@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save, m2m_changed
 from django.db.models import F
 from django.dispatch import receiver
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
 
 SLICE_STATE_STOPPED = 0
@@ -58,7 +60,6 @@ class Slice(models.Model):
 
 class Resource(models.Model):
     name = models.CharField(max_length=256)
-    island = models.ForeignKey(Island)
     slices = models.ManyToManyField(Slice)
 
     def on_create_slice(self):
@@ -82,30 +83,33 @@ class Resource(models.Model):
     class Meta:
         abstract = True
 
-class Controller(Resource):
+class IslandResource(Resource):
+    island = models.ForeignKey(Island)
+
+    class Meta:
+        abstract = True
+
+class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
     http_port = models.IntegerField()
+    hostname = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+
+    def __unicode__(self):
+        return self.hostname
+
+    class Meta:
+        abstract = True
+
+class Controller(ServiceResource):
     is_root = models.BooleanField(default=False)
-    hostname = models.CharField(max_length=20)
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
 
-    def __unicode__(self):
-        return self.hostname
+class Flowvisor(ServiceResource):
+    pass
 
-class Flowvisor(Resource):
-    ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
-    hostname = models.CharField(max_length=20)
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-
-    def __unicode__(self):
-        return self.hostname
-
-class Switch(Resource):
+class Switch(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
     http_port = models.IntegerField()
@@ -118,7 +122,7 @@ class Switch(Resource):
     def __unicode__(self):
         return self.hostname
 
-class Server(Resource):
+class HostBase(IslandResource):
     ip = models.IPAddressField()
     hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
@@ -135,10 +139,17 @@ class Server(Resource):
     def __unicode__(self):
         return self.hostname
 
-class VirtualMachine(Server):
-    slice = models.ForeignKey(Slice, related_name="virtual_machines")
+    class Meta:
+        abstract = True
 
-class VirtualSwitch(Resource):
+class Server(HostBase):
+    pass
+
+class VirtualMachine(HostBase):
+    slice = models.ForeignKey(Slice, related_name="virtual_machines")
+    server = models.ForeignKey(Server)
+
+class VirtualSwitch(IslandResource):
     server = models.ForeignKey(Server)
 
 
@@ -160,6 +171,92 @@ class FlowSpaceRule(Resource):
     wildcards = models.CharField(max_length=256)
     is_default = models.IntegerField()
     actions = models.CharField(max_length=256)
+
+
+class Network(Resource):
+    netaddr = models.IPAddressField(null=False)
+    netmask = models.IPAddressField(null=False)
+
+    def __init__(self, *args, **kwargs):
+        self.slices.through = "SliceNetwork"
+        super(Network, self).__init__(*args, **kwargs)
+
+    class Meta:
+        unique_together = ("netaddr", "netmask")
+
+class IPRange(Resource):
+    network = models.ForeignKey(Network)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    host = generic.GenericForeignKey('content_type', 'object_id')
+    start = models.IPAddressField(null=False)
+    end = models.IPAddressField(null=False)
+    type = models.IntegerField(default=1) # 1: static, 2: dynamic
+
+    def __unicode__(self):
+        return u"%s ~ %s" % (self.start, self.end)
+
+    class Meta:
+        unique_together = (u"network", u"object_id", u"start", u"end")
+
+class IPAddress(models.Model):
+    ip_range = models.ForeignKey(IPRange)
+    address = models.IPAddressField(null=False)
+    available  = models.BooleanField(default=False)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    host = generic.GenericForeignKey('content_type', 'object_id')
+
+    def __unicode__(self):
+        return self.address
+
+    class Meta:
+        pass
+
+class SliceNetwork(models.Model):
+    network = models.ForeignKey(Network)
+    slice = models.ForeignKey(Slice)
+    dhcp = models.BooleanField(default=False)
+    public = models.BooleanField(default=False)
+    description = models.TextField(null=True)
+    ip_ranges = models.ManyToManyField(IPRange)
+    ip_addresses = models.ManyToManyField(IPAddress, related_name="ipaddress_slice_network")
+    dnses = models.ManyToManyField(IPAddress)
+    dhcpes = models.ManyToManyField(IPAddress, related_name="dhcp_slice_networks")
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        pass
+
+
+class Gateway(models.Model):
+    network = models.ForeignKey(Network)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    host = generic.GenericForeignKey('content_type', 'object_id')
+    address = models.IPAddressField()
+
+    def __unicode__(self):
+        return self.address
+
+    class Meta:
+        unique_together = ("network", "object_id")
+
+class NAT(Resource):
+    """
+    primary key: level + public_address
+    """
+    level = models.IntegerField(null=False)
+    public  = models.IPAddressField(null=False)
+    private = models.IPAddressField(null=True)
+    expires = models.DateTimeField(null=True)
+    available = models.BooleanField(default=False)
+    slice = models.ForeignKey(Slice, related_name="slice_nats")
+
+    def __unicode__(self):
+        return self.public
 
 @receiver(m2m_changed, sender=Flowvisor.slices.through)
 @receiver(m2m_changed, sender=Controller.slices.through)
