@@ -121,24 +121,24 @@ INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
-    #"django.contrib.sessions",
-    #"django.contrib.sites",
-    #"django.contrib.messages",
+    "django.contrib.sessions",
+    "django.contrib.sites",
+    "django.contrib.messages",
     "django.contrib.staticfiles",
-    
+
     # theme
     "pinax_theme_bootstrap",
     "django_forms_bootstrap",
-    
+
     # external
     #'xadmin',
-    'django_extensions',
-    #'crispy_forms',
-    #'reversion',
-    #"account",
-    #"metron",
-    #"eventlog",
-    
+    #'django_extensions',
+    'crispy_forms',
+    'reversion',
+    "account",
+    "metron",
+    "eventlog",
+
     # project
     "ccf",
     "project",

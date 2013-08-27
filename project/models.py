@@ -145,6 +145,9 @@ class HostBase(IslandResource):
 class Server(HostBase):
     pass
 
+class Gateway(Server):
+    pass
+
 class VirtualMachine(HostBase):
     slice = models.ForeignKey(Slice, related_name="virtual_machines")
     server = models.ForeignKey(Server)
@@ -216,7 +219,7 @@ class IPAddress(models.Model):
 class SliceNetwork(models.Model):
     network = models.ForeignKey(Network)
     slice = models.ForeignKey(Slice)
-    dhcp = models.BooleanField(default=False)
+    use_dhcp = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     description = models.TextField(null=True)
     ip_ranges = models.ManyToManyField(IPRange)
@@ -231,32 +234,28 @@ class SliceNetwork(models.Model):
         pass
 
 
-class Gateway(models.Model):
+class IslandNetworkGateway(IslandResource):
     network = models.ForeignKey(Network)
-    content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
-    host = generic.GenericForeignKey('content_type', 'object_id')
-    address = models.IPAddressField()
+    ip_address = models.ForeignKey(IPAddress)
 
     def __unicode__(self):
         return self.address
 
     class Meta:
-        unique_together = ("network", "object_id")
+        unique_together = ("network", "island")
 
 class NAT(Resource):
     """
     primary key: level + public_address
     """
-    level = models.IntegerField(null=False)
-    public  = models.IPAddressField(null=False)
-    private = models.IPAddressField(null=True)
-    expires = models.DateTimeField(null=True)
+    parent = models.ForeignKey("self", null=True)
+    public_ip = models.ForeignKey(IPAddress, related_name="public_ip_nats")
+    private_ip = models.ForeignKey(IPAddress, related_name="private_ip_nats")
+    date_expired = models.DateTimeField()
     available = models.BooleanField(default=False)
-    slice = models.ForeignKey(Slice, related_name="slice_nats")
 
     def __unicode__(self):
-        return self.public
+        return self.public_ip
 
 @receiver(m2m_changed, sender=Flowvisor.slices.through)
 @receiver(m2m_changed, sender=Controller.slices.through)

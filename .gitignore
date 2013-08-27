@@ -1,0 +1,8 @@
+.DS_Store
+.svn
+*~
+*.swp
+*.rbc
+*.pyc
+my_logs
+local_settings.py
