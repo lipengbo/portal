@@ -32,9 +32,9 @@ class Project(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
     description = models.TextField()
-    islands = models.ManyToManyField(Island)
+    islands = models.ManyToManyField(Island)  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
-            related_name="project_belongs")
+            related_name="project_belongs") 
 
     def __unicode__(self):
         return self.name
@@ -122,7 +122,7 @@ class Switch(IslandResource):
     def __unicode__(self):
         return self.hostname
 
-class HostBase(IslandResource):
+class ComputeResource(IslandResource):
     ip = models.IPAddressField()
     hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
@@ -142,13 +142,13 @@ class HostBase(IslandResource):
     class Meta:
         abstract = True
 
-class Server(HostBase):
+class Server(ComputeResource):
     pass
 
 class Gateway(Server):
     pass
 
-class VirtualMachine(HostBase):
+class VirtualMachine(ComputeResource):
     slice = models.ForeignKey(Slice, related_name="virtual_machines")
     server = models.ForeignKey(Server)
 
