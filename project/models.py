@@ -118,7 +118,7 @@ class Switch(IslandResource):
     password = models.CharField(max_length=20)
     dpid = models.CharField(max_length=256)
     has_gre_tunnel = models.BooleanField(default=False)
- 
+
     def __unicode__(self):
         return self.hostname
 
@@ -152,7 +152,7 @@ class VirtualMachine(ComputeResource):
     slice = models.ForeignKey(Slice, related_name="virtual_machines")
     server = models.ForeignKey(Server)
 
-class VirtualSwitch(IslandResource):
+class VirtualSwitch(Switch):
     server = models.ForeignKey(Server)
 
 
