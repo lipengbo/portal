@@ -74,7 +74,7 @@ class Slice(models.Model):
     project = models.ForeignKey(Project)
     date_created = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField()
-    state = models.IntegerField(choices=SLICE_STATES, 
+    state = models.IntegerField(choices=SLICE_STATES,
             default=SLICE_STATE_STOPPED)
 
     def __unicode__(self):
@@ -112,7 +112,6 @@ class IslandResource(Resource):
 
 
 class ComputeResource(IslandResource):
-    ip = models.IPAddressField()
     hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
@@ -122,6 +121,7 @@ class ComputeResource(IslandResource):
     bandwidth = models.IntegerField(null=True)
     disk_size = models.IntegerField(null=True)
     os = models.CharField(max_length=256, null=True)
+    ip = models.IPAddressField()
     mac = models.CharField(max_length=256, null=True)
     update_time = models.DateTimeField(auto_now_add=True)
 
@@ -148,6 +148,7 @@ class ServiceResource(IslandResource):
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')  
     slices = models.ManyToManyField(Slice)
+    state = models.IntegerField()
 
     def __unicode__(self):
         return self.hostname
@@ -180,9 +181,9 @@ class Switch(IslandResource):
     slices = models.ManyToManyField(Slice)
 
     type = models.IntegerField(choices=SWITCH_TYPES)
-
     def __unicode__(self):
         return self.hostname
+
 
 class VirtualSwitch(Switch):
     """
