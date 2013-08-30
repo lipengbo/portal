@@ -13,6 +13,12 @@ SLICE_STATES = (
         (SLICE_STATE_STOPPED, 'stopped'),
         (SLICE_STATE_STARTED, 'started'),)
 
+SWITCH_TYPE_PHYSICAL = 0
+SWITCH_TYPE_VIRTUAL = 1
+SWITCH_TYPES = (
+        (SWITCH_TYPE_PHYSICAL, 'physical'),
+        (SWITCH_TYPE_VIRTUAL, 'virtual')
+        )
 class City(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField()
@@ -28,6 +34,9 @@ class Island(models.Model):
     def __unicode__(self):
         return self.name
 
+class Category(models.Model):
+    name = models.CharField(max_length=256)
+
 class Project(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
@@ -35,15 +44,28 @@ class Project(models.Model):
     islands = models.ManyToManyField(Island)  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
             related_name="project_belongs") 
+    categories = models.ManyToManyField(Category, through="ProjectCategory")
 
     def __unicode__(self):
         return self.name
+
+
+class ProjectCategory(models.Model):
+    project = models.ForeignKey(Project)
+    category = models.ForeignKey(Category)
+
+    class Meta:
+        unique_together = (("project", "category"),)
+
 
 class Membership(models.Model):
     project = models.ForeignKey(Project)
     user = models.ForeignKey(User)
     is_owner = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = (("project", "user"), )
 
 class Slice(models.Model):
     owner = models.ForeignKey(User)
@@ -60,7 +82,6 @@ class Slice(models.Model):
 
 class Resource(models.Model):
     name = models.CharField(max_length=256)
-    slices = models.ManyToManyField(Slice)
 
     def on_create_slice(self):
         pass
@@ -89,38 +110,6 @@ class IslandResource(Resource):
     class Meta:
         abstract = True
 
-class ServiceResource(IslandResource):
-    ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
-    hostname = models.CharField(max_length=20)
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-
-    def __unicode__(self):
-        return self.hostname
-
-    class Meta:
-        abstract = True
-
-class Controller(ServiceResource):
-    is_root = models.BooleanField(default=False)
-
-class Flowvisor(ServiceResource):
-    pass
-
-class Switch(IslandResource):
-    ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
-    hostname = models.CharField(max_length=20)
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-    dpid = models.CharField(max_length=256)
-    has_gre_tunnel = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return self.hostname
 
 class ComputeResource(IslandResource):
     ip = models.IPAddressField()
@@ -136,6 +125,8 @@ class ComputeResource(IslandResource):
     mac = models.CharField(max_length=256, null=True)
     update_time = models.DateTimeField(auto_now_add=True)
 
+    slices = models.ManyToManyField(Slice)
+
     def __unicode__(self):
         return self.hostname
 
@@ -145,6 +136,31 @@ class ComputeResource(IslandResource):
 class Server(ComputeResource):
     pass
 
+class ServiceResource(IslandResource):
+    ip = models.IPAddressField()
+    port = models.IntegerField()
+    http_port = models.IntegerField()
+    hostname = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    #: served on a ComputeResource like Server or VirtualMachine
+    host = generic.GenericForeignKey('content_type', 'object_id')  
+    slices = models.ManyToManyField(Slice)
+
+    def __unicode__(self):
+        return self.hostname
+
+    class Meta:
+        abstract = True
+
+class Controller(ServiceResource):
+    is_root = models.BooleanField(default=False)
+
+class Flowvisor(ServiceResource):
+    pass
+
 class Gateway(Server):
     pass
 
@@ -152,12 +168,51 @@ class VirtualMachine(ComputeResource):
     slice = models.ForeignKey(Slice, related_name="virtual_machines")
     server = models.ForeignKey(Server)
 
+class Switch(IslandResource):
+    ip = models.IPAddressField()
+    port = models.IntegerField()
+    http_port = models.IntegerField()
+    hostname = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    dpid = models.CharField(max_length=256)
+    has_gre_tunnel = models.BooleanField(default=False)
+    slices = models.ManyToManyField(Slice)
+
+    type = models.IntegerField(choices=SWITCH_TYPES)
+
+    def __unicode__(self):
+        return self.hostname
+
 class VirtualSwitch(Switch):
+    """
+        A virtual switch service that created on a Physical Server
+    """
     server = models.ForeignKey(Server)
 
+class HostMac(models.Model):
+    mac = models.CharField(max_length=32)
+    content_type = models.ForeignKey(ContentType)
+    host_id = models.PositiveIntegerField()
+    #: the switch that the rule is applied on, can be Switch or VirtualSwitch
+    host = generic.GenericForeignKey('content_type', 'host_id')
+
+class SwitchPort(Resource):
+
+    #: the switch that the rule is applied on, can be Switch or VirtualSwitch
+    switch = models.ForeignKey(Switch)
+    port = models.PositiveIntegerField()
+    slices = models.ManyToManyField(Slice, through="SlicePort")
+
+    class Meta:
+        unique_together = (("switch", "port"), )
+
+class SlicePort(models.Model):
+    slice = models.ForeignKey(Slice)
+    switch_port = models.ForeignKey(SwitchPort)
 
 class FlowSpaceRule(Resource):
-    dpid = models.CharField(max_length=256)
+    slice_port = models.ForeignKey(SlicePort)
     priority = models.IntegerField()
     in_port = models.CharField(max_length=256)
     dl_vlan = models.CharField(max_length=256)
@@ -179,10 +234,7 @@ class FlowSpaceRule(Resource):
 class Network(Resource):
     netaddr = models.IPAddressField(null=False)
     netmask = models.IPAddressField(null=False)
-
-    def __init__(self, *args, **kwargs):
-        self.slices.through = "SliceNetwork"
-        super(Network, self).__init__(*args, **kwargs)
+    slices = models.ManyToManyField(Slice, through="SliceNetwork")
 
     class Meta:
         unique_together = ("netaddr", "netmask")
@@ -234,20 +286,21 @@ class SliceNetwork(models.Model):
         pass
 
 
-class IslandNetworkGateway(IslandResource):
-    network = models.ForeignKey(Network)
-    ip_address = models.ForeignKey(IPAddress)
+class IslandSliceNetworkGateway(IslandResource):
+    slice_network = models.ForeignKey(SliceNetwork)
+    gateway = models.ForeignKey(Gateway)
 
     def __unicode__(self):
         return self.address
 
     class Meta:
-        unique_together = ("network", "island")
+        unique_together = ("slice_network", "island")
 
 class NAT(Resource):
     """
     primary key: level + public_address
     """
+    slice = models.ForeignKey(Slice)
     parent = models.ForeignKey("self", null=True)
     public_ip = models.ForeignKey(IPAddress, related_name="public_ip_nats")
     private_ip = models.ForeignKey(IPAddress, related_name="private_ip_nats")
