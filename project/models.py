@@ -33,8 +33,8 @@ class Project(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField()
     islands = models.ManyToManyField(Island)  # Usage: project.islands.add(island)
-    memberships = models.ManyToManyField(User, through="Membership", 
-            related_name="project_belongs") 
+    memberships = models.ManyToManyField(User, through="Membership",
+            related_name="project_belongs")
 
     def __unicode__(self):
         return self.name
@@ -52,7 +52,7 @@ class Slice(models.Model):
     project = models.ForeignKey(Project)
     date_created = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField()
-    state = models.IntegerField(choices=SLICE_STATES, 
+    state = models.IntegerField(choices=SLICE_STATES,
             default=SLICE_STATE_STOPPED)
 
     def __unicode__(self):
@@ -96,6 +96,7 @@ class ServiceResource(IslandResource):
     hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
+    state = models.IntegerField()
 
     def __unicode__(self):
         return self.hostname
@@ -123,7 +124,6 @@ class Switch(IslandResource):
         return self.hostname
 
 class ComputeResource(IslandResource):
-    ip = models.IPAddressField()
     hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
@@ -133,6 +133,7 @@ class ComputeResource(IslandResource):
     bandwidth = models.IntegerField(null=True)
     disk_size = models.IntegerField(null=True)
     os = models.CharField(max_length=256, null=True)
+    ip = models.IPAddressField()
     mac = models.CharField(max_length=256, null=True)
     update_time = models.DateTimeField(auto_now_add=True)
 
