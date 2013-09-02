@@ -132,7 +132,7 @@ INSTALLED_APPS = [
 
     # external
     #'xadmin',
-    #'django_extensions',
+    'django_extensions',
     #'crispy_forms',
     #'reversion',
     "account",
@@ -141,7 +141,12 @@ INSTALLED_APPS = [
 
     # project
     "ccf",
+    "slice",
     "project",
+    "resources",
+    "plugins.vt",
+    "plugins.openflow",
+    "plugins.network",
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -191,3 +196,8 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
 ]
+
+try:
+    from ccf.local_settings import *
+except ImportError:
+    pass

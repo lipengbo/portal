@@ -1,0 +1,16 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.db.models import F
+from resources.models import *
+# Create your models here.
+class VirtualMachine(ComputeResource):
+    slice = models.ForeignKey(Slice, related_name="virtual_machines")
+    server = models.ForeignKey(Server)
+
+class HostMac(models.Model):
+    mac = models.CharField(max_length=32)
+    content_type = models.ForeignKey(ContentType)
+    host_id = models.PositiveIntegerField()
+    #: the switch that the rule is applied on, can be Switch or VirtualSwitch
+    host = generic.GenericForeignKey('content_type', 'host_id')
