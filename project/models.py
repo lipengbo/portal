@@ -14,14 +14,16 @@ SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
 SLICE_STATES = (
         (SLICE_STATE_STOPPED, 'stopped'),
-        (SLICE_STATE_STARTED, 'started'),)
+        (SLICE_STATE_STARTED, 'started'),
+)
 
 SWITCH_TYPE_PHYSICAL = 0
 SWITCH_TYPE_VIRTUAL = 1
 SWITCH_TYPES = (
         (SWITCH_TYPE_PHYSICAL, 'physical'),
         (SWITCH_TYPE_VIRTUAL, 'virtual')
-        )
+)
+
 class City(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField()

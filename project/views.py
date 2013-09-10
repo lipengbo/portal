@@ -19,6 +19,12 @@ def index(request):
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
+def detail(request, id):
+    project = get_object_or_404(Project, id=id)
+    context = {}
+    context['project'] = project
+    return render(request, 'project/detail.html', context)
+
 @login_required
 def create(request):
     user = request.user
@@ -31,7 +37,7 @@ def create(request):
             project = form.save(commit=False)
             project.owner = user
             project.save()
-            return redirect('project_create')
+            return redirect('project_detail', id=project.id)
 
     context['form'] = form
     return render(request, 'project/create.html', context)

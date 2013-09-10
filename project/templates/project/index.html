@@ -5,7 +5,7 @@
     {% for project in projects %}
     <div class="span4">
         <div class="well">
-            <h3>{{ project.name }}</h3>
+            <h3><a href="{% url project_detail project.id %}">{{ project.name }}</a></h3>
             <blockquote>
                 {{ project.description }}
             </blockquote>
