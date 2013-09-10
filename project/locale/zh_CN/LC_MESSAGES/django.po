@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-10 09:27+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: models.py:35
+msgid "City"
+msgstr "城市"
+
+#: models.py:46 models.py:61
+msgid "Island"
+msgstr "节点"
+
+#: models.py:55 models.py:64
+msgid "Category"
+msgstr "类型"
+
+#: models.py:59
+msgid "Project Name"
+msgstr "项目名称"
+
+#: models.py:60
+msgid "Project Description"
+msgstr "项目描述"
+
+#: models.py:63
+msgid "Memberships"
+msgstr "成员"
+
+#: models.py:78
+msgid "Project"
+msgstr "项目"
+
+#: models.py:88
+msgid "Membership"
+msgstr "成员"
+
+#: templates/project/detail.html:5
+msgid "Basic info"
+msgstr "基本信息"
