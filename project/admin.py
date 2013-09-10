@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from project.models import (City, Island, Project, Category,
-        ProjectCategory, Membership)
+        Membership)
 from slice.models import Slice
 from resources.models import  Switch, Server
 from plugins.openflow.models import Flowvisor, Controller
@@ -13,7 +13,6 @@ admin.site.register(City)
 admin.site.register(Island)
 admin.site.register(Project)
 admin.site.register(Category)
-admin.site.register(ProjectCategory)
 admin.site.register(Slice)
 admin.site.register(Switch)
 admin.site.register(VirtualSwitch)
