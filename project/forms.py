@@ -14,7 +14,6 @@ class ProjectForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
-
         self.helper.add_input(Submit('submit', '创建'))
 
     class Meta:

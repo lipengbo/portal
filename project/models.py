@@ -49,7 +49,7 @@ class Project(models.Model):
     islands = models.ManyToManyField(Island, verbose_name="节点")  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
             related_name="project_belongs", verbose_name="成员") 
-    categories = models.ManyToManyField(Category, through="ProjectCategory", verbose_name="分类")
+    category = models.ForeignKey(Category, verbose_name="分类")
 
     def add_category(self, category):
         project_category, created = ProjectCategory.objects.get_or_create(category=category,

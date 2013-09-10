@@ -31,8 +31,6 @@ def create(request):
             project = form.save(commit=False)
             project.owner = user
             project.save()
-            for category in form.cleaned_data.get('categories'):
-                project.add_category(category)
             return redirect('project_create')
 
     context['form'] = form
