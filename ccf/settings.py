@@ -132,7 +132,7 @@ INSTALLED_APPS = [
 
     # external
     #'xadmin',
-    'django_extensions',
+    #'django_extensions',
     'crispy_forms',
     #'reversion',
     "account",
