@@ -9,10 +9,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 
+from project.models import Project
 from project.forms import ProjectForm
 
 def index(request):
+    user = request.user
+    projects = Project.objects.filter(owner=user)
     context = {}
+    context['projects'] = projects
     return render(request, 'project/index.html', context)
 
 @login_required

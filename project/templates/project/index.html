@@ -1,0 +1,17 @@
+{% extends "site_base.html" %}
+
+{% block body %}
+<div class="row">
+    {% for project in projects %}
+    <div class="span4">
+        <div class="well">
+            <h3>{{ project.name }}</h3>
+            <blockquote>
+                {{ project.description }}
+            </blockquote>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+ 
