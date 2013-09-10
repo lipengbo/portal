@@ -133,7 +133,7 @@ INSTALLED_APPS = [
     # external
     #'xadmin',
     'django_extensions',
-    #'crispy_forms',
+    'crispy_forms',
     #'reversion',
     "account",
     "metron",
@@ -196,6 +196,8 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 try:
     from ccf.local_settings import *

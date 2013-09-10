@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from project.models import City, Island, Project, Category, ProjectCategory
+from project.models import (City, Island, Project, Category,
+        ProjectCategory, Membership)
 from slice.models import Slice
 from resources.models import  Switch, Server
 from plugins.openflow.models import Flowvisor, Controller
@@ -23,3 +24,4 @@ admin.site.register(Network)
 admin.site.register(HostMac)
 admin.site.register(SwitchPort)
 admin.site.register(IPAddress)
+admin.site.register(Membership)

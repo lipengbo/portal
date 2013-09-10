@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, m2m_changed
@@ -35,16 +37,27 @@ class Island(models.Model):
         return self.name
 
 class Category(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, unique=True)
+
+    def __unicode__(self):
+        return self.name
 
 class Project(models.Model):
     owner = models.ForeignKey(User)
-    name = models.CharField(max_length=256)
-    description = models.TextField()
-    islands = models.ManyToManyField(Island)  # Usage: project.islands.add(island)
+    name = models.CharField(max_length=256, verbose_name="名称")
+    description = models.TextField(verbose_name="描述")
+    islands = models.ManyToManyField(Island, verbose_name="节点")  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
-            related_name="project_belongs") 
-    categories = models.ManyToManyField(Category, through="ProjectCategory")
+            related_name="project_belongs", verbose_name="成员") 
+    categories = models.ManyToManyField(Category, through="ProjectCategory", verbose_name="分类")
+
+    def add_category(self, category):
+        project_category, created = ProjectCategory.objects.get_or_create(category=category,
+                project=self)
+
+    def add_member(self, user, is_owner=False):
+        project_membership, created = Membership.objects.get_or_create(project=self,
+                user=user, defaults={'is_owner': is_owner})
 
     def __unicode__(self):
         return self.name
@@ -66,8 +79,6 @@ class Membership(models.Model):
 
     class Meta:
         unique_together = (("project", "user"), )
-
-
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)
 #@receiver(m2m_changed, sender=Controller.slices.through)

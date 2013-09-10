@@ -76,7 +76,7 @@ class SliceNetwork(models.Model):
     use_dhcp = models.BooleanField(default=False)
     public = models.BooleanField(default=False)
     description = models.TextField(null=True)
-    ip_ranges = models.ManyToManyField(Subnet)
+    subnets = models.ManyToManyField(Subnet)
     ip_addresses = models.ManyToManyField(IPAddress, related_name="ipaddress_slice_network")
     dnses = models.ManyToManyField(IPAddress)
     dhcpes = models.ManyToManyField(IPAddress, related_name="dhcp_slice_networks")
