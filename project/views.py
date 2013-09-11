@@ -26,13 +26,16 @@ def detail(request, id):
     return render(request, 'project/detail.html', context)
 
 @login_required
-def create(request):
+def create_or_edit(request, id=None):
     user = request.user
     context = {}
+    instance = None
+    if id:
+        instance = get_object_or_404(Project, id=id)
     if request.method == 'GET':
-        form = ProjectForm()
+        form = ProjectForm(instance=instance)
     else:
-        form = ProjectForm(request.POST)
+        form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             project = form.save(commit=False)
             project.owner = user

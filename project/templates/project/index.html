@@ -1,11 +1,14 @@
 {% extends "site_base.html" %}
 
+{% load i18n %}
+
 {% block body %}
 <div class="row">
     {% for project in projects %}
     <div class="span4">
         <div class="well">
             <h3><a href="{% url project_detail project.id %}">{{ project.name }}</a></h3>
+            <a href="{% url project_edit project.id %}">{% trans "Edit" %}</a>
             <blockquote>
                 {{ project.description }}
             </blockquote>
