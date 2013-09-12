@@ -8,6 +8,7 @@ from django.contrib.contenttypes import generic
 from project.models import Island
 from slice.models import *
 
+
 class Resource(models.Model):
     name = models.CharField(max_length=256)
 
@@ -20,10 +21,10 @@ class Resource(models.Model):
     def on_start_slice(self):
         pass
 
-    def on_add_into_slice(self):
-        print self, 'on_add_into_slice'
+    def on_add_into_slice(self, slice_obj):
+        pass
 
-    def on_remove_from_slice(self):
+    def on_remove_from_slice(self, slice_obj):
         pass
 
     def __unicode__(self):
@@ -31,6 +32,7 @@ class Resource(models.Model):
 
     class Meta:
         abstract = True
+
 
 class IslandResource(Resource):
     island = models.ForeignKey(Island)
@@ -61,6 +63,7 @@ class ComputeResource(IslandResource):
     class Meta:
         abstract = True
 
+
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
@@ -71,7 +74,7 @@ class ServiceResource(IslandResource):
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
     #: served on a ComputeResource like Server or VirtualMachine
-    host = generic.GenericForeignKey('content_type', 'object_id')  
+    host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice)
     state = models.IntegerField()
 
@@ -81,8 +84,10 @@ class ServiceResource(IslandResource):
     class Meta:
         abstract = True
 
+
 class Server(ComputeResource):
     pass
+
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
@@ -101,8 +106,12 @@ class SwitchResource(IslandResource):
     class Meta:
         abstract = True
 
+
 class Switch(SwitchResource):
-    pass
+    def on_add_into_slice(self, slice_obj):
+        SliceSwitch.objects.get_or_create(
+             switch=self, slice=slice_obj)
+
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
@@ -111,12 +120,17 @@ class SliceSwitch(models.Model):
     class Meta:
         unique_together = (("slice", "switch"), )
 
+
 class SwitchPort(Resource):
 
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     switch = models.ForeignKey(Switch)
     port = models.PositiveIntegerField()
     slices = models.ManyToManyField(Slice, through="SlicePort")
+
+    def on_add_into_slice(self, slice_obj):
+        SlicePort.objects.get_or_create(
+             switch_port=self, slice=slice_obj)
 
     class Meta:
         unique_together = (("switch", "port"), )
@@ -126,13 +140,12 @@ class SlicePort(models.Model):
     slice = models.ForeignKey(Slice)
     switch_port = models.ForeignKey(SwitchPort)
 
-
     class Meta:
         unique_together = (("slice", "switch_port"), )
+
 
 class VirtualSwitch(Switch):
     """
         A virtual switch service that created on a Physical Server
     """
     server = models.ForeignKey(Server)
-

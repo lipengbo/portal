@@ -6,11 +6,18 @@ from django.db.models import F
 from resources.models import ServiceResource, Resource, Switch
 from slice.models import Slice
 
+
 class Controller(ServiceResource):
     is_root = models.BooleanField(default=False)
 
+    def on_add_into_slice(self, slice_obj):
+        self.slices.add(slice_obj)
+
+
 class Flowvisor(ServiceResource):
-    pass
+    def on_add_into_slice(self, slice_obj):
+        self.slices.add(slice_obj)
+
 
 class FlowSpaceRule(Resource):
     slice = models.ForeignKey(Slice)
@@ -31,4 +38,3 @@ class FlowSpaceRule(Resource):
     wildcards = models.CharField(max_length=256)
     is_default = models.IntegerField()
     actions = models.CharField(max_length=256)
-

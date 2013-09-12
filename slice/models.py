@@ -12,6 +12,8 @@ SLICE_STATES = (
         (SLICE_STATE_STARTED, 'started'),
 )
 # Create your models here.
+
+
 class Slice(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
@@ -24,8 +26,19 @@ class Slice(models.Model):
 
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
+    def add_island(self, island):
+        slice_island, created = SliceIsland.objects.get_or_create(
+            island=island, slice=self)
+
+    def add_resource(self, resource):
+        resource.on_add_into_slice(self)
+
+    def remove_resource(self, resource):
+        resource.on_remove_from_slice(self)
+
     def __unicode__(self):
         return self.name
+
 
 class SliceIsland(models.Model):
     slice = models.ForeignKey(Slice)
@@ -33,4 +46,3 @@ class SliceIsland(models.Model):
 
     class Meta:
         unique_together = (("slice", "island"), )
-
