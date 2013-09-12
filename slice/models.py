@@ -27,8 +27,12 @@ class Slice(models.Model):
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
     def add_island(self, island):
-        slice_island, created = SliceIsland.objects.get_or_create(
+        SliceIsland.objects.get_or_create(
             island=island, slice=self)
+
+    def change_description(self, description):
+        self.description = description
+        self.save()
 
     def add_resource(self, resource):
         resource.on_add_into_slice(self)

@@ -12,7 +12,7 @@ from django.utils.translation import ugettext, ugettext as _
 from slice_api import create_slice_api
 from plugins.openflow.controller_api import slice_add_controller
 from plugins.openflow.models import Controller
-from project.models import Project, Island
+from project.models import Project, Island, Category
 
 from slice.models import Slice
 # Create your views here.
@@ -33,19 +33,23 @@ def create_or_edit(request):
         description = request.POST.get("description")
         island_id = request.POST.get("island_id")
         island = Island.objects.get(id=int(island_id))
+        controller = Controller(ip="192.168.5.41", port="8081",
+                http_port="8080", username="test", password="test",
+                hostname="test_contoller", island=island)
+        controller.save()
         controller_type = request.POST.get("controller_type")
         if controller_type == 'default_create':
             controller = Controller.objects.all()[0]
         else:
             controller = Controller.objects.all()[0]
-#         ovs_ids = request.POST.getlist("ovs_ids")
-#         ovs_ports = []
-#         if ovs_ids:
-#             for ovs_id in ovs_ids:
-#                 ports = request.POST.getlist("ovs"+ovs_id+"ports")
-#                 if ports:
-#                     ovs_port = {'ovs_id':int(ovs_id), 'ports':ports}
-#                     ovs_ports.append(ovs_port)
+        ovs_ids = request.POST.getlist("ovs_ids")
+        ovs_ports = []
+        if ovs_ids:
+            for ovs_id in ovs_ids:
+                ports = request.POST.getlist("ovs"+ovs_id+"ports")
+                if ports:
+                    ovs_port = {'ovs_id':int(ovs_id), 'ports':ports}
+                    ovs_ports.append(ovs_port)
         slice_obj = create_slice_api(project, name, description, island, user)
         slice_add_controller(slice_obj, controller, island)
         print slice_obj.id

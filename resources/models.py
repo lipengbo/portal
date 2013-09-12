@@ -75,7 +75,7 @@ class ServiceResource(IslandResource):
     object_id = models.PositiveIntegerField()
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
-    slices = models.ManyToManyField(Slice)
+    slices = models.ManyToManyField(Slice, blank=True)
     state = models.IntegerField()
 
     def __unicode__(self):
