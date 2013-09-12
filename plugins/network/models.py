@@ -2,9 +2,11 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
-from project.models import *
-from resources.models import *
+from resources.models import Resource, Server, IslandResource
+from slice.models import Slice
 
 # Create your models here.
 class Gateway(Server):

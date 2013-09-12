@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 from project.models import Island
-from slice.models import *
+from slice.models import Slice
 
 
 class Resource(models.Model):
