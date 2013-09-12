@@ -94,6 +94,11 @@ class Switch(IslandResource):
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 
     type = models.IntegerField(choices=SWITCH_TYPES)
+    
+    def on_add_into_slice(self, slice):
+        slice_switch, created = SliceSwitch.objects.get_or_create(
+             switch=self, slice=slice)
+    
     def __unicode__(self):
         return self.hostname
 
