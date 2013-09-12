@@ -32,18 +32,10 @@ class Slice(models.Model):
             island=island, slice=self)
 
     def add_resource(self, resource):
-        resource.on_add_into_slice()
+        resource.on_add_into_slice(self)
 
-#     def add_controller(self, controller):
-#         controller.slices.add(self)
-# 
-#     def add_switch(self, switch):
-#         slice_switch, created = SliceSwitch.objects.get_or_create(
-#             switch=switch, slice=self)
-# 
-#     def add_virtual_switch(self, virtual_switch):
-#         slice_switch, created = SliceSwitch.objects.get_or_create(
-#             switch=virtual_switch, slice=self)
+    def remove_resource(self, resource):
+        resource.on_remove_from_slice(self)
 
     def __unicode__(self):
         return self.name
