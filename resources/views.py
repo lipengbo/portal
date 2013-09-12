@@ -1,3 +1,4 @@
+# coding:utf-8
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -11,7 +12,7 @@ from django.utils.translation import ugettext, ugettext as _
 
 # Create your views here.
 
+
 def index(request):
     context = {}
     return render(request, 'resources/index.html', context)
-
