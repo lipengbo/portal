@@ -149,3 +149,4 @@ class VirtualSwitch(Switch):
         A virtual switch service that created on a Physical Server
     """
     server = models.ForeignKey(Server)
+
