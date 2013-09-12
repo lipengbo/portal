@@ -11,12 +11,6 @@ from django.utils.translation import ugettext as _
 
 
 
-SWITCH_TYPE_PHYSICAL = 0
-SWITCH_TYPE_VIRTUAL = 1
-SWITCH_TYPES = (
-        (SWITCH_TYPE_PHYSICAL, 'physical'),
-        (SWITCH_TYPE_VIRTUAL, 'virtual')
-)
 
 class City(models.Model):
     name = models.CharField(max_length=256)

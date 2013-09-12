@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
 
-from resources.models import *
+from resources.models import ServiceResource, Resource, Switch
+from slice.models import Slice
 
 class Controller(ServiceResource):
     is_root = models.BooleanField(default=False)
@@ -12,7 +13,8 @@ class Flowvisor(ServiceResource):
     pass
 
 class FlowSpaceRule(Resource):
-    slice_switch = models.ForeignKey(SliceSwitch, null=True)
+    slice = models.ForeignKey(Slice)
+    switch = models.ForeignKey(Switch, null=True)
     priority = models.IntegerField()
     in_port = models.CharField(max_length=256)
     dl_vlan = models.CharField(max_length=256)

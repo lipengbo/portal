@@ -2,8 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 
-from project.models import *
+from project.models import Island
 from slice.models import *
 
 class Resource(models.Model):
@@ -82,7 +84,7 @@ class ServiceResource(IslandResource):
 class Server(ComputeResource):
     pass
 
-class Switch(IslandResource):
+class SwitchResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
     http_port = models.IntegerField()
@@ -93,9 +95,14 @@ class Switch(IslandResource):
     has_gre_tunnel = models.BooleanField(default=False)
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 
-    type = models.IntegerField(choices=SWITCH_TYPES)
     def __unicode__(self):
         return self.hostname
+
+    class Meta:
+        abstract = True
+
+class Switch(SwitchResource):
+    pass
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
