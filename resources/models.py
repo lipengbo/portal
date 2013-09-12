@@ -6,7 +6,6 @@ from django.db.models import F
 from project.models import *
 from slice.models import *
 
-# Create your models here.
 class Resource(models.Model):
     name = models.CharField(max_length=256)
 
@@ -104,4 +103,29 @@ class SliceSwitch(models.Model):
 
     class Meta:
         unique_together = (("slice", "switch"), )
+
+class SwitchPort(Resource):
+
+    #: the switch that the rule is applied on, can be Switch or VirtualSwitch
+    switch = models.ForeignKey(Switch)
+    port = models.PositiveIntegerField()
+    slices = models.ManyToManyField(Slice, through="SlicePort")
+
+    class Meta:
+        unique_together = (("switch", "port"), )
+
+
+class SlicePort(models.Model):
+    slice = models.ForeignKey(Slice)
+    switch_port = models.ForeignKey(SwitchPort)
+
+
+    class Meta:
+        unique_together = (("slice", "switch_port"), )
+
+class VirtualSwitch(Switch):
+    """
+        A virtual switch service that created on a Physical Server
+    """
+    server = models.ForeignKey(Server)
 

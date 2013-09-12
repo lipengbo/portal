@@ -7,26 +7,26 @@ from django.db.models import F
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.utils.translation import ugettext as _
 
 
-SLICE_STATE_STOPPED = 0
-SLICE_STATE_STARTED = 1
-SLICE_STATES = (
-        (SLICE_STATE_STOPPED, 'stopped'),
-        (SLICE_STATE_STARTED, 'started'),)
 
 SWITCH_TYPE_PHYSICAL = 0
 SWITCH_TYPE_VIRTUAL = 1
 SWITCH_TYPES = (
         (SWITCH_TYPE_PHYSICAL, 'physical'),
         (SWITCH_TYPE_VIRTUAL, 'virtual')
-        )
+)
+
 class City(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField()
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _("City")
 
 class Island(models.Model):
     name = models.CharField(max_length=256)
@@ -36,20 +36,26 @@ class Island(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Island")
+
 class Category(models.Model):
     name = models.CharField(max_length=256, unique=True)
 
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Category")
+
 class Project(models.Model):
     owner = models.ForeignKey(User)
-    name = models.CharField(max_length=256, verbose_name="名称")
-    description = models.TextField(verbose_name="描述")
-    islands = models.ManyToManyField(Island, verbose_name="节点")  # Usage: project.islands.add(island)
+    name = models.CharField(max_length=256, verbose_name=_("Project Name"))
+    description = models.TextField(verbose_name=_("Project Description"))
+    islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
-            related_name="project_belongs", verbose_name="成员") 
-    categories = models.ManyToManyField(Category, through="ProjectCategory", verbose_name="分类")
+            related_name="project_belongs", verbose_name=_("Memberships")) 
+    category = models.ForeignKey(Category, verbose_name=_("Category"))
 
     def add_category(self, category):
         project_category, created = ProjectCategory.objects.get_or_create(category=category,
@@ -62,14 +68,8 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
-
-class ProjectCategory(models.Model):
-    project = models.ForeignKey(Project)
-    category = models.ForeignKey(Category)
-
     class Meta:
-        unique_together = (("project", "category"),)
-
+        verbose_name = _("Project")
 
 class Membership(models.Model):
     project = models.ForeignKey(Project)
@@ -79,6 +79,7 @@ class Membership(models.Model):
 
     class Meta:
         unique_together = (("project", "user"), )
+        verbose_name = _("Membership")
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)
 #@receiver(m2m_changed, sender=Controller.slices.through)

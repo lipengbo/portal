@@ -1,0 +1,39 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% block body %}
+<div class="page-header">
+    <h1>{% trans "Basic info" %}</h1>
+</div>
+<div class="row-fluid">
+    <dl class="dl-horizontal">
+        <dt>{% trans "Project Name" %}</dt>
+        <dd>
+            <h3>{{ project.name }}</h3>
+        </dd>
+        <dt>
+            {% trans "Project Description" %}
+        </dt>
+        <dd>{{ project.description }}</dd>
+        <dt>
+            {% trans "Creator" %}
+        <dt>
+        <dd>
+            {{ project.owner }}
+        </dd>
+        <dt>
+            {% trans "Category" %}
+        </dt>
+        <dd>
+            <span class="label label-success">{{ project.category }}</span>
+        </dd>
+        <dt>
+            {% trans "Selected Islands" %}
+        </dt>
+        <dd>
+            {% for island in project.islands.all %}
+                {{ island.name }}
+            {% endfor %}
+        <dd>
+    </dl>
+</div>
+{% endblock %}

@@ -12,12 +12,13 @@ from django.contrib.auth.models import User
 from project.models import (Project, Category, Island)
 
 class SimpleTest(TestCase):
-    fixtures = ['users.json', 'projects.json', 'islands.json',
+    fixtures = ['users.json', 'islands.json',
             'cities.json', 'categories']
 
     def test_create_project(self):
         owner = User.objects.all()[0]
-        project = Project(name="sdn project", owner=owner)
+        category = Category.objects.all()[0]
+        project = Project(name="sdn project", owner=owner, category=category)
         project.save()
         self.assertTrue(project.id)
 
@@ -26,27 +27,10 @@ class SimpleTest(TestCase):
         category.save()
         self.assertTrue(category.id)
 
-    def test_add_category_to_project(self):
-        owner = User.objects.all()[0]
-        project = Project(name="sdn project", owner=owner)
-        project.save()
-        self.assertTrue(project.categories.count() == 0)
-        project.add_category(Category.objects.all()[0])
-        self.assertTrue(project.categories.count() == 1)
-
-    def test_add_same_category_to_project(self):
-        owner = User.objects.all()[0]
-        project = Project(name="sdn project", owner=owner)
-        project.save()
-        self.assertTrue(project.categories.count() == 0)
-        project.add_category(Category.objects.all()[0])
-        self.assertTrue(project.categories.count() == 1)
-        project.add_category(Category.objects.all()[0])
-        self.assertTrue(project.categories.count() == 1)
-
     def test_add_member_to_project(self):
         owner = User.objects.all()[0]
-        project = Project(name="sdn project", owner=owner)
+        category = Category.objects.all()[0]
+        project = Project(name="sdn project", owner=owner, category=category)
         project.save()
         self.assertTrue(project.memberships.count() == 0)
         project.add_member(User.objects.all()[1])
@@ -54,7 +38,8 @@ class SimpleTest(TestCase):
 
     def test_add_same_member_to_project(self):
         owner = User.objects.all()[0]
-        project = Project(name="sdn project", owner=owner)
+        category = Category.objects.all()[0]
+        project = Project(name="sdn project", owner=owner, category=category)
         project.save()
         self.assertTrue(project.memberships.count() == 0)
         project.add_member(User.objects.all()[1])

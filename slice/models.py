@@ -3,7 +3,14 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
 
-from project.models import *
+from project.models import Project, Island
+
+SLICE_STATE_STOPPED = 0
+SLICE_STATE_STARTED = 1
+SLICE_STATES = (
+        (SLICE_STATE_STOPPED, 'stopped'),
+        (SLICE_STATE_STARTED, 'started'),
+)
 # Create your models here.
 class Slice(models.Model):
     owner = models.ForeignKey(User)

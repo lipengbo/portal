@@ -6,9 +6,24 @@
 {% block extra_head_base %}
     {% block extra_head %}{% endblock %}
 {% endblock %}
-
-{% block footer %}
-    {% include "_footer.html" %}
+{% block body_base %}
+    <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="#">{% trans "Project" %}</a> <span class="divider">/</span>{% block breadcrumb %}
+            {% endblock %}</li>
+        </ul>
+        {% include "_messages.html" %}
+        {% block body %}
+        {% endblock %}
+        {% block footer_base %}
+            <hr />
+            <footer>
+                {% block footer %}
+                    {% include "_footer.html" %}
+                {% endblock %}
+            </footer>
+        {% endblock %}
+    </div>
 {% endblock %}
 
 {% block extra_body_base %}
