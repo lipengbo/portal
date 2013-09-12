@@ -10,12 +10,6 @@ from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
 
-SLICE_STATE_STOPPED = 0
-SLICE_STATE_STARTED = 1
-SLICE_STATES = (
-        (SLICE_STATE_STOPPED, 'stopped'),
-        (SLICE_STATE_STARTED, 'started'),
-)
 
 SWITCH_TYPE_PHYSICAL = 0
 SWITCH_TYPE_VIRTUAL = 1
