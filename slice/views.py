@@ -25,10 +25,10 @@ def index(request):
 def create_or_edit(request):
     user = request.user
     context = {}
+    project = Project.objects.all()[0]
     if request.method == 'GET':
         pass
     else:
-        project = Project.objects.all()[0]
         name = request.POST.get("name")
         description = request.POST.get("description")
         island_id = request.POST.get("island_id")
@@ -36,19 +36,22 @@ def create_or_edit(request):
         controller_type = request.POST.get("controller_type")
         if controller_type == 'default_create':
             controller = Controller.objects.all()[0]
-        ovs_ids = request.POST.getlist("ovs_ids")
-        ovs_ports = []
-        if ovs_ids:
-            for ovs_id in ovs_ids:
-                ports = request.POST.getlist("ovs"+ovs_id+"ports")
-                if ports:
-                    ovs_port = {'ovs_id':int(ovs_id), 'ports':ports}
-                    ovs_ports.append(ovs_port)
+        else:
+            controller = Controller.objects.all()[0]
+#         ovs_ids = request.POST.getlist("ovs_ids")
+#         ovs_ports = []
+#         if ovs_ids:
+#             for ovs_id in ovs_ids:
+#                 ports = request.POST.getlist("ovs"+ovs_id+"ports")
+#                 if ports:
+#                     ovs_port = {'ovs_id':int(ovs_id), 'ports':ports}
+#                     ovs_ports.append(ovs_port)
         slice_obj = create_slice_api(project, name, description, island, user)
         slice_add_controller(slice_obj, controller, island)
+        print slice_obj.id
 #             return redirect('slice_create')
-
-    context['islands'] = [{'id':1,'name':'南京'},{'id':2,'name':'北京'}]
+    islands = project.islands.all()
+    context['islands'] = islands
     context['ovs_ports'] = [{'ovs':{'id':1, 'hostname':'ovs1'}, 'ports':[1,2,3]},
                             {'ovs':{'id':2, 'hostname':'ovs2'}, 'ports':[1,2]}]
     return render(request, 'slice/create.html', context)
