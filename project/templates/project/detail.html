@@ -7,7 +7,7 @@
 
 {% block body %}
 <div class="page-header">
-    <h1>{% trans "Basic info" %}</h1>
+    <h1>{% trans "Basic info" %}<small class="pull-right"><a href="{% url project_edit project.id %}" class="btn btn-success">{% trans "Edit" %}</a></small></h1>
 </div>
 <div class="row-fluid">
     <dl class="dl-horizontal">
@@ -42,22 +42,34 @@
     </dl>
 </div>
 <div class="page-header">
-    <h1 id="">{% trans "Members" %}</h1>
+    <h1 id="">{% trans "Members" %}
+        <small class="pull-right">
+            <a href="" class="btn btn-success">{% trans "View pending members" %}</a>
+            <a href="{% url invite_invite project.get_content_type.id project.id %}" class="btn btn-success">{% trans "Invite members" %}</a>
+        </small>
+    </h1>
 </div>
 <div class="row-fluid">
     <div class="span12">
         <table class="table table-bordered">
             <tr>
+                <th>{% trans "No." %}</th>
                 <th>{% trans "Member name" %}</th>
-                <th>{% trans "About Member" %}</th>
+                <th>{% trans "Company/Organization" %}</th>
+                <th>{% trans "Actions" %}</th>
             </tr>
             <tr>
                 {% for membership in project.memberships.all %}
+                    <td>{{ forloop.counter }}</td>
                     <td>{{ membership }}</td>
                     <td>{{ membership }}</td>
+                    <td><a href="">{% trans "Remove" %}<td>
                 {% endfor %}
             </tr>
         </table>
     </div>
+</div>
+<div class="page-header">
+    <h1 id="">{% trans "Slice" %}</h1>
 </div>
 {% endblock %}

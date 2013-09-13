@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     "plugins.vt",
     "plugins.openflow",
     "plugins.network",
+    "invite",
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -182,7 +183,8 @@ FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_USE_OPENID = False
@@ -192,6 +194,11 @@ ACCOUNT_EMAIL_AUTHENTICATION = False
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
+
+EMAIL_HOST = 'mail.fnic.cn'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'tengzhifei@fnic.cn'
+EMAIL_HOST_PASSWORD = 'fnic123'
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
