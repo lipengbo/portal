@@ -34,7 +34,7 @@ class Island(models.Model):
         verbose_name = _("Island")
 
 class Category(models.Model):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=64, unique=True)
 
     def __unicode__(self):
         return self.name

@@ -1,32 +1,79 @@
 {% extends "theme_base.html" %}
+{% load url from future %}
+{% load staticfiles %}
 
 {% load metron_tags %}
 {% load i18n %}
 
-{% block extra_head_base %}
-    {% block extra_head %}{% endblock %}
-{% endblock %}
-{% block body_base %}
-    <div class="container">
-        <ul class="breadcrumb">
-            <li><a href="#">{% trans "Project" %}</a> <span class="divider">/</span>{% block breadcrumb %}
-            {% endblock %}</li>
-        </ul>
-        {% include "_messages.html" %}
-        {% block body %}
+       {% block style_base %}
+            <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
+            <link href="{% static "css/own.css" %}" rel="stylesheet">
+            {% block extra_style %}{% endblock %}
         {% endblock %}
-        {% block footer_base %}
-            <hr />
+        
+		{% block extra_head_base %}
+		    {% block extra_head %}{% endblock %}
+		{% endblock %}
+				
+		{% block topbar_base %}
+                <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %} navbar-inverse">
+                    <div class="navbar-inner">
+                        <div class="container">
+                            {% block topbar %}
+                                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                    <span class="icon-bar"></span>
+                                </a>
+                                {% block site_brand %}{% endblock %}
+                                <div class="nav-collapse collapse">
+                                    {% block nav %}
+                                    	<ul class="nav">
+					                      <li class="active"><a href="#">首页</a></li>
+					                      <li><a href="#">项目</a></li>
+					                      <li><a href="#">消息日志</a></li>
+					                      <li><a href="#">权限</a></li>
+					                      <li><a href="#">帮助</a></li>
+					                    </ul>
+                                        {% comment %}
+                                            <ul class="nav">
+                                                <li><a href="#tab_one">One</a></li>
+                                                <li><a href="#tab_two">Two</a></li>
+                                            </ul>
+                                        {% endcomment %}
+                                    {% endblock %}
+                                    {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
+                                </div>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+		{% block body_base %}
+		    <div class="container">
+		    	{% block breadcrumb_base %}
+		        <ul class="breadcrumb">
+		            <li><a href="#">{% trans "Project" %}</a> <span class="divider">/</span>
+		            {% block breadcrumb %}
+		            {% endblock %}
+		            </li>
+		        </ul>
+		        {% endblock %}
+		        {% include "_messages.html" %}
+		        {% block body %}
+		        {% endblock %}		        
+		    </div>
+		{% endblock %}
+
+{% block extra_body_base %}
+    {% analytics %}
+    {% block extra_body %}
+    	{% block footer_base %}
             <footer>
                 {% block footer %}
                     {% include "_footer.html" %}
                 {% endblock %}
             </footer>
         {% endblock %}
-    </div>
-{% endblock %}
-
-{% block extra_body_base %}
-    {% analytics %}
-    {% block extra_body %}{% endblock %}
+    {% endblock %}
 {% endblock %}

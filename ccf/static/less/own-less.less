@@ -9,72 +9,25 @@ body {
 
 a {outline:none !important;}
 
-#top_line {
-	background-color: #FFF;
-	border-bottom: 1px solid #e5e4e4;
-	height: 10px;
-	width: 100%;
-}
-
 .container {
     width: 1024px;
 }
 
-.navbar {
-	top:-11px;
-	position:relative;
-	height:45px;
-	margin-bottom:0;
+.navbar-inverse {
 	.navbar-inner {
-		  background:none;
-		  border:none;
-		  border-radius: 0;
-		  box-shadow:none;
-		  padding-left:0;
-		  padding-right:0;
-		  .container {
-			  	margin:0;
-			  	#menu {
-		    	float:right;
-		    	border-radius: 0px 0px 5px 5px;
-				-moz-border-radius: 0px 0px 5px 5px;
-				-webkit-border-radius: 0px 0px 5px 5px;
-				border-bottom: 1px solid #e5e4e4;
-				border-left: 1px solid #e5e4e4;
-				border-right: 1px solid #e5e4e4;
-				background: #FFF;
-				position:relative;
-				.white-fix-left {
-					background-color: white;
-					position: absolute;
-					height: 10px;
-					width: 684px;
-					right: -1px;
-				}
-				.nav_top {
-					float:right;
-					padding:0 5px;
-					margin:0;
-					li {
-						float: left;
-						line-height: 20px;
-						border-left: 1px solid #e5e4e4;	
-						padding-left:5px;
-						a {
-							padding:12px 50px 12px 45px;
-						}
-					}
-					li:first-child {
-			        	border-left: none;
-			        }
-			        li.active a {
-			        	background-color:#fff;
-			        	box-shadow:none;
-		            }
-				}
-	      }
-	  }
-	}  
+		background:#3b6998;
+		border-color:#023c70;
+		.nav > li > a {
+			color:#ddd;
+		}		
+		.nav > li > a:hover {
+			color:#fff;
+		}
+		.nav .active > a {
+			color:#fff;
+			background:#0b4073;
+		}
+	}
 }
 
 .posit_re {
@@ -108,7 +61,7 @@ width: 100%;
 margin: 0;
 padding: 0;
 list-style: none;
-border-bottom: 4px solid #34495e;
+border-bottom: 4px solid #0b4073;
 margin-top:40px;
 }
 
@@ -128,21 +81,21 @@ text-transform: uppercase;
 text-decoration: none;
 color: #fff;
 border-right: 30px solid transparent;
-border-bottom: 30px solid #34495e;
+border-bottom: 30px solid #0b4073;
 border-bottom-color: #777\9;
 opacity: .3;
 filter: alpha(opacity=30);
 }
 
 #tabs a:hover, #tabs a:focus {
-border-bottom-color: #4e6d8d;
+border-bottom-color: #3b6998;
 opacity: 1;
 filter: alpha(opacity=100);
 }
 
 #tabs .active a {
 z-index: 3;
-border-bottom-color: #34495e;
+border-bottom-color: #0b4073;
 opacity: 1;
 filter: alpha(opacity=100);
 }
@@ -192,7 +145,7 @@ width: 1024px;
 }
 
 #footer{
-	background-color: #34495e;
+	background-color: #0b4073;
 	border-top: 3px solid #ddd;
 	color: #FFF;
 	font-size: 12px;
@@ -201,6 +154,7 @@ width: 1024px;
 	padding-bottom: 15px;
 	padding-top: 15px;
 	text-align:center;
+	margin-top:20px;
 }
 
 .breadcrumb {
