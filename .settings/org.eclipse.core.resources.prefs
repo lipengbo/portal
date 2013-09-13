@@ -4,6 +4,7 @@ encoding//plugins/openflow/flowspace_api.py=utf-8
 encoding//plugins/openflow/flowvisor_api.py=utf-8
 encoding//project/forms.py=utf-8
 encoding//project/models.py=utf-8
+encoding//resources/island_api.py=utf-8
 encoding//resources/ovs_api.py=utf-8
 encoding//resources/views.py=utf-8
 encoding//slice/slice_api.py=utf-8

@@ -13,6 +13,9 @@ class Controller(ServiceResource):
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
 
+    def is_used(self):
+        return self.slices.all().count() > 0
+
 
 class Flowvisor(ServiceResource):
     def on_add_into_slice(self, slice_obj):
@@ -35,6 +38,5 @@ class FlowSpaceRule(Resource):
     nw_tos = models.CharField(max_length=256)
     tp_src = models.CharField(max_length=256)
     tp_dst = models.CharField(max_length=256)
-    wildcards = models.CharField(max_length=256)
     is_default = models.IntegerField()
     actions = models.CharField(max_length=256)

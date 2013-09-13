@@ -1,55 +1,54 @@
 # coding:utf-8
 from models import *
 from django.db import transaction
-from CENI.Project.project_exception import *
+from slice.slice_exception import DbError
+from plugins.openflow.models import FlowSpaceRule
 
 
 import logging
 LOG = logging.getLogger("CENI")
 
 
+@transaction.commit_on_success
 def flowspace_nw_add(slice_obj, old_nws, new_nm):
     """添加网段时添加flowspace
     """
     LOG.debug('flowspace_nw_add')
-    from CENI.Project.slice_api import update_slice_virtual_network
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
-        return False
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex)
     if new_nm:
-        name = str(slice_obj.name) + '_df'
-        nw_num = len(old_nws)
-        if nw_num > 0:
-            for i in range(nw_num):
-                create_default_flowspace(slice_obj, name, '', '100', '', '',
-                    '', '', '', '0x800', old_nws[i], new_nm, '', '', '', '')
-                create_default_flowspace(slice_obj, name, '', '100', '', '',
-                    '', '', '', '0x800', new_nm, old_nws[i], '', '', '', '')
-        create_default_flowspace(slice_obj, name, '', '100', '', '',
-            '', '', '', '0x800', new_nm, new_nm, '', '', '', '')
-        create_default_flowspace(slice_obj, name, '', '100', '', '',
-            '', '', '', '0x806', new_nm, new_nm, '', '', '', '')
-        if not update_slice_virtual_network(slice_obj):
-            return False
-    return True
+        try:
+            name = str(slice_obj.name) + '_df'
+            nw_num = len(old_nws)
+            if nw_num > 0:
+                for i in range(nw_num):
+                    create_default_flowspace(slice_obj, name, '100', '', '',
+                        '', '', '', '0x800', old_nws[i], new_nm, '', '', '', '')
+                    create_default_flowspace(slice_obj, name, '100', '', '',
+                        '', '', '', '0x800', new_nm, old_nws[i], '', '', '', '')
+            create_default_flowspace(slice_obj, name, '100', '', '',
+                '', '', '', '0x800', new_nm, new_nm, '', '', '', '')
+            create_default_flowspace(slice_obj, name, '100', '', '',
+                '', '', '', '0x806', new_nm, new_nm, '', '', '', '')
+        except Exception, ex:
+            transaction.rollback()
+            raise DbError(ex)
 
 
 def flowspace_nw_del(slice_obj, del_nw):
     """删除网段时删除相应flowspace
     """
     LOG.debug('flowspace_nw_del')
-    from CENI.Project.slice_api import update_slice_virtual_network
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if del_nw:
         name = str(slice_obj.name) + '_df'
         delete_default_flowspace(slice_obj, name, '', '', del_nw, '')
         delete_default_flowspace(slice_obj, name, '', '', '', del_nw)
-        if not update_slice_virtual_network(slice_obj):
-            return False
     return True
 
 
@@ -57,21 +56,18 @@ def flowspace_gw_add(slice_obj, new_gateway):
     """添加网关时添加flowspace
     """
     LOG.debug('flowspace_gw_add')
-    from CENI.Project.slice_api import get_slice_nws, update_slice_virtual_network
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if new_gateway:
         name = str(slice_obj.name) + '_df'
-        haved_nws = get_slice_nws(slice_obj)
+        haved_nws = slice_obj.get_nws()
         for haved_nw in haved_nws:
-            create_default_flowspace(slice_obj, name, '', '100', '', '',
+            create_default_flowspace(slice_obj, name, '100', '', '',
                 '', '', new_gateway, '0x800', haved_nw, '', '', '', '', '')
-            create_default_flowspace(slice_obj, name, '', '100', '', '',
+            create_default_flowspace(slice_obj, name, '100', '', '',
                 '', new_gateway, '', '0x800', '', haved_nw, '', '', '', '')
-        if not update_slice_virtual_network(slice_obj):
-            return False
     return True
 
 
@@ -79,17 +75,14 @@ def flowspace_gw_del(slice_obj, del_gateway):
     """删除网关时删除相应flowspace
     """
     LOG.debug('flowspace_gw_del')
-    from CENI.Project.slice_api import update_slice_virtual_network
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if del_gateway:
         name = str(slice_obj.name) + '_df'
         delete_default_flowspace(slice_obj, name, del_gateway, '', '', '')
         delete_default_flowspace(slice_obj, name, '', del_gateway, '', '')
-        if not update_slice_virtual_network(slice_obj):
-            return False
     return True
 
 
@@ -97,23 +90,21 @@ def flowspace_dhcp_add(slice_obj, new_dhcp):
     """添加dhcp服务器时添加flowspace
     """
     LOG.debug('flowspace_dhcp_add')
-    from CENI.Project.slice_api import get_slice_dhcps, get_slice_vms, update_slice_virtual_network
+    from CENI.Project.slice_api import get_slice_dhcps, get_slice_vms
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if new_dhcp:
         name = str(slice_obj.name) + '_df'
-        create_default_flowspace(slice_obj, name, '', '1', '', '',
+        create_default_flowspace(slice_obj, name, '1', '', '',
             '', new_dhcp, '', '', '', '', '', '', '', '')
         haved_dhcps = get_slice_dhcps(slice_obj)
         if len(haved_dhcps) == 1:
             haved_vms = get_slice_vms(slice_obj)
             for haved_vm in haved_vms:
-                create_default_flowspace(slice_obj, name, '', '1', '', '',
+                create_default_flowspace(slice_obj, name, '1', '', '',
                     '', str(haved_vm.mac), '', '', '', '', '', '', '', '')
-        if not update_slice_virtual_network(slice_obj):
-            return False
     return True
 
 
@@ -121,10 +112,10 @@ def flowspace_dhcp_del(slice_obj, del_dhcp):
     """删除dhcp服务器时删除相应flowspace
     """
     LOG.debug('flowspace_dhcp_del')
-    from CENI.Project.slice_api import get_slice_dhcps, get_slice_vms, update_slice_virtual_network
+    from CENI.Project.slice_api import get_slice_dhcps, get_slice_vms
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if del_dhcp:
         name = str(slice_obj.name) + '_df'
@@ -134,8 +125,6 @@ def flowspace_dhcp_del(slice_obj, del_dhcp):
             haved_vms = get_slice_vms(slice_obj)
             for haved_vm in haved_vms:
                 delete_default_flowspace(slice_obj, name, str(haved_vm.mac), '', '', '')
-        if not update_slice_virtual_network(slice_obj):
-            return False
     return True
 
 
@@ -143,19 +132,17 @@ def flowspace_vm_add(slice_obj, new_vm):
     """添加虚拟机时添加flowspace
     """
     LOG.debug('flowspace_vm_add')
-    from CENI.Project.slice_api import get_slice_dhcps, update_slice_virtual_network
+    from CENI.Project.slice_api import get_slice_dhcps
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if new_vm:
         haved_dhcps = get_slice_dhcps(slice_obj)
         if len(haved_dhcps) != 0:
             name = str(slice_obj.name) + '_df'
-            create_default_flowspace(slice_obj, name, '', '1', '', '',
+            create_default_flowspace(slice_obj, name, '1', '', '',
                 '', new_vm, '', '', '', '', '', '', '', '')
-            if not update_slice_virtual_network(slice_obj):
-                return False
     return True
 
 
@@ -163,32 +150,29 @@ def flowspace_vm_del(slice_obj, del_vm):
     """删除虚拟机时删除相应flowspace
     """
     LOG.debug('flowspace_vm_del')
-    from CENI.Project.slice_api import get_slice_dhcps, update_slice_virtual_network
+    from CENI.Project.slice_api import get_slice_dhcps
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
-    except ceni_slice.DoesNotExist:
+        Slice.objects.get(id=slice_obj.id)
+    except Slice.DoesNotExist:
         return False
     if del_vm:
         haved_dhcps = get_slice_dhcps(slice_obj)
         if len(haved_dhcps) != 0:
             name = str(slice_obj.name) + '_df'
             delete_default_flowspace(slice_obj, name, del_vm, '', '', '')
-            if not update_slice_virtual_network(slice_obj):
-                return False
     return True
 
 
-@transaction.commit_on_success
-def create_default_flowspace(slice_obj, name, dpid, priority, in_port, dl_vlan,
+def create_default_flowspace(slice_obj, name, priority, in_port, dl_vlan,
     dl_vpcp, dl_src, dl_dst, dl_type, nw_src, nw_dst, nw_proto, nw_tos, tp_src,
     tp_dst):
     """创建默认flowspace
     """
     LOG.debug('create_default_flowspace')
     try:
-        flowspace_obj = ceni_flowspace(
+        flowspace_obj = FlowSpaceRule(
+            slice=slice_obj,
             name=name,
-            dpid=dpid,
             priority=priority,
             in_port=in_port,
             dl_vlan=dl_vlan,
@@ -205,13 +189,10 @@ def create_default_flowspace(slice_obj, name, dpid, priority, in_port, dl_vlan,
             is_default=1,
             actions=7)
         flowspace_obj.save()
-        slice_flowspace = ceni_slice_resource(
-            slice_id=slice_obj.id,
-            resource_type=1,
-            resource_id=flowspace_obj.id)
-        slice_flowspace.save()
     except Exception, ex:
-        transaction.rollback()
+        raise DbError(ex)
+    else:
+        return flowspace_obj
 
 
 @transaction.commit_on_success
@@ -295,62 +276,14 @@ def create_user_flowspace(slice_obj, name, dpid, priority, in_port, dl_vlan,
     """创建用户flowspace
     """
     LOG.debug('create_user_flowspace')
-    try:
-        flowspace_obj = ceni_flowspace(
-            name=name,
-            dpid=dpid,
-            priority=priority,
-            in_port=in_port,
-            dl_vlan=dl_vlan,
-            dl_vpcp=dl_vpcp,
-            dl_src=dl_src,
-            dl_dst=dl_dst,
-            dl_type=dl_type,
-            nw_src=nw_src,
-            nw_dst=nw_dst,
-            nw_proto=nw_proto,
-            nw_tos=nw_tos,
-            tp_src=tp_src,
-            tp_dst=tp_dst,
-            is_default=0,
-            actions=7)
-        flowspace_obj.save()
-        slice_flowspace = ceni_slice_resource(
-            slice_id=slice_obj.id,
-            resource_type=1,
-            resource_id=flowspace_obj.id)
-        slice_flowspace.save()
-    except Exception, ex:
-        transaction.rollback()
-        raise DbError(ex)
 
 
-@transaction.commit_on_success
 def edit_user_flowspace(flowspace_obj, dpid, priority, in_port, dl_vlan,
     dl_vpcp, dl_src, dl_dst, dl_type, nw_src, nw_dst, nw_proto, nw_tos, tp_src,
     tp_dst):
     """编辑用户flowspace
     """
     LOG.debug('edit_user_flowspace')
-    try:
-        flowspace_obj.dpid = dpid
-        flowspace_obj.priority = priority
-        flowspace_obj.in_port = in_port
-        flowspace_obj.dl_vlan = dl_vlan
-        flowspace_obj.dl_vpcp = dl_vpcp
-        flowspace_obj.dl_src = dl_src
-        flowspace_obj.dl_dst = dl_dst
-        flowspace_obj.dl_type = dl_type
-        flowspace_obj.nw_src = nw_src
-        flowspace_obj.nw_dst = nw_dst
-        flowspace_obj.nw_proto = nw_proto
-        flowspace_obj.nw_tos = nw_tos
-        flowspace_obj.tp_src = tp_src
-        flowspace_obj.tp_dst = tp_dst
-        flowspace_obj.save()
-    except Exception, ex:
-        transaction.rollback()
-        raise DbError(ex)
 
 
 def delete_user_flowspace(flowspace_obj):

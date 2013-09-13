@@ -40,6 +40,39 @@ class Slice(models.Model):
     def remove_resource(self, resource):
         resource.on_remove_from_slice(self)
 
+    def get_flowvisor(self):
+        flowvisors = self.flowvisor_set.all()
+        if flowvisors:
+            return flowvisors[0]
+        else:
+            return None
+
+    def get_controller(self):
+        controllers = self.controller_set.all()
+        if controllers:
+            return controllers[0]
+        else:
+            return None
+
+    def get_island(self):
+        islands = self.islands.all()
+        if islands:
+            return islands[0]
+        else:
+            return None
+
+    def get_switches(self):
+        return self.switch_set.all()
+
+    def get_virtual_switches(self):
+        return self.virtualswitch_set.all()
+
+    def get_default_flowspaces(self):
+        return self.flowspacerule_set.filter(is_default=1)
+
+    def get_switch_ports(self):
+        return self.switchport_set.all()
+
     def __unicode__(self):
         return self.name
 

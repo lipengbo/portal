@@ -1,5 +1,4 @@
 # coding:utf-8
-from models import *
 from flowvisor_proxy import *
 from slice.slice_exception import *
 from django.contrib.auth.models import User as ceni_user
@@ -16,9 +15,9 @@ def flowvisor_add_slice(flowvisor, controller, slice_name, user_email):
         controllerAdd = 'tcp:' + str(controller.ip) + ':' + str(controller.port) + ''
         args = [slice_name, controllerAdd, user_email]
         pwd = "cdn%nf"
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
-        adslice = do_addSlice(args, pwd, flowvisor_url, flowvisor_ps)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
+        adslice = do_addSlice(args, pwd, False, flowvisor_url, flowvisor_ps)
         if adslice == 'error':
             raise FlowvisorError("flowvisor上创建slice失败,flowvisor连接失败或控制器不可用!")
     else:
@@ -33,8 +32,8 @@ def flowvisor_update_sice_controller(flowvisor, controller, slice_obj):
         args = [str(slice_obj.name)]
         opts = {'chost': str(controller.ip), 'cport': int(controller.port)}
         print opts
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
         upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
         if upslice == 'error':
             raise FlowvisorError("flowvisor上更新控制器失败,flowvisor连接失败或控制器不可用!")
@@ -49,8 +48,8 @@ def flowvisor_update_slice_status(flowvisor, status, slice_obj):
     if flowvisor and slice_obj:
         args = [str(slice_obj.name)]
         opts = {'status': status}
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
         upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
         if upslice == 'error':
             raise FlowvisorError("flowvisor更新slice状态失败!")
@@ -64,8 +63,8 @@ def flowvisor_del_slice(flowvisor, slice_obj):
     LOG.debug('flowvisor_del_slice')
     if flowvisor and slice_obj:
         args = [str(slice_obj.name)]
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
         do_removeSlice(args, flowvisor_url, flowvisor_ps)
     else:
         raise DbError("数据库异常")
@@ -79,8 +78,8 @@ def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
     if flowvisor:
         fsaction = '' + str(slice_name) + '=' + str(slice_action) + ''
         pwd = str(pwd)
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
         dpid = str(dpid)
         name = str(name)
         priority = str(priority)
@@ -105,8 +104,8 @@ def flowvisor_update_flowspace(flowvisor, flowspace_name, priority_flag,
             opts['prio'] = priority
         if arg_match_flag == 1:
             opts['match'] = arg_match
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
         args = [flowspace_name]
         upflowspace = do_updateFlowSpace(args, opts, flowvisor_url, flowvisor_ps)
         if upflowspace == 'error':
@@ -121,8 +120,8 @@ def flowvisor_del_flowspace(flowvisor, flowspace_name):
     LOG.debug('flowvisor_del_flowspace')
     if flowvisor:
         args = [flowspace_name]
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.port) + ""
-        flowvisor_ps = str(flowvisor.passwd)
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
         do_removeFlowSpace(args, flowvisor_url, flowvisor_ps)
     else:
         raise DbError("数据库异常")

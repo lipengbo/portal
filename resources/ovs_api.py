@@ -1,6 +1,7 @@
 # coding:utf-8
-from models import *
-from CENI.Project.project_exception import *
+from models import Slice
+from resources.models import SwitchPort
+from slice.slice_exception import DbError
 from django.db import transaction
 import logging
 LOG = logging.getLogger("CENI")
@@ -8,55 +9,25 @@ OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
 
 
 @transaction.commit_on_success
-def slice_add_ovss(slice_obj, new_dpids):
+def slice_add_ovs_ports(slice_obj, ovs_ports):
     """slice添加交换
     """
     LOG.debug('slice_add_ovss')
-    from CENI.Project.slice_api import get_slice_flowvisor, get_slice_island, get_slice_dpids, update_slice_virtual_network
     try:
-        ceni_slice.objects.get(id=slice_obj.id)
+        Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex)
-    flowvisor = get_slice_flowvisor(slice_obj)
-    island = get_slice_island(slice_obj)
-    flag = 0
-    if flowvisor and island:
-        try:
-            for new_dpid in new_dpids:
-                try:
-                    ovs = ceni_facility_server.objects.get(dpid=new_dpid)
-                    ceni_island_facility.objects.get(island_id=island.id,
-                                                     facility_type=2,
-                                                     facility_id=ovs.id)
-                except:
-                    pass
-                else:
-                    flowvisor_ovs = ceni_flowvisor_related(
-                        slice_id=slice_obj.id,
-                        flowvisor_id=flowvisor.id,
-                        related_id=ovs.id,
-                        related_type=2,
-                        island_id=island.id)
-                    flowvisor_ovs.save()
-                    haved_dpids = get_slice_dpids(slice_obj)
-                    dst_links = flowvisor.flowvisorlink_set.filter(
-                        src_dpid__in=haved_dpids, dst_dpid=new_dpid)
-                    src_links = flowvisor.flowvisorlink_set.filter(
-                        dst_dpid__in=haved_dpids, src_dpid=new_dpid)
-                    links = []
-                    links.extend(src_links)
-                    links.extend(dst_links)
-                    for link in links:
-                        slice_add_ovs_ports(slice_obj, link.src_dpid, link.src_port)
-                        slice_add_ovs_ports(slice_obj, link.dst_dpid, link.dst_port)
-                        flag = 1
-            if flag == 1:
-                update_slice_virtual_network(slice_obj)
-        except Exception, ex:
-            transaction.rollback()
-            raise DbError(ex)
-    else:
-        raise DbError("数据库异常")
+    try:
+        for ovs_port in ovs_ports:
+            slice_obj.add_resource(ovs_port['ovs'])
+            for port in ovs_port['ports']:
+                switch_port = SwitchPort(switch=ovs_port['ovs'],
+                                         port=port)
+                switch_port.save()
+                slice_obj.add_resource(switch_port)
+    except Exception, ex:
+        transaction.rollback()
+        raise DbError(ex)
 
 
 @transaction.commit_on_success
@@ -143,35 +114,35 @@ def slice_remove_ovss(slice_obj, remove_dpids):
             raise DbError(ex)
 
 
-@transaction.commit_on_success
-def slice_add_ovs_ports(slice_obj, dpid, port):
-    """slice添加交换端口
-    """
-    LOG.debug('slice_add_ovs_ports')
-    try:
-        ceni_slice.objects.get(id=slice_obj.id)
-        ovs = ceni_facility_server.objects.get(dpid=dpid)
-    except Exception, ex:
-        raise DbError(ex)
-#     dpid_lists = dpid.split(':')
-#     if len(dpid_lists) > 2 and dpid_lists[0] == 'ff' and dpid_lists[1] == 'ff':
-#         port = -1
-    slice_dpid_ports_count = ceni_slice_switch.objects.filter(
-        slice_id=slice_obj.id,
-        switch_id=ovs.id,
-        dpid=ovs.dpid,
-        port=port).count()
-    if slice_dpid_ports_count == 0:
-        try:
-            slice_dpid_port = ceni_slice_switch(
-                slice_id=slice_obj.id,
-                switch_id=ovs.id,
-                dpid=ovs.dpid,
-                port=port)
-            slice_dpid_port.save()
-        except Exception, ex:
-            transaction.rollback()
-            raise DbError(ex)
+# @transaction.commit_on_success
+# def slice_add_ovs_ports(slice_obj, dpid, port):
+#     """slice添加交换端口
+#     """
+#     LOG.debug('slice_add_ovs_ports')
+#     try:
+#         ceni_slice.objects.get(id=slice_obj.id)
+#         ovs = ceni_facility_server.objects.get(dpid=dpid)
+#     except Exception, ex:
+#         raise DbError(ex)
+# #     dpid_lists = dpid.split(':')
+# #     if len(dpid_lists) > 2 and dpid_lists[0] == 'ff' and dpid_lists[1] == 'ff':
+# #         port = -1
+#     slice_dpid_ports_count = ceni_slice_switch.objects.filter(
+#         slice_id=slice_obj.id,
+#         switch_id=ovs.id,
+#         dpid=ovs.dpid,
+#         port=port).count()
+#     if slice_dpid_ports_count == 0:
+#         try:
+#             slice_dpid_port = ceni_slice_switch(
+#                 slice_id=slice_obj.id,
+#                 switch_id=ovs.id,
+#                 dpid=ovs.dpid,
+#                 port=port)
+#             slice_dpid_port.save()
+#         except Exception, ex:
+#             transaction.rollback()
+#             raise DbError(ex)
 
 
 @transaction.commit_on_success

@@ -55,7 +55,7 @@ class ComputeResource(IslandResource):
     mac = models.CharField(max_length=256, null=True)
     update_time = models.DateTimeField(auto_now_add=True)
 
-    slices = models.ManyToManyField(Slice)
+    slices = models.ManyToManyField(Slice, blank=True)
 
     def __unicode__(self):
         return self.hostname
