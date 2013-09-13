@@ -151,7 +151,7 @@ def get_slice_topology(slice_obj):
     for haved_dpid in haved_dpids:
         switch = {'dpid': haved_dpid}
         switches.append(switch)
-    flowvisor = get_slice_flowvisor(slice_obj)
+    flowvisor = slice_obj.get_flowvisor()
     if flowvisor:
         link_objs = flowvisor.flowvisorlink_set.filter(
             src_dpid__in=haved_dpids, dst_dpid__in=haved_dpids)

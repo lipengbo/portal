@@ -10,7 +10,7 @@ from plugins.openflow.controller_api import slice_add_controller
 from slice.models import Slice
 from plugins.openflow.models import Controller, Flowvisor, FlowSpaceRule
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
-from project.models import Island
+from project.models import Island, City
 from resources.models import Server
 from plugins.openflow.flowspace_api import create_default_flowspace, flowspace_nw_add
 
@@ -23,6 +23,9 @@ class ControllerTest(TestCase):
         slice_obj = Slice.objects.all()[0]
 #         print slice_obj.controller_set.all().count()
         controller = Controller.objects.all()[0]
+        citys = City.objects.all()
+        islands = Island.objects.filter(city__in=citys)
+        print islands.count()
         try:
             slice_add_controller(slice_obj, controller)
         except Exception, ex:

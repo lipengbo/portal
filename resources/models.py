@@ -125,7 +125,7 @@ class SwitchPort(Resource):
 
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     switch = models.ForeignKey(Switch)
-    port = models.PositiveIntegerField()
+    port = models.IntegerField()
     slices = models.ManyToManyField(Slice, through="SlicePort")
 
     def on_add_into_slice(self, slice_obj):

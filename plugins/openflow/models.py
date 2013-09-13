@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
 
-from resources.models import ServiceResource, Resource, Switch
+from resources.models import ServiceResource, Resource, SwitchPort
 from slice.models import Slice
 
 
@@ -44,9 +44,5 @@ class FlowSpaceRule(Resource):
 class Link(models.Model):
 
     flowvisor = models.ForeignKey(Flowvisor)
-
-    source = models.ForeignKey(Switch, related_name="source_links")
-    source_port = models.PositiveIntegerField()
-
-    target = models.ForeignKey(Switch, related_name="target_links")
-    target_port = models.PositiveIntegerField()
+    source = models.ForeignKey(SwitchPort, related_name="source_links")
+    target = models.ForeignKey(SwitchPort, related_name="target_links")
