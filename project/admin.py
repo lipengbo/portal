@@ -3,10 +3,9 @@ from django.contrib import admin
 from project.models import (City, Island, Project, Category,
         Membership)
 from slice.models import Slice
-from resources.models import  Switch, Server
+from resources.models import  Switch, SwitchPort, Server, VirtualSwitch
 from plugins.openflow.models import Flowvisor, Controller
-from plugins.network.models import VirtualSwitch,\
-        Network, SwitchPort, IPAddress
+from plugins.network.models import Network, IPAddress
 from plugins.vt.models import VirtualMachine, HostMac
 
 admin.site.register(City)

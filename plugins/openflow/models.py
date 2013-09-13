@@ -40,3 +40,13 @@ class FlowSpaceRule(Resource):
     tp_dst = models.CharField(max_length=256)
     is_default = models.IntegerField()
     actions = models.CharField(max_length=256)
+
+class Link(models.Model):
+
+    flowvisor = models.ForeignKey(Flowvisor)
+
+    source = models.ForeignKey(Switch, related_name="source_links")
+    source_port = models.PositiveIntegerField()
+
+    target = models.ForeignKey(Switch, related_name="target_links")
+    target_port = models.PositiveIntegerField()

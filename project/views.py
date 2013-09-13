@@ -12,6 +12,7 @@ from django.utils.translation import ugettext as _
 from project.models import Project
 from project.forms import ProjectForm
 
+@login_required
 def index(request):
     user = request.user
     projects = Project.objects.filter(owner=user)
