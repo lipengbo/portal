@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
 
-from resources.models import ServiceResource, Resource, Switch
+from resources.models import ServiceResource, Resource, SwitchPort, Switch
 from slice.models import Slice
 
 
@@ -12,6 +12,9 @@ class Controller(ServiceResource):
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
+
+    def is_used(self):
+        return self.slices.all().count() > 0
 
 
 class Flowvisor(ServiceResource):
@@ -35,16 +38,11 @@ class FlowSpaceRule(Resource):
     nw_tos = models.CharField(max_length=256)
     tp_src = models.CharField(max_length=256)
     tp_dst = models.CharField(max_length=256)
-    wildcards = models.CharField(max_length=256)
     is_default = models.IntegerField()
     actions = models.CharField(max_length=256)
 
 class Link(models.Model):
 
     flowvisor = models.ForeignKey(Flowvisor)
-
-    source = models.ForeignKey(Switch, related_name="source_links")
-    source_port = models.PositiveIntegerField()
-
-    target = models.ForeignKey(Switch, related_name="target_links")
-    target_port = models.PositiveIntegerField()
+    source = models.ForeignKey(SwitchPort, related_name="source_links")
+    target = models.ForeignKey(SwitchPort, related_name="target_links")

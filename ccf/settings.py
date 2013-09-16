@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     "plugins.vt",
     "plugins.openflow",
     "plugins.network",
+    "invite",
 ]
 
 # A sample logging configuration. The only tangible logging
@@ -157,6 +158,12 @@ INSTALLED_APPS = [
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+    'formatters': {
+        'standard': {
+
+            'format': '%(asctime)s [%(name)s] [%(pathname)s.%(funcName)s:%(lineno)d] [%(levelname)s]- %(message)s'
+        },
+    },
     "filters": {
         "require_debug_false": {
             "()": "django.utils.log.RequireDebugFalse"
@@ -167,7 +174,28 @@ LOGGING = {
             "level": "ERROR",
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
-        }
+        },
+        'ceni_debug': {
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/ceni_debug.log',
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+        'ceni_error': {
+            'level':'ERROR',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename': 'logs/ceni_error.log',
+            'maxBytes': 1024*1024*5,
+            'backupCount': 5,
+            'formatter':'standard',
+        },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter':'standard',
+        },
     },
     "loggers": {
         "django.request": {
@@ -182,7 +210,8 @@ FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
 ]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_USE_OPENID = False
@@ -192,6 +221,11 @@ ACCOUNT_EMAIL_AUTHENTICATION = False
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
+
+EMAIL_HOST = 'mail.fnic.cn'
+EMAIL_PORT = '25'
+EMAIL_HOST_USER = 'tengzhifei@fnic.cn'
+EMAIL_HOST_PASSWORD = 'fnic123'
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",

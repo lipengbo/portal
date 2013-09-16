@@ -1,6 +1,7 @@
 #coding: utf-8
 
 from django.db import models
+from django.db import IntegrityError 
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, m2m_changed
 from django.db.models import F
@@ -9,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
-
+from invite.models import Invitation
 
 
 class City(models.Model):
@@ -59,6 +60,24 @@ class Project(models.Model):
         project_membership, created = Membership.objects.get_or_create(project=self,
                 user=user, defaults={'is_owner': is_owner})
 
+    def invite(self, invitee, message):
+        Invitation.objects.invite(self.owner, invitee, message, self)
+
+    @property
+    def get_content_type(self):
+        project_type = ContentType.objects.get_for_model(self)
+        return project_type
+
+    def get_display_name(self):
+        return self.name
+
+    def accept(self, member):
+        membership = Membership(project=self, user=member)
+        try:
+            membership.save()
+        except IntegrityError, e:
+            pass
+
     def __unicode__(self):
         return self.name
 
@@ -70,6 +89,9 @@ class Membership(models.Model):
     user = models.ForeignKey(User)
     is_owner = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return "{} - {}".format(self.user, self.project)
 
     class Meta:
         unique_together = (("project", "user"), )

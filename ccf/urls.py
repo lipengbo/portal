@@ -20,6 +20,7 @@ urlpatterns = patterns("",
 
     url(r"^project/", include("project.urls")),
     url(r"^slice/", include("slice.urls")),
+    url(r"^invite/", include("invite.urls")),
     url(r"^admin/", include(admin.site.urls)),
 #    url(r'^xadmin/', include(xadmin.site.urls)),
     url(r"^accounts/", include("account.urls")),
