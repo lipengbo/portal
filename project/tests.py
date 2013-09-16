@@ -21,6 +21,8 @@ class SimpleTest(TestCase):
         project = Project(name="sdn project", owner=owner, category=category)
         project.save()
         self.assertTrue(project.id)
+        self.assertTrue(project.memberships.count() == 1) #: there is a default member which is the owner
+        self.assertTrue(project.memberships.all()[0] == owner)
 
     def test_create_category(self):
         category = Category(name="sdn2")
@@ -32,18 +34,18 @@ class SimpleTest(TestCase):
         category = Category.objects.all()[0]
         project = Project(name="sdn project", owner=owner, category=category)
         project.save()
-        self.assertTrue(project.memberships.count() == 0)
+        self.assertTrue(project.memberships.count() == 1) #: there is a default member which is the owner
         project.add_member(User.objects.all()[1])
-        self.assertTrue(project.memberships.count() == 1)
+        self.assertTrue(project.memberships.count() == 2)
 
     def test_add_same_member_to_project(self):
         owner = User.objects.all()[0]
         category = Category.objects.all()[0]
         project = Project(name="sdn project", owner=owner, category=category)
         project.save()
-        self.assertTrue(project.memberships.count() == 0)
-        project.add_member(User.objects.all()[1])
         self.assertTrue(project.memberships.count() == 1)
         project.add_member(User.objects.all()[1])
-        self.assertTrue(project.memberships.count() == 1)
+        self.assertTrue(project.memberships.count() == 2)
+        project.add_member(User.objects.all()[1])
+        self.assertTrue(project.memberships.count() == 2)
 

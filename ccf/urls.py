@@ -18,6 +18,8 @@ urlpatterns = patterns("",
     url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="home"),
     url(r"^detail_project/", TemplateView.as_view(template_name="detail_project.html"), name="home"),
 
+    url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
+
     url(r"^project/", include("project.urls")),
     url(r"^slice/", include("slice.urls")),
     url(r"^invite/", include("invite.urls")),
