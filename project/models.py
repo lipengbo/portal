@@ -1,6 +1,7 @@
 #coding: utf-8
 
 from django.db import models
+from django.db import IntegrityError 
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, m2m_changed
 from django.db.models import F
@@ -66,6 +67,16 @@ class Project(models.Model):
     def get_content_type(self):
         project_type = ContentType.objects.get_for_model(self)
         return project_type
+
+    def get_display_name(self):
+        return self.name
+
+    def accept(self, member):
+        membership = Membership(project=self, user=member)
+        try:
+            membership.save()
+        except IntegrityError, e:
+            pass
 
     def __unicode__(self):
         return self.name
