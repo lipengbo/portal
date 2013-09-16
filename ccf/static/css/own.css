@@ -5513,3 +5513,6 @@ a {
   outline: 0;
   border: 1px solid #878787;
 }
+.base_info .table td {
+  border: none;
+}
