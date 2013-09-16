@@ -1,6 +1,7 @@
 #coding: utf-8
 
 from django.db import models
+from django.db import IntegrityError 
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save, m2m_changed
 from django.db.models import F
@@ -8,6 +9,8 @@ from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
+
+from guardian.shortcuts import assign_perm
 
 from invite.models import Invitation
 
@@ -34,7 +37,7 @@ class Island(models.Model):
         verbose_name = _("Island")
 
 class Category(models.Model):
-    name = models.CharField(max_length=256, unique=True)
+    name = models.CharField(max_length=64, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -67,6 +70,16 @@ class Project(models.Model):
         project_type = ContentType.objects.get_for_model(self)
         return project_type
 
+    def get_display_name(self):
+        return self.name
+
+    def accept(self, member):
+        try:
+            self.add_member(member)
+        except IntegrityError, e:
+            pass
+
+
     def __unicode__(self):
         return self.name
 
@@ -85,6 +98,19 @@ class Membership(models.Model):
     class Meta:
         unique_together = (("project", "user"), )
         verbose_name = _("Membership")
+
+@receiver(post_save, sender=Project)
+def create_owner_membership(sender, instance, created, **kwargs):
+    if created:
+        instance.add_member(instance.owner, True)
+
+
+#@receiver(post_save, sender=Membership)
+def assign_membership_permission(sender, instance, created, **kwargs):
+    if created:
+        if instance.is_owner:
+            assign_perm('project.add_project', instance.user)
+
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)
 #@receiver(m2m_changed, sender=Controller.slices.through)

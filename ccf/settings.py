@@ -178,7 +178,7 @@ LOGGING = {
         'ceni_debug': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/ceni_debug.log',
+            'filename': 'logs/ceni_debug.log',
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -186,7 +186,7 @@ LOGGING = {
         'ceni_error': {
             'level':'ERROR',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': '/var/log/ceni_error.log',
+            'filename': 'logs/ceni_error.log',
             'maxBytes': 1024*1024*5,
             'backupCount': 5,
             'formatter':'standard',
@@ -232,6 +232,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+ANONYMOUS_USER_ID = -1
 
 try:
     from ccf.local_settings import *
