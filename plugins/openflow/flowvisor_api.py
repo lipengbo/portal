@@ -1,13 +1,14 @@
 # coding:utf-8
-from flowvisor_proxy import *
-from slice.slice_exception import *
+from flowvisor_proxy import do_addSlice, do_updateSlice,\
+    do_removeSlice, do_addFlowSpace, do_updateFlowSpace, do_removeFlowSpace
+from slice.slice_exception import FlowvisorError, DbError
 from django.contrib.auth.models import User as ceni_user
 
 import logging
 LOG = logging.getLogger("CENI")
 
 
-def flowvisor_add_slice(flowvisor, controller, slice_name, user_email):
+def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
     """flowvisor上添加slice
     """
     LOG.debug('flowvisor_add_slice')
@@ -24,29 +25,29 @@ def flowvisor_add_slice(flowvisor, controller, slice_name, user_email):
         raise DbError("数据库异常")
 
 
-def flowvisor_update_sice_controller(flowvisor, controller, slice_obj):
+def flowvisor_update_sice_controller(flowvisor, slice_name, controller_ip, controller_port):
     """flowvisor上更新slice控制器
     """
     LOG.debug('flowvisor_update_sice_controller')
-    if flowvisor and controller and slice_obj:
-        args = [str(slice_obj.name)]
-        opts = {'chost': str(controller.ip), 'cport': int(controller.port)}
-        print opts
-        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
-        flowvisor_ps = str(flowvisor.password)
-        upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
-        if upslice == 'error':
-            raise FlowvisorError("flowvisor上更新控制器失败,flowvisor连接失败或控制器不可用!")
+    if flowvisor and slice_name and controller_ip and controller_port:
+            args = [str(slice_name)]
+            opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
+            print opts
+            flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+            flowvisor_ps = str(flowvisor.password)
+            upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
+            if upslice == 'error':
+                raise FlowvisorError("flowvisor上更新控制器失败,flowvisor连接失败或控制器不可用!")
     else:
-        raise DbError("数据库异常")
+        raise DbError("数据库异常!")
 
 
-def flowvisor_update_slice_status(flowvisor, status, slice_obj):
+def flowvisor_update_slice_status(flowvisor, slice_name, status):
     """flowvisor上更新slice启停状态
     """
     LOG.debug('flowvisor_update_slice_status')
-    if flowvisor and slice_obj:
-        args = [str(slice_obj.name)]
+    if flowvisor and slice_name:
+        args = [str(slice_name)]
         opts = {'status': status}
         flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
         flowvisor_ps = str(flowvisor.password)
@@ -54,20 +55,20 @@ def flowvisor_update_slice_status(flowvisor, status, slice_obj):
         if upslice == 'error':
             raise FlowvisorError("flowvisor更新slice状态失败!")
     else:
-        raise DbError("数据库异常")
+        raise DbError("数据库异常！")
 
 
-def flowvisor_del_slice(flowvisor, slice_obj):
+def flowvisor_del_slice(flowvisor, slice_name):
     """flowvisor上删除slice
     """
     LOG.debug('flowvisor_del_slice')
-    if flowvisor and slice_obj:
-        args = [str(slice_obj.name)]
+    if flowvisor and slice_name:
+        args = [str(slice_name)]
         flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
         flowvisor_ps = str(flowvisor.password)
         do_removeSlice(args, flowvisor_url, flowvisor_ps)
     else:
-        raise DbError("数据库异常")
+        raise DbError("数据库异常!")
 
 
 def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
