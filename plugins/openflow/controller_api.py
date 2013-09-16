@@ -1,6 +1,6 @@
 # coding:utf-8
 from models import *
-from slice.slice_exception import *
+from slice.slice_exception import DbError, ControllerUsedError
 from flowvisor_api import *
 from django.db import transaction
 import logging
@@ -8,22 +8,19 @@ LOG = logging.getLogger("CENI")
 
 
 @transaction.commit_on_success
-def slice_add_controller(slice_obj, controller, island):
+def slice_add_controller(slice_obj, controller):
     """slice添加控制器
     """
     LOG.debug('slice_add_controller')
-    if slice_obj and controller and island:
-        flowvisor = island.flowvisor_set.all()[0]
-        if controller.slices.all().count() > 0:
+    if slice_obj and controller:
+        if controller.is_used():
             raise ControllerUsedError('控制器已经被使用！')
-        if slice.controller_set.all().count() == 0 and slice.flowvisor_set.all().count() == 0:
+        if not slice_obj.get_controller:
             try:
-#                 flowvisor_add_slice(flowvisor, controller, slice_obj.name, slice_obj.email)
-                slice_obj.add_resource(flowvisor)
                 slice_obj.add_resource(controller)
-            except:
+            except Exception, ex:
                 transaction.rollback()
-                raise
+                raise DbError(ex)
     else:
         raise DbError("数据库异常")
 
