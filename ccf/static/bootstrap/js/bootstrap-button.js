@@ -19,7 +19,6 @@
 
 
 !function ($) {
-
   "use strict"; // jshint ;_;
 
 

@@ -5288,6 +5288,9 @@ a {
 .container {
   width: 1024px;
 }
+.common {
+  padding-top: 60px;
+}
 .navbar-inverse .navbar-inner {
   background: #3b6998;
   border-color: #023c70;
@@ -5424,7 +5427,10 @@ a {
   margin-top: 20px;
 }
 .breadcrumb {
-  margin-top: 40px;
+  background: #eee;
+}
+.breadcrumb .icon-home {
+  margin-right: 5px;
 }
 .help_all {
   margin-bottom: 40px;
@@ -5446,7 +5452,7 @@ a {
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
-  padding-bottom: 40px;
+  padding-bottom: 30px;
 }
 .help_main section {
   margin-top: 40px;
@@ -5485,4 +5491,25 @@ a {
 }
 .bs-docs-sidenav a:hover .icon-chevron-left {
   opacity: .5;
+}
+.fill_form fieldset {
+  margin-top: 20px;
+}
+.fill_form fieldset textarea {
+  width: 500px;
+  resize: none;
+}
+.fill_form fieldset .edit {
+  float: right;
+}
+.node_btn.active,
+.node_btn:active {
+  background-image: none;
+  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background-color: #c2c2c2;
+  background-color: #c2c2c2 \9;
+  outline: 0;
+  border: 1px solid #878787;
 }

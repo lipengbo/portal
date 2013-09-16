@@ -4,7 +4,7 @@
 {% load url from future %}
 {% load staticfiles %}
 
-{% block head_title %}{% trans "Welcome" %}{% endblock %}
+{% block head_title %}{% trans "help" %}{% endblock %}
 {% block extra_style %}
     <link rel="stylesheet" type="text/css" href="{% static "css/own-flatui.css" %}" />       
 {% endblock %}
@@ -99,8 +99,6 @@
 {% block footer_base %}{% endblock %}
 
 {% block extra_script %}
-<script src="js/bootstrap-modal.js"></script>
-<script src="js/bootstrap-transition.js"></script>
 <script type="text/javascript">
 $(function() {
 	$("#register").click(function(){

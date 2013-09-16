@@ -1,0 +1,81 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+
+{% block body_class %}common{% endblock %}
+{% block breadcrumb %}创建项目{% endblock %}
+
+{% block body %}
+	<div class="help_doc">
+		<div class="help_main fill_form">
+		  <form>
+			  <fieldset>
+			    <legend>基本信息</legend>
+			    <label>名称</label>
+			    <input type="text">
+			    <label>描述</label>
+			    <textarea rows="8"></textarea>
+			    <label>类型</label>
+			    <select>
+				  <option>SDN</option>
+				  <option>CNN</option>
+				</select>			     
+			  </fieldset>
+			  <fieldset>
+			  	 <legend>添加资源 </legend>
+			  	 <div class="progress" style="width:150px;">
+			           <div class="bar bar-success" style="width: 33%;">交换机</div>
+			           <div class="bar bar-warning" style="width: 33%;">服务器</div>
+			           <div class="bar bar-danger" style="width: 34%;">控制器</div>
+			     </div>
+			  	 <table class="table table-striped table-hover">
+				 	<thead>
+				 		<tr>
+				 			<th width="25%">节点名称</th>
+				 			<th width="25%">详细节点</th>
+				 			<th width="50%">节点资源</th>
+				 		</tr>
+				 	</thead>
+				 	<tbody>
+				 		<tr>
+				 			<td>南京</td>
+				 			<td><button type="button" class="btn node_btn" data-toggle="button">无线谷</button></td>
+				 			<td>
+				 				<div class="progress">
+								  <div class="bar bar-success" style="width: 35%;">1</div>
+								  <div class="bar bar-warning" style="width: 20%;">1</div>
+								  <div class="bar bar-danger" style="width: 10%;">3</div>
+								</div>
+				 			</td>
+				 		</tr>
+				 		<tr>
+				 			<td>北京</td>
+				 			<td><button type="button" class="btn node_btn" data-toggle="button">北邮</button></td>
+				 			<td>
+				 				<div class="progress">
+								  <div class="bar bar-success" style="width: 35%;">1</div>
+								  <div class="bar bar-warning" style="width: 20%;">1</div>
+								  <div class="bar bar-danger" style="width: 10%;">3</div>
+								</div>
+				 			</td>
+				 		</tr>
+				 	</tbody>
+				 </table>
+			  </fieldset>
+			  <div class="row-fluid">
+			  	<div class="span6"><button type="submit" class="btn btn-large btn-block">取 消</button></div>
+			  	<div class="span6"><button type="submit" class="btn btn-large btn-block btn-info">创 建</button></div>
+			  </div>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+{% block extra_script %}
+    <script type="text/javascript">
+	   		$(".node_btn").button();     		   	  			
+	</script>
+{% endblock %}

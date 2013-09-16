@@ -14,6 +14,9 @@ admin.autodiscover()
 urlpatterns = patterns("",
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
     url(r"^login/", TemplateView.as_view(template_name="login.html"), name="home"),
+    url(r"^help/", TemplateView.as_view(template_name="help.html"), name="home"),
+    url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="home"),
+    url(r"^detail_project/", TemplateView.as_view(template_name="detail_project.html"), name="home"),
 
     url(r"^project/", include("project.urls")),
     url(r"^slice/", include("slice.urls")),

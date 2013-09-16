@@ -3885,9 +3885,7 @@ body.vjs-full-window {
 }
 .login_bg .login-form input {
   height: auto;
-}
-.login_bg .login-form a {
-  width: 80%;
+  width: 299px;
 }
 .pop_form input {
   padding: 5px;
@@ -3895,7 +3893,13 @@ body.vjs-full-window {
 .pop_form label {
   line-height: 26px;
 }
+.pop_form .controls {
+  margin-left: 160px;
+}
 .pop_form .controls span {
   color: #E74C3C;
   margin-left: 5px;
+}
+.pop_form .control-label {
+  width: 140px;
 }
