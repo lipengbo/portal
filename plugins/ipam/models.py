@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.translation import ugettext as _
-<<<<<<< HEAD
 import random
 import netaddr as na
 from ccf.plugins.common import exception
@@ -14,44 +13,65 @@ class HostCountOutOfRangeException(Exception):
 
 class IPAM(models.Manager):
 
-    def create_net(self, netaddr):
-        network = Network(netaddr=netaddr)
+    def create_net(self, netaddr, type=1):
+        network = Network(netaddr=netaddr, type=type)
         network.save()
         return network
 
-    def create_subnet_64(self, supernet, ipcount=64):
-        if supernet.is_used:
-            raise exception.NetWorkInUse(network=supernet.netaddr)
-        for subnet_addr in na.Network(supernet.netaddr).subnet(ipcount):
-            Subnet(supernet=supernet.id, netaddr=subnet_addr).save()
-        supernet.is_used = True
-        supernet.save()
+    def create_subnet_64(self, supernet, owner, ipcount=64):
+        subnetaddrs = Subnet.objects.filter(supernet=supernet.id).order_by('-id')
+        if subnetaddrs:
+            subnetaddr = subnetaddrs[0]
+            subnet = self.next_sub(subnetaddr)
+            if subnet:
+                result = Subnet(supernet=supernet.id, netaddr=str(subnet), owner=owner)
+                result.save()
+                self.generate_ip_usage(subnet)
+            else:
+                raise exception.NetworkNoMoreSubNet(network=supernet.netaddr)
+        else:
+            subnet = [subnet for subnet in na.Network(supernet.netaddr).subnet(ipcount)][0]
+            result = Subnet(supernet=supernet.id, netaddr=str(subnet), owner=owner)
+            result.save()
+            supernet.is_used = True
+            supernet.save()
+            self.generate_ip_usage(subnet)
+        return result
 
-    def create_subnet_base(self, supernet):
+    def create_subnet_base(self, supernet, owner='base'):
         if supernet.is_used:
             raise exception.NetWorkInUse(network=supernet.netaddr)
-        Subnet(supernet=supernet.id, netaddr=supernet.netaddr).save()
+        result = Subnet(supernet=supernet.id, netaddr=supernet.netaddr, owner=owner)
+        result.save()
         supernet.is_used = True
         supernet.save()
+        self.generate_ip_usage(supernet)
+        return result
+
+    def next_sub(self, subnet):
+        if subnet.supernet in subnet.supernet():
+            return subnet.next()
+        return None
 
     def delete_network(self, netaddr):
         network = Network.objects.get(netaddr=netaddr)
-        network.is_used = False
-        network.save()
+        network.delete()
 
     def delete_subnet(self, subnet_addr):
         network = Subnet.objects.get(netaddr=subnet_addr)
-        network.is_used = False
-        network.save()
+        network.delete()
 
-    def allocate_addr(self, owner):
+    def allocate_ip(self, owner):
+        ip_obj = self.objects.filter(supernet__owner=owner, is_used=False)[0]
+        ip_obj.is_used = True
+        ip_obj.save()
+        return ip_obj.ip, na.IPNetwork(ip_obj.supernet.netaddr).prefixlen
+
+    def release_ip(self, ip):
+        ip_obj = self.objects.get(ip=ip)
+        ip_obj.is_used = False
+        ip_obj.save()
         return True
-
-    def release_addr(self, addr):
-        return True
-
-    def get_registed_network_by_netaddr(self, netaddr):
-        return Network.objects.get(netaddr=netaddr)
 
     def generate_mac_address(self):
         """Generate an Ethernet MAC address."""
@@ -64,42 +84,16 @@ class IPAM(models.Manager):
             self.generate_mac_address()
         return result
 
-=======
-import netaddr as na
+    def generate_ip_usage(self, subnet):
+        mysubnet = Subnet.objects.get(netaddr=str(subnet))
+        for ip in subnet.iter_hosts():
+            mac = self.generate_mac_address()
+            IPUsage(supernet=mysubnet.id, ip=ip, mac=mac).save()
 
-
-class IPAM(models.Manager):
-
-    def create_network(self, netaddr):
-        network = Network(netaddr=netaddr)
-        network.save()
-        return True
-
-    def create_sunet(self, netaddr, hostcount=None):
-        if hostcount:
-            for subnet in na.Network(netaddr).subnet(hostcount):
-                Subnet(supernet=netaddr, netaddr=subnet, mac="")
-        return True
-
-    def delete_network(self, netaddr):
-        return True
-
-    def delete_subnet(self, sunbet):
-        return True
-
-    def allocate_addr(self, subnet):
-        return True
-
-    def release_addr(self, addr):
-        return True
-
-    def get_registed_network_by_netaddr(self, netaddr):
-        return Network.objects.get(netaddr=netaddr)
-
->>>>>>> 4b7eca2310fee1770921830a824a8a1e8e9bdeab
 
 class Network(models.Model):
     netaddr = models.IPAddressField(null=False, unique=True)
+    type = models.IntegerField(null=True)  # 1: sub64 ; 0:base
     is_used = models.BooleanField(default=False)
 
     def __unicode__(self):
@@ -112,16 +106,11 @@ class Network(models.Model):
 class Subnet(models.Model):
     supernet = models.ForeignKey(Network)
     netaddr = models.IPAddressField(null=False, unique=True)
-<<<<<<< HEAD
     owner = models.CharField(max_length=20, null=True, unique=True)
     is_used = models.BooleanField(default=False)
 
     def next(self):
         pass
-=======
-    owner = models.CharField(max_length=20, null=False, unique=True)
-    is_used = models.BooleanField(default=False)
->>>>>>> 4b7eca2310fee1770921830a824a8a1e8e9bdeab
 
     def __unicode__(self):
         return self.netaddr
@@ -130,18 +119,11 @@ class Subnet(models.Model):
         verbose_name = _("Subnet")
 
 
-<<<<<<< HEAD
 class IPUsage(models.Model):
     supernet = models.ForeignKey(Subnet)
-    addr = models.IPAddressField(null=False, unique=True)
-    mac = models.CharField(max_length=20, null=False, unique=True)
-=======
-class IPAddr(models.Model):
-    supernet = models.ForeignKey(Subnet)
-    addr = models.IPAddressField(null=False, unique=True)
+    ip = models.IPAddressField(null=False, unique=True)
     mac = models.CharField(max_length=20, null=False, unique=True)
     is_used = models.BooleanField(default=False)
->>>>>>> 4b7eca2310fee1770921830a824a8a1e8e9bdeab
     objects = IPAM()
 
     def __unicode__(self):
