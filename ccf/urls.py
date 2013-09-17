@@ -17,6 +17,8 @@ urlpatterns = patterns("",
     url(r"^help/", TemplateView.as_view(template_name="help.html"), name="home"),
     url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="home"),
     url(r"^detail_project/", TemplateView.as_view(template_name="detail_project.html"), name="home"),
+    url(r"^create_slice1/", TemplateView.as_view(template_name="create_slice1.html"), name="home"),
+    url(r"^create_slice2/", TemplateView.as_view(template_name="create_slice2.html"), name="home"),
 
     url(r"^project/", include("project.urls")),
     url(r"^slice/", include("slice.urls")),
