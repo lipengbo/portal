@@ -5502,6 +5502,12 @@ a {
 .fill_form fieldset .edit {
   float: right;
 }
+.fill_form fieldset legend button {
+  margin-left: 10px;
+}
+.fill_form fieldset .progress {
+  margin-bottom: 0;
+}
 .node_btn.active,
 .node_btn:active {
   background-image: none;
@@ -5515,4 +5521,35 @@ a {
 }
 .base_info .table td {
   border: none;
+}
+.form-wizard .nav-pills {
+  margin-top: 15px;
+}
+.form-wizard .nav-pills li a {
+  background-color: #fff !important;
+  background-image: none !important;
+  filter: none !important;
+  border: 0px;
+  box-shadow: none !important;
+  color: #777;
+  cursor: default;
+}
+.form-wizard .nav-pills li .number {
+  background-color: #eee;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: 300;
+  padding: 12px 15px 12px 15px !important;
+  margin-right: 10px;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  border-radius: 50% !important;
+  margin-right: 5px;
+}
+.form-wizard .nav-pills .active .step .number {
+  background-color: #35aa47;
+  color: #fff;
+}
+.form-wizard .nav-pills .active .step .desc {
+  color: #555;
 }

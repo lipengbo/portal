@@ -244,6 +244,14 @@ width: 1024px;
 		.edit {
 			float:right;
 		}
+		legend {
+			button {
+				margin-left:10px;
+			}
+		}
+		.progress {
+			margin-bottom:0;
+		}
 	}
 }
 
@@ -262,5 +270,43 @@ width: 1024px;
 .base_info {
 	.table td {
 		border:none;
+	}
+}
+
+.form-wizard {
+	.nav-pills {
+		margin-top:15px;
+		li {
+			a {
+				background-color: #fff !important;
+				background-image: none !important;
+				filter: none !important;
+				border: 0px;
+				box-shadow: none !important;
+				color: #777;
+				cursor: default;
+			}
+			.number {
+				background-color: #eee;
+				display: inline-block;
+				font-size: 16px;
+				font-weight: 300;
+				padding: 12px 15px 12px 15px !important;
+				margin-right: 10px;
+				-webkit-border-radius: 50% !important;
+				-moz-border-radius: 50% !important;
+				border-radius: 50% !important;
+				margin-right:5px;
+			}
+		}	
+		.active .step {
+			.number {
+				background-color: #35aa47;
+				color: #fff;
+			}
+			.desc {
+				color:#555;
+			}
+		}
 	}
 }
