@@ -1,9 +1,12 @@
 # coding:utf-8
-from slice.models import Slice
+from slice.models import *
 from project.models import Project
-from slice.slice_exception import DbError
-from plugins.openflow.flowvisor_api import flowvisor_del_slice, flowvisor_del_flowspace, flowvisor_add_flowspace
+from slice.slice_exception import DbError, IslandError, NameExistError
+from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
+    flowvisor_del_flowspace, flowvisor_add_flowspace,\
+    flowvisor_update_slice_status
 from plugins.openflow.flowspace_api import matches_to_arg_match
+from plugins.openflow.controller_api import slice_change_controller
 from django.db import transaction
 import time
 import datetime
@@ -96,12 +99,56 @@ def delete_slice_api(slice_obj):
 #             删除slice网络地址
 #             删除交换机端口
 #             删除底层slice
-            flowvisor_del_slice(slice_obj.get_flowvisor, slice_obj.name)
+            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
 #             删除slice记录
             slice_obj.delete()
         except Exception, ex:
             transaction.rollback()
             raise DbError(ex)
+
+
+@transaction.commit_on_success
+def start_slice_api(slice_obj):
+    """启动slice
+    """
+    LOG.debug('start_slice_api')
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex)
+    else:
+        if slice_obj.state == SLICE_STATES.SLICE_STATE_STOPPED:
+            try:
+                slice_obj.start()
+                flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, True)
+            except Exception:
+                transaction.rollback()
+                raise
+            else:
+                try:
+                    update_slice_virtual_network(slice_obj)
+                except:
+                    stop_slice_api(slice_obj)
+                    raise
+
+
+@transaction.commit_on_success
+def stop_slice_api(slice_obj):
+    """停止slice
+    """
+    LOG.debug('stop_slice_api')
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex)
+    else:
+        if slice_obj.state == SLICE_STATES.SLICE_STATE_STARTED:
+            try:
+                slice_obj.stop()
+                flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, False)
+            except Exception:
+                transaction.rollback()
+                raise
 
 
 def update_slice_virtual_network(slice_obj):
@@ -110,14 +157,14 @@ def update_slice_virtual_network(slice_obj):
     LOG.debug('update_slice_virtual_network')
     try:
         Slice.objects.get(id=slice_obj.id)
-    except Slice.DoesNotExist:
-        return False
+    except Exception, ex:
+        return DbError(ex)
     flowvisor = slice_obj.get_flowvisor()
     flowspace_name = str(slice_obj.name) + '_df'
     try:
         flowvisor_del_flowspace(flowvisor, flowspace_name)
-    except Exception, ex:
-        LOG.debug(str(ex))
+    except:
+        raise
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
     for switch_port in switch_ports:
@@ -134,93 +181,55 @@ def update_slice_virtual_network(slice_obj):
                 flowvisor_add_flowspace(flowvisor, flowspace_name, slice_obj.name,
                     default_flowspace.actions, 'cdn%nf', switch_port.switch.dpid,
                     default_flowspace.priority, arg_match)
-            except Exception, ex:
-                LOG.debug(str(ex))
-    return True
+            except:
+                raise
 
 
 def get_slice_topology(slice_obj):
     """获取slice拓扑信息
     """
     LOG.debug('get_slice_topology')
+#     交换机
     switches = []
-    links = []
-    specials = []
-    normals = []
-    haved_dpids = get_slice_dpids(slice_obj)
-    for haved_dpid in haved_dpids:
-        switch = {'dpid': haved_dpid}
+    switch_dpids = []
+    switch_ports = slice_obj.get_switch_ports
+    for switch_port in switch_ports:
+        switch_dpids.append(switch_port.switch.dpid)
+    switch_dpids = list(set(switch_dpids))
+    for switch_dpid in switch_dpids:
+        switch = {'dpid': switch_dpid}
         switches.append(switch)
+#     链接
+    links = []
     flowvisor = slice_obj.get_flowvisor()
     if flowvisor:
-        link_objs = flowvisor.flowvisorlink_set.filter(
-            src_dpid__in=haved_dpids, dst_dpid__in=haved_dpids)
+        link_objs = flowvisor.link_set.filter(
+            source__in=switch_ports, target__in=switch_ports)
     for link_obj in link_objs:
-        link = {'src_switch': link_obj.src_dpid, 'dst_switch': link_obj.dst_dpid}
+        link = {'src_switch': link_obj.source.switch.dpid,
+                'dst_switch': link_obj.target.switch.dpid}
         links.append(link)
-    haved_server_ovs_ids = []
-    server_ovss = get_slice_server_ovss(slice_obj)
-    for server_ovs in server_ovss:
-        haved_server_ovs_ids.append(server_ovs.id)
-    haved_server_ids = []
-    haved_servers = get_slice_servers(slice_obj)
-    for haved_server in haved_servers:
-        haved_server_ids.append(haved_server.id)
-    vms = get_slice_vms(slice_obj)
+#     虚拟机
+    specials = []
+    normals = []
+    servers = []
+    virtual_switches = slice_obj.get_virtual_switches()
+    for virtual_switch in virtual_switches:
+        servers.append(virtual_switch.server)
+    vms = slice_obj.get_vms()
     for vm in vms:
-        if vm.belong_server_id in haved_server_ids:
-            link1s = ceni_facility_topology.objects.filter(
-                facility1_classid=1, facility2_classid=2,
-                facility1_id=vm.belong_server_id, facility2_id__in=haved_server_ovs_ids)
-            link2s = ceni_facility_topology.objects.filter(
-                facility2_classid=1, facility1_classid=2,
-                facility2_id=vm.belong_server_id, facility1_id__in=haved_server_ovs_ids)
-            links = []
-            links.extend(link1s)
-            links.extend(link2s)
-            status = isVmOn(vm.belong_server_id, vm.id)
-            if status:
+        virtual_switch = vm.server.get_link_vs()
+        if virtual_switch:
+            if vm.state == 1:
                 host_status = 1
             else:
                 host_status = 0
-            vm_infos = []
-            for link in links:
-                try:
-                    if link.facility1_classid == 2:
-                        switch = ceni_facility_server.objects.get(
-                            id=link1s[0].facility1_id)
-                    else:
-                        switch = ceni_facility_server.objects.get(
-                            id=link1s[0].facility2_id)
-                    vm_infos.append({'macAddress': vm.ip, 'switchDPID': switch.dpid,
-                        'hostid': vm.id, 'hostStatus': host_status})
-                except:
-                    pass
-            if len(vm_infos) == 1:
-                normals.extend(vm_infos)
-            else:
-                specials.extend(vm_infos)
+            vm_info = {'macAddress': vm.ip, 'switchDPID': virtual_switch.dpid,
+                        'hostid': vm.id, 'hostStatus': host_status}
+            normals.append(vm_info)
     topology = {'switches': switches, 'links': links,
                 'normals': normals, 'specials': specials}
     return topology
-
-
-def get_slice_ovss(slice_obj):
-    """获取slice选择的交换机
-    """
-    LOG.debug('get_slice_ovss')
-
-
-def get_slice_dpids(slice_obj):
-    """获取slice选择的交换机
-    """
-    LOG.debug('get_slice_dpids')
-    haved_dpids = []
-    if slice_obj:
-        ovss = get_slice_ovss(slice_obj)
-        for ovs in ovss:
-            haved_dpids.append(ovs.dpid)
-    return haved_dpids
 
 
 def get_slice_resource(slice_obj):

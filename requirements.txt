@@ -6,4 +6,4 @@ metron==1.1
 eventlog==0.6.2
 django-jsonfield==0.8.12
 django-crispy-form==1.4.0
-
+django-guardian==1.1.1

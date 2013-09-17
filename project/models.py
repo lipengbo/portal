@@ -10,6 +10,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
+from guardian.shortcuts import assign_perm
+
 from invite.models import Invitation
 
 
@@ -72,11 +74,11 @@ class Project(models.Model):
         return self.name
 
     def accept(self, member):
-        membership = Membership(project=self, user=member)
         try:
-            membership.save()
+            self.add_member(member)
         except IntegrityError, e:
             pass
+
 
     def __unicode__(self):
         return self.name
@@ -96,6 +98,19 @@ class Membership(models.Model):
     class Meta:
         unique_together = (("project", "user"), )
         verbose_name = _("Membership")
+
+@receiver(post_save, sender=Project)
+def create_owner_membership(sender, instance, created, **kwargs):
+    if created:
+        instance.add_member(instance.owner, True)
+
+
+#@receiver(post_save, sender=Membership)
+def assign_membership_permission(sender, instance, created, **kwargs):
+    if created:
+        if instance.is_owner:
+            assign_perm('project.add_project', instance.user)
+
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)
 #@receiver(m2m_changed, sender=Controller.slices.through)

@@ -233,6 +233,8 @@ AUTHENTICATION_BACKENDS = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
+ANONYMOUS_USER_ID = -1
+
 try:
     from ccf.local_settings import *
 except ImportError:
