@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext as _
+<<<<<<< HEAD
 import random
 import netaddr as na
 from ccf.plugins.common import exception
@@ -63,6 +64,39 @@ class IPAM(models.Manager):
             self.generate_mac_address()
         return result
 
+=======
+import netaddr as na
+
+
+class IPAM(models.Manager):
+
+    def create_network(self, netaddr):
+        network = Network(netaddr=netaddr)
+        network.save()
+        return True
+
+    def create_sunet(self, netaddr, hostcount=None):
+        if hostcount:
+            for subnet in na.Network(netaddr).subnet(hostcount):
+                Subnet(supernet=netaddr, netaddr=subnet, mac="")
+        return True
+
+    def delete_network(self, netaddr):
+        return True
+
+    def delete_subnet(self, sunbet):
+        return True
+
+    def allocate_addr(self, subnet):
+        return True
+
+    def release_addr(self, addr):
+        return True
+
+    def get_registed_network_by_netaddr(self, netaddr):
+        return Network.objects.get(netaddr=netaddr)
+
+>>>>>>> 4b7eca2310fee1770921830a824a8a1e8e9bdeab
 
 class Network(models.Model):
     netaddr = models.IPAddressField(null=False, unique=True)
@@ -78,11 +112,16 @@ class Network(models.Model):
 class Subnet(models.Model):
     supernet = models.ForeignKey(Network)
     netaddr = models.IPAddressField(null=False, unique=True)
+<<<<<<< HEAD
     owner = models.CharField(max_length=20, null=True, unique=True)
     is_used = models.BooleanField(default=False)
 
     def next(self):
         pass
+=======
+    owner = models.CharField(max_length=20, null=False, unique=True)
+    is_used = models.BooleanField(default=False)
+>>>>>>> 4b7eca2310fee1770921830a824a8a1e8e9bdeab
 
     def __unicode__(self):
         return self.netaddr
@@ -91,10 +130,18 @@ class Subnet(models.Model):
         verbose_name = _("Subnet")
 
 
+<<<<<<< HEAD
 class IPUsage(models.Model):
     supernet = models.ForeignKey(Subnet)
     addr = models.IPAddressField(null=False, unique=True)
     mac = models.CharField(max_length=20, null=False, unique=True)
+=======
+class IPAddr(models.Model):
+    supernet = models.ForeignKey(Subnet)
+    addr = models.IPAddressField(null=False, unique=True)
+    mac = models.CharField(max_length=20, null=False, unique=True)
+    is_used = models.BooleanField(default=False)
+>>>>>>> 4b7eca2310fee1770921830a824a8a1e8e9bdeab
     objects = IPAM()
 
     def __unicode__(self):

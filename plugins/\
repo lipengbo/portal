@@ -1,0 +1,44 @@
+from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+from django.utils.translation import ugettext as _
+from slice.models import Slice
+
+# Create your models here.
+class Gateway(Server):
+    pass
+
+
+class Network(Resource):
+    netaddr = models.IPAddressField(null=False, unique=True)
+    is_used = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = _("Network")
+
+
+class Subnet(Resource):
+    network = models.ForeignKey(Network)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    host = generic.GenericForeignKey('content_type', 'object_id')
+    start = models.IPAddressField(null=False)
+    netmask = models.IPAddressField(null=False)
+    type = models.IntegerField(default=1) # 1: static, 2: dynamic
+
+    class Meta:
+        unique_together = (u"network", u"object_id", u"start", u"netmask")
+
+class IPAddress(models.Model):
+    ip_range = models.ForeignKey(Subnet)
+    address = models.IPAddressField(null=False)
+    available  = models.BooleanField(default=False)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    host = generic.GenericForeignKey('content_type', 'object_id')
+
+    def __unicode__(self):
+        return self.address
+
+    class Meta:
+        pass
