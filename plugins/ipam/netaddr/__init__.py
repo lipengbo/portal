@@ -73,12 +73,6 @@ __all__ = [
 ]
 
 
-class HostCountOutOfRangeException(Exception):
-
-    def __init__(self, message=None):
-        super(HostCountOutOfRangeException, self).__init__(message)
-
-
 class Network(object):
 
     def __init__(self, ipaddr):
@@ -91,17 +85,7 @@ class Network(object):
         self.sub16_prefix = 28
         self.sub8_prefix = 29
 
-    def subnet(self, hostcount):
-        if not hostcount >> 3:
-            ipcount = 8
-        elif not hostcount >> 4:
-            ipcount = 16
-        elif not hostcount >> 5:
-            ipcount = 32
-        elif not hostcount >> 6:
-            ipcount = 64
-        else:
-            raise HostCountOutOfRangeException('0 < hostcount < 64')
+    def subnet(self, ipcount):
         function = '_sub_net_%s' % ipcount
         return getattr(self, function)()
 
