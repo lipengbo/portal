@@ -5288,6 +5288,20 @@ a {
 .container {
   width: 1024px;
 }
+.table th,
+.table td {
+  vertical-align: middle;
+}
+.table th input,
+.table td input,
+.table th select,
+.table td select {
+  margin-bottom: 0;
+}
+.table th .btn,
+.table td .btn {
+  margin-right: 10px;
+}
 .common {
   padding-top: 60px;
 }
@@ -5496,7 +5510,7 @@ a {
   margin-top: 20px;
 }
 .fill_form fieldset textarea {
-  width: 500px;
+  width: 400px;
   resize: none;
 }
 .fill_form fieldset .edit {
@@ -5507,6 +5521,11 @@ a {
 }
 .fill_form fieldset .progress {
   margin-bottom: 0;
+}
+.fill_form .form-actions {
+  border: none;
+  background: none;
+  clear: both;
 }
 .node_btn.active,
 .node_btn:active {
@@ -5521,6 +5540,14 @@ a {
 }
 .base_info .table td {
   border: none;
+}
+.base_info .table .v_top {
+  vertical-align: top;
+}
+.base_info .sec_block {
+  background: #dff0d8;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 .form-wizard .nav-pills {
   margin-top: 15px;
@@ -5544,12 +5571,45 @@ a {
   -webkit-border-radius: 50% !important;
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;
-  margin-right: 5px;
+  margin-right: 2px;
 }
-.form-wizard .nav-pills .active .step .number {
+.form-wizard .nav-pills .visit .step .number {
   background-color: #35aa47;
   color: #fff;
 }
-.form-wizard .nav-pills .active .step .desc {
+.form-wizard .nav-pills .visit .step .desc {
   color: #555;
+}
+.form-wizard .nav-pills .visit .step .active {
+  font-weight: bold;
+}
+.form-wizard .show_frame {
+  padding: 10px;
+  border-radius: 4px;
+  background: #eee;
+}
+.form-wizard .show_frame .frame_tip {
+  float: right;
+}
+.form-wizard .show_frame .main_frame {
+  clear: both;
+  height: 400px;
+  background: #fff;
+  margin-top: 30px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+}
+.form-wizard .show_frame table {
+  background: #fff;
+  margin-bottom: 0;
+}
+.form-wizard .operate_btn {
+  text-align: right;
+}
+.form-wizard .operate_btn .del {
+  visibility: hidden;
+}
+.form-wizard .pagination {
+  float: right;
 }

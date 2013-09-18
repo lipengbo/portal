@@ -13,6 +13,16 @@ a {outline:none !important;}
     width: 1024px;
 }
 
+.table th, .table td {
+	vertical-align: middle;
+	input,select {
+		margin-bottom:0;
+	}
+	.btn {
+		margin-right:10px;
+	}
+}
+
 .common {padding-top:60px;}
 
 .navbar-inverse {
@@ -222,10 +232,6 @@ width: 1024px;
 		padding: 8px 14px;
 		border-bottom: 1px solid #e5e5e5;
 	}
-	li.active a{
-		
-		
-	}
 	.icon-chevron-left {
 		opacity: .25;
 	}
@@ -238,7 +244,7 @@ width: 1024px;
 	fieldset {
 		margin-top:20px;
 		textarea {
-			width:500px;
+			width:400px;
 			resize:none;
 		}
 		.edit {
@@ -252,6 +258,11 @@ width: 1024px;
 		.progress {
 			margin-bottom:0;
 		}
+	}
+	.form-actions {
+		border:none;
+		background:none;
+		clear:both;
 	}
 }
 
@@ -268,8 +279,18 @@ width: 1024px;
 }
 
 .base_info {
-	.table td {
-		border:none;
+	.table {
+		td {
+			border:none;
+		}
+		.v_top {
+			vertical-align: top;
+		}
+	} 
+	.sec_block {
+		background:#dff0d8;
+		padding:10px;
+		border-bottom:1px solid #ddd;
 	}
 }
 
@@ -296,10 +317,10 @@ width: 1024px;
 				-webkit-border-radius: 50% !important;
 				-moz-border-radius: 50% !important;
 				border-radius: 50% !important;
-				margin-right:5px;
+				margin-right:2px;
 			}
 		}	
-		.active .step {
+		.visit .step {
 			.number {
 				background-color: #35aa47;
 				color: #fff;
@@ -307,6 +328,43 @@ width: 1024px;
 			.desc {
 				color:#555;
 			}
+			.active {
+				font-weight:bold;
+			}
 		}
 	}
+	.show_frame {
+		padding:10px;
+		border-radius:4px;
+		background:#eee;
+		.frame_tip {
+			float:right;
+		}
+		.main_frame {
+			clear:both;
+			height:400px;
+			background:#fff;
+			margin-top:30px;
+			border-radius:4px;
+			margin-bottom:10px;
+			border:1px solid #ddd;
+		}
+		table {
+			background:#fff;
+			margin-bottom:0;
+		}
+	}
+	.operate_btn {
+		text-align:right;
+		.del {
+		    visibility: hidden;
+		}
+	}
+	.pagination {		
+		float:right;	
+	}
 }
+
+
+
+
