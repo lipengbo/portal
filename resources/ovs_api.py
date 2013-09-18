@@ -72,15 +72,14 @@ def find_ovs_by_dpid(dpid):
     """通过dpid查找交换机记录，可能是switch或virtualswitch
     """
     LOG.debug('find_ovs_by_dpid')
-    ovss = VirtualSwitch.objects.filter(dpid=dpid)
+    ovss = Switch.objects.filter(dpid=dpid)
     if ovss:
-        return ovss[0]
-    else:
-        ovss = Switch.objects.filter(dpid=dpid)
-        if ovss:
-            return ovss[0]
+        if ovss[0].is_virtual():
+            return ovss[0].virtualswitch
         else:
-            return None
+            return ovss[0]
+    else:
+        return None
 
 
 def get_ovs_class(ovs):
