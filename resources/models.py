@@ -42,7 +42,6 @@ class IslandResource(Resource):
 
 
 class ComputeResource(IslandResource):
-    hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     state = models.IntegerField(null=True)
@@ -68,7 +67,6 @@ class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
     http_port = models.IntegerField()
-    hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     content_type = models.ForeignKey(ContentType)
@@ -86,14 +84,18 @@ class ServiceResource(IslandResource):
 
 
 class Server(ComputeResource):
-    pass
+    def get_link_vs(self):
+        virtualswitchs = self.virtualswitch_set.all()
+        if virtualswitchs:
+            return virtualswitchs[0]
+        else:
+            return None
 
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
     http_port = models.IntegerField()
-    hostname = models.CharField(max_length=20)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     dpid = models.CharField(max_length=256)
@@ -119,6 +121,10 @@ class Switch(SwitchResource):
             return False
         else:
             return True
+    def on_remove_from_slice(self, slice_obj):
+        slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
+        slice_switches.delete()
+
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
@@ -137,7 +143,20 @@ class SwitchPort(Resource):
 
     def on_add_into_slice(self, slice_obj):
         SlicePort.objects.get_or_create(
-             switch_port=self, slice=slice_obj)
+            switch_port=self, slice=slice_obj)
+        slice_switches = SliceSwitch.objects.filter(
+            slice=slice_obj, switch=self.switch)
+        if not slice_switches:
+            slice_obj.add_resource(self.switch)
+
+    def on_remove_from_slice(self, slice_obj):
+        slice_ports = SlicePort.objects.filter(
+            switch_port=self, slice=slice_obj)
+        for slice_port in slice_ports:
+            switch = slice_port.switch
+            slice_port.delete()
+            if not slice_obj.get_switch_ports().filter(switch=switch):
+                slice_obj.remove_resouce(slice_port.switch)
 
     class Meta:
         unique_together = (("switch", "port"), )
@@ -156,4 +175,5 @@ class VirtualSwitch(Switch):
         A virtual switch service that created on a Physical Server
     """
     server = models.ForeignKey(Server)
-
+    def get_vms(self, slice_obj):
+        return slice_obj.get_vms.filter(server=self.server)

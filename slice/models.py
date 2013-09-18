@@ -40,6 +40,14 @@ class Slice(models.Model):
     def remove_resource(self, resource):
         resource.on_remove_from_slice(self)
 
+    def stop(self):
+        self.state = SLICE_STATE_STOPPED
+        self.save()
+
+    def start(self):
+        self.state = SLICE_STATE_STARTED
+        self.save()
+
     def get_flowvisor(self):
         flowvisors = self.flowvisor_set.all()
         if flowvisors:
@@ -72,6 +80,9 @@ class Slice(models.Model):
 
     def get_switch_ports(self):
         return self.switchport_set.all()
+
+    def get_vms(self):
+        return self.virtual_machines.all()
 
     def __unicode__(self):
         return self.name

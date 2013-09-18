@@ -9,12 +9,14 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
-from slice_api import create_slice_api
+from slice.slice_api import create_slice_api, start_slice_api, stop_slice_api
 from plugins.openflow.controller_api import slice_add_controller
+from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
+from resources.ovs_api import slice_add_ovs_ports
 from project.models import Project, Island, Category
 
-from slice.models import Slice
+from slice.models import *
 # Create your views here.
 
 def index(request):
@@ -22,7 +24,8 @@ def index(request):
     return render(request, 'slice/index.html', context)
 
 
-def create_or_edit(request):
+def create_or_edit(request, slice_id):
+    """创建slice。"""
     user = request.user
     context = {}
     project = Project.objects.all()[0]
@@ -48,14 +51,39 @@ def create_or_edit(request):
             for ovs_id in ovs_ids:
                 ports = request.POST.getlist("ovs"+ovs_id+"ports")
                 if ports:
-                    ovs_port = {'ovs_id':int(ovs_id), 'ports':ports}
+                    ovs = None
+                    ovs_port = {'ovs':ovs, 'ports':ports}
                     ovs_ports.append(ovs_port)
-        slice_obj = create_slice_api(project, name, description, island, user)
-        slice_add_controller(slice_obj, controller, island)
-        print slice_obj.id
+        try:
+            slice_obj = create_slice_api(project, name, description, island, user)
+            slice_add_ovs_ports(slice_obj, ovs_ports)
+            slice_add_controller(slice_obj, controller)
+            flowvisor_add_slice(island.flowvisor_set.all()[0], controller, name, user.email)
+        except:
+            pass
 #             return redirect('slice_create')
     islands = project.islands.all()
     context['islands'] = islands
     context['ovs_ports'] = [{'ovs':{'id':1, 'hostname':'ovs1'}, 'ports':[1,2,3]},
                             {'ovs':{'id':2, 'hostname':'ovs2'}, 'ports':[1,2]}]
     return render(request, 'slice/create.html', context)
+
+
+def start_or_stop(request, slice_id, flag):
+    """启动slice。"""
+    try:
+        slice_obj = Slice.objects.get(id=slice_id)
+    except Slice.DoesNotExist:
+        return HttpResponseRedirect(
+            reverse("warning", kwargs={"warn_id": 2}))
+    try:
+        if int(flag) == 1:
+            start_slice_api(slice_obj)
+        else:
+            stop_slice_api(slice_obj)
+    except:
+        return HttpResponseRedirect(
+            reverse("warning", kwargs={"warn_id": 2}))
+    else:
+        return HttpResponseRedirect(reverse('ccf.slice.views.detail',
+                            args=(slice_id, 1)))
