@@ -15,7 +15,7 @@ def slice_add_controller(slice_obj, controller):
     if slice_obj and controller:
         if controller.is_used():
             raise ControllerUsedError('控制器已经被使用！')
-        if not slice_obj.get_controller:
+        if not slice_obj.get_controller():
             try:
                 slice_obj.add_resource(controller)
             except Exception, ex:
@@ -36,10 +36,10 @@ def slice_change_controller(slice_obj, controller_ip, controller_port):
         raise DbError(ex)
     else:
         haved_controller = slice_obj.get_controller()
-        if haved_controller.ip != controller_ip or haved_controller.port != controller_port:
+        if haved_controller and (haved_controller.ip != controller_ip or haved_controller.port != int(controller_port)):
             try:
                 haved_controller.ip = controller_ip
-                haved_controller.port = controller_port
+                haved_controller.port = int(controller_port)
                 haved_controller.save()
                 flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
                     slice_obj.name, controller_ip, controller_port)

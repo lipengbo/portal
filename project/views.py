@@ -44,6 +44,7 @@ def create_or_edit(request, id=None):
             project = form.save(commit=False)
             project.owner = user
             project.save()
+            form.save_m2m()
             return redirect('project_detail', id=project.id)
 
     context['form'] = form

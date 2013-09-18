@@ -75,7 +75,6 @@ class SimpleTest(TestCase):
         for virtual_switch in virtual_switches:
             ovs = find_ovs_by_dpid(virtual_switch.dpid)
             print get_ovs_class(ovs)
-            print ovs.server
             if ovs.id != virtual_switch.id:
                 self.assertFalse(True)
         self.assertTrue(True)

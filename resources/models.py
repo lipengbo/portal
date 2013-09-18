@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.base import ModelBase
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
@@ -8,8 +9,25 @@ from django.contrib.contenttypes import generic
 from project.models import Island
 from slice.models import Slice
 
+OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
+
+
+class ResourceBase(ModelBase):
+
+    def __init__(cls, name, bases, attrs):
+        if not hasattr(cls, 'registry'):
+            # this is the base class.  Create an empty registry
+            cls.registry = {}
+        else:
+            # this is a derived class.  Add cls to the registry
+            interface_id = name.lower()
+            cls.registry[interface_id] = cls
+        return super(ResourceBase, cls).__init__(name, bases, attrs)
 
 class Resource(models.Model):
+
+    __metaclass__ = ResourceBase
+
     name = models.CharField(max_length=256)
 
     def on_create_slice(self):
@@ -125,6 +143,17 @@ class Switch(SwitchResource):
     def on_remove_from_slice(self, slice_obj):
         slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
         slice_switches.delete()
+
+    def type(self):
+        try:
+            self.virtualswitch
+        except VirtualSwitch.DoesNotExist:
+            return OVS_TYPE['NOMAL']
+        else:
+            if self.has_gre_tunnel:
+                return OVS_TYPE['EXTERNAL']
+            else:
+                return OVS_TYPE['RELATED']
 
 
 class SliceSwitch(models.Model):

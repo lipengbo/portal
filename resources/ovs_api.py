@@ -1,8 +1,8 @@
 # coding:utf-8
 from slice.models import Slice
-from resources.models import Switch, VirtualSwitch
-from resources.models import SwitchPort
+from resources.models import Switch, VirtualSwitch, OVS_TYPE, SwitchPort
 from slice.slice_exception import DbError
+from plugins.openflow.flowspace_api import flowspace_gw_add, flowspace_gw_del
 from django.db import transaction
 import logging
 LOG = logging.getLogger("CENI")
@@ -21,6 +21,8 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
     try:
         for ovs_port in ovs_ports:
             slice_obj.add_resource(ovs_port)
+            if ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
+                flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
     except Exception, ex:
         transaction.rollback()
         raise DbError(ex)
@@ -45,9 +47,13 @@ def slice_change_ovs_ports(slice_obj, ovs_ports):
             cur_ovs_port_ids.append(ovs_port.id)
             if ovs_port.id not in haved_ovs_port_ids:
                 slice_obj.add_resource(ovs_port)
+                if ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
+                    flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
         for haved_ovs_port in haved_ovs_ports:
             if haved_ovs_port.id not in cur_ovs_port_ids:
                 slice_obj.remove_resource(haved_ovs_port)
+                if haved_ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
+                    flowspace_gw_del(slice_obj, haved_ovs_port.switch.virtualswitch.server.mac)
     except Exception, ex:
         transaction.rollback()
         raise DbError(ex)
@@ -72,15 +78,14 @@ def find_ovs_by_dpid(dpid):
     """通过dpid查找交换机记录，可能是switch或virtualswitch
     """
     LOG.debug('find_ovs_by_dpid')
-    ovss = VirtualSwitch.objects.filter(dpid=dpid)
+    ovss = Switch.objects.filter(dpid=dpid)
     if ovss:
-        return ovss[0]
-    else:
-        ovss = Switch.objects.filter(dpid=dpid)
-        if ovss:
-            return ovss[0]
+        if ovss[0].is_virtual():
+            return ovss[0].virtualswitch
         else:
-            return None
+            return ovss[0]
+    else:
+        return None
 
 
 def get_ovs_class(ovs):
