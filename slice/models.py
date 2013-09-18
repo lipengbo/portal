@@ -73,7 +73,17 @@ class Slice(models.Model):
         return self.switch_set.all()
 
     def get_virtual_switches(self):
-        return self.virtualswitch_set.all()
+        from resources.models import VirtualSwitch
+        switches = self.switch_set.all()
+        virtual_switches = []
+        for switch in switches:
+            try:
+                virtual_switch = VirtualSwitch.objects.get(id = switch.id)
+            except:
+                pass
+            else:
+                virtual_switches.append(virtual_switch)
+        return virtual_switches
 
     def get_default_flowspaces(self):
         return self.flowspacerule_set.filter(is_default=1)

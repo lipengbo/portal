@@ -57,7 +57,7 @@ class ComputeResource(IslandResource):
     slices = models.ManyToManyField(Slice, blank=True)
 
     def __unicode__(self):
-        return self.hostname
+        return self.name
 
     class Meta:
         abstract = True
@@ -77,7 +77,7 @@ class ServiceResource(IslandResource):
     state = models.IntegerField()
 
     def __unicode__(self):
-        return self.hostname
+        return self.name
 
     class Meta:
         abstract = True
@@ -103,7 +103,7 @@ class SwitchResource(IslandResource):
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 
     def __unicode__(self):
-        return self.hostname
+        return self.name
 
     class Meta:
         abstract = True
@@ -146,10 +146,10 @@ class SwitchPort(Resource):
         slice_ports = SlicePort.objects.filter(
             switch_port=self, slice=slice_obj)
         for slice_port in slice_ports:
-            switch = slice_port.switch
+            switch = slice_port.switch_port.switch
             slice_port.delete()
             if not slice_obj.get_switch_ports().filter(switch=switch):
-                slice_obj.remove_resouce(slice_port.switch)
+                slice_obj.remove_resource(switch)
 
     class Meta:
         unique_together = (("switch", "port"), )

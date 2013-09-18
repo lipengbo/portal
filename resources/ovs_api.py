@@ -20,10 +20,7 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
         raise DbError(ex)
     try:
         for ovs_port in ovs_ports:
-            for port in ovs_port['ports']:
-                switch_port, created = SwitchPort.objects.get_or_create(
-                    switch=ovs_port['ovs'], port=port)
-                slice_obj.add_resource(switch_port)
+            slice_obj.add_resource(ovs_port)
     except Exception, ex:
         transaction.rollback()
         raise DbError(ex)
@@ -40,29 +37,16 @@ def slice_change_ovs_ports(slice_obj, ovs_ports):
         raise DbError(ex)
     try:
         haved_ovs_ports = slice_obj.get_switch_ports()
-        cur_ovs_ids = []
-        for ovs_port in ovs_ports:
-            cur_ovs_ids.append(ovs_port['ovs'].id)
-            one_ovs_ports = slice_obj.get_switch_ports().filter(
-                switch=ovs_port['ovs'])
-            if one_ovs_ports:
-                haved_ports = []
-                for one_ovs_port in one_ovs_ports:
-                    haved_ports.append(one_ovs_port.port)
-                    if one_ovs_port.port not in ovs_port['port']:
-                        slice_obj.remove_resource(one_ovs_port)
-                for port in ovs_port['port']:
-                    if port not in haved_ports:
-                        switch_port, created = SwitchPort.objects.get_or_create(
-                            switch=ovs_port['ovs'], port=port)
-                        slice_obj.add_resource(switch_port)
-            else:
-                for port in ovs_port['port']:
-                    switch_port, created = SwitchPort.objects.get_or_create(
-                        switch=ovs_port['ovs'], port=port)
-                    slice_obj.add_resource(switch_port)
+        cur_ovs_port_ids = []
+        haved_ovs_port_ids = []
         for haved_ovs_port in haved_ovs_ports:
-            if haved_ovs_port.switch.id not in cur_ovs_ids:
+            haved_ovs_port_ids.append(haved_ovs_port.id)
+        for ovs_port in ovs_ports:
+            cur_ovs_port_ids.append(ovs_port.id)
+            if ovs_port.id not in haved_ovs_port_ids:
+                slice_obj.add_resource(ovs_port)
+        for haved_ovs_port in haved_ovs_ports:
+            if haved_ovs_port.id not in cur_ovs_port_ids:
                 slice_obj.remove_resource(haved_ovs_port)
     except Exception, ex:
         transaction.rollback()
@@ -88,11 +72,11 @@ def find_ovs_by_dpid(dpid):
     """通过dpid查找交换机记录，可能是switch或virtualswitch
     """
     LOG.debug('find_ovs_by_dpid')
-    ovss = Switch.objects.filter(dpid=dpid)
+    ovss = VirtualSwitch.objects.filter(dpid=dpid)
     if ovss:
         return ovss[0]
     else:
-        ovss = VirtualSwitch.objects.filter(dpid=dpid)
+        ovss = Switch.objects.filter(dpid=dpid)
         if ovss:
             return ovss[0]
         else:
