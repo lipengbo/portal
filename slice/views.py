@@ -46,6 +46,15 @@ def edit(request, slice_id):
     return render(request, 'slice/edit_slice.html', context)
 
 
+def detail(request, slice_id):
+    """编辑slice。"""
+    context = {}
+    if request.method == 'POST':
+        return HttpResponseRedirect(
+            reverse('ccf.slice.views.slice_detail', args=(slice_id)))
+    return render(request, 'slice/slice_detail.html', context)
+
+
 def delete(request, slice_id):
     """删除slice。"""
     try:
