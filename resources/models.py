@@ -114,6 +114,13 @@ class Switch(SwitchResource):
         SliceSwitch.objects.get_or_create(
              switch=self, slice=slice_obj)
 
+    def is_virtual(self):
+        try:
+            self.virtualswitch
+        except VirtualSwitch.DoesNotExist:
+            return False
+        else:
+            return True
     def on_remove_from_slice(self, slice_obj):
         slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
         slice_switches.delete()
