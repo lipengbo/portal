@@ -112,6 +112,13 @@ class Switch(SwitchResource):
         SliceSwitch.objects.get_or_create(
              switch=self, slice=slice_obj)
 
+    def is_virtual(self):
+        try:
+            self.virtualswitch
+        except VirtualSwitch.DoesNotExist:
+            return False
+        else:
+            return True
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
