@@ -8,6 +8,8 @@ from django.contrib.contenttypes import generic
 from project.models import Island
 from slice.models import Slice
 
+OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
+
 
 class Resource(models.Model):
     name = models.CharField(max_length=256)
@@ -125,6 +127,17 @@ class Switch(SwitchResource):
     def on_remove_from_slice(self, slice_obj):
         slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
         slice_switches.delete()
+
+    def type(self):
+        try:
+            self.virtualswitch
+        except VirtualSwitch.DoesNotExist:
+            return OVS_TYPE['NOMAL']
+        else:
+            if self.has_gre_tunnel:
+                return OVS_TYPE['EXTERNAL']
+            else:
+                return OVS_TYPE['RELATED']
 
 
 class SliceSwitch(models.Model):
