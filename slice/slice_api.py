@@ -4,15 +4,30 @@ from project.models import Project
 from slice.slice_exception import DbError, IslandError, NameExistError
 from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
-    flowvisor_update_slice_status
+    flowvisor_update_slice_status, flowvisor_add_slice
 from plugins.openflow.flowspace_api import matches_to_arg_match
-from plugins.openflow.controller_api import slice_change_controller
+from plugins.openflow.controller_api import slice_change_controller, slice_add_controller
+from resources.ovs_api import slice_add_ovs_ports
 from django.db import transaction
 import time
 import datetime
 
 import logging
 LOG = logging.getLogger("ccf")
+
+
+def create_slice_step(project, name, description, island, user, ovs_ports, controller):
+    slice_obj = None
+    try:
+        slice_obj = create_slice_api(project, name, description, island, user)
+        slice_add_ovs_ports(slice_obj, ovs_ports)
+        slice_add_controller(slice_obj, controller)
+        flowvisor_add_slice(island.flowvisor_set.all()[0], name, controller, user.email)
+        return slice_obj
+    except:
+        if slice_obj:
+            delete_slice_api(slice_obj)
+        raise
 
 
 @transaction.commit_on_success
@@ -117,7 +132,7 @@ def start_slice_api(slice_obj):
     except Exception, ex:
         raise DbError(ex)
     else:
-        if slice_obj.state == SLICE_STATES.SLICE_STATE_STOPPED:
+        if slice_obj.state == SLICE_STATE_STOPPED:
             try:
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, True)
@@ -142,7 +157,7 @@ def stop_slice_api(slice_obj):
     except Exception, ex:
         raise DbError(ex)
     else:
-        if slice_obj.state == SLICE_STATES.SLICE_STATE_STARTED:
+        if slice_obj.state == SLICE_STATE_STARTED:
             try:
                 slice_obj.stop()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, False)
@@ -192,7 +207,7 @@ def get_slice_topology(slice_obj):
 #     交换机
     switches = []
     switch_dpids = []
-    switch_ports = slice_obj.get_switch_ports
+    switch_ports = slice_obj.get_switch_ports()
     for switch_port in switch_ports:
         switch_dpids.append(switch_port.switch.dpid)
     switch_dpids = list(set(switch_dpids))

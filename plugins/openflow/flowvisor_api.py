@@ -88,7 +88,6 @@ def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
         args = [name, dpid, priority, arg_match, fsaction]
         adflowspace = do_addFlowSpace(args, pwd, flowvisor_url, flowvisor_ps)
         if adflowspace == 'error':
-            print 'flerror'
             raise FlowvisorError("flowvisor上添加flowspace失败！")
     else:
         raise DbError("数据库异常")
