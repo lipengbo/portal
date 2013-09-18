@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.base import ModelBase
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
@@ -9,7 +10,22 @@ from project.models import Island
 from slice.models import Slice
 
 
+class ResourceBase(ModelBase):
+
+    def __init__(cls, name, bases, attrs):
+        if not hasattr(cls, 'registry'):
+            # this is the base class.  Create an empty registry
+            cls.registry = {}
+        else:
+            # this is a derived class.  Add cls to the registry
+            interface_id = name.lower()
+            cls.registry[interface_id] = cls
+        return super(ResourceBase, cls).__init__(name, bases, attrs)
+
 class Resource(models.Model):
+
+    __metaclass__ = ResourceBase
+
     name = models.CharField(max_length=256)
 
     def on_create_slice(self):
