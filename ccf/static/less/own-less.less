@@ -13,6 +13,16 @@ a {outline:none !important;}
     width: 1024px;
 }
 
+.table th, .table td {
+	vertical-align: middle;
+	input,select {
+		margin-bottom:0;
+	}
+	.btn {
+		margin-right:10px;
+	}
+}
+
 .common {padding-top:60px;}
 
 .navbar-inverse {
@@ -222,10 +232,6 @@ width: 1024px;
 		padding: 8px 14px;
 		border-bottom: 1px solid #e5e5e5;
 	}
-	li.active a{
-		
-		
-	}
 	.icon-chevron-left {
 		opacity: .25;
 	}
@@ -238,12 +244,25 @@ width: 1024px;
 	fieldset {
 		margin-top:20px;
 		textarea {
-			width:500px;
+			width:400px;
 			resize:none;
 		}
 		.edit {
 			float:right;
 		}
+		legend {
+			button {
+				margin-left:10px;
+			}
+		}
+		.progress {
+			margin-bottom:0;
+		}
+	}
+	.form-actions {
+		border:none;
+		background:none;
+		clear:both;
 	}
 }
 
@@ -260,7 +279,92 @@ width: 1024px;
 }
 
 .base_info {
-	.table td {
-		border:none;
+	.table {
+		td {
+			border:none;
+		}
+		.v_top {
+			vertical-align: top;
+		}
+	} 
+	.sec_block {
+		background:#dff0d8;
+		padding:10px;
+		border-bottom:1px solid #ddd;
 	}
 }
+
+.form-wizard {
+	.nav-pills {
+		margin-top:15px;
+		li {
+			a {
+				background-color: #fff !important;
+				background-image: none !important;
+				filter: none !important;
+				border: 0px;
+				box-shadow: none !important;
+				color: #777;
+				cursor: default;
+			}
+			.number {
+				background-color: #eee;
+				display: inline-block;
+				font-size: 16px;
+				font-weight: 300;
+				padding: 12px 15px 12px 15px !important;
+				margin-right: 10px;
+				-webkit-border-radius: 50% !important;
+				-moz-border-radius: 50% !important;
+				border-radius: 50% !important;
+				margin-right:2px;
+			}
+		}	
+		.visit .step {
+			.number {
+				background-color: #35aa47;
+				color: #fff;
+			}
+			.desc {
+				color:#555;
+			}
+			.active {
+				font-weight:bold;
+			}
+		}
+	}
+	.show_frame {
+		padding:10px;
+		border-radius:4px;
+		background:#eee;
+		.frame_tip {
+			float:right;
+		}
+		.main_frame {
+			clear:both;
+			height:400px;
+			background:#fff;
+			margin-top:30px;
+			border-radius:4px;
+			margin-bottom:10px;
+			border:1px solid #ddd;
+		}
+		table {
+			background:#fff;
+			margin-bottom:0;
+		}
+	}
+	.operate_btn {
+		text-align:right;
+		.del {
+		    visibility: hidden;
+		}
+	}
+	.pagination {		
+		float:right;	
+	}
+}
+
+
+
+

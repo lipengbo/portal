@@ -5298,9 +5298,9 @@ a {
 .table td select {
   margin-bottom: 0;
 }
-.table th .btn,
-.table td .btn {
-  margin-right: 10px;
+.table th .v_top,
+.table td .v_top {
+  vertical-align: top;
 }
 .common {
   padding-top: 60px;
@@ -5525,7 +5525,6 @@ a {
 .fill_form .form-actions {
   border: none;
   background: none;
-  clear: both;
 }
 .node_btn.active,
 .node_btn:active {
@@ -5540,14 +5539,6 @@ a {
 }
 .base_info .table td {
   border: none;
-}
-.base_info .table .v_top {
-  vertical-align: top;
-}
-.base_info .sec_block {
-  background: #dff0d8;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
 .form-wizard .nav-pills {
   margin-top: 15px;
@@ -5571,17 +5562,32 @@ a {
   -webkit-border-radius: 50% !important;
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;
-  margin-right: 2px;
+  margin-right: 5px;
 }
-.form-wizard .nav-pills .visit .step .number {
+.form-wizard .nav-pills .active .step .number {
   background-color: #35aa47;
   color: #fff;
 }
-.form-wizard .nav-pills .visit .step .desc {
+.form-wizard .nav-pills .active .step .desc {
   color: #555;
 }
-.form-wizard .nav-pills .visit .step .active {
+.form-wizard .nav-pills .active .step .active {
   font-weight: bold;
+}
+.form-wizard .guide_line {
+  list-style-type: none;
+  height: 4px;
+  width: 85%;
+  background: #eee;
+  margin: -20px auto 0;
+}
+.form-wizard .guide_line li {
+  width: 20%;
+  float: left;
+  height: 4px;
+}
+.form-wizard .guide_line .active {
+  background: #35aa47;
 }
 .form-wizard .show_frame {
   padding: 10px;
@@ -5603,13 +5609,4 @@ a {
 .form-wizard .show_frame table {
   background: #fff;
   margin-bottom: 0;
-}
-.form-wizard .operate_btn {
-  text-align: right;
-}
-.form-wizard .operate_btn .del {
-  visibility: hidden;
-}
-.form-wizard .pagination {
-  float: right;
 }

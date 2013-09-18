@@ -105,7 +105,7 @@ def create_owner_membership(sender, instance, created, **kwargs):
         instance.add_member(instance.owner, True)
 
 
-#@receiver(post_save, sender=Membership)
+@receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
     if created:
         if instance.is_owner:
