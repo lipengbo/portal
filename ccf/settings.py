@@ -145,6 +145,7 @@ INSTALLED_APPS = [
     "project",
     "resources",
     "plugins.vt",
+    "plugins.ipam",
     "plugins.openflow",
     "plugins.network",
     "invite",
