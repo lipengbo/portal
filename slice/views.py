@@ -1,4 +1,6 @@
 # coding:utf-8
+import json
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -9,16 +11,15 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
+
 from slice.slice_api import create_slice_api, start_slice_api, stop_slice_api, get_slice_topology, delete_slice_api
 from plugins.openflow.controller_api import slice_add_controller
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
 from resources.ovs_api import slice_add_ovs_ports
 from project.models import Project, Island
-import simplejson
 
 from slice.models import Slice
-# Create your views here.
 
 
 def index(request):
@@ -90,7 +91,7 @@ def topology(request, slice_id):
         return HttpResponseRedirect(
             reverse("warning", kwargs={"warn_id": 2}))
     jsondatas = get_slice_topology(slice_obj)
-    result = simplejson.dumps(jsondatas)
+    result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
 
