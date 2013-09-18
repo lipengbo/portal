@@ -121,6 +121,7 @@ class Switch(SwitchResource):
             return False
         else:
             return True
+
     def on_remove_from_slice(self, slice_obj):
         slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
         slice_switches.delete()
