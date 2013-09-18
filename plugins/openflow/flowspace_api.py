@@ -18,7 +18,7 @@ def flowspace_nw_add(slice_obj, old_nws, new_nm):
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex)
-    if new_nm:
+    if new_nm and (new_nm not in slice_obj.get_nws()):
         try:
             name = str(slice_obj.name) + '_df'
             nw_num = len(old_nws)
@@ -45,7 +45,7 @@ def flowspace_nw_del(slice_obj, del_nw):
         Slice.objects.get(id=slice_obj.id)
     except Slice.DoesNotExist:
         return False
-    if del_nw:
+    if del_nw and (del_nw in slice_obj.get_nws()):
         name = str(slice_obj.name) + '_df'
         delete_default_flowspace(slice_obj, name, '', '', del_nw, '')
         delete_default_flowspace(slice_obj, name, '', '', '', del_nw)
@@ -60,7 +60,7 @@ def flowspace_gw_add(slice_obj, new_gateway):
         Slice.objects.get(id=slice_obj.id)
     except Slice.DoesNotExist:
         return False
-    if new_gateway:
+    if new_gateway and (new_gateway not in slice_obj.get_gws()):
         name = str(slice_obj.name) + '_df'
         haved_nws = slice_obj.get_nws()
         for haved_nw in haved_nws:
@@ -79,7 +79,7 @@ def flowspace_gw_del(slice_obj, del_gateway):
         Slice.objects.get(id=slice_obj.id)
     except Slice.DoesNotExist:
         return False
-    if del_gateway:
+    if del_gateway and (del_gateway in slice_obj.get_gws()):
         name = str(slice_obj.name) + '_df'
         delete_default_flowspace(slice_obj, name, del_gateway, '', '', '')
         delete_default_flowspace(slice_obj, name, '', del_gateway, '', '')
@@ -90,21 +90,21 @@ def flowspace_dhcp_add(slice_obj, new_dhcp):
     """添加dhcp服务器时添加flowspace
     """
     LOG.debug('flowspace_dhcp_add')
-    from CENI.Project.slice_api import get_slice_dhcps, get_slice_vms
     try:
         Slice.objects.get(id=slice_obj.id)
     except Slice.DoesNotExist:
         return False
     if new_dhcp:
-        name = str(slice_obj.name) + '_df'
-        create_default_flowspace(slice_obj, name, '1', '', '',
-            '', new_dhcp, '', '', '', '', '', '', '', '')
-        haved_dhcps = get_slice_dhcps(slice_obj)
-        if len(haved_dhcps) == 1:
-            haved_vms = get_slice_vms(slice_obj)
+        dhcp_vm_macs = slice_obj.get_dhcp_vm_macs()
+        if new_dhcp not in dhcp_vm_macs:
+            name = str(slice_obj.name) + '_df'
+            create_default_flowspace(slice_obj, name, '1', '', '',
+                '', new_dhcp, '', '', '', '', '', '', '', '')
+            haved_vms = slice_obj.get_vms()
             for haved_vm in haved_vms:
-                create_default_flowspace(slice_obj, name, '1', '', '',
-                    '', str(haved_vm.mac), '', '', '', '', '', '', '', '')
+                if haved_vm.mac not in dhcp_vm_macs:
+                    create_default_flowspace(slice_obj, name, '1', '', '',
+                        '', str(haved_vm.mac), '', '', '', '', '', '', '', '')
     return True
 
 
@@ -112,7 +112,7 @@ def flowspace_dhcp_del(slice_obj, del_dhcp):
     """删除dhcp服务器时删除相应flowspace
     """
     LOG.debug('flowspace_dhcp_del')
-    from CENI.Project.slice_api import get_slice_dhcps, get_slice_vms
+    from CENI.Project.slice_api import get_slice_dhcps
     try:
         Slice.objects.get(id=slice_obj.id)
     except Slice.DoesNotExist:
@@ -122,7 +122,7 @@ def flowspace_dhcp_del(slice_obj, del_dhcp):
         delete_default_flowspace(slice_obj, name, del_dhcp, '', '', '')
         haved_dhcps = get_slice_dhcps(slice_obj)
         if len(haved_dhcps) == 0:
-            haved_vms = get_slice_vms(slice_obj)
+            haved_vms = slice_obj.get_vms()
             for haved_vm in haved_vms:
                 delete_default_flowspace(slice_obj, name, str(haved_vm.mac), '', '', '')
     return True
@@ -201,26 +201,20 @@ def delete_default_flowspace(slice_obj, name, dl_src, dl_dst, nw_src, nw_dst):
     """
     LOG.debug('delete_default_flowspace')
     try:
-        flowspace_objs = ceni_flowspace.objects.filter(name=name, is_default=1)
+        flowspace_objs = FlowSpaceRule.objects.filter(name=name, is_default=1)
         if dl_src:
-            flowspace_objs = ceni_flowspace.objects.filter(name=name,
+            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
                 dl_src=dl_src, is_default=1)
         if dl_dst:
-            flowspace_objs = ceni_flowspace.objects.filter(name=name,
+            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
                 dl_dst=dl_dst, is_default=1)
         if nw_src:
-            flowspace_objs = ceni_flowspace.objects.filter(name=name,
+            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
                 nw_src=nw_src, is_default=1)
         if nw_dst:
-            flowspace_objs = ceni_flowspace.objects.filter(name=name,
+            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
                 nw_dst=nw_dst, is_default=1)
-        for flowspace_obj in flowspace_objs:
-            slice_flowspace = ceni_slice_resource.objects.filter(
-                 slice_id=slice_obj.id,
-                 resource_type=1,
-                 resource_id=flowspace_obj.id)
-            slice_flowspace.delete()
-            flowspace_obj.delete()
+        flowspace_objs.delete()
     except Exception, ex:
         transaction.rollback()
 

@@ -95,10 +95,6 @@ def makeMatch(matchStr):
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
     try:
-        print data
-        print flowvisor_url
-        print flowvisor_ps
-
         #url = "https://192.168.28.141:8181"
         url = flowvisor_url
         ps = flowvisor_ps
@@ -114,6 +110,9 @@ def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
     except Exception, e:
         print 1
         print e
+        print 2
+        if e == '<urlopen error [Errno 104] Connection reset by peer>':
+            connect(cmd, data, flowvisor_url, flowvisor_ps)
 #         if e.code == 401:
 #             print "Authentication failed: invalid password"
 #         elif e.code == 504:

@@ -18,4 +18,6 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        exclude = ('owner', 'memberships')
+        fields = ("name", "description", "category", "islands")
+
+        widgets = {"islands": forms.SelectMultiple(attrs={"class": "hide"})}
