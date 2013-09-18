@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
-# from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm
 
 from invite.models import Invitation
 
