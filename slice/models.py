@@ -91,6 +91,31 @@ class Slice(models.Model):
     def get_vms(self):
         return self.virtual_machines.all()
 
+    def get_nws(self):
+        default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
+        nws = []
+        for default_flowspace in default_flowspaces:
+            if default_flowspace.nw_src != '' and default_flowspace.nw_src == default_flowspace.nw_dst:
+                nws.append(default_flowspace.nw_dst)
+        return nws
+
+    def get_gws(self):
+        default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
+        gws = []
+        for default_flowspace in default_flowspaces:
+            if default_flowspace.dl_src != '':
+                gws.append(default_flowspace.dl_src)
+        return gws
+
+    def get_dhcp_vm_macs(self):
+        default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='')
+        dhcp_vm_macs = []
+        for default_flowspace in default_flowspaces:
+            if default_flowspace.dl_src != '':
+                dhcp_vm_macs.append(default_flowspace.dl_src)
+        return dhcp_vm_macs
+
+
     def __unicode__(self):
         return self.name
 
