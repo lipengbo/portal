@@ -9,11 +9,12 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
 {% endblock %}
 {% block breadcrumb_base %}{% endblock %}
+{% block body_class %}common help_box{% endblock %}
 
 {% block body %}
 	<div class="row-fluid help_all">
        <div class="span9">
-       	 <div class="help_doc">
+       	 <div class="help_main_wrap">
        	 	<div class="help_main">
        	 	  <section id="ceni">
        	 		<h4>What is GENI?</h4>
@@ -39,7 +40,7 @@
        	 </div>
        </div>	
        <div class="span3 help_chose">
-       	 <div class="help_doc">
+       	 <div class="help_main_wrap">
           <ul class="nav nav-list bs-docs-sidenav">
 	          <li><a href="#ceni"><i class="icon-chevron-left"></i> What is GENI?</a></li>
 	          <li><a href="#project"><i class="icon-chevron-left"></i> About project</a></li>

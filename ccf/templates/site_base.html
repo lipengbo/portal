@@ -50,7 +50,7 @@
                 </div>
             {% endblock %}
 		{% block body_base %}
-		    <div class="container">
+		    <div class="container">	        
 		    	{% block breadcrumb_base %}
 		        <ul class="breadcrumb">
 		            <li><span class="icon-home"></span><a href="#">{% trans "Project" %}</a> <span class="divider">/</span>
@@ -60,8 +60,15 @@
 		        </ul>
 		        {% endblock %}
 		        {% include "_messages.html" %}
-		        {% block body %}
-		        {% endblock %}		        
+		        
+		        
+		         <div class="main_wrap">	
+		           <div class="main">	             		        
+    		        {% block body %}
+    		        {% endblock %}	
+    		       </div>                
+		        </div>
+	        
 		    </div>
 		{% endblock %}
 
