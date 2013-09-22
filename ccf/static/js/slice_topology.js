@@ -126,7 +126,7 @@ function drawTopology(slicec){
 			$("div#content4").empty();
 		}
 	}
-		
+	var static_url = $("#STATIC_URL").text();	
 	var str = "";
 	if(slicec > -1){
 		str = str + "<a href=\"/slice_detail/" + slice_id + "/1/\">";
@@ -170,7 +170,7 @@ function drawTopology(slicec){
 	
 	for(var i = 0; i < switches.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>"
-				+ "<image xlink:href='/static/img/switch.png' x='" + switches[i][1] + "' y='" + switches[i][2] + "" +
+				+ "<image xlink:href='" + static_url + "img/switch.png' x='" + switches[i][1] + "' y='" + switches[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>"
 				+ "<title>" + switches[i][0] + "</title>"
 			+ "</g> ";
@@ -649,8 +649,7 @@ function init(){
 	var tempLinks = new Array();
 	var sign = new Array();
 	//获取数据库中该slice的拓扑信息	
-	var topology_flag = $("#topology_flag").text();
-	var topology_url = "http://" + window.location.host + "/slice_topology/"+slice_id+"/"+topology_flag+"/";
+	var topology_url = "http://" + window.location.host + "/slice/topology/"+slice_id+"/";
 	$.ajaxSetup({  
 	    async : false  
 	}); 
@@ -856,7 +855,7 @@ function initCircleTemp(){
 //初始化画布，图标
 function initCheckBoard(conti){
 	if(conti == -1){
-		rs_mbWidth = 800* 0.9;
+		rs_mbWidth = 980* 0.9;
 		rs_mbHeight = 300;
 		rs_pic_width = 50;
 		rs_pic_height = 30;

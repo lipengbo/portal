@@ -110,9 +110,10 @@ def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
     except Exception, e:
         print 1
         print e
-        print 2
-        if e == '<urlopen error [Errno 104] Connection reset by peer>':
-            connect(cmd, data, flowvisor_url, flowvisor_ps)
+        if str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
+            return connect(cmd, data, flowvisor_url, flowvisor_ps)
+        else:
+            return ""
 #         if e.code == 401:
 #             print "Authentication failed: invalid password"
 #         elif e.code == 504:
@@ -121,7 +122,6 @@ def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
 #             print "HTTP Error 500"
 #         else:
 #             print e
-        return ""
     except RuntimeError, e:
         print 2
         print e

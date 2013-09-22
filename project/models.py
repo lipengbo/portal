@@ -3,7 +3,7 @@
 from django.db import models
 from django.db import IntegrityError 
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, m2m_changed
+from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
@@ -104,6 +104,16 @@ def create_owner_membership(sender, instance, created, **kwargs):
     if created:
         instance.add_member(instance.owner, True)
 
+@receiver(pre_delete, sender=Membership)
+def delete_invitation(sender, instance, **kwargs):
+    to_user = instance.user
+    project = instance.project
+    from_user = project.owner
+    try:
+        target_type = ContentType.objects.get_for_model(project)
+        Invitation.objects.get(to_user=to_user, from_user=from_user, target_id=project.id, target_type=target_type).delete()
+    except Invitation.DoesNotExist, e:
+        pass
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):

@@ -12,12 +12,14 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 
-from slice.slice_api import create_slice_api, start_slice_api, stop_slice_api, get_slice_topology, delete_slice_api
+from slice.slice_api import create_slice_step, start_slice_api, stop_slice_api, get_slice_topology, delete_slice_api
 from plugins.openflow.controller_api import slice_add_controller, create_user_defined_controller
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
 from resources.ovs_api import slice_add_ovs_ports
 from project.models import Project, Island
+from resources.models import SwitchPort
+from slice.slice_exception import *
 
 from slice.models import Slice
 
@@ -30,27 +32,49 @@ def index(request):
 def create(request, proj_id):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
+    error_info = None
     if request.method == 'POST':
-        slice_name = request.POST.get("slice_name")
-        slice_description = request.POST.get("slice_description")
-        island_id = request.POST.get("island_id")
-        island = get_object_or_404(Island, id=island_id)
-        controller_type = request.POST.get("controller_type")
-        if controller_type == 'default_create':
-            controller = project.islands.all()[0].controller_set.all()[0]
+        try:
+            user = request.user
+            slice_name = request.POST.get("slice_name")
+            slice_description = request.POST.get("slice_description")
+            island_id = request.POST.get("island_id")
+            island = get_object_or_404(Island, id=island_id)
+            controller_type = request.POST.get("controller_type")
+            if controller_type == 'default_create':
+                controller = project.islands.all()[0].controller_set.all()[0]
+            else:
+                controller_ip = request.POST.get("controller_ip")
+                controller_port = request.POST.get("controller_port")
+                controller = create_user_defined_controller(island, controller_ip, controller_port)
+            port_ids = []
+            switch_port_ids = request.POST.getlist("switch_port_ids")
+            for switch_port_id in switch_port_ids:
+                port_ids.append(int(switch_port_id))
+            ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
+            slice_obj = create_slice_step(project, slice_name, slice_description, island, user, ovs_ports, controller)
+        except DbError, ex:
+            return render(request, 'slice/warning.html', {'info': str(ex)})
+        except Exception, ex:
+            print 'he'
+            error_info = str(ex)
         else:
-            controller_ip = request.POST.get("controller_ip")
-            controller_port = request.POST.get("controller_port")
-            controller = create_user_defined_controller(island, controller_ip, controller_port)
-        slice_id = 1
-        return HttpResponseRedirect(
-            reverse('ccf.slice.views.slice_detail', args=(slice_id)))
+            return HttpResponseRedirect(
+                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
     islands = project.islands.all()
     if not islands:
-        return HttpResponseRedirect(
-            reverse(request, 'slice/warning.html', {'info':'无可用节点，无法创建slice！'}))
+        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
+    ovs_ports = []
+    for island in islands:
+        switches = island.switch_set.all()
+        for switch in switches:
+            switch_ports = switch.switchport_set.all()
+            if switch_ports:
+                ovs_ports.append({'switch_type': switch.type(), 'switch':switch, 'switch_ports': switch_ports})
     context = {}
     context['islands'] = islands
+    context['ovs_ports'] = ovs_ports
+    context['error_info'] = error_info
     return render(request, 'slice/create_slice.html', context)
 
 
@@ -58,17 +82,20 @@ def edit(request, slice_id):
     """编辑slice。"""
     context = {}
     if request.method == 'POST':
+        slice_obj = None
         return HttpResponseRedirect(
-            reverse('ccf.slice.views.slice_detail', args=(slice_id)))
+            reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
     return render(request, 'slice/edit_slice.html', context)
 
 
 def detail(request, slice_id):
     """编辑slice。"""
+    slice_obj = get_object_or_404(Slice, id=slice_id)
     context = {}
-    if request.method == 'POST':
-        return HttpResponseRedirect(
-            reverse('ccf.slice.views.slice_detail', args=(slice_id)))
+    context['slice_obj'] = slice_obj
+    context['island'] = slice_obj.get_island()
+    context['controller'] = slice_obj.get_controller()
+    context['flowvisor'] = slice_obj.get_flowvisor()
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -78,11 +105,10 @@ def delete(request, slice_id):
     project_id = slice_obj.project.id
     try:
         delete_slice_api(slice_obj)
-    except:
-        return HttpResponseRedirect(
-            reverse("warning", kwargs={"warn_id": 2}))
+    except Exception, ex:
+        return render(request, 'slice/warning.html', {'info': str(ex)})
     return HttpResponseRedirect(
-        reverse("project_detail", kwargs={"project_id": project_id}))
+        reverse("project_detail", kwargs={"id": project_id}))
 
 
 def start_or_stop(request, slice_id, flag):
@@ -93,12 +119,11 @@ def start_or_stop(request, slice_id, flag):
             start_slice_api(slice_obj)
         else:
             stop_slice_api(slice_obj)
-    except:
-        return HttpResponseRedirect(
-            reverse("warning", kwargs={"warn_id": 2}))
+    except Exception, ex:
+        return render(request, 'slice/warning.html', {'info': str(ex)})
     else:
         return HttpResponseRedirect(
-            reverse('ccf.slice.views.slice_detail', args=(slice_id, 1)))
+            reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def topology(request, slice_id):
@@ -107,48 +132,3 @@ def topology(request, slice_id):
     jsondatas = get_slice_topology(slice_obj)
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
-
-
-def create_or_edit(request, slice_id):
-    """创建slice。"""
-    user = request.user
-    context = {}
-    project = Project.objects.all()[0]
-    if request.method == 'GET':
-        pass
-    else:
-        name = request.POST.get("name")
-        description = request.POST.get("description")
-        island_id = request.POST.get("island_id")
-        island = Island.objects.get(id=int(island_id))
-        controller = Controller(ip="192.168.5.41", port="8081",
-                http_port="8080", username="test", password="test",
-                hostname="test_contoller", island=island)
-        controller.save()
-        controller_type = request.POST.get("controller_type")
-        if controller_type == 'default_create':
-            controller = Controller.objects.all()[0]
-        else:
-            controller = Controller.objects.all()[0]
-        ovs_ids = request.POST.getlist("ovs_ids")
-        ovs_ports = []
-        if ovs_ids:
-            for ovs_id in ovs_ids:
-                ports = request.POST.getlist("ovs" + ovs_id + "ports")
-                if ports:
-                    ovs = None
-                    ovs_port = {'ovs': ovs, 'ports': ports}
-                    ovs_ports.append(ovs_port)
-        try:
-            slice_obj = create_slice_api(project, name, description, island, user)
-            slice_add_ovs_ports(slice_obj, ovs_ports)
-            slice_add_controller(slice_obj, controller)
-            flowvisor_add_slice(island.flowvisor_set.all()[0], controller, name, user.email)
-        except:
-            pass
-#             return redirect('slice_create')
-    islands = project.islands.all()
-    context['islands'] = islands
-    context['ovs_ports'] = [{'ovs':{'id':1, 'hostname':'ovs1'}, 'ports':[1, 2, 3]},
-                            {'ovs':{'id':2, 'hostname':'ovs2'}, 'ports':[1, 2]}]
-    return render(request, 'slice/create_slice.html', context)
