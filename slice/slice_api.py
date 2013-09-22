@@ -111,12 +111,14 @@ def delete_slice_api(slice_obj):
     #             删除dhcp
     #             删除网关
     #             删除控制器
+                controller = slice_obj.get_controller()
     #             删除slice网络地址
     #             删除交换机端口
     #             删除底层slice
                 flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
     #             删除slice记录
                 slice_obj.delete()
+                delete_controller(controller)
             except Exception, ex:
                 transaction.rollback()
                 raise DbError(ex)

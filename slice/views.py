@@ -90,7 +90,12 @@ def edit(request, slice_id):
 
 def detail(request, slice_id):
     """编辑slice。"""
+    slice_obj = get_object_or_404(Slice, id=slice_id)
     context = {}
+    context['slice_obj'] = slice_obj
+    context['island'] = slice_obj.get_island()
+    context['controller'] = slice_obj.get_controller()
+    context['flowvisor'] = slice_obj.get_flowvisor()
     return render(request, 'slice/slice_detail.html', context)
 
 
