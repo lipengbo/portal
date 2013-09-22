@@ -1,5 +1,6 @@
 # coding:utf-8
-from models import Slice
+from slice.models import Slice
+from plugins.openflow.models import Controller
 from slice.slice_exception import DbError, ControllerUsedError
 from flowvisor_api import flowvisor_update_sice_controller
 from django.db import transaction
@@ -23,6 +24,17 @@ def slice_add_controller(slice_obj, controller):
                 raise DbError(ex)
     else:
         raise DbError("数据库异常")
+
+
+def create_user_defined_controller(island, controller_ip, controller_port):
+    """创建用户自定义控制器记录
+    """
+    controller = Controller(
+        ip = controller_ip,
+        port = controller_port,
+        http_port = 0,
+        state = 1)
+    controller.save()
 
 
 @transaction.commit_on_success

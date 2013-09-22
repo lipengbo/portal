@@ -13,7 +13,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 
 from slice.slice_api import create_slice_api, start_slice_api, stop_slice_api, get_slice_topology, delete_slice_api
-from plugins.openflow.controller_api import slice_add_controller
+from plugins.openflow.controller_api import slice_add_controller, create_user_defined_controller
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
 from resources.ovs_api import slice_add_ovs_ports
@@ -27,13 +27,30 @@ def index(request):
     return render(request, 'slice/index.html', context)
 
 
-def create(request):
+def create(request, proj_id):
     """创建slice。"""
-    context = {}
+    project = get_object_or_404(Project, id=proj_id)
     if request.method == 'POST':
+        slice_name = request.POST.get("slice_name")
+        slice_description = request.POST.get("slice_description")
+        island_id = request.POST.get("island_id")
+        island = get_object_or_404(Island, id=island_id)
+        controller_type = request.POST.get("controller_type")
+        if controller_type == 'default_create':
+            controller = project.islands.all()[0].controller_set.all()[0]
+        else:
+            controller_ip = request.POST.get("controller_ip")
+            controller_port = request.POST.get("controller_port")
+            controller = create_user_defined_controller(island, controller_ip, controller_port)
         slice_id = 1
         return HttpResponseRedirect(
             reverse('ccf.slice.views.slice_detail', args=(slice_id)))
+    islands = project.islands.all()
+    if not islands:
+        return HttpResponseRedirect(
+            reverse(request, 'slice/warning.html', {'info':'无可用节点，无法创建slice！'}))
+    context = {}
+    context['islands'] = islands
     return render(request, 'slice/create_slice.html', context)
 
 
@@ -57,11 +74,7 @@ def detail(request, slice_id):
 
 def delete(request, slice_id):
     """删除slice。"""
-    try:
-        slice_obj = Slice.objects.get(id=slice_id)
-    except Slice.DoesNotExist:
-        return HttpResponseRedirect(
-            reverse("warning", kwargs={"warn_id": 2}))
+    slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
     try:
         delete_slice_api(slice_obj)
@@ -74,11 +87,7 @@ def delete(request, slice_id):
 
 def start_or_stop(request, slice_id, flag):
     """启动或停止slice。"""
-    try:
-        slice_obj = Slice.objects.get(id=slice_id)
-    except Slice.DoesNotExist:
-        return HttpResponseRedirect(
-            reverse("warning", kwargs={"warn_id": 2}))
+    slice_obj = get_object_or_404(Slice, id=slice_id)
     try:
         if int(flag) == 1:
             start_slice_api(slice_obj)
@@ -94,11 +103,7 @@ def start_or_stop(request, slice_id, flag):
 
 def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
-    try:
-        slice_obj = Slice.objects.get(id=slice_id)
-    except:
-        return HttpResponseRedirect(
-            reverse("warning", kwargs={"warn_id": 2}))
+    slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
