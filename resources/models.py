@@ -88,7 +88,7 @@ class ServiceResource(IslandResource):
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     content_type = models.ForeignKey(ContentType)
-    object_id = models.PositiveIntegerField()
+    object_id = models.PositiveIntegerField(null=True, blank=True)
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
