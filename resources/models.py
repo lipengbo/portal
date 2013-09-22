@@ -87,7 +87,7 @@ class ServiceResource(IslandResource):
     http_port = models.IntegerField()
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
@@ -169,7 +169,7 @@ class SwitchPort(Resource):
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     switch = models.ForeignKey(Switch)
     port = models.IntegerField()
-    slices = models.ManyToManyField(Slice, through="SlicePort")
+    slices = models.ManyToManyField(Slice, through="SlicePort", blank=True)
 
     def on_add_into_slice(self, slice_obj):
         SlicePort.objects.get_or_create(

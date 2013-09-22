@@ -48,8 +48,11 @@
                 </li>
                 <li class="span1"></li>
             </ul>
-          <form>
+          <form class="" action="" method="post" accept-charset="utf-8">{% csrf_token %}
             <div class="tab_part">
+              	{% if error_info %}
+              		<p>{{error_info}}ok</p>
+              	{%endif%}
               <fieldset>
                 <legend>基本信息</legend>
                 <label>名称</label>
@@ -99,24 +102,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>A</td>
-                            <td>00:00:00:00:00:00:01</td>
-                            <td>网络出口节点</td>
-                            <td>A-1<------->B-1，A-2<--------->C-1</td>
-                        </tr>
-                        <tr>
-                            <td>A</td>
-                            <td>00:00:00:00:00:00:01</td>
-                            <td>网络出口节点</td>
-                            <td>A-1<------->B-1，A-2<--------->C-1</td>
-                        </tr>
-                        <tr>
-                            <td>A</td>
-                            <td>00:00:00:00:00:00:01</td>
-                            <td>网络出口节点</td>
-                            <td>A-1<------->B-1，A-2<--------->C-1</td>
-                        </tr>
+                    	{%for ovs_port in ovs_ports%}
+                    		<tr>
+	                            <td>{{ovs_port.switch.name}}</td>
+	                            <td>{{ovs_port.switch.dpid}}</td>
+	                            <td>
+	                            {% if ovs_port.switch_type == 1 %}
+	                            	交换节点
+	                            {%endif%}
+	                            {% if ovs_port.switch_type == 2 %}
+	                            	网络出口节点
+	                            {%endif%}
+	                            {% if ovs_port.switch_type == 3 %}
+	                            	虚拟机关联节点
+	                            {%endif%}
+	                            </td>
+	                            <td>
+	                            	{%for port in ovs_port.switch_ports%}
+	                            		<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+	                            	{%endfor%}
+	                            </td>
+                        	</tr>
+                    	{%endfor%}
                     </tbody>
                   </table>              
                 </div>       
