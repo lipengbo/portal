@@ -23,7 +23,7 @@ def invite(request, target_type_id, target_id):
     target = target_type.get_object_for_this_type(id=target_id)
 
     if request.method == 'GET':
-        form = InvitationForm()
+        form = InvitationForm(target_obj=target)
     else:
         form = InvitationForm(request.POST)
         if form.is_valid():
@@ -32,6 +32,7 @@ def invite(request, target_type_id, target_id):
             invitation.target = target
             invitation.save()
             messages.add_message(request, messages.INFO, _("Invitation completed."))
+            return redirect("invite_invite", target_type_id=target_type_id, target_id=target_id)
     context = {}
     context['target'] = target
     context['form'] = form
