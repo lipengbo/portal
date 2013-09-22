@@ -24,6 +24,11 @@ urlpatterns = patterns("",
     url(r"^create_slice5/", TemplateView.as_view(template_name="create_slice5.html"), name="home"),
     url(r"^detail_slice/", TemplateView.as_view(template_name="detail_slice.html"), name="home"),
     url(r"^create_slice/", TemplateView.as_view(template_name="create_slice.html"), name="home"),
+    url(r"^project_manage/", TemplateView.as_view(template_name="project_manage.html"), name="home"),
+    url(r"^list_project/", TemplateView.as_view(template_name="list_project.html"), name="home"),
+    url(r"^list_slice/", TemplateView.as_view(template_name="list_slice.html"), name="home"),
+    url(r"^list_vm/", TemplateView.as_view(template_name="list_vm.html"), name="home"),
+    url(r"^apply_project/", TemplateView.as_view(template_name="apply_project.html"), name="home"),
 
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
