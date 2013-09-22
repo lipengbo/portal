@@ -5453,12 +5453,14 @@ a {
   width: 239px;
   float: right;
 }
-.help_doc {
+.help_doc,
+.main_wrap {
   background: #eee;
   padding: 3px;
   border-radius: 3px;
 }
-.help_main {
+.help_main,
+.main {
   border: 1px solid #e5e5e5;
   background: #fff;
   padding-left: 15px;
@@ -5468,18 +5470,22 @@ a {
   border-radius: 2px;
   padding-bottom: 30px;
 }
-.help_main section {
+.help_main section,
+.main section {
   margin-top: 40px;
 }
-.help_main section p {
+.help_main section p,
+.main section p {
   text-indent: 2em;
 }
-.help_main section ol {
+.help_main section ol,
+.main section ol {
   font-size: 13px;
   margin-left: 20px;
   margin-top: 15px;
 }
-.help_main section img {
+.help_main section img,
+.main section img {
   display: block;
   margin: 20px auto 0;
 }
