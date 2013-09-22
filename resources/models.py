@@ -171,6 +171,8 @@ class SwitchPort(Resource):
     port = models.IntegerField()
     slices = models.ManyToManyField(Slice, through="SlicePort")
 
+    def __unicode__(self):
+        return '{} - {}'.format(self.switch, self.port)
     def on_add_into_slice(self, slice_obj):
         SlicePort.objects.get_or_create(
             switch_port=self, slice=slice_obj)

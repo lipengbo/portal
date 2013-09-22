@@ -11,13 +11,14 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 
-from project.models import Project
+from project.models import Project, Membership
 from project.forms import ProjectForm
 
 @login_required
 def index(request):
     user = request.user
-    projects = Project.objects.filter(owner=user)
+    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    projects = Project.objects.filter(id__in=project_ids)
     context = {}
     context['projects'] = projects
     return render(request, 'project/index.html', context)
@@ -49,3 +50,23 @@ def create_or_edit(request, id=None):
 
     context['form'] = form
     return render(request, 'project/create.html', context)
+
+@login_required
+def delete_member(request, id):
+    user = request.user
+    membership = get_object_or_404(Membership, id=int(id))
+    project = membership.project
+    if project.owner == user and not membership.is_owner:
+        membership.delete()
+    else:
+        return redirect("forbidden")
+    return redirect("project_detail", id=project.id)
+
+@login_required
+def delete_project(request, id):
+    project = get_object_or_404(Project, id=id)
+    if request.user == project.owner:
+        project.delete()
+    else:
+        return redirect("forbidden")
+    return redirect("project_index")
