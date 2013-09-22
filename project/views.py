@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -13,6 +15,9 @@ from django.contrib.contenttypes.models import ContentType
 
 from project.models import Project, Membership
 from project.forms import ProjectForm
+
+from communication.flowvisor_client import FlowvisorClient
+from plugins.openflow.models import Flowvisor
 
 @login_required
 def index(request):
@@ -70,3 +75,79 @@ def delete_project(request, id):
     else:
         return redirect("forbidden")
     return redirect("project_index")
+
+
+def get_island_flowvisors(island_id=None):
+    flowvisors = Flowvisor.objects.all()
+    if island_id:
+        flowvisors = flowvisors.filter(island__id=island_id)
+    flowvisor_list = []
+    for flowvisor in flowvisors:
+        flowvisor_list.append({"host": flowvisor.ip + ":" + str(flowvisor.port), "id": flowvisor.id})
+    return flowvisor_list
+
+def get_all_cities():
+    return [], 2,2,2,2,2
+def topology(request):
+    from resources.models import Switch
+    root_controller = None
+    no_parent = request.GET.get('no_parent')
+    hide_filter = request.GET.get('hide_filter')
+    island_id = request.GET.get('island_id', 0)
+    show_virtual_switch = request.GET.get('show_virtual_switch')
+    try:
+        island_id = int(island_id)
+    except:
+        island_id = 0
+    flowvisors = get_island_flowvisors(island_id)
+
+    all_gre_ovs = Switch.objects.filter(has_gre_tunnel=True)
+
+    node_infos, total_server, total_switch, total_ctrl, total_nodes, total_island = get_all_cities()
+    city_id = int(request.GET.get('city_id', 0))
+    island_id = int(island_id)
+    total_facility = 4
+
+    #slices = get_slices()
+    return render(request, 'topology/index.html', {
+        'node_infos': node_infos,
+        'city_id': city_id,
+        'island_id': island_id,
+        'total_server':total_server,
+        'total_switch': total_switch,
+        'total_ctrl': total_ctrl,
+        'total_nodes': total_nodes,
+        'total_island': total_island,
+        'total_facility':total_facility,
+        'all_gre_ovs': all_gre_ovs,
+        'no_parent': no_parent,
+        'hide_filter': hide_filter,
+        'show_virtual_switch':show_virtual_switch,
+        #'slices': slices,
+        'root_controllers': json.dumps(flowvisors)})
+
+def swicth_desc(request, host, port, dpid):
+    return HttpResponse(json.dumps({dpid:[]}), content_type="application/json")
+
+def swicth_aggregate(request, host, port, dpid):
+    return HttpResponse(json.dumps({dpid:[]}), content_type="application/json")
+
+def device_proxy(request, host, port):
+    return HttpResponse(json.dumps([]), content_type="application/json")
+
+def links_proxy(request, host, port):
+    flowvisor = Flowvisor.objects.get(ip=host, port=port)
+    client = FlowvisorClient(host, port, flowvisor.password)
+    data = client.get_links()
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+@login_required
+#@cache_page(60 * 60 * 24 * 10)
+def switch_proxy(request, host, port):
+    flowvisor = Flowvisor.objects.get(ip=host, port=port)
+    client = FlowvisorClient(host, port, flowvisor.password)
+    data = json.dumps(client.get_switches())
+    #controller_api = request.path[1:]
+    #resp = urllib2.urlopen('http://' + controller_api)
+    #data = resp.read()
+    return HttpResponse(data, content_type="application/json")
