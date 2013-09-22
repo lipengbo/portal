@@ -166,7 +166,7 @@ width: 1024px;
 	padding-bottom: 15px;
 	padding-top: 15px;
 	text-align:center;
-	margin-top:20px;
+	margin-top:40px;
 }
 
 .breadcrumb {
@@ -177,17 +177,34 @@ width: 1024px;
 }
 
 .help_all {
-	margin-bottom:40px;
 	.help_chose {
 		width:239px;
 		float:right;
 		}
 }
 
-.help_doc,.main_wrap {
+.help_main_wrap, .main_wrap {
 	background:#eee;
-	padding:3px;
+	padding:5px;
 	border-radius:3px;
+}
+
+.login_bg, .home,.help_box {
+    .main_wrap {
+        background:none;
+        padding:0;
+        border:none;
+    } 
+    .main {
+        border: none;
+        background:transparent;
+        padding-left:0;
+        padding-right:0;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        padding-bottom:0;
+    }
 }
 
 .help_main,.main {

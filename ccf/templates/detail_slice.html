@@ -8,8 +8,7 @@
 {% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span><a href="#">创建Slice</a><span class="divider">/</span>Slice详情{% endblock %}
 
 {% block body %}
-	<div class="help_doc">
-		<div class="help_main fill_form form-wizard">
+		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
 			    <legend>基本信息<button type="button" class="btn btn-primary edit">编辑Slice</button></legend>
 			    <table class="table">
@@ -93,7 +92,6 @@
     			  </div>
 			  </div>			 
 		</div>
-	</div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
