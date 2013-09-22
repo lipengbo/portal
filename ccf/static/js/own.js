@@ -15,7 +15,7 @@ $(document).ready(function() {
 	
 	//虚拟机创建页面，添加和删除按钮功能
 	$(".add").click(function(){
-		$(".sec_block").first().clone(true).appendTo(".base_info");		
+		$(".sec_block").first().clone(true).appendTo(".vm_info_list");		
 		$(".sec_block").last().find("input[type='text']").val("");
 		$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
 		$(".sec_block").last().find(".del").css("visibility","visible");
