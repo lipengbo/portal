@@ -14,5 +14,21 @@
             "domain": "example.com", 
             "name": "example.com"
         }
+    },
+    {
+        "pk": 1, 
+        "model": "ipam.network", 
+        "fields": {
+            "netaddr": "10.0.0.0/8", 
+            "type": 1
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "ipam.network", 
+        "fields": {
+            "netaddr": "172.16.0.0/16", 
+            "type": 0
+        }
     }
 ]

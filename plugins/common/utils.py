@@ -28,12 +28,12 @@ from eventlet import event
 from eventlet import greenthread
 from eventlet.green import subprocess
 import exception
-import lockfile
-import netaddr
+#import lockfile
 from django.utils.translation import ugettext as _
-from ccf.etc import config
+from etc import config
+from plugins.ipam import netaddr
 import logging
-LOG = logging.getLogger(__file__)
+LOG = logging.getLogger('plugins')
 
 
 def import_class(import_str):
@@ -343,32 +343,32 @@ def utf8(value):
     return value
 
 
-class GreenLockFile(lockfile.FileLock):
+#class GreenLockFile(lockfile.FileLock):
 
-    """Implementation of lockfile that allows for a lock per greenthread.
+    #"""Implementation of lockfile that allows for a lock per greenthread.
 
-    Simply implements lockfile:LockBase init with an addiontall suffix
-    on the unique name of the greenthread identifier
-    """
-    def __init__(self, path, threaded=True):
-        self.path = path
-        self.lock_file = os.path.abspath(path) + ".lock"
-        self.hostname = socket.gethostname()
-        self.pid = os.getpid()
-        if threaded:
-            t = threading.current_thread()
-            # Thread objects in Python 2.4 and earlier do not have ident
-            # attrs.  Worm around that.
-            ident = getattr(t, "ident", hash(t))
-            gident = corolocal.get_ident()
-            self.tname = "-%x-%x" % (ident & 0xffffffff, gident & 0xffffffff)
-        else:
-            self.tname = ""
-        dirname = os.path.dirname(self.lock_file)
-        self.unique_name = os.path.join(dirname,
-                                        "%s%s.%s" % (self.hostname,
-                                                     self.tname,
-                                                     self.pid))
+    #Simply implements lockfile:LockBase init with an addiontall suffix
+    #on the unique name of the greenthread identifier
+    #"""
+    #def __init__(self, path, threaded=True):
+        #self.path = path
+        #self.lock_file = os.path.abspath(path) + ".lock"
+        #self.hostname = socket.gethostname()
+        #self.pid = os.getpid()
+        #if threaded:
+            #t = threading.current_thread()
+            ## Thread objects in Python 2.4 and earlier do not have ident
+            ## attrs.  Worm around that.
+            #ident = getattr(t, "ident", hash(t))
+            #gident = corolocal.get_ident()
+            #self.tname = "-%x-%x" % (ident & 0xffffffff, gident & 0xffffffff)
+        #else:
+            #self.tname = ""
+        #dirname = os.path.dirname(self.lock_file)
+        #self.unique_name = os.path.join(dirname,
+                                        #"%s%s.%s" % (self.hostname,
+                                                     #self.tname,
+                                                     #self.pid))
 
 
 _semaphores = {}
@@ -649,6 +649,12 @@ def tempdir(**kwargs):
             shutil.rmtree(tmpdir)
         except OSError as e:
             LOG.debug(_('Could not remove tmpdir: %s'), str(e))
+
+
+def generate_mac_address(ip):
+    """Generate an Ethernet MAC address."""
+    base_bin = netaddr.EUI('fa:16:00:00:00:00').value
+    return str(netaddr.EUI(base_bin | netaddr.IPAddress(ip).value))
 
 
 class UndoManager(object):

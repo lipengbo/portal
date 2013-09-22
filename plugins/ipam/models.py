@@ -1,109 +1,82 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Filename:models.py
+# Date:Fri Sep 20 18:36:12 CST 2013
+# Author:Pengbo Li
+# E-mail:lipengbo10054444@gmail.com
 from django.db import models
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext as _
-import random
-import netaddr as na
-from plugins.common import exception
+from plugins.ipam import netaddr as na
 
 
-class HostCountOutOfRangeException(Exception):
+class IPManager(models.Manager):
 
-    def __init__(self, message=None):
-        super(HostCountOutOfRangeException, self).__init__(message)
-
-
-class IPAM(models.Manager):
-
-    def create_subnet_64(self, supernet, owner, ipcount=64):
-        subnetaddrs = Subnet.objects.filter(supernet=supernet).order_by('-id')
-        if subnetaddrs:
-            subnetaddr = subnetaddrs[0]
-            subnet = self.next_sub(subnetaddr)
-            if subnet:
-                result = Subnet(supernet=supernet, netaddr=str(
-                    subnet), owner=owner)
-                result.save()
-                self.generate_ip_usage(subnet)
+    def create_subnet(self, owner):
+        supernet = Network.objects.get(type=1)
+        all_subnets = Subnet.objects.filter(supernet=supernet)
+        unused_subnets = all_subnets.filter(is_used=False)
+        if all_subnets:
+            if unused_subnets:
+                new_subnet_addr = unused_subnets[0]
             else:
-                raise exception.NetworkNoMoreSubNet(network=supernet.netaddr)
+                new_subnet_addr = all_subnets[0].get_next()
         else:
-            subnet = [subnet for subnet in na.Network(
-                supernet.netaddr).subnet(ipcount, count=1)][0]
-            result = Subnet(supernet=supernet, netaddr=str(
-                subnet), owner=owner)
-            result.save()
-            supernet.is_used = True
-            supernet.save()
-            self.generate_ip_usage(subnet)
-        return result
-
-    def create_subnet_base(self, supernet, owner='base'):
-        supernet = Network.objects.get(netaddr=supernet)
-        if supernet.is_used:
-            raise exception.NetWorkInUse(network=supernet.netaddr)
-        result = Subnet(
-            supernet=supernet, netaddr=supernet.netaddr, owner=owner)
+            new_subnet_addr = supernet.first_subnet()
+        result = Subnet(supernet=supernet, netaddr=new_subnet_addr, owner=owner, is_used=True)
         result.save()
-        supernet.is_used = True
-        supernet.save()
-        self.generate_ip_usage(supernet)
         return result
 
-    def generate_mac_address(self):
-        """Generate an Ethernet MAC address."""
-        mac = [0xfa, 0x16, 0x3e,
-               random.randint(0x00, 0xff),
-               random.randint(0x00, 0xff),
-               random.randint(0x00, 0xff)]
-        result = ':'.join(map(lambda x: "%02x" % x, mac))
-        if self.filter(mac=result):
-            self.generate_mac_address()
-        return result
-
-    def next_sub(self, subnet):
-        if subnet.supernet in subnet.supernet():
-            return subnet.next()
-        return None
-
-    def delete_network(self, netaddr):
-        network = Network.objects.get(netaddr=netaddr)
-        network.delete()
-
-    def delete_subnet(self, subnet_addr):
-        network = Subnet.objects.get(netaddr=subnet_addr)
-        network.delete()
-
-    def allocate_ip(self, owner):
-        ip_obj = self.objects.filter(supernet__owner=owner, is_used=False)[0]
-        ip_obj.is_used = True
-        ip_obj.save()
-        return ip_obj.ip, na.IPNetwork(ip_obj.supernet.netaddr).prefixlen
-
-    def release_ip(self, ip):
-        ip_obj = self.objects.get(ip=ip)
-        ip_obj.is_used = False
-        ip_obj.save()
+    def delete_subnet(self, owner):
+        subnet = Subnet.objects.get(owner=owner)
+        subnet.is_used = False
+        subnet.owner = None
+        subnet.save()
         return True
 
-    def generate_ip_usage(self, subnet):
-        mysubnet = Subnet.objects.get(netaddr=str(subnet))
-        print mysubnet
-        for ip in subnet.iter_hosts():
-            mac = self.generate_mac_address()
-            IPUsage(supernet=mysubnet, ip=str(ip), mac=mac).save()
+    def allocate_ip(self, owner):
+        supernet = Subnet.objects.get(owner=owner)
+        all_hosts = supernet.get_hosts()
+        used_hosts = self.get_used_hosts(owner)
+        free_hosts = list(set(all_hosts) - set(used_hosts))
+        if free_hosts:
+            ipaddr = free_hosts[0]
+            ip = IPUsage(supernet=supernet, ipaddr=ipaddr)
+            ip.save()
+            return ip
+
+    def release_ip(self, ip):
+        ip.delete()
+        return True
+
+    def get_used_hosts(self, owner):
+        subnet = Subnet.objects.get(owner=owner)
+        return map(lambda x: x.ipaddr, self.filter(supernet=subnet))
 
 
 class Network(models.Model):
-    TYPE_CHOICE = ((0, "subnet for physics, It's a Class B IP Address"),
-                  (1, 'subnet for slice, It contains 64 ips'),)
-    netaddr = models.IPAddressField(null=False, unique=True)
+    TYPE_CHOICE = ((0, _('subnet for phy')),
+                  (1, _('subnet for slice')),)
+    netaddr = models.GenericIPAddressField(null=False, unique=True)
     type = models.IntegerField(null=False, choices=TYPE_CHOICE)
-    is_used = models.BooleanField(default=False)
+
+    def __init__(self, *args, **kwargs):
+        super(Network, self).__init__(*args, **kwargs)
+        self.na_Network = na.Network(self.netaddr)
+
+    def subnet(self):
+        return self.na_Network.subnet(ipcount=64)
+
+    def first_subnet(self):
+        return [str(first_sub) for first_sub in self.na_Network.subnet(ipcount=64, count=1)][0]
 
     def __unicode__(self):
         return self.netaddr
 
     class Meta:
         verbose_name = _("Network")
+        ordering = ['-id', ]
 
 
 class Subnet(models.Model):
@@ -112,25 +85,81 @@ class Subnet(models.Model):
     owner = models.CharField(max_length=20, null=True, unique=True)
     is_used = models.BooleanField(default=False)
 
-    def next(self):
-        pass
+    def __init__(self, *args, **kwargs):
+        super(Subnet, self).__init__(*args, **kwargs)
+        self.na_IPNetwork = na.IPNetwork(self.netaddr)
+
+    def get_netmask(self):
+        return str(self.na_IPNetwork.netmask)
+
+    def get_network(self):
+        return str(self.na_IPNetwork.network)
+
+    def get_next(self):
+        next_sub = self.na_IPNetwork.next()
+        if na.IPNetwork(self.supernet.netaddr) in next_sub.supernet():
+            return str(next_sub)
+
+    def get_previous(self):
+        pre_sub = self.na_IPNetwork.previous()
+        if self.na_IPNetwork in pre_sub.supernet():
+            return str(pre_sub)
+
+    def get_size(self):
+        return self.na_IPNetwork.size
+
+    def get_prefixlen(self):
+        return self.na_IPNetwork.prefixlen
+
+    def get_cidr(self):
+        return str(self.na_IPNetwork.cidr)
+
+    def get_broadcast(self):
+        return str(self.na_IPNetwork.broadcast)
+
+    def get_first(self):
+        first_value = self.na_IPNetwork.first
+        return first_value
+
+    def get_last(self):
+        last_value = self.na_IPNetwork.last
+        return last_value
+
+    def get_value(self):
+        return self.na_IPNetwork.value
+
+    def iter_hosts(self):
+        return self.na_IPNetwork.iter_hosts()
+
+    def get_hosts(self):
+        hosts = [str(host) for host in self.iter_hosts()]
+        return hosts
 
     def __unicode__(self):
         return self.netaddr
 
     class Meta:
         verbose_name = _("Subnet")
+        ordering = ['-id', ]
 
 
 class IPUsage(models.Model):
     supernet = models.ForeignKey(Subnet)
-    ip = models.IPAddressField(null=False, unique=True)
-    mac = models.CharField(max_length=20, null=False, unique=True)
-    is_used = models.BooleanField(default=False)
-    objects = IPAM()
+    ipaddr = models.IPAddressField(null=False, unique=True)
+    objects = IPManager()
 
     def __unicode__(self):
-        return self.addr
+        return self.ipaddr
 
     class Meta:
-        verbose_name = _("IPAddr")
+        verbose_name = _("IPUsage")
+        ordering = ['-id', ]
+
+
+@receiver(post_save, sender=Network)
+def create_base_subnet(sender, instance, **kwargs):
+    network = instance
+    if kwargs.get('created'):
+        if network.type == 0:
+            Subnet(supernet=network, netaddr=network.netaddr,
+                   owner=0, is_used=True).save()
