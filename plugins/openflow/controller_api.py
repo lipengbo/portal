@@ -26,15 +26,33 @@ def slice_add_controller(slice_obj, controller):
         raise DbError("数据库异常")
 
 
+@transaction.commit_on_success
 def create_user_defined_controller(island, controller_ip, controller_port):
     """创建用户自定义控制器记录
     """
-    controller = Controller(
-        ip = controller_ip,
-        port = controller_port,
-        http_port = 0,
-        state = 1)
-    controller.save()
+    try:
+        controller = Controller(
+            name='user_define',
+            ip=controller_ip,
+            port=controller_port,
+            http_port=0,
+            state=1,
+            island=island)
+        controller.save()
+        return controller
+    except Exception, ex:
+        transaction.rollback()
+        raise DbError(ex)
+
+
+def delete_controller(controller):
+    """创建用户自定义控制器记录
+    """
+    if controller:
+        if controller.name == 'user_define' and (not controller.host):
+            controller.delete()
+        else:
+            pass
 
 
 @transaction.commit_on_success
