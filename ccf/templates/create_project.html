@@ -17,10 +17,16 @@
 			    <label>描述</label>
 			    <textarea rows="8"></textarea>
 			    <label>类型</label>
-			    <select>
-				  <option>SDN</option>
-				  <option>CNN</option>
-				</select>			     
+		        <div class="input-append select_input">
+                  <input class="span2" id="appendedDropdownButton" type="text">
+                  <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">选择 <span class="caret"></span></button>
+                    <ul class="dropdown-menu">
+                      <li><a href="javascript:void(0);">SDN</a></li>
+                      <li><a href="javascript:void(0);">CNN</a></li>
+                    </ul>
+                  </div>
+                </div>	     
 			  </fieldset>
 			  <fieldset>
 			  	 <legend>添加资源 </legend>
@@ -75,4 +81,5 @@
 		</div>
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
 {% endblock %}

@@ -98,6 +98,12 @@ $(document).ready(function() {
         }
 
     });
+    
+    //输入框兼选择框
+    $(".select_input ul li a").click(function(){
+        var selectText = $(this).text();
+        $(".select_input input").val(selectText);
+    });   
 });
 
    
