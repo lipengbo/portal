@@ -5278,6 +5278,9 @@ img {
   margin: 0;
   padding: 0;
 }
+textarea {
+  resize: none;
+}
 body {
   background: url(../img/bg.png) repeat;
   min-width: 1024px;
@@ -5533,7 +5536,6 @@ a {
 }
 .fill_form fieldset textarea {
   width: 400px;
-  resize: none;
 }
 .fill_form fieldset .edit {
   float: right;
@@ -5668,4 +5670,16 @@ a {
 }
 .example-sites li {
   background: #fff;
+}
+.search {
+  margin-top: 20px;
+}
+.search p {
+  float: left;
+}
+.search form {
+  float: right;
+}
+.hide_form {
+  display: none;
 }
