@@ -244,7 +244,7 @@
                         <tr>
                             <td colspan="6">
                                 <label class="radio tab_radio3">
-                                  <input type="radio" name="controller_type" id="optionsRadios3" value="default_create">
+                                  <input type="radio" name="dhcp_type" id="optionsRadios3" value="default">
                                   默认DHCP服务
                                 </label>
                             </td>
@@ -252,7 +252,7 @@
                         <tr>
                             <td colspan="6">
                                 <label class="radio tab_radio4">
-                                  <input type="radio" name="controller_type" id="optionsRadios4" value="default_create" checked>
+                                  <input type="radio" name="dhcp_type" id="optionsRadios4" value="user_define" checked>
                                   自定义DHCP服务
                                 </label>
                             </td>
@@ -481,6 +481,7 @@
 {% block extra_script %}
 	<script language="JavaScript">  
 	    $(document).ready(function() {
+            /*
             window.selected_switches = { {% for island_resource  in island_resources %}
                 {{ island_resource.island.id }} : [
                 {% for sw in island_resource.ovss %}{% if sw.selected %}"{{ sw.dpid }}"{% if not forloop.last %},{% endif %}{% endif %}
@@ -524,6 +525,32 @@
                 $('#topology-switch' + island_id).val(window.selected_switches[island_id].join(','));
                 return existed;
             }
+            */
+            window.selected_ports = {};
+            window.add_port = function(island_id, dpid, port, is_delete) {
+                var existed = false;
+                if(!selected_ports[dpid]) {
+                    selected_ports[dpid] = [];
+                }
+                $.each(selected_ports[dpid], function(index, port_item){
+                    if(port == port_item) {
+                        existed = true;
+                    }
+                });
+                if(!existed) {
+                    var switch_ports = selected_ports[dpid];
+                    if(!is_delete) {
+                        switch_ports.push(port);
+                    }
+                } else {
+                    var index = selected_ports[dpid].indexOf(port);
+                    if(is_delete) {
+                        selected_ports[dpid].splice(index, 1);
+                    }
+                }
+                $('#topology-switch').val(JSON.stringify(window.selected_ports));
+                return existed;
+            };
 		});
  	</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
