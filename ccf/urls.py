@@ -31,6 +31,8 @@ urlpatterns = patterns("",
     url(r"^list_vm/", TemplateView.as_view(template_name="list_vm.html"), name="home"),
     url(r"^apply_project/", TemplateView.as_view(template_name="apply_project.html"), name="home"),
     url(r"^homepage/", TemplateView.as_view(template_name="homepage.html"), name="home"),
+    url(r"^logs/", TemplateView.as_view(template_name="logs.html"), name="home"),
+    url(r"^logs_handle/", TemplateView.as_view(template_name="logs_handle.html"), name="home"),
 
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
