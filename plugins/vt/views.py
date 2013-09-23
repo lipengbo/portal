@@ -7,6 +7,7 @@
 from django.shortcuts import render, get_object_or_404
 from forms import VmForm
 from models import VirtualMachine
+from resources.models import Server
 
 
 def vm_detail(request, vmId):
@@ -20,9 +21,11 @@ def vm_detail(request, vmId):
 def create_vm(request, sliceId):
     if request.method == 'POST':
         form = VmForm(request.POST)
-        form.save()
+        if form.is_valid():
+            form.save()
     else:
         form = VmForm()
+        form.fields['server'].queryset = Server.objects.filter(id=3)
     context = {}
     context['form'] = form
     return render(request, 'vt/create_vm.html', context)
