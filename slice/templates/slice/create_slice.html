@@ -55,7 +55,7 @@
               <fieldset>
                 <legend>基本信息</legend>
                 <label>名称</label>
-                <input type="text" name="slice_name">
+                <input type="text" id="slice_name" name="slice_name" onblur="check_slice_form(this,1)"><span id="slice_nameInfo" style="display:inline;float:none;"></span>
                 <label>描述</label>
                 <textarea rows="8" name="slice_description" ></textarea>  
                 <label>选择节点</label>
@@ -554,4 +554,5 @@
 		});
  	</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 {% endblock %}

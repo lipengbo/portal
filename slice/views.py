@@ -170,3 +170,18 @@ def topology(request, slice_id):
     jsondatas = get_slice_topology(slice_obj)
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
+
+
+def check_slice_name(request, slice_name):
+    """
+    校验用户所填slice名称是否已经存在
+    return:
+        value:
+          slice名称已存在:value = 1
+          slice名称不存在：value = 0
+    """
+    slice_objs = Slice.objects.filter(name=slice_name)
+    if slice_objs:
+        return HttpResponse(json.dumps({'value': 1}))
+    else:
+        return HttpResponse(json.dumps({'value': 0}))
