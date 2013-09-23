@@ -5634,9 +5634,6 @@ a {
 .form-wizard .operate_btn .del {
   visibility: hidden;
 }
-.form-wizard .pagination {
-  float: right;
-}
 .index {
   background: #fff;
 }
@@ -5704,4 +5701,14 @@ a {
 }
 .font_fail {
   color: #b94a48;
+}
+.pagination {
+  overflow: hidden;
+}
+.pagination ul {
+  float: right;
+}
+.add_btn {
+  margin-top: 20px;
+  text-align: right;
 }
