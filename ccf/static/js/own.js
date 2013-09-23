@@ -61,7 +61,10 @@ $(document).ready(function() {
             }           
         }
     });
-    
+    $('.btn-step1').click(function () {
+        var island_id = $('select[name="island_id"]').val();
+        $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+    });
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){

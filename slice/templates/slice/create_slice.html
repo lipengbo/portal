@@ -73,7 +73,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block">返 回</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-step1 btn-info next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -90,7 +90,10 @@
                     <span class="label label-info">普通交换节点</span>
                     <span class="label label-success">虚拟机关联节点</span>
                   </div>
-                  <div class="main_frame"></div>
+                  <div class="main_frame">
+                      <input type="hidden" name="switches" id="topology-switch" value="" />
+                        <iframe id="topology-iframe" width="100%" height="100%" src=""></iframe>
+                  </div>
                   <table class="table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
@@ -329,7 +332,7 @@
                  </table>
                  <label class="checkbox">
                     <input type="checkbox" value="" checked>
-                                                                     否启动DHCP
+                                                                     是否启动DHCP
                  </label>
                  <div class="operate_btn">
                     <button class="btn btn-primary add" type="button">继续添加</button>
@@ -488,5 +491,52 @@
         </div>
 {% endblock %}
 {% block extra_script %}
+	<script language="JavaScript">  
+	    $(document).ready(function() {
+            window.selected_switches = { {% for island_resource  in island_resources %}
+                {{ island_resource.island.id }} : [
+                {% for sw in island_resource.ovss %}{% if sw.selected %}"{{ sw.dpid }}"{% if not forloop.last %},{% endif %}{% endif %}
+                    {% endfor %}
+                ]{% if not forloop.parentloop.last %},{% endif %}
+            {% endfor %}};
+            //window.cfo_variable = cfo_variable;
+            window.disabled_switches = { {% for island_resource  in island_resources %}
+                {% for sw in island_resource.ovss %}{% if sw.disabled %}"{{ sw.dpid }}": true{% if not forloop.last %},{% endif %}{% endif %}
+                    {% endfor %}
+            {% endfor %}};
+            $.each(selected_switches, function(island_id, dpids){
+                var values = [];
+                $.each(dpids, function(index, dpid){
+                    values.push(dpid);
+                });
+                $('#topology-switch' + island_id).val(values.join(","));
+            });
+            window.add_switch = function (id, island_id) {
+                var existed = false;
+                if(!selected_switches[island_id]) {
+                    selected_switches[island_id] = [];
+                }
+                var dpid = null;
+                $.each(selected_switches[island_id], function(index, sw){
+                    if(id == sw) {
+                        existed = true;
+                        dpid = sw;
+                    }
+                });
+                if(dpid in disabled_switches) {
+                    return false;
+                }
+                if(!existed) {
+                    var island_switches = selected_switches[island_id];
+                    island_switches.push(id);
+                } else {
+                    var index = selected_switches[island_id].indexOf(id);
+                    selected_switches[island_id].splice(index, 1);
+                }
+                $('#topology-switch' + island_id).val(window.selected_switches[island_id].join(','));
+                return existed;
+            }
+		});
+ 	</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 {% endblock %}

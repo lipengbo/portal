@@ -10,7 +10,7 @@
 {% block body %}
 		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
-			    <legend>基本信息<button type="button" class="btn btn-primary edit">编辑Slice</button></legend>
+			    <legend>基本信息<a data-toggle="modal" href="#editInfoModal" class="btn btn-primary edit">编 辑</a></legend>
 			    <table class="table">
 			    	<tbody>
 			    		<tr>
@@ -35,17 +35,17 @@
 				 		<tr>
 				 			<td width="25%">控制器</td>
 				 			<td width="50%">IP：192.168.5.123：6633</td>
-				 			<td width="25%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-primary">编辑</button></td>
+				 			<td width="25%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
 				 		</tr>
 				 		<tr>
 				 			<td>虚拟网关</td>
 				 			<td>IP：192.168.5.124</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-primary">编辑</button></td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
 				 		</tr>
 				 		<tr>
 				 			<td>DHCP服务器</td>
 				 			<td>IP：192.168.5.123</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-primary">编辑</button></td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
 				 		</tr>
 				 	</tbody>
 				 </table>
@@ -92,6 +92,83 @@
     			  </div>
 			  </div>			 
 		</div>
+		<div id="editInfoModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+              <h3>Slice基本信息编辑</h3>      
+            </div>
+            <div class="modal-body">
+              <form class="base_info">
+                  <table class="table">
+                      <tbody>
+                          <tr>
+                              <td width="150" class="text_r">名称</td>
+                              <td><input type="text" /></td>
+                          </tr>
+                          <tr>
+                              <td class="v_top text_r">描述</td>
+                              <td><textarea rows="3"></textarea></td>
+                          </tr>
+                      </tbody>
+                  </table>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal">取消</button>
+              <button class="btn btn-primary">提交申请</button>
+            </div>
+         </div>
+         <div id="editSliceModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+              <h3>SLICE控制器编辑</h3>      
+            </div>
+            <div class="modal-body">
+              <form class="base_info">
+                  <table class="table">
+                    <tbody>
+                        <tr>
+                            <td width="180">
+                                <label class="radio tab_radio1">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+                                                                                                                         创建控制器
+                                </label>
+                            </td>
+                            <td width="70">控制器类型</td>
+                            <td width="290">
+                                <select>
+                                  <option>floodlight</option>
+                                  <option>pox</option>
+                                  <option>nox</option>
+                                </select>
+                            </td>
+                            <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="radio tab_radio2">
+                                  <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+                                                                                                                         自定义控制器
+                                </label>
+                            </td>
+                            <td>控制器IP</td> 
+                            <td>
+                                <input type="text" disabled>
+                            </td>
+                            <td width="70">控制器端口</td>
+                            <td>
+                                <input type="text" disabled>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn" data-dismiss="modal">取消</button>
+              <button class="btn btn-primary">提交申请</button>
+            </div>
+         </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
