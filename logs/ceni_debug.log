@@ -444,3 +444,134 @@
 2013-09-22 03:07:35,620 [plugins] [/home/lipengbo/workspace/ccf/plugins/common/utils.py.inner:576] [DEBUG]- timefunc: 'allocate_ip' took 0.76 secs
 2013-09-22 03:07:35,622 [plugins] [/home/lipengbo/workspace/ccf/plugins/common/utils.py.inner:576] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
 2013-09-22 03:07:35,899 [plugins] [/home/lipengbo/workspace/ccf/plugins/common/utils.py.inner:576] [DEBUG]- timefunc: 'allocate_ip' took 0.28 secs
+2013-09-23 01:42:17,278 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:17,645 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:17,646 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:18,008 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:18,371 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:18,371 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:18,736 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:19,103 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:19,103 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:19,467 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:19,831 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:19,832 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:20,197 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:20,561 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:20,562 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:20,928 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:21,291 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:21,293 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:21,657 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:22,020 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:22,021 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:22,386 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:22,751 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:22,751 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:23,118 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:23,485 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:23,486 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:23,851 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:24,216 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.36 secs
+2013-09-23 01:42:24,216 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:24,585 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:24,952 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:24,953 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:25,318 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:25,684 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:25,684 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:26,050 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:26,416 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:26,416 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'release_ip' took 0.00 secs
+2013-09-23 01:42:26,783 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.37 secs
+2013-09-23 01:42:26,783 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.inner:542] [DEBUG]- timefunc: 'allocate_ip' took 0.00 secs
+2013-09-23 05:41:31,972 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): glance -U http://192.168.5.107:9292/v1 index
+2013-09-23 05:45:45,345 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 05:46:41,512 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 05:46:44,088 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 05:47:04,256 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ['ls', '-', 'al']
+2013-09-23 05:47:18,048 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 05:49:58,831 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 05:51:00,047 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:107] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 05:52:40,302 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:110] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 06:13:08,517 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls
+2013-09-23 06:14:36,781 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls
+2013-09-23 06:15:03,501 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls
+2013-09-23 06:15:49,556 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ['ls', '-al', '/etc']
+2013-09-23 06:16:02,996 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ['ls', '-al']
+2013-09-23 06:16:19,276 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 06:16:27,668 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 06:16:50,724 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls -al
+2013-09-23 06:16:55,276 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ls
+2013-09-23 06:17:04,740 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:169] [DEBUG]- Running cmd (subprocess): ifconfig
+2013-09-23 06:35:08,564 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:131] [DEBUG]- Running cmd (subprocess): ifconfig -a
+2013-09-23 06:50:11,822 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['i', 'f', 'c', 'o', 'n', 'f', 'i', 'g', ' ', '-', 'a']
+2013-09-23 06:51:40,333 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['i', 'f', 'c', 'o', 'n', 'f', 'i', 'g']
+2013-09-23 06:51:49,165 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['l', 's']
+2013-09-23 06:53:26,244 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['l', 's']
+2013-09-23 06:54:34,236 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['l', 's']
+2013-09-23 06:54:44,580 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls']
+2013-09-23 06:54:44,594 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls']
+Exit code: 0
+Stdout: 'ccf\ncommunication\nCONTRIBUTING.md\ndev.db\netc\nfixtures\n__init__.py\ninvite\nlogs\nmanage.py\nplugins\nproject\nREADME.md\nrequirements.txt\nresources\nslice\n'
+Stderr: ''
+2013-09-23 06:54:52,468 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls', '-a']
+2013-09-23 06:54:52,481 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls', '-a']
+Exit code: 0
+Stdout: '.\n..\nccf\ncommunication\nCONTRIBUTING.md\ndev.db\netc\nfixtures\n.git\n.gitignore\n__init__.py\ninvite\nlogs\nmanage.py\nplugins\nproject\n.project\n.pydevproject\nREADME.md\nrequirements.txt\nresources\n.ropeproject\nslice\n'
+Stderr: ''
+2013-09-23 06:54:58,604 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls', '-al']
+2013-09-23 06:54:58,618 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls', '-al']
+Exit code: 0
+Stdout: '\xe6\x80\xbb\xe7\x94\xa8\xe9\x87\x8f 208\ndrwxr-xr-x 14 lipengbo lipengbo   4096 Sep 23 06:54 .\ndrwxr-xr-x  6 lipengbo lipengbo   4096 Sep 12 07:31 ..\ndrwxr-xr-x  4 lipengbo lipengbo   4096 Sep 23 01:18 ccf\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 01:17 communication\n-rw-r--r--  1 lipengbo lipengbo   6452 Sep 11 01:11 CONTRIBUTING.md\n-rw-r--r--  1 lipengbo lipengbo 116736 Sep 23 05:41 dev.db\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 05:40 etc\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 01:30 fixtures\ndrwxr-xr-x  8 lipengbo lipengbo   4096 Sep 23 00:50 .git\n-rw-r--r--  1 lipengbo lipengbo     92 Sep 23 00:49 .gitignore\n-rw-r--r--  1 lipengbo lipengbo      0 Sep 11 01:11 __init__.py\ndrwxr-xr-x  3 lipengbo lipengbo   4096 Sep 23 01:17 invite\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 00:49 logs\n-rw-r--r--  1 lipengbo lipengbo    290 Sep 23 00:49 manage.py\ndrwxr-xr-x  7 lipengbo lipengbo   4096 Sep 23 01:04 plugins\ndrwxr-xr-x  5 lipengbo lipengbo   4096 Sep 23 05:31 project\n-rw-r--r--  1 lipengbo lipengbo    413 Sep 12 10:42 .project\n-rw-r--r--  1 lipengbo lipengbo    641 Sep 12 10:42 .pydevproject\n-rw-r--r--  1 lipengbo lipengbo    611 Sep 11 01:11 README.md\n-rw-r--r--  1 lipengbo lipengbo    211 Sep 23 00:58 requirements.txt\ndrwxr-xr-x  4 lipengbo lipengbo   4096 Sep 23 05:40 resources\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 00:49 .ropeproject\ndrwxr-xr-x  4 lipengbo lipengbo   4096 Sep 23 01:17 slice\n'
+Stderr: ''
+2013-09-23 06:56:38,771 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:131] [DEBUG]- Running cmd (subprocess): ['ls', '-al']
+2013-09-23 06:56:53,147 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:131] [DEBUG]- Running cmd (subprocess): ['ls']
+2013-09-23 06:58:20,730 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls']
+2013-09-23 06:58:20,744 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls']
+Exit code: 0
+Stdout: 'ccf\ncommunication\nCONTRIBUTING.md\ndev.db\netc\nfixtures\n__init__.py\ninvite\nlogs\nmanage.py\nplugins\nproject\nREADME.md\nrequirements.txt\nresources\nslice\n'
+Stderr: ''
+2013-09-23 06:58:26,714 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['l', 's']
+2013-09-23 06:58:33,386 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['l', 's']
+2013-09-23 06:58:41,034 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls', '-a']
+2013-09-23 06:58:41,038 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls', '-a']
+Exit code: 0
+Stdout: '.\n..\nccf\ncommunication\nCONTRIBUTING.md\ndev.db\netc\nfixtures\n.git\n.gitignore\n__init__.py\ninvite\nlogs\nmanage.py\nplugins\nproject\n.project\n.pydevproject\nREADME.md\nrequirements.txt\nresources\n.ropeproject\nslice\n'
+Stderr: ''
+2013-09-23 06:58:46,202 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls', '-a', 'l']
+2013-09-23 06:58:46,336 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls', '-a', 'l']
+Exit code: 2
+Stdout: ''
+Stderr: 'ls: \xe6\x97\xa0\xe6\xb3\x95\xe8\xae\xbf\xe9\x97\xael: \xe6\xb2\xa1\xe6\x9c\x89\xe9\x82\xa3\xe4\xb8\xaa\xe6\x96\x87\xe4\xbb\xb6\xe6\x88\x96\xe7\x9b\xae\xe5\xbd\x95\n'
+2013-09-23 06:58:51,842 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['ls', '-a', '-l']
+2013-09-23 06:58:51,846 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['ls', '-a', '-l']
+Exit code: 0
+Stdout: '\xe6\x80\xbb\xe7\x94\xa8\xe9\x87\x8f 208\ndrwxr-xr-x 14 lipengbo lipengbo   4096 Sep 23 06:54 .\ndrwxr-xr-x  6 lipengbo lipengbo   4096 Sep 12 07:31 ..\ndrwxr-xr-x  4 lipengbo lipengbo   4096 Sep 23 01:18 ccf\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 01:17 communication\n-rw-r--r--  1 lipengbo lipengbo   6452 Sep 11 01:11 CONTRIBUTING.md\n-rw-r--r--  1 lipengbo lipengbo 116736 Sep 23 05:41 dev.db\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 05:40 etc\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 01:30 fixtures\ndrwxr-xr-x  8 lipengbo lipengbo   4096 Sep 23 00:50 .git\n-rw-r--r--  1 lipengbo lipengbo     92 Sep 23 00:49 .gitignore\n-rw-r--r--  1 lipengbo lipengbo      0 Sep 11 01:11 __init__.py\ndrwxr-xr-x  3 lipengbo lipengbo   4096 Sep 23 01:17 invite\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 00:49 logs\n-rw-r--r--  1 lipengbo lipengbo    290 Sep 23 00:49 manage.py\ndrwxr-xr-x  7 lipengbo lipengbo   4096 Sep 23 01:04 plugins\ndrwxr-xr-x  5 lipengbo lipengbo   4096 Sep 23 05:31 project\n-rw-r--r--  1 lipengbo lipengbo    413 Sep 12 10:42 .project\n-rw-r--r--  1 lipengbo lipengbo    641 Sep 12 10:42 .pydevproject\n-rw-r--r--  1 lipengbo lipengbo    611 Sep 11 01:11 README.md\n-rw-r--r--  1 lipengbo lipengbo    211 Sep 23 00:58 requirements.txt\ndrwxr-xr-x  4 lipengbo lipengbo   4096 Sep 23 05:40 resources\ndrwxr-xr-x  2 lipengbo lipengbo   4096 Sep 23 00:49 .ropeproject\ndrwxr-xr-x  4 lipengbo lipengbo   4096 Sep 23 01:17 slice\n'
+Stderr: ''
+2013-09-23 07:03:41,009 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 07:03:41,328 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:59] [DEBUG]- 
+Command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+Exit code: 0
+Stdout: 'ID                                   Name                           Disk Format          Container Format     Size          \n------------------------------------ ------------------------------ -------------------- -------------------- --------------\n7fc070b8-88a5-47ba-9ef0-d98dba9edad5 windowsxp                      qcow2                ovf                      2782658560\na09273ab-382a-4622-b18c-705fda77bdcc 15g_img                        qcow2                ovf                     15585771520\n53807c3b-8d25-4d4f-9249-a798ce0b7013 9m_img                         qcow2                ovf                         9761280\n'
+Stderr: 'WARNING! This tool is deprecated in favor of python-glanceclient (see http://github.com/openstack/python-glanceclient).\n'
+2013-09-23 07:07:30,006 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 07:07:43,686 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 07:08:01,206 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 07:09:41,805 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'indexabc']
+2013-09-23 07:10:16,573 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'indexabc']
+2013-09-23 07:12:05,757 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9293/v1', 'index']
+2013-09-23 07:15:17,938 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 07:26:36,438 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 07:27:14,905 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 08:17:03,524 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 08:17:10,344 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 10:58:34,093 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']
+2013-09-23 10:58:34,277 [plugins] [/home/lipengbo/workspace2/ccf/plugins/common/utils.py.execute:42] [DEBUG]- Running command: ['glance', '-U', 'http://192.168.5.107:9292/v1', 'index']

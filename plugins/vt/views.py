@@ -1,17 +1,28 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
-from django.db import transaction, IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect,Http404
-from django.shortcuts import render, get_object_or_404, redirect
-from django.template import RequestContext
-from django.utils.translation import ugettext, ugettext as _
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Filename:views.py
+# Date:Mon Sep 23 18:36:59 CST 2013
+# Author:Pengbo Li
+# E-mail:lipengbo10054444@gmail.com
+from django.shortcuts import render, get_object_or_404
+from forms import VmForm
+from models import VirtualMachine
 
-# Create your views here.
 
-def index(request):
+def vm_detail(request, vmId):
+    vm = get_object_or_404(VirtualMachine, id=vmId)
     context = {}
-    return render(request, 'vt/index.html', context)
+    context['vm'] = vm
+    context['vmId'] = vmId
+    return render(request, 'vt/vm_detail.html', context)
 
+
+def create_vm(request, sliceId):
+    if request.method == 'POST':
+        form = VmForm(request.POST)
+        form.save()
+    else:
+        form = VmForm()
+    context = {}
+    context['form'] = form
+    return render(request, 'vt/create_vm.html', context)

@@ -11,7 +11,7 @@ glance_port = 9292
 
 def generate_glance_url():
     """Generate the URL to glance."""
-    return "http://%s:%d" % (glance_host, glance_port)
+    return "http://%s:%d/v1" % (glance_host, glance_port)
 
 
 #[plugin-advance]

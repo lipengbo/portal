@@ -24,6 +24,7 @@ class ResourceBase(ModelBase):
             cls.registry[interface_id] = cls
         return super(ResourceBase, cls).__init__(name, bases, attrs)
 
+
 class Resource(models.Model):
 
     __metaclass__ = ResourceBase
@@ -59,20 +60,13 @@ class IslandResource(Resource):
         abstract = True
 
 
-class ComputeResource(IslandResource):
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+class ComputeResource(Resource):
     state = models.IntegerField(null=True)
     cpu = models.CharField(max_length=256, null=True)
-    memory = models.IntegerField(null=True)
+    mem = models.IntegerField(null=True)
     bandwidth = models.IntegerField(null=True)
-    disk_size = models.IntegerField(null=True)
-    os = models.CharField(max_length=256, null=True)
-    ip = models.IPAddressField()
-    mac = models.CharField(max_length=256, null=True)
+    disk = models.IntegerField(null=True)
     update_time = models.DateTimeField(auto_now_add=True)
-
-    slices = models.ManyToManyField(Slice, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -101,7 +95,19 @@ class ServiceResource(IslandResource):
         abstract = True
 
 
-class Server(ComputeResource):
+class Server(IslandResource):
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    state = models.IntegerField(null=True)
+    cpu = models.CharField(max_length=256, null=True)
+    mem = models.IntegerField(null=True)
+    bandwidth = models.IntegerField(null=True)
+    disk = models.IntegerField(null=True)
+    ip = models.IPAddressField(null=False, unique=True)
+    mac = models.CharField(max_length=256, null=True)
+    os = models.CharField(max_length=256, null=True)
+    update_time = models.DateTimeField(auto_now_add=True)
+
     def get_link_vs(self):
         virtualswitchs = self.virtualswitch_set.all()
         if virtualswitchs:

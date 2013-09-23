@@ -75,7 +75,6 @@ class Network(models.Model):
         return self.netaddr
 
     class Meta:
-        verbose_name = _("Network")
         ordering = ['-id', ]
 
 
@@ -139,7 +138,6 @@ class Subnet(models.Model):
         return self.netaddr
 
     class Meta:
-        verbose_name = _("Subnet")
         ordering = ['-id', ]
 
 
@@ -152,7 +150,6 @@ class IPUsage(models.Model):
         return self.ipaddr
 
     class Meta:
-        verbose_name = _("IPUsage")
         ordering = ['-id', ]
 
 
@@ -161,5 +158,4 @@ def create_base_subnet(sender, instance, **kwargs):
     network = instance
     if kwargs.get('created'):
         if network.type == 0:
-            Subnet(supernet=network, netaddr=network.netaddr,
-                   owner=0, is_used=True).save()
+            Subnet(supernet=network, netaddr=network.netaddr, owner=0, is_used=True).save()
