@@ -1,7 +1,9 @@
 @import "bootstrap.less";
 
 body,div,ul,li,td,th,p,ol,section,form,table,img{margin:0;padding:0;}
-
+textarea {
+    resize:none;
+}
 body {
 	background:url(../img/bg.png) repeat;
 	min-width:1024px;
@@ -166,7 +168,7 @@ width: 1024px;
 	padding-bottom: 15px;
 	padding-top: 15px;
 	text-align:center;
-	margin-top:20px;
+	margin-top:40px;
 }
 
 .breadcrumb {
@@ -177,17 +179,34 @@ width: 1024px;
 }
 
 .help_all {
-	margin-bottom:40px;
 	.help_chose {
 		width:239px;
 		float:right;
 		}
 }
 
-.help_doc,.main_wrap {
+.help_main_wrap, .main_wrap {
 	background:#eee;
-	padding:3px;
+	padding:5px;
 	border-radius:3px;
+}
+
+.login_bg, .home,.help_box {
+    .main_wrap {
+        background:none;
+        padding:0;
+        border:none;
+    } 
+    .main {
+        border: none;
+        background:transparent;
+        padding-left:0;
+        padding-right:0;
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        padding-bottom:0;
+    }
 }
 
 .help_main,.main {
@@ -245,7 +264,6 @@ width: 1024px;
 		margin-top:20px;
 		textarea {
 			width:400px;
-			resize:none;
 		}
 		.edit {
 			float:right;
@@ -365,6 +383,57 @@ width: 1024px;
 	}
 }
 
+.index {
+    background:#fff;
+    .banner {
+        padding-top:150px;
+        padding-bottom:100px;
+        text-align:center;
+        .masthead {
+            h1 {
+                font-size: 80px;
+                line-height: 1;
+                letter-spacing: -2px;
+                font-family: "Microsoft YaHei";
+                margin-bottom:40px;
+            }
+            p {
+                font-size: 40px;
+                font-weight: 200;
+                line-height: 1.25;
+                margin-bottom:40px;
+            }
+            .enter_btn {
+                a {
+                    padding:15px 80px;
+                    font-size:30px;
+                }
+            }
+        }
+    }
+    fieldset {
+        padding: 0 15px;
+        legend {
+            text-align:center;
+        }
+    }
+}
 
 
+.example-sites li {
+    background:#fff;
+}
 
+.search {
+    margin-top:20px;
+    p {
+        float:left;
+    }
+    form {
+        float:right;
+    }
+}
+
+.hide_form {
+    display:none;
+}

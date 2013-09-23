@@ -1,0 +1,113 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span><a href="#">创建Slice</a><span class="divider">/</span>Slice详情{% endblock %}
+
+{% block body %}
+		<div class="fill_form form-wizard">
+			  <fieldset class="base_info">
+			    <legend>基本信息<button type="button" class="btn btn-primary edit">编辑Slice</button></legend>
+			    <table class="table">
+			    	<tbody>
+			    		<tr>
+			    			<td width="50">名称：</td>
+			    			<td>{{slice_obj.name}}</td>
+			    		</tr>
+			    		<tr>
+			    			<td class="v_top">描述：</td>
+			    			<td>{{slice_obj.description}}</td>
+			    		</tr>
+			    		<tr>
+			    			<td valign="top">节点：</td>
+			    			<td>{{island.name}}</td>
+			    		</tr>
+			    	</tbody>
+			    </table>			     
+			  </fieldset>
+			  <fieldset class="base_info">
+			  	 <legend>Slice资源</legend>
+			  	 <table class="table">
+				 	<tbody>
+				 		<tr>
+				 			<td width="20%">控制器</td>
+				 			<td width="60%">{{controller.ip}}：{{controller.port}}</td>
+				 			<td width="20%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button></td>
+				 		</tr>
+				 		<tr>
+				 			<td>虚拟网关</td>
+				 			<td>IP：192.168.5.124</td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button></td>
+				 		</tr>
+				 		<tr>
+				 			<td>DHCP服务器</td>
+				 			<td>IP：192.168.5.123</td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button></td>
+				 		</tr>
+				 	</tbody>
+				 </table>
+				 <table class="table">
+				 	<tbody>
+				 		<tr>
+				 			<td width="20%">VM1</td>
+				 			<td width="30%">IP：192.168.5.123</td>
+				 			<td width="30%">所属网络节点：192.168.20.6</td>
+				 			<td width="20%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button></td>
+				 		</tr>
+				 		<tr>
+				 			<td>VM2</td>
+				 			<td>IP：192.168.5.125</td>
+				 			<td>所属网络节点：192.168.20.6</td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button></td>
+				 		</tr>
+				 		<tr>
+				 			<td>VM3</td>
+				 			<td>IP：192.168.5.126</td>
+				 			<td>所属网络节点：192.168.20.7</td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button></td>
+				 		</tr>
+				 		<tr>
+				 			<td></td>
+				 			<td></td>
+				 			<td></td>
+				 			<td><a href="#">更多>></a></td>				 			
+				 		</tr>
+				 	</tbody>
+				 </table>
+			  </fieldset>
+			  <fieldset>
+			  	 <legend>Slice拓扑</legend>
+					<div id="content" style="background-color:#FFFFFF; width:100%; height:300px">
+					</div>
+					<div class="clear" style="display: none" >
+						<p id="slice_id">{{slice_obj.id}}</p>
+						<p id="topology_type">1</p>
+						<p id="STATIC_URL">{{STATIC_URL}}</p>
+					</div>
+			  </fieldset>
+			  <div class="form-actions">
+    			  <div class="row-fluid">
+    			  	<div class="span4"></div>
+    			  	<div class="span4">
+    			  	{% if slice_obj.state == 0 %}
+    			  		<button type="button" class="btn btn-large btn-block btn-success start_btn"
+    			  		onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'"/>
+    			  			启动Slice
+    			  		</button>
+    			  	{%else%}
+    			  		<button type="submit" class="btn btn-large btn-block btn-success start_btn">停止Slice</button>
+    			  	{%endif%}
+    			  	</div>
+    			  	<div class="span4"></div>
+    			  </div>
+			  </div>			 
+		</div>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
+
+{% endblock %}

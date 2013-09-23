@@ -12,7 +12,7 @@
     </style>    
 {% endblock %}
 {% block breadcrumb %}
-<li class="active">{% trans "Create Project" %}</li>
+<li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
 <form class="" action="" method="post" accept-charset="utf-8">
@@ -63,7 +63,7 @@
             </tbody>
         </table>
         <div class="form-actions">
-            <button type="submit" class="btn btn-primary">{% trans "Create Project" %}</button>
+            <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
         </div>
     </div>
 </form>

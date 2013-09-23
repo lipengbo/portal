@@ -8,8 +8,7 @@
 {% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span>创建Slice{% endblock %}
 
 {% block body %}
-    <div class="help_doc">
-        <div class="help_main fill_form form-wizard">
+        <div class="fill_form form-wizard">
             <ul class="row-fluid nav nav-pills">                
                 <li class="span1"></li>
                 <li class="span2 visit">
@@ -208,25 +207,38 @@
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td>
-                                <select>
-                                  <option>floodlight</option>
-                                  <option>pox</option>
-                                  <option>nox</option>
-                                </select>
-                            </td>
+                            <td><input type="text" /></td>
                             <td><span class="help-inline">用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1</span></td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info">
+              <label class="checkbox inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1" class="tab_checkbox"> 是否配置DHCP服务器 
+              </label>
+              <fieldset class="base_info hide_form">
                  <legend>DHCP服务器配置</legend>
                  <div class="alert alert-info">
                      <strong>提示：</strong> 可选
                  </div>
                  <table class="table">
                     <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <label class="radio tab_radio3">
+                                  <input type="radio" name="controller_type" id="optionsRadios3" value="default_create">
+                                  默认DHCP服务
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <label class="radio tab_radio4">
+                                  <input type="radio" name="controller_type" id="optionsRadios4" value="default_create" checked>
+                                  自定义DHCP服务
+                                </label>
+                            </td>
+                        </tr>                        
                         <tr>
                             <td>DHCP地址池<td>
                             <td>开始</td>
@@ -253,7 +265,7 @@
               </div>
              </div>     
              <div class="tab_part">
-                 <fieldset class="base_info">
+                 <fieldset class="base_info vm_info_list">
                  <legend>虚拟机信息</legend>
                  <div class="sec_block">
                   <table class="table">             
@@ -459,7 +471,6 @@
              </div>
            </form>
         </div>
-    </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
