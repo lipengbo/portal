@@ -225,25 +225,38 @@
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td>
-                                <select>
-                                  <option>floodlight</option>
-                                  <option>pox</option>
-                                  <option>nox</option>
-                                </select>
-                            </td>
+                            <td><input type="text" /></td>
                             <td><span class="help-inline">用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1</span></td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info">
+              <label class="checkbox inline">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1" class="tab_checkbox"> 是否配置DHCP服务器 
+              </label>
+              <fieldset class="base_info hide_form">
                  <legend>DHCP服务器配置</legend>
                  <div class="alert alert-info">
                      <strong>提示：</strong> 可选
                  </div>
                  <table class="table">
                     <tbody>
+                        <tr>
+                            <td colspan="6">
+                                <label class="radio tab_radio3">
+                                  <input type="radio" name="controller_type" id="optionsRadios3" value="default_create">
+                                  默认DHCP服务
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <label class="radio tab_radio4">
+                                  <input type="radio" name="controller_type" id="optionsRadios4" value="default_create" checked>
+                                  自定义DHCP服务
+                                </label>
+                            </td>
+                        </tr>
                         <tr>
                             <td>DHCP地址池<td>
                             <td>开始</td>
@@ -319,7 +332,7 @@
                  </table>
                  <label class="checkbox">
                     <input type="checkbox" value="" checked>
-                                                                     否启动DHCP
+                                                                     是否启动DHCP
                  </label>
                  <div class="operate_btn">
                     <button class="btn btn-primary add" type="button">继续添加</button>

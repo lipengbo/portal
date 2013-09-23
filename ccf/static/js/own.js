@@ -36,6 +36,12 @@ $(document).ready(function() {
         $(this).parent("td").siblings("td").children("input").removeAttr("disabled");
         $(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");
     });
+    $(".tab_radio3").click(function(){
+        $(this).parent("td").parent("tr").siblings("tr").children("td").children("input").attr("disabled","disabled");
+    });
+    $(".tab_radio4").click(function(){
+        $(this).parent("td").parent("tr").siblings("tr").children("td").children("input").removeAttr("disabled");
+    });
     
     //slice详情启动停止按钮
     $(".start_btn").click(function(){
@@ -81,6 +87,16 @@ $(document).ready(function() {
        $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
+    });
+    
+    //通过复选框控制表单显示和隐藏
+    $(".tab_checkbox").click(function(){
+        if(!$(this).attr("checked")){
+            $(".hide_form").slideUp();                     
+        } else {
+            $(".hide_form").slideDown();            
+        }
+
     });
 });
 

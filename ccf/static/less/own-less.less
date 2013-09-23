@@ -1,7 +1,9 @@
 @import "bootstrap.less";
 
 body,div,ul,li,td,th,p,ol,section,form,table,img{margin:0;padding:0;}
-
+textarea {
+    resize:none;
+}
 body {
 	background:url(../img/bg.png) repeat;
 	min-width:1024px;
@@ -262,7 +264,6 @@ width: 1024px;
 		margin-top:20px;
 		textarea {
 			width:400px;
-			resize:none;
 		}
 		.edit {
 			float:right;
@@ -423,3 +424,30 @@ width: 1024px;
     background:#fff;
 }
 
+.search {
+    margin-top:20px;
+    p {
+        float:left;
+    }
+    form {
+        float:right;
+    }
+}
+
+.hide_form {
+    display:none;
+}
+
+.modal {
+    .text_r {
+        text-align:right;
+    }
+    .modal-footer {
+        text-align:center;
+    }
+}
+
+#editSliceModal {
+    width:950px;
+    margin-left:-475px;
+}
