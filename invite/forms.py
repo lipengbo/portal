@@ -23,9 +23,10 @@ class InvitationForm(forms.ModelForm):
         self.helper.add_input(Submit('submit', _('Invite')))
         if target_obj:
             target_type = ContentType.objects.get_for_model(target_obj)
-            invited_user_ids = Invitation.objects.filter(target_id=target_obj.id,
-                    target_type=target_type).values_list("to_user__id", flat=True)
-            self.fields['to_user'].queryset = User.objects.exclude(id__in=invited_user_ids)
+            invited_user_ids = list(Invitation.objects.filter(target_id=target_obj.id,
+                    target_type=target_type).values_list("to_user__id", flat=True))
+            invited_user_ids.extend(target_obj.member_ids())
+            self.fields['to_user'].queryset = User.objects.exclude(id__in=set(invited_user_ids))
 
     class Meta:
         fields = ("to_user", "message")

@@ -29,7 +29,7 @@
                                 <div class="nav-collapse collapse">
                                     {% block nav %}
                                     	<ul class="nav">
-					                      <li class="active"><a href="#">首页</a></li>
+					                      <li class="active"><a href="/">首页</a></li>
 					                      <li><a href="#">项目</a></li>
 					                      <li><a href="#">消息日志</a></li>
 					                      <li><a href="#">权限</a></li>
@@ -53,7 +53,7 @@
 		    <div class="container">	        
 		    	{% block breadcrumb_base %}
 		        <ul class="breadcrumb">
-		            <li><span class="icon-home"></span><a href="#">{% trans "Project" %}</a> <span class="divider">/</span>
+		            <li><span class="icon-home"></span><a href="#">{% trans "Project" %}</a><span class="divider">/</span>
 		            {% block breadcrumb %}
 		            {% endblock %}
 		            </li>

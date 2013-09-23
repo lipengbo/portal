@@ -65,6 +65,9 @@ class Project(models.Model):
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
 
+    def member_ids(self):
+        return self.memberships.all().values_list('id', flat=True)
+
     @property
     def get_content_type(self):
         project_type = ContentType.objects.get_for_model(self)

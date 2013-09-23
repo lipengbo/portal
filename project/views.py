@@ -83,7 +83,7 @@ def get_island_flowvisors(island_id=None):
         flowvisors = flowvisors.filter(island__id=island_id)
     flowvisor_list = []
     for flowvisor in flowvisors:
-        flowvisor_list.append({"host": flowvisor.ip + ":" + str(flowvisor.port), "id": flowvisor.id})
+        flowvisor_list.append({"host": flowvisor.ip + ":" + str(flowvisor.http_port), "id": flowvisor.id})
     return flowvisor_list
 
 def get_all_cities():
@@ -136,7 +136,7 @@ def device_proxy(request, host, port):
     return HttpResponse(json.dumps([]), content_type="application/json")
 
 def links_proxy(request, host, port):
-    flowvisor = Flowvisor.objects.get(ip=host, port=port)
+    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = client.get_links()
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -144,7 +144,7 @@ def links_proxy(request, host, port):
 @login_required
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
-    flowvisor = Flowvisor.objects.get(ip=host, port=port)
+    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = json.dumps(client.get_switches())
     #controller_api = request.path[1:]

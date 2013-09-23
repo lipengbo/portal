@@ -26,16 +26,16 @@ window.Topology = Backbone.Model.extend({
     initialize:function (options) {
         var self = this;
         self.island = options.island;
-        console.log("fetching topology")
+        //console.log("fetching topology")
         var hackBase = options.hackBase;
         var swl = options.island.swl;
-        console.log(hackBase)
+        //console.log(hackBase)
         
         $.ajax({
             url:hackBase + self.url,
             dataType:"json",
             success:function (data) {
-                console.log("fetched topology: " + data.length);
+                //console.log("fetched topology: " + data.length);
                 // console.log(data);
                 self.nodes = {};
                 self.links = [];

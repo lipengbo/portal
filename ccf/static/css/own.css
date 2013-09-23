@@ -5532,7 +5532,7 @@ a {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-top: 20px;
+  margin-bottom: 40px;
 }
 .fill_form fieldset textarea {
   width: 400px;
@@ -5546,7 +5546,7 @@ a {
 .fill_form fieldset .progress {
   margin-bottom: 0;
 }
-.fill_form .form-actions {
+.form-actions {
   border: none;
   background: none;
   clear: both;
@@ -5572,9 +5572,6 @@ a {
   background: #dff0d8;
   padding: 10px;
   border-bottom: 1px solid #ddd;
-}
-.form-wizard .nav-pills {
-  margin-top: 15px;
 }
 .form-wizard .nav-pills li a {
   background-color: #fff !important;
@@ -5668,9 +5665,6 @@ a {
 .example-sites li {
   background: #fff;
 }
-.search {
-  margin-top: 20px;
-}
 .search .search_chose {
   float: left;
 }
@@ -5711,4 +5705,7 @@ a {
 .add_btn {
   margin-top: 20px;
   text-align: right;
+}
+.main {
+  padding-top: 20px;
 }

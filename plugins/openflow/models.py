@@ -61,7 +61,7 @@ class FlowvisorLinksMd5(models.Model):
 def update_links(sender, instance, created, **kwargs):
     from communication.flowvisor_client import FlowvisorClient
 
-    client = FlowvisorClient(instance.ip, instance.port, instance.password)
+    client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
     try:
         links = client.get_links()
     except Exception, e:

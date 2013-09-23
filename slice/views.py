@@ -88,7 +88,6 @@ def create(request, proj_id):
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    context = {}
     if request.method == 'POST':
         slice_description = request.POST.get("slice_description")
         try:
@@ -98,14 +97,11 @@ def edit_description(request, slice_id):
         else:
             return HttpResponseRedirect(
                 reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-    context['slice_obj'] = slice_obj
-    return render(request, 'slice/edit_slice_description.html', context)
 
 
 def edit_controller(request, slice_id):
     """编辑slice控制器。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    context = {}
     if request.method == 'POST':
         controller_type = request.POST.get("controller_type")
         if controller_type == 'default_create':
@@ -125,9 +121,9 @@ def edit_controller(request, slice_id):
         else:
             return HttpResponseRedirect(
                 reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-    context['slice_obj'] = slice_obj
-    context['controller'] = slice_obj.get_controller()
-    return render(request, 'slice/edit_slice_controller.html', context)
+#     context['slice_obj'] = slice_obj
+#     context['controller'] = slice_obj.get_controller()
+#     return render(request, 'slice/edit_slice_controller.html', context)
 
 
 def detail(request, slice_id):
@@ -174,3 +170,18 @@ def topology(request, slice_id):
     jsondatas = get_slice_topology(slice_obj)
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
+
+
+def check_slice_name(request, slice_name):
+    """
+    校验用户所填slice名称是否已经存在
+    return:
+        value:
+          slice名称已存在:value = 1
+          slice名称不存在：value = 0
+    """
+    slice_objs = Slice.objects.filter(name=slice_name)
+    if slice_objs:
+        return HttpResponse(json.dumps({'value': 1}))
+    else:
+        return HttpResponse(json.dumps({'value': 0}))

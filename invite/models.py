@@ -22,9 +22,9 @@ class InvitationManager(models.Manager):
 
 class Invitation(models.Model):
     from_user = models.ForeignKey(User, related_name="from_invitations")
-    to_user = models.ForeignKey(User, related_name="to_invitations")
+    to_user = models.ForeignKey(User, related_name="to_invitations", verbose_name=_("Invitee"))
 
-    message = models.TextField()
+    message = models.TextField(verbose_name=_("Message"))
     accepted = models.BooleanField(default=False)
     key = models.CharField(max_length=32, unique=True)
 
@@ -52,7 +52,7 @@ class Invitation(models.Model):
         return name
 
     def send(self):
-        body =  "You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:%(accept_link)s" % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         send_mail(_("You have an invitation"), body, self.from_user.email, [self.to_user.email])
 
 @receiver(pre_save, sender=Invitation)

@@ -9,4 +9,5 @@ urlpatterns = patterns('slice.views',
     url(r'^topology/(?P<slice_id>\d+)/$', "topology", name='slice_topology'),
     url(r'^edit_description/(?P<slice_id>\d+)/$', "edit_description", name='edit_slice_description'),
     url(r'^edit_controller/(?P<slice_id>\d+)/$', "edit_controller", name='edit_slice_controller'),
+    url(r'^check_slice_name/(?P<slice_name>\w+)/$', "check_slice_name", name='check_slice_name'),
 )
