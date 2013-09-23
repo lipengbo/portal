@@ -10,7 +10,11 @@
 {% block body %}
 		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
-			    <legend>基本信息<button type="button" class="btn btn-primary edit">编辑Slice</button></legend>
+			    <legend>基本信息
+			    	<button type="button" class="btn btn-primary edit">
+			    		编辑Slice
+			    	</button>
+			    </legend>
 			    <table class="table">
 			    	<tbody>
 			    		<tr>
@@ -34,18 +38,48 @@
 				 	<tbody>
 				 		<tr>
 				 			<td width="20%">控制器</td>
-				 			<td width="60%">{{controller.ip}}：{{controller.port}}</td>
-				 			<td width="20%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button></td>
+				 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
+				 			<td width="25%">
+				 			{% if slice_obj.state == 0 %}
+					 			<button type="button" class="btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn btn-primary edit">编辑</button>
+					 		{%else%}
+					 			<button type="button" class="btn btn-success start_btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn">编辑</button>
+					 		{%endif%}
+				 			</td>
 				 		</tr>
 				 		<tr>
 				 			<td>虚拟网关</td>
 				 			<td>IP：192.168.5.124</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button></td>
+				 			<td>
+					 		{% if slice_obj.state == 0 %}
+					 			<button type="button" class="btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn btn-primary edit">编辑</button>
+					 		{%else%}
+					 			<button type="button" class="btn btn-success start_btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn">编辑</button>
+					 		{%endif%}
+				 			</td>
 				 		</tr>
 				 		<tr>
 				 			<td>DHCP服务器</td>
 				 			<td>IP：192.168.5.123</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button></td>
+				 			<td>
+					 		{% if slice_obj.state == 0 %}
+					 			<button type="button" class="btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn btn-primary edit">编辑</button>
+					 		{%else%}
+					 			<button type="button" class="btn btn-success start_btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn">编辑</button>
+					 		{%endif%}
+				 			</td>
 				 		</tr>
 				 	</tbody>
 				 </table>
@@ -98,7 +132,10 @@
     			  			启动Slice
     			  		</button>
     			  	{%else%}
-    			  		<button type="submit" class="btn btn-large btn-block btn-success start_btn">停止Slice</button>
+    			  		<button type="button" class="btn btn-large btn-block btn-danger start_btn"
+    			  		onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'"/>
+    			  			停止Slice
+    			  		</button>
     			  	{%endif%}
     			  	</div>
     			  	<div class="span4"></div>
