@@ -204,6 +204,11 @@ LOGGING = {
             "level": "ERROR",
             "propagate": True,
         },
+        "plugins": {
+            "handlers": ["console", "ceni_debug"],
+            "level": "DEBUG",
+            "propagate": True,
+        },
     }
 }
 

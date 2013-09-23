@@ -89,9 +89,9 @@ class Network(object):
         self.sub16_prefix = 28
         self.sub8_prefix = 29
 
-    def subnet(self, ipcount, count=1):
+    def subnet(self, ipcount, count=None):
         function = '_sub_net_%s' % ipcount
-        return getattr(self, function)(count=1)
+        return getattr(self, function)(count=count)
 
     def _sub_net_64(self, count):
         for sub64_net in self.netaddr.subnet(self.sub64_prefix, count=count):

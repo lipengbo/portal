@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Filename:config.py
+# Date:Sun Sep 22 00:30:02 CST 2013
+# Author:Pengbo Li
+# E-mail:lipengbo10054444@gmail.com
 #[plugin-vt]
 glance_host = '192.168.5.107'
 glance_port = 9292
