@@ -302,9 +302,9 @@ function init_svg () {
                 }
             }
             return color; 
-        })
+        });
         //.attr('haha', function(d){ return d.source.id + " " + d.target.id})
-        .append("text").attr("dx", 20).attr("dy", ".35em")
+    link.append("text").attr("dx", 20).attr("dy", ".35em")
         .text(function(d) { return "sasa"});
     link.exit().remove();
     var node = svg.selectAll(".node").data(g_nodes);
@@ -332,6 +332,7 @@ function init_svg () {
     .call(force.drag);
     node.exit().remove();
 
+    /*
     var selected_switch_map = {};
     if (parent.selected_switches) {
         $.each(parent.selected_switches, function(island_id, dpids) {
@@ -340,6 +341,7 @@ function init_svg () {
             });
         })
     }
+    */
     node.append("image")
         .attr("xlink:href", function (d) {
             var show_logical = $('#show-logical').attr('checked');
@@ -348,26 +350,27 @@ function init_svg () {
             }
             var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
 
+            /*
             if (parent.selected_switches) {
                 if (d.id in selected_switch_map) {
                     ovs_image = STATIC_URL + 'topology/img/ovs_green.png?v=3';
                 }
             }
+            */
             return d.group==1 ? ovs_image : STATIC_URL + "topology/img/host.png?v=5"
         })
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
-    //node.append("text").attr("dx", 20).attr("dy", ".35em")
-      //  .text(function(d) { return d.name });
+    node.append("text").attr("dx", 40).attr("dy", ".35em")
+        .text(function(d) { return d.name });
     node.on("click", function (d) {
         // TODO we could add some functionality here
-        if (parent.add_switch) {
+        if (parent.add_port) {
             if (d.group == 1) {
 
                 var data = d;
                 if (data.id in origin_nodes_map) {
                     var origin_data = origin_nodes_map[data.id];
-                    
                     if (!origin_data.ports) {
                         return;
                     }
@@ -375,13 +378,33 @@ function init_svg () {
                     $.each(origin_data.ports, function(index, port){
                         var state = port.state == 1 ? "活跃" : "非活跃";
                         content +=  
-                            "<label><input class='checkbox' type='checkbox' value='" + port.portNumber + "'/> " + 
+                            "<label><input class='checkbox' type='checkbox' ";
+                        if (d.id in parent.selected_ports) {
+                            if (parent.selected_ports[d.id].indexOf(port.portNumber) >= 0) {
+                                content += "checked ";
+                            }
+                        }
+                        content += "value='" + port.portNumber + "'/> " + 
                             port.name + "(" + port.portNumber+ ")" + 
                             "</label>";
+                    });
+                    $('.port-modal .confirm-port').unbind("click");
+                    $('.port-modal .confirm-port').click(function () {
+                        var inputs = $('.port-modal input');
+                        
+                        $.each(inputs, function (index, input) {
+                            if ($(input).attr('checked')) {
+                                parent.add_port(d.island_id, d.id, parseInt($(input).val()), false);
+                            } else {
+                                parent.add_port(d.island_id, d.id, parseInt($(input).val()), true);
+                            }
+                        });
+
                     });
                     $('.port-modal .modal-body').html(content);
                     $('.port-modal').modal();
                 }
+                /*
                 var existed = parent.add_switch(d.id, d.island_id);
                 var image = '';
                 if (existed) {
@@ -391,6 +414,7 @@ function init_svg () {
                     image = STATIC_URL + "topology/img/ovs_green.png?v=2";
                 }
                 d3.select(this).select('image').attr("xlink:href", image);
+                */
             }
         }
     });
