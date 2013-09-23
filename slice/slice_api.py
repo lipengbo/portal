@@ -6,7 +6,8 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
     flowvisor_update_slice_status, flowvisor_add_slice
 from plugins.openflow.flowspace_api import matches_to_arg_match
-from plugins.openflow.controller_api import slice_change_controller, slice_add_controller, delete_controller
+from plugins.openflow.controller_api import slice_change_controller,\
+    slice_add_controller, delete_controller, create_add_controller
 from resources.ovs_api import slice_add_ovs_ports
 from django.db import transaction
 import time
@@ -16,17 +17,20 @@ import logging
 LOG = logging.getLogger("ccf")
 
 
-def create_slice_step(project, name, description, island, user, ovs_ports, controller):
+def create_slice_step(project, name, description, island, user, ovs_ports, controller_info):
     slice_obj = None
     try:
         slice_obj = create_slice_api(project, name, description, island, user)
         slice_add_ovs_ports(slice_obj, ovs_ports)
-        slice_add_controller(slice_obj, controller)
-        flowvisor_add_slice(island.flowvisor_set.all()[0], name, controller, user.email)
+        create_add_controller(slice_obj, controller_info)
+        flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
+#         创建并添加网段
+#         创建并添加网关
+#         创建并添加dhcp
+#         创建并添加虚拟机
         return slice_obj
     except:
         delete_slice_api(slice_obj)
-        delete_controller(controller)
         raise
 
 
@@ -82,11 +86,7 @@ def slice_change_description(slice_obj, new_description):
     """编辑slice，编辑描述信息、控制器、交换机端口
     """
     LOG.debug('slice_change_description')
-    try:
-        Slice.objects.get(id=slice_obj.id)
-    except Slice.DoesNotExist:
-        pass
-    else:
+    if slice_obj:
         if slice_obj.description != new_description:
             try:
                 slice_obj.change_description(new_description)
@@ -102,26 +102,20 @@ def delete_slice_api(slice_obj):
     print 'delete_slice_api'
     if slice_obj:
         try:
-            Slice.objects.get(id=slice_obj.id)
-        except Slice.DoesNotExist:
-            pass
-        else:
-            try:
-    #             删除虚拟机
-    #             删除dhcp
-    #             删除网关
-    #             删除控制器
-                controller = slice_obj.get_controller()
-    #             删除slice网络地址
-    #             删除交换机端口
-    #             删除底层slice
-                flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
-    #             删除slice记录
-                slice_obj.delete()
-                delete_controller(controller)
-            except Exception, ex:
-                transaction.rollback()
-                raise DbError(ex)
+#             删除虚拟机
+#             删除dhcp
+#             删除网关
+#             删除slice网络地址
+#             删除底层slice
+            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
+#             删除控制器
+            delete_controller(slice_obj.get_controller())
+#             删除交换机端口
+#             删除slice记录
+            slice_obj.delete()
+        except Exception, ex:
+            transaction.rollback()
+            raise DbError(ex)
 
 
 @transaction.commit_on_success

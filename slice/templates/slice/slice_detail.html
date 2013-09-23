@@ -10,7 +10,9 @@
 {% block body %}
 		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
-			    <legend>基本信息<a data-toggle="modal" href="#editInfoModal" class="btn btn-primary edit">编 辑</a></legend>
+			    <legend>基本信息
+			    	<a data-toggle="modal" href="#editInfoModal" class="btn btn-primary edit">编 辑</a>
+			    </legend>
 			    <table class="table">
 			    	<tbody>
 			    		<tr>
@@ -36,13 +38,11 @@
 				 			<td width="25%">控制器</td>
 				 			<td width="50%">{{controller.ip}}：{{controller.port}}</td>
 				 			<td width="25%">
+				 				<button type="button" class="btn btn-success start_btn">启动</button>
+					 			<button type="button" class="btn">登录</button>
 				 			{% if slice_obj.state == 0 %}
-					 			<button type="button" class="btn">启动</button>
-					 			<button type="button" class="btn">登录</button>
 					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a>
-					 		{%else%}
-					 			<button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn">登录</button>
+					 		{%else%}	
 					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary" disabled>编辑</a>
 					 		{%endif%}
 				 			</td>
@@ -51,13 +51,11 @@
 				 			<td>虚拟网关</td>
 				 			<td>IP：192.168.5.124</td>
 				 			<td>
-					 		{% if slice_obj.state == 0 %}
-					 			<button type="button" class="btn">启动</button>
+				 				<button type="button" class="btn btn-success start_btn">启动</button>
 					 			<button type="button" class="btn">登录</button>
+					 		{% if slice_obj.state == 0 %}
 					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a>
 					 		{%else%}
-					 			<button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn">登录</button>
 					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary" disabled>编辑</a>
 					 		{%endif%}
 				 			</td>
@@ -66,13 +64,11 @@
 				 			<td>DHCP服务器</td>
 				 			<td>IP：192.168.5.123</td>
 				 			<td>
-					 		{% if slice_obj.state == 0 %}
-					 			<button type="button" class="btn">启动</button>
+				 				<button type="button" class="btn btn-success start_btn">启动</button>
 					 			<button type="button" class="btn">登录</button>
+					 		{% if slice_obj.state == 0 %}
 					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a>
 					 		{%else%}
-					 			<button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn">登录</button>
 					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary" disabled>编辑</a>
 					 		{%endif%}
 				 			</td>

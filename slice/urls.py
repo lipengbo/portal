@@ -8,4 +8,6 @@ urlpatterns = patterns('slice.views',
     url(r'^detail/(?P<slice_id>\d+)/$', "detail", name='slice_detail'),
     url(r'^start_or_stop/(?P<slice_id>\d+)/(?P<flag>\d+)/$', "start_or_stop", name='start_or_stop'),
     url(r'^topology/(?P<slice_id>\d+)/$', "topology", name='slice_topology'),
+    url(r'^edit_discription/(?P<slice_id>\d+)/$', "edit_discription", name='edit_slice_discription'),
+    url(r'^edit_controller/(?P<slice_id>\d+)/$', "edit_controller", name='edit_slice_controller'),
 )
