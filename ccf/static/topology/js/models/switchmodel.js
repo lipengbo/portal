@@ -32,8 +32,7 @@ window.Switch = Backbone.Model.extend({
     initialize:function () {
         var self = this;
 
-        console.log(self.id)
-    console.log(self)
+        //console.log(self)
         if (!self.id) {
             return;
         }
@@ -53,8 +52,6 @@ window.Switch = Backbone.Model.extend({
                 }
             }
         });
-        console.log('aa', hackBase)
-        console.log('id', self.id)
 
         //console.log("fetching switch " + this.id + " aggregate")
         $.ajax({
@@ -66,8 +63,6 @@ window.Switch = Backbone.Model.extend({
                 self.set(data[self.id][0]);
             }
         });
-        console.log('aa', hackBase)
-        console.log('id', self.id)
         self.trigger('add');
         this.ports = new PortCollection();
         this.flows = new FlowCollection();
