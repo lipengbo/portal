@@ -5674,8 +5674,11 @@ a {
 .search {
   margin-top: 20px;
 }
-.search p {
+.search .search_chose {
   float: left;
+}
+.search .search_chose .control-label {
+  width: 75px;
 }
 .search form {
   float: right;
@@ -5692,4 +5695,7 @@ a {
 #editSliceModal {
   width: 950px;
   margin-left: -475px;
+}
+.font_wait {
+  color: #C09853;
 }
