@@ -2,6 +2,12 @@
 {% block head_title_base %}
     未来网络实验设施控制框架
 {% endblock %}
+{% block body_class %}
+{% if no_parent %}
+{% else %}
+common
+{% endif %}
+{% endblock %}
 {% block extra_style %}
     <link href="{{ STATIC_URL }}topology/css/topology.css?v=1" rel="stylesheet">
     <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui.css" rel="Stylesheet" />
@@ -10,7 +16,10 @@
             .navbar {
                 display: none;
             }
-            .sidebar.left {
+            #footer{
+                display: none;
+            }
+            .breadcrumb {
                 display: none;
             }
             .body {
@@ -148,6 +157,18 @@
 {% endblock %}
 </div>
 
+    <div class="port-modal modal hide fade">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>选择端口</h3>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">关闭</a>
+        <a href="#" class="btn btn-primary">确定</a>
+      </div>
+    </div>
 </div> <!-- /container -->
 {% endblock %}
 
@@ -163,9 +184,8 @@
 <script src="{{ STATIC_URL }}topology/lib/underscore-min.js"></script>
 <script src="{{ STATIC_URL }}topology/lib/backbone-min.js"></script>
 <script src="{{ STATIC_URL }}topology/lib/d3.v2.min.js"></script>
+<script src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
 
-<script src="{{ STATIC_URL }}topology/lib/bootstrap-dropdown.js"></script>
-<script src="{{ STATIC_URL }}topology/lib/bootstrap-alert.js"></script>
 <script src="{{ STATIC_URL }}topology/lib/custom-tooltip.js"></script>
 
 <script src="{{ STATIC_URL }}topology/js/utils.js"></script>
