@@ -30,6 +30,7 @@ urlpatterns = patterns("",
     url(r"^list_slice/", TemplateView.as_view(template_name="list_slice.html"), name="home"),
     url(r"^list_vm/", TemplateView.as_view(template_name="list_vm.html"), name="home"),
     url(r"^apply_project/", TemplateView.as_view(template_name="apply_project.html"), name="home"),
+    url(r"^homepage/", TemplateView.as_view(template_name="homepage.html"), name="home"),
 
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
