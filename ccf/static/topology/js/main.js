@@ -363,6 +363,25 @@ function init_svg () {
         // TODO we could add some functionality here
         if (parent.add_switch) {
             if (d.group == 1) {
+
+                var data = d;
+                if (data.id in origin_nodes_map) {
+                    var origin_data = origin_nodes_map[data.id];
+                    
+                    if (!origin_data.ports) {
+                        return;
+                    }
+                    var content = "";
+                    $.each(origin_data.ports, function(index, port){
+                        var state = port.state == 1 ? "活跃" : "非活跃";
+                        content +=  
+                            "<label><input class='checkbox' type='checkbox' value='" + port.portNumber + "'/> " + 
+                            port.name + "(" + port.portNumber+ ")" + 
+                            "</label>";
+                    });
+                    $('.port-modal .modal-body').html(content);
+                    $('.port-modal').modal();
+                }
                 var existed = parent.add_switch(d.id, d.island_id);
                 var image = '';
                 if (existed) {

@@ -12,8 +12,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 
-from slice.slice_api import create_slice_step, start_slice_api, stop_slice_api, get_slice_topology, delete_slice_api
-from plugins.openflow.controller_api import slice_add_controller, create_user_defined_controller
+from slice.slice_api import create_slice_step, start_slice_api,\
+    stop_slice_api, get_slice_topology, delete_slice_api, slice_change_description
+from plugins.openflow.controller_api import slice_change_controller
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
 from resources.ovs_api import slice_add_ovs_ports
@@ -42,17 +43,22 @@ def create(request, proj_id):
             island = get_object_or_404(Island, id=island_id)
             controller_type = request.POST.get("controller_type")
             if controller_type == 'default_create':
-                controller = project.islands.all()[0].controller_set.all()[0]
+                controller_sys = request.POST.get("controller_sys")
+                controller_info = {'controller_type': controller_type,
+                                   'controller_sys': controller_sys}
             else:
                 controller_ip = request.POST.get("controller_ip")
                 controller_port = request.POST.get("controller_port")
-                controller = create_user_defined_controller(island, controller_ip, controller_port)
+                controller_info = {'controller_type': controller_type,
+                                   'controller_ip': controller_ip,
+                                   'controller_port': controller_port}
             port_ids = []
             switch_port_ids = request.POST.getlist("switch_port_ids")
             for switch_port_id in switch_port_ids:
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
-            slice_obj = create_slice_step(project, slice_name, slice_description, island, user, ovs_ports, controller)
+            slice_obj = create_slice_step(project, slice_name,
+                slice_description, island, user, ovs_ports, controller_info)
         except DbError, ex:
             return render(request, 'slice/warning.html', {'info': str(ex)})
         except Exception, ex:
@@ -70,7 +76,8 @@ def create(request, proj_id):
         for switch in switches:
             switch_ports = switch.switchport_set.all()
             if switch_ports:
-                ovs_ports.append({'switch_type': switch.type(), 'switch':switch, 'switch_ports': switch_ports})
+                ovs_ports.append({'switch_type': switch.type(),
+                    'switch': switch, 'switch_ports': switch_ports})
     context = {}
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
@@ -78,14 +85,49 @@ def create(request, proj_id):
     return render(request, 'slice/create_slice.html', context)
 
 
-def edit(request, slice_id):
-    """编辑slice。"""
+def edit_description(request, slice_id):
+    """编辑slice描述信息。"""
+    slice_obj = get_object_or_404(Slice, id=slice_id)
     context = {}
     if request.method == 'POST':
-        slice_obj = None
-        return HttpResponseRedirect(
-            reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-    return render(request, 'slice/edit_slice.html', context)
+        slice_description = request.POST.get("slice_description")
+        try:
+            slice_change_description(slice_obj, slice_description)
+        except Exception, ex:
+            return render(request, 'slice/warning.html', {'info': str(ex)})
+        else:
+            return HttpResponseRedirect(
+                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+    context['slice_obj'] = slice_obj
+    return render(request, 'slice/edit_slice_description.html', context)
+
+
+def edit_controller(request, slice_id):
+    """编辑slice控制器。"""
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    context = {}
+    if request.method == 'POST':
+        controller_type = request.POST.get("controller_type")
+        if controller_type == 'default_create':
+            controller_sys = request.POST.get("controller_sys")
+            controller_info = {'controller_type': controller_type,
+                               'controller_sys': controller_sys}
+        else:
+            controller_ip = request.POST.get("controller_ip")
+            controller_port = request.POST.get("controller_port")
+            controller_info = {'controller_type': controller_type,
+                               'controller_ip': controller_ip,
+                               'controller_port': controller_port}
+        try:
+            slice_change_controller(slice_obj, controller_info)
+        except Exception, ex:
+            return render(request, 'slice/warning.html', {'info': str(ex)})
+        else:
+            return HttpResponseRedirect(
+                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+    context['slice_obj'] = slice_obj
+    context['controller'] = slice_obj.get_controller()
+    return render(request, 'slice/edit_slice_controller.html', context)
 
 
 def detail(request, slice_id):

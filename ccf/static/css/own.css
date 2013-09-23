@@ -5634,9 +5634,6 @@ a {
 .form-wizard .operate_btn .del {
   visibility: hidden;
 }
-.form-wizard .pagination {
-  float: right;
-}
 .index {
   background: #fff;
 }
@@ -5674,12 +5671,44 @@ a {
 .search {
   margin-top: 20px;
 }
-.search p {
+.search .search_chose {
   float: left;
+}
+.search .search_chose .control-label {
+  width: 75px;
 }
 .search form {
   float: right;
 }
 .hide_form {
   display: none;
+}
+.modal .text_r {
+  text-align: right;
+}
+.modal .modal-footer {
+  text-align: center;
+}
+#editSliceModal {
+  width: 950px;
+  margin-left: -475px;
+}
+.font_wait {
+  color: #c09853;
+}
+.font_success {
+  color: #468847;
+}
+.font_fail {
+  color: #b94a48;
+}
+.pagination {
+  overflow: hidden;
+}
+.pagination ul {
+  float: right;
+}
+.add_btn {
+  margin-top: 20px;
+  text-align: right;
 }

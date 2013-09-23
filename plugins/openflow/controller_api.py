@@ -9,6 +9,28 @@ LOG = logging.getLogger("CENI")
 
 
 @transaction.commit_on_success
+def create_add_controller(slice_obj, controller_info):
+    """创建并添加slice控制器
+    """
+    if slice_obj:
+        try:
+            if controller_info['controller_type'] == 'default_create':
+                controller = create_default_controller(slice_obj,
+                    controller_info['controller_sys'])
+                controller = slice_obj.project.islands.all()[0].controller_set.all()[0]
+            else:
+                controller = create_user_defined_controller(slice_obj,
+                    controller_info['controller_ip'],
+                    controller_info['controller_port'])
+            slice_add_controller(slice_obj, controller)
+        except Exception, ex:
+            transaction.rollback()
+            raise
+    else:
+        raise DbError("数据库异常")
+
+
+@transaction.commit_on_success
 def slice_add_controller(slice_obj, controller):
     """slice添加控制器
     """
@@ -27,22 +49,47 @@ def slice_add_controller(slice_obj, controller):
 
 
 @transaction.commit_on_success
-def create_user_defined_controller(island, controller_ip, controller_port):
+def create_user_defined_controller(slice_obj, controller_ip, controller_port):
     """创建用户自定义控制器记录
     """
-    try:
-        controller = Controller(
-            name='user_define',
-            ip=controller_ip,
-            port=controller_port,
-            http_port=0,
-            state=1,
-            island=island)
-        controller.save()
-        return controller
-    except Exception, ex:
-        transaction.rollback()
-        raise DbError(ex)
+    if slice_obj:
+        try:
+            controller = Controller(
+                name='user_define',
+                ip=controller_ip,
+                port=int(controller_port),
+                http_port=0,
+                state=1,
+                island=slice_obj.get_island())
+            controller.save()
+            return controller
+        except Exception, ex:
+            transaction.rollback()
+            raise DbError(ex)
+    else:
+        raise DbError("数据库异常")
+
+
+@transaction.commit_on_success
+def create_default_controller(slice_obj, controller_sys):
+    """创建用户自定义控制器记录
+    """
+    if slice_obj:
+        try:
+            controller = Controller(
+                name=controller_sys,
+                ip='192.168.8.9',
+                port=7687,
+                http_port=0,
+                state=1,
+                island=slice_obj.get_island())
+            controller.save()
+            return controller
+        except Exception, ex:
+            transaction.rollback()
+            raise DbError(ex)
+    else:
+        raise DbError("数据库异常")
 
 
 def delete_controller(controller):
@@ -56,23 +103,29 @@ def delete_controller(controller):
 
 
 @transaction.commit_on_success
-def slice_change_controller(slice_obj, controller_ip, controller_port):
+def slice_change_controller(slice_obj, controller_info):
     """slice更改控制器
     """
     LOG.debug('slice_change_controller')
-    try:
-        Slice.objects.get(id=slice_obj.id)
-    except Exception, ex:
-        raise DbError(ex)
+    if slice_obj:
+        try:
+            haved_controller = slice_obj.get_controller()
+            if controller_info['controller_type'] == 'default_create':
+                if haved_controller.name != controller_info['controller_sys']:
+                    delete_controller(haved_controller)
+                    create_add_controller(slice_obj, controller_info)
+                    controller = slice_obj.get_controller()
+                    flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+                        slice_obj.name, controller.ip, controller.port)
+            else:
+                if haved_controller.ip != controller_info['controller_ip'] or haved_controller.port != int(controller_info['controller_port']):
+                    haved_controller.ip = controller_info['controller_ip']
+                    haved_controller.port = int(controller_info['controller_port'])
+                    haved_controller.save()
+                    flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+                        slice_obj.name, haved_controller.ip, haved_controller.port)
+        except:
+            transaction.rollback()
+            raise
     else:
-        haved_controller = slice_obj.get_controller()
-        if haved_controller and (haved_controller.ip != controller_ip or haved_controller.port != int(controller_port)):
-            try:
-                haved_controller.ip = controller_ip
-                haved_controller.port = int(controller_port)
-                haved_controller.save()
-                flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                    slice_obj.name, controller_ip, controller_port)
-            except Exception, ex:
-                transaction.rollback()
-                raise DbError(ex)
+        raise DbError("数据库异常")
