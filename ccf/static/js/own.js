@@ -103,7 +103,14 @@ $(document).ready(function() {
     $(".select_input ul li a").click(function(){
         var selectText = $(this).text();
         $(".select_input input").val(selectText);
-    });   
+    });      
 });
+
+//全选全不选
+function check_all(obj,cName){
+    var checkboxs = document.getElementsByName(cName);
+    for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
+}
+
 
    
