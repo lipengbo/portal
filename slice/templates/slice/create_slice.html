@@ -133,12 +133,12 @@
               <fieldset>
                  <legend>Slice网络地址</legend>
                  <label>IP数量</label>
-                <select>
-                  <option>4</option>
-                  <option>8</option>
-                  <option>16</option>
-                  <option>32</option>
-                  <option>64</option>
+                <select name="nw_num" id="nw_num">
+                  <option value="4">4</option>
+                  <option value="8">8</option>
+                  <option value="16">16</option>
+                  <option value="32">32</option>
+                  <option value="64">64</option>
                 </select>   
                 <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
               </fieldset>
@@ -159,7 +159,7 @@
                     <tbody>
                         <tr>
                             <td width="71">网络地址：</td>
-                            <td>192.168.10.0/28</td>
+                            <td id="nw">192.168.10.0/28</td>
                             <td><span class="help-inline">网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器</span></td>
                         </tr>
                     </tbody>
@@ -178,10 +178,10 @@
                             </td>
                             <td width="70">控制器类型</td>
                             <td width="290">
-                                <select>
-                                  <option>floodlight</option>
-                                  <option>pox</option>
-                                  <option>nox</option>
+                                <select name="controller_sys">
+                                  <option value="floodlight">floodlight</option>
+                                  <option value="pox">pox</option>
+                                  <option value="nox">nox</option>
                                 </select>
                             </td>
                             <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
@@ -335,23 +335,11 @@
                                                                      是否启动DHCP
                  </label>
                  <div class="operate_btn">
-                    <button class="btn btn-primary add" type="button">继续添加</button>
                     <button class="btn btn-inverse del" type="button">删 除</button>
                  </div>
                 </div>          
               </fieldset>
-              <div class="pagination">
-                  <ul>
-                    <li class="disabled"><a href="#">Prev</a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
-                    <li><a href="#">Next</a></li>
-                  </ul>
-                </div>
-              
+              <p class="add_btn"><button class="btn btn-primary add" type="button">继续添加</button></p>               
               <div class="form-actions">
                   <div class="row-fluid">
                     <div class="span3"></div>
