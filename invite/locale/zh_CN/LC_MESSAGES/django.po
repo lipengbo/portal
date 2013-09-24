@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-23 08:57+0000\n"
+"POT-Creation-Date: 2013-09-23 09:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,6 +22,28 @@ msgstr ""
 msgid "Invite"
 msgstr "邀请"
 
+#: models.py:25
+msgid "Invitee"
+msgstr "被邀请者"
+
+#: models.py:27
+msgid "Message"
+msgstr "消息"
+
+#: models.py:55
+#, python-format
+msgid ""
+"You're invited by %(inviter)s to join a project of %(project)s.\n"
+"Here is a message from %(inviter)s:\n"
+"%(message)s\n"
+"You can click the link below to accept the invitation:\n"
+"%(accept_link)s"
+msgstr ""
+"您被%(inviter)s邀请加入“%(project)s”，\n"
+"这是%(inviter)s留给您的消息：\n%(message)s\n"
+"您可以点击下面的链接接受该邀请：\n"
+"%(accept_link)s"
+
 #: models.py:56
 msgid "You have an invitation"
 msgstr "您有一个邀请"
@@ -34,4 +56,3 @@ msgstr "邀请完成"
 #, python-format
 msgid "You have joined %s"
 msgstr "您加入了%s"
-

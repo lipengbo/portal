@@ -211,8 +211,8 @@ class NetworkInUse(CCFException):
     message = _("Network %(network)s is still in use.")
 
 
-class NetworkNotCreated(CCFException):
-    message = _("%(req)s is required to create a network.")
+class NetworkNoMoreSubNet(CCFException):
+    message = _("%(network)s is required to create a network.")
 
 
 class FlavorNotFound(NotFound):

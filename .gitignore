@@ -6,3 +6,6 @@
 *.pyc
 my_logs
 local_settings.py
+.settings
+.ropeproject
+dev.db

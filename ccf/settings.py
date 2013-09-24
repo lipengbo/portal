@@ -145,6 +145,7 @@ INSTALLED_APPS = [
     "project",
     "resources",
     "plugins.vt",
+    "plugins.ipam",
     "plugins.openflow",
     "plugins.network",
     "invite",
@@ -201,6 +202,11 @@ LOGGING = {
         "django.request": {
             "handlers": ["mail_admins"],
             "level": "ERROR",
+            "propagate": True,
+        },
+        "plugins": {
+            "handlers": ["console", "ceni_debug"],
+            "level": "DEBUG",
             "propagate": True,
         },
     }

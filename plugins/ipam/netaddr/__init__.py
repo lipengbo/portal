@@ -4,6 +4,10 @@
 # Date:Fri Sep 13 14:50:28 CST 2013
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
+import os
+import sys
+netaddr_path = os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir))
+sys.path.insert(0, netaddr_path)
 from netaddr.core import AddrConversionError, AddrFormatError, \
     NotRegisteredError, ZEROFILL, Z, INET_PTON, P, NOHOST, N
 
@@ -85,22 +89,22 @@ class Network(object):
         self.sub16_prefix = 28
         self.sub8_prefix = 29
 
-    def subnet(self, ipcount):
+    def subnet(self, ipcount, count=None):
         function = '_sub_net_%s' % ipcount
-        return getattr(self, function)()
+        return getattr(self, function)(count=count)
 
-    def _sub_net_64(self):
-        for sub64_net in self.netaddr.subnet(self.sub64_prefix):
+    def _sub_net_64(self, count):
+        for sub64_net in self.netaddr.subnet(self.sub64_prefix, count=count):
             yield sub64_net
 
-    def _sub_net_32(self):
-        for sub32_net in self.netaddr.subnet(self.sub32_prefix):
+    def _sub_net_32(self, count):
+        for sub32_net in self.netaddr.subnet(self.sub32_prefix, count=count):
             yield sub32_net
 
-    def _sub_net_16(self):
-        for sub16_net in self.netaddr.subnet(self.sub16_prefix):
+    def _sub_net_16(self, count):
+        for sub16_net in self.netaddr.subnet(self.sub16_prefix, count=count):
             yield sub16_net
 
-    def _sub_net_8(self):
-        for sub8_net in self.netaddr.subnet(self.sub8_prefix):
+    def _sub_net_8(self, count):
+        for sub8_net in self.netaddr.subnet(self.sub8_prefix, count=count):
             yield sub8_net
