@@ -4,8 +4,8 @@
 *.swp
 *.rbc
 *.pyc
-my_logs
+logs
+dev.db
 local_settings.py
 .settings
 .ropeproject
-dev.db

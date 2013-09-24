@@ -42,7 +42,7 @@
                 <li class="span2">
                     <a href="#tab4" class="step">
                     <span class="number">5</span>
-                    <span class="desc">服务清单</span>   
+                    <span class="desc">Slice清单</span>   
                     </a> 
                 </li>
                 <li class="span1"></li>
@@ -288,54 +288,8 @@
                  <fieldset class="base_info vm_info_list">
                  <legend>虚拟机信息</legend>
                  <div class="sec_block">
-                  <table class="table">             
-                    <tbody>
-                        <tr>
-                            <td width="100">名称</td>
-                            <td>
-                                <input type="text" value="">
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>模板类型</td>
-                            <td>
-                                <select>
-                                  <option>类型1</option>
-                                  <option>类型2</option>
-                                  <option>类型3</option>
-                                </select>
-                            </td>
-                            <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
-                        </tr>
-                        <tr>
-                            <td>镜像类型</td>
-                            <td>
-                                <select>
-                                  <option>类型1</option>
-                                  <option>类型2</option>
-                                  <option>类型3</option>
-                                </select>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>关联网络节点</td>
-                            <td>
-                                <select>
-                                  <option>节点1</option>
-                                  <option>节点2</option>
-                                  <option>节点3</option>
-                                </select>
-                            </td>
-                            <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
-                        </tr>
-                    </tbody>
-                 </table>
-                 <label class="checkbox">
-                    <input type="checkbox" value="" checked>
-                                                                     是否启动DHCP
-                 </label>
+    		    {% csrf_token %}
+		    {{ form|crispy  }}
                  <div class="operate_btn">
                     <button class="btn btn-inverse del" type="button">删 除</button>
                  </div>
