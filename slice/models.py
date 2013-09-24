@@ -91,6 +91,15 @@ class Slice(models.Model):
                 virtual_switches.append(switch.virtualswitch)
         return virtual_switches
 
+    def get_virtual_switches_server(self):
+        from resources.models import VirtualSwitch
+        switches = self.switch_set.all()
+        virtual_switches = []
+        for switch in switches:
+            if switch.is_virtual() and not switch.has_gre_tunnel:
+                virtual_switches.append(switch.virtualswitch)
+        return virtual_switches
+
     def get_default_flowspaces(self):
         return self.flowspacerule_set.filter(is_default=1)
 
@@ -98,7 +107,7 @@ class Slice(models.Model):
         return self.switchport_set.all()
 
     def get_vms(self):
-        return self.virtual_machines.all()
+        return self.virtualmachine_set.all()
 
     def get_nws(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
