@@ -54,6 +54,10 @@ class IPManager(models.Manager):
         subnet = Subnet.objects.get(owner=owner)
         return map(lambda x: x.ipaddr, self.filter(supernet=subnet))
 
+    def get_subnet(self, owner):
+        result = Subnet.objects.get(owner=owner)
+        return result.netaddr
+
 
 class Network(models.Model):
     TYPE_CHOICE = ((0, _('subnet for phy')),
