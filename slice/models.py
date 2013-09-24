@@ -82,6 +82,15 @@ class Slice(models.Model):
         print virtual_switches
         return virtual_switches
 
+    def get_virtual_switches_gre(self):
+        from resources.models import VirtualSwitch
+        switches = self.switch_set.all()
+        virtual_switches = []
+        for switch in switches:
+            if switch.is_virtual() and switch.has_gre_tunnel:
+                virtual_switches.append(switch.virtualswitch)
+        return virtual_switches
+
     def get_default_flowspaces(self):
         return self.flowspacerule_set.filter(is_default=1)
 
