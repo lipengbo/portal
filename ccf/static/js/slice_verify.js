@@ -65,8 +65,9 @@ function check_slice_controller(obj_name){
 				ret2 = check_port("controller_port",1);
 				if(ret1){
 				}
-	  }  
-	}   
+	  		}  
+		}   
+	}
 }
 
 //验证IP地址格式
@@ -77,24 +78,22 @@ function check_ip(obj_id,flag){
 	
 	if(flag){
 		if(obj.value.length > 0){
-			if(reg.test(obj.value))
-			{
-				if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256) 
-					{
+			if(reg.test(obj.value)){
+				if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
 					showInfo(info,"√","green")
 					return true;
-					}
+				}
 			}
 			showInfo(info,"IP地址格式错误","red")		
 			return false;
 		}
-		else
+		else{
 			return true;
-	}
-	else
-		{
-		showInfo(info,"请填写IP地址","blue")
 		}
+	}
+	else{
+		showInfo(info,"请填写IP地址","blue")
+	}
 }
 
 //校验端口值
@@ -104,25 +103,21 @@ function check_port(obj_id,flag){
 	var reg = /^[0-9]*$/;
 	if (flag){
 		if(obj.value.length > 0){
-			if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value))
-			{
+			if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value)){
 				showInfo(info,"（0-65535）之间","red")
 				return false;
 			}
-			else
-			{
+			else{
 				showInfo(info,"√","green")
 				return true;
 			}	
 		}
-		else
-		{
+		else{
 			return true;
 		}
 	}
-	else
-	{
-		showInfo(info,"请填写端口","blue")
+	else{
+		showInfo(info,"请填写端口","blue");
 	}
 }
 
