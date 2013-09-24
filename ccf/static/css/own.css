@@ -5665,6 +5665,10 @@ a {
 .example-sites li {
   background: #fff;
 }
+.search {
+  overflow: hidden;
+  margin-bottom: 20px;
+}
 .search .search_chose {
   float: left;
 }

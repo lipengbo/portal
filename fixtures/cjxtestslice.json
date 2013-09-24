@@ -1,0 +1,2389 @@
+[
+    {
+        "pk": 19,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "category",
+            "name": "Category",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 17,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "city",
+            "name": "City",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 18,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "island",
+            "name": "Island",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 21,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "membership",
+            "name": "Membership",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 20,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "project",
+            "name": "Project",
+            "app_label": "project"
+        }
+    },
+    {
+        "pk": 8,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "account",
+            "name": "account",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 13,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "accountdeletion",
+            "name": "account deletion",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 5,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "contenttype",
+            "name": "content type",
+            "app_label": "contenttypes"
+        }
+    },
+    {
+        "pk": 32,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "controller",
+            "name": "controller",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 11,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "emailaddress",
+            "name": "email address",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 12,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "emailconfirmation",
+            "name": "email confirmation",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 31,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flavor",
+            "name": "flavor",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 34,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flowspacerule",
+            "name": "flow space rule",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 33,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flowvisor",
+            "name": "flowvisor",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 36,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "flowvisorlinksmd5",
+            "name": "flowvisor links md5",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 37,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "gateway",
+            "name": "gateway",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "group",
+            "name": "group",
+            "app_label": "auth"
+        }
+    },
+    {
+        "pk": 29,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "hostmac",
+            "name": "host mac",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 30,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "image",
+            "name": "image",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 44,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "invitation",
+            "name": "invitation",
+            "app_label": "invite"
+        }
+    },
+    {
+        "pk": 40,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "ipaddress",
+            "name": "ip address",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 42,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "islandslicenetworkgateway",
+            "name": "island slice network gateway",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 35,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "link",
+            "name": "link",
+            "app_label": "openflow"
+        }
+    },
+    {
+        "pk": 14,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "log",
+            "name": "log",
+            "app_label": "eventlog"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "logentry",
+            "name": "log entry",
+            "app_label": "admin"
+        }
+    },
+    {
+        "pk": 43,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "nat",
+            "name": "nat",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 38,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "network",
+            "name": "network",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "permission",
+            "name": "permission",
+            "app_label": "auth"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "server",
+            "name": "server",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 6,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "session",
+            "name": "session",
+            "app_label": "sessions"
+        }
+    },
+    {
+        "pk": 9,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "signupcode",
+            "name": "signup code",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 10,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "signupcoderesult",
+            "name": "signup code result",
+            "app_label": "account"
+        }
+    },
+    {
+        "pk": 7,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "site",
+            "name": "site",
+            "app_label": "sites"
+        }
+    },
+    {
+        "pk": 15,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "slice",
+            "name": "slice",
+            "app_label": "slice"
+        }
+    },
+    {
+        "pk": 16,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "sliceisland",
+            "name": "slice island",
+            "app_label": "slice"
+        }
+    },
+    {
+        "pk": 41,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "slicenetwork",
+            "name": "slice network",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 26,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "sliceport",
+            "name": "slice port",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "sliceswitch",
+            "name": "slice switch",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 39,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "subnet",
+            "name": "subnet",
+            "app_label": "network"
+        }
+    },
+    {
+        "pk": 23,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "switch",
+            "name": "switch",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 25,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "switchport",
+            "name": "switch port",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "user",
+            "name": "user",
+            "app_label": "auth"
+        }
+    },
+    {
+        "pk": 28,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "virtualmachine",
+            "name": "virtual machine",
+            "app_label": "vt"
+        }
+    },
+    {
+        "pk": 27,
+        "model": "contenttypes.contenttype",
+        "fields": {
+            "model": "virtualswitch",
+            "name": "virtual switch",
+            "app_label": "resources"
+        }
+    },
+    {
+        "pk": "c196eaec29a896f43169479ebce4e218",
+        "model": "sessions.session",
+        "fields": {
+            "expire_date": "2013-10-07T06:20:40.976Z",
+            "session_data": "YzE4ZjNiYzIyZTMwOTViNjBkM2IxNWQ0NDgxMmNmZTNkNjU3NTczYzqAAn1xAShVEl9hdXRoX3Vz\nZXJfYmFja2VuZHECVTNhY2NvdW50LmF1dGhfYmFja2VuZHMuVXNlcm5hbWVBdXRoZW50aWNhdGlv\nbkJhY2tlbmRxA1UNX2F1dGhfdXNlcl9pZHEESwF1Lg==\n"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "sites.site",
+        "fields": {
+            "domain": "example.com",
+            "name": "example.com"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "sites.site",
+        "fields": {
+            "domain": "localhost:8000",
+            "name": "example.com [localhost]"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "slice.sliceisland",
+        "fields": {
+            "island": 1,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.city",
+        "fields": {
+            "name": "\u5357\u4eac",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.island",
+        "fields": {
+            "city": 1,
+            "name": "\u672a\u6765\u7f51\u7edc",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.category",
+        "fields": {
+            "name": "sdn"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.server",
+        "fields": {
+            "username": "cjx",
+            "update_time": "2013-09-23T06:24:36.051Z",
+            "disk_size": 32,
+            "name": "server1",
+            "slices": [],
+            "island": 1,
+            "bandwidth": 32,
+            "mac": "11:11:11:11:11:11",
+            "state": 1,
+            "ip": "192.168.5.111",
+            "memory": 32,
+            "password": "cjx",
+            "os": "32",
+            "cpu": "32"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.server",
+        "fields": {
+            "username": "cjx",
+            "update_time": "2013-09-23T06:25:18.104Z",
+            "disk_size": 32,
+            "name": "srever2",
+            "slices": [],
+            "island": 1,
+            "bandwidth": 32,
+            "mac": "12:12:12:12:12:12",
+            "state": 1,
+            "ip": "192.168.5.112",
+            "memory": 32,
+            "password": "cjx",
+            "os": "32",
+            "cpu": "32"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.server",
+        "fields": {
+            "username": "cjx",
+            "update_time": "2013-09-23T06:26:15.743Z",
+            "disk_size": 32,
+            "name": "srever3",
+            "slices": [],
+            "island": 1,
+            "bandwidth": 32,
+            "mac": "03:03:03:03:03:03",
+            "state": 1,
+            "ip": "192.168.5.103",
+            "memory": 32,
+            "password": "cjx",
+            "os": "32",
+            "cpu": "32"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 33,
+            "name": "ovs2",
+            "island": 1,
+            "dpid": "13:13:13:13:13:13:13:13",
+            "has_gre_tunnel": false,
+            "ip": "192.168.5.113",
+            "password": "cjx",
+            "port": 32
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 44,
+            "name": "ovs3",
+            "island": 1,
+            "dpid": "14:14:14:14:14:14:14:14",
+            "has_gre_tunnel": false,
+            "ip": "192.168.5.114",
+            "password": "cjx",
+            "port": 32
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 35,
+            "name": "ovs1",
+            "island": 1,
+            "dpid": "11:11:11:11:11:11:11:11",
+            "has_gre_tunnel": true,
+            "ip": "192.168.5.111",
+            "password": "cjx",
+            "port": 34
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.switch",
+        "fields": {
+            "username": "cjx",
+            "http_port": 34,
+            "name": "ovs4",
+            "island": 1,
+            "dpid": "12:12:12:12:12:12:12:12",
+            "has_gre_tunnel": false,
+            "ip": "192.168.5.112",
+            "password": "cjx",
+            "port": 32
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 3,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 1,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 2,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 4,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 3,
+            "name": "p1",
+            "port": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 3,
+            "name": "p2",
+            "port": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 1,
+            "name": "p3",
+            "port": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 1,
+            "name": "p4",
+            "port": 2
+        }
+    },
+    {
+        "pk": 5,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 2,
+            "name": "p5",
+            "port": 1
+        }
+    },
+    {
+        "pk": 6,
+        "model": "resources.switchport",
+        "fields": {
+            "switch": 4,
+            "name": "p6",
+            "port": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 4
+        }
+    },
+    {
+        "pk": 5,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 5
+        }
+    },
+    {
+        "pk": 6,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 6
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.virtualswitch",
+        "fields": {
+            "server": 1
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.virtualswitch",
+        "fields": {
+            "server": 2
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.controller",
+        "fields": {
+            "username": "root",
+            "http_port": 8080,
+            "name": "controller1",
+            "slices": [],
+            "island": 1,
+            "object_id": null,
+            "is_root": false,
+            "state": 1,
+            "content_type": null,
+            "ip": "192.168.5.103",
+            "password": "cdn%nf",
+            "port": 6633
+        }
+    },
+    {
+        "pk": 2,
+        "model": "openflow.controller",
+        "fields": {
+            "username": "",
+            "http_port": 0,
+            "name": "user_define",
+            "slices": [
+                1
+            ],
+            "island": 1,
+            "object_id": null,
+            "is_root": false,
+            "state": 1,
+            "content_type": null,
+            "ip": "192.167.9.8",
+            "password": "",
+            "port": 213
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.flowvisor",
+        "fields": {
+            "username": "root",
+            "http_port": 8181,
+            "name": "flowvisor1",
+            "slices": [
+                1
+            ],
+            "island": 1,
+            "object_id": null,
+            "state": 1,
+            "content_type": null,
+            "ip": "192.168.5.103",
+            "password": "123",
+            "port": 6634
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.link",
+        "fields": {
+            "flowvisor": 1,
+            "source": 1,
+            "target": 3
+        }
+    },
+    {
+        "pk": 2,
+        "model": "openflow.link",
+        "fields": {
+            "flowvisor": 1,
+            "source": 2,
+            "target": 5
+        }
+    },
+    {
+        "pk": 3,
+        "model": "openflow.link",
+        "fields": {
+            "flowvisor": 1,
+            "source": 4,
+            "target": 6
+        }
+    },
+    {
+        "pk": 1,
+        "model": "openflow.flowvisorlinksmd5",
+        "fields": {
+            "flowvisor": 1,
+            "md5": "d751713988987e9331980363e24189ce"
+        }
+    },
+    {
+        "pk": 22,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_account",
+            "name": "Can add account",
+            "content_type": 8
+        }
+    },
+    {
+        "pk": 23,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_account",
+            "name": "Can change account",
+            "content_type": 8
+        }
+    },
+    {
+        "pk": 24,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_account",
+            "name": "Can delete account",
+            "content_type": 8
+        }
+    },
+    {
+        "pk": 37,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_accountdeletion",
+            "name": "Can add account deletion",
+            "content_type": 13
+        }
+    },
+    {
+        "pk": 38,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_accountdeletion",
+            "name": "Can change account deletion",
+            "content_type": 13
+        }
+    },
+    {
+        "pk": 39,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_accountdeletion",
+            "name": "Can delete account deletion",
+            "content_type": 13
+        }
+    },
+    {
+        "pk": 31,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_emailaddress",
+            "name": "Can add email address",
+            "content_type": 11
+        }
+    },
+    {
+        "pk": 32,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_emailaddress",
+            "name": "Can change email address",
+            "content_type": 11
+        }
+    },
+    {
+        "pk": 33,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_emailaddress",
+            "name": "Can delete email address",
+            "content_type": 11
+        }
+    },
+    {
+        "pk": 34,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_emailconfirmation",
+            "name": "Can add email confirmation",
+            "content_type": 12
+        }
+    },
+    {
+        "pk": 35,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_emailconfirmation",
+            "name": "Can change email confirmation",
+            "content_type": 12
+        }
+    },
+    {
+        "pk": 36,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_emailconfirmation",
+            "name": "Can delete email confirmation",
+            "content_type": 12
+        }
+    },
+    {
+        "pk": 25,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_signupcode",
+            "name": "Can add signup code",
+            "content_type": 9
+        }
+    },
+    {
+        "pk": 26,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_signupcode",
+            "name": "Can change signup code",
+            "content_type": 9
+        }
+    },
+    {
+        "pk": 27,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_signupcode",
+            "name": "Can delete signup code",
+            "content_type": 9
+        }
+    },
+    {
+        "pk": 28,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_signupcoderesult",
+            "name": "Can add signup code result",
+            "content_type": 10
+        }
+    },
+    {
+        "pk": 29,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_signupcoderesult",
+            "name": "Can change signup code result",
+            "content_type": 10
+        }
+    },
+    {
+        "pk": 30,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_signupcoderesult",
+            "name": "Can delete signup code result",
+            "content_type": 10
+        }
+    },
+    {
+        "pk": 1,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_logentry",
+            "name": "Can add log entry",
+            "content_type": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_logentry",
+            "name": "Can change log entry",
+            "content_type": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_logentry",
+            "name": "Can delete log entry",
+            "content_type": 1
+        }
+    },
+    {
+        "pk": 7,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_group",
+            "name": "Can add group",
+            "content_type": 3
+        }
+    },
+    {
+        "pk": 8,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_group",
+            "name": "Can change group",
+            "content_type": 3
+        }
+    },
+    {
+        "pk": 9,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_group",
+            "name": "Can delete group",
+            "content_type": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_permission",
+            "name": "Can add permission",
+            "content_type": 2
+        }
+    },
+    {
+        "pk": 5,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_permission",
+            "name": "Can change permission",
+            "content_type": 2
+        }
+    },
+    {
+        "pk": 6,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_permission",
+            "name": "Can delete permission",
+            "content_type": 2
+        }
+    },
+    {
+        "pk": 10,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_user",
+            "name": "Can add user",
+            "content_type": 4
+        }
+    },
+    {
+        "pk": 11,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_user",
+            "name": "Can change user",
+            "content_type": 4
+        }
+    },
+    {
+        "pk": 12,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_user",
+            "name": "Can delete user",
+            "content_type": 4
+        }
+    },
+    {
+        "pk": 13,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_contenttype",
+            "name": "Can add content type",
+            "content_type": 5
+        }
+    },
+    {
+        "pk": 14,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_contenttype",
+            "name": "Can change content type",
+            "content_type": 5
+        }
+    },
+    {
+        "pk": 15,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_contenttype",
+            "name": "Can delete content type",
+            "content_type": 5
+        }
+    },
+    {
+        "pk": 40,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_log",
+            "name": "Can add log",
+            "content_type": 14
+        }
+    },
+    {
+        "pk": 41,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_log",
+            "name": "Can change log",
+            "content_type": 14
+        }
+    },
+    {
+        "pk": 42,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_log",
+            "name": "Can delete log",
+            "content_type": 14
+        }
+    },
+    {
+        "pk": 130,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_invitation",
+            "name": "Can add invitation",
+            "content_type": 44
+        }
+    },
+    {
+        "pk": 131,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_invitation",
+            "name": "Can change invitation",
+            "content_type": 44
+        }
+    },
+    {
+        "pk": 132,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_invitation",
+            "name": "Can delete invitation",
+            "content_type": 44
+        }
+    },
+    {
+        "pk": 109,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_gateway",
+            "name": "Can add gateway",
+            "content_type": 37
+        }
+    },
+    {
+        "pk": 110,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_gateway",
+            "name": "Can change gateway",
+            "content_type": 37
+        }
+    },
+    {
+        "pk": 111,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_gateway",
+            "name": "Can delete gateway",
+            "content_type": 37
+        }
+    },
+    {
+        "pk": 118,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_ipaddress",
+            "name": "Can add ip address",
+            "content_type": 40
+        }
+    },
+    {
+        "pk": 119,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_ipaddress",
+            "name": "Can change ip address",
+            "content_type": 40
+        }
+    },
+    {
+        "pk": 120,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_ipaddress",
+            "name": "Can delete ip address",
+            "content_type": 40
+        }
+    },
+    {
+        "pk": 124,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_islandslicenetworkgateway",
+            "name": "Can add island slice network gateway",
+            "content_type": 42
+        }
+    },
+    {
+        "pk": 125,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_islandslicenetworkgateway",
+            "name": "Can change island slice network gateway",
+            "content_type": 42
+        }
+    },
+    {
+        "pk": 126,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_islandslicenetworkgateway",
+            "name": "Can delete island slice network gateway",
+            "content_type": 42
+        }
+    },
+    {
+        "pk": 127,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_nat",
+            "name": "Can add nat",
+            "content_type": 43
+        }
+    },
+    {
+        "pk": 128,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_nat",
+            "name": "Can change nat",
+            "content_type": 43
+        }
+    },
+    {
+        "pk": 129,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_nat",
+            "name": "Can delete nat",
+            "content_type": 43
+        }
+    },
+    {
+        "pk": 112,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_network",
+            "name": "Can add network",
+            "content_type": 38
+        }
+    },
+    {
+        "pk": 113,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_network",
+            "name": "Can change network",
+            "content_type": 38
+        }
+    },
+    {
+        "pk": 114,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_network",
+            "name": "Can delete network",
+            "content_type": 38
+        }
+    },
+    {
+        "pk": 121,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_slicenetwork",
+            "name": "Can add slice network",
+            "content_type": 41
+        }
+    },
+    {
+        "pk": 122,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_slicenetwork",
+            "name": "Can change slice network",
+            "content_type": 41
+        }
+    },
+    {
+        "pk": 123,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_slicenetwork",
+            "name": "Can delete slice network",
+            "content_type": 41
+        }
+    },
+    {
+        "pk": 115,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_subnet",
+            "name": "Can add subnet",
+            "content_type": 39
+        }
+    },
+    {
+        "pk": 116,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_subnet",
+            "name": "Can change subnet",
+            "content_type": 39
+        }
+    },
+    {
+        "pk": 117,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_subnet",
+            "name": "Can delete subnet",
+            "content_type": 39
+        }
+    },
+    {
+        "pk": 94,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_controller",
+            "name": "Can add controller",
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 95,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_controller",
+            "name": "Can change controller",
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 96,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_controller",
+            "name": "Can delete controller",
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 100,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_flowspacerule",
+            "name": "Can add flow space rule",
+            "content_type": 34
+        }
+    },
+    {
+        "pk": 101,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_flowspacerule",
+            "name": "Can change flow space rule",
+            "content_type": 34
+        }
+    },
+    {
+        "pk": 102,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_flowspacerule",
+            "name": "Can delete flow space rule",
+            "content_type": 34
+        }
+    },
+    {
+        "pk": 97,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_flowvisor",
+            "name": "Can add flowvisor",
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 98,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_flowvisor",
+            "name": "Can change flowvisor",
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 99,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_flowvisor",
+            "name": "Can delete flowvisor",
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 106,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_flowvisorlinksmd5",
+            "name": "Can add flowvisor links md5",
+            "content_type": 36
+        }
+    },
+    {
+        "pk": 107,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_flowvisorlinksmd5",
+            "name": "Can change flowvisor links md5",
+            "content_type": 36
+        }
+    },
+    {
+        "pk": 108,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_flowvisorlinksmd5",
+            "name": "Can delete flowvisor links md5",
+            "content_type": 36
+        }
+    },
+    {
+        "pk": 103,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_link",
+            "name": "Can add link",
+            "content_type": 35
+        }
+    },
+    {
+        "pk": 104,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_link",
+            "name": "Can change link",
+            "content_type": 35
+        }
+    },
+    {
+        "pk": 105,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_link",
+            "name": "Can delete link",
+            "content_type": 35
+        }
+    },
+    {
+        "pk": 55,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_category",
+            "name": "Can add Category",
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 56,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_category",
+            "name": "Can change Category",
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 57,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_category",
+            "name": "Can delete Category",
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 49,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_city",
+            "name": "Can add City",
+            "content_type": 17
+        }
+    },
+    {
+        "pk": 50,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_city",
+            "name": "Can change City",
+            "content_type": 17
+        }
+    },
+    {
+        "pk": 51,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_city",
+            "name": "Can delete City",
+            "content_type": 17
+        }
+    },
+    {
+        "pk": 52,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_island",
+            "name": "Can add Island",
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 53,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_island",
+            "name": "Can change Island",
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 54,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_island",
+            "name": "Can delete Island",
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 61,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_membership",
+            "name": "Can add Membership",
+            "content_type": 21
+        }
+    },
+    {
+        "pk": 62,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_membership",
+            "name": "Can change Membership",
+            "content_type": 21
+        }
+    },
+    {
+        "pk": 63,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_membership",
+            "name": "Can delete Membership",
+            "content_type": 21
+        }
+    },
+    {
+        "pk": 58,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_project",
+            "name": "Can add Project",
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 59,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_project",
+            "name": "Can change Project",
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 60,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_project",
+            "name": "Can delete Project",
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 64,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_server",
+            "name": "Can add server",
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 65,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_server",
+            "name": "Can change server",
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 66,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_server",
+            "name": "Can delete server",
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 76,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_sliceport",
+            "name": "Can add slice port",
+            "content_type": 26
+        }
+    },
+    {
+        "pk": 77,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_sliceport",
+            "name": "Can change slice port",
+            "content_type": 26
+        }
+    },
+    {
+        "pk": 78,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_sliceport",
+            "name": "Can delete slice port",
+            "content_type": 26
+        }
+    },
+    {
+        "pk": 70,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_sliceswitch",
+            "name": "Can add slice switch",
+            "content_type": 24
+        }
+    },
+    {
+        "pk": 71,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_sliceswitch",
+            "name": "Can change slice switch",
+            "content_type": 24
+        }
+    },
+    {
+        "pk": 72,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_sliceswitch",
+            "name": "Can delete slice switch",
+            "content_type": 24
+        }
+    },
+    {
+        "pk": 67,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_switch",
+            "name": "Can add switch",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 68,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_switch",
+            "name": "Can change switch",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 69,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_switch",
+            "name": "Can delete switch",
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 73,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_switchport",
+            "name": "Can add switch port",
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 74,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_switchport",
+            "name": "Can change switch port",
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 75,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_switchport",
+            "name": "Can delete switch port",
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 79,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_virtualswitch",
+            "name": "Can add virtual switch",
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 80,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_virtualswitch",
+            "name": "Can change virtual switch",
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 81,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_virtualswitch",
+            "name": "Can delete virtual switch",
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 16,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_session",
+            "name": "Can add session",
+            "content_type": 6
+        }
+    },
+    {
+        "pk": 17,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_session",
+            "name": "Can change session",
+            "content_type": 6
+        }
+    },
+    {
+        "pk": 18,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_session",
+            "name": "Can delete session",
+            "content_type": 6
+        }
+    },
+    {
+        "pk": 19,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_site",
+            "name": "Can add site",
+            "content_type": 7
+        }
+    },
+    {
+        "pk": 20,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_site",
+            "name": "Can change site",
+            "content_type": 7
+        }
+    },
+    {
+        "pk": 21,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_site",
+            "name": "Can delete site",
+            "content_type": 7
+        }
+    },
+    {
+        "pk": 43,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_slice",
+            "name": "Can add slice",
+            "content_type": 15
+        }
+    },
+    {
+        "pk": 44,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_slice",
+            "name": "Can change slice",
+            "content_type": 15
+        }
+    },
+    {
+        "pk": 45,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_slice",
+            "name": "Can delete slice",
+            "content_type": 15
+        }
+    },
+    {
+        "pk": 46,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_sliceisland",
+            "name": "Can add slice island",
+            "content_type": 16
+        }
+    },
+    {
+        "pk": 47,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_sliceisland",
+            "name": "Can change slice island",
+            "content_type": 16
+        }
+    },
+    {
+        "pk": 48,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_sliceisland",
+            "name": "Can delete slice island",
+            "content_type": 16
+        }
+    },
+    {
+        "pk": 91,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_flavor",
+            "name": "Can add flavor",
+            "content_type": 31
+        }
+    },
+    {
+        "pk": 92,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_flavor",
+            "name": "Can change flavor",
+            "content_type": 31
+        }
+    },
+    {
+        "pk": 93,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_flavor",
+            "name": "Can delete flavor",
+            "content_type": 31
+        }
+    },
+    {
+        "pk": 85,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_hostmac",
+            "name": "Can add host mac",
+            "content_type": 29
+        }
+    },
+    {
+        "pk": 86,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_hostmac",
+            "name": "Can change host mac",
+            "content_type": 29
+        }
+    },
+    {
+        "pk": 87,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_hostmac",
+            "name": "Can delete host mac",
+            "content_type": 29
+        }
+    },
+    {
+        "pk": 88,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_image",
+            "name": "Can add image",
+            "content_type": 30
+        }
+    },
+    {
+        "pk": 89,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_image",
+            "name": "Can change image",
+            "content_type": 30
+        }
+    },
+    {
+        "pk": 90,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_image",
+            "name": "Can delete image",
+            "content_type": 30
+        }
+    },
+    {
+        "pk": 82,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "add_virtualmachine",
+            "name": "Can add virtual machine",
+            "content_type": 28
+        }
+    },
+    {
+        "pk": 83,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "change_virtualmachine",
+            "name": "Can change virtual machine",
+            "content_type": 28
+        }
+    },
+    {
+        "pk": 84,
+        "model": "auth.permission",
+        "fields": {
+            "codename": "delete_virtualmachine",
+            "name": "Can delete virtual machine",
+            "content_type": 28
+        }
+    },
+    {
+        "pk": 1,
+        "model": "auth.user",
+        "fields": {
+            "username": "cjx",
+            "first_name": "",
+            "last_name": "",
+            "is_active": true,
+            "is_superuser": true,
+            "is_staff": true,
+            "last_login": "2013-09-23T06:20:40.841Z",
+            "groups": [],
+            "user_permissions": [
+                58
+            ],
+            "password": "pbkdf2_sha256$10000$JpbFrGl5gNmT$SI2CzuD7Ydvi7gemL8p+wnvOPDKIbIfif025PR3G35g=",
+            "email": "cjx@qq.com",
+            "date_joined": "2013-09-23T06:17:24.576Z"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "account.account",
+        "fields": {
+            "timezone": "",
+            "user": 1,
+            "language": "zh-cn"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "account.emailaddress",
+        "fields": {
+            "verified": false,
+            "user": 1,
+            "primary": true,
+            "email": "cjx@qq.com"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "slice.slice",
+        "fields": {
+            "name": "cjxunigg",
+            "date_expired": "2013-10-23T07:14:08.711Z",
+            "project": 1,
+            "state": 0,
+            "owner": 1,
+            "date_created": "2013-09-23T07:14:08.711Z",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.project",
+        "fields": {
+            "owner": 1,
+            "category": 1,
+            "islands": [
+                1
+            ],
+            "name": "unittestproject",
+            "description": "ok"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "project.membership",
+        "fields": {
+            "project": 1,
+            "is_owner": true,
+            "user": 1,
+            "date_joined": "2013-09-23T06:22:56.819Z"
+        }
+    },
+    {
+        "pk": 24,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:41:50.075Z",
+            "object_repr": "Link object",
+            "object_id": "3",
+            "change_message": "",
+            "user": 1,
+            "content_type": 35
+        }
+    },
+    {
+        "pk": 23,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:41:27.624Z",
+            "object_repr": "Link object",
+            "object_id": "2",
+            "change_message": "",
+            "user": 1,
+            "content_type": 35
+        }
+    },
+    {
+        "pk": 22,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:41:11.506Z",
+            "object_repr": "Link object",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 35
+        }
+    },
+    {
+        "pk": 21,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:40:26.700Z",
+            "object_repr": "ovs4 - 1",
+            "object_id": "6",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 20,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:40:03.204Z",
+            "object_repr": "ovs3 - 1",
+            "object_id": "5",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 19,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:39:45.324Z",
+            "object_repr": "ovs2 - 2",
+            "object_id": "4",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 18,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:39:32.189Z",
+            "object_repr": "ovs2 - 1",
+            "object_id": "3",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 17,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:39:12.408Z",
+            "object_repr": "ovs1 - 2",
+            "object_id": "2",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 16,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:38:27.853Z",
+            "object_repr": "ovs1 - 1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 15,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 2,
+            "action_time": "2013-09-23T06:36:15.184Z",
+            "object_repr": "flowvisor1",
+            "object_id": "1",
+            "change_message": "\u5df2\u4fee\u6539 username \u3002",
+            "user": 1,
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 14,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:36:03.321Z",
+            "object_repr": "controller1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 32
+        }
+    },
+    {
+        "pk": 13,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:32:35.325Z",
+            "object_repr": "flowvisor1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 33
+        }
+    },
+    {
+        "pk": 12,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:31:02.425Z",
+            "object_repr": "ovs4",
+            "object_id": "4",
+            "change_message": "",
+            "user": 1,
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 11,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:30:06.027Z",
+            "object_repr": "ovs1",
+            "object_id": "3",
+            "change_message": "",
+            "user": 1,
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 10,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 2,
+            "action_time": "2013-09-23T06:29:01.611Z",
+            "object_repr": "ovs2",
+            "object_id": "1",
+            "change_message": "\u5df2\u4fee\u6539 dpid \u3002",
+            "user": 1,
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 9,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:28:55.149Z",
+            "object_repr": "ovs3",
+            "object_id": "2",
+            "change_message": "",
+            "user": 1,
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 8,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:28:10.356Z",
+            "object_repr": "ovs2",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 23
+        }
+    },
+    {
+        "pk": 7,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:26:15.744Z",
+            "object_repr": "srever3",
+            "object_id": "3",
+            "change_message": "",
+            "user": 1,
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 6,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:25:18.105Z",
+            "object_repr": "srever2",
+            "object_id": "2",
+            "change_message": "",
+            "user": 1,
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 5,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:24:36.052Z",
+            "object_repr": "server1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 4,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:22:56.823Z",
+            "object_repr": "unittestproject",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 20
+        }
+    },
+    {
+        "pk": 3,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:22:16.939Z",
+            "object_repr": "sdn",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 19
+        }
+    },
+    {
+        "pk": 2,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:21:37.139Z",
+            "object_repr": "\u672a\u6765\u7f51\u7edc",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 18
+        }
+    },
+    {
+        "pk": 1,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-23T06:21:12.656Z",
+            "object_repr": "\u5357\u4eac",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 17
+        }
+    }
+]

@@ -42,7 +42,7 @@
                 <li class="span2">
                     <a href="#tab4" class="step">
                     <span class="number">5</span>
-                    <span class="desc">服务清单</span>   
+                    <span class="desc">Slice清单</span>   
                     </a> 
                 </li>
                 <li class="span1"></li>
@@ -55,12 +55,14 @@
               <fieldset>
                 <legend>基本信息</legend>
                 <label>名称</label>
-                <input type="text" id="slice_name" name="slice_name" onblur="check_slice_form(this,1)"><span id="slice_nameInfo" style="display:inline;float:none;"></span>
+                <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                 <label>描述</label>
-                <textarea rows="8" name="slice_description" ></textarea>  
+                <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                 <label>选择节点</label>
                 {%if islands%}
-	                <select name="island_id">
+	                <select name="island_id" id="island_id">
 	                	{%for island in islands%}
 		                  <option value="{{ island.id }}">{{island.name}}</option>
 		                {%endfor%}
