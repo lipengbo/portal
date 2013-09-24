@@ -24,6 +24,9 @@ from slice.slice_exception import *
 
 from slice.models import Slice
 
+from plugins.vt.forms import VmForm
+from resources.models import Server
+
 
 def index(request):
     context = {}
@@ -78,10 +81,13 @@ def create(request, proj_id):
             if switch_ports:
                 ovs_ports.append({'switch_type': switch.type(),
                     'switch': switch, 'switch_ports': switch_ports})
+    vm_form = VmForm()
+    vm_form.fields['server'].queryset = Server.objects.filter(id=3)
     context = {}
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
+    context['vm_form'] = vm_form
     return render(request, 'slice/create_slice.html', context)
 
 

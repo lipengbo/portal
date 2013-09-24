@@ -20,12 +20,12 @@ def vm_detail(request, vmId):
 
 def create_vm(request, sliceId):
     if request.method == 'POST':
-        form = VmForm(request.POST)
-        if form.is_valid():
-            form.save()
+        vm_form = VmForm(request.POST)
+        if vm_form.is_valid():
+            vm_form.save()
     else:
-        form = VmForm()
-        form.fields['server'].queryset = Server.objects.filter(id=3)
+        vm_form = VmForm()
+        vm_form.fields['server'].queryset = Server.objects.filter(id=3)
     context = {}
-    context['form'] = form
-    return render(request, 'vt/create_vm.html', context)
+    context['vmform'] = vm_form
+    return render(request, 'slice/create_slice.html', context)
