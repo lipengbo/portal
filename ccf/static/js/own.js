@@ -71,6 +71,24 @@ $(document).ready(function() {
        $("html, body").scrollTop(0);
        var thisIndex = $(".next_btn").index(this);
        var nowIndex = thisIndex + 1;
+       if(thisIndex == 0){
+           ret = page_function0();
+           if (!ret){
+           		return;
+           }
+       }
+       if(thisIndex == 1){
+       	   page_function1();
+       }
+       if(thisIndex == 2){
+           page_function2();
+       }
+       if(thisIndex == 3){
+           page_function3();
+       }
+       if(thisIndex == 4){
+           page_function4();
+       }
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
@@ -88,7 +106,6 @@ $(document).ready(function() {
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
-    
     //通过复选框控制表单显示和隐藏
     $(".tab_checkbox").click(function(){
         if(!$(this).attr("checked")){
@@ -112,5 +129,27 @@ function check_all(obj,cName){
     for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
 }
 
-
+//slice创建页面js
+function page_function0(){
+	ret1 = check_slice_name('slice_name',2);
+	ret2 = check_slice_description('slice_description',2);
+	if (ret1 && ret2){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+function page_function1(){
+	
+}
+function page_function2(){
+	check_slice_controller('controller_type');
+}
+function page_function3(){
+	
+}
+function page_function4(){
+	
+}
    
