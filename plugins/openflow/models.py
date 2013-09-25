@@ -89,9 +89,9 @@ def update_links(sender, instance, created, **kwargs):
         target_switch = Switch.objects.get(dpid=link['dst-switch'])
         source_port, created = SwitchPort.objects.get_or_create(switch=source_switch, port=src_port)
         target_port, created = SwitchPort.objects.get_or_create(switch=target_switch, port=dst_port)
-        for slice in instance.slices.all():
-            SlicePort.objects.get_or_create(slice=slice, port=source_port)
-            SlicePort.objects.get_or_create(slice=slice, port=target_port)
+#         for slice in instance.slices.all():
+#             SlicePort.objects.get_or_create(slice=slice, port=source_port)
+#             SlicePort.objects.get_or_create(slice=slice, port=target_port)
 
         link_obj = Link(flowvisor=instance, source=source_port, target=target_port)
         link_obj.save()

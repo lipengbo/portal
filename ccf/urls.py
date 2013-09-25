@@ -33,6 +33,8 @@ urlpatterns = patterns("",
     url(r"^homepage/", TemplateView.as_view(template_name="homepage.html"), name="home"),
     url(r"^logs/", TemplateView.as_view(template_name="logs.html"), name="home"),
     url(r"^logs_handle/", TemplateView.as_view(template_name="logs_handle.html"), name="home"),
+    url(r"^member_check/", TemplateView.as_view(template_name="member_check.html"), name="home"),
+    url(r"^invite_member/", TemplateView.as_view(template_name="invite_member.html"), name="home"),
 
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 

@@ -81,7 +81,7 @@ $(document).ready(function() {
        	   page_function1();
        }
        if(thisIndex == 2){
-           page_function2();
+           //page_function2();
        }
        if(thisIndex == 3){
            page_function3();
