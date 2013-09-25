@@ -14,7 +14,6 @@
             "domain": "example.com", 
             "name": "example.com"
         }
-<<<<<<< HEAD
     },
     {
         "pk": 1,
@@ -89,7 +88,7 @@
             "username": "cjx",
             "update_time": "2013-09-23T06:25:18.104Z",
             "disk": 32,
-            "name": "srever2",
+            "name": "server2",
             "island": 1,
             "bandwidth": 32,
             "mac": "12:12:12:12:12:12",
@@ -108,7 +107,7 @@
             "username": "cjx",
             "update_time": "2013-09-23T06:26:15.743Z",
             "disk": 32,
-            "name": "srever3",
+            "name": "server3",
             "island": 1,
             "bandwidth": 32,
             "mac": "03:03:03:03:03:03",
@@ -119,7 +118,5 @@
             "os": "32",
             "cpu": "32"
         }
-=======
->>>>>>> ef5e306781f68dc9c9efb849bf045012e67e9ac8
     }
 ]
