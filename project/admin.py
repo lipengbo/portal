@@ -7,7 +7,7 @@ from resources.models import  Switch, SwitchPort, Server, VirtualSwitch
 from plugins.openflow.models import Flowvisor, Controller
 #from plugins.network.models import Network, IPAddress
 from resources.models import  Switch, SwitchPort, Server, VirtualSwitch, SliceSwitch
-from plugins.openflow.models import Flowvisor, Controller, Link
+from plugins.openflow.models import Flowvisor, Controller, Link, FlowvisorLinksMd5
 
 admin.site.register(City)
 admin.site.register(Island)
@@ -24,3 +24,4 @@ admin.site.register(Membership)
 
 admin.site.register(SliceSwitch)
 admin.site.register(Link)
+admin.site.register(FlowvisorLinksMd5)
