@@ -7,8 +7,8 @@
 
 {% block head_title %}{% trans "create project" %}{% endblock %}
 {% block breadcrumb %}
-	<a href="#">创建项目</a><span class="divider">/</span>
-	<a href="#">项目详情</a><span class="divider">/</span>
+	<a href="/project/create/">创建项目</a><span class="divider">/</span>
+	<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
 	创建Slice
 {% endblock %}
 
@@ -70,9 +70,7 @@
 	                </select>
 	             {%else%}
 	             	<select name="island_id" id="island_id">
-	                	{%for island in islands%}
-		                  <option value="no">无可选节点</option>
-		                {%endfor%}
+		                 <option value="no">无可选节点</option>
 	                </select>
 	             {%endif%}
 	             <span id="island_idInfo" style="display:inline;float:none;"></span>
@@ -80,7 +78,7 @@
                <div class="form-actions">
                   <div class="row-fluid">
                     <div class="span3"></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block">返 回</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-step1 btn-info next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
@@ -147,7 +145,8 @@
                   <option value="16">16</option>
                   <option value="32">32</option>-->
                   <option value="64">64</option>
-                </select>   
+                </select>
+                <span id="nw_numInfo" style="display:inline;float:none;"></span>
                 <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
               </fieldset>
               <div class="form-actions">
@@ -169,9 +168,9 @@
                             <td width="71">网络地址：</td>
                             <td>
                             	<span id="slice_nw"></span>
-                            	<input type="text" value="" name="slice_nw" id="old_slice_nw" style="display:none"/>
+                            	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
-                            	<input type="text" value="" id="old_slice_name" style="display:none"/>
+                            	<input type="text" value="cjx" id="old_nw_owner" style="display:none"/>
                             </td>
                             <td><span class="help-inline">网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器</span></td>
                         </tr>

@@ -647,6 +647,7 @@ function init(){
 	host_vss = new Array();
 	
 	var tempLinks = new Array();
+	var srcLinks = new Array();
 	var sign = new Array();
 	//获取数据库中该slice的拓扑信息	
 	var topology_url = "http://" + window.location.host + "/slice/topology/"+slice_id+"/";
@@ -658,7 +659,7 @@ function init(){
 		{
 			responseTxt=strToJson(responseTxt);
 			switches = responseTxt.switches;
-			links = responseTxt.links;
+			srcLinks = responseTxt.links;
 			normals = responseTxt.normals;
 			specials = responseTxt.specials;
 			//获取数据库中该slice的交换机信息
@@ -666,8 +667,8 @@ function init(){
 				switches[key] = new Array(switches[key].dpid, 0, 0);
 			}
 			//获取数据库中该slice的交换机的连接信息
-			for(var key=0; key< links.length; key++){
-				tempLinks[key] = new Array(links[key].src_switch, links[key].dst_switch, 0, 0, 0 ,0);
+			for(var key=0; key< srcLinks.length; key++){
+				tempLinks[key] = new Array(srcLinks[key].src_switch, srcLinks[key].dst_switch, 0, 0, 0 ,0);
 				sign[key] = 0;
 			}
 			// 初始化links数组，使其连接无重复

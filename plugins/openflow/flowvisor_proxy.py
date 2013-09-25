@@ -95,6 +95,7 @@ def makeMatch(matchStr):
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
     try:
+        print data
         print flowvisor_url
         print flowvisor_ps
         #url = "https://192.168.28.141:8181"

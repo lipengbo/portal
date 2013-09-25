@@ -78,7 +78,10 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 1){
-       	   page_function1();
+       	   ret = page_function1();
+       	   if (!ret){
+           		return;
+           }
        }
        if(thisIndex == 2){
            ret = page_function2();
@@ -136,7 +139,8 @@ function check_all(obj,cName){
 function page_function0(){
 	ret1 = check_slice_name('slice_name',2);
 	ret2 = check_slice_description('slice_description',2);
-	if (ret1 && ret2){
+	ret3 = check_island_id('island_id')
+	if (ret1 && ret2 && ret3){
 		return true;
 	}
 	else{
@@ -144,60 +148,12 @@ function page_function0(){
 	}
 }
 function page_function1(){
-	var slice_name = document.getElementById("slice_name");
-	var old_slice_name = document.getElementById("old_slice_name");
-	var nw_num = document.getElementById("nw_num");
-	var old_nw_num = document.getElementById("old_nw_num");
-	var slice_nw = document.getElementById("slice_nw");
-	var old_slice_nw = document.getElementById("old_slice_nw");
-	var slicename = slice_name.value;
-	var old_slicename = old_slice_name.value;
-	var nw_num_val = nw_num.options[nw_num.selectedIndex].value;
-	var old_nw_num_val = old_nw_num.value;
-	if((slicename!=old_slicename) || (nw_num_val!=old_nw_num_val)){
-		//alert(1);
-		if(slice_nw.innerHTML != ''){
-			alert(2);
-			check_url = "http://" + window.location.host + "/slice/delete_nw/"+old_slicename+"/";
-			//alert(check_url)
-		    $.ajax({
-		        type: "GET",
-		        url: check_url,
-		        dataType: "json",
-		        cache: false,
-		        async: false,  
-		        success: function(data) {
-		        	if (data.value == 1)
-		             {
-		             	slice_nw.innerHTML = '';
-		             	old_slice_nw.value = '';
-		             } 
-		        }
-		    });
-		}
-		check_url = "http://" + window.location.host + "/slice/create_nw/"+slicename+"/";
-		//alert(check_url)
-	    $.ajax({
-	        type: "GET",
-	        url: check_url,
-	        dataType: "json",
-	        cache: false,
-	        async: false,  
-	        success: function(data) {
-	        	if (data.value == 0)
-	             {
-	             	slice_nw.innerHTML = '';
-	             	old_slice_nw.value = '';
-	             } 
-	             else
-	             {
-	             	slice_nw.innerHTML = data.value;
-	             	old_slice_nw.value = data.value;
-	             }
-	        }
-	    });
-	    old_slice_name.value = slicename;
-	    old_nw_num.value = nw_num_val;
+	ret1 = check_nw_num();
+	if (ret1){
+		return true;
+	}
+	else{
+		return false;
 	}
 }
 function page_function2(){
@@ -258,8 +214,8 @@ function page_function3(){
 		}   
 	}
 	$("div#list_controller").append(str); 
+	
 }
 function page_function4(){
 	
 }
-   
