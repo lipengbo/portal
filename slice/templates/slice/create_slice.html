@@ -293,35 +293,39 @@
                         <tr>
                             <td width="100">名称</td>
                             <td>
-                                {{ vmform.name }} {{form.name.errors}}
+				<input id="id_name" onblur="check_vm_name('id_name')" type="text" name="name" maxlength="20" />
+				<span id="id_nameInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>模板类型</td>
                             <td>
-                                {{ vmform.flavor }} {{form.flavor.errors}}
+                                {{ vm_form.flavor }} {{vm_form.flavor.errors}}
+				<span id="id_flavorInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
                         </tr>
                         <tr>
                             <td>镜像类型</td>
                             <td>
-                                {{ vmform.image }} {{form.image.errors}}
+                                {{ vm_form.image }} {{vm_form.image.errors}}
+				<span id="id_imageInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>关联网络节点</td>
                             <td>
-                                {{ vmform.server }} {{form.server.errors}}
+                                {{ vm_form.server }} {{vm_form.server.errors}}
+				<span id="id_serverInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
                         </tr>
                     </tbody>
                  </table>
                  <label class="checkbox">
-                                {{ vmform.enable_dhcp }} {{form.enable_dhcp.errors}}
+                                {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                                      是否启动DHCP
                  </label>
                  <div class="operate_btn">
@@ -334,7 +338,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn" onclick="fetch_vminfo()">下一步</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -427,7 +431,7 @@
               </fieldset>
               <fieldset>
                  <legend>Slice虚拟机列表</legend>
-                 <table class="table table-striped table-hover" name="vm_list_table">
+                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>名称</th>
@@ -437,8 +441,8 @@
                             <th>是否启动DHCP</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody id="id_vm_tbody">
+ <!--                       <tr>
                             <td>VM1</td>
                             <td>small</td>
                             <td>ubuntu</td>
@@ -451,7 +455,7 @@
                             <td>ubuntu</td>
                             <td>DPID</td>
                             <td>否</td>
-                        </tr>
+                        </tr>-->
                     </tbody>
                  </table>   
               </fieldset>
@@ -545,4 +549,5 @@
  	</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
 {% endblock %}
