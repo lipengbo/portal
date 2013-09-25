@@ -5,10 +5,12 @@ from slice.slice_exception import DbError, IslandError, NameExistError
 from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
     flowvisor_update_slice_status, flowvisor_add_slice
-from plugins.openflow.flowspace_api import matches_to_arg_match
+from plugins.openflow.flowspace_api import matches_to_arg_match,\
+    flowspace_nw_add, flowspace_nw_del
 from plugins.openflow.controller_api import slice_change_controller,\
     slice_add_controller, delete_controller, create_add_controller
 from resources.ovs_api import slice_add_ovs_ports
+from plugins.ipam.models import IPUsage
 from django.db import transaction
 import time
 import datetime
@@ -24,6 +26,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports, contr
         slice_add_ovs_ports(slice_obj, ovs_ports)
         create_add_controller(slice_obj, controller_info)
         flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
+        flowspace_nw_add(slice_obj, [], slice_nw)
 #         创建并添加网段
 #         创建并添加网关
 #         创建并添加dhcp
@@ -106,6 +109,9 @@ def delete_slice_api(slice_obj):
 #             删除dhcp
 #             删除网关
 #             删除slice网络地址
+            del_nw = slice_obj.get_nw()
+            flowspace_nw_del(slice_obj, del_nw)
+            IPUsage.objects.delete_subnet(slice_obj.name)
 #             删除底层slice
             flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
 #             删除控制器

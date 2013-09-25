@@ -137,7 +137,7 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3>Slice基本信息编辑</h3>      
             </div>
-            <form class="" action="/slice/edit_description/{{ slice_obj.id }}/" method="post" accept-charset="utf-8">{% csrf_token %}
+            <form class="" action="/slice/edit_description/{{ slice_obj.id }}/" method="post" accept-charset="utf-8" onsubmit="return check_slice_description('slice_description',1)">{% csrf_token %}
             	<div class="modal-body">
                   <table class="table">
                       <tbody>
@@ -147,7 +147,10 @@
                           </tr>
                           <tr>
                               <td class="v_top text_r">描述</td>
-                              <td><textarea rows="3" name="slice_description"></textarea></td>
+                              <td>
+                              		<textarea rows="3" name="slice_description" id="slice_description">{{slice_obj.description}}</textarea>
+                              		<span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                              </td>
                           </tr>
                       </tbody>
                   </table>
@@ -165,24 +168,24 @@
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3>SLICE控制器编辑</h3>      
             </div>
-            <form class="" action="/slice/edit_controller/{{ slice_obj.id }}/" method="post" accept-charset="utf-8">{% csrf_token %}
+            <form class="" action="/slice/edit_controller/{{ slice_obj.id }}/" method="post" accept-charset="utf-8" onsubmit="return check_slice_controller('controller_type')">{% csrf_token %}
             	<div class="modal-body">
                   <table class="table">
                     <tbody>
                         <tr>
-                            <td width="180">
+                            <td width="100">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
-                                  创建控制器
+                                  默认创建
                                 </label>
                             </td>
                             <td width="70">控制器类型</td>
                             <td width="290">
-                                <select name="controller_sys">
+                                <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
-                                  <option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
-                                  <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>
+                                  <!--<option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
+                                  <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>-->
                                 </select>
                             </td>
                             <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
@@ -192,24 +195,26 @@
                                 <label class="radio tab_radio2">
                                   <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined"
                                   {%if controller.name == "user_define"%}checked{%else%}{%endif%}>
-                                  自定义控制器
+                                  自定义
                                 </label>
                             </td>
                             <td>控制器IP</td> 
                             <td>
                             	{%if controller.name == "user_define"%}
-                                <input type="text" name="controller_ip" value={{controller.ip}}>
+                                <input type="text" name="controller_ip" id="controller_ip" value={{controller.ip}} onblur="check_ip('controller_ip',1)">
                             	{%else%}
-                            	<input type="text" name="controller_ip" disabled>
+                            	<input type="text" name="controller_ip" id="controller_ip" disabled onblur="check_ip('controller_ip',1)">
                             	{%endif%}
+                            	<span id="controller_ipInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td width="70">控制器端口</td>
                             <td>
                                 {%if controller.name == "user_define"%}
-                                <input type="text" name="controller_port" value={{controller.port}}>
+                                <input type="text" name="controller_port" id="controller_port" value={{controller.port}} onblur="check_port('controller_port',1)">
                             	{%else%}
-                            	<input type="text" name="controller_port" disabled>
+                            	<input type="text" name="controller_port" id="controller_port" disabled onblur="check_port('controller_port',1)">
                             	{%endif%}
+                            	<span id="controller_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -225,4 +230,5 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
+<script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 {% endblock %}

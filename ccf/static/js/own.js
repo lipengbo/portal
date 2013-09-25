@@ -81,7 +81,10 @@ $(document).ready(function() {
        	   page_function1();
        }
        if(thisIndex == 2){
-           //page_function2();
+           ret = page_function2();
+           if (!ret){
+           		return;
+           }
        }
        if(thisIndex == 3){
            page_function3();
@@ -141,13 +144,120 @@ function page_function0(){
 	}
 }
 function page_function1(){
-	
+	var slice_name = document.getElementById("slice_name");
+	var old_slice_name = document.getElementById("old_slice_name");
+	var nw_num = document.getElementById("nw_num");
+	var old_nw_num = document.getElementById("old_nw_num");
+	var slice_nw = document.getElementById("slice_nw");
+	var old_slice_nw = document.getElementById("old_slice_nw");
+	var slicename = slice_name.value;
+	var old_slicename = old_slice_name.value;
+	var nw_num_val = nw_num.options[nw_num.selectedIndex].value;
+	var old_nw_num_val = old_nw_num.value;
+	if((slicename!=old_slicename) || (nw_num_val!=old_nw_num_val)){
+		alert(1);
+		if(slice_nw.innerHTML != ''){
+			alert(2);
+			check_url = "http://" + window.location.host + "/slice/delete_nw/"+old_slicename+"/";
+			//alert(check_url)
+		    $.ajax({
+		        type: "GET",
+		        url: check_url,
+		        dataType: "json",
+		        cache: false,
+		        async: false,  
+		        success: function(data) {
+		        	if (data.value == 1)
+		             {
+		             	slice_nw.innerHTML = '';
+		             	old_slice_nw.value = '';
+		             } 
+		        }
+		    });
+		}
+		check_url = "http://" + window.location.host + "/slice/create_nw/"+slicename+"/";
+		//alert(check_url)
+	    $.ajax({
+	        type: "GET",
+	        url: check_url,
+	        dataType: "json",
+	        cache: false,
+	        async: false,  
+	        success: function(data) {
+	        	if (data.value == 0)
+	             {
+	             	slice_nw.innerHTML = '';
+	             	old_slice_nw.value = '';
+	             } 
+	             else
+	             {
+	             	slice_nw.innerHTML = data.value;
+	             	old_slice_nw.value = data.value;
+	             }
+	        }
+	    });
+	    old_slice_name.value = slicename;
+	    old_nw_num.value = nw_num_val;
+	}
 }
 function page_function2(){
-	check_slice_controller('controller_type');
+	ret1 = check_slice_controller('controller_type');
+	if (ret1){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 function page_function3(){
+	var slice_nw = document.getElementById("slice_nw");
+	var list_slice_nw = document.getElementById("list_slice_nw");
+	list_slice_nw.innerHTML = slice_nw.innerHTML;
 	
+	var controller_type_obj = document.getElementsByName("controller_type");
+	$("div#list_controller").empty();
+	for(var i=0;i<controller_type_obj.length;i++){  
+		if(controller_type_obj[i].checked){  
+			if(controller_type_obj[i].value=="default_create"){  
+				var controller_sys_obj = document.getElementById("controller_sys");
+				var controller_sys = controller_sys_obj.options[controller_sys_obj.selectedIndex].value;
+				var str = "";
+				str = str + "<table class=\"table\">"
+			        + "<tbody>"
+			        + "<tr>"
+			        + "<td width=\"100\">默认创建</td>"
+			        + "<td></td>"
+			        + "</tr>"
+			        + "<tr>"
+			        + "<td width=\"100\">控制器类型：</td>"
+			        + "<td>" + controller_sys + "</td>"
+			        + "</tr>"                     
+			        + "</tbody>"
+			        + "</table>";
+			    
+			}  
+			if(controller_type_obj[i].value=="user_defined"){
+				var controller_ip_obj = document.getElementById("controller_ip");
+				var controller_port_obj = document.getElementById("controller_port");
+				var controller_ip = controller_ip_obj.value;
+				var controller_port = controller_port_obj.value;
+				var str = "";
+				str = str + "<table class=\"table\">"
+			        + "<tbody>"
+			        + "<tr>"
+			        + "<td width=\"100\">自定义</td>"
+			        + "<td></td>"
+			        + "</tr>"
+			        + "<tr>"
+			        + "<td width=\"100\">控制器IP端口：</td>"
+			        + "<td>" + controller_ip + ":" + controller_port + "</td>"
+			        + "</tr>"                     
+			        + "</tbody>"
+			        + "</table>";        
+	  		}  
+		}   
+	}
+	$("div#list_controller").append(str); 
 }
 function page_function4(){
 	

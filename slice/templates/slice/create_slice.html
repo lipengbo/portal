@@ -1,6 +1,7 @@
 {% extends "site_base.html" %}
 
 {% load i18n %}
+{% load crispy_forms_tags %}
 {% load url from future %}
 {% load staticfiles %}
 
@@ -136,10 +137,10 @@
                  <legend>Slice网络地址</legend>
                  <label>IP数量</label>
                 <select name="nw_num" id="nw_num">
-                  <option value="4">4</option>
+                  <!--<option value="4">4</option>
                   <option value="8">8</option>
                   <option value="16">16</option>
-                  <option value="32">32</option>
+                  <option value="32">32</option>-->
                   <option value="64">64</option>
                 </select>   
                 <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
@@ -161,7 +162,12 @@
                     <tbody>
                         <tr>
                             <td width="71">网络地址：</td>
-                            <td id="nw">192.168.10.0/28</td>
+                            <td>
+                            	<span id="slice_nw"></span>
+                            	<input type="text" value="" name="slice_nw" id="old_slice_nw" style="display:none"/>
+                            	<input type="text" value="" id="old_nw_num" style="display:none"/>
+                            	<input type="text" value="" id="old_slice_name" style="display:none"/>
+                            </td>
                             <td><span class="help-inline">网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器</span></td>
                         </tr>
                     </tbody>
@@ -172,7 +178,7 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="180">
+                            <td width="150">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
                                   创建控制器
@@ -180,10 +186,10 @@
                             </td>
                             <td width="70">控制器类型</td>
                             <td width="290">
-                                <select name="controller_sys">
+                                <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
-                                  <option value="pox">pox</option>
-                                  <option value="nox">nox</option>
+                                  <!--<option value="pox">pox</option>
+                                  <option value="nox">nox</option>-->
                                 </select>
                             </td>
                             <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
@@ -197,11 +203,13 @@
                             </td>
                             <td>控制器IP</td> 
                             <td>
-                                <input type="text" name="controller_ip" disabled>
+                                <input type="text" name="controller_ip" id="controller_ip" disabled onblur="check_ip('controller_ip',1)">
+                                <span id="controller_ipInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td width="70">控制器端口</td>
                             <td>
-                                <input type="text" name="controller_port" disabled>
+                                <input type="text" name="controller_port" id="controller_port" disabled onblur="check_port('controller_port',1)">
+                                <span id="controller_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -339,25 +347,14 @@
                     <tbody>
                         <tr>
                             <td width="70">网络地址：</td>
-                            <td>192.168.5.0/24</td>
+                            <td><span id="list_slice_nw"></span></td>
                         </tr>
                     </tbody>
                  </table>   
               </fieldset>
               <fieldset class="base_info">
                  <legend>Slice控制器</legend>
-                 <table class="table">
-                    <tbody>
-                        <tr>
-                            <td width="100">控制器IP端口：</td>
-                            <td>192.168.5.122:6633</td>
-                        </tr>
-                        <tr>
-                            <td width="100">控制器类型：</td>
-                            <td>floodlight</td>
-                        </tr>                       
-                    </tbody>
-                 </table>   
+                 <div id="list_controller"></div>
               </fieldset>
               <fieldset class="base_info">
                  <legend>Slice虚拟网关</legend>

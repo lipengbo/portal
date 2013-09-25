@@ -34,7 +34,7 @@ function check_slice_name(obj_id,flag){
 	}
 	else
 	{
-		showInfo(info," * 该项为必填项","red")
+		showInfo(info," * 必填","red")
 		return false;
 	}	
 }
@@ -47,14 +47,13 @@ function check_slice_description(obj_id,flag){
 		return true;
 	}
 	else{
-		showInfo(info," * 该项为必填项","red")
+		showInfo(info," * 必填","red")
 		return false;
 	}
 }
 
 function check_slice_controller(obj_name){
 	var objs = document.getElementsByName(obj_name);
-	alert(objs.length);
 	for(var i=0;i<objs.length;i++){  
 		if(objs[i].checked){  
 			if(objs[i].value=="default_create"){  
@@ -63,7 +62,11 @@ function check_slice_controller(obj_name){
 			if(objs[i].value=="user_defined"){
 				ret1 = check_ip("controller_ip",1);
 				ret2 = check_port("controller_port",1);
-				if(ret1){
+				if (ret1 && ret2){
+					return true;
+				}
+				else{
+					return false;
 				}
 	  		}  
 		}   
@@ -75,25 +78,26 @@ function check_ip(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info");
 	var reg=/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;//正则表达式
-	
-	if(flag){
-		if(obj.value.length > 0){
-			if(reg.test(obj.value)){
-				if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
-					showInfo(info,"√","green")
-					return true;
-				}
+
+	if(obj.value.length > 0){
+		if(reg.test(obj.value)){
+			if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
+				showInfo(info,"√","green")
+				return true;
 			}
-			showInfo(info,"IP地址格式错误","red")		
+		}
+		showInfo(info," * 格式错误","red")		
+		return false;
+	}
+	else{
+		if(flag){
+			showInfo(info," * 必填","red")
 			return false;
 		}
 		else{
 			return true;
 		}
-	}
-	else{
-		showInfo(info,"请填写IP地址","blue")
-	}
+	}	
 }
 
 //校验端口值
@@ -101,23 +105,24 @@ function check_port(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info");
 	var reg = /^[0-9]*$/;
-	if (flag){
-		if(obj.value.length > 0){
-			if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value)){
-				showInfo(info,"（0-65535）之间","red")
-				return false;
-			}
-			else{
-				showInfo(info,"√","green")
-				return true;
-			}	
+	if(obj.value.length > 0){
+		if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value)){
+			showInfo(info," * （0-65535）","red")
+			return false;
+		}
+		else{
+			showInfo(info,"√","green")
+			return true;
+		}	
+	}
+	else{
+		if(flag){
+			showInfo(info," * 必填","red")
+			return false;
 		}
 		else{
 			return true;
 		}
-	}
-	else{
-		showInfo(info,"请填写端口","blue");
 	}
 }
 
