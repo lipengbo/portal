@@ -376,15 +376,12 @@ function init_svg () {
                     }
                     var content = "";
                     $.each(origin_data.ports, function(index, port){
-                        var state = port.state == 1 ? "活跃" : "非活跃";
                         content +=  
                             "<label><input class='checkbox' type='checkbox' ";
-                        if (d.id in parent.selected_ports) {
-                            if (parent.selected_ports[d.id].indexOf(port.portNumber) >= 0) {
-                                content += "checked ";
-                            }
+                        if (d.db_id in parent.selected_ports) {
+                            content += "checked ";
                         }
-                        content += "value='" + port.portNumber + "'/> " + 
+                        content += "value='" + port.db_id+ "'/> " + 
                             port.name + "(" + port.portNumber+ ")" + 
                             "</label>";
                     });
@@ -394,9 +391,9 @@ function init_svg () {
                         
                         $.each(inputs, function (index, input) {
                             if ($(input).attr('checked')) {
-                                parent.add_port(d.island_id, d.id, parseInt($(input).val()), false);
+                                parent.add_port($(input).val(), false);
                             } else {
-                                parent.add_port(d.island_id, d.id, parseInt($(input).val()), true);
+                                parent.add_port($(input).val(), true);
                             }
                         });
 

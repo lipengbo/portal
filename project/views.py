@@ -166,7 +166,7 @@ def switch_proxy(request, host, port):
         ports = switch.switchport_set.all()
         port_data = []
         for port in ports:
-            port_data.append({"name": port.name, "portNumber": str(port.port)})
+            port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
         switch_data.append({"dpid": switch.dpid, "ports": port_data})
 
     data = json.dumps(switch_data)
