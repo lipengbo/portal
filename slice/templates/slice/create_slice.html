@@ -69,8 +69,13 @@
 		                {%endfor%}
 	                </select>
 	             {%else%}
-	             *无可选节点资源！无法创建slice！
-	             {%endif%}     
+	             	<select name="island_id" id="island_id">
+	                	{%for island in islands%}
+		                  <option value="no">无可选节点</option>
+		                {%endfor%}
+	                </select>
+	             {%endif%}
+	             <span id="island_idInfo" style="display:inline;float:none;"></span>
               </fieldset>
                <div class="form-actions">
                   <div class="row-fluid">

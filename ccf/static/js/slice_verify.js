@@ -52,6 +52,19 @@ function check_slice_description(obj_id,flag){
 	}
 }
 
+function check_island_id(){
+	var obj = document.getElementById("island_id");
+	var info = document.getElementById("island_idInfo"); 
+	if(obj.value.length > 0){
+		showInfo(info,"√","green")
+		return true;
+	}
+	else{
+		showInfo(info," * 必填","red")
+		return false;
+	}
+}
+
 function check_slice_controller(obj_name){
 	var objs = document.getElementsByName(obj_name);
 	for(var i=0;i<objs.length;i++){  

@@ -155,7 +155,7 @@ function page_function1(){
 	var nw_num_val = nw_num.options[nw_num.selectedIndex].value;
 	var old_nw_num_val = old_nw_num.value;
 	if((slicename!=old_slicename) || (nw_num_val!=old_nw_num_val)){
-		alert(1);
+		//alert(1);
 		if(slice_nw.innerHTML != ''){
 			alert(2);
 			check_url = "http://" + window.location.host + "/slice/delete_nw/"+old_slicename+"/";
