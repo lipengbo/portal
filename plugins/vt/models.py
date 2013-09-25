@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-from resources.models import ComputeResource, Server
+from resources.models import ComputeResource, Server, IslandResource
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
@@ -31,7 +31,7 @@ class Flavor(models.Model):
         return self.name
 
 
-class VirtualMachine(ComputeResource):
+class VirtualMachine(ComputeResource, IslandResource):
     uuid = models.CharField(max_length=20, null=True, unique=True)
     ip = models.ForeignKey(IPUsage)
     mac = models.CharField(max_length=20, null=True)
