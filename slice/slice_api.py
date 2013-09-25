@@ -209,45 +209,54 @@ def get_slice_topology(slice_obj):
     """
     LOG.debug('get_slice_topology')
 #     交换机
-    switches = []
-    switch_dpids = []
-    switch_ports = slice_obj.get_switch_ports()
-    for switch_port in switch_ports:
-        switch_dpids.append(switch_port.switch.dpid)
-    switch_dpids = list(set(switch_dpids))
-    for switch_dpid in switch_dpids:
-        switch = {'dpid': switch_dpid}
-        switches.append(switch)
-#     链接
-    links = []
-    flowvisor = slice_obj.get_flowvisor()
-    if flowvisor:
-        link_objs = flowvisor.link_set.filter(
-            source__in=switch_ports, target__in=switch_ports)
-    for link_obj in link_objs:
-        link = {'src_switch': link_obj.source.switch.dpid,
-                'dst_switch': link_obj.target.switch.dpid}
-        links.append(link)
-#     虚拟机
-    specials = []
-    normals = []
-    servers = []
-    virtual_switches = slice_obj.get_virtual_switches()
-    for virtual_switch in virtual_switches:
-        servers.append(virtual_switch.server)
-    vms = slice_obj.get_vms()
-    for vm in vms:
-        virtual_switch = vm.server.get_link_vs()
-        if virtual_switch:
-            if vm.state == 1:
-                host_status = 1
-            else:
-                host_status = 0
-            vm_info = {'macAddress': vm.ip, 'switchDPID': virtual_switch.dpid,
-                        'hostid': vm.id, 'hostStatus': host_status}
-            normals.append(vm_info)
-    topology = {'switches': switches, 'links': links,
-                'normals': normals, 'specials': specials}
+    try:
+        switches = []
+        switch_dpids = []
+        switch_ports = slice_obj.get_switch_ports()
+        for switch_port in switch_ports:
+            switch_dpids.append(switch_port.switch.dpid)
+        switch_dpids = list(set(switch_dpids))
+        for switch_dpid in switch_dpids:
+            switch = {'dpid': switch_dpid}
+            switches.append(switch)
+        print 1
+    #     链接
+        links = []
+        flowvisor = slice_obj.get_flowvisor()
+        if flowvisor:
+            link_objs = flowvisor.link_set.filter(
+                source__in=switch_ports, target__in=switch_ports)
+        for link_obj in link_objs:
+            link = {'src_switch': link_obj.source.switch.dpid,
+                    'dst_switch': link_obj.target.switch.dpid}
+            links.append(link)
+        print 2
+    #     虚拟机
+        specials = []
+        normals = []
+        servers = []
+        virtual_switches = slice_obj.get_virtual_switches()
+        print 3
+        for virtual_switch in virtual_switches:
+            servers.append(virtual_switch.server)
+        print 4
+        vms = slice_obj.get_vms()
+        for vm in vms:
+            virtual_switch = vm.server.get_link_vs()
+            if virtual_switch:
+                if vm.state == 1:
+                    host_status = 1
+                else:
+                    host_status = 0
+                vm_info = {'macAddress': vm.ip, 'switchDPID': virtual_switch.dpid,
+                            'hostid': vm.id, 'hostStatus': host_status}
+                normals.append(vm_info)
+        print 5
+        topology = {'switches': switches, 'links': links,
+                    'normals': normals, 'specials': specials}
+    except Exception, ex:
+        print '****************************************he'
+        print ex
     return topology
 
 

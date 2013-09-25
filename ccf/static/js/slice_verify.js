@@ -184,8 +184,8 @@ function check_nw_num(){
 	            	//alert(2);
 	            	if (data.value != 1){
 	            		//alert(3);
-	        			slice_nw.innerHTML = data.value;
-		             	old_slice_nw.value = data.value;
+	        			slice_nw_obj.innerHTML = data.value;
+		             	old_slice_nw_obj.value = data.value;
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;

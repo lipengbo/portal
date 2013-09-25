@@ -58,7 +58,9 @@ def create(request, proj_id):
             for switch_port_id in switch_port_ids:
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
-            slice_nw = request.POST.get("slice_nw")
+            slice_nw = request.POST.get("old_slice_nw")
+            print "*************************************"
+            print slice_nw
             slice_obj = create_slice_step(project, slice_name,
                 slice_description, island, user, ovs_ports, controller_info, slice_nw)
         except DbError, ex:
@@ -170,6 +172,8 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
+    print "**********************************************ok"
+    print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
