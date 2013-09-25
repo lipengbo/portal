@@ -5,7 +5,12 @@
 {% load staticfiles %}
 
 {% block head_title %}{% trans "create project" %}{% endblock %}
-{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span><a href="#">创建Slice</a><span class="divider">/</span>Slice详情{% endblock %}
+{% block breadcrumb %}
+	<a href="/project/create/">创建项目</a><span class="divider">/</span>
+	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
+	<a href="/slice/create/{{ slice_obj.project.id }}/">创建Slice</a><span class="divider">/</span>
+	Slice详情
+{% endblock %}
 
 {% block body %}
 		<div class="fill_form form-wizard">

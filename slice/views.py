@@ -83,6 +83,7 @@ def create(request, proj_id):
                 ovs_ports.append({'switch_type': switch.type(),
                     'switch': switch, 'switch_ports': switch_ports})
     context = {}
+    context['project'] = project
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
@@ -172,8 +173,6 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
-    print "**********************************************ok"
-    print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 

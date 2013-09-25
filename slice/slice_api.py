@@ -147,8 +147,7 @@ def start_slice_api(slice_obj):
                 try:
                     update_slice_virtual_network(slice_obj)
                 except:
-                    stop_slice_api(slice_obj)
-                    raise
+                    pass
 
 
 @transaction.commit_on_success
@@ -219,7 +218,6 @@ def get_slice_topology(slice_obj):
         for switch_dpid in switch_dpids:
             switch = {'dpid': switch_dpid}
             switches.append(switch)
-        print 1
     #     链接
         links = []
         flowvisor = slice_obj.get_flowvisor()
@@ -230,16 +228,13 @@ def get_slice_topology(slice_obj):
             link = {'src_switch': link_obj.source.switch.dpid,
                     'dst_switch': link_obj.target.switch.dpid}
             links.append(link)
-        print 2
     #     虚拟机
         specials = []
         normals = []
         servers = []
         virtual_switches = slice_obj.get_virtual_switches()
-        print 3
         for virtual_switch in virtual_switches:
             servers.append(virtual_switch.server)
-        print 4
         vms = slice_obj.get_vms()
         for vm in vms:
             virtual_switch = vm.server.get_link_vs()
@@ -251,13 +246,12 @@ def get_slice_topology(slice_obj):
                 vm_info = {'macAddress': vm.ip, 'switchDPID': virtual_switch.dpid,
                             'hostid': vm.id, 'hostStatus': host_status}
                 normals.append(vm_info)
-        print 5
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials}
     except Exception, ex:
-        print '****************************************he'
-        print ex
-    return topology
+        return []
+    else:
+        return topology
 
 
 def get_slice_resource(slice_obj):
