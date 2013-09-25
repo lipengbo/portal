@@ -60,7 +60,7 @@ class IslandResource(Resource):
         abstract = True
 
 
-class ComputeResource(Resource):
+class ComputeResource(IslandResource):
     state = models.IntegerField(null=True)
     cpu = models.CharField(max_length=256, null=True)
     mem = models.IntegerField(null=True)
@@ -175,10 +175,12 @@ class SwitchPort(Resource):
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     switch = models.ForeignKey(Switch)
     port = models.IntegerField()
+    #name = models.CharField(max_length=32)
     slices = models.ManyToManyField(Slice, through="SlicePort", blank=True)
 
     def __unicode__(self):
         return '{} - {}'.format(self.switch, self.port)
+
     def on_add_into_slice(self, slice_obj):
         SlicePort.objects.get_or_create(
             switch_port=self, slice=slice_obj)

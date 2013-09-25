@@ -31,7 +31,7 @@ class Flavor(models.Model):
         return self.name
 
 
-class VirtualMachine(ComputeResource, IslandResource):
+class VirtualMachine(ComputeResource):
     uuid = models.CharField(max_length=20, null=True, unique=True)
     ip = models.ForeignKey(IPUsage)
     mac = models.CharField(max_length=20, null=True)
