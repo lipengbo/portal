@@ -376,9 +376,6 @@ function init_svg () {
                     }
                     var content = "";
                     $.each(origin_data.ports, function(index, port){
-                        if (port.name.indexOf('eth') < 0) {
-                            return;
-                        }
                         var state = port.state == 1 ? "活跃" : "非活跃";
                         content +=  
                             "<label><input class='checkbox' type='checkbox' ";
