@@ -22,6 +22,7 @@ class IPManager(models.Manager):
                 new_subnet_addr = unused_subnets[0]
                 new_subnet_addr.owner = owner
                 new_subnet_addr.is_used = True
+                new_subnet_addr.save()
                 return new_subnet_addr.netaddr
             else:
                 new_subnet_addr = all_subnets[0].get_next()

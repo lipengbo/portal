@@ -19,13 +19,15 @@ import logging
 LOG = logging.getLogger("ccf")
 
 
-def create_slice_step(project, name, description, island, user, ovs_ports, controller_info):
+def create_slice_step(project, name, description, island, user, ovs_ports, controller_info, slice_nw):
     slice_obj = None
     try:
         slice_obj = create_slice_api(project, name, description, island, user)
         slice_add_ovs_ports(slice_obj, ovs_ports)
         create_add_controller(slice_obj, controller_info)
         flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
+        print "8888888888888888888888888888888888888888888888888"
+        print slice_nw
         flowspace_nw_add(slice_obj, [], slice_nw)
 #         创建并添加网段
 #         创建并添加网关
