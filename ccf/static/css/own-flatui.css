@@ -3867,7 +3867,10 @@ body.vjs-full-window {
 }
 .login_bg {
   background: #c9d7e7;
-  min-width: 1024px;
+  min-width: 980px;
+}
+.login_bg .main {
+  padding-top: 0px;
 }
 .login_bg .login_logo {
   margin-top: 20px;
@@ -3886,6 +3889,13 @@ body.vjs-full-window {
 .login_bg .login-form input {
   height: auto;
   width: 299px;
+}
+.login_bg .login-field {
+  margin-bottom: 0 !important;
+}
+.login_bg .btn_register {
+  padding-left: 50px;
+  padding-right: 50px;
 }
 .pop_form input {
   padding: 5px;
