@@ -41,16 +41,16 @@ force = d3.layout.force()
             }
             return distance;
         })
-                     .charge(function(d){
-                         var charge = -1500;
-                         if(d.group == 1) {
-                            chrage = -1500;
-                         }
-                         if (d.type) {
-                            charge = -20;
-                         }
-                         return charge})
-                     .size([width, height]);
+         .charge(function(d){
+             var charge = -1500;
+             if(d.group == 1) {
+                chrage = -1500;
+             }
+             if (d.type) {
+                charge = -20;
+             }
+             return charge})
+         .size([width, height]);
 svg_obj = d3.select("#topology-svg").append("svg")
             .attr("width", width)
             .attr("height", height);
@@ -376,48 +376,29 @@ function init_svg () {
                     }
                     var content = "";
                     $.each(origin_data.ports, function(index, port){
-                        if (port.name.indexOf('eth') < 0) {
-                            return;
-                        }
-                        var state = port.state == 1 ? "活跃" : "非活跃";
                         content +=  
                             "<label><input class='checkbox' type='checkbox' ";
-                        if (d.id in parent.selected_ports) {
-                            if (parent.selected_ports[d.id].indexOf(port.portNumber) >= 0) {
-                                content += "checked ";
-                            }
+                        if (d.db_id in parent.selected_ports) {
+                            content += "checked ";
                         }
-                        content += "value='" + port.portNumber + "'/> " + 
+                        content += "value='" + port.db_id+ "'/> " + 
                             port.name + "(" + port.portNumber+ ")" + 
                             "</label>";
                     });
                     $('.port-modal .confirm-port').unbind("click");
                     $('.port-modal .confirm-port').click(function () {
                         var inputs = $('.port-modal input');
-                        
                         $.each(inputs, function (index, input) {
                             if ($(input).attr('checked')) {
-                                parent.add_port(d.island_id, d.id, parseInt($(input).val()), false);
+                                parent.add_port($(input).val(), false);
                             } else {
-                                parent.add_port(d.island_id, d.id, parseInt($(input).val()), true);
+                                parent.add_port($(input).val(), true);
                             }
                         });
-
                     });
                     $('.port-modal .modal-body').html(content);
                     $('.port-modal').modal();
                 }
-                /*
-                var existed = parent.add_switch(d.id, d.island_id);
-                var image = '';
-                if (existed) {
-                    image = STATIC_URL + "topology/img/ovs.png?v=4";
-                } else {
-
-                    image = STATIC_URL + "topology/img/ovs_green.png?v=2";
-                }
-                d3.select(this).select('image').attr("xlink:href", image);
-                */
             }
         }
     });
@@ -459,11 +440,14 @@ var Island = function(urlBase, island_id) {
     this.id = island_id;
     var hackBase = urlBase;
     this.hackBase = hackBase;
+    if (direct_flowvisor_api) {
+        this.hackBase = "/direct" + this.hackBase;
+    }
     this.count = 2;
     this.swl = new SwitchCollection();
-    this.swl.hackBase = hackBase;
+    this.swl.hackBase = this.hackBase;
     this.hl = new HostCollection();
-    this.hl.hackBase = hackBase;
+    this.hl.hackBase = this.hackBase;
     this.last_swl = null;
     this.last_hl = null;
 
@@ -481,8 +465,6 @@ var Island = function(urlBase, island_id) {
         if (self.swl.pluck('id').join("") == self.last_swl && JSON.stringify(self.hl) == self.last_hl) {
             return;
         }
-        
-        
         self.last_swl = self.swl.pluck('id').join('');
         self.last_hl = JSON.stringify(self.hl);
         app.topology(this);

@@ -60,7 +60,7 @@ class IslandResource(Resource):
         abstract = True
 
 
-class ComputeResource(Resource):
+class ComputeResource(IslandResource):
     state = models.IntegerField(null=True)
     cpu = models.CharField(max_length=256, null=True)
     mem = models.IntegerField(null=True)
@@ -179,6 +179,7 @@ class SwitchPort(Resource):
 
     def __unicode__(self):
         return '{} - {}'.format(self.switch, self.port)
+
     def on_add_into_slice(self, slice_obj):
         SlicePort.objects.get_or_create(
             switch_port=self, slice=slice_obj)

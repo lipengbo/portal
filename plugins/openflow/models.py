@@ -62,6 +62,18 @@ def update_links(sender, instance, created, **kwargs):
     from communication.flowvisor_client import FlowvisorClient
 
     client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
+    port_name_dict = {}
+    try:
+        switches = client.get_switches()
+    except Exception, e:
+        print e
+        return
+    else:
+        for switch in switches:
+            dpid = switch['dpid']
+            port_name_dict[dpid] = {}
+            for port in switch['ports']:
+                port_name_dict[dpid][port['portNumber']] = port['name']
     try:
         links = client.get_links()
     except Exception, e:
@@ -84,14 +96,26 @@ def update_links(sender, instance, created, **kwargs):
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
-        print link
         source_switch = Switch.objects.get(dpid=link['src-switch'])
         target_switch = Switch.objects.get(dpid=link['dst-switch'])
-        source_port, created = SwitchPort.objects.get_or_create(switch=source_switch, port=src_port)
-        target_port, created = SwitchPort.objects.get_or_create(switch=target_switch, port=dst_port)
-#         for slice in instance.slices.all():
-#             SlicePort.objects.get_or_create(slice=slice, port=source_port)
-#             SlicePort.objects.get_or_create(slice=slice, port=target_port)
+        try:
+            src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
+        except KeyError:
+            src_port_name = 'eth' + src_port
+        try:
+            dst_port_name = port_name_dict[target_switch.dpid][int(dst_port)]
+        except KeyError:
+            dst_port_name = 'eth' + dst_port
+        source_port, created = SwitchPort.objects.get_or_create(
+                switch=source_switch,
+                port=src_port,
+                defaults={'name': src_port_name})
+        target_port, created = SwitchPort.objects.get_or_create(
+                switch=target_switch,
+                port=dst_port,
+                defaults={'name': dst_port_name})
 
-        link_obj = Link(flowvisor=instance, source=source_port, target=target_port)
+        link_obj = Link(flowvisor=instance,
+                source=source_port,
+                target=target_port)
         link_obj.save()
