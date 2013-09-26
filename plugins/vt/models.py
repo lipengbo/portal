@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-from resources.models import ComputeResource, Server
+from resources.models import ComputeResource, Server, IslandResource
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils

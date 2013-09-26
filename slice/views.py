@@ -21,6 +21,7 @@ from resources.ovs_api import slice_add_ovs_ports
 from project.models import Project, Island
 from resources.models import SwitchPort
 from slice.slice_exception import *
+from plugins.ipam.models import IPUsage, Subnet
 
 from slice.models import Slice
 
@@ -60,8 +61,11 @@ def create(request, proj_id):
             for switch_port_id in switch_port_ids:
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
+            slice_nw = request.POST.get("old_slice_nw")
+            print "*************************************"
+            print slice_nw
             slice_obj = create_slice_step(project, slice_name,
-                slice_description, island, user, ovs_ports, controller_info)
+                slice_description, island, user, ovs_ports, controller_info, slice_nw)
         except DbError, ex:
             return render(request, 'slice/warning.html', {'info': str(ex)})
         except Exception, ex:
@@ -84,6 +88,7 @@ def create(request, proj_id):
     vm_form = VmForm()
     vm_form.fields['server'].queryset = Server.objects.filter(id=3)
     context = {}
+    context['project'] = project
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
@@ -190,4 +195,76 @@ def check_slice_name(request, slice_name):
     if slice_objs:
         return HttpResponse(json.dumps({'value': 1}))
     else:
+        return HttpResponse(json.dumps({'value': 0}))
+
+
+def create_nw(request, owner):
+    """
+    分配slice网段
+    return:
+        value:
+          失败:value = 0
+          成功：value = 网段（192.168.5.6/27）
+    """
+    try:
+        nw = IPUsage.objects.create_subnet(owner)
+        if nw:
+            return HttpResponse(json.dumps({'value': nw}))
+        else:
+            return HttpResponse(json.dumps({'value': 0}))
+    except Exception, ex:
+        return HttpResponse(json.dumps({'value': 0}))
+
+
+def delete_nw(request, owner):
+    """
+    删除slice网段
+    return:
+        value:
+          失败:value = 0
+          成功：value = 网段（192.168.5.6/27）
+    """
+    try:
+        if IPUsage.objects.delete_subnet(owner):
+            return HttpResponse(json.dumps({'value': 1}))
+        else:
+            return HttpResponse(json.dumps({'value': 0}))
+    except:
+        return HttpResponse(json.dumps({'value': 0}))
+
+
+def change_nw_owner(request, nw, new_owner):
+    """
+    更改slice网段的owner
+    return:
+        value:
+          失败:value = 0
+          成功：value = 1
+    """
+    try:
+        nw_obj = Subnet.objects.filter(netaddr=nw)
+        nw_obj.owner = new_owner
+        nw_obj.save()
+    except:
+        return HttpResponse(json.dumps({'value': 0}))
+    else:
+        return HttpResponse(json.dumps({'value': 1}))
+
+
+def change_nw(request, owner, new_owner):
+    """
+    更改slice网段的owner
+    return:
+        value:
+          失败:value = 0
+          成功：value = 1
+    """
+    try:
+        IPUsage.objects.delete_subnet(owner)
+        nw = IPUsage.objects.create_subnet(new_owner)
+        if nw:
+            return HttpResponse(json.dumps({'value': nw}))
+        else:
+            return HttpResponse(json.dumps({'value': 0}))
+    except:
         return HttpResponse(json.dumps({'value': 0}))

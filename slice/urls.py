@@ -10,4 +10,8 @@ urlpatterns = patterns('slice.views',
     url(r'^edit_description/(?P<slice_id>\d+)/$', "edit_description", name='edit_slice_description'),
     url(r'^edit_controller/(?P<slice_id>\d+)/$', "edit_controller", name='edit_slice_controller'),
     url(r'^check_slice_name/(?P<slice_name>\w+)/$', "check_slice_name", name='check_slice_name'),
+    url(r'^create_nw/(?P<owner>\w+)/$', "create_nw", name='create_nw'),
+    url(r'^delete_nw/(?P<owner>\w+)/$', "delete_nw", name='delete_nw'),
+    url(r'^change_nw_owner/(?P<nw>\w+)/(?P<new_owner>\w+)/$', "change_nw_owner", name='change_nw_owner'),
+    url(r'^change_nw/(?P<owner>\w+)/(?P<new_owner>\w+)/$', "change_nw", name='change_nw'),
 )

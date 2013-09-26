@@ -50,7 +50,6 @@ window.TopologyView = Backbone.View.extend({
             } else {
                 var all_nodes = this.model.nodes;
             }
-            
             var all_nodes_map = [];
             
             var all_node_copy = []
@@ -84,6 +83,7 @@ window.TopologyView = Backbone.View.extend({
                 host = this.hosts[i];
                 //for (var j = 0; j < host.attributes['attachmentPoint'].length; j++) {
                 for (var j = 0; j < 1; j++) { // FIXME hack to ignore multiple APs
+                    
                     var link = {source:all_nodes_map[host.id],
                                 target:all_nodes_map[host.attributes['attachmentPoint'][j]['switchDPID']],
                                 attach_point: host.attributes['attachmentPoint'][j],
@@ -101,11 +101,13 @@ window.TopologyView = Backbone.View.extend({
                 }
             }
             
+            
             if ($('#quanwang').attr('checked')) {
                 var all_links = this.model.links.concat(this.host_links);
             } else {
                 var all_links = this.model.links;
             }
+            
             var all_links_copy = [];
             $.each(all_links, function (index, link) {
                 all_links_copy.push(link);
@@ -125,10 +127,15 @@ window.TopologyView = Backbone.View.extend({
             };
             all_links = all_links_copy;
             g_links_map[this.model.island.id] = all_links;
+            console.log(all_links, '----')
+            console.log(g_links_map)
+            
             g_links = [];
             $.each(g_links_map, function (k, v) {
                 g_links = g_links.concat(v);
             })
+            console.log(g_links)
+            
             init_svg();
         }
         return this;

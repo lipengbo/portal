@@ -16,6 +16,7 @@ from django.contrib.contenttypes.models import ContentType
 from project.models import Project, Membership
 from project.forms import ProjectForm
 
+from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 
@@ -88,6 +89,7 @@ def get_island_flowvisors(island_id=None):
 
 def get_all_cities():
     return [], 2,2,2,2,2
+
 def topology(request):
     from resources.models import Switch
     root_controller = None
@@ -137,17 +139,49 @@ def device_proxy(request, host, port):
 
 def links_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    links = flowvisor.link_set.all()
+    link_data = []
+    for link in links:
+        link_data.append({
+            "dst-port": link.target.port,
+            "dst-switch": link.target.switch.dpid,
+            "src-port": link.source.port,
+            "src-switch": link.source.switch.dpid
+            })
+
+    return HttpResponse(json.dumps(link_data), content_type="application/json")
+
+@login_required
+def links_direct(request, host, port):
+    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = client.get_links()
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 @login_required
-#@cache_page(60 * 60 * 24 * 10)
-def switch_proxy(request, host, port):
+def switch_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = json.dumps(client.get_switches())
-    #controller_api = request.path[1:]
-    #resp = urllib2.urlopen('http://' + controller_api)
-    #data = resp.read()
+    return HttpResponse(data, content_type="application/json")
+
+@login_required
+#@cache_page(60 * 60 * 24 * 10)
+def switch_proxy(request, host, port):
+    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    switch_ids_tuple = flowvisor.link_set.all().values_list('source__switch__id', 'target__switch__id')
+    switch_ids = set()
+    for switch_id_tuple in switch_ids_tuple:
+        switch_ids.add(switch_id_tuple[0])
+        switch_ids.add(switch_id_tuple[1])
+    switches = Switch.objects.filter(id__in=switch_ids)
+    switch_data = []
+    for switch in switches:
+        ports = switch.switchport_set.all()
+        port_data = []
+        for port in ports:
+            port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
+        switch_data.append({"dpid": switch.dpid, "ports": port_data})
+
+    data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")

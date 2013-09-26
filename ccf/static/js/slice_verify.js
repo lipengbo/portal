@@ -10,7 +10,7 @@ function check_slice_name(obj_id,flag){
 		if(!reg.test(obj.value))
 		{
 			//alert("in 输入");
-			showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red")
+			showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
 			return false;
 		}
 		else
@@ -21,12 +21,12 @@ function check_slice_name(obj_id,flag){
 			if(slice_exist)
 			{
 				//alert(slice_exist);
-				showInfo(info," * 该slice已经存在","red")
+				showInfo(info," * 该slice已经存在","red");
 				return false;
 			}
 			else
 			{
-				showInfo(info,"√","green")
+				showInfo(info,"√","green");
 				return true;
 			}
 		}
@@ -34,7 +34,7 @@ function check_slice_name(obj_id,flag){
 	}
 	else
 	{
-		showInfo(info," * 该项为必填项","red")
+		showInfo(info," * 必填","red");
 		return false;
 	}	
 }
@@ -43,18 +43,31 @@ function check_slice_description(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
 	if(obj.value.length > 0){
-		showInfo(info,"√","green")
+		showInfo(info,"√","green");
 		return true;
 	}
 	else{
-		showInfo(info," * 该项为必填项","red")
+		showInfo(info," * 必填","red");
 		return false;
+	}
+}
+
+function check_island_id(obj_id){
+	var obj = document.getElementById(obj_id);
+	var info = document.getElementById(obj_id+"Info"); 
+	var island_id = obj.options[obj.selectedIndex].value;
+	if(obj.value == "no"){
+		showInfo(info," * 必选","red");
+		return false;
+	}
+	else{
+		showInfo(info,"√","green");
+		return true;
 	}
 }
 
 function check_slice_controller(obj_name){
 	var objs = document.getElementsByName(obj_name);
-	alert(objs.length);
 	for(var i=0;i<objs.length;i++){  
 		if(objs[i].checked){  
 			if(objs[i].value=="default_create"){  
@@ -63,7 +76,11 @@ function check_slice_controller(obj_name){
 			if(objs[i].value=="user_defined"){
 				ret1 = check_ip("controller_ip",1);
 				ret2 = check_port("controller_port",1);
-				if(ret1){
+				if (ret1 && ret2){
+					return true;
+				}
+				else{
+					return false;
 				}
 	  		}  
 		}   
@@ -75,25 +92,26 @@ function check_ip(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info");
 	var reg=/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;//正则表达式
-	
-	if(flag){
-		if(obj.value.length > 0){
-			if(reg.test(obj.value)){
-				if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
-					showInfo(info,"√","green")
-					return true;
-				}
+
+	if(obj.value.length > 0){
+		if(reg.test(obj.value)){
+			if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
+				showInfo(info,"√","green");
+				return true;
 			}
-			showInfo(info,"IP地址格式错误","red")		
+		}
+		showInfo(info," * 格式错误","red");	
+		return false;
+	}
+	else{
+		if(flag){
+			showInfo(info," * 必填","red");
 			return false;
 		}
 		else{
 			return true;
 		}
-	}
-	else{
-		showInfo(info,"请填写IP地址","blue")
-	}
+	}	
 }
 
 //校验端口值
@@ -101,24 +119,88 @@ function check_port(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info");
 	var reg = /^[0-9]*$/;
-	if (flag){
-		if(obj.value.length > 0){
-			if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value)){
-				showInfo(info,"（0-65535）之间","red")
-				return false;
-			}
-			else{
-				showInfo(info,"√","green")
-				return true;
-			}	
+	if(obj.value.length > 0){
+		if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value)){
+			showInfo(info," * （0-65535）","red");
+			return false;
+		}
+		else{
+			showInfo(info,"√","green");
+			return true;
+		}	
+	}
+	else{
+		if(flag){
+			showInfo(info," * 必填","red");
+			return false;
 		}
 		else{
 			return true;
 		}
 	}
-	else{
-		showInfo(info,"请填写端口","blue");
+}
+
+//校验网段分配
+function check_nw_num(){
+	var slice_name_obj = document.getElementById("slice_name");
+	var old_nw_owner_obj = document.getElementById("old_nw_owner");
+	var nw_num_obj = document.getElementById("nw_num");
+	var old_nw_num_obj = document.getElementById("old_nw_num");
+	var slice_nw_obj = document.getElementById("slice_nw");
+	var old_slice_nw_obj = document.getElementById("old_slice_nw");
+	var slice_name = slice_name_obj.value;
+	var old_nw_owner = old_nw_owner_obj.value;
+	var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
+	var old_nw_num = old_nw_num_obj.value;
+	var old_slice_nw = old_slice_nw_obj.value;
+	var info = document.getElementById("nw_numInfo");
+	
+	if((slice_name!=old_nw_owner) || (nw_num!=old_nw_num)){
+		if(old_slice_nw==''){
+			check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/";
+		}
+		else{
+			if(nw_num!=old_nw_num){
+				check_url = "http://" + window.location.host + "/slice/change_nw/"+old_nw_owner+"/"+slice_name+"/";
+			}
+			else{
+				check_url = "http://" + window.location.host + "/slice/change_nw_owner/"+old_slice_nw+"/"+slice_name+"/";
+			}
+		}
+	    $.ajax({
+	        type: "GET",
+	        url: check_url,
+	        dataType: "json",
+	        cache: false,
+	        async: false,  
+	        success: function(data) {
+	        	//alert(data.value);
+	        	if (data.value == 0){
+	        		//alert(1);
+	        		showInfo(info," * 分配网段失败！(改slice名称)","red");
+	        		return false;
+	            }
+	            else{
+	            	//alert(2);
+	            	if (data.value != 1){
+	            		//alert(3);
+	        			slice_nw_obj.innerHTML = data.value;
+		             	old_slice_nw_obj.value = data.value;
+	            	}
+	            	old_nw_owner_obj.value = slice_name;
+	    			old_nw_num_obj.value = nw_num;
+	    			showInfo(info,"√","green");
+	    			return true;
+	            }
+	        },
+	        error: function(data) {
+	        	showInfo(info," * 分配网段失败！(改slice名称)","red");
+	    		return false;
+	        },
+	    });
 	}
+	showInfo(info,"√","green");
+	return true;
 }
 
 var slice_exist;

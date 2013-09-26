@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.db.models import F
 
 from project.models import Project, Island
+from plugins.ipam.models import Subnet
 
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
@@ -116,6 +117,13 @@ class Slice(models.Model):
             if default_flowspace.nw_src != '' and default_flowspace.nw_src == default_flowspace.nw_dst:
                 nws.append(default_flowspace.nw_dst)
         return nws
+
+    def get_nw(self):
+        try:
+            nw_obj = Subnet.objects.get(owner=self.name)
+            return nw_obj.netaddr
+        except:
+            return None
 
     def get_gws(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')

@@ -61,9 +61,24 @@ $(document).ready(function() {
             }           
         }
     });
+    // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
         $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+    });
+    
+    $('.btn-step4').click(function () {
+        $('.switch-manifest tbody').html('');
+        $.each($('.switch-table tbody tr'), function (index, tr) {
+            var checked_ports = $(tr).find('input[name="switch_port_ids"][checked]');
+            if (checked_ports.length > 0) {
+                var clone = $(tr).clone();
+                clone.find('input[name="switch_port_ids"]').remove();
+                clone.find('label').addClass('label label-success');
+                $('.switch-manifest tbody').append(clone);
+            }
+        });
+        $('.switch-manifest tbody input').attr('disabled', '');
     });
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
@@ -78,10 +93,16 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 1){
-       	   page_function1();
+       	   ret = page_function1();
+       	   if (!ret){
+           		return;
+           }
        }
        if(thisIndex == 2){
-           //page_function2();
+           ret = page_function2();
+           if (!ret){
+           		return;
+           }
        }
        if(thisIndex == 3){
            ret = page_function3();
@@ -109,34 +130,52 @@ $(document).ready(function() {
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
+    
     //通过复选框控制表单显示和隐藏
     $(".tab_checkbox").click(function(){
-        if(!$(this).attr("checked")){
-            $(".hide_form").slideUp();                     
+        if($(this).children(".icheckbox_square-blue").hasClass("checked")){
+             $(".hide_form").slideDown();                                
         } else {
-            $(".hide_form").slideDown();            
+             $(".hide_form").slideUp(); 
         }
-
+    });
+    $(".tab_checkbox .iCheck-helper").click(function(){
+        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+             $(".hide_form").slideDown();                                
+        } else {
+             $(".hide_form").slideUp(); 
+        }
     });
     
     //输入框兼选择框
     $(".select_input ul li a").click(function(){
         var selectText = $(this).text();
         $(".select_input input").val(selectText);
-    });      
+    }); 
+    
+   //全选全不选
+    $(".checkall .iCheck-helper").click(function(){
+       if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+           $(".icheckbox_square-blue").addClass("checked");
+       } else {
+           $(".icheckbox_square-blue").removeClass("checked");
+       }
+    });
+         
 });
 
 //全选全不选
-function check_all(obj,cName){
+/*function check_all(obj,cName){
     var checkboxs = document.getElementsByName(cName);
     for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
-}
+}*/
 
 //slice创建页面js
 function page_function0(){
 	ret1 = check_slice_name('slice_name',2);
 	ret2 = check_slice_description('slice_description',2);
-	if (ret1 && ret2){
+	ret3 = check_island_id('island_id')
+	if (ret1 && ret2 && ret3){
 		return true;
 	}
 	else{
@@ -144,16 +183,77 @@ function page_function0(){
 	}
 }
 function page_function1(){
-	
+	ret1 = check_nw_num();
+	if (ret1){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 function page_function2(){
-	check_slice_controller('controller_type');
+	ret1 = check_slice_controller('controller_type');
+	if (ret1){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 function page_function3(){
+	//slice
+	var slice_nw = document.getElementById("slice_nw");
+	var list_slice_nw = document.getElementById("list_slice_nw");
+	list_slice_nw.innerHTML = slice_nw.innerHTML;
+	//控制器
+	var controller_type_obj = document.getElementsByName("controller_type");
+	$("div#list_controller").empty();
+	for(var i=0;i<controller_type_obj.length;i++){  
+		if(controller_type_obj[i].checked){  
+			if(controller_type_obj[i].value=="default_create"){  
+				var controller_sys_obj = document.getElementById("controller_sys");
+				var controller_sys = controller_sys_obj.options[controller_sys_obj.selectedIndex].value;
+				var str = "";
+				str = str + "<table class=\"table\">"
+			        + "<tbody>"
+			        + "<tr>"
+			        + "<td width=\"100\">默认创建</td>"
+			        + "<td></td>"
+			        + "</tr>"
+			        + "<tr>"
+			        + "<td width=\"100\">控制器类型：</td>"
+			        + "<td>" + controller_sys + "</td>"
+			        + "</tr>"                     
+			        + "</tbody>"
+			        + "</table>";
+			    
+			}  
+			if(controller_type_obj[i].value=="user_defined"){
+				var controller_ip_obj = document.getElementById("controller_ip");
+				var controller_port_obj = document.getElementById("controller_port");
+				var controller_ip = controller_ip_obj.value;
+				var controller_port = controller_port_obj.value;
+				var str = "";
+				str = str + "<table class=\"table\">"
+			        + "<tbody>"
+			        + "<tr>"
+			        + "<td width=\"100\">自定义</td>"
+			        + "<td></td>"
+			        + "</tr>"
+			        + "<tr>"
+			        + "<td width=\"100\">控制器IP端口：</td>"
+			        + "<td>" + controller_ip + ":" + controller_port + "</td>"
+			        + "</tr>"                     
+			        + "</tbody>"
+			        + "</table>";        
+	  		}  
+		}   
+	}
+	$("div#list_controller").append(str); 
+        //虚拟机
         fetch_vminfo();
         return check_vminfo()
 }
 function page_function4(){
-	
+        submmit_vms(1)
 }
-   
