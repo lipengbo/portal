@@ -223,14 +223,7 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 enable_dhcp: enable_dhcp,
         },
         success: function(data) {
-                if (data.value == 1)
-                {
-                        alert("true")
-                } 
-                else
-                {
-                        alert("false");
-                }
+
         }
         });
 }
