@@ -114,7 +114,15 @@ $(document).ready(function() {
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
     
-    //通过复选框控制表单显示和隐藏\
+    //通过复选框控制表单显示和隐藏
+    $(".tab_checkbox").click(function(){
+        if($(this).children(".icheckbox_square-blue").hasClass("checked")){
+             $(".hide_form").slideDown();                                
+        } else {
+             $(".hide_form").slideUp(); 
+        }
+
+    });
     $(".tab_checkbox .iCheck-helper").click(function(){
         if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
              $(".hide_form").slideDown();                                
