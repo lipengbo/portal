@@ -234,7 +234,7 @@ var opts = {
 };
 var spinner = new Spinner(opts);
 var target = document.getElementById('content');
-        
+var direct_flowvisor_api = {% if not no_Parent %}true{% else %}false{% endif %};
 {% if not no_parent or not svg %}
     var islands = [];
         
