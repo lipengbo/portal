@@ -150,16 +150,8 @@ function page_function2(){
 	check_slice_controller('controller_type');
 }
 function page_function3(){
-        name = check_vm_name('id_name')
-        flavor = check_vm_select('id_flavor')
-        image = check_vm_select('id_image')
-        server = check_vm_select('id_server')
-	if (name && flavor && image && server){
-		return true;
-	}
-	else{
-		return false;
-	}
+        fetch_vminfo();
+        return check_vminfo()
 }
 function page_function4(){
 	
