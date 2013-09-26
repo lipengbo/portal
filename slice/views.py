@@ -99,7 +99,6 @@ def create_first(request, proj_id):
             print 'he'
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
-<<<<<<< HEAD
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -111,30 +110,6 @@ def list(request, proj_id):
     context = {}
     context['project'] = project
     return render(request, 'slice/slice_list.html', context)
-=======
-            return HttpResponseRedirect(
-                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-    islands = project.islands.all()
-    if not islands:
-        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
-    ovs_ports = []
-    for island in islands:
-        switches = island.switch_set.all()
-        for switch in switches:
-            switch_ports = switch.switchport_set.all()
-            if switch_ports:
-                ovs_ports.append({'switch_type': switch.type(),
-                    'switch': switch, 'switch_ports': switch_ports})
-    vm_form = VmForm()
-    vm_form.fields['server'].queryset = Server.objects.filter(id=3)
-    context = {}
-    context['project'] = project
-    context['islands'] = islands
-    context['ovs_ports'] = ovs_ports
-    context['error_info'] = error_info
-    context['vm_form'] = vm_form
-    return render(request, 'slice/create_slice.html', context)
->>>>>>> 64b350b2f433eb1d583db6f9321f8561fbe4c6fb
 
 
 def edit_description(request, slice_id):
