@@ -65,6 +65,7 @@ $(document).ready(function() {
         var island_id = $('select[name="island_id"]').val();
         $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
     });
+    
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
@@ -109,12 +110,13 @@ $(document).ready(function() {
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
-    //通过复选框控制表单显示和隐藏
-    $(".tab_checkbox").click(function(){
-        if(!$(this).attr("checked")){
-            $(".hide_form").slideUp();                     
+    
+    //通过复选框控制表单显示和隐藏\
+    $(".tab_checkbox .iCheck-helper").click(function(){
+        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+             $(".hide_form").slideDown();                                
         } else {
-            $(".hide_form").slideDown();            
+             $(".hide_form").slideUp(); 
         }
 
     });
@@ -123,14 +125,24 @@ $(document).ready(function() {
     $(".select_input ul li a").click(function(){
         var selectText = $(this).text();
         $(".select_input input").val(selectText);
-    });      
+    }); 
+    
+   //全选全不选
+    $(".checkall .iCheck-helper").click(function(){
+       if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+           $(".icheckbox_square-blue").addClass("checked");
+       } else {
+           $(".icheckbox_square-blue").removeClass("checked");
+       }
+    });
+         
 });
 
 //全选全不选
-function check_all(obj,cName){
+/*function check_all(obj,cName){
     var checkboxs = document.getElementsByName(cName);
     for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
-}
+}*/
 
 //slice创建页面js
 function page_function0(){

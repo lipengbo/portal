@@ -98,19 +98,19 @@
 			if( this.support3d && this.supportTrans ) {
 			
 				leftCSS 	= {
-					'-webkit-transform'	: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-					'-moz-transform'	: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-					'-o-transform'		: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-					'-ms-transform'		: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-					'transform'			: 'translateX(-350px) translateZ(-200px) rotateY(45deg)'
+					'-webkit-transform'	: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+					'-moz-transform'	: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+					'-o-transform'		: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+					'-ms-transform'		: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+					'transform'			: 'translateX(-320px) translateZ(-200px) rotateY(45deg)'
 				};
 				
 				rightCSS	= {
-					'-webkit-transform'	: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-					'-moz-transform'	: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-					'-o-transform'		: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-					'-ms-transform'		: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-					'transform'			: 'translateX(350px) translateZ(-200px) rotateY(-45deg)'
+					'-webkit-transform'	: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+					'-moz-transform'	: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+					'-o-transform'		: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+					'-ms-transform'		: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+					'transform'			: 'translateX(320px) translateZ(-200px) rotateY(-45deg)'
 				};
 				
 				currentCSS	= {                            //增加
@@ -126,19 +126,19 @@
 			else if( this.support2d && this.supportTrans ) {
 				
 				leftCSS 	= {
-					'-webkit-transform'	: 'translate(-350px) scale(0.8)',
-					'-moz-transform'	: 'translate(-350px) scale(0.8)',
-					'-o-transform'		: 'translate(-350px) scale(0.8)',
-					'-ms-transform'		: 'translate(-350px) scale(0.8)',
-					'transform'			: 'translate(-350px) scale(0.8)'
+					'-webkit-transform'	: 'translate(-320px) scale(0.8)',
+					'-moz-transform'	: 'translate(-320px) scale(0.8)',
+					'-o-transform'		: 'translate(-320px) scale(0.8)',
+					'-ms-transform'		: 'translate(-320px) scale(0.8)',
+					'transform'			: 'translate(-320px) scale(0.8)'
 				};
 				
 				rightCSS	= {
-					'-webkit-transform'	: 'translate(350px) scale(0.8)',
-					'-moz-transform'	: 'translate(350px) scale(0.8)',
-					'-o-transform'		: 'translate(350px) scale(0.8)',
-					'-ms-transform'		: 'translate(350px) scale(0.8)',
-					'transform'			: 'translate(350px) scale(0.8)'
+					'-webkit-transform'	: 'translate(320px) scale(0.8)',
+					'-moz-transform'	: 'translate(320px) scale(0.8)',
+					'-o-transform'		: 'translate(320px) scale(0.8)',
+					'-ms-transform'		: 'translate(320px) scale(0.8)',
+					'transform'			: 'translate(320px) scale(0.8)'
 				};
 				
 				currentCSS	= {
@@ -262,11 +262,11 @@
 						break;
 					case 'left':
 						return {
-							'-webkit-transform'	: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-							'-moz-transform'	: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-							'-o-transform'		: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-							'-ms-transform'		: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
-							'transform'			: 'translateX(-350px) translateZ(-200px) rotateY(45deg)',
+							'-webkit-transform'	: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+							'-moz-transform'	: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+							'-o-transform'		: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+							'-ms-transform'		: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
+							'transform'			: 'translateX(-320px) translateZ(-200px) rotateY(45deg)',
 							'opacity'			: 1,
 							'visibility'		: 'visible',
 							'z-index'           : 5           //增加
@@ -274,11 +274,11 @@
 						break;
 					case 'right':
 						return {
-							'-webkit-transform'	: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-							'-moz-transform'	: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-							'-o-transform'		: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-							'-ms-transform'		: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
-							'transform'			: 'translateX(350px) translateZ(-200px) rotateY(-45deg)',
+							'-webkit-transform'	: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+							'-moz-transform'	: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+							'-o-transform'		: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+							'-ms-transform'		: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
+							'transform'			: 'translateX(320px) translateZ(-200px) rotateY(-45deg)',
 							'opacity'			: 1,
 							'visibility'		: 'visible',
 							'z-index'           : 5           //增加
@@ -326,22 +326,22 @@
 						break;
 					case 'left':
 						return {
-							'-webkit-transform'	: 'translate(-350px) scale(0.8)',
-							'-moz-transform'	: 'translate(-350px) scale(0.8)',
-							'-o-transform'		: 'translate(-350px) scale(0.8)',
-							'-ms-transform'		: 'translate(-350px) scale(0.8)',
-							'transform'			: 'translate(-350px) scale(0.8)',
+							'-webkit-transform'	: 'translate(-320px) scale(0.8)',
+							'-moz-transform'	: 'translate(-320px) scale(0.8)',
+							'-o-transform'		: 'translate(-320px) scale(0.8)',
+							'-ms-transform'		: 'translate(-320px) scale(0.8)',
+							'transform'			: 'translate(-320px) scale(0.8)',
 							'opacity'			: 1,
 							'visibility'		: 'visible'
 						};
 						break;
 					case 'right':
 						return {
-							'-webkit-transform'	: 'translate(350px) scale(0.8)',
-							'-moz-transform'	: 'translate(350px) scale(0.8)',
-							'-o-transform'		: 'translate(350px) scale(0.8)',
-							'-ms-transform'		: 'translate(350px) scale(0.8)',
-							'transform'			: 'translate(350px) scale(0.8)',
+							'-webkit-transform'	: 'translate(320px) scale(0.8)',
+							'-moz-transform'	: 'translate(320px) scale(0.8)',
+							'-o-transform'		: 'translate(320px) scale(0.8)',
+							'-ms-transform'		: 'translate(320px) scale(0.8)',
+							'transform'			: 'translate(320px) scale(0.8)',
 							'opacity'			: 1,
 							'visibility'		: 'visible'
 						};

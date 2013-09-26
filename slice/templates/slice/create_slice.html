@@ -55,27 +55,33 @@
               	{%endif%}
               <fieldset>
                 <legend>基本信息</legend>
-                <label>名称</label>
-                <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
-                <span id="slice_nameInfo" style="display:inline;float:none;"></span>
-                <label>描述</label>
-                <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
-                <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
-                <label>选择节点</label>
-                {%if islands%}
-	                <select name="island_id" id="island_id">
-	                	{%for island in islands%}
-		                  <option value="{{ island.id }}">{{island.name}}</option>
-		                {%endfor%}
-	                </select>
-	             {%else%}
-	             	<select name="island_id" id="island_id">
-	                	{%for island in islands%}
-		                  <option value="no">无可选节点</option>
-		                {%endfor%}
-	                </select>
-	             {%endif%}
-	             <span id="island_idInfo" style="display:inline;float:none;"></span>
+                <div class="form_inline">
+                    <label>Slice名称</label>
+                    <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <span id="slice_nameInfo" style="display:inline;float:none;"></span>
+                </div>
+                <div class="form_inline">
+                    <label>Slice描述</label>
+                    <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                </div>
+                <div class="form_inline">
+                    <label>选择节点</label>
+                    {%if islands%}
+                        <select name="island_id" id="island_id">
+                            {%for island in islands%}
+                              <option value="{{ island.id }}">{{island.name}}</option>
+                            {%endfor%}
+                        </select>
+                     {%else%}
+                        <select name="island_id" id="island_id">
+                            {%for island in islands%}
+                              <option value="no">无可选节点</option>
+                            {%endfor%}
+                        </select>
+                     {%endif%}
+                     <span id="island_idInfo" style="display:inline;float:none;"></span>
+                </div>
               </fieldset>
                <div class="form-actions">
                   <div class="row-fluid">
@@ -140,15 +146,17 @@
               </fieldset>
               <fieldset>
                  <legend>Slice网络地址</legend>
-                 <label>IP数量</label>
-                <select name="nw_num" id="nw_num">
-                  <!--<option value="4">4</option>
-                  <option value="8">8</option>
-                  <option value="16">16</option>
-                  <option value="32">32</option>-->
-                  <option value="64">64</option>
-                </select>   
-                <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
+                 <div class="form_inline">
+                     <label>IP数量</label>
+                    <select name="nw_num" id="nw_num">
+                      <!--<option value="4">4</option>
+                      <option value="8">8</option>
+                      <option value="16">16</option>
+                      <option value="32">32</option>-->
+                      <option value="64">64</option>
+                    </select>   
+                    <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
+                 </div>
               </fieldset>
               <div class="form-actions">
                   <div class="row-fluid">
@@ -183,11 +191,9 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="150">
-                                <label class="radio tab_radio1">
-                                  <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
-                                  创建控制器
-                                </label>
+                            <td width="200">
+                                <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
+                                <label class="tab_radio1" for="optionsRadios1">创建控制器 </label>
                             </td>
                             <td width="70">控制器类型</td>
                             <td width="290">
@@ -201,10 +207,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <label class="radio tab_radio2">
-                                  <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
-                                  自定义控制器
-                                </label>
+                              <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
+                              <label class="tab_radio2" for="optionsRadios2">
+                                                                                                                           自定义控制器
+                              </label>
                             </td>
                             <td>控制器IP</td> 
                             <td>
@@ -246,9 +252,6 @@
                     </tbody>
                 </table>
               </fieldset>
-              <label class="checkbox inline">
-                  <input type="checkbox" id="inlineCheckbox1" value="option1" class="tab_checkbox"> 是否配置DHCP服务器 
-              </label>
               <fieldset class="base_info hide_form">
                  <legend>DHCP服务器配置</legend>
                  <div class="alert alert-info">
@@ -258,7 +261,7 @@
                     <tbody>
                         <tr>
                             <td colspan="6">
-                                <label class="radio tab_radio3">
+                                <label class="tab_radio3">
                                   <input type="radio" name="dhcp_type" id="optionsRadios3" value="default">
                                   默认DHCP服务
                                 </label>
@@ -266,7 +269,7 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                                <label class="radio tab_radio4">
+                                <label class="tab_radio4">
                                   <input type="radio" name="dhcp_type" id="optionsRadios4" value="user_define" checked>
                                   自定义DHCP服务
                                 </label>
@@ -287,6 +290,9 @@
                     </tbody>
                 </table>
               </fieldset>
+              <label class="checkbox inline tab_checkbox">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> 是否配置DHCP服务器 
+              </label>
               
               <div class="form-actions">
                   <div class="row-fluid">
@@ -437,6 +443,7 @@
         </div>
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 	<script language="JavaScript">  
 	    $(document).ready(function() {
             /*
@@ -510,6 +517,11 @@
                 return existed;
             };
 		});
+		$('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+          });
  	</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
