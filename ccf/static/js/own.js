@@ -61,9 +61,24 @@ $(document).ready(function() {
             }           
         }
     });
+    // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
         $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+    });
+    
+    $('.btn-step4').click(function () {
+        $('.switch-manifest tbody').html('');
+        $.each($('.switch-table tbody tr'), function (index, tr) {
+            var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
+            if (checked_ports.length > 0) {
+                var clone = $(tr).clone();
+                clone.find('.icheckbox_square-blue.checked').remove();
+                clone.find('label').addClass('label label-success');
+                $('.switch-manifest tbody').append(clone);
+            }
+        });
+        $('.switch-manifest tbody input').attr('disabled', '');
     });
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
@@ -90,7 +105,10 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 3){
-           page_function3();
+           ret = page_function3();
+           if (!ret){
+           		return;
+           }
        }
        if(thisIndex == 4){
            page_function4();
@@ -113,28 +131,45 @@ $(document).ready(function() {
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
+    
     //通过复选框控制表单显示和隐藏
     $(".tab_checkbox").click(function(){
-        if(!$(this).attr("checked")){
-            $(".hide_form").slideUp();                     
+        if($(this).children(".icheckbox_square-blue").hasClass("checked")){
+             $(".hide_form").slideDown();                                
         } else {
-            $(".hide_form").slideDown();            
+             $(".hide_form").slideUp(); 
         }
-
+    });
+    $(".tab_checkbox .iCheck-helper").click(function(){
+        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+             $(".hide_form").slideDown();                                
+        } else {
+             $(".hide_form").slideUp(); 
+        }
     });
     
     //输入框兼选择框
     $(".select_input ul li a").click(function(){
         var selectText = $(this).text();
         $(".select_input input").val(selectText);
-    });      
+    }); 
+    
+   //全选全不选
+    $(".checkall .iCheck-helper").click(function(){
+       if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+           $(".icheckbox_square-blue").addClass("checked");
+       } else {
+           $(".icheckbox_square-blue").removeClass("checked");
+       }
+    });
+         
 });
 
 //全选全不选
-function check_all(obj,cName){
+/*function check_all(obj,cName){
     var checkboxs = document.getElementsByName(cName);
     for(var i=0;i<checkboxs.length;i++){checkboxs[i].checked = obj.checked;}
-}
+}*/
 
 //slice创建页面js
 function page_function0(){
@@ -167,10 +202,11 @@ function page_function2(){
 	}
 }
 function page_function3(){
+	//slice
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
-	
+	//控制器
 	var controller_type_obj = document.getElementsByName("controller_type");
 	$("div#list_controller").empty();
 	for(var i=0;i<controller_type_obj.length;i++){  
@@ -215,7 +251,9 @@ function page_function3(){
 		}   
 	}
 	$("div#list_controller").append(str); 
-	
+        //虚拟机
+        fetch_vminfo();
+        return check_vminfo()
 }
 function page_function4(){
 	var project_id = $("#project_id").text();
@@ -282,7 +320,7 @@ function submit_slice_info(project_id){
 			success: function(data) {
 	        	if (data.result == 1){
 	        		//alert(data.slice_id);
-	        		submit_vm_info(data.slice_id);
+	        		submmit_vms(data.slice_id);
 	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
 	            }
 	            else{
@@ -293,8 +331,4 @@ function submit_slice_info(project_id){
 	        	alert("创建slice失败！");
 	        },
 	});
-}
-//提交虚拟机信息创建虚拟机
-function submit_vm_info(slice_id){
-	
 }

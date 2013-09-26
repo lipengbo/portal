@@ -4,28 +4,42 @@
 # Date:Mon Sep 23 18:36:59 CST 2013
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
+import json
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from forms import VmForm
 from models import VirtualMachine
 from resources.models import Server
+from slice.models import Slice
 
 
-def vm_detail(request, vmId):
-    vm = get_object_or_404(VirtualMachine, id=vmId)
+def vm_list(request, sliceid):
+    vms = get_object_or_404(Slice, id=sliceid).virtualmavhine_set.all()
+    context = {}
+    context['vms'] = vms
+    return render(request, 'slice/vm_list.html', context)
+
+
+def vm_detail(request, vmid):
+    vm = get_object_or_404(VirtualMachine, id=vmid)
     context = {}
     context['vm'] = vm
-    context['vmId'] = vmId
     return render(request, 'vt/vm_detail.html', context)
 
 
-def create_vm(request, sliceId):
+def create_vm(request, sliceid):
     if request.method == 'POST':
-        form = VmForm(request.POST)
-        if form.is_valid():
-            form.save()
+        vm_form = VmForm(request.POST)
+        if vm_form.is_valid():
+            vm = vm_form.save(commit=False)
+            vm.slice = get_object_or_404(Slice, id=sliceid)
+            vm.save()
+            return HttpResponse(json.dumps({'value': 1}))
+        else:
+            return HttpResponse(json.dumps({'value': 0}))
     else:
-        form = VmForm()
-        form.fields['server'].queryset = Server.objects.filter(id=3)
-    context = {}
-    context['form'] = form
-    return render(request, 'vt/create_vm.html', context)
+        vm_form = VmForm()
+        vm_form.fields['server'].queryset = Server.objects.filter(id=3)
+        context = {}
+        context['vmform'] = vm_form
+        return render(request, 'slice/create_slice.html', context)

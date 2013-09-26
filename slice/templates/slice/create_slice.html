@@ -54,26 +54,32 @@
               		<p>{{error_info}}ok</p>
               	{%endif%}
               <fieldset>
-                <legend>基本信息</legend>
-                <label>名称</label>
-                <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
-                <span id="slice_nameInfo" style="display:inline;float:none;"></span>
-                <label>描述</label>
-                <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
-                <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
-                <label>选择节点</label>
-                {%if islands%}
-	                <select name="island_id" id="island_id">
-	                	{%for island in islands%}
-		                  <option value="{{ island.id }}">{{island.name}}</option>
-		                {%endfor%}
-	                </select>
-	             {%else%}
-	             	<select name="island_id" id="island_id">
-		                 <option value="no">无可选节点</option>
-	                </select>
-	             {%endif%}
-	             <span id="island_idInfo" style="display:inline;float:none;"></span>
+                 <legend>基本信息</legend>
+                 <div class="form_inline">
+                    <label>Slice名称</label>
+                    <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <span id="slice_nameInfo" style="display:inline;float:none;"></span>
+                 </div>
+                 <div class="form_inline">
+                    <label>描述</label>
+                    <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                 </div>
+                 <div class="form_inline">   
+                    <label>选择节点</label>
+                    {%if islands%}
+    	                <select name="island_id" id="island_id">
+    	                	{%for island in islands%}
+    		                  <option value="{{ island.id }}">{{island.name}}</option>
+    		                {%endfor%}
+    	                </select>
+    	             {%else%}
+    	             	<select name="island_id" id="island_id">
+    		                 <option value="no">无可选节点</option>
+    	                </select>
+    	             {%endif%}
+    	             <span id="island_idInfo" style="display:inline;float:none;"></span>
+    	          </div>   
               </fieldset>
                <div class="form-actions">
                   <div class="row-fluid">
@@ -100,7 +106,7 @@
                       <input type="hidden" name="switches" id="topology-switch" value="" />
                         <iframe id="topology-iframe" width="100%" height="100%" src=""></iframe>
                   </div>
-                  <table class="table table-bordered table-striped table-hover">
+                  <table class="switch-table table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -127,7 +133,8 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-	                            		<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+                                    </label>
 	                            	{%endfor%}
 	                            </td>
                         	</tr>
@@ -138,16 +145,18 @@
               </fieldset>
               <fieldset>
                  <legend>Slice网络地址</legend>
-                 <label>IP数量</label>
-                <select name="nw_num" id="nw_num">
-                  <!--<option value="4">4</option>
-                  <option value="8">8</option>
-                  <option value="16">16</option>
-                  <option value="32">32</option>-->
-                  <option value="64">64</option>
-                </select>
-                <span id="nw_numInfo" style="display:inline;float:none;"></span>
-                <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
+                <div class="form_inline"> 
+                    <label>IP数量</label>
+                    <select name="nw_num" id="nw_num">
+                      <!--<option value="4">4</option>
+                      <option value="8">8</option>
+                      <option value="16">16</option>
+                      <option value="32">32</option>-->
+                      <option value="64">64</option>
+                    </select>
+                    <span id="nw_numInfo" style="display:inline;float:none;"></span>
+                    <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
+                </div>
               </fieldset>
               <div class="form-actions">
                   <div class="row-fluid">
@@ -182,11 +191,9 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="150">
-                                <label class="radio tab_radio1">
-                                  <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
-                                  创建控制器
-                                </label>
+                            <td width="200">
+                                <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
+                                <label class="tab_radio1" for="optionsRadios1">创建控制器 </label>
                             </td>
                             <td width="70">控制器类型</td>
                             <td width="290">
@@ -200,10 +207,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <label class="radio tab_radio2">
-                                  <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
-                                  自定义控制器
-                                </label>
+                              <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
+                              <label class="tab_radio2" for="optionsRadios2">
+                                                                                                                           自定义控制器
+                              </label>
                             </td>
                             <td>控制器IP</td> 
                             <td>
@@ -245,9 +252,6 @@
                     </tbody>
                 </table>
               </fieldset>
-              <label class="checkbox inline">
-                  <input type="checkbox" id="inlineCheckbox1" value="option1" class="tab_checkbox"> 是否配置DHCP服务器 
-              </label>
               <fieldset class="base_info hide_form">
                  <legend>DHCP服务器配置</legend>
                  <div class="alert alert-info">
@@ -257,7 +261,7 @@
                     <tbody>
                         <tr>
                             <td colspan="6">
-                                <label class="radio tab_radio3">
+                                <label class="tab_radio3">
                                   <input type="radio" name="dhcp_type" id="optionsRadios3" value="default">
                                   默认DHCP服务
                                 </label>
@@ -265,7 +269,7 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                                <label class="radio tab_radio4">
+                                <label class="tab_radio4">
                                   <input type="radio" name="dhcp_type" id="optionsRadios4" value="user_define" checked>
                                   自定义DHCP服务
                                 </label>
@@ -286,6 +290,9 @@
                     </tbody>
                 </table>
               </fieldset>
+              <label class="checkbox inline tab_checkbox">
+                  <input type="checkbox" id="inlineCheckbox1" value="option1"> 是否配置DHCP服务器 
+              </label>
               
               <div class="form-actions">
                   <div class="row-fluid">
@@ -300,8 +307,46 @@
                  <fieldset class="base_info vm_info_list">
                  <legend>虚拟机信息</legend>
                  <div class="sec_block">
-    		    {% csrf_token %}
-		    {{ form|crispy  }}
+		 <table class="table">             
+                    <tbody>
+                        <tr>
+                            <td width="100">名称</td>
+                            <td>
+				<input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
+				<span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>模板类型</td>
+                            <td>
+                                {{ vm_form.flavor }} {{vm_form.flavor.errors}}
+				<span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
+                            </td>
+                            <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                        </tr>
+                        <tr>
+                            <td>镜像类型</td>
+                            <td>
+                                {{ vm_form.image }} {{vm_form.image.errors}}
+				<span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>关联网络节点</td>
+                            <td>
+                                {{ vm_form.server }} {{vm_form.server.errors}}
+				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
+                            </td>
+                            <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
+                        </tr>
+                    </tbody>
+                 </table>
+                 <label class="checkbox">
+                                {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+                                                                     是否启动DHCP
+                 </label>
                  <div class="operate_btn">
                     <button class="btn btn-inverse del" type="button">删 除</button>
                  </div>
@@ -312,7 +357,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-step4 btn-info next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -320,7 +365,7 @@
              <div class="tab_part">
                  <fieldset>
                  <legend>Slice网络节点</legend>
-                 <table class="table table-striped table-hover">
+                 <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -330,18 +375,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>00000000001</td>
-                            <td>虚拟机关联节点</td>
-                            <td>1.2.4</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>00000000002</td>
-                            <td>网络出口节点</td>
-                            <td>1.2</td>
-                        </tr>
                     </tbody>
                  </table>   
               </fieldset>
@@ -404,8 +437,8 @@
                             <th>是否启动DHCP</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
+                    <tbody id="id_vm_tbody">
+ <!--                       <tr>
                             <td>VM1</td>
                             <td>small</td>
                             <td>ubuntu</td>
@@ -418,7 +451,7 @@
                             <td>ubuntu</td>
                             <td>DPID</td>
                             <td>否</td>
-                        </tr>
+                        </tr>-->
                     </tbody>
                  </table>   
               </fieldset>
@@ -440,62 +473,20 @@
         </div>
 {% endblock %}
 {% block extra_script %}
-	<script language="JavaScript">  
+<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+<script>  
 	    $(document).ready(function() {
-            /*
-            window.selected_switches = { {% for island_resource  in island_resources %}
-                {{ island_resource.island.id }} : [
-                {% for sw in island_resource.ovss %}{% if sw.selected %}"{{ sw.dpid }}"{% if not forloop.last %},{% endif %}{% endif %}
-                    {% endfor %}
-                ]{% if not forloop.parentloop.last %},{% endif %}
-            {% endfor %}};
-            //window.cfo_variable = cfo_variable;
-            window.disabled_switches = { {% for island_resource  in island_resources %}
-                {% for sw in island_resource.ovss %}{% if sw.disabled %}"{{ sw.dpid }}": true{% if not forloop.last %},{% endif %}{% endif %}
-                    {% endfor %}
-            {% endfor %}};
-            $.each(selected_switches, function(island_id, dpids){
-                var values = [];
-                $.each(dpids, function(index, dpid){
-                    values.push(dpid);
-                });
-                $('#topology-switch' + island_id).val(values.join(","));
-            });
-            window.add_switch = function (id, island_id) {
-                var existed = false;
-                if(!selected_switches[island_id]) {
-                    selected_switches[island_id] = [];
-                }
-                var dpid = null;
-                $.each(selected_switches[island_id], function(index, sw){
-                    if(id == sw) {
-                        existed = true;
-                        dpid = sw;
-                    }
-                });
-                if(dpid in disabled_switches) {
-                    return false;
-                }
-                if(!existed) {
-                    var island_switches = selected_switches[island_id];
-                    island_switches.push(id);
-                } else {
-                    var index = selected_switches[island_id].indexOf(id);
-                    selected_switches[island_id].splice(index, 1);
-                }
-                $('#topology-switch' + island_id).val(window.selected_switches[island_id].join(','));
-                return existed;
-            }
-            */
             window.selected_ports = {};
             window.add_port = function(port_id, is_delete) {
                 if(port_id in selected_ports) {
                     if(is_delete) {
                         delete selected_ports[port_id];
+                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('uncheck');
                     }
                 } else {
                     if(!is_delete) {
                         selected_ports[port_id] = port_id;
+                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('check');
                     }
                 }
                 var ports = [];
@@ -504,8 +495,20 @@
                 };
                 $('#topology-switch').val(ports.join(","));
             };
-		});
- 	</script> 
+    		$('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+              });
+            $('input[name="switch_port_ids"]').on("ifChecked", function(){
+                selected_ports[$(this).val()] = $(this).val();
+            });
+            $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
+                delete selected_ports[$(this).val()];
+            });
+});
+</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
 {% endblock %}

@@ -9,8 +9,7 @@ admin.autodiscover()
 #import xadmin
 #xadmin.autodiscover()
 
-#from xadmin.plugins import xversion
-#xversion.registe_models()
+#from xadmin.plugins import xversion #xversion.registe_models()
 
 urlpatterns = patterns("",
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
@@ -38,13 +37,22 @@ urlpatterns = patterns("",
 
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
+
     url(r'^topology/$', 'project.views.topology', name="topology_view"),
     url(r'^(topology/.+\.html)$', direct_to_template, ),
+    url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/aggregate/json', 'project.views.swicth_aggregate'),
+    url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/desc/json', 'project.views.swicth_desc'),
+    url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/device/', 'project.views.device_proxy'),
+    url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/topology/links/json', 'project.views.links_direct'),
+    url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/', 'project.views.switch_direct'),
+
     url(r'^(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/aggregate/json', 'project.views.swicth_aggregate'),
     url(r'^(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/desc/json', 'project.views.swicth_desc'),
     url(r'^(?P<host>[\d\.]+):(?P<port>\d+)/wm/device/', 'project.views.device_proxy'),
     url(r'^(?P<host>[\d\.]+):(?P<port>\d+)/wm/topology/links/json', 'project.views.links_proxy'),
     url(r'^(?P<host>[\d\.]+):(?P<port>\d+)/wm/', 'project.views.switch_proxy'),
+
+
     url(r"^project/", include("project.urls")),
     url(r"^slice/", include("slice.urls")),
     url(r"^plugins/vt/", include("plugins.vt.urls")),
