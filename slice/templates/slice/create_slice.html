@@ -100,7 +100,7 @@
                       <input type="hidden" name="switches" id="topology-switch" value="" />
                         <iframe id="topology-iframe" width="100%" height="100%" src=""></iframe>
                   </div>
-                  <table class="table table-bordered table-striped table-hover">
+                  <table class="switch-table table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -127,7 +127,8 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-	                            		<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+                                    </label>
 	                            	{%endfor%}
 	                            </td>
                         	</tr>
@@ -312,7 +313,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block prev_btn">上一步</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-step4 btn-info next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -320,7 +321,7 @@
              <div class="tab_part">
                  <fieldset>
                  <legend>Slice网络节点</legend>
-                 <table class="table table-striped table-hover">
+                 <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -330,18 +331,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>00000000001</td>
-                            <td>虚拟机关联节点</td>
-                            <td>1.2.4</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>00000000002</td>
-                            <td>网络出口节点</td>
-                            <td>1.2</td>
-                        </tr>
                     </tbody>
                  </table>   
               </fieldset>
@@ -436,62 +425,19 @@
         </div>
 {% endblock %}
 {% block extra_script %}
-	<script language="JavaScript">  
-	    $(document).ready(function() {
-            /*
-            window.selected_switches = { {% for island_resource  in island_resources %}
-                {{ island_resource.island.id }} : [
-                {% for sw in island_resource.ovss %}{% if sw.selected %}"{{ sw.dpid }}"{% if not forloop.last %},{% endif %}{% endif %}
-                    {% endfor %}
-                ]{% if not forloop.parentloop.last %},{% endif %}
-            {% endfor %}};
-            //window.cfo_variable = cfo_variable;
-            window.disabled_switches = { {% for island_resource  in island_resources %}
-                {% for sw in island_resource.ovss %}{% if sw.disabled %}"{{ sw.dpid }}": true{% if not forloop.last %},{% endif %}{% endif %}
-                    {% endfor %}
-            {% endfor %}};
-            $.each(selected_switches, function(island_id, dpids){
-                var values = [];
-                $.each(dpids, function(index, dpid){
-                    values.push(dpid);
-                });
-                $('#topology-switch' + island_id).val(values.join(","));
-            });
-            window.add_switch = function (id, island_id) {
-                var existed = false;
-                if(!selected_switches[island_id]) {
-                    selected_switches[island_id] = [];
-                }
-                var dpid = null;
-                $.each(selected_switches[island_id], function(index, sw){
-                    if(id == sw) {
-                        existed = true;
-                        dpid = sw;
-                    }
-                });
-                if(dpid in disabled_switches) {
-                    return false;
-                }
-                if(!existed) {
-                    var island_switches = selected_switches[island_id];
-                    island_switches.push(id);
-                } else {
-                    var index = selected_switches[island_id].indexOf(id);
-                    selected_switches[island_id].splice(index, 1);
-                }
-                $('#topology-switch' + island_id).val(window.selected_switches[island_id].join(','));
-                return existed;
-            }
-            */
+<script language="JavaScript">  
+    $(document).ready(function() {
             window.selected_ports = {};
             window.add_port = function(port_id, is_delete) {
                 if(port_id in selected_ports) {
                     if(is_delete) {
                         delete selected_ports[port_id];
+                        $('input[name="switch_port_ids"][value="' + port_id + '"]').removeAttr('checked');
                     }
                 } else {
                     if(!is_delete) {
                         selected_ports[port_id] = port_id;
+                        $('input[name="switch_port_ids"][value="' + port_id + '"]').attr('checked', '');
                     }
                 }
                 var ports = [];
@@ -500,8 +446,15 @@
                 };
                 $('#topology-switch').val(ports.join(","));
             };
-		});
- 	</script> 
+            $('input[name="switch_port_ids"]').click(function(){
+                if($(this).attr('checked')) {
+                    selected_ports[$(this).val()] = $(this).val();
+                } else {
+                    delete selected_ports[$(this).val()];
+                }
+            });
+});
+</script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 {% endblock %}

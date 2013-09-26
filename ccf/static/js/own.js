@@ -61,9 +61,23 @@ $(document).ready(function() {
             }           
         }
     });
+    // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
         $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+    });
+    $('.btn-step4').click(function () {
+        $('.switch-manifest tbody').html('');
+        $.each($('.switch-table tbody tr'), function (index, tr) {
+            var checked_ports = $(tr).find('input[name="switch_port_ids"][checked]');
+            if (checked_ports.length > 0) {
+                var clone = $(tr).clone();
+                clone.find('input[name="switch_port_ids"]').remove();
+                clone.find('label').addClass('label label-success');
+                $('.switch-manifest tbody').append(clone);
+            }
+        });
+        $('.switch-manifest tbody input').attr('disabled', '');
     });
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
@@ -115,9 +129,9 @@ $(document).ready(function() {
     //通过复选框控制表单显示和隐藏
     $(".tab_checkbox").click(function(){
         if(!$(this).attr("checked")){
-            $(".hide_form").slideUp();                     
+            $(".hide_form").slideUp();
         } else {
-            $(".hide_form").slideDown();            
+            $(".hide_form").slideDown();
         }
 
     });

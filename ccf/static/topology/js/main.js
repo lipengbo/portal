@@ -378,7 +378,7 @@ function init_svg () {
                     $.each(origin_data.ports, function(index, port){
                         content +=  
                             "<label><input class='checkbox' type='checkbox' ";
-                        if (d.db_id in parent.selected_ports) {
+                        if (port.db_id in parent.selected_ports) {
                             content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
@@ -439,7 +439,7 @@ function show_svg_code()
 var Island = function(urlBase, island_id) {
     this.id = island_id;
     var hackBase = urlBase;
-    this.hackBase = hackBase;
+    this.hackBase = hackBase;   
     if (direct_flowvisor_api) {
         this.hackBase = "/direct" + this.hackBase;
     }
