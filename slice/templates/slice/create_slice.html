@@ -484,29 +484,21 @@
             }
             */
             window.selected_ports = {};
-            window.add_port = function(island_id, dpid, port, is_delete) {
-                var existed = false;
-                if(!selected_ports[dpid]) {
-                    selected_ports[dpid] = [];
-                }
-                $.each(selected_ports[dpid], function(index, port_item){
-                    if(port == port_item) {
-                        existed = true;
-                    }
-                });
-                if(!existed) {
-                    var switch_ports = selected_ports[dpid];
-                    if(!is_delete) {
-                        switch_ports.push(port);
+            window.add_port = function(port_id, is_delete) {
+                if(port_id in selected_ports) {
+                    if(is_delete) {
+                        delete selected_ports[port_id];
                     }
                 } else {
-                    var index = selected_ports[dpid].indexOf(port);
-                    if(is_delete) {
-                        selected_ports[dpid].splice(index, 1);
+                    if(!is_delete) {
+                        selected_ports[port_id] = port_id;
                     }
                 }
-                $('#topology-switch').val(JSON.stringify(window.selected_ports));
-                return existed;
+                var ports = [];
+                for(port in selected_ports) {
+                    ports.push(port);
+                };
+                $('#topology-switch').val(ports.join(","));
             };
 		});
  	</script> 

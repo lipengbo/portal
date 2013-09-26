@@ -175,7 +175,6 @@ class SwitchPort(Resource):
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     switch = models.ForeignKey(Switch)
     port = models.IntegerField()
-    #name = models.CharField(max_length=32)
     slices = models.ManyToManyField(Slice, through="SlicePort", blank=True)
 
     def __unicode__(self):

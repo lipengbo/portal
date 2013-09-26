@@ -138,9 +138,17 @@ def device_proxy(request, host, port):
 
 def links_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    data = client.get_links()
-    return HttpResponse(json.dumps(data), content_type="application/json")
+    links = flowvisor.link_set.all()
+    link_data = []
+    for link in links:
+        link_data.append({
+            "dst-port": link.target.port,
+            "dst-switch": link.target.switch.dpid,
+            "src-port": link.source.port,
+            "src-switch": link.source.switch.dpid
+            })
+
+    return HttpResponse(json.dumps(link_data), content_type="application/json")
 
 @login_required
 #@cache_page(60 * 60 * 24 * 10)
@@ -158,7 +166,7 @@ def switch_proxy(request, host, port):
         ports = switch.switchport_set.all()
         port_data = []
         for port in ports:
-            port_data.append({"name": "sa", "portNumber": str(port.port)})
+            port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
         switch_data.append({"dpid": switch.dpid, "ports": port_data})
 
     data = json.dumps(switch_data)

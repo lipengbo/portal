@@ -310,7 +310,7 @@ class FlowvisorClient(object):
 
     def _parse_datapath_info(self, info):
         if not info:
-            return
+            return []
         ports = []
         ports_info = zip(info['port-list'], info['port-names'])
         for port_info in ports_info:
