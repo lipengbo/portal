@@ -9,8 +9,7 @@ admin.autodiscover()
 #import xadmin
 #xadmin.autodiscover()
 
-#from xadmin.plugins import xversion
-#xversion.registe_models()
+#from xadmin.plugins import xversion #xversion.registe_models()
 
 urlpatterns = patterns("",
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),

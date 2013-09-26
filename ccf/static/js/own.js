@@ -105,7 +105,10 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 3){
-           page_function3();
+           ret = page_function3();
+           if (!ret){
+           		return;
+           }
        }
        if(thisIndex == 4){
            page_function4();
@@ -198,10 +201,11 @@ function page_function2(){
 	}
 }
 function page_function3(){
+	//slice
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
-	
+	//控制器
 	var controller_type_obj = document.getElementsByName("controller_type");
 	$("div#list_controller").empty();
 	for(var i=0;i<controller_type_obj.length;i++){  
@@ -246,8 +250,10 @@ function page_function3(){
 		}   
 	}
 	$("div#list_controller").append(str); 
-	
+        //虚拟机
+        fetch_vminfo();
+        return check_vminfo()
 }
 function page_function4(){
-	
+        submmit_vms(1)
 }
