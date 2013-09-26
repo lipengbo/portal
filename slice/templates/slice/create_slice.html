@@ -439,12 +439,12 @@
                 if(port_id in selected_ports) {
                     if(is_delete) {
                         delete selected_ports[port_id];
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').removeAttr('checked');
+                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('uncheck');
                     }
                 } else {
                     if(!is_delete) {
                         selected_ports[port_id] = port_id;
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').attr('checked', '');
+                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('check');
                     }
                 }
                 var ports = [];
@@ -458,12 +458,11 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
               });
-            $('input[name="switch_port_ids"]').click(function(){
-                if($(this).attr('checked')) {
-                    selected_ports[$(this).val()] = $(this).val();
-                } else {
-                    delete selected_ports[$(this).val()];
-                }
+            $('input[name="switch_port_ids"]').on("ifChecked", function(){
+                selected_ports[$(this).val()] = $(this).val();
+            });
+            $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
+                delete selected_ports[$(this).val()];
             });
 });
 </script> 

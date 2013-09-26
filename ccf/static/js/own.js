@@ -70,10 +70,10 @@ $(document).ready(function() {
     $('.btn-step4').click(function () {
         $('.switch-manifest tbody').html('');
         $.each($('.switch-table tbody tr'), function (index, tr) {
-            var checked_ports = $(tr).find('input[name="switch_port_ids"][checked]');
+            var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
             if (checked_ports.length > 0) {
                 var clone = $(tr).clone();
-                clone.find('input[name="switch_port_ids"]').remove();
+                clone.find('.icheckbox_square-blue.checked').remove();
                 clone.find('label').addClass('label label-success');
                 $('.switch-manifest tbody').append(clone);
             }
