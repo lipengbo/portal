@@ -38,6 +38,29 @@ def create(request, proj_id):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
     error_info = None
+    islands = project.islands.all()
+    if not islands:
+        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
+    ovs_ports = []
+    for island in islands:
+        switches = island.switch_set.all()
+        for switch in switches:
+            switch_ports = switch.switchport_set.all()
+            if switch_ports:
+                ovs_ports.append({'switch_type': switch.type(),
+                    'switch': switch, 'switch_ports': switch_ports})
+    context = {}
+    context['project'] = project
+    context['islands'] = islands
+    context['ovs_ports'] = ovs_ports
+    context['error_info'] = error_info
+    return render(request, 'slice/create_slice.html', context)
+
+
+def create_first(request, proj_id):
+    """创建slice不含虚拟机创建。"""
+    project = get_object_or_404(Project, id=proj_id)
+    error_info = None
     if request.method == 'POST':
         try:
             user = request.user
@@ -57,43 +80,36 @@ def create(request, proj_id):
                                    'controller_ip': controller_ip,
                                    'controller_port': controller_port}
             port_ids = []
-            switch_port_ids = request.POST.getlist("switch_port_ids")
+            switch_port_ids_str = request.POST.get("switch_port_ids")
+#             print switch_port_ids_str
+            switch_port_ids = switch_port_ids_str.split(',')
             for switch_port_id in switch_port_ids:
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
-            slice_nw = request.POST.get("old_slice_nw")
-            print "*************************************"
-            print slice_nw
+            slice_nw = request.POST.get("slice_nw")
+#             print slice_name
+#             print slice_description
+#             print island_id
+#             print controller_info
+#             print port_ids
+#             print slice_nw
             slice_obj = create_slice_step(project, slice_name,
                 slice_description, island, user, ovs_ports, controller_info, slice_nw)
-        except DbError, ex:
-            return render(request, 'slice/warning.html', {'info': str(ex)})
         except Exception, ex:
             print 'he'
-            error_info = str(ex)
+            jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
-            return HttpResponseRedirect(
-                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-    islands = project.islands.all()
-    if not islands:
-        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
-    ovs_ports = []
-    for island in islands:
-        switches = island.switch_set.all()
-        for switch in switches:
-            switch_ports = switch.switchport_set.all()
-            if switch_ports:
-                ovs_ports.append({'switch_type': switch.type(),
-                    'switch': switch, 'switch_ports': switch_ports})
-    vm_form = VmForm()
-    vm_form.fields['server'].queryset = Server.objects.filter(id=3)
+            jsondatas = {'result': 1, 'slice_id': slice_obj.id}
+        result = json.dumps(jsondatas)
+        return HttpResponse(result, mimetype='text/plain')
+
+
+def list(request, proj_id):
+    """显示所有slice。"""
+    project = get_object_or_404(Project, id=proj_id)
     context = {}
     context['project'] = project
-    context['islands'] = islands
-    context['ovs_ports'] = ovs_ports
-    context['error_info'] = error_info
-    context['vm_form'] = vm_form
-    return render(request, 'slice/create_slice.html', context)
+    return render(request, 'slice/slice_list.html', context)
 
 
 def edit_description(request, slice_id):
@@ -145,6 +161,9 @@ def detail(request, slice_id):
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
     context['flowvisor'] = slice_obj.get_flowvisor()
+    context['gws'] = []
+    context['dhcps'] = []
+    context['vms'] = slice_obj.get_vms()[0:3]
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -153,7 +172,7 @@ def delete(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
     try:
-        delete_slice_api(slice_obj)
+        slice_obj.delete()
     except Exception, ex:
         return render(request, 'slice/warning.html', {'info': str(ex)})
     return HttpResponseRedirect(

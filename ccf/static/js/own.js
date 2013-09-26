@@ -70,10 +70,10 @@ $(document).ready(function() {
     $('.btn-step4').click(function () {
         $('.switch-manifest tbody').html('');
         $.each($('.switch-table tbody tr'), function (index, tr) {
-            var checked_ports = $(tr).find('input[name="switch_port_ids"][checked]');
+            var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
             if (checked_ports.length > 0) {
                 var clone = $(tr).clone();
-                clone.find('input[name="switch_port_ids"]').remove();
+                clone.find('.icheckbox_square-blue.checked').remove();
                 clone.find('label').addClass('label label-success');
                 $('.switch-manifest tbody').append(clone);
             }
@@ -112,6 +112,7 @@ $(document).ready(function() {
        }
        if(thisIndex == 4){
            page_function4();
+           return;
        }
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
@@ -255,5 +256,79 @@ function page_function3(){
         return check_vminfo()
 }
 function page_function4(){
-        submmit_vms(1)
+	var project_id = $("#project_id").text();
+	//alert(project_id);
+	submit_slice_info(project_id);
+}
+
+
+//提交slice信息创建slice
+function submit_slice_info(project_id){
+	//alert("here");
+	var slice_name_obj = document.getElementById("slice_name");
+	var slice_description_obj = document.getElementById("slice_description");
+	var island_id_obj = document.getElementById("island_id");
+	var controller_type_objs = document.getElementsByName("controller_type");
+	var controller_sys_obj = document.getElementById("controller_sys");
+	var controller_ip_obj = document.getElementById("controller_ip");
+	var controller_port_obj = document.getElementById("controller_port");
+	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
+	var old_slice_nw_obj = document.getElementById("old_slice_nw");
+	var switch_port_ids = "";
+	var controller_type;
+	var j = 0;
+    for(var i=0;i<switch_port_ids_obj.length;i++){
+		if(switch_port_ids_obj[i].checked){
+			//alert(switch_port_ids_obj[i].value);
+			if(j==0){
+				switch_port_ids = switch_port_ids_obj[i].value;
+			}
+			else{
+				switch_port_ids = switch_port_ids + "," + switch_port_ids_obj[i].value;
+			}
+			j++;
+		}
+    }      
+	for(var i=0;i<controller_type_objs.length;i++){  
+		if(controller_type_objs[i].checked){  
+			if(controller_type_objs[i].value=="default_create"){  
+				controller_type = "default_create";
+			}  
+			if(controller_type_objs[i].value=="user_defined"){
+				controller_type = "user_defined";
+	  		}  
+		}   
+	}
+	var submit_data = {"slice_name": slice_name_obj.value,
+						"slice_description": slice_description_obj.value,
+						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
+						"controller_type": controller_type,
+						"controller_sys": controller_sys_obj.value,
+						"controller_ip": controller_ip_obj.value,
+						"controller_port": controller_port_obj.value,
+						"switch_port_ids": switch_port_ids,
+						"slice_nw": old_slice_nw_obj.value,
+						}
+
+	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
+	$.ajax({
+			type: "POST",
+			url: check_url,
+			dataType: "json",
+			data: submit_data,
+			async: false, 
+			success: function(data) {
+	        	if (data.result == 1){
+	        		//alert(data.slice_id);
+	        		submmit_vms(data.slice_id);
+	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+	            }
+	            else{
+	            	alert(data.error_info);
+	            }
+	        },
+	        error: function(data) {
+	        	alert("创建slice失败！");
+	        },
+	});
 }
