@@ -1,20 +1,47 @@
 {% extends "site_base.html" %}
 
 {% load i18n %}
+{% load staticfiles %}
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}项目列表{% endblock %}
 
 {% block body %}
-<div class="row">
-    {% for project in projects %}
-    <div class="span4">
-        <div class="well">
-            <h3><a href="{% url project_detail project.id %}">{{ project.name }}</a></h3>
-            <a href="{% url project_edit project.id %}">{% trans "Edit" %}</a>
-            <blockquote>
-                {{ project.description }}
-            </blockquote>
+        <div class="fill_form">
+            <fieldset>
+                 <legend>我的项目<button type="button" class="btn edit" onclick="window.history.back();">返 回</button></legend>
+                 <div class="alert alert-info">
+                     <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
+                </div>
+                 <ul class="thumbnails example-sites">
+                    {% for project in projects %}
+                    <li class="span3">
+                        <a class="thumbnail" href="{% url project_detail project.id %}" target="_blank">
+                        <img src="{% static "img/001.png" %}" />
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td width="80">项目名称：</td>
+                                    <td>{{ project.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">Slice个数：</td>
+                                    <td>{{ project.slice_set.count }}</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">成员个数：</td>
+                                    <td>{{ project.memberships.count }}个</td>
+                                </tr>
+                                <tr>
+                                    <td valign="top">创建者：</td>
+                                    <td>{{ project.owner }}</td>
+                                </tr>
+                            </tbody>
+                        </table>            
+                      </a>
+                    </li>
+                    {% endfor %}
+                  </ul>
+              </fieldset>
         </div>
-    </div>
-    {% endfor %}
-</div>
 {% endblock %}
  

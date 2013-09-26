@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.db.models import F
+from django.dispatch import receiver
 
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
@@ -152,3 +153,8 @@ class SliceIsland(models.Model):
 
     class Meta:
         unique_together = (("slice", "island"), )
+        
+@receiver(pre_delete, sender=Slice)
+def pre_delete_slice(sender, instance, **kwargs):
+    from slice.slice_api import delete_slice_api
+    delete_slice_api(instance)
