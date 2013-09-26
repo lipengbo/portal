@@ -5521,6 +5521,11 @@ a {
 .fill_form fieldset textarea {
   width: 400px;
 }
+.fill_form fieldset legend {
+  font-family: "Microsoft YaHei";
+  color: #2489c5;
+  border-bottom: 1px solid #2489c5;
+}
 .fill_form fieldset legend button {
   margin-left: 10px;
 }
@@ -5579,6 +5584,8 @@ a {
   box-shadow: none !important;
   color: #777;
   cursor: default;
+  padding-left: 9px;
+  padding-right: 9px;
 }
 .form-wizard .nav-pills li .number {
   background-color: #eee;

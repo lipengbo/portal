@@ -192,10 +192,12 @@
                     <tbody>
                         <tr>
                             <td width="200">
-                                <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
-                                <label class="tab_radio1" for="optionsRadios1">创建控制器 </label>
+                                <label class="tab_radio1" for="optionsRadios1">
+                                    <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
+                                                                                                                               创建控制器 
+                                </label>
                             </td>
-                            <td width="70">控制器类型</td>
+                            <td width="85">控制器类型</td>
                             <td width="290">
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
@@ -207,21 +209,17 @@
                         </tr>
                         <tr>
                             <td>
-                              <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
-                              <label class="tab_radio2" for="optionsRadios2">
+                                <label class="tab_radio2" for="optionsRadios2">
+                                    <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
                                                                                                                            自定义控制器
                               </label>
                             </td>
-                            <td>控制器IP</td> 
+                            <td>控制器IP端口</td> 
                             <td>
                                 <input type="text" name="controller_ip" id="controller_ip" disabled onblur="check_ip('controller_ip',1)">
                                 <span id="controller_ipInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td width="70">控制器端口</td>
-                            <td>
-                                <input type="text" name="controller_port" id="controller_port" disabled onblur="check_port('controller_port',1)">
-                                <span id="controller_portInfo" style="display:inline;float:none;"></span>
-                            </td>
+                            <td colspan="2"></td>
                         </tr>
                     </tbody>
                 </table>

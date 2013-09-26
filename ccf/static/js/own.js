@@ -28,19 +28,19 @@ $(document).ready(function() {
     });
     
     //创建slice第3步，选择控制器配置方式
-    $(".tab_radio1").click(function(){
-        $(this).parent("td").siblings("td").children("select").removeAttr("disabled");
+    $(".tab_radio1, .tab_radio1 .iCheck-helper").click(function(){
+        $(".tab_radio1").parent("td").siblings("td").children("select").removeAttr("disabled");
         $(".tab_radio2").parent("td").siblings("td").children("input").attr("disabled","disabled");
     });
-    $(".tab_radio2").click(function(){
-        $(this).parent("td").siblings("td").children("input").removeAttr("disabled");
+    $(".tab_radio2, .tab_radio2 .iCheck-helper").click(function(){
+        $(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
         $(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");
     });
-    $(".tab_radio3").click(function(){
-        $(this).parent("td").parent("tr").siblings("tr").children("td").children("input").attr("disabled","disabled");
+    $(".tab_radio3, .tab_radio3 .iCheck-helper").click(function(){
+        $(".tab_radio3").parent("td").parent("tr").siblings("tr").children("td").children("input").attr("disabled","disabled");
     });
-    $(".tab_radio4").click(function(){
-        $(this).parent("td").parent("tr").siblings("tr").children("td").children("input").removeAttr("disabled");
+    $(".tab_radio4, .tab_radio4 .iCheck-helper").click(function(){
+        $(".tab_radio4").parent("td").parent("tr").siblings("tr").children("td").children("input").removeAttr("disabled");
     });
     
     //slice详情启动停止按钮
