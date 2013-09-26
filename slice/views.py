@@ -43,6 +43,7 @@ def create(request, proj_id):
             island_id = request.POST.get("island_id")
             island = get_object_or_404(Island, id=island_id)
             controller_type = request.POST.get("controller_type")
+            dpid_port = request.POST.get("controller_type")
             if controller_type == 'default_create':
                 controller_sys = request.POST.get("controller_sys")
                 controller_info = {'controller_type': controller_type,
