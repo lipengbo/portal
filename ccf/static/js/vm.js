@@ -121,6 +121,20 @@ function get_text_from_select(obj)
         return results
 }
 
+function get_value_from_select(obj)
+{
+	var objs = document.getElementsByName(obj);
+        //var obj = document.getElementById(obj);
+        var results = new Array();
+        for(var i=0; i < objs.length; i++)
+        {
+                obj = objs[i];
+                value = obj.value
+                results[i] = value
+        }
+        return results
+}
+
 function get_checked_from_checkbox(obj)
 {
 	var objs = document.getElementsByName(obj);
@@ -134,6 +148,19 @@ function get_checked_from_checkbox(obj)
                         results[i] = '是'
                 }
                 results[i] = '否'
+        }
+        return results
+}
+
+function get_checked_value_from_checkbox(obj)
+{
+	var objs = document.getElementsByName(obj);
+        //var obj = document.getElementById(obj);
+        var results = new Array();
+        for(var i=0; i < objs.length; i++)
+        {
+                obj = objs[i];
+                results[i] = obj.checked
         }
         return results
 }
@@ -168,19 +195,12 @@ function submmit_vms(sliceid)
 {
         var objs = document.getElementsByName('name');
         name_value = get_value_from_obj('name');
-        flavor_text = get_text_from_select('flavor');
-        image_text = get_text_from_select('image');
-        server_text = get_text_from_select('server');
-        enable_dhcp_value = get_checked_from_checkbox('enable_dhcp');
+        flavor_text = get_value_from_select('flavor');
+        image_text = get_value_from_select('image');
+        server_text = get_value_from_select('server');
+        enable_dhcp_value = get_checked_value_from_checkbox('enable_dhcp');
         for(var i=0; i < objs.length; i++)
         {
-                content = content + "<tr>"
-                content = content + "<td>" + name_value[i] + "</td>"
-                content = content + "<td>" + flavor_text[i] + "</td>"
-                content = content + "<td>" + image_text[i] + "</td>"
-                content = content + "<td>" + server_text[i] + "</td>"
-                content = content + "<td>" + enable_dhcp_value[i] + "</td>"
-                content = content + "</tr>"
                 post_vminfo(sliceid, name_value[i], flavor_text[i], image_text[i], server_text[i], enable_dhcp_value[i])
         }
         
@@ -188,8 +208,7 @@ function submmit_vms(sliceid)
 
 function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
 {
-	//alert (sliceid)
-        url = "/plugins/vt/create/vm"+sliceid+"/";
+        url = "/plugins/vt/create/vm/"+sliceid+"/";
         $.ajax({
         type: "POST",
         url: url,
@@ -204,14 +223,14 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 enable_dhcp: enable_dhcp,
         },
         success: function(data) {
-                if (data.value == 1)
-                {
-                        alert("true")
-                } 
-                else
-                {
-                        alert("false");
-                }
+
         }
         });
+}
+
+//显示信息
+function showInfo(_info,msg,color){
+    var info=_info;
+    info.innerHTML = msg;
+    info.style.color=color;
 }
