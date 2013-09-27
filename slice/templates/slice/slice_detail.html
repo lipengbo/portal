@@ -170,22 +170,23 @@
                   <table class="table">
                     <tbody>
                         <tr>
-                            <td width="100">
+                            <td width="120">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
                                   默认创建
                                 </label>
                             </td>
-                            <td width="70">控制器类型</td>
-                            <td width="290">
+                            <td width="85">控制器类型</td>
+                            <td width="250">
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
                                   <!--<option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
                                   <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>-->
                                 </select>
                             </td>
-                            <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
+                            <td width="200"><span class="help-inline">此处默认创建floodlight控制器</span></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>
@@ -195,24 +196,16 @@
                                   自定义
                                 </label>
                             </td>
-                            <td>控制器IP</td> 
-                            <td>
-                            	{%if controller.name == "user_define"%}
-                                <input type="text" name="controller_ip" id="controller_ip" value={{controller.ip}} onblur="check_ip('controller_ip',1)">
-                            	{%else%}
-                            	<input type="text" name="controller_ip" id="controller_ip" disabled onblur="check_ip('controller_ip',1)">
-                            	{%endif%}
-                            	<span id="controller_ipInfo" style="display:inline;float:none;"></span>
+                            <td>控制器IP端口</td> 
+                            <td colspan="2">
+                            {%if controller.name == "user_define"%}
+                                <input type="text" name="controller_ip_port" id="controller_ip_port" value={{controller.ip}}:{{controller.port}} onblur="check_slice_controller('controller_type')">
+                            {%else%}
+                                <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
+                            {%endif%}
+                            	<span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td width="70">控制器端口</td>
-                            <td>
-                                {%if controller.name == "user_define"%}
-                                <input type="text" name="controller_port" id="controller_port" value={{controller.port}} onblur="check_port('controller_port',1)">
-                            	{%else%}
-                            	<input type="text" name="controller_port" id="controller_port" disabled onblur="check_port('controller_port',1)">
-                            	{%endif%}
-                            	<span id="controller_portInfo" style="display:inline;float:none;"></span>
-                            </td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
