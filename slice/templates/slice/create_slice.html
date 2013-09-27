@@ -118,7 +118,7 @@
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
                     		<tr>
-	                            <td>{{ovs_port.switch.name}}</td>
+                                    <td>{{ovs_port.switch.name}}</td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
 	                            {% if ovs_port.switch_type == 1 %}
@@ -133,8 +133,13 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
+		                            {% if ovs_port.switch_type == 3 %}
+                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
+                                    </label>
+					    {%else%}
                                     <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
                                     </label>
+		                            {%endif%}
 	                            	{%endfor%}
 	                            </td>
                         	</tr>
@@ -336,7 +341,9 @@
                         <tr>
                             <td>关联网络节点</td>
                             <td>
-                                {{ vm_form.server }} {{vm_form.server.errors}}
+                                <select onblur="check_vminfo()" name="server" id="id_server">
+					 <!--<option value="" selected="selected">---------</option>-->
+				</select>
 				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>

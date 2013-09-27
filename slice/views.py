@@ -49,11 +49,13 @@ def create(request, proj_id):
             if switch_ports:
                 ovs_ports.append({'switch_type': switch.type(),
                     'switch': switch, 'switch_ports': switch_ports})
+    vm_form = VmForm()
     context = {}
     context['project'] = project
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
+    context['vm_form'] = vm_form
     return render(request, 'slice/create_slice.html', context)
 
 

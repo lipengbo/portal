@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-from resources.models import ComputeResource, Server, IslandResource
+from resources.models import ComputeResource, Server
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
@@ -40,14 +40,6 @@ class VirtualMachine(ComputeResource):
     flavor = models.ForeignKey(Flavor)
     image = models.ForeignKey(Image)
     server = models.ForeignKey(Server)
-
-    def __init__(self, *args, **kwargs):
-        super(VirtualMachine, self).__init__(*args, **kwargs)
-
-    def save(self, force_insert=False, force_update=False, using=None):
-        self.uuid = utils.gen_uuid()
-        self.mac = utils.generate_mac_address(self.get_ipaddr())
-        super(VirtualMachine, self).save(force_insert=force_insert, force_update=force_update, using=using)
 
     def get_ipaddr(self):
         return self.ip.ipaddr
@@ -85,6 +77,9 @@ class VirtualMachine(ComputeResource):
     def create_vm(self):
         print '----------------------create a vm=%s -------------------------' % self.name
 
+    def delete_vm(self):
+        print '----------------------delete a vm=%s -------------------------' % self.name
+
 
 class HostMac(models.Model):
     mac = models.CharField(max_length=32)
@@ -95,7 +90,27 @@ class HostMac(models.Model):
 
 
 @receiver(post_save, sender=VirtualMachine)
+def vm_pre_save(sender, instance, **kwargs):
+    print '--------------------vm pre save-------------------------'
+    print kwargs
+    print '--------------------vm pre save-------------------------'
+    instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+    instance.uuid = utils.gen_uuid()
+    instance.mac = utils.generate_mac_address(instance.get_ipaddr())
+
+
+@receiver(post_save, sender=VirtualMachine)
 def vm_post_save(sender, instance, **kwargs):
     if kwargs.get('created'):
         instance.create_vm()
         print '-------------------Add HostMac----------------------------'
+
+
+@receiver(post_save, sender=VirtualMachine)
+def vm_post_delete(sender, instance, **kwargs):
+    print '--------------------vm post delete-------------------------'
+    print kwargs
+    print '--------------------vm post delete-------------------------'
+    IPUsage.objects.release_ip(instance.ip)
+    instance.delete_vm()
+    print '-------------------Delete HostMac----------------------------'

@@ -193,6 +193,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
+        fetch_serverinfo();
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -320,7 +321,7 @@ function submit_slice_info(project_id){
 			success: function(data) {
 	        	if (data.result == 1){
 	        		//alert(data.slice_id);
-	        		submmit_vms(data.slice_id);
+	        		submit_vms(data.slice_id);
 	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
 	            }
 	            else{

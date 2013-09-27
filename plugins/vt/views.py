@@ -8,7 +8,6 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from forms import VmForm
-from resources.models import Server
 from slice.models import Slice
 
 
@@ -20,10 +19,6 @@ def vm_list(request, sliceid):
 
 
 def create_vm(request, sliceid):
-    print "start to create vm "
-    print 'sliceid=%s' % sliceid
-    print request.POST
-    print request.GET
     if request.method == 'POST':
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
@@ -36,7 +31,8 @@ def create_vm(request, sliceid):
             return HttpResponse(json.dumps({'value': 0}))
     else:
         vm_form = VmForm()
-        vm_form.fields['server'].queryset = Server.objects.filter(id=3)
+        #slice = get_object_or_404(Slice, id=sliceid)
+        #vm_form.fields['server'].queryset = slice.get_virtual_switches_server()
         context = {}
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid
