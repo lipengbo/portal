@@ -134,21 +134,14 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-<<<<<<< HEAD
+                                            <label class="checkbox inline">
 		                            {% if ovs_port.switch_type == 3 %}
-                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
-                                    </label>
+						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
-                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
-=======
-                                    <label class="checkbox inline">
-	                                    <input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
-	                                    <!--<input type="text" value="{{ovs_port.switch.virtualswitch.server.id}}" id="serverid{{port.id}}" style="display:none"/>
-	                                    <input type="text" value="{{ovs_port.switch.name}}" id="switchname{{port.id}}" style="display:none"/>-->
-	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
->>>>>>> 3e4262534d23f0fd3588a5033d78ea58daa51454
-                                    </label>
+						<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
 		                            {%endif%}
+	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
+                                    </label>
 	                            	{%endfor%}
 	                            </td>
                         	</tr>

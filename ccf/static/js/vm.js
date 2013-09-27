@@ -254,20 +254,16 @@ function fetch_serverinfo(){
 function get_select_server_name(){
     var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
     var results = new Array();
+    var j =0
     for(var i=0;i<switch_port_ids_obj.length;i++){
-        if(switch_port_ids_obj[i].checked){
-            obj = switch_port_ids_obj[i]
-            servername = obj.getAttribute("servername")
-            if(servername == null)
+        obj = switch_port_ids_obj[i];
+        if(obj.checked){
+            servername = obj.getAttribute("servername");
+            if( servername && not_contains(results, servername))
             {
-               continue
-            }
-            if(contains(results, servername))
-            {
-                alert('contain')
-            }else{
-                results[i] = obj.value
-                alert('not contain')
+                results[j] = servername;
+                alert('not contain');
+                j++;
             }
         }
     }      
@@ -277,31 +273,27 @@ function get_select_server_name(){
 function get_select_server_id(){
     var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
     var results = new Array();
+    var j =0
     for(var i=0;i<switch_port_ids_obj.length;i++){
-        if(switch_port_ids_obj[i].checked){
-            obj = switch_port_ids_obj[i]
-            serverid = obj.getAttribute("serverid")
-            if(serverid == null)
+        obj = switch_port_ids_obj[i];
+        if(obj.checked){
+            serverid = obj.getAttribute("serverid");
+            if( serverid && not_contains(results, serverid))
             {
-               continue
-            }
-            if(contains(results, serverid))
-            {
-                alert('contain')
-            }else{
-                results[i] = obj.value
-                alert('not contain')
+                results[j] = serverid;
+                alert('not contain');
+                j++;
             }
         }
     }      
     return results
 }
 
-function contains(a, obj) {
+function not_contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
         if (a[i] === obj) {
-            return true;
+            return false;
         }
     }
-    return false;
+    return true;
 }
