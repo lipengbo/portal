@@ -5531,7 +5531,7 @@ a {
   margin-left: 10px;
   font-family: "宋体";
 }
-.fill_form fieldset legend span {
+.fill_form fieldset legend small {
   margin-left: 10px;
   font-style: italic;
 }
