@@ -61,8 +61,8 @@
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
-                    <label>描述</label>
-                    <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <label>Slice描述</label>
+                    <textarea rows="5" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
                  <div class="form_inline">   
@@ -311,9 +311,8 @@
                             <td width="100">名称</td>
                             <td>
 				<input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
-				<span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td></td>
+                            <td><span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span></td>
                         </tr>
                         <tr>
                             <td>模板类型</td>
@@ -471,7 +470,6 @@
         </div>
 {% endblock %}
 {% block extra_script %}
-<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script>  
 	    $(document).ready(function() {
             window.selected_ports = {};
@@ -493,11 +491,6 @@
                 };
                 $('#topology-switch').val(ports.join(","));
             };
-    		$('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-              });
             $('input[name="switch_port_ids"]').on("ifChecked", function(){
                 selected_ports[$(this).val()] = $(this).val();
             });

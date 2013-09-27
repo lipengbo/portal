@@ -5526,8 +5526,10 @@ a {
   color: #2489c5;
   border-bottom: 1px solid #2489c5;
 }
-.fill_form fieldset legend button {
+.fill_form fieldset legend button,
+.fill_form fieldset legend a {
   margin-left: 10px;
+  font-family: "宋体";
 }
 .fill_form fieldset .progress {
   margin-bottom: 0;
@@ -5568,13 +5570,13 @@ a {
 .base_info .table td {
   border: none;
 }
-.base_info .table .v_top {
-  vertical-align: top;
-}
 .base_info .sec_block {
   background: #dff0d8;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+}
+.v_top {
+  vertical-align: top;
 }
 .form-wizard .nav-pills li a {
   background-color: #fff !important;
