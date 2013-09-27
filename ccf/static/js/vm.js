@@ -220,7 +220,7 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 flavor: flavor,
                 image: image,
                 server: server,
-                enable_dhcp: enable_dhcp,
+                enable_dhcp: enable_dhcp
         },
         success: function(data) {
 

@@ -204,7 +204,7 @@ function check_nw_num(){
 	        error: function(data) {
 	        	showInfo(info," * 分配网段失败！(改slice名称)","red");
 	    		return false;
-	        },
+	        }
 	    });
 	}
 	else{

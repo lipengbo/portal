@@ -116,11 +116,11 @@
     			  	<div class="span4"></div>
     			  	<div class="span4">
     			  	{% if slice_obj.state == 0 %}
-    			  		<button type="button" class="btn btn-large btn-block btn-success start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'"/>
+    			  		<button type="button" class="btn btn-large btn-block btn-success start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'">
     			  			启动Slice
     			  		</button>
     			  	{%else%}
-    			  		<button type="button" class="btn btn-large btn-block btn-danger start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'"/>
+    			  		<button type="button" class="btn btn-large btn-block btn-danger start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'">
     			  			停止Slice
     			  		</button>
     			  	{%endif%}
@@ -154,7 +154,7 @@
 	            </div>
 	            <div class="modal-footer">
 	              <button class="btn" data-dismiss="modal">取消</button>
-	              <button  class="btn btn-primary" type="submit"/>
+	              <button  class="btn btn-primary" type="submit">确定</button>
 		  			提交申请
 		  		  </button>
 	            </div>
@@ -166,11 +166,11 @@
               <h3>SLICE控制器编辑</h3>      
             </div>
             <form class="" action="/slice/edit_controller/{{ slice_obj.id }}/" method="post" accept-charset="utf-8" onsubmit="return check_slice_controller('controller_type')">{% csrf_token %}
-            	<div class="modal-body">
+            	<div class="modal-body tooltip-demo">
                   <table class="table">
                     <tbody>
                         <tr>
-                            <td width="120">
+                            <td width="200">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
@@ -178,15 +178,14 @@
                                 </label>
                             </td>
                             <td width="85">控制器类型</td>
-                            <td width="250">
+                            <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
                                   <!--<option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
                                   <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>-->
                                 </select>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td width="200"><span class="help-inline">此处默认创建floodlight控制器</span></td>
-                            <td></td>
                         </tr>
                         <tr>
                             <td>
@@ -197,7 +196,7 @@
                                 </label>
                             </td>
                             <td>控制器IP端口</td> 
-                            <td colspan="2">
+                            <td>
                             {%if controller.name == "user_define"%}
                                 <input type="text" name="controller_ip_port" id="controller_ip_port" value={{controller.ip}}:{{controller.port}} onblur="check_slice_controller('controller_type')">
                             {%else%}
@@ -205,14 +204,13 @@
                             {%endif%}
                             	<span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </table>
 	          </div>
 	          <div class="modal-footer">
 	              <button class="btn" data-dismiss="modal">取消</button>
-	              <button class="btn btn-primary" type="submit">提交申请</button>
+	              <button class="btn btn-primary" type="submit">确定</button>
 	          </div>
             </form>
          </div>

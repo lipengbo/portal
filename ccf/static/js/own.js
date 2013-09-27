@@ -40,7 +40,7 @@ $(document).ready(function() {
         $(".tab_radio3").parent("td").parent("tr").siblings("tr").children("td").children("input").attr("disabled","disabled");
     });
     $(".tab_radio4, .tab_radio4 .iCheck-helper").click(function(){
-        $(".tab_radio4").parent("td").parent("tr").siblings("tr").children("td").children("input").removeAttr("disabled");
+        $(".tab_radio4").parent("td").siblings("td").children("input").removeAttr("disabled");
     });
     
     //slice详情启动停止按钮
@@ -162,7 +162,12 @@ $(document).ready(function() {
            $(".icheckbox_square-blue").iCheck('uncheck');
        }
     });
-         
+    
+    //tooltip demo
+     $('.tooltip-demo').tooltip({
+      selector: "a[data-toggle=tooltip]"
+    });
+
 });
 
 //全选全不选
@@ -308,8 +313,8 @@ function submit_slice_info(project_id){
 						"controller_ip": controller_ip_port[0],
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
-						"slice_nw": old_slice_nw_obj.value,
-						}
+						"slice_nw": old_slice_nw_obj.value
+		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
 	$.ajax({
@@ -330,6 +335,6 @@ function submit_slice_info(project_id){
 	        },
 	        error: function(data) {
 	        	alert("创建slice失败！");
-	        },
+	        }
 	});
 }

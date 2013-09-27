@@ -5531,6 +5531,10 @@ a {
   margin-left: 10px;
   font-family: "宋体";
 }
+.fill_form fieldset legend small {
+  margin-left: 10px;
+  font-style: italic;
+}
 .fill_form fieldset .progress {
   margin-bottom: 0;
 }
@@ -5576,7 +5580,7 @@ a {
   border-bottom: 1px solid #ddd;
 }
 .v_top {
-  vertical-align: top;
+  vertical-align: top !important;
 }
 .form-wizard .nav-pills li a {
   background-color: #fff !important;
@@ -5590,6 +5594,7 @@ a {
   padding-right: 9px;
 }
 .form-wizard .nav-pills li .number {
+  vertical-align: middle;
   background-color: #eee;
   display: inline-block;
   font-size: 16px;
@@ -5600,6 +5605,9 @@ a {
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;
   margin-right: 0px;
+}
+.form-wizard .nav-pills li .desc {
+  vertical-align: middle;
 }
 .form-wizard .nav-pills .visit .step .number {
   background-color: #2489c5;
@@ -5705,8 +5713,8 @@ a {
   text-align: center;
 }
 #editSliceModal {
-  width: 950px;
-  margin-left: -475px;
+  width: 700px;
+  margin-left: -350px;
 }
 .font_wait {
   color: #c09853;

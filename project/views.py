@@ -12,9 +12,11 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import messages
 
 from project.models import Project, Membership
 from project.forms import ProjectForm
+from invite.forms import ApplicationForm
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -38,9 +40,24 @@ def detail(request, id):
 
 @login_required
 def apply(request):
-    projects = Project.objects.all()
     context = {}
+    user = request.user
+    projects = Project.objects.all()
     context['projects'] = projects
+    if request.method == 'POST':
+        project_ids = request.POST.getlist('project_id')
+        message = request.POST.get('message')
+        for project_id in project_ids:
+            project = get_object_or_404(Project, id=project_id)
+            form = ApplicationForm({"to_user": project.owner.id, "message": message})
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.target = project
+                application.from_user = user
+                try:
+                    application.save()
+                except IntegrityError:
+                    pass
     return render(request, 'project/apply.html', context)
 
 @login_required

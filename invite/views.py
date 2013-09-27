@@ -12,7 +12,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.contrib import messages
 
-from invite.models import Invitation
+from invite.models import Invitation, Application
 from invite.forms import InvitationForm
 
 @login_required
@@ -38,13 +38,17 @@ def invite(request, target_type_id, target_id):
     context['form'] = form
     return render(request, "invite/invite.html", context)
 
-def accept(request, key):
-    invitation = get_object_or_404(Invitation, key=key)
+def accept(request, kind="invite", key=""):
+    if kind == 'apply':
+        ModelClass = Application
+    else:
+        messages.add_message(request, messages.INFO,
+                _("You have joined %s") % (invitation.get_target_name(), ))
+        ModelClass = Invitation
+    invitation = get_object_or_404(ModelClass, key=key)
     invitation.accept()
 
     user = request.user
-    messages.add_message(request, messages.INFO,
-            _("You have joined %s") % (invitation.get_target_name(), ))
 
     if user.is_authenticated():
         redirect_url = "/"
