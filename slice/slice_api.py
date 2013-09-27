@@ -26,8 +26,6 @@ def create_slice_step(project, name, description, island, user, ovs_ports, contr
         slice_add_ovs_ports(slice_obj, ovs_ports)
         create_add_controller(slice_obj, controller_info)
         flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
-        print "8888888888888888888888888888888888888888888888888"
-        print slice_nw
         flowspace_nw_add(slice_obj, [], slice_nw)
 #         创建并添加网段
 #         创建并添加网关
@@ -35,7 +33,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports, contr
 #         创建并添加虚拟机
         return slice_obj
     except:
-        delete_slice_api(slice_obj)
+        slice_obj.delete()
         raise
 
 
@@ -120,7 +118,6 @@ def delete_slice_api(slice_obj):
             delete_controller(slice_obj.get_controller())
 #             删除交换机端口
 #             删除slice记录
-            slice_obj.delete()
         except Exception, ex:
             transaction.rollback()
             raise DbError(ex)
