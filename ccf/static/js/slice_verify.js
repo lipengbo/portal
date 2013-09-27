@@ -182,16 +182,16 @@ function check_nw_num(){
 	        cache: false,
 	        async: false,  
 	        success: function(data) {
-	        	alert(data.value);
+	        	//alert(data.value);
 	        	if (data.value == 0){
-	        		alert(1);
+	        		//alert(1);
 	        		showInfo(info," * 分配网段失败！(改slice名称)","red");
 	        		return false;
 	            }
 	            else{
-	            	alert(2);
+	            	//alert(2);
 	            	if (data.value != 1){
-	            		alert(3);
+	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
 		             	old_slice_nw_obj.value = data.value;
 	            	}
@@ -208,7 +208,7 @@ function check_nw_num(){
 	    });
 	}
 	else{
-		alert(4);
+		//alert(4);
 		showInfo(info,"√","green");
 		return true;
 	}
