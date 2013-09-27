@@ -82,7 +82,7 @@ $(document).ready(function() {
     });
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
-    $(".next_btn").click(function(){
+    $(".next_btn").click(function(){alert(1);
        $("html, body").scrollTop(0);
        var thisIndex = $(".next_btn").index(this);
        var nowIndex = thisIndex + 1;
@@ -157,9 +157,9 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
-           $(".icheckbox_square-blue").addClass("checked");
+           $(".icheckbox_square-blue").iCheck('check');
        } else {
-           $(".icheckbox_square-blue").removeClass("checked");
+           $(".icheckbox_square-blue").iCheck('uncheck');
        }
     });
          
