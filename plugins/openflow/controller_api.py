@@ -72,10 +72,11 @@ def create_user_defined_controller(slice_obj, controller_ip, controller_port):
 
 @transaction.commit_on_success
 def create_default_controller(slice_obj, controller_sys):
-    """创建用户自定义控制器记录
+    """创建默认控制器
     """
     if slice_obj:
         try:
+#             调用控制器创建接口
             controller = Controller(
                 name=controller_sys,
                 ip='192.168.8.9',

@@ -97,6 +97,7 @@
                   <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
                 </div>
                 <div class="show_frame">
+                <span id="switch_portInfo" style="display:inline;float:left;"></span>
                   <div class="frame_tip">
                     <span class="label label-important">网络出口节点</span>
                     <span class="label label-info">普通交换节点</span>
@@ -133,7 +134,11 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+                                    <label class="checkbox inline">
+	                                    <input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+	                                    <!--<input type="text" value="{{ovs_port.switch.virtualswitch.server.id}}" id="serverid{{port.id}}" style="display:none"/>
+	                                    <input type="text" value="{{ovs_port.switch.name}}" id="switchname{{port.id}}" style="display:none"/>-->
+	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
 	                            	{%endfor%}
 	                            </td>
