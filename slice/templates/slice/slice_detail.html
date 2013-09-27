@@ -166,26 +166,26 @@
               <h3>SLICE控制器编辑</h3>      
             </div>
             <form class="" action="/slice/edit_controller/{{ slice_obj.id }}/" method="post" accept-charset="utf-8" onsubmit="return check_slice_controller('controller_type')">{% csrf_token %}
-            	<div class="modal-body">
+            	<div class="modal-body tooltip-demo">
                   <table class="table">
                     <tbody>
                         <tr>
-                            <td width="100">
+                            <td width="200">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
                                   默认创建
                                 </label>
                             </td>
-                            <td width="70">控制器类型</td>
-                            <td width="290">
+                            <td width="85">控制器类型</td>
+                            <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
                                   <!--<option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
                                   <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>-->
                                 </select>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
                         </tr>
                         <tr>
                             <td>
