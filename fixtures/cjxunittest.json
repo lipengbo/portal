@@ -394,14 +394,6 @@
     },
     {
         "pk": 1,
-        "model": "slice.sliceisland",
-        "fields": {
-            "island": 1,
-            "slice": 1
-        }
-    },
-    {
-        "pk": 1,
         "model": "project.city",
         "fields": {
             "name": "\u5357\u4eac",
@@ -437,7 +429,7 @@
             "bandwidth": 32,
             "mac": "00:00:00:00:b1:09",
             "state": 1,
-            "ip": "192.168.5.111",
+            "ip": "192.168.5.109",
             "password": "cdn%nf",
             "os": "32",
             "cpu": "32"
@@ -479,37 +471,13 @@
         "fields": {
             "username": "root",
             "http_port": 1968,
-            "name": "ovs111",
+            "name": "ovs109",
             "island": 1,
-            "dpid": "ff:ff:00:00:00:00:b1:09",
+            "dpid": "00:ff:00:00:00:00:b1:09",
             "has_gre_tunnel": false,
-            "ip": "192.168.5.111",
+            "ip": "192.168.5.109",
             "password": "cdn%nf",
-            "port": 1
-        }
-    },
-    {
-        "pk": 1,
-        "model": "resources.sliceswitch",
-        "fields": {
-            "switch": 1,
-            "slice": 1
-        }
-    },
-    {
-        "pk": 2,
-        "model": "resources.sliceswitch",
-        "fields": {
-            "switch": 2,
-            "slice": 1
-        }
-    },
-    {
-        "pk": 3,
-        "model": "resources.sliceswitch",
-        "fields": {
-            "switch": 3,
-            "slice": 1
+            "port": 144
         }
     },
     {
@@ -517,7 +485,7 @@
         "model": "resources.switchport",
         "fields": {
             "switch": 1,
-            "name": "",
+            "name": "eth1",
             "port": 1
         }
     },
@@ -526,7 +494,7 @@
         "model": "resources.switchport",
         "fields": {
             "switch": 2,
-            "name": "",
+            "name": "eth2",
             "port": 7
         }
     },
@@ -535,7 +503,7 @@
         "model": "resources.switchport",
         "fields": {
             "switch": 3,
-            "name": "",
+            "name": "eth2",
             "port": 1
         }
     },
@@ -544,40 +512,8 @@
         "model": "resources.switchport",
         "fields": {
             "switch": 1,
-            "name": "",
+            "name": "eth4",
             "port": 3
-        }
-    },
-    {
-        "pk": 1,
-        "model": "resources.sliceport",
-        "fields": {
-            "slice": 1,
-            "switch_port": 1
-        }
-    },
-    {
-        "pk": 2,
-        "model": "resources.sliceport",
-        "fields": {
-            "slice": 1,
-            "switch_port": 2
-        }
-    },
-    {
-        "pk": 3,
-        "model": "resources.sliceport",
-        "fields": {
-            "slice": 1,
-            "switch_port": 3
-        }
-    },
-    {
-        "pk": 4,
-        "model": "resources.sliceport",
-        "fields": {
-            "slice": 1,
-            "switch_port": 4
         }
     },
     {
@@ -697,6 +633,106 @@
         }
     },
     {
+        "pk": 12,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "cjxwwjj",
+            "supernet": 1,
+            "netaddr": "10.0.2.128/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 11,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "asd",
+            "supernet": 1,
+            "netaddr": "10.0.2.64/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 10,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": null,
+            "supernet": 1,
+            "netaddr": "10.0.2.0/26",
+            "is_used": false
+        }
+    },
+    {
+        "pk": 9,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": null,
+            "supernet": 1,
+            "netaddr": "10.0.1.192/26",
+            "is_used": false
+        }
+    },
+    {
+        "pk": 8,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "sdffffccc",
+            "supernet": 1,
+            "netaddr": "10.0.1.128/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 7,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "ggggggggg",
+            "supernet": 1,
+            "netaddr": "10.0.1.64/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 6,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "dfgdfg77",
+            "supernet": 1,
+            "netaddr": "10.0.1.0/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 5,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "kljhdfsa",
+            "supernet": 1,
+            "netaddr": "10.0.0.192/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 4,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "ds",
+            "supernet": 1,
+            "netaddr": "10.0.0.128/26",
+            "is_used": true
+        }
+    },
+    {
+        "pk": 3,
+        "model": "ipam.subnet",
+        "fields": {
+            "owner": "ttttttttttcjx",
+            "supernet": 1,
+            "netaddr": "10.0.0.64/26",
+            "is_used": true
+        }
+    },
+    {
         "pk": 2,
         "model": "ipam.subnet",
         "fields": {
@@ -735,35 +771,13 @@
         }
     },
     {
-        "pk": 2,
-        "model": "openflow.controller",
-        "fields": {
-            "username": "",
-            "http_port": 0,
-            "name": "user_define",
-            "slices": [
-                1
-            ],
-            "island": 1,
-            "object_id": null,
-            "is_root": false,
-            "state": 1,
-            "content_type": null,
-            "ip": "192.168.2.4",
-            "password": "",
-            "port": 3444
-        }
-    },
-    {
         "pk": 1,
         "model": "openflow.flowvisor",
         "fields": {
             "username": "root",
             "http_port": 8181,
             "name": "flowvisor1",
-            "slices": [
-                1
-            ],
+            "slices": [],
             "island": 1,
             "object_id": null,
             "state": 1,
@@ -771,54 +785,6 @@
             "ip": "192.168.5.103",
             "password": "123",
             "port": 6634
-        }
-    },
-    {
-        "pk": 1,
-        "model": "openflow.flowspacerule",
-        "fields": {
-            "dl_type": "0x800",
-            "is_default": 1,
-            "slice": 1,
-            "name": "cjxbs12_df",
-            "dl_vpcp": "",
-            "nw_dst": "10.0.0.0/26",
-            "dl_src": "",
-            "nw_proto": "",
-            "priority": 100,
-            "switch": null,
-            "nw_tos": "",
-            "actions": "7",
-            "tp_dst": "",
-            "tp_src": "",
-            "dl_dst": "",
-            "dl_vlan": "",
-            "nw_src": "10.0.0.0/26",
-            "in_port": ""
-        }
-    },
-    {
-        "pk": 2,
-        "model": "openflow.flowspacerule",
-        "fields": {
-            "dl_type": "0x806",
-            "is_default": 1,
-            "slice": 1,
-            "name": "cjxbs12_df",
-            "dl_vpcp": "",
-            "nw_dst": "10.0.0.0/26",
-            "dl_src": "",
-            "nw_proto": "",
-            "priority": 100,
-            "switch": null,
-            "nw_tos": "",
-            "actions": "7",
-            "tp_dst": "",
-            "tp_src": "",
-            "dl_dst": "",
-            "dl_vlan": "",
-            "nw_src": "10.0.0.0/26",
-            "in_port": ""
         }
     },
     {
@@ -835,8 +801,8 @@
         "model": "openflow.link",
         "fields": {
             "flowvisor": 1,
-            "source": 3,
-            "target": 4
+            "source": 2,
+            "target": 1
         }
     },
     {
@@ -844,8 +810,8 @@
         "model": "openflow.link",
         "fields": {
             "flowvisor": 1,
-            "source": 2,
-            "target": 1
+            "source": 3,
+            "target": 4
         }
     },
     {
@@ -862,7 +828,7 @@
         "model": "openflow.flowvisorlinksmd5",
         "fields": {
             "flowvisor": 1,
-            "md5": "fdbc9928e56f6d5d0d212e660031d0ff"
+            "md5": "d32b5b7cbf5676c301254de2e0872afa"
         }
     },
     {
@@ -2013,19 +1979,6 @@
     },
     {
         "pk": 1,
-        "model": "slice.slice",
-        "fields": {
-            "name": "cjxbs12",
-            "date_expired": "2013-10-25T09:01:35.899Z",
-            "project": 3,
-            "state": 1,
-            "owner": 1,
-            "date_created": "2013-09-25T09:01:35.899Z",
-            "description": "sadfff"
-        }
-    },
-    {
-        "pk": 1,
         "model": "project.project",
         "fields": {
             "owner": 1,
@@ -2035,32 +1988,6 @@
             ],
             "name": "cjxproject",
             "description": "ok"
-        }
-    },
-    {
-        "pk": 2,
-        "model": "project.project",
-        "fields": {
-            "owner": 1,
-            "category": 1,
-            "islands": [
-                1
-            ],
-            "name": "cjxp2",
-            "description": "asd"
-        }
-    },
-    {
-        "pk": 3,
-        "model": "project.project",
-        "fields": {
-            "owner": 1,
-            "category": 1,
-            "islands": [
-                1
-            ],
-            "name": "cjxp2",
-            "description": "asd"
         }
     },
     {
@@ -2074,23 +2001,172 @@
         }
     },
     {
-        "pk": 2,
-        "model": "project.membership",
+        "pk": 29,
+        "model": "admin.logentry",
         "fields": {
-            "project": 2,
-            "is_owner": true,
+            "action_flag": 1,
+            "action_time": "2013-09-27T02:02:15.237Z",
+            "object_repr": "flowvisor1",
+            "object_id": "1",
+            "change_message": "",
             "user": 1,
-            "date_joined": "2013-09-25T09:00:28.104Z"
+            "content_type": 36
         }
     },
     {
-        "pk": 3,
-        "model": "project.membership",
+        "pk": 28,
+        "model": "admin.logentry",
         "fields": {
-            "project": 3,
-            "is_owner": true,
+            "action_flag": 3,
+            "action_time": "2013-09-27T02:01:33.946Z",
+            "object_repr": "flowvisor1",
+            "object_id": "1",
+            "change_message": "",
             "user": 1,
-            "date_joined": "2013-09-25T09:00:28.737Z"
+            "content_type": 36
+        }
+    },
+    {
+        "pk": 27,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 2,
+            "action_time": "2013-09-27T01:45:06.681Z",
+            "object_repr": "ovs109",
+            "object_id": "3",
+            "change_message": "\u5df2\u4fee\u6539 name\uff0cip \u548c port \u3002",
+            "user": 1,
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 26,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 2,
+            "action_time": "2013-09-27T01:44:43.226Z",
+            "object_repr": "server1",
+            "object_id": "1",
+            "change_message": "\u6ca1\u6709\u5b57\u6bb5\u88ab\u4fee\u6539\u3002",
+            "user": 1,
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 25,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 2,
+            "action_time": "2013-09-27T01:44:42.859Z",
+            "object_repr": "server1",
+            "object_id": "1",
+            "change_message": "\u5df2\u4fee\u6539 ip \u3002",
+            "user": 1,
+            "content_type": 22
+        }
+    },
+    {
+        "pk": 24,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 1,
+            "action_time": "2013-09-27T01:43:22.814Z",
+            "object_repr": "flowvisor1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 36
+        }
+    },
+    {
+        "pk": 23,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 3,
+            "action_time": "2013-09-27T01:42:54.657Z",
+            "object_repr": "ovs114 - 1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 22,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 3,
+            "action_time": "2013-09-27T01:42:54.473Z",
+            "object_repr": "ovs112 - 7",
+            "object_id": "2",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 21,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 3,
+            "action_time": "2013-09-27T01:42:54.339Z",
+            "object_repr": "ovs111 - 1",
+            "object_id": "3",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 20,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 3,
+            "action_time": "2013-09-27T01:42:54.087Z",
+            "object_repr": "ovs114 - 3",
+            "object_id": "4",
+            "change_message": "",
+            "user": 1,
+            "content_type": 25
+        }
+    },
+    {
+        "pk": 19,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 3,
+            "action_time": "2013-09-27T01:41:59.763Z",
+            "object_repr": "flowvisor1",
+            "object_id": "1",
+            "change_message": "",
+            "user": 1,
+            "content_type": 36
+        }
+    },
+    {
+        "pk": 18,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 2,
+            "action_time": "2013-09-27T01:18:13.526Z",
+            "object_repr": "ovs111",
+            "object_id": "3",
+            "change_message": "\u5df2\u4fee\u6539 dpid \u3002",
+            "user": 1,
+            "content_type": 27
+        }
+    },
+    {
+        "pk": 17,
+        "model": "admin.logentry",
+        "fields": {
+            "action_flag": 3,
+            "action_time": "2013-09-26T11:59:12.151Z",
+            "object_repr": "user_define",
+            "object_id": "2",
+            "change_message": "",
+            "user": 1,
+            "content_type": 35
         }
     },
     {
