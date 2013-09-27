@@ -42,13 +42,13 @@ def accept(request, kind="invite", key=""):
     if kind == 'apply':
         ModelClass = Application
     else:
+        messages.add_message(request, messages.INFO,
+                _("You have joined %s") % (invitation.get_target_name(), ))
         ModelClass = Invitation
     invitation = get_object_or_404(ModelClass, key=key)
     invitation.accept()
 
     user = request.user
-    messages.add_message(request, messages.INFO,
-            _("You have joined %s") % (invitation.get_target_name(), ))
 
     if user.is_authenticated():
         redirect_url = "/"

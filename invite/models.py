@@ -11,6 +11,8 @@ from django.core.mail import send_mail
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.conf import settings
+
 
 # Create your models here.
 class InvitationManager(models.Manager):
@@ -32,10 +34,6 @@ class Connection(models.Model):
     target_id = models.PositiveIntegerField()
     target = generic.GenericForeignKey('target_type', 'target_id')
 
-    def accept(self):
-        self.target.accept(self.to_user)
-        self.accepted = True
-        self.save()
 
     def get_target_name(self):
         display_name_func = getattr(self.target, 'get_display_name')
@@ -53,15 +51,25 @@ class Invitation(Connection):
 
     objects = InvitationManager()
 
+    def accept(self):
+        self.target.accept(self.to_user)
+        self.accepted = True
+        self.save()
+
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("invite", self.key, ))})
         return link
 
     def send(self):
         body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
-        send_mail(_("You have an invitation"), body, self.from_user.email, [self.to_user.email])
+        send_mail(_("You have an invitation"), body, settings.FROM_EMAIL, [self.to_user.email])
 
 class Application(Connection):
+
+    def accept(self):
+        self.target.accept(self.from_user)
+        self.accepted = True
+        self.save()
 
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
@@ -70,7 +78,7 @@ class Application(Connection):
 
     def send(self):
         body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
-        send_mail(_("You have an application"), body, self.from_user.email, [self.to_user.email])
+        send_mail(_("You have an application"), body, settings.FROM_EMAIL, [self.to_user.email])
 
 @receiver(pre_save, sender=Invitation)
 @receiver(pre_save, sender=Application)
