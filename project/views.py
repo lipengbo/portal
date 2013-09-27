@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 
-from project.models import Project, Membership
+from project.models import Project, Membership, Category
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm
 
@@ -43,7 +43,15 @@ def apply(request):
     context = {}
     user = request.user
     projects = Project.objects.all()
+    if 'category' in request.GET:
+        cat_id = request.GET.get('category')
+        if cat_id != u'-1':
+            current_cat = get_object_or_404(Category, id=cat_id)
+            projects = projects.filter(category=current_cat)
+            context['current_cat'] = current_cat
+    categories = Category.objects.all()
     context['projects'] = projects
+    context['categories'] = categories
     if request.method == 'POST':
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
