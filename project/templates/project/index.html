@@ -15,6 +15,7 @@
                  <ul class="thumbnails example-sites">
                     {% for project in projects %}
                     <li class="span3">
+                        <a href="{% url project_delete project.id %}" class="btn-delete close">×</a>
                         <a class="thumbnail" href="{% url project_detail project.id %}" target="_blank">
                         <img src="{% static "img/001.png" %}" />
                         <table class="table">

@@ -101,8 +101,8 @@
      <legend>Slice<button type="button" class="pull-right btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button></legend>
      <ul class="thumbnails example-sites">
          {% for slice in project.slice_set.all %}
-        <li class="span3 thumbnail">
-          <a class="" href="{% url slice_detail slice.id %}" target="_blank">
+        <li class="span3 ">
+          <a class="thumbnail" href="{% url slice_detail slice.id %}" target="_blank">
             <img src="{% static "img/001.png" %}" />
             <table class="table">
                 <tbody>
@@ -129,7 +129,6 @@
                 </tbody>
             </table>
           </a>
-          <a href="{% url delete_slice slice.id  %}" class="btn btn-small btn-inverse">移除</a>
         </li>
          {% endfor %}
       </ul>
@@ -138,13 +137,5 @@
 {% block extra_script %}
 
 <script type="text/javascript" charset="utf-8">
-    $('.btn-delete').click(function(){
-         var result = confirm("你确定要删除?");
-         if (result) {
-            return true;
-         } else {
-            return false;
-         }
-    });
 </script>
 {% endblock %}
