@@ -54,7 +54,10 @@ def apply(request):
                 application = form.save(commit=False)
                 application.target = project
                 application.from_user = user
-                application.save()
+                try:
+                    application.save()
+                except IntegrityError:
+                    pass
     return render(request, 'project/apply.html', context)
 
 @login_required
