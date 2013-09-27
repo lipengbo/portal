@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
 
-from invite.models import Invitation
+from invite.models import Invitation, Application
 
 class InvitationForm(forms.ModelForm):
 
@@ -31,3 +31,9 @@ class InvitationForm(forms.ModelForm):
     class Meta:
         fields = ("to_user", "message")
         model = Invitation
+
+class ApplicationForm(forms.ModelForm):
+
+    class Meta:
+        fields = ("to_user", "message")
+        model = Application

@@ -74,13 +74,27 @@ function check_slice_controller(obj_name){
 				return true; 
 			}  
 			if(objs[i].value=="user_defined"){
-				ret1 = check_ip("controller_ip",1);
-				ret2 = check_port("controller_port",1);
-				if (ret1 && ret2){
-					return true;
+				controller_ip_port_obj = document.getElementById("controller_ip_port");
+				controller_ip_port = controller_ip_port_obj.value.split(":")
+				var info = document.getElementById("controller_ip_portInfo");
+				if(controller_ip_port.length != 2){
+					showInfo(info," * 格式错误(ip:port)","red");
+					return false;
 				}
 				else{
-					return false;
+					ret1 = check_ip(controller_ip_port[0],1);
+					if(!ret1){
+						return false;
+					}
+					else{
+						ret2 = check_port(controller_ip_port[1],1);
+						if (ret2){
+							return true;
+						}
+						else{
+							return false;
+						}
+					}
 				}
 	  		}  
 		}   
@@ -88,24 +102,25 @@ function check_slice_controller(obj_name){
 }
 
 //验证IP地址格式
-function check_ip(obj_id,flag){
-	var obj = document.getElementById(obj_id);
-	var info = document.getElementById(obj_id+"Info");
+function check_ip(ip,flag){
+	var info = document.getElementById("controller_ip_portInfo");
 	var reg=/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;//正则表达式
 
-	if(obj.value.length > 0){
-		if(reg.test(obj.value)){
+	if(ip.length > 0){
+		//alert(ip);
+		if(reg.test(ip)){
 			if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
-				showInfo(info,"√","green");
+				showInfo(info,"√","green")
 				return true;
 			}
 		}
-		showInfo(info," * 格式错误","red");	
+		
+		showInfo(info," * 格式错误(ip:port)","red");	
 		return false;
 	}
 	else{
 		if(flag){
-			showInfo(info," * 必填","red");
+			showInfo(info," * 格式错误(ip:port)","red");
 			return false;
 		}
 		else{
@@ -115,13 +130,12 @@ function check_ip(obj_id,flag){
 }
 
 //校验端口值
-function check_port(obj_id,flag){
-	var obj = document.getElementById(obj_id);
-	var info = document.getElementById(obj_id+"Info");
+function check_port(port,flag){
+	var info = document.getElementById("controller_ip_portInfo");
 	var reg = /^[0-9]*$/;
-	if(obj.value.length > 0){
-		if(obj.value >= 65535 || obj.value < 0 || !reg.test(obj.value)){
-			showInfo(info," * （0-65535）","red");
+	if(port.length > 0){
+		if(port >= 65535 || port < 0 || !reg.test(port)){
+			showInfo(info," * port在(0-65535)之间","red");
 			return false;
 		}
 		else{
@@ -131,7 +145,7 @@ function check_port(obj_id,flag){
 	}
 	else{
 		if(flag){
-			showInfo(info," * 必填","red");
+			showInfo(info," * 格式错误(ip:port)","red");
 			return false;
 		}
 		else{
