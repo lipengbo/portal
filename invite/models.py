@@ -69,8 +69,8 @@ class Application(Connection):
 
 
     def send(self):
-        body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
-        send_mail(_("You have an invitation"), body, self.from_user.email, [self.to_user.email])
+        body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        send_mail(_("You have an application"), body, self.from_user.email, [self.to_user.email])
 
 @receiver(pre_save, sender=Invitation)
 @receiver(pre_save, sender=Application)
