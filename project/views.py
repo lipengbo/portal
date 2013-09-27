@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
+from django.db.models import Q
 
 from project.models import Project, Membership, Category
 from project.forms import ProjectForm
@@ -45,10 +46,15 @@ def apply(request):
     projects = Project.objects.all()
     if 'category' in request.GET:
         cat_id = request.GET.get('category')
-        if cat_id != u'-1':
+        if cat_id and cat_id != u'-1':
             current_cat = get_object_or_404(Category, id=cat_id)
             projects = projects.filter(category=current_cat)
             context['current_cat'] = current_cat
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            context['query'] = query
     categories = Category.objects.all()
     context['projects'] = projects
     context['categories'] = categories
