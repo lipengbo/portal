@@ -163,6 +163,8 @@ function check_nw_num(){
 	var old_slice_nw = old_slice_nw_obj.value;
 	var info = document.getElementById("nw_numInfo");
 	
+	var ajax_ret = false;
+	
 	if((slice_name!=old_nw_owner) || (nw_num!=old_nw_num)){
 		if(old_slice_nw==''){
 			check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/";
@@ -186,10 +188,10 @@ function check_nw_num(){
 	        	if (data.value == 0){
 	        		//alert(1);
 	        		showInfo(info," * 分配网段失败！(改slice名称)","red");
-	        		return false;
+	        		ajax_ret = false;
 	            }
 	            else{
-	            	//alert(2);
+	            	alert(2);
 	            	if (data.value != 1){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
@@ -198,14 +200,21 @@ function check_nw_num(){
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
 	    			showInfo(info,"√","green");
-	    			return true;
+	    			//alert(5);
+	    			ajax_ret = true;
 	            }
 	        },
 	        error: function(data) {
 	        	showInfo(info," * 分配网段失败！(改slice名称)","red");
-	    		return false;
+	    		ajax_ret = false;
 	        }
 	    });
+	    if(ajax_ret){
+	    	return true;
+	    }
+	    else{
+	    	return false;
+	    }
 	}
 	else{
 		//alert(4);

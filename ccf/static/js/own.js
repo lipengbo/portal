@@ -190,7 +190,7 @@ function page_function0(){
 }
 function page_function1(){
 	//ret1 = check_switch_port();
-	ret2 = check_nw_num();
+	var ret2 = check_nw_num();
 	//alert(ret1);
 	//alert(ret2);
 	if (ret2){
