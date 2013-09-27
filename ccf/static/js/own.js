@@ -230,10 +230,8 @@ function page_function3(){
 			    
 			}  
 			if(controller_type_obj[i].value=="user_defined"){
-				var controller_ip_obj = document.getElementById("controller_ip");
-				var controller_port_obj = document.getElementById("controller_port");
-				var controller_ip = controller_ip_obj.value;
-				var controller_port = controller_port_obj.value;
+				var controller_ip_port_obj = document.getElementById("controller_ip_port");
+				var controller_ip_port = controller_ip_port_obj.value;
 				var str = "";
 				str = str + "<table class=\"table\">"
 			        + "<tbody>"
@@ -243,7 +241,7 @@ function page_function3(){
 			        + "</tr>"
 			        + "<tr>"
 			        + "<td width=\"100\">控制器IP端口：</td>"
-			        + "<td>" + controller_ip + ":" + controller_port + "</td>"
+			        + "<td>" + controller_ip_port + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
 			        + "</table>";        
@@ -270,8 +268,7 @@ function submit_slice_info(project_id){
 	var island_id_obj = document.getElementById("island_id");
 	var controller_type_objs = document.getElementsByName("controller_type");
 	var controller_sys_obj = document.getElementById("controller_sys");
-	var controller_ip_obj = document.getElementById("controller_ip");
-	var controller_port_obj = document.getElementById("controller_port");
+	var controller_ip_port_obj = document.getElementById("controller_ip_port");
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
 	var switch_port_ids = "";
@@ -299,13 +296,15 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
+	var controller_ip_port = controller_ip_port_obj.value.split(":");
+
 	var submit_data = {"slice_name": slice_name_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
 						"controller_sys": controller_sys_obj.value,
-						"controller_ip": controller_ip_obj.value,
-						"controller_port": controller_port_obj.value,
+						"controller_ip": controller_ip_port[0],
+						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
 						"slice_nw": old_slice_nw_obj.value,
 						}

@@ -205,7 +205,8 @@
                                   <option value="nox">nox</option>-->
                                 </select>
                             </td>
-                            <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
+                            <td width="300"><span class="help-inline">此处默认创建floodlight控制器</span></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td>
@@ -215,11 +216,11 @@
                               </label>
                             </td>
                             <td>控制器IP端口</td> 
-                            <td>
-                                <input type="text" name="controller_ip" id="controller_ip" disabled onblur="check_ip('controller_ip',1)">
-                                <span id="controller_ipInfo" style="display:inline;float:none;"></span>
+                            <td colspan="2">
+                                <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
+                                <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td colspan="2"></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -398,8 +399,8 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="110">虚拟网关IP地址：</td>
-                            <td>192.168.5.1</td>
+                            <td width="140"></td>
+                            <td></td>
                         </tr>                       
                     </tbody>
                  </table>   
@@ -412,12 +413,12 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="140">DHCP所在网络节点：</td>
-                            <td>192.168.20.5</td>
+                            <td width="140"></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td width="140">DHCP地址范围：</td>
-                            <td>192.168.5.2~192.168.5.100</td>
+                            <td width="140"></td>
+                            <td></td>
                         </tr>                       
                     </tbody>
                  </table>   
