@@ -5531,6 +5531,10 @@ a {
   margin-left: 10px;
   font-family: "宋体";
 }
+.fill_form fieldset legend span {
+  margin-left: 10px;
+  font-style: italic;
+}
 .fill_form fieldset .progress {
   margin-bottom: 0;
 }
