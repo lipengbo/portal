@@ -1,0 +1,57 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+{% load project_tags %}
+
+{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block breadcrumb %}
+<a href="/project/create/">创建项目</a><span class="divider">/</span>
+<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
+Slice列表
+{% endblock %}
+
+{% block body %}
+    <div class="fill_form">
+        <fieldset>
+             <legend>我的Slice<button type="button" class="btn edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></legend>
+             <ul class="thumbnails example-sites">
+		         {% for slice in project.slice_set.all %}
+		        <li class="span3 thumbnail">
+		          <a class="" href="/slice/detail/{{ slice.id }}/" target="_blank">
+		            <img src="{% static "img/001.png" %}" />
+		            <table class="table">
+		                <tbody>
+		                    <tr>
+		                        <td width="100">Slice名称：</td>
+		                        <td>{{ slice.name }}</td>
+		                    </tr>
+		                    <tr>
+		                        <td valign="top">网络节点个数：</td>
+		                        <td>{% resource_num slice.get_island "switch" %}{{ switch_num }}个</td>
+		                    </tr>
+		                    <tr>
+		                        <td valign="top">虚拟机个数：</td>
+		                        <td>{% resource_num slice.get_island "virtualmachine" %}{{ virtualmachine_num }}个</td>
+		                    </tr>
+		                    <tr>
+		                        <td valign="top">网络节点：</td>
+		                        <td>
+		                            {% for switch in  slice.get_switches%}
+		                                {{ switch.dpid }}
+		                            {% endfor %}
+		                        </td>
+		                    </tr>
+		                </tbody>
+		            </table>
+		          </a>
+		          <a href="/slice/delete/{{ slice.id }}/" class="btn btn-small btn-inverse">移除</a>
+		        </li>
+		         {% endfor %}
+		     </ul>
+         </fieldset>
+    </div>
+{% endblock %}
+{% block extra_script %}
+{% endblock %}
