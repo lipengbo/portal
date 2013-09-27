@@ -112,7 +112,7 @@
                     </tr>
                     <tr>
                         <td valign="top">网络节点个数：</td>
-                        <td>{% resource_num slice.get_island "switch" %}{{ switch_num }}个</td>
+                        <td>{{ slice.get_switches.count }}个</td>
                     </tr>
                     <tr>
                         <td valign="top">虚拟机个数：</td>

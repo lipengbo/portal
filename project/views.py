@@ -29,11 +29,19 @@ def index(request):
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
+@login_required
 def detail(request, id):
     project = get_object_or_404(Project, id=id)
     context = {}
     context['project'] = project
     return render(request, 'project/detail.html', context)
+
+@login_required
+def apply(request):
+    projects = Project.objects.all()
+    context = {}
+    context['projects'] = projects
+    return render(request, 'project/apply.html', context)
 
 @login_required
 @permission_required('project.add_project', login_url='/forbidden/')
