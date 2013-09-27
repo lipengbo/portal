@@ -49,7 +49,7 @@
                         {% for project in projects %}
                         <tr>
                             {% with project|application_status:user as status %}
-                            <td><input type="checkbox" name="project_id" {% if status.accepted %}disabled{% endif %} value="{{ project.id }}"></td>
+                            <td><input type="checkbox" name="project_id" {% if status.accepted or user == project.owner %}disabled{% endif %} value="{{ project.id }}"></td>
                             <td>{{ project.name }}</td>
                             <td>{{ project.description }}</td>
                             <td>{{ project.owner }}</td>
