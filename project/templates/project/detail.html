@@ -3,6 +3,9 @@
 {% load staticfiles %}
 {% load project_tags %}
 
+{% block head_title %}
+{% trans "Project Detail" %} [{{ project.name }}]
+{% endblock %}
 {% block breadcrumb %}
 <li class="active">{% trans "Project Detail" %}</li>
 {% endblock %}

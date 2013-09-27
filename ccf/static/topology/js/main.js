@@ -20,7 +20,7 @@ var svg;
 var force;
 var g_nodes = [];
 var g_links = [];
-var width = 900,
+var width = 700,
     height = 400;
 
 var color = d3.scale.category20();

@@ -5283,7 +5283,6 @@ textarea {
 }
 body {
   background: url(../img/bg.png) repeat;
-  min-width: 980px;
 }
 a {
   outline: none !important;
@@ -5629,7 +5628,7 @@ a {
 }
 .form-wizard .show_frame .main_frame {
   clear: both;
-  height: 400px;
+  height: 560px;
   background: #fff;
   margin-top: 30px;
   border-radius: 4px;
