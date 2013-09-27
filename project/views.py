@@ -12,9 +12,12 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
+from django.contrib import messages
+from django.db.models import Q
 
-from project.models import Project, Membership
+from project.models import Project, Membership, Category
 from project.forms import ProjectForm
+from invite.forms import ApplicationForm
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -29,11 +32,47 @@ def index(request):
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
+@login_required
 def detail(request, id):
     project = get_object_or_404(Project, id=id)
     context = {}
     context['project'] = project
     return render(request, 'project/detail.html', context)
+
+@login_required
+def apply(request):
+    context = {}
+    user = request.user
+    projects = Project.objects.all()
+    if 'category' in request.GET:
+        cat_id = request.GET.get('category')
+        if cat_id and cat_id != u'-1':
+            current_cat = get_object_or_404(Category, id=cat_id)
+            projects = projects.filter(category=current_cat)
+            context['current_cat'] = current_cat
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            context['query'] = query
+    categories = Category.objects.all()
+    context['projects'] = projects
+    context['categories'] = categories
+    if request.method == 'POST':
+        project_ids = request.POST.getlist('project_id')
+        message = request.POST.get('message')
+        for project_id in project_ids:
+            project = get_object_or_404(Project, id=project_id)
+            form = ApplicationForm({"to_user": project.owner.id, "message": message})
+            if form.is_valid():
+                application = form.save(commit=False)
+                application.target = project
+                application.from_user = user
+                try:
+                    application.save()
+                except IntegrityError:
+                    pass
+    return render(request, 'project/apply.html', context)
 
 @login_required
 @permission_required('project.add_project', login_url='/forbidden/')

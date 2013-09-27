@@ -5283,7 +5283,6 @@ textarea {
 }
 body {
   background: url(../img/bg.png) repeat;
-  min-width: 980px;
 }
 a {
   outline: none !important;
@@ -5521,8 +5520,19 @@ a {
 .fill_form fieldset textarea {
   width: 400px;
 }
-.fill_form fieldset legend button {
+.fill_form fieldset legend {
+  font-family: "Microsoft YaHei";
+  color: #2489c5;
+  border-bottom: 1px solid #2489c5;
+}
+.fill_form fieldset legend button,
+.fill_form fieldset legend a {
   margin-left: 10px;
+  font-family: "宋体";
+}
+.fill_form fieldset legend small {
+  margin-left: 10px;
+  font-style: italic;
 }
 .fill_form fieldset .progress {
   margin-bottom: 0;
@@ -5563,13 +5573,13 @@ a {
 .base_info .table td {
   border: none;
 }
-.base_info .table .v_top {
-  vertical-align: top;
-}
 .base_info .sec_block {
   background: #dff0d8;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+}
+.v_top {
+  vertical-align: top !important;
 }
 .form-wizard .nav-pills li a {
   background-color: #fff !important;
@@ -5579,8 +5589,11 @@ a {
   box-shadow: none !important;
   color: #777;
   cursor: default;
+  padding-left: 9px;
+  padding-right: 9px;
 }
 .form-wizard .nav-pills li .number {
+  vertical-align: middle;
   background-color: #eee;
   display: inline-block;
   font-size: 16px;
@@ -5591,6 +5604,9 @@ a {
   -moz-border-radius: 50% !important;
   border-radius: 50% !important;
   margin-right: 0px;
+}
+.form-wizard .nav-pills li .desc {
+  vertical-align: middle;
 }
 .form-wizard .nav-pills .visit .step .number {
   background-color: #2489c5;
@@ -5612,7 +5628,7 @@ a {
 }
 .form-wizard .show_frame .main_frame {
   clear: both;
-  height: 400px;
+  height: 560px;
   background: #fff;
   margin-top: 30px;
   border-radius: 4px;
@@ -5696,8 +5712,8 @@ a {
   text-align: center;
 }
 #editSliceModal {
-  width: 950px;
-  margin-left: -475px;
+  width: 700px;
+  margin-left: -350px;
 }
 .font_wait {
   color: #c09853;

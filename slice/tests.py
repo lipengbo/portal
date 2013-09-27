@@ -8,13 +8,15 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 from slice.slice_api import create_slice_api, slice_change_description,\
     delete_slice_api, start_slice_api, stop_slice_api,\
-    update_slice_virtual_network, get_slice_topology, create_slice_step
+    update_slice_virtual_network, get_slice_topology
 from django.contrib.auth.models import User
 from project.models import Project, Island
 from resources.models import SwitchPort
 from slice.models import *
-from plugins.openflow.flowvisor_api import flowvisor_del_slice
+from plugins.openflow.flowvisor_api import flowvisor_del_slice, flowvisor_add_slice
 from plugins.openflow.flowspace_api import flowspace_nw_add
+from plugins.openflow.controller import slice_add_controller
+from resources.ovs_api import slice_add_ovs_ports
 
 
 class SimpleTest(TestCase):
@@ -26,7 +28,7 @@ class SimpleTest(TestCase):
         island = project.islands.all()[0]
         ovs_ports = SwitchPort.objects.all()
         try:
-            slice_obj = create_slice_step(project,
+            slice_obj = create_slice(project,
                 'cjxunittestslice', 'description',
                 island, project.owner,
                 ovs_ports, island.controller_set.all()[0])
@@ -71,7 +73,7 @@ class SimpleTest(TestCase):
         island = project.islands.all()[0]
         ovs_ports = SwitchPort.objects.all()
         try:
-            slice_obj = create_slice_step(project,
+            slice_obj = create_slice(project,
                 'cjxunittestslice', 'description',
                 island, project.owner,
                 ovs_ports, island.controller_set.all()[0])
@@ -93,7 +95,7 @@ class SimpleTest(TestCase):
         island = project.islands.all()[0]
         ovs_ports = SwitchPort.objects.all()
         try:
-            slice_obj = create_slice_step(project,
+            slice_obj = create_slice(project,
                 'cjxunittestslice', 'description',
                 island, project.owner,
                 ovs_ports, island.controller_set.all()[0])
@@ -112,7 +114,7 @@ class SimpleTest(TestCase):
         island = project.islands.all()[0]
         ovs_ports = SwitchPort.objects.all()
         try:
-            slice_obj = create_slice_step(project,
+            slice_obj = create_slice(project,
                 'cjxunittestslice', 'description',
                 island, project.owner,
                 ovs_ports, island.controller_set.all()[0])
@@ -132,7 +134,7 @@ class SimpleTest(TestCase):
         island = project.islands.all()[0]
         ovs_ports = SwitchPort.objects.all()
         try:
-            slice_obj = create_slice_step(project,
+            slice_obj = create_slice(project,
                 'cjxunittestslice', 'description',
                 island, project.owner,
                 ovs_ports, island.controller_set.all()[0])
@@ -152,7 +154,7 @@ class SimpleTest(TestCase):
         island = project.islands.all()[0]
         ovs_ports = SwitchPort.objects.all()
         try:
-            slice_obj = create_slice_step(project,
+            slice_obj = create_slice(project,
                 'cjxunittestslice', 'description',
                 island, project.owner,
                 ovs_ports, island.controller_set.all()[0])
@@ -165,3 +167,20 @@ class SimpleTest(TestCase):
         else:
             flowvisor_del_slice(island.flowvisor_set.all()[0], 'cjxunittestslice')
             self.assertTrue(True)
+
+
+def create_slice(project, name, description, island, user, ovs_ports, controller):
+    slice_obj = None
+    try:
+        slice_obj = create_slice_api(project, name, description, island, user)
+        slice_add_ovs_ports(slice_obj, ovs_ports)
+        slice_add_controller(slice_obj, controller)
+        flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
+#         创建并添加网段
+#         创建并添加网关
+#         创建并添加dhcp
+#         创建并添加虚拟机
+        return slice_obj
+    except:
+        slice_obj.delete()
+        raise

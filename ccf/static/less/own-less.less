@@ -6,7 +6,6 @@ textarea {
 }
 body {
 	background:url(../img/bg.png) repeat;
-	min-width:980px;
 }
 
 a {outline:none !important;}
@@ -249,8 +248,16 @@ width: 980px;
 			width:400px;
 		}		
 		legend {
-			button {
+		    font-family: "Microsoft YaHei";
+		    color:#2489c5;
+		    border-bottom:1px solid #2489c5;
+			button,a {
 				margin-left:10px;
+				font-family:"宋体";
+			}
+			small {
+			    margin-left:10px;
+			    font-style:italic;
 			}
 		}
 		.progress {
@@ -297,9 +304,6 @@ width: 980px;
 		td {
 			border:none;
 		}
-		.v_top {
-			vertical-align: top;
-		}
 	} 
 	.sec_block {
 		background:#dff0d8;
@@ -307,6 +311,10 @@ width: 980px;
 		border-bottom:1px solid #ddd;
 	}
 }
+
+.v_top {
+            vertical-align: top !important;
+        }
 
 .form-wizard {
 	.nav-pills {
@@ -319,8 +327,11 @@ width: 980px;
 				box-shadow: none !important;
 				color: #777;
 				cursor: default;
+				padding-left:9px;
+				padding-right:9px;
 			}
 			.number {
+			    vertical-align:middle;
 				background-color: #eee;
 				display: inline-block;
 				font-size: 16px;
@@ -332,6 +343,9 @@ width: 980px;
 				border-radius: 50% !important;
 				margin-right:0px;
 			}
+			.desc {
+                vertical-align: middle;
+            }
 		}	
 		.visit .step {
 			.number {
@@ -355,7 +369,7 @@ width: 980px;
 		}
 		.main_frame {
 			clear:both;
-			height:400px;
+			height:560px;
 			background:#fff;
 			margin-top:30px;
 			border-radius:4px;
@@ -454,8 +468,8 @@ width: 980px;
 }
 
 #editSliceModal {
-    width:950px;
-    margin-left:-475px;
+    width:700px;
+    margin-left:-350px;
 }
 
 .font_wait {

@@ -61,8 +61,8 @@
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
-                    <label>描述</label>
-                    <textarea rows="8" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <label>Slice描述</label>
+                    <textarea rows="5" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
                  <div class="form_inline">   
@@ -97,6 +97,7 @@
                   <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
                 </div>
                 <div class="show_frame">
+                <span id="switch_portInfo" style="display:inline;float:left;"></span>
                   <div class="frame_tip">
                     <span class="label label-important">网络出口节点</span>
                     <span class="label label-info">普通交换节点</span>
@@ -104,7 +105,7 @@
                   </div>
                   <div class="main_frame">
                       <input type="hidden" name="switches" id="topology-switch" value="" />
-                        <iframe id="topology-iframe" width="100%" height="100%" src=""></iframe>
+                        <iframe id="topology-iframe" width="100%" height="100%" src="" frameborder="0"></iframe>
                   </div>
                   <table class="switch-table table table-bordered table-striped table-hover">
                     <thead>
@@ -133,11 +134,19 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
+<<<<<<< HEAD
 		                            {% if ovs_port.switch_type == 3 %}
                                     <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
                                     </label>
 					    {%else%}
                                     <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+=======
+                                    <label class="checkbox inline">
+	                                    <input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+	                                    <!--<input type="text" value="{{ovs_port.switch.virtualswitch.server.id}}" id="serverid{{port.id}}" style="display:none"/>
+	                                    <input type="text" value="{{ovs_port.switch.name}}" id="switchname{{port.id}}" style="display:none"/>-->
+	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
+>>>>>>> 3e4262534d23f0fd3588a5033d78ea58daa51454
                                     </label>
 		                            {%endif%}
 	                            	{%endfor%}
@@ -150,7 +159,7 @@
               </fieldset>
               <fieldset>
                  <legend>Slice网络地址</legend>
-                <div class="form_inline"> 
+                <div class="form_inline tooltip-demo"> 
                     <label>IP数量</label>
                     <select name="nw_num" id="nw_num">
                       <!--<option value="4">4</option>
@@ -159,8 +168,8 @@
                       <option value="32">32</option>-->
                       <option value="64">64</option>
                     </select>
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
                     <span id="nw_numInfo" style="display:inline;float:none;"></span>
-                    <span class="help-inline">用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段</span>
                 </div>
               </fieldset>
               <div class="form-actions">
@@ -174,7 +183,7 @@
              </div>  
              
              <div class="tab_part">
-                 <fieldset class="base_info">
+              <fieldset class="base_info tooltip-demo">
                 <legend>Slice网络地址</legend>
                 <table class="table">
                     <tbody>
@@ -185,57 +194,51 @@
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
                             	<input type="text" value="cjx" id="old_nw_owner" style="display:none"/>
+                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td><span class="help-inline">网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器</span></td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info">
+              <fieldset class="base_info tooltip-demo">
                  <legend>Slice控制器配置</legend>
                  <table class="table">
                     <tbody>
                         <tr>
                             <td width="200">
-                                <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
-                                <label class="tab_radio1" for="optionsRadios1">创建控制器 </label>
+                                <label class="tab_radio1" for="optionsRadios1">
+                                    <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
+                                                                                                                               创建控制器 
+                                </label>
                             </td>
-                            <td width="70">控制器类型</td>
-                            <td width="290">
+                            <td width="85">控制器类型</td>
+                            <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
                                   <!--<option value="pox">pox</option>
                                   <option value="nox">nox</option>-->
                                 </select>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td colspan="2"><span class="help-inline">此处默认创建floodlight控制器</span></td>
                         </tr>
                         <tr>
                             <td>
-                              <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
-                              <label class="tab_radio2" for="optionsRadios2">
+                                <label class="tab_radio2" for="optionsRadios2">
+                                    <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined">
                                                                                                                            自定义控制器
                               </label>
                             </td>
-                            <td>控制器IP</td> 
-                            <td>
-                                <input type="text" name="controller_ip" id="controller_ip" disabled onblur="check_ip('controller_ip',1)">
-                                <span id="controller_ipInfo" style="display:inline;float:none;"></span>
-                            </td>
-                            <td width="70">控制器端口</td>
-                            <td>
-                                <input type="text" name="controller_port" id="controller_port" disabled onblur="check_port('controller_port',1)">
-                                <span id="controller_portInfo" style="display:inline;float:none;"></span>
+                            <td>控制器IP端口</td> 
+                            <td colspan="2">
+                                <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
+                                <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info">
-                 <legend>虚拟网关配置</legend>
-                 <div class="alert alert-info">
-                     <strong>提示：</strong> 可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分
-                 </div>
+              <fieldset class="base_info tooltip-demo">
+                 <legend>虚拟网关配置<small>(可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -246,22 +249,20 @@
                                   <option>pox</option>
                                   <option>nox</option>
                                 </select>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td><span class="help-inline">用户根据选取的虚拟机关联节点选取虚拟网关部署位置</span></td>
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td><input type="text" /></td>
-                            <td><span class="help-inline">用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1</span></td>
+                            <td><input type="text" />
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info hide_form">
-                 <legend>DHCP服务器配置</legend>
-                 <div class="alert alert-info">
-                     <strong>提示：</strong> 可选
-                 </div>
+              <fieldset class="base_info hide_form tooltip-demo">
+                 <legend>DHCP服务器配置<small>(可选)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -273,25 +274,24 @@
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6">
+                            <td width="200">
                                 <label class="tab_radio4">
                                   <input type="radio" name="dhcp_type" id="optionsRadios4" value="user_define" checked>
                                   自定义DHCP服务
                                 </label>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>DHCP地址池<td>
-                            <td>开始</td>
-                            <td>
+                            <td width="100">DHCP地址池</td>
+                            <td width="35">开始</td>
+                            <td width="120">
                                 <input type="text" class="input-small">
                             </td>
-                            <td>结束</td>
+                            <td width="35">结束</td>
                             <td>
                                 <input type="text" class="input-small">
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户为DHCP分配地址池，地址池必须包含在第2步获取的网络段内部"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td><span class="help-inline">用户为DHCP分配地址池，地址池必须包含在第2步获取的网络段内部</span></td>
                         </tr>
+
                     </tbody>
                 </table>
               </fieldset>
@@ -318,9 +318,8 @@
                             <td width="100">名称</td>
                             <td>
 				<input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
-				<span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td></td>
+                            <td><span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span></td>
                         </tr>
                         <tr>
                             <td>模板类型</td>
@@ -401,33 +400,27 @@
                  <div id="list_controller"></div>
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice虚拟网关</legend>
-                 <div class="alert alert-info">
-                     <strong>提示：</strong> 可选
-                 </div>
+                 <legend>Slice虚拟网关<small>(可选)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="110">虚拟网关IP地址：</td>
-                            <td>192.168.5.1</td>
+                            <td width="140"></td>
+                            <td></td>
                         </tr>                       
                     </tbody>
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice DHCP服务器</legend>
-                 <div class="alert alert-info">
-                     <strong>提示：</strong> 可选
-                 </div>
+                 <legend>Slice DHCP服务器<small>(可选)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="140">DHCP所在网络节点：</td>
-                            <td>192.168.20.5</td>
+                            <td width="140"></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td width="140">DHCP地址范围：</td>
-                            <td>192.168.5.2~192.168.5.100</td>
+                            <td width="140"></td>
+                            <td></td>
                         </tr>                       
                     </tbody>
                  </table>   
@@ -480,7 +473,6 @@
         </div>
 {% endblock %}
 {% block extra_script %}
-<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script>  
 	    $(document).ready(function() {
             window.selected_ports = {};
@@ -502,17 +494,13 @@
                 };
                 $('#topology-switch').val(ports.join(","));
             };
-    		$('input').iCheck({
-                checkboxClass: 'icheckbox_square-blue',
-                radioClass: 'iradio_square-blue',
-                increaseArea: '20%' // optional
-              });
             $('input[name="switch_port_ids"]').on("ifChecked", function(){
                 selected_ports[$(this).val()] = $(this).val();
             });
             $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
                 delete selected_ports[$(this).val()];
             });
+            
 });
 </script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>

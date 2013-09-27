@@ -28,19 +28,19 @@ $(document).ready(function() {
     });
     
     //创建slice第3步，选择控制器配置方式
-    $(".tab_radio1").click(function(){
-        $(this).parent("td").siblings("td").children("select").removeAttr("disabled");
+    $(".tab_radio1, .tab_radio1 .iCheck-helper").click(function(){
+        $(".tab_radio1").parent("td").siblings("td").children("select").removeAttr("disabled");
         $(".tab_radio2").parent("td").siblings("td").children("input").attr("disabled","disabled");
     });
-    $(".tab_radio2").click(function(){
-        $(this).parent("td").siblings("td").children("input").removeAttr("disabled");
+    $(".tab_radio2, .tab_radio2 .iCheck-helper").click(function(){
+        $(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
         $(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");
     });
-    $(".tab_radio3").click(function(){
-        $(this).parent("td").parent("tr").siblings("tr").children("td").children("input").attr("disabled","disabled");
+    $(".tab_radio3, .tab_radio3 .iCheck-helper").click(function(){
+        $(".tab_radio3").parent("td").parent("tr").siblings("tr").children("td").children("input").attr("disabled","disabled");
     });
-    $(".tab_radio4").click(function(){
-        $(this).parent("td").parent("tr").siblings("tr").children("td").children("input").removeAttr("disabled");
+    $(".tab_radio4, .tab_radio4 .iCheck-helper").click(function(){
+        $(".tab_radio4").parent("td").siblings("td").children("input").removeAttr("disabled");
     });
     
     //slice详情启动停止按钮
@@ -157,12 +157,17 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
-           $(".icheckbox_square-blue").addClass("checked");
+           $(".icheckbox_square-blue").iCheck('check');
        } else {
-           $(".icheckbox_square-blue").removeClass("checked");
+           $(".icheckbox_square-blue").iCheck('uncheck');
        }
     });
-         
+    
+    //tooltip demo
+     $('.tooltip-demo').tooltip({
+      selector: "a[data-toggle=tooltip]"
+    });
+
 });
 
 //全选全不选
@@ -184,8 +189,11 @@ function page_function0(){
 	}
 }
 function page_function1(){
-	ret1 = check_nw_num();
-	if (ret1){
+	//ret1 = check_switch_port();
+	var ret2 = check_nw_num();
+	//alert(ret1);
+	//alert(ret2);
+	if (ret2){
 		return true;
 	}
 	else{
@@ -203,7 +211,7 @@ function page_function2(){
 	}
 }
 function page_function3(){
-	//slice
+	//网段
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
@@ -227,14 +235,11 @@ function page_function3(){
 			        + "<td>" + controller_sys + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
-			        + "</table>";
-			    
+			        + "</table>";  
 			}  
 			if(controller_type_obj[i].value=="user_defined"){
-				var controller_ip_obj = document.getElementById("controller_ip");
-				var controller_port_obj = document.getElementById("controller_port");
-				var controller_ip = controller_ip_obj.value;
-				var controller_port = controller_port_obj.value;
+				var controller_ip_port_obj = document.getElementById("controller_ip_port");
+				var controller_ip_port = controller_ip_port_obj.value;
 				var str = "";
 				str = str + "<table class=\"table\">"
 			        + "<tbody>"
@@ -244,7 +249,7 @@ function page_function3(){
 			        + "</tr>"
 			        + "<tr>"
 			        + "<td width=\"100\">控制器IP端口：</td>"
-			        + "<td>" + controller_ip + ":" + controller_port + "</td>"
+			        + "<td>" + controller_ip_port + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
 			        + "</table>";        
@@ -271,8 +276,7 @@ function submit_slice_info(project_id){
 	var island_id_obj = document.getElementById("island_id");
 	var controller_type_objs = document.getElementsByName("controller_type");
 	var controller_sys_obj = document.getElementById("controller_sys");
-	var controller_ip_obj = document.getElementById("controller_ip");
-	var controller_port_obj = document.getElementById("controller_port");
+	var controller_ip_port_obj = document.getElementById("controller_ip_port");
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
 	var switch_port_ids = "";
@@ -300,16 +304,18 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
+	var controller_ip_port = controller_ip_port_obj.value.split(":");
+
 	var submit_data = {"slice_name": slice_name_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
 						"controller_sys": controller_sys_obj.value,
-						"controller_ip": controller_ip_obj.value,
-						"controller_port": controller_port_obj.value,
+						"controller_ip": controller_ip_port[0],
+						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
-						"slice_nw": old_slice_nw_obj.value,
-						}
+						"slice_nw": old_slice_nw_obj.value
+		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
 	$.ajax({
@@ -330,6 +336,6 @@ function submit_slice_info(project_id){
 	        },
 	        error: function(data) {
 	        	alert("创建slice失败！");
-	        },
+	        }
 	});
 }

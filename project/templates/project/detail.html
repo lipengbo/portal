@@ -3,6 +3,9 @@
 {% load staticfiles %}
 {% load project_tags %}
 
+{% block head_title %}
+{% trans "Project Detail" %} [{{ project.name }}]
+{% endblock %}
 {% block breadcrumb %}
 <li class="active">{% trans "Project Detail" %}</li>
 {% endblock %}
@@ -101,8 +104,8 @@
      <legend>Slice<button type="button" class="pull-right btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button></legend>
      <ul class="thumbnails example-sites">
          {% for slice in project.slice_set.all %}
-        <li class="span3 thumbnail">
-          <a class="" href="{% url slice_detail slice.id %}" target="_blank">
+        <li class="span3 ">
+          <a class="thumbnail" href="{% url slice_detail slice.id %}" target="_blank">
             <img src="{% static "img/001.png" %}" />
             <table class="table">
                 <tbody>
@@ -112,7 +115,7 @@
                     </tr>
                     <tr>
                         <td valign="top">网络节点个数：</td>
-                        <td>{% resource_num slice.get_island "switch" %}{{ switch_num }}个</td>
+                        <td>{{ slice.get_switches.count }}个</td>
                     </tr>
                     <tr>
                         <td valign="top">虚拟机个数：</td>
@@ -129,7 +132,6 @@
                 </tbody>
             </table>
           </a>
-          <a href="{% url delete_slice slice.id  %}" class="btn btn-small btn-inverse">移除</a>
         </li>
          {% endfor %}
       </ul>
@@ -138,13 +140,5 @@
 {% block extra_script %}
 
 <script type="text/javascript" charset="utf-8">
-    $('.btn-delete').click(function(){
-         var result = confirm("你确定要删除?");
-         if (result) {
-            return true;
-         } else {
-            return false;
-         }
-    });
 </script>
 {% endblock %}

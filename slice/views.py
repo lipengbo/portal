@@ -138,11 +138,10 @@ def edit_controller(request, slice_id):
             controller_info = {'controller_type': controller_type,
                                'controller_sys': controller_sys}
         else:
-            controller_ip = request.POST.get("controller_ip")
-            controller_port = request.POST.get("controller_port")
+            controller_ip_port = request.POST.get("controller_ip_port").split(':')
             controller_info = {'controller_type': controller_type,
-                               'controller_ip': controller_ip,
-                               'controller_port': controller_port}
+                               'controller_ip': controller_ip_port[0],
+                               'controller_port': controller_ip_port[1]}
         try:
             slice_change_controller(slice_obj, controller_info)
         except Exception, ex:
