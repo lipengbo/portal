@@ -6,9 +6,11 @@
 # E-mail:lipengbo10054444@gmail.com
 import json
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
 from slice.models import Slice
+from plugins.vt.models import VirtualMachine, IPUsage
+from django.core.urlresolvers import reverse
 
 
 def vm_list(request, sliceid):
@@ -26,6 +28,7 @@ def create_vm(request, sliceid):
             vm = vm_form.save(commit=False)
             slice = get_object_or_404(Slice, id=sliceid)
             vm.slice = slice
+            vm.island = vm.server.island
             vm.save()
             return HttpResponse(json.dumps({'value': 1}))
         else:
@@ -40,3 +43,16 @@ def create_vm(request, sliceid):
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid
         return render(request, 'vt/create_vm.html', context)
+
+
+def do_vm_action(request, vmid, action):
+    pass
+
+
+def delete_vm(request, vmid, flag):
+    vm = VirtualMachine.objects.get(id=vmid)
+    IPUsage.objects.release_ip(vm.ip)
+    if flag == '1':
+        return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+    else:
+        return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))

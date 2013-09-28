@@ -28,7 +28,7 @@
   			        <button type="button" class="btn btn-success start_btn">重启</button>
 			        <button type="button" class="btn" disabled>登录</button>
 			    {%endif%}
-  			    <a data-toggle="modal" href="#" class="btn btn-primary">删除</a>
+  			    <a data-toggle="modal" href="{% url delete_vm vm.id 1 %}" class="btn btn-primary">删除</a>
 			</td>
                     </tr>
             {% endfor %}
