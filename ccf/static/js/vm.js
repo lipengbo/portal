@@ -262,7 +262,6 @@ function get_select_server_name(){
             if( servername && not_contains(results, servername))
             {
                 results[j] = servername;
-                alert('not contain');
                 j++;
             }
         }
@@ -281,7 +280,6 @@ function get_select_server_id(){
             if( serverid && not_contains(results, serverid))
             {
                 results[j] = serverid;
-                alert('not contain');
                 j++;
             }
         }
@@ -296,4 +294,13 @@ function not_contains(a, obj) {
         }
     }
     return true;
+}
+
+function create_vms(sliceid)
+{
+    if(check_vminfo())
+    {
+        submit_vms(sliceid);
+        window.location.href='/plugins/vt/vm/list/' + sliceid + '/'
+    }
 }

@@ -98,6 +98,9 @@
 					 			</td>
 					 		</tr>
 				 		{%endfor%}
+				{% if vms %}		
+					<a data-toggle="modal" href="{% url 'vm_list' slice_obj.id %}" class="btn btn-primary edit">&gt;&gt;更多</a>
+				{%endif%}
 				 	</tbody>
 				 </table>
 			  </fieldset>

@@ -12,9 +12,10 @@ from slice.models import Slice
 
 
 def vm_list(request, sliceid):
-    vms = get_object_or_404(Slice, id=sliceid).virtualmavhine_set.all()
+    vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     context = {}
     context['vms'] = vms
+    context['sliceid'] = sliceid
     return render(request, 'vt/vm_list.html', context)
 
 
@@ -23,16 +24,18 @@ def create_vm(request, sliceid):
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
             vm = vm_form.save(commit=False)
-            print 'vm= %s ' % repr(vm)
-            #vm.slice = get_object_or_404(Slice, id=sliceid)
-            #vm.save()
+            slice = get_object_or_404(Slice, id=sliceid)
+            vm.slice = slice
+            vm.save()
             return HttpResponse(json.dumps({'value': 1}))
         else:
             return HttpResponse(json.dumps({'value': 0}))
     else:
         vm_form = VmForm()
-        #slice = get_object_or_404(Slice, id=sliceid)
-        #vm_form.fields['server'].queryset = slice.get_virtual_switches_server()
+        slice = get_object_or_404(Slice, id=sliceid)
+        servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
+        servers.insert(0, ('', '---------'))
+        vm_form.fields['server'].choices = servers
         context = {}
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid

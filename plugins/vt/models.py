@@ -1,6 +1,6 @@
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -89,7 +89,7 @@ class HostMac(models.Model):
     host = generic.GenericForeignKey('host_type', 'host_id')
 
 
-@receiver(post_save, sender=VirtualMachine)
+@receiver(pre_save, sender=VirtualMachine)
 def vm_pre_save(sender, instance, **kwargs):
     print '--------------------vm pre save-------------------------'
     print kwargs
@@ -97,6 +97,9 @@ def vm_pre_save(sender, instance, **kwargs):
     instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
     instance.uuid = utils.gen_uuid()
     instance.mac = utils.generate_mac_address(instance.get_ipaddr())
+    print 'vm.ip= %s ' % instance.ip
+    print 'vm.uuid= %s ' % instance.uuid
+    print 'vm.mac= %s ' % instance.mac
 
 
 @receiver(post_save, sender=VirtualMachine)
@@ -106,7 +109,7 @@ def vm_post_save(sender, instance, **kwargs):
         print '-------------------Add HostMac----------------------------'
 
 
-@receiver(post_save, sender=VirtualMachine)
+@receiver(post_delete, sender=VirtualMachine)
 def vm_post_delete(sender, instance, **kwargs):
     print '--------------------vm post delete-------------------------'
     print kwargs
