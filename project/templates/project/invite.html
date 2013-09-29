@@ -21,7 +21,7 @@
         <form action="" method="post" accept-charset="utf-8">
             {% csrf_token %}
             <fieldset>
-                 <legend>邀请成员<a data-toggle="modal" href="#inviteModal" class="btn btn-primary edit">邀请</a></legend>
+                 <legend>邀请成员<a data-toggle="modal" href="#inviteModal" class="btn btn-info edit">邀请</a></legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -56,7 +56,7 @@
         <div class="form-actions">
           <div class="row-fluid">
             <div class="span4"></div>
-            <div class="span4"><button type="button" class="btn btn-large btn-block">返 回</button></div>
+            <div class="span4"><button type="button" class="btn btn-info btn-large btn-block">返 回</button></div>
             <div class="span4"></div>
           </div>
         </div>
@@ -76,8 +76,8 @@
                   </table>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal">取消</button>
-              <button class="btn btn-primary">提交邀请</button>
+              <button class="btn btn-info" data-dismiss="modal">取消</button>
+              <button class="btn btn-info">提交邀请</button>
             </div>
          </div>
         </form>
