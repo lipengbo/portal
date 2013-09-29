@@ -11,6 +11,7 @@ from forms import VmForm
 from slice.models import Slice
 from plugins.vt.models import VirtualMachine, IPUsage
 from django.core.urlresolvers import reverse
+from etc.config import vnctunnel
 
 
 def vm_list(request, sliceid):
@@ -46,7 +47,27 @@ def create_vm(request, sliceid):
 
 
 def do_vm_action(request, vmid, action):
-    pass
+    operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
+    if action in operator:
+        vm = VirtualMachine.objects.get(id=vmid)
+        if vm.do_action(action):
+            result = 1
+        else:
+            result = 0
+        return HttpResponse(json.dumps({'value': result}))
+    return HttpResponse(json.dumps({'value': 0}))
+
+
+def vnc(request, vmid):
+    vm = VirtualMachine.objects.get(id=vmid)
+    host_ip = vm.server.ip
+    vnc_port = vm.vnc_port
+    context = {}
+    context['host_ip'] = host_ip
+    context['vnc_port'] = vnc_port
+    context['tunnel_host'] = vnctunnel
+    context['vm'] = vm
+    return render(request, 'vt/vnc.html', context)
 
 
 def delete_vm(request, vmid, flag):

@@ -92,9 +92,14 @@
 					 			<td width="25%">IP：{{vm.ip}}</td>
 					 			<td width="25%">所属网络节点：{{vm.server.ip}}</td>
 					 			<td width="35%">
-					 				<a href="" class="btn btn-success start_btn">启动</a>
-					 				<a href="" class="btn">登录</a>
-					 				<a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse">删除</a>
+			    {% if vm.state == 1 %}
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-success stop_btn">停止</button>
+			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
+			    {%else%}
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+			        <button type="button" onclick="" class="btn" disabled>登录</button>
+			    {%endif%}
+  			    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete">删除</button>
 					 			</td>
 					 		</tr>
 				 		{%endfor%}
@@ -220,4 +225,5 @@
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
 {% endblock %}

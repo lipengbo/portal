@@ -1,6 +1,6 @@
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save, post_delete
+from django.db.models.signals import post_save, post_delete
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -60,9 +60,10 @@ class Flavor(models.Model):
 
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=20, null=True, unique=True)
-    ip = models.ForeignKey(IPUsage)
+    ip = models.ForeignKey(IPUsage, null=True)
     mac = models.CharField(max_length=20, null=True)
     enable_dhcp = models.BooleanField(default=True)
+    vnc_port = models.IntegerField(null=True)
     slice = models.ForeignKey(Slice)
     flavor = models.ForeignKey(Flavor)
     image = models.ForeignKey(Image)
@@ -108,6 +109,9 @@ class VirtualMachine(IslandResource):
     def delete_vm(self):
         print '----------------------delete a vm=%s -------------------------' % self.name
 
+    def do_action(self, action):
+        print '----------------------vm action=%s-------------------------' % action
+
 
 class HostMac(models.Model):
     mac = models.CharField(max_length=32)
@@ -117,17 +121,16 @@ class HostMac(models.Model):
     host = generic.GenericForeignKey('host_type', 'host_id')
 
 
-@receiver(pre_save, sender=VirtualMachine)
-def vm_pre_save(sender, instance, **kwargs):
-    instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
-    instance.uuid = utils.gen_uuid()
-    instance.mac = utils.generate_mac_address(instance.get_ipaddr())
-    instance.state = DOMAIN_STATE_DIC['building']
-
-
 @receiver(post_save, sender=VirtualMachine)
 def vm_post_save(sender, instance, **kwargs):
     if kwargs.get('created'):
+        print '-------------------vm created-----------------------------'
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+        instance.uuid = utils.gen_uuid()
+        instance.mac = utils.generate_mac_address(instance.get_ipaddr())
+        instance.vnc_port = 5900 + instance.objects.filter(server=instance.server).count()
+        instance.state = DOMAIN_STATE_DIC['building']
+        instance.save()
         instance.create_vm()
 
 

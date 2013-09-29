@@ -304,3 +304,25 @@ function create_vms(sliceid)
         window.location.href='/plugins/vt/vm/list/' + sliceid + '/'
     }
 }
+
+function open_vnc(url)
+{
+    window.open(url,'','width=968,height=552')
+}
+
+function do_vm_action(url)
+{
+        $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+            if(data==0)
+            {
+                alert('Failed to operator vm!')
+            }
+        }
+        });
+}

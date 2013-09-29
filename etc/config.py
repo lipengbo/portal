@@ -7,6 +7,7 @@
 #[plugin-vt]
 glance_host = '192.168.5.107'
 glance_port = 9292
+vnctunnel = '192.168.5.9'
 
 
 def generate_glance_url():
