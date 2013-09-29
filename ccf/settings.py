@@ -232,6 +232,7 @@ EMAIL_HOST = 'mail.fnic.cn'
 EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'tengzhifei@fnic.cn'
 FROM_EMAIL = 'tengzhifei@fnic.cn'
+DEFAULT_FROM_EMAIL = FROM_EMAIL
 EMAIL_HOST_PASSWORD = 'fnic123'
 
 AUTHENTICATION_BACKENDS = [

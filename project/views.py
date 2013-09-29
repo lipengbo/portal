@@ -17,7 +17,8 @@ from django.db.models import Q
 
 from project.models import Project, Membership, Category
 from project.forms import ProjectForm
-from invite.forms import ApplicationForm
+from invite.forms import ApplicationForm, InvitationForm
+from invite.models import Invitation
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -38,6 +39,47 @@ def detail(request, id):
     context = {}
     context['project'] = project
     return render(request, 'project/detail.html', context)
+
+@login_required
+def manage(request):
+    user = request.user
+    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    projects = Project.objects.filter(id__in=project_ids)
+    context = {}
+    context['projects'] = projects[:4]
+    return render(request, 'project/manage.html', context)
+
+@login_required
+def invite(request, id):
+    project = get_object_or_404(Project, id=id)
+    if not (request.user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    target_type = ContentType.objects.get_for_model(project)
+    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
+            target_type=target_type).values_list("to_user__id", flat=True))
+    invited_user_ids.extend(project.member_ids())
+    users = User.objects.exclude(id__in=set(invited_user_ids))
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            users = users.filter(username__icontains=query)
+            context['query'] = query
+    context['users'] = users
+
+    if request.method == 'POST':
+        user_ids = request.POST.getlist('user')
+        message = request.POST.get('message')
+        for user_id in user_ids:
+            user = get_object_or_404(User, id=user_id)
+            form = InvitationForm({'message': message, 'to_user': user_id})
+            if form.is_valid():
+                invitation = form.save(commit=False)
+                invitation.from_user = request.user
+                invitation.target = project
+                invitation.save()
+    return render(request, 'project/invite.html', context)
 
 @login_required
 def apply(request):
@@ -88,12 +130,21 @@ def create_or_edit(request, id=None):
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             project = form.save(commit=False)
+            category_name = request.POST.get('category_name')
+            try:
+                category = Category.objects.get(name=category_name)
+            except Category.DoesNotExist:
+                category = Category(name=category_name)
+                category.save()
+            project.category = category
             project.owner = user
             project.save()
             form.save_m2m()
             return redirect('project_detail', id=project.id)
 
     context['form'] = form
+    cats = Category.objects.all()
+    context['cats'] = cats
     return render(request, 'project/create.html', context)
 
 @login_required
@@ -114,6 +165,8 @@ def delete_project(request, id):
         project.delete()
     else:
         return redirect("forbidden")
+    if 'next' in request.GET:
+        return redirect(request.GET.get('next'))
     return redirect("project_index")
 
 
