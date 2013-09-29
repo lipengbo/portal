@@ -9,4 +9,5 @@ urlpatterns = patterns('project.views',
     url(r'^create/$', "create_or_edit", name='project_create'),
     url(r'^apply/$', "apply", name='project_apply'),
     url(r'^manage/$', "manage", name='project_manage'),
+    url(r'^invite/(?P<id>\d+)/$', "invite", name='project_invite'),
 )

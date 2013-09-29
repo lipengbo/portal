@@ -49,3 +49,8 @@ class SimpleTest(TestCase):
         project.add_member(User.objects.all()[1])
         self.assertTrue(project.memberships.count() == 2)
 
+    def test_invite_member(self):
+        owner = User.objects.all()[0]
+        category = Category.objects.all()[0]
+        project = Project(name="sdn project", owner=owner, category=category)
+        project.save()
