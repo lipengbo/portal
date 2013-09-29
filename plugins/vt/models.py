@@ -24,7 +24,7 @@ DOMAIN_STATE_TUPLE = (
 )
 DOMAIN_STATE_DIC = {
     'nostate': 0,
-    "runnng": 1,
+    "running": 1,
     "blocked": 2,
     "paused": 3,
     "shutdown": 4,
@@ -126,12 +126,17 @@ def vm_post_save(sender, instance, **kwargs):
     if kwargs.get('created'):
         print '-------------------vm created-----------------------------'
         instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+        print instance.ip
         instance.uuid = utils.gen_uuid()
+        print instance.uuid
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
-        instance.vnc_port = 5900 + instance.objects.filter(server=instance.server).count()
+        print instance.mac
+        instance.vnc_port = 5900 + VirtualMachine.objects.filter(server=instance.server).count()
+        print instance.vnc_port
         instance.state = DOMAIN_STATE_DIC['building']
         instance.save()
         instance.create_vm()
+        print '-------------------vm created-----------------------------'
 
 
 @receiver(post_delete, sender=VirtualMachine)
