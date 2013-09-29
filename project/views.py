@@ -136,6 +136,8 @@ def create_or_edit(request, id=None):
             return redirect('project_detail', id=project.id)
 
     context['form'] = form
+    cats = Category.objects.all()
+    context['cats'] = cats
     return render(request, 'project/create.html', context)
 
 @login_required
