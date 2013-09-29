@@ -34,3 +34,11 @@ def grouped(l, n):
 @register.filter
 def group_by(value, arg):
     return grouped(value, arg)
+
+@register.filter
+def project_selected(island, project):
+    if project.id:
+        islands = project.islands.filter(id=island.id)
+    else:
+        islands = []
+    return islands
