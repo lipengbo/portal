@@ -5,14 +5,14 @@
 {% load staticfiles %}
 
 {% block head_title %}{% trans "create project" %}{% endblock %}
-{% block breadcrumb %}<a href="#">创建项目</a><span class="divider">/</span><a href="#">项目详情</a><span class="divider">/</span>成员邀请{% endblock %}
+{% block breadcrumb %}<a href="{% url "project_create" %}">创建项目</a><span class="divider">/</span><a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>成员邀请{% endblock %}
 
 {% block body %}
         <div class="fill_form">
             <div class="search">                                                                   
                 <form class="form-search">
                   <div class="input-append">
-                    <input type="text" class="span2 search-query">
+                      <input type="text" name="query" value="{{ query }}" class="span2 search-query">
                     <button type="submit" class="btn">搜索</button>
                   </div>
                 </form>

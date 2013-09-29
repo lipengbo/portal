@@ -55,11 +55,18 @@ def invite(request, id):
     if not (request.user == project.owner):
         return redirect('forbidden')
     context = {}
+    context['project'] = project
     target_type = ContentType.objects.get_for_model(project)
     invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
             target_type=target_type).values_list("to_user__id", flat=True))
     invited_user_ids.extend(project.member_ids())
-    context['users'] = User.objects.exclude(id__in=set(invited_user_ids))
+    users = User.objects.exclude(id__in=set(invited_user_ids))
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            users = users.filter(username__icontains=query)
+            context['query'] = query
+    context['users'] = users
 
     if request.method == 'POST':
         user_ids = request.POST.getlist('user')
@@ -67,7 +74,6 @@ def invite(request, id):
         for user_id in user_ids:
             user = get_object_or_404(User, id=user_id)
             form = InvitationForm({'message': message, 'to_user': user_id})
-            import pdb;pdb.set_trace()
             if form.is_valid():
                 invitation = form.save(commit=False)
                 invitation.from_user = request.user
