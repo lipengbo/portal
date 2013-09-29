@@ -40,6 +40,15 @@ def detail(request, id):
     return render(request, 'project/detail.html', context)
 
 @login_required
+def manage(request):
+    user = request.user
+    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    projects = Project.objects.filter(id__in=project_ids)
+    context = {}
+    context['projects'] = projects[:4]
+    return render(request, 'project/manage.html', context)
+
+@login_required
 def apply(request):
     context = {}
     user = request.user
@@ -114,6 +123,8 @@ def delete_project(request, id):
         project.delete()
     else:
         return redirect("forbidden")
+    if 'next' in request.GET:
+        return redirect(request.GET.get('next'))
     return redirect("project_index")
 
 
