@@ -97,6 +97,7 @@
                   <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
                 </div>
                 <div class="show_frame">
+                <span id="switch_portInfo" style="display:inline;float:left;"></span>
                   <div class="frame_tip">
                     <span class="label label-important">网络出口节点</span>
                     <span class="label label-info">普通交换节点</span>
@@ -118,7 +119,7 @@
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
                     		<tr>
-	                            <td>{{ovs_port.switch.name}}</td>
+                                    <td>{{ovs_port.switch.name}}</td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
 	                            {% if ovs_port.switch_type == 1 %}
@@ -133,7 +134,13 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                    <label class="checkbox inline"><input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+                                            <label class="checkbox inline">
+		                            {% if ovs_port.switch_type == 3 %}
+						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
+					    {%else%}
+						<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+		                            {%endif%}
+	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
 	                            	{%endfor%}
 	                            </td>
@@ -326,7 +333,9 @@
                         <tr>
                             <td>关联网络节点</td>
                             <td>
-                                {{ vm_form.server }} {{vm_form.server.errors}}
+                                <select onblur="check_vminfo()" name="server" id="id_server">
+					 <!--<option value="" selected="selected">---------</option>-->
+				</select>
 				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>

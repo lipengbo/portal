@@ -60,21 +60,6 @@ class IslandResource(Resource):
         abstract = True
 
 
-class ComputeResource(IslandResource):
-    state = models.IntegerField(null=True)
-    cpu = models.CharField(max_length=256, null=True)
-    mem = models.IntegerField(null=True)
-    bandwidth = models.IntegerField(null=True)
-    disk = models.IntegerField(null=True)
-    update_time = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        abstract = True
-
-
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
@@ -134,9 +119,9 @@ class SwitchResource(IslandResource):
 
 
 class Switch(SwitchResource):
+
     def on_add_into_slice(self, slice_obj):
-        SliceSwitch.objects.get_or_create(
-             switch=self, slice=slice_obj)
+        SliceSwitch.objects.get_or_create(switch=self, slice=slice_obj)
 
     def is_virtual(self):
         try:
@@ -147,7 +132,8 @@ class Switch(SwitchResource):
             return True
 
     def on_remove_from_slice(self, slice_obj):
-        slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
+        slice_switches = SliceSwitch.objects.filter(
+            switch=self, slice=slice_obj)
         slice_switches.delete()
 
     def type(self):
@@ -210,9 +196,11 @@ class SlicePort(models.Model):
 
 
 class VirtualSwitch(Switch):
+
     """
         A virtual switch service that created on a Physical Server
     """
     server = models.ForeignKey(Server)
+
     def get_vms(self, slice_obj):
         return slice_obj.get_vms.filter(server=self.server)

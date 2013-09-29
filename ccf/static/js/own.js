@@ -190,8 +190,11 @@ function page_function0(){
 	}
 }
 function page_function1(){
-	ret1 = check_nw_num();
-	if (ret1){
+	//ret1 = check_switch_port();
+	var ret2 = check_nw_num();
+	//alert(ret1);
+	//alert(ret2);
+	if (ret2){
 		return true;
 	}
 	else{
@@ -199,6 +202,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
+        fetch_serverinfo();
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -208,7 +212,7 @@ function page_function2(){
 	}
 }
 function page_function3(){
-	//slice
+	//网段
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
@@ -232,8 +236,7 @@ function page_function3(){
 			        + "<td>" + controller_sys + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
-			        + "</table>";
-			    
+			        + "</table>";  
 			}  
 			if(controller_type_obj[i].value=="user_defined"){
 				var controller_ip_port_obj = document.getElementById("controller_ip_port");
@@ -325,7 +328,7 @@ function submit_slice_info(project_id){
 			success: function(data) {
 	        	if (data.result == 1){
 	        		//alert(data.slice_id);
-	        		submmit_vms(data.slice_id);
+	        		submit_vms(data.slice_id);
 	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
 	            }
 	            else{

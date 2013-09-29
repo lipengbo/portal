@@ -49,11 +49,13 @@ def create(request, proj_id):
             if switch_ports:
                 ovs_ports.append({'switch_type': switch.type(),
                     'switch': switch, 'switch_ports': switch_ports})
+    vm_form = VmForm()
     context = {}
     context['project'] = project
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
+    context['vm_form'] = vm_form
     return render(request, 'slice/create_slice.html', context)
 
 
@@ -136,11 +138,10 @@ def edit_controller(request, slice_id):
             controller_info = {'controller_type': controller_type,
                                'controller_sys': controller_sys}
         else:
-            controller_ip = request.POST.get("controller_ip")
-            controller_port = request.POST.get("controller_port")
+            controller_ip_port = request.POST.get("controller_ip_port").split(':')
             controller_info = {'controller_type': controller_type,
-                               'controller_ip': controller_ip,
-                               'controller_port': controller_port}
+                               'controller_ip': controller_ip_port[0],
+                               'controller_port': controller_ip_port[1]}
         try:
             slice_change_controller(slice_obj, controller_info)
         except Exception, ex:

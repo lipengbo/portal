@@ -92,14 +92,17 @@
 					 			<td width="25%">IP：{{vm.ip}}</td>
 					 			<td width="25%">所属网络节点：{{vm.server.ip}}</td>
 					 			<td width="35%">
-					 				<button type="button" class="btn btn-success start_btn">启动</button>
-					 				<button type="button" class="btn">登录</button>
-					 				<button type="button" class="btn btn-inverse">删除</button>
+					 				<a href="" class="btn btn-success start_btn">启动</a>
+					 				<a href="" class="btn">登录</a>
+					 				<a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse">删除</a>
 					 			</td>
 					 		</tr>
 				 		{%endfor%}
 				 	</tbody>
 				 </table>
+				{% if vms %}		
+					<a data-toggle="modal" href="{% url 'vm_list' slice_obj.id %}" class="btn btn-primary edit">&gt;&gt;更多</a>
+				{%endif%}
 			  </fieldset>
 			  <fieldset>
 			  	 <legend>Slice拓扑</legend>
@@ -155,8 +158,6 @@
 	            <div class="modal-footer">
 	              <button class="btn" data-dismiss="modal">取消</button>
 	              <button  class="btn btn-primary" type="submit">确定</button>
-		  			提交申请
-		  		  </button>
 	            </div>
           </form>
          </div>
@@ -170,7 +171,7 @@
                   <table class="table">
                     <tbody>
                         <tr>
-                            <td width="200">
+                            <td width="130">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>

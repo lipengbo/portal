@@ -1,13 +1,40 @@
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save, post_delete
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
-from resources.models import ComputeResource, Server, IslandResource
+from resources.models import IslandResource, Server
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
+from django.utils.translation import ugettext as _
+DOMAIN_STATE_TUPLE = (
+    (0, _('nostate')),
+    (1, _('running')),
+    (2, _('blocked')),
+    (3, _('paused')),
+    (4, _('shutdown')),
+    (5, _('shutoff')),
+    (6, _('crashed')),
+    (7, _('pmsuspended')),
+    (8, _('building')),
+    (9, _('failed')),
+    (10, _('not exist'))
+)
+DOMAIN_STATE_DIC = {
+    'nostate': 0,
+    "runnng": 1,
+    "blocked": 2,
+    "paused": 3,
+    "shutdown": 4,
+    "shutoff": 5,
+    "crashed": 6,
+    "pmsuspended": 7,
+    "building": 8,
+    "failed": 9,
+    "notexist": 10,
+}
 
 
 class Image(models.Model):
@@ -31,7 +58,7 @@ class Flavor(models.Model):
         return self.name
 
 
-class VirtualMachine(ComputeResource):
+class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=20, null=True, unique=True)
     ip = models.ForeignKey(IPUsage)
     mac = models.CharField(max_length=20, null=True)
@@ -40,14 +67,7 @@ class VirtualMachine(ComputeResource):
     flavor = models.ForeignKey(Flavor)
     image = models.ForeignKey(Image)
     server = models.ForeignKey(Server)
-
-    def __init__(self, *args, **kwargs):
-        super(VirtualMachine, self).__init__(*args, **kwargs)
-
-    def save(self, force_insert=False, force_update=False, using=None):
-        self.uuid = utils.gen_uuid()
-        self.mac = utils.generate_mac_address(self.get_ipaddr())
-        super(VirtualMachine, self).save(force_insert=force_insert, force_update=force_update, using=using)
+    state = models.IntegerField(null=True, choices=DOMAIN_STATE_TUPLE)
 
     def get_ipaddr(self):
         return self.ip.ipaddr
@@ -85,6 +105,9 @@ class VirtualMachine(ComputeResource):
     def create_vm(self):
         print '----------------------create a vm=%s -------------------------' % self.name
 
+    def delete_vm(self):
+        print '----------------------delete a vm=%s -------------------------' % self.name
+
 
 class HostMac(models.Model):
     mac = models.CharField(max_length=32)
@@ -94,8 +117,20 @@ class HostMac(models.Model):
     host = generic.GenericForeignKey('host_type', 'host_id')
 
 
+@receiver(pre_save, sender=VirtualMachine)
+def vm_pre_save(sender, instance, **kwargs):
+    instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+    instance.uuid = utils.gen_uuid()
+    instance.mac = utils.generate_mac_address(instance.get_ipaddr())
+    instance.state = DOMAIN_STATE_DIC['building']
+
+
 @receiver(post_save, sender=VirtualMachine)
 def vm_post_save(sender, instance, **kwargs):
     if kwargs.get('created'):
         instance.create_vm()
-        print '-------------------Add HostMac----------------------------'
+
+
+@receiver(post_delete, sender=VirtualMachine)
+def vm_post_delete(sender, instance, **kwargs):
+    instance.delete_vm()

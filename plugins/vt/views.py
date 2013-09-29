@@ -6,38 +6,53 @@
 # E-mail:lipengbo10054444@gmail.com
 import json
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
-from resources.models import Server
 from slice.models import Slice
+from plugins.vt.models import VirtualMachine, IPUsage
+from django.core.urlresolvers import reverse
 
 
 def vm_list(request, sliceid):
-    vms = get_object_or_404(Slice, id=sliceid).virtualmavhine_set.all()
+    vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     context = {}
     context['vms'] = vms
+    context['sliceid'] = sliceid
     return render(request, 'vt/vm_list.html', context)
 
 
 def create_vm(request, sliceid):
-    print "start to create vm "
-    print 'sliceid=%s' % sliceid
-    print request.POST
-    print request.GET
     if request.method == 'POST':
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
             vm = vm_form.save(commit=False)
-            print 'vm= %s ' % repr(vm)
-            #vm.slice = get_object_or_404(Slice, id=sliceid)
-            #vm.save()
+            slice = get_object_or_404(Slice, id=sliceid)
+            vm.slice = slice
+            vm.island = vm.server.island
+            vm.save()
             return HttpResponse(json.dumps({'value': 1}))
         else:
             return HttpResponse(json.dumps({'value': 0}))
     else:
         vm_form = VmForm()
-        vm_form.fields['server'].queryset = Server.objects.filter(id=3)
+        slice = get_object_or_404(Slice, id=sliceid)
+        servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
+        servers.insert(0, ('', '---------'))
+        vm_form.fields['server'].choices = servers
         context = {}
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid
         return render(request, 'vt/create_vm.html', context)
+
+
+def do_vm_action(request, vmid, action):
+    pass
+
+
+def delete_vm(request, vmid, flag):
+    vm = VirtualMachine.objects.get(id=vmid)
+    IPUsage.objects.release_ip(vm.ip)
+    if flag == '1':
+        return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+    else:
+        return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))

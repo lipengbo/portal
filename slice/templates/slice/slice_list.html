@@ -28,20 +28,26 @@ Slice列表
 		                        <td>{{ slice.name }}</td>
 		                    </tr>
 		                    <tr>
+		                        <td valign="top">创建者：</td>
+		                        <td>{{ slice.owner }}</td>
+		                    </tr>
+		                    <tr>
+		                        <td valign="top">状态：</td>
+		                        <td>
+		                        {%if slice.state == 0 %}
+		                        停止
+		                        {%else%}
+		                        启动
+		                        {%endif%}
+		                        </td>
+		                    </tr>
+		                    <tr>
 		                        <td valign="top">网络节点个数：</td>
-		                        <td>{% resource_num slice.get_island "switch" %}{{ switch_num }}个</td>
+		                        <td>{{ slice.get_switches.count }}个</td>
 		                    </tr>
 		                    <tr>
 		                        <td valign="top">虚拟机个数：</td>
 		                        <td>{% resource_num slice.get_island "virtualmachine" %}{{ virtualmachine_num }}个</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">网络节点：</td>
-		                        <td>
-		                            {% for switch in  slice.get_switches%}
-		                                {{ switch.dpid }}
-		                            {% endfor %}
-		                        </td>
 		                    </tr>
 		                </tbody>
 		            </table>
