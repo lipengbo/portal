@@ -25,6 +25,9 @@
 </div>
 
 <div class="row-fluid">
+                 <div class="alert alert-block nothing_tip">
+                     <h4>没有已创建的项目,请通过上方"创建项目"按钮进行创建！</h4>
+                </div>
                  <ul class="thumbnails example-sites">
                     {% for project in projects %}
                     <li class="span3">
@@ -55,12 +58,13 @@
                     </li>
                     {% endfor %}
                   </ul>
-                  <a class="edit" href="{% url "project_index" %}">查看更多>></a>
+                  <a class="edit view_more" href="{% url "project_index" %}">查看更多>></a>
 </div>
 
 {% endblock %}
 {% endblock %}
 
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/close_project.js"></script>
 {% endblock %}
 
