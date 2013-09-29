@@ -130,6 +130,13 @@ def create_or_edit(request, id=None):
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             project = form.save(commit=False)
+            category_name = request.POST.get('category_name')
+            try:
+                category = Category.objects.get(name=category_name)
+            except Category.DoesNotExist:
+                category = Category(name=category_name)
+                category.save()
+            project.category = category
             project.owner = user
             project.save()
             form.save_m2m()
