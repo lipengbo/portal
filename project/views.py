@@ -17,7 +17,8 @@ from django.db.models import Q
 
 from project.models import Project, Membership, Category
 from project.forms import ProjectForm
-from invite.forms import ApplicationForm
+from invite.forms import ApplicationForm, InvitationForm
+from invite.models import Invitation
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -47,6 +48,38 @@ def manage(request):
     context = {}
     context['projects'] = projects[:4]
     return render(request, 'project/manage.html', context)
+
+@login_required
+def invite(request, id):
+    project = get_object_or_404(Project, id=id)
+    if not (request.user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    target_type = ContentType.objects.get_for_model(project)
+    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
+            target_type=target_type).values_list("to_user__id", flat=True))
+    invited_user_ids.extend(project.member_ids())
+    users = User.objects.exclude(id__in=set(invited_user_ids))
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            users = users.filter(username__icontains=query)
+            context['query'] = query
+    context['users'] = users
+
+    if request.method == 'POST':
+        user_ids = request.POST.getlist('user')
+        message = request.POST.get('message')
+        for user_id in user_ids:
+            user = get_object_or_404(User, id=user_id)
+            form = InvitationForm({'message': message, 'to_user': user_id})
+            if form.is_valid():
+                invitation = form.save(commit=False)
+                invitation.from_user = request.user
+                invitation.target = project
+                invitation.save()
+    return render(request, 'project/invite.html', context)
 
 @login_required
 def apply(request):
