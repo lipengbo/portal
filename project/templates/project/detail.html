@@ -67,7 +67,7 @@
     <legend>
    {% trans "Members" %}
         <small class="pull-right">
-            <a href="" class="btn btn-info">{% trans "View pending members" %}</a>
+            <a href="{% url project_applicant project.id  %}" class="btn btn-info">{% trans "View pending members" %}</a>
             <a href="{% url project_invite project.id %}" class="btn btn-info">{% trans "Invite members" %}</a>
         </small>
     </legend>

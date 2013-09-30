@@ -4,11 +4,13 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load invite_tags %}
+{% load endless %}
 
 {% block head_title %}{% trans "create project" %}{% endblock %}
 {% block breadcrumb %}项目申请{% endblock %}
 
 {% block body %}
+{% paginate  projects %}
         <div class="fill_form">
             <div class="search">
                 <div class="form-horizontal search_chose">
@@ -72,13 +74,7 @@
               </fieldset>
         <div class="pagination">
           <ul>
-            <li class="disabled"><a href="#">Prev</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
+              {% show_pages %}
           </ul>
         </div>   
         <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
