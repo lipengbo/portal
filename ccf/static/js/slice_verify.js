@@ -191,7 +191,6 @@ function check_nw_num(){
 	        		ajax_ret = false;
 	            }
 	            else{
-	            	alert(2);
 	            	if (data.value != 1){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
