@@ -16,6 +16,7 @@
 		    {% block extra_head %}{% endblock %}
 		{% endblock %}
 	    {% block body_class %}common{% endblock %}
+	    {% block wrapper_class %}wrapper_all{% endblock %}
 		{% block topbar_base %}
                 <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %} navbar-inverse">
                     <div class="navbar-inner">
@@ -68,9 +69,9 @@
     		        {% block body %}
     		        {% endblock %}	
     		       </div>                
-		        </div>
-	        
+		        </div>	        
 		    </div>
+		    <div class="push"></div>
 		{% endblock %}
 		
 		{% block script_base %}
