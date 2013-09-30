@@ -2,7 +2,7 @@
     {
         "fields": {
             "domain": "localhost:8000", 
-            "name": "example.com [localhost]"
+            "name": "ccf"
         }, 
         "model": "sites.site", 
         "pk": 1

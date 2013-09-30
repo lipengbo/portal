@@ -4,6 +4,9 @@
 {% load crispy_forms_tags %}
 {% load project_tags %}
 
+{% block head_title %}
+项目{% if form.instance.id%}编辑{% else %}创建{% endif %}
+{% endblock %}
 {% block extra_style %}
     <style type="text/css" media="screen">
         #div_id_islands {
