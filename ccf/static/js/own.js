@@ -73,8 +73,13 @@ $(document).ready(function() {
             var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
             if (checked_ports.length > 0) {
                 var clone = $(tr).clone();
-                clone.find('.icheckbox_square-blue.checked').remove();
                 clone.find('label').addClass('label label-success');
+                $.each(clone.find('label.checkbox'), function (index, input) {
+                    if (!$(input).find('.icheckbox_square-blue').hasClass("checked")) {
+                        $(input).remove();
+                    }
+                });
+                clone.find('.icheckbox_square-blue.checked').remove();
                 $('.switch-manifest tbody').append(clone);
             }
         });
