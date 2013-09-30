@@ -5303,6 +5303,9 @@ a {
 .container {
   width: 980px;
 }
+table {
+  word-break: break-all;
+}
 .table th,
 .table td {
   vertical-align: middle;
@@ -5316,9 +5319,6 @@ a {
 .table th .btn,
 .table td .btn {
   margin-right: 10px;
-}
-.common {
-  padding-top: 60px;
 }
 .posit_re {
   position: relative;
