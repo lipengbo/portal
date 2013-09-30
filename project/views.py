@@ -18,7 +18,7 @@ from django.db.models import Q
 from project.models import Project, Membership, Category
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
-from invite.models import Invitation
+from invite.models import Invitation, Application
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -169,6 +169,25 @@ def delete_project(request, id):
         return redirect(request.GET.get('next'))
     return redirect("project_index")
 
+@login_required
+def applicant(request, id):
+    project = get_object_or_404(Project, id=id)
+    target_type = ContentType.objects.get_for_model(project)
+    applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
+    context = {}
+    context['applications'] = applications
+    context['project'] = project
+
+    if request.method == 'POST':
+        application_ids = request.POST.getlist('application')
+        selected_applications = Application.objects.filter(id__in=application_ids)
+        for application in selected_applications:
+            if 'approve' in request.POST:
+                application.accept()
+            elif 'deny' in request.POST:
+                application.deny()
+
+    return render(request, 'project/applicant.html', context)
 
 def get_island_flowvisors(island_id=None):
     flowvisors = Flowvisor.objects.all()

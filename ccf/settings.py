@@ -138,6 +138,7 @@ INSTALLED_APPS = [
     "account",
     "metron",
     "eventlog",
+    "endless_pagination",
 
     # project
     "ccf",

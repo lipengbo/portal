@@ -4,7 +4,7 @@
 {% load staticfiles %}
 {% load i18n %}
 
-{% block head_title %}{% endblock %}
+{% block head_title %}项目管理{% endblock %}
 {% block breadcrumb_base %}{% endblock %}
 
 {% block body_class %}home index{% endblock %}
@@ -58,7 +58,9 @@
                     </li>
                     {% endfor %}
                   </ul>
+                  {% if projects|length == 4 %}
                   <a class="edit view_more" href="{% url "project_index" %}">查看更多>></a>
+                  {% endif %}
 </div>
             <div class="push"></div>
 
