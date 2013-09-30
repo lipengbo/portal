@@ -55,7 +55,9 @@
                     </li>
                     {% endfor %}
                   </ul>
-                  <a class="edit" href="{% url "project_index" %}">查看更多>></a>
+                  {% if project|length == 4 %}
+                      <a class="edit" href="{% url "project_index" %}">查看更多>></a>
+                  {% endif %}
 </div>
 
 {% endblock %}

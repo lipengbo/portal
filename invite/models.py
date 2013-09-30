@@ -71,6 +71,9 @@ class Application(Connection):
         self.accepted = True
         self.save()
 
+    def deny(self):
+        self.delete()
+
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
         return link
