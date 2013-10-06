@@ -1,6 +1,6 @@
 from django.db import models
 from django.dispatch import receiver
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
@@ -8,7 +8,9 @@ from resources.models import IslandResource, Server
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
+from plugins.common.vt_manager_client import VTClient
 from django.utils.translation import ugettext as _
+from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
     (1, _('running')),
@@ -35,6 +37,15 @@ DOMAIN_STATE_DIC = {
     "failed": 9,
     "notexist": 10,
 }
+HOST_STATE = {
+    'active': 1,
+    'disactive': 0,
+}
+VM_TYPE = (
+    (0, _('vm for controller')),
+    (1, _('vm for slice')),
+    (2, _('vm for gateway'))
+)
 
 
 class Image(models.Model):
@@ -69,48 +80,74 @@ class VirtualMachine(IslandResource):
     image = models.ForeignKey(Image)
     server = models.ForeignKey(Server)
     state = models.IntegerField(null=True, choices=DOMAIN_STATE_TUPLE)
+    type = models.IntegerField(null=False, choices=VM_TYPE)
 
     def get_ipaddr(self):
         return self.ip.ipaddr
 
     def get_netmask(self):
-        return self.ip.supernet.get_netmask()
+        return str(self.ip.supernet.get_network().netmask)
 
     def get_network(self):
-        return self.ip.supernet.get_network()
+        return str(self.ip.supernet.get_network().network)
 
     def get_ip_range_size(self):
-        return self.ip.supernet.get_size()
+        return self.ip.supernet.get_network().size
 
     def get_prefixlen(self):
-        return self.ip.supernet.get_prefixlen()
+        return self.ip.supernet.get_network().prefixlen
 
     def get_cidr(self):
-        return self.ip.supernet.get_cidr()
+        return str(self.ip.supernet.get_network().cidr)
 
     def get_broadcast(self):
-        return self.ip.supernet.get_broadcast()
+        return str(self.ip.supernet.get_network().broadcast)
 
     def get_slice_id(self):
         return self.slice.id
 
-    def get_image_uuid(self):
-        return self.image.uuid
-
-    def get_image_name(self):
-        return self.image.name
-
-    def get_image_url(self):
-        return self.image.url
-
     def create_vm(self):
-        print '----------------------create a vm=%s -------------------------' % self.name
+        if function_test:
+            print '----------------------create a vm=%s -------------------------' % self.name
+        else:
+            vmInfo = {}
+            netInfo = {}
+            vmInfo['name'] = self.name
+            vmInfo['cpus'] = self.flavor.cpu
+            vmInfo['mem'] = self.flavor.ram
+            vmInfo['hdd'] = self.flavor.hdd
+            vmInfo['mac'] = self.mac
+            vmInfo['img'] = self.image.uuid
+            vmInfo['glanceURL'] = self.image.url
+            vmInfo['type'] = self.type
+            vmInfo['vnc_port'] = self.vnc_port
+            if self.type == 0:
+                vmInfo['dhcp'] = 0
+            else:
+                vmInfo['dhcp'] = 1
+            netInfo['ip'] = self.get_ipaddr()
+            netInfo['netmask'] = self.get_netmask()
+            netInfo['broadcast'] = self.get_broadcast()
+            netInfo['gateway'] = self.get_network()
+            netInfo['dns'] = '8.8.8.8'
+            vt_client = VTClient()
+            vt_client.create_vm(self.server.ip, vmInfo, netInfo)
 
     def delete_vm(self):
-        print '----------------------delete a vm=%s -------------------------' % self.name
+        if function_test:
+            print '----------------------delete a vm=%s -------------------------' % self.name
+        else:
+            vt_client = VTClient()
+            vt_client.delete_vm(self.server.ip, self.uuid, self.ip.ipaddr)
 
     def do_action(self, action):
-        print '----------------------vm action=%s-------------------------' % action
+        if function_test:
+            print '----------------------vm action=%s-------------------------' % action
+            result = True
+        else:
+            vt_client = VTClient()
+            result = vt_client.do_domain_action(self.server.ip, self.uuid, action)
+        return result
 
 
 class HostMac(models.Model):
@@ -121,24 +158,31 @@ class HostMac(models.Model):
     host = generic.GenericForeignKey('host_type', 'host_id')
 
 
+@receiver(pre_save, sender=VirtualMachine)
+def vm_pre_save(sender, instance, **kwargs):
+    if not instance.ip:
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+    if not instance.uuid:
+        instance.uuid = utils.gen_uuid()
+    if not instance.mac:
+        instance.mac = utils.generate_mac_address(instance.get_ipaddr())
+    if not instance.vnc_port:
+        instance.vnc_port = 5900 + VirtualMachine.objects.filter(server=instance.server).count()
+    if not instance.state:
+        instance.state = DOMAIN_STATE_DIC['building']
+
+
 @receiver(post_save, sender=VirtualMachine)
 def vm_post_save(sender, instance, **kwargs):
     if kwargs.get('created'):
-        print '-------------------vm created-----------------------------'
-        instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
-        print instance.ip
-        instance.uuid = utils.gen_uuid()
-        print instance.uuid
-        instance.mac = utils.generate_mac_address(instance.get_ipaddr())
-        print instance.mac
-        instance.vnc_port = 5900 + VirtualMachine.objects.filter(server=instance.server).count()
-        print instance.vnc_port
-        instance.state = DOMAIN_STATE_DIC['building']
-        instance.save()
         instance.create_vm()
-        print '-------------------vm created-----------------------------'
+
+
+@receiver(pre_delete, sender=VirtualMachine)
+def vm_pre_delete(sender, instance, **kwargs):
+    instance.delete_vm()
 
 
 @receiver(post_delete, sender=VirtualMachine)
 def vm_post_delete(sender, instance, **kwargs):
-    instance.delete_vm()
+    IPUsage.objects.release_ip(instance.ip)

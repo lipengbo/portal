@@ -12,7 +12,7 @@
             "bandwidth": 32,
             "mac": "00:00:00:00:b1:09",
             "state": 1,
-            "ip": "192.168.5.109",
+            "ip": "127.0.0.1",
             "password": "cdn%nf",
             "os": "32",
             "cpu": "32"
@@ -58,7 +58,7 @@
             "island": 1,
             "dpid": "00:ff:00:00:00:00:b1:09",
             "has_gre_tunnel": false,
-            "ip": "192.168.5.109",
+            "ip": "127.0.0.1",
             "password": "cdn%nf",
             "port": 144
         }

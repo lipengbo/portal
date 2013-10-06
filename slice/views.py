@@ -101,6 +101,7 @@ def create_first(request, proj_id):
             print 'he'
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
+            IPUsage.objects.subnet_create_success(slice_obj.name)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')

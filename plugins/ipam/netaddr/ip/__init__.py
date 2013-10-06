@@ -1,8 +1,9 @@
-#-----------------------------------------------------------------------------
-#   Copyright (c) 2008-2013, David P. D. Moss. All rights reserved.
-#
-#   Released under the BSD license. See the LICENSE file for details.
-#-----------------------------------------------------------------------------
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# Filename:__init__.py
+# Date:Sat Oct 05 12:30:41 CST 2013
+# Author:Pengbo Li
+# E-mail:lipengbo10054444@gmail.com
 """Routines for IPv4 and IPv6 addresses, subnets and ranges."""
 
 import sys as _sys
