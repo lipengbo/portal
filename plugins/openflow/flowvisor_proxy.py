@@ -7,6 +7,7 @@ import json
 import pprint
 import re
 from optparse import OptionParser
+from etc.config import flowvisor_disable
 
 
 def toInt(val):
@@ -94,6 +95,8 @@ def makeMatch(matchStr):
 
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
+    if flowvisor_disable:
+        return "success"
     try:
         print data
         print flowvisor_url
