@@ -16,41 +16,37 @@
     </small></legend>
     <table class="table">
         <thead>
-            <tr>
-                <th width="71">
-                </th>
-            </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{% trans "Project Name" %}</td>
+                <td width="71">{% trans "Project Name" %}：</td>
                 <td>
-                    <h3>{{ project.name }}</h3>
+                    {{ project.name }}
                 </td>
             </tr>
             <tr>
-                <td>{% trans "Project Description" %}</td>
+                <td width="71">{% trans "Project Description" %}：</td>
                 <td>{{ project.description }}</td>
             </tr>
             <tr>
-                <td>
-                    {% trans "Creator" %}
+                <td width="71">
+                    {% trans "Creator" %}：
                 </td>
                 <td>
                     {{ project.owner }}
                 </td>
             </tr>
             <tr>
-                <td>
-                    {% trans "Category" %}
+                <td width="71">
+                    {% trans "Category" %}：
                 </td>
                 <td>
                     <span class="label label-success">{{ project.category }}</span>
                 </td>
             </tr>
             <tr>
-                <td>
-                    {% trans "Selected Islands" %}
+                <td width="71">
+                    {% trans "Selected Islands" %}：
                 </td>
                 <td>
                     {% for island in project.islands.all %}

@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.db.models import F
 from django.dispatch import receiver
+from django.conf import settings
 
 from resources.models import ServiceResource, Resource, SwitchPort, Switch
 from slice.models import Slice
@@ -59,7 +60,7 @@ class FlowvisorLinksMd5(models.Model):
 @transaction.commit_on_success
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
-    if created:
+    if settings.DEBUG:
         return
     from communication.flowvisor_client import FlowvisorClient
 
