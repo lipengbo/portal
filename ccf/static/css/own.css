@@ -5281,6 +5281,19 @@ img {
 textarea {
   resize: none;
 }
+html,
+body {
+  height: 100%;
+}
+.wrapper_all {
+  min-height: 100%;
+  height: 100%;
+  height: auto !important;
+  margin: 0 auto -72px;
+}
+.push {
+  height: 72px;
+}
 body {
   background: url(../img/bg.png) repeat;
 }
@@ -5289,6 +5302,9 @@ a {
 }
 .container {
   width: 980px;
+}
+table {
+  word-break: break-all;
 }
 .table th,
 .table td {
@@ -5303,9 +5319,6 @@ a {
 .table th .btn,
 .table td .btn {
   margin-right: 10px;
-}
-.common {
-  padding-top: 60px;
 }
 .posit_re {
   position: relative;
@@ -5515,7 +5528,7 @@ a {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 .fill_form fieldset textarea {
   width: 400px;
@@ -5649,8 +5662,8 @@ a {
   background: #fff;
 }
 .index .banner {
-  padding-top: 120px;
-  padding-bottom: 70px;
+  padding-top: 80px;
+  padding-bottom: 30px;
   text-align: center;
   background: #0088cc;
   color: #fff;
@@ -5678,16 +5691,30 @@ a {
 .index fieldset legend {
   text-align: center;
 }
+.example-sites {
+  margin-bottom: 20px;
+}
 .example-sites li {
   background: #fff;
   overflow: hidden;
   position: relative;
+  margin-bottom: 0;
 }
 .example-sites li .close {
   font-size: 40px;
   position: absolute;
   right: 5px;
   top: 5px;
+}
+.example-sites li table {
+  margin-bottom: 0;
+}
+.example-sites li img {
+  width: 100%;
+  height: 150px;
+}
+.nothing_tip {
+  text-align: center;
 }
 .search {
   overflow: hidden;

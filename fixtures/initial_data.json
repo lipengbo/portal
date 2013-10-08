@@ -1,122 +1,94 @@
 [
     {
-        "pk": 1, 
-        "model": "sites.site", 
         "fields": {
             "domain": "localhost:8000", 
-            "name": "example.com [localhost]"
-        }
-    },
-    {
-        "pk": 2, 
+            "name": "ccf"
+        }, 
         "model": "sites.site", 
+        "pk": 1
+    }, 
+    {
         "fields": {
             "domain": "example.com", 
             "name": "example.com"
-        }
-    },
+        }, 
+        "model": "sites.site", 
+        "pk": 2
+    }, 
     {
-        "pk": 1,
-        "model": "project.city",
         "fields": {
-            "name": "\u5357\u4eac",
-            "description": "\u5357\u4eac"
-        }
-    },
+            "netaddr": "10.0.0.0/8", 
+            "type": 1
+        }, 
+        "model": "ipam.network", 
+        "pk": 1
+    }, 
     {
-        "pk": 1,
-        "model": "project.island",
         "fields": {
-            "city": 1, 
-            "name": "\u65e0\u7ebf\u8c37",
-            "description": "\u65e0\u7ebf\u8c37"
-        }
-    },
+            "netaddr": "172.16.0.100/16", 
+            "type": 0
+        }, 
+        "model": "ipam.network", 
+        "pk": 2
+    }, 
     {
-        "pk": 1,
-        "model": "project.category",
         "fields": {
-            "name": "sdn"
-        }
-    },
+            "cpu": 1, 
+            "hdd": 10, 
+            "name": "micro", 
+            "ram": 256
+        }, 
+        "model": "vt.flavor", 
+        "pk": 1
+    }, 
     {
-        "pk": 1,
-        "model": "project.project",
         "fields": {
-            "owner": 1,
-            "category": 1,
-            "islands": [
-                1
-            ],
-            "name": "unittestproject",
-            "description": "ok"
-        }
-    },
+            "cpu": 1, 
+            "hdd": 20, 
+            "name": "mini", 
+            "ram": 512
+        }, 
+        "model": "vt.flavor", 
+        "pk": 2
+    }, 
     {
-        "pk": 1,
-        "model": "project.membership",
         "fields": {
-            "project": 1,
-            "is_owner": true,
-            "user": 1,
-            "date_joined": "2013-09-23T06:22:56.819Z"
-        }
-    },
+            "cpu": 2, 
+            "hdd": 40, 
+            "name": "small", 
+            "ram": 1024
+        }, 
+        "model": "vt.flavor", 
+        "pk": 3
+    }, 
     {
-        "pk": 1,
-        "model": "resources.server",
         "fields": {
-            "username": "cjx",
-            "update_time": "2013-09-23T06:24:36.051Z",
-            "disk": 32,
-            "name": "server1",
-            "island": 1,
-            "bandwidth": 32,
-            "mac": "11:11:11:11:11:11",
-            "state": 1,
-            "ip": "192.168.5.111",
-            "mem": 32,
-            "password": "cjx",
-            "os": "32",
-            "cpu": "32"
-        }
-    },
+            "cpu": 2, 
+            "hdd": 80, 
+            "name": "medium", 
+            "ram": 2048
+        }, 
+        "model": "vt.flavor", 
+        "pk": 4
+    }, 
     {
-        "pk": 2,
-        "model": "resources.server",
         "fields": {
-            "username": "cjx",
-            "update_time": "2013-09-23T06:25:18.104Z",
-            "disk": 32,
-            "name": "server2",
-            "island": 1,
-            "bandwidth": 32,
-            "mac": "12:12:12:12:12:12",
-            "state": 1,
-            "ip": "192.168.5.112",
-            "mem": 32,
-            "password": "cjx",
-            "os": "32",
-            "cpu": "32"
-        }
-    },
+            "cpu": 4, 
+            "hdd": 160, 
+            "name": "large", 
+            "ram": 4096
+        }, 
+        "model": "vt.flavor", 
+        "pk": 5
+    }, 
     {
-        "pk": 3,
-        "model": "resources.server",
         "fields": {
-            "username": "cjx",
-            "update_time": "2013-09-23T06:26:15.743Z",
-            "disk": 32,
-            "name": "server3",
-            "island": 1,
-            "bandwidth": 32,
-            "mac": "03:03:03:03:03:03",
-            "state": 1,
-            "ip": "192.168.5.103",
-            "mem": 32,
-            "password": "cjx",
-            "os": "32",
-            "cpu": "32"
-        }
+            "cpu": 6, 
+            "hdd": 320, 
+            "name": "xlarge", 
+            "ram": 8192
+        }, 
+        "model": "vt.flavor", 
+        "pk": 6
     }
 ]

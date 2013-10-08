@@ -25,3 +25,20 @@ def get_total_resources(context):
 def resource_num(context, island, resource_type):
     context[resource_type + '_num'] = Resource.registry[resource_type].objects.filter(island=island).count()
     return ''
+
+def grouped(l, n):
+    # Yield successive n-sized chunks from l.
+    for i in xrange(0, len(l), n):
+        yield l[i:i+n]
+
+@register.filter
+def group_by(value, arg):
+    return grouped(value, arg)
+
+@register.filter
+def project_selected(island, project):
+    if project.id:
+        islands = project.islands.filter(id=island.id)
+    else:
+        islands = []
+    return islands

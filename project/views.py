@@ -13,10 +13,12 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
+from django.db.models import Q
 
-from project.models import Project, Membership
+from project.models import Project, Membership, Category
 from project.forms import ProjectForm
-from invite.forms import ApplicationForm
+from invite.forms import ApplicationForm, InvitationForm
+from invite.models import Invitation, Application
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -39,11 +41,65 @@ def detail(request, id):
     return render(request, 'project/detail.html', context)
 
 @login_required
+def manage(request):
+    user = request.user
+    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    projects = Project.objects.filter(id__in=project_ids)
+    context = {}
+    context['projects'] = projects[:4]
+    return render(request, 'project/manage.html', context)
+
+@login_required
+def invite(request, id):
+    project = get_object_or_404(Project, id=id)
+    if not (request.user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    target_type = ContentType.objects.get_for_model(project)
+    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
+            target_type=target_type).values_list("to_user__id", flat=True))
+    invited_user_ids.extend(project.member_ids())
+    users = User.objects.exclude(id__in=set(invited_user_ids))
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            users = users.filter(username__icontains=query)
+            context['query'] = query
+    context['users'] = users
+
+    if request.method == 'POST':
+        user_ids = request.POST.getlist('user')
+        message = request.POST.get('message')
+        for user_id in user_ids:
+            user = get_object_or_404(User, id=user_id)
+            form = InvitationForm({'message': message, 'to_user': user_id})
+            if form.is_valid():
+                invitation = form.save(commit=False)
+                invitation.from_user = request.user
+                invitation.target = project
+                invitation.save()
+    return render(request, 'project/invite.html', context)
+
+@login_required
 def apply(request):
     context = {}
     user = request.user
     projects = Project.objects.all()
+    if 'category' in request.GET:
+        cat_id = request.GET.get('category')
+        if cat_id and cat_id != u'-1':
+            current_cat = get_object_or_404(Category, id=cat_id)
+            projects = projects.filter(category=current_cat)
+            context['current_cat'] = current_cat
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            context['query'] = query
+    categories = Category.objects.all()
     context['projects'] = projects
+    context['categories'] = categories
     if request.method == 'POST':
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
@@ -74,12 +130,21 @@ def create_or_edit(request, id=None):
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             project = form.save(commit=False)
+            category_name = request.POST.get('category_name')
+            try:
+                category = Category.objects.get(name=category_name)
+            except Category.DoesNotExist:
+                category = Category(name=category_name)
+                category.save()
+            project.category = category
             project.owner = user
             project.save()
             form.save_m2m()
             return redirect('project_detail', id=project.id)
 
     context['form'] = form
+    cats = Category.objects.all()
+    context['cats'] = cats
     return render(request, 'project/create.html', context)
 
 @login_required
@@ -100,8 +165,29 @@ def delete_project(request, id):
         project.delete()
     else:
         return redirect("forbidden")
+    if 'next' in request.GET:
+        return redirect(request.GET.get('next'))
     return redirect("project_index")
 
+@login_required
+def applicant(request, id):
+    project = get_object_or_404(Project, id=id)
+    target_type = ContentType.objects.get_for_model(project)
+    applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
+    context = {}
+    context['applications'] = applications
+    context['project'] = project
+
+    if request.method == 'POST':
+        application_ids = request.POST.getlist('application')
+        selected_applications = Application.objects.filter(id__in=application_ids)
+        for application in selected_applications:
+            if 'approve' in request.POST:
+                application.accept()
+            elif 'deny' in request.POST:
+                application.deny()
+
+    return render(request, 'project/applicant.html', context)
 
 def get_island_flowvisors(island_id=None):
     flowvisors = Flowvisor.objects.all()

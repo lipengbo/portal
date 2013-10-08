@@ -4,26 +4,27 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load invite_tags %}
+{% load endless %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block head_title %}项目申请{% endblock %}
 {% block breadcrumb %}项目申请{% endblock %}
 
 {% block body %}
+{% paginate  projects %}
         <div class="fill_form">
             <div class="search">
                 <div class="form-horizontal search_chose">
                     <label class="control-label">项目类别：</label>                   
-                    <select>
-                      <option>全部</option>
-                      <option>SDN</option>
-                      <option>CCN</option>
-                      <option>云计算</option>
-                      <option>其他</option>
-                    </select>                 
-                </div>                                                        
+                    <select name="category" id="category-filter">
+                      <option value="-1">全部</option>
+                      {% for category in categories %}
+                      <option {% if category == current_cat %}selected{% endif %} value="{{ category.id }}">{{ category }}</option>
+                      {% endfor %}
+                    </select>
+                </div>
                 <form class="form-search">
                   <div class="input-append">
-                    <input type="text" class="span2 search-query">
+                      <input type="text" name="query" value="{{ query }}" class="span2 search-query">
                     <button type="submit" class="btn">搜索</button>
                   </div>
                 </form>
@@ -33,7 +34,7 @@
           <form action="" method="POST" class="base_info">
               {% csrf_token %}
             <fieldset>
-                 <legend>项目列表<a data-toggle="modal" href="#applyModal" class="btn btn-primary edit">申请加入</a></legend>
+                 <legend>项目列表<a data-toggle="modal" href="#applyModal" class="btn btn-info edit">申请加入</a></legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -73,13 +74,7 @@
               </fieldset>
         <div class="pagination">
           <ul>
-            <li class="disabled"><a href="#">Prev</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">Next</a></li>
+              {% show_pages %}
           </ul>
         </div>   
         <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -110,13 +105,21 @@
                       </table>
                 </div>
                 <div class="modal-footer">
-                  <button class="btn" data-dismiss="modal">取消</button>
-                  <button type="submit" class="btn btn-primary">提交申请</button>
+                  <button class="btn btn-info" data-dismiss="modal">取消</button>
+                  <button type="submit" class="btn btn-info">提交申请</button>
                 </div>
          </div>
   </form>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('#category-filter').change(function(){
+        if($(this).val() != '-1') {
+            window.location.href = '?category=' + $(this).val();
+        } else {
+            window.location.href= "?"
+        }
+    });
+</script>
 {% endblock %}
-

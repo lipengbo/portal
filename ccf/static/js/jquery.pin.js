@@ -59,7 +59,7 @@
                 if (from < scrollY && to > scrollY) {
                     !($this.css("position") == "fixed") && $this.css({
                         left: $this.offset().left,
-                        top: 41+"px"
+                        top: 41 + "px"
                     }).css("position", "fixed");
                     if (options.activeClass) { $this.addClass(options.activeClass); }
                 } else if (scrollY >= to) {

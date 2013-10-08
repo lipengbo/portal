@@ -73,8 +73,13 @@ $(document).ready(function() {
             var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
             if (checked_ports.length > 0) {
                 var clone = $(tr).clone();
-                clone.find('.icheckbox_square-blue.checked').remove();
                 clone.find('label').addClass('label label-success');
+                $.each(clone.find('label.checkbox'), function (index, input) {
+                    if (!$(input).find('.icheckbox_square-blue').hasClass("checked")) {
+                        $(input).remove();
+                    }
+                });
+                clone.find('.icheckbox_square-blue.checked').remove();
                 $('.switch-manifest tbody').append(clone);
             }
         });
@@ -170,6 +175,7 @@ $(document).ready(function() {
 
 });
 
+
 //全选全不选
 /*function check_all(obj,cName){
     var checkboxs = document.getElementsByName(cName);
@@ -201,6 +207,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
+        fetch_serverinfo();
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -326,7 +333,7 @@ function submit_slice_info(project_id){
 			success: function(data) {
 	        	if (data.result == 1){
 	        		//alert(data.slice_id);
-	        		submmit_vms(data.slice_id);
+	        		submit_vms(data.slice_id);
 	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
 	            }
 	            else{

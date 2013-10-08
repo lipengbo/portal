@@ -1,10 +1,11 @@
 from django.db import models
 from django.db.models.base import ModelBase
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.db.models import F
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from plugins.common.vt_manager_client import VTClient
+from etc.config import function_test
 
 from project.models import Island
 from slice.models import Slice
@@ -55,21 +56,6 @@ class Resource(models.Model):
 
 class IslandResource(Resource):
     island = models.ForeignKey(Island)
-
-    class Meta:
-        abstract = True
-
-
-class ComputeResource(IslandResource):
-    state = models.IntegerField(null=True)
-    cpu = models.CharField(max_length=256, null=True)
-    mem = models.IntegerField(null=True)
-    bandwidth = models.IntegerField(null=True)
-    disk = models.IntegerField(null=True)
-    update_time = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return self.name
 
     class Meta:
         abstract = True
@@ -134,9 +120,9 @@ class SwitchResource(IslandResource):
 
 
 class Switch(SwitchResource):
+
     def on_add_into_slice(self, slice_obj):
-        SliceSwitch.objects.get_or_create(
-             switch=self, slice=slice_obj)
+        SliceSwitch.objects.get_or_create(switch=self, slice=slice_obj)
 
     def is_virtual(self):
         try:
@@ -147,7 +133,8 @@ class Switch(SwitchResource):
             return True
 
     def on_remove_from_slice(self, slice_obj):
-        slice_switches = SliceSwitch.objects.filter(switch=self, slice=slice_obj)
+        slice_switches = SliceSwitch.objects.filter(
+            switch=self, slice=slice_obj)
         slice_switches.delete()
 
     def type(self):
@@ -210,9 +197,20 @@ class SlicePort(models.Model):
 
 
 class VirtualSwitch(Switch):
+
     """
         A virtual switch service that created on a Physical Server
     """
     server = models.ForeignKey(Server)
+
     def get_vms(self, slice_obj):
         return slice_obj.get_vms.filter(server=self.server)
+
+
+@receiver(pre_save, sender=Server)
+def vm_pre_save(sender, instance, **kwargs):
+    if not function_test:
+        info = VTClient.get_host_info(instance.ip)
+        instance.cpu = info['cpu']
+        instance.cpu = info['mem']
+        instance.cpu = info['hdd']

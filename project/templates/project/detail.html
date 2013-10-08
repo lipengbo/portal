@@ -12,7 +12,7 @@
 
 {% block body %}
 <fieldset class="base_info">
-    <legend>{% trans "Basic info" %}<small class="pull-right"><a href="{% url project_edit project.id %}" class="btn btn-success">{% trans "Edit" %}</a> 
+    <legend>{% trans "Basic info" %}<small class="pull-right"><a href="{% url project_edit project.id %}" class="btn btn-info">{% trans "Edit" %}</a> 
     </small></legend>
     <table class="table">
         <thead>
@@ -67,8 +67,8 @@
     <legend>
    {% trans "Members" %}
         <small class="pull-right">
-            <a href="" class="btn btn-success">{% trans "View pending members" %}</a>
-            <a href="{% url invite_invite project.get_content_type.id project.id %}" class="btn btn-success">{% trans "Invite members" %}</a>
+            <a href="{% url project_applicant project.id  %}" class="btn btn-info">{% trans "View pending members" %}</a>
+            <a href="{% url project_invite project.id %}" class="btn btn-info">{% trans "Invite members" %}</a>
         </small>
     </legend>
 </fieldset>
@@ -90,7 +90,7 @@
                     <td>{{ membership.user }}</td>
                     <td>
                         {% if not membership.is_owner %}
-                        <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}<td>
+                        <a href="{% url project_delete_member membership.id  %}" class="btn btn-info btn-delete">{% trans "Remove" %}<td>
                         {% endif %}
                 {% endfor %}
             </tr>
@@ -101,7 +101,11 @@
     <div class="span4 offset4"><a href="{% url create_slice project.id %}" class="btn btn-large btn-block btn-info">创建Slice</a></div>
   </div>
   <fieldset>
-     <legend>Slice<button type="button" class="pull-right btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button></legend>
+      <legend>Slice
+          {% if  project.slice_set.count > 4%}
+            <button type="button" class="pull-right btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button>
+          {% endif %}
+      </legend>
      <ul class="thumbnails example-sites">
          {% for slice in project.slice_set.all %}
         <li class="span3 ">

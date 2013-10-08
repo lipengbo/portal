@@ -16,7 +16,7 @@
 		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
 			    <legend>基本信息
-			    	<a data-toggle="modal" href="#editInfoModal" class="btn btn-primary edit">编 辑</a>
+			    	<a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编 辑</a>
 			    </legend>
 			    <table class="table">
 			    	<tbody>
@@ -40,15 +40,15 @@
 			  	 <table class="table">
 				 	<tbody>
 				 		<tr>
-				 			<td width="25%">控制器</td>
-				 			<td width="50%">{{controller.ip}}：{{controller.port}}</td>
+				 			<td width="20%">控制器</td>
+				 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
 				 			<td width="25%">
 				 				<button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn">登录</button>
+					 			<button type="button" class="btn btn-info">登录</button>
 				 			{% if slice_obj.state == 0 %}
-					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a>
+					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
 					 		{%else%}	
-					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-primary" disabled>编辑</a>
+					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info" disabled>编辑</a>
 					 		{%endif%}
 				 			</td>
 				 		</tr>
@@ -58,11 +58,11 @@
 					 			<td>IP：{{gw.ip}}</td>
 					 			<td>
 					 				<button type="button" class="btn btn-success start_btn">启动</button>
-						 			<button type="button" class="btn">登录</button>
+						 			<button type="button" class="btn btn-info">登录</button>
 						 		{% if slice_obj.state == 0 %}
-						 			<a data-toggle="modal" href="#" class="btn btn-primary">编辑</a>
+						 			<a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
 						 		{%else%}
-						 			<a data-toggle="modal" href="#" class="btn btn-primary" disabled>编辑</a>
+						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
 						 		{%endif%}
 					 			</td>
 					 		</tr>
@@ -73,11 +73,11 @@
 					 			<td>IP：{{dhcp.ip}}</td>
 					 			<td>
 					 				<button type="button" class="btn btn-success start_btn">启动</button>
-						 			<button type="button" class="btn">登录</button>
+						 			<button type="button" class="btn btn-info">登录</button>
 						 		{% if slice_obj.state == 0 %}
-						 			<a data-toggle="modal" href="#" class="btn btn-primary">编辑</a>
+						 			<a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
 						 		{%else%}
-						 			<a data-toggle="modal" href="#" class="btn btn-primary" disabled>编辑</a>
+						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
 						 		{%endif%}
 					 			</td>
 					 		</tr>
@@ -88,18 +88,24 @@
 				 	<tbody>
 				 		{%for vm in vms%}
 					 		<tr>
-					 			<td width="25%">{{vm.name}}</td>
+					 			<td width="20%">{{vm.name}}</td>
 					 			<td width="25%">IP：{{vm.ip}}</td>
-					 			<td width="25%">所属网络节点：{{vm.server.ip}}</td>
-					 			<td width="35%">
-					 				<button type="button" class="btn btn-success start_btn">启动</button>
-					 				<button type="button" class="btn">登录</button>
-					 				<button type="button" class="btn btn-inverse">删除</button>
+					 			<td width="30%">所属网络节点：{{vm.server.ip}}</td>
+					 			<td width="25%">
+			    {% if vm.state == 1 %}
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-success stop_btn">停止</button>
+			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
+			    {%else%}
+			        <button type="button" onclick="do_vm_action('{% url 'do_vm_action' vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+			        <button type="button" onclick="" class="btn" disabled>登录</button>
+			    {%endif%}
+  			    <button type="button" onclick="window.location.href='{% url 'delete_vm' vm.id 0 %}'" class="btn btn-delete">删除</button>
 					 			</td>
 					 		</tr>
 				 		{%endfor%}
 				 	</tbody>
-				 </table>
+				 </table>	
+				<button type="button" onclick="window.location.href='{% url 'vm_list' slice_obj.id %}'" class="btn btn-info edit">&gt;&gt;更多</button>
 			  </fieldset>
 			  <fieldset>
 			  	 <legend>Slice拓扑</legend>
@@ -207,8 +213,8 @@
                 </table>
 	          </div>
 	          <div class="modal-footer">
-	              <button class="btn" data-dismiss="modal">取消</button>
-	              <button class="btn btn-primary" type="submit">确定</button>
+	              <button class="btn btn-info" data-dismiss="modal">取消</button>
+	              <button class="btn btn-info" type="submit">确定</button>
 	          </div>
             </form>
          </div>
@@ -217,4 +223,5 @@
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
 {% endblock %}
