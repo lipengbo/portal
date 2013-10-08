@@ -43,13 +43,13 @@
 				 			<td width="20%">控制器</td>
 				 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
 				 			<td width="25%">
-				 				<button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn btn-info">登录</button>
-				 			{% if slice_obj.state == 0 %}
-					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
-					 		{%else%}	
-					 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info" disabled>编辑</a>
-					 		{%endif%}
+							    <button type="button" class="btn btn-success start_btn">启动</button>
+						 		<button type="button" class="btn btn-info">登录</button>
+					 			{% if slice_obj.state == 0 %}
+						 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
+						 		{%else%}	
+						 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info" disabled>编辑</a>
+						 		{%endif%}
 				 			</td>
 				 		</tr>
 				 		{%for gw in gws%}
