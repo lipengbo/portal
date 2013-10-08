@@ -106,7 +106,6 @@ function isBlocked(i){
 		}	
 	}
 	return false;				
-	//alert(switches[key]);
 	//switchUsedNum[key] = 0;
 }
 
@@ -186,11 +185,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts[i][6] == 0){
-			str = str + "<image xlink:href='/static/img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='/static/img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts[i][0] + "</title>  "
@@ -202,11 +201,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts_special.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts_special[i][4] == 0){
-			str = str + "<image xlink:href='/static/img/host_down.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='/static/img/host.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts_special[i][0] + "</title>  "
@@ -362,8 +361,6 @@ function setLocation(){
 	
 	//计算树中每层的主机所占宽度，交换机所占宽度
 	for(var i = 0; i <= levelNum; i++){	
-		//alert("levelNodesNum[i]" + levelNodesNum[i])	
-		//alert("levelHostsNum[i]" + levelHostsNum[i])
 		if(levelNodesNum[i] == 0){
 			levelNodesWidth[i] = mbWidth / 1;
 		}else{
@@ -450,7 +447,6 @@ function findCircle(fatherObj){
 			}
 		}
 	}
-	
 	for(var i = 0; i < childSw.length; i++){
 		findCircle(childSw[i]);
 	}
@@ -532,12 +528,9 @@ function initLevelNodesNum(fatherObj, level){
 	var level_pre;
 	
 	for(var k = 0; k < host_links.length; k++){
-		//alert("hosts_special[k][3]"+hosts_special[k][3])
 		if(hosts_special[k][3] == 0){
 			num = host_links[k][1];
 			for(var l = 0; l < num; l++){
-				//alert("fatherObj[0]"+fatherObj[0])
-				//alert("host_links[k][l+3]"+host_links[k][l+3])
 				if(host_links[k][l+3] == fatherObj[0]){
 					if(host_links[k][2] < level){
 						HostNum++;
@@ -894,9 +887,8 @@ var getDegrees = function(edges) {
     return degree;
 }
 
-function maxDegree (){
-    var degrees = getDegrees(links),
-        maxDegree = -1, max_idx = -1;
+function maxDegree (degrees){
+    var maxDegree = -1, max_idx = -1;
     for (var i in switches){
         if (sw_in_circle[i] != 1){
             dg = degrees[switches[i][0]] || 0;
@@ -911,59 +903,60 @@ function maxDegree (){
 
 //画一个slice的拓扑，参数conti表示对应的html页面中的div编号（-1对应slice编辑页面中的div）
 function draw(conti){
-	//alert("draw")
 	initCheckBoard(conti);	
 	init();
 	//initCircleTemp();
 	
 	//确定slice中有几棵树，每棵树的层数，宽度
-	for(var i=0; i<switches.length; i++){
-		if(sw_in_circle[i]==0){
-			currMaxLevelNodes = 1;
-			levelNum = 0;
-			
-			//设置树的根节点
-            i = maxDegree();
-			treeRootIndexs[treeNum] = i;
-			rootIndex = i;
-			setRootSwitch();
-			
-			//从根节点开始遍历交换机（广度优先遍历，破环)
-			findCircle(rootSw);
-			resetLinksSign();
-			
-			//获取树的层数	
-			getLevelNum(rootSw,0);
-			resetLinksSign();
-			if(maxTreeLevels <levelNum){
-				maxTreeLevels = levelNum;
-			}
-			treeLevels[treeNum]=levelNum;
-			
-			//获取树的宽度
-			levelNodesNum = null;
-			levelHostsNum = null;
-			levelNodesNum = new Array(0);
-			levelHostsNum = new Array(0);
-			for(var j=0; j<=levelNum; j++){
-				levelNodesNum[j] = 0;
-				levelHostsNum[j] = 0;
-			}
-			//一个主机连接不同树的多个交换机时，主机放在第一棵树上
-			for(var k = 0; k < host_links.length; k++){
-				if(host_links[k][2] != -1){
-					hosts_special[k][3] = 1;
-				}
-				host_links[k][2] = -1;
-			}
-			initLevelNodesNum(rootSw, 0);
-			resetLinksSign();
-			treeLevelNodes[treeNum]=currMaxLevelNodes;
-			
-			totalLevelNodes = totalLevelNodes + currMaxLevelNodes;
-			treeNum++;
-			currMaxLevelNodes = 0;
+	var degrees = getDegrees(links)
+	for(var s=0; s<switches.length; s++){
+		currMaxLevelNodes = 1;
+		levelNum = 0;
+		
+		//设置树的根节点
+        i = maxDegree(degrees);
+        if(i == -1){
+        	break;
+        }
+		treeRootIndexs[treeNum] = i;
+		rootIndex = i;
+		setRootSwitch();
+		
+		//从根节点开始遍历交换机（广度优先遍历，破环)
+		findCircle(rootSw);
+		resetLinksSign();
+		
+		//获取树的层数	
+		getLevelNum(rootSw,0);
+		resetLinksSign();
+		if(maxTreeLevels <levelNum){
+			maxTreeLevels = levelNum;
 		}
+		treeLevels[treeNum]=levelNum;
+		
+		//获取树的宽度
+		levelNodesNum = null;
+		levelHostsNum = null;
+		levelNodesNum = new Array(0);
+		levelHostsNum = new Array(0);
+		for(var j=0; j<=levelNum; j++){
+			levelNodesNum[j] = 0;
+			levelHostsNum[j] = 0;
+		}
+		//一个主机连接不同树的多个交换机时，主机放在第一棵树上
+		for(var k = 0; k < host_links.length; k++){
+			if(host_links[k][2] != -1){
+				hosts_special[k][3] = 1;
+			}
+			host_links[k][2] = -1;
+		}
+		initLevelNodesNum(rootSw, 0);
+		resetLinksSign();
+		treeLevelNodes[treeNum]=currMaxLevelNodes;
+		
+		totalLevelNodes = totalLevelNodes + currMaxLevelNodes;
+		treeNum++;
+		currMaxLevelNodes = 0;
 	}
 
 	if(totalLevelNodes == 0){
@@ -979,15 +972,12 @@ function draw(conti){
 	for(var k=0; k<hosts_special.length; k++){
 		hosts_special[k][3] = 0;
 		host_links[k][2] = -1;
-		//alert("for hosts_special[k][3]"+hosts_special[k][3]);
 	}
-	
 	//确定slice中的树的各元素坐标
 	for(var i=0; i<treeNum; i++){
 		rootIndex = treeRootIndexs[i];
 		setRootSwitch();
 		levelNum = treeLevels[i];
-		//alert("levelNum"+levelNum)
 		//确定当前树的画布位置
 		checkBoard(i);
 		//确定树中各元素坐标

@@ -18,7 +18,6 @@ def create_add_controller(slice_obj, controller_info):
             if controller_info['controller_type'] == 'default_create':
                 controller = create_default_controller(slice_obj,
                     controller_info['controller_sys'])
-                controller = slice_obj.project.islands.all()[0].controller_set.all()[0]
             else:
                 controller = create_user_defined_controller(slice_obj,
                     controller_info['controller_ip'],
@@ -103,7 +102,7 @@ def create_default_controller(slice_obj, controller_sys):
 
 
 def delete_controller(controller):
-    """创建用户自定义控制器记录
+    """删除控制器
     """
     if controller:
         if controller.name == 'user_define' and (not controller.host):
