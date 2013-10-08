@@ -59,6 +59,8 @@ class FlowvisorLinksMd5(models.Model):
 @transaction.commit_on_success
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
+    if created:
+        return
     from communication.flowvisor_client import FlowvisorClient
 
     client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
@@ -96,8 +98,16 @@ def update_links(sender, instance, created, **kwargs):
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
-        source_switch = Switch.objects.get(dpid=link['src-switch'])
-        target_switch = Switch.objects.get(dpid=link['dst-switch'])
+        try:
+            source_switch = Switch.objects.get(dpid=link['src-switch'])
+        except Switch.DoesNotExist, e:
+            print '========== FETCHING ' + link['src-switch'] + " =========="
+            raise e
+        try:
+            target_switch = Switch.objects.get(dpid=link['dst-switch'])
+        except Switch.DoesNotExist, e:
+            print '========== FETCHING ' + link['dst-switch'] + " =========="
+            raise e
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
         except KeyError:
