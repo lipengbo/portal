@@ -112,7 +112,7 @@ class VirtualMachine(IslandResource):
         else:
             vmInfo = {}
             netInfo = {}
-            vmInfo['name'] = self.name
+            vmInfo['name'] = self.uuid
             vmInfo['cpus'] = self.flavor.cpu
             vmInfo['mem'] = self.flavor.ram
             vmInfo['hdd'] = self.flavor.hdd
@@ -138,7 +138,7 @@ class VirtualMachine(IslandResource):
             print '----------------------delete a vm=%s -------------------------' % self.name
         else:
             vt_client = VTClient()
-            vt_client.delete_vm(self.server.ip, self.uuid, self.ip.ipaddr)
+            vt_client.delete_vm(self.server.ip, self.uuid)
 
     def do_action(self, action):
         if function_test:
