@@ -8,3 +8,4 @@ django-jsonfield==0.8.12
 django-guardian==1.1.1
 django-crispy-forms==1.4.0
 eventlet==0.14.0
+django-endless-pagination==2.0

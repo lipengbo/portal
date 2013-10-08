@@ -3,11 +3,13 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
+{% load endless %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block head_title %}项目列表{% endblock %}
 {% block breadcrumb %}项目列表{% endblock %}
 
 {% block body %}
+{% paginate  projects  %}
         <div class="fill_form">
             <fieldset>
                 <legend>我的项目<button type="button" class="btn btn-info edit" onclick="window.history.back();">返 回</button></legend>
@@ -49,6 +51,11 @@
                     {% endfor %}
                 </div>
             </fieldset>
+        </div>
+        <div class="pagination">
+            <ul>
+                {% show_pages %}
+            </ul>
         </div>
 {% endblock %}
  
