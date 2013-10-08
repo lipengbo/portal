@@ -16,41 +16,37 @@
     </small></legend>
     <table class="table">
         <thead>
-            <tr>
-                <th width="71">
-                </th>
-            </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{% trans "Project Name" %}</td>
+                <td width="71">{% trans "Project Name" %}：</td>
                 <td>
-                    <h3>{{ project.name }}</h3>
+                    {{ project.name }}
                 </td>
             </tr>
             <tr>
-                <td>{% trans "Project Description" %}</td>
+                <td width="71">{% trans "Project Description" %}：</td>
                 <td>{{ project.description }}</td>
             </tr>
             <tr>
-                <td>
-                    {% trans "Creator" %}
+                <td width="71">
+                    {% trans "Creator" %}：
                 </td>
                 <td>
                     {{ project.owner }}
                 </td>
             </tr>
             <tr>
-                <td>
-                    {% trans "Category" %}
+                <td width="71">
+                    {% trans "Category" %}：
                 </td>
                 <td>
                     <span class="label label-success">{{ project.category }}</span>
                 </td>
             </tr>
             <tr>
-                <td>
-                    {% trans "Selected Islands" %}
+                <td width="71">
+                    {% trans "Selected Islands" %}：
                 </td>
                 <td>
                     {% for island in project.islands.all %}
@@ -83,17 +79,18 @@
                     <th>{% trans "Actions" %}</th>
                 </tr>
             </thead>
-            <tr>
                 {% for membership in project.membership_set.all %}
+            <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ membership.user }}</td>
                     <td>{{ membership.user }}</td>
                     <td>
                         {% if not membership.is_owner %}
-                        <a href="{% url project_delete_member membership.id  %}" class="btn btn-info btn-delete">{% trans "Remove" %}<td>
+                        <a href="{% url project_delete_member membership.id  %}" class="btn btn-info btn-delete">{% trans "Remove" %}</a>
                         {% endif %}
-                {% endfor %}
+                    </td>
             </tr>
+                {% endfor %}
         </table>
     </div>
 </div>

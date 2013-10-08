@@ -167,14 +167,14 @@ function check_nw_num(){
 	
 	if((slice_name!=old_nw_owner) || (nw_num!=old_nw_num)){
 		if(old_slice_nw==''){
-			check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/";
+			check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 		}
 		else{
 			if(nw_num!=old_nw_num){
-				check_url = "http://" + window.location.host + "/slice/change_nw/"+old_nw_owner+"/"+slice_name+"/";
+				check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 			}
 			else{
-				check_url = "http://" + window.location.host + "/slice/change_nw_owner/"+old_slice_nw+"/"+slice_name+"/";
+				check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 			}
 		}
 	    $.ajax({
@@ -195,6 +195,7 @@ function check_nw_num(){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
 		             	old_slice_nw_obj.value = data.value;
+		             	setTimeout("nw_timeout()",110000);
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
@@ -220,6 +221,13 @@ function check_nw_num(){
 		showInfo(info,"√","green");
 		return true;
 	}
+}
+
+//网段过期
+function nw_timeout(){
+	alert("分配的网段已过期！");
+	window.location.href = window.location.href;
+	//window.top.location.reload();
 }
 
 //验证交换机端口的选择

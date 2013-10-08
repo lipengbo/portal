@@ -77,6 +77,8 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+LOCALE_PATHS = [os.path.join(PROJECT_ROOT, 'i18n', app, 'locale') for app in os.listdir(os.path.join(PROJECT_ROOT,'i18n'))]
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = "2d3di+cxe4f1gh5cewjlpj&amp;qwr^6xi3d91p!blkhz3rl&amp;8hvpx"
 
