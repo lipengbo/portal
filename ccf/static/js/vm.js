@@ -223,6 +223,11 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 enable_dhcp: enable_dhcp
         },
         success: function(data) {
+            if(data.result==1)
+            {
+                //alert('Failed to operator vm!')
+                alert(data.error)
+            }
 
         }
         });
@@ -319,9 +324,10 @@ function do_vm_action(url)
         cache: false,
         async: false,  
         success: function(data) {
-            if(data==0)
+            if(data.result==1)
             {
-                alert('Failed to operator vm!')
+                //alert('Failed to operator vm!')
+                alert(data.error)
             }
         }
         });

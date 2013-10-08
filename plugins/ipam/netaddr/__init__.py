@@ -77,34 +77,63 @@ __all__ = [
 ]
 
 
-class Network(object):
+class Network(IPNetwork):
 
-    def __init__(self, ipaddr):
-        """
-        ipaddr : must use cidr format,such as '10.0.0.0/8'
-        """
-        self.netaddr = IPNetwork(ipaddr)
-        self.sub64_prefix = 26
-        self.sub32_prefix = 27
-        self.sub16_prefix = 28
-        self.sub8_prefix = 29
+    def subnet(self, ipcount, *args, **kwargs):
+        if ipcount == 64:
+            prefixlen = 26
+        elif ipcount == 32:
+            prefixlen = 27
+        elif ipcount == 16:
+            prefixlen = 28
+        elif ipcount == 8:
+            prefixlen = 29
+        else:
+            prefixlen = self.prefixlen
+        return super(Network, self).subnet(prefixlen, *args, **kwargs)
 
-    def subnet(self, ipcount, count=None):
-        function = '_sub_net_%s' % ipcount
-        return getattr(self, function)(count=count)
+    def get_subnet(self, ipcount, index):
+        if ipcount == 64:
+            prefixlen = 26
+        elif ipcount == 32:
+            prefixlen = 27
+        elif ipcount == 16:
+            prefixlen = 28
+        elif ipcount == 8:
+            prefixlen = 29
+        else:
+            prefixlen = self.prefixlen
+        width = self._module.width
+        max_subnets = (1 << (width - self.prefixlen)) // (1 << (width - prefixlen))
+        if index >= max_subnets:
+            raise ValueError('Index outside of current IP subnet boundary!')
+        base_subnet = self._module.int_to_str(self.first)
+        subnet = self.__class__('%s/%d' % (base_subnet, prefixlen), self._module.version)
+        subnet.value += (subnet.size * index)
+        subnet.prefixlen = prefixlen
+        return subnet
 
-    def _sub_net_64(self, count):
-        for sub64_net in self.netaddr.subnet(self.sub64_prefix, count=count):
-            yield sub64_net
+    def get_supernet(self, superprefix):
+        if not 0 <= superprefix <= self._module.width:
+            raise ValueError('CIDR prefix /%d invalid for IPv%d!' % (superprefix, self._module.version))
+        supernet = self.cidr
+        supernet._prefixlen = superprefix
+        return supernet
 
-    def _sub_net_32(self, count):
-        for sub32_net in self.netaddr.subnet(self.sub32_prefix, count=count):
-            yield sub32_net
+    def get_previous(self, superprefix, step=1):
+        ip_previous = self.previous(step)
+        if self.get_supernet(superprefix) in ip_previous.supernet():
+            return ip_previous
+        raise StopIteration
 
-    def _sub_net_16(self, count):
-        for sub16_net in self.netaddr.subnet(self.sub16_prefix, count=count):
-            yield sub16_net
+    def get_next(self, superprefix, step=1):
+        ip_next = self.next(step)
+        if self.get_supernet(superprefix) in ip_next.supernet():
+            return ip_next
+        raise StopIteration
 
-    def _sub_net_8(self, count):
-        for sub8_net in self.netaddr.subnet(self.sub8_prefix, count=count):
-            yield sub8_net
+    def get_host(self, index):
+        if 0 <= index <= self.last - self.first - 2:
+            return IPAddress(self.first + 1 + index, self._module.version)
+        else:
+            raise StopIteration

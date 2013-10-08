@@ -31,5 +31,16 @@
             "uuid": "53807c3b-8d25-4d4f-9249-a798ce0b7013",
             "name": "9m_img"
         }
+    },
+    {
+        "pk": 4,
+        "model": "vt.image",
+        "fields": {
+            "url": "http://192.168.5.107:9292/v1/image/53807c3b-8d25-4d4f-9249-a798ce0b7014",
+            "version": null,
+            "type": null,
+            "uuid": "53807c3b-8d25-4d4f-9249-a798ce0b7014",
+            "name": "floodlight"
+        }
     }
 ]
