@@ -414,6 +414,9 @@ function getSwitch(Dpip){
 function setCircleSign(sw){
 	for(var i = 0; i < switches.length; i++){
 		if(switches[i][0] == sw[0]){
+			alert("no");
+			alert(i);
+			alert(sw[0]);
 			sw_in_circle[i] = 1;			
 			break;
 		}
@@ -422,6 +425,7 @@ function setCircleSign(sw){
 
 //广度优先遍历交换机，破环
 function findCircle(fatherObj){
+	alert(fatherObj[0]);
 	if(fatherObj == null){
 		return;
 	}
@@ -431,6 +435,7 @@ function findCircle(fatherObj){
 	var cnum = 0;
 	for(var i = 0; i < links.length; i++){
 		if(links[i][0] == fatherObj[0]){
+			alert("ok1");
 			var DestDpip = links[i][1];
 			var destSwitch = getSwitch(DestDpip);
 			if(!isSwUsed(destSwitch)){
@@ -440,6 +445,7 @@ function findCircle(fatherObj){
 				cnum++;
 			}
 		}else if(links[i][1] == fatherObj[0]){
+			alert("ok2");
 			var DestDpip = links[i][0];
 			var destSwitch = getSwitch(DestDpip);
 			if(!isSwUsed(destSwitch)){
@@ -450,7 +456,7 @@ function findCircle(fatherObj){
 			}
 		}
 	}
-	
+	alert(childSw.length);
 	for(var i = 0; i < childSw.length; i++){
 		findCircle(childSw[i]);
 	}
@@ -917,8 +923,14 @@ function draw(conti){
 	//initCircleTemp();
 	
 	//确定slice中有几棵树，每棵树的层数，宽度
+	alert(switches.length);
+	alert(switches[0][0]);
+	alert(switches[1][0]);
+	alert(switches[2][0]);
 	for(var i=0; i<switches.length; i++){
+		alert(i);
 		if(sw_in_circle[i]==0){
+			alert(i);
 			currMaxLevelNodes = 1;
 			levelNum = 0;
 			
@@ -981,7 +993,8 @@ function draw(conti){
 		host_links[k][2] = -1;
 		//alert("for hosts_special[k][3]"+hosts_special[k][3]);
 	}
-	
+	alert('***************');
+	alert(treeNum);
 	//确定slice中的树的各元素坐标
 	for(var i=0; i<treeNum; i++){
 		rootIndex = treeRootIndexs[i];
