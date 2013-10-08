@@ -258,7 +258,7 @@ def get_slice_topology(slice_obj):
                     host_status = 1
                 else:
                     host_status = 0
-                vm_info = {'macAddress': vm.ip, 'switchDPID': virtual_switch.dpid,
+                vm_info = {'macAddress': vm.ip.ipaddr, 'switchDPID': virtual_switch.dpid,
                             'hostid': vm.id, 'hostStatus': host_status}
                 normals.append(vm_info)
         topology = {'switches': switches, 'links': links,

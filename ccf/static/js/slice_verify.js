@@ -171,10 +171,10 @@ function check_nw_num(){
 		}
 		else{
 			if(nw_num!=old_nw_num){
-				check_url = "http://" + window.location.host + "/slice/change_nw/"+old_nw_owner+"/"+slice_name+"/"+nw_num+"/";
+				check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 			}
 			else{
-				check_url = "http://" + window.location.host + "/slice/change_nw_owner/"+old_slice_nw+"/"+slice_name+"/";
+				check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_name+"/"+nw_num+"/";
 			}
 		}
 	    $.ajax({

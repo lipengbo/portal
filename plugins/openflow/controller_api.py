@@ -103,7 +103,7 @@ def create_default_controller(slice_obj, controller_sys):
 
 
 def delete_controller(controller):
-    """创建用户自定义控制器记录
+    """删除控制器
     """
     if controller:
         if controller.name == 'user_define' and (not controller.host):

@@ -228,6 +228,9 @@ def create_nw(request, owner, nw_num):
           成功：value = 网段（192.168.5.6/27）
     """
     try:
+        nw_objs = Subnet.objects.filter(owner=owner)
+        if nw_objs:
+            IPUsage.objects.delete_subnet(owner)
         nw = IPUsage.objects.create_subnet(owner, int(nw_num), 120)
         if nw:
             return HttpResponse(json.dumps({'value': nw}))
@@ -254,38 +257,38 @@ def delete_nw(request, owner):
         return HttpResponse(json.dumps({'value': 0}))
 
 
-def change_nw_owner(request, nw, new_owner):
-    """
-    更改slice网段的owner
-    return:
-        value:
-          失败:value = 0
-          成功：value = 1
-    """
-    try:
-        nw_obj = Subnet.objects.filter(netaddr=nw)
-        nw_obj.owner = new_owner
-        nw_obj.save()
-    except:
-        return HttpResponse(json.dumps({'value': 0}))
-    else:
-        return HttpResponse(json.dumps({'value': 1}))
+# def change_nw_owner(request, nw, new_owner):
+#     """
+#     更改slice网段的owner
+#     return:
+#         value:
+#           失败:value = 0
+#           成功：value = 1
+#     """
+#     try:
+#         nw_obj = Subnet.objects.filter(netaddr=nw)
+#         nw_obj.owner = new_owner
+#         nw_obj.save()
+#     except:
+#         return HttpResponse(json.dumps({'value': 0}))
+#     else:
+#         return HttpResponse(json.dumps({'value': 1}))
 
 
-def change_nw(request, owner, new_owner, nw_num):
-    """
-    更改slice网段的owner
-    return:
-        value:
-          失败:value = 0
-          成功：value = 1
-    """
-    try:
-        IPUsage.objects.delete_subnet(owner)
-        nw = IPUsage.objects.create_subnet(new_owner, int(nw_num), 120)
-        if nw:
-            return HttpResponse(json.dumps({'value': nw}))
-        else:
-            return HttpResponse(json.dumps({'value': 0}))
-    except:
-        return HttpResponse(json.dumps({'value': 0}))
+# def change_nw(request, owner, new_owner, nw_num):
+#     """
+#     更改slice网段的owner
+#     return:
+#         value:
+#           失败:value = 0
+#           成功：value = 1
+#     """
+#     try:
+#         IPUsage.objects.delete_subnet(owner)
+#         nw = IPUsage.objects.create_subnet(new_owner, int(nw_num), 120)
+#         if nw:
+#             return HttpResponse(json.dumps({'value': nw}))
+#         else:
+#             return HttpResponse(json.dumps({'value': 0}))
+#     except:
+#         return HttpResponse(json.dumps({'value': 0}))

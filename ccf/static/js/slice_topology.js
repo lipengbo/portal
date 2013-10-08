@@ -185,11 +185,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts[i][6] == 0){
-			str = str + "<image xlink:href='/static/img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='/static/img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts[i][0] + "</title>  "
@@ -201,11 +201,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts_special.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts_special[i][4] == 0){
-			str = str + "<image xlink:href='/static/img/host_down.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='/static/img/host.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts_special[i][1] + "' y='" + hosts_special[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts_special[i][0] + "</title>  "
