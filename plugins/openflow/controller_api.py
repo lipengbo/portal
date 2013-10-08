@@ -18,7 +18,6 @@ def create_add_controller(slice_obj, controller_info):
             if controller_info['controller_type'] == 'default_create':
                 controller = create_default_controller(slice_obj,
                     controller_info['controller_sys'])
-                controller = slice_obj.project.islands.all()[0].controller_set.all()[0]
             else:
                 controller = create_user_defined_controller(slice_obj,
                     controller_info['controller_ip'],
