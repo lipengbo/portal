@@ -43,6 +43,7 @@ class IPManager(models.Manager):
         subnet = Subnet.objects.get(owner=owner)
         subnet.is_owned = False
         subnet.is_used = False
+        subnet.owner = None
         subnet.save()
         return True
 
@@ -175,7 +176,7 @@ class Network(models.Model):
 class Subnet(models.Model):
     supernet = models.ForeignKey(Network)
     netaddr = models.CharField(max_length=20, null=False, unique=True)
-    owner = models.CharField(max_length=20, null=False, unique=True)
+    owner = models.CharField(max_length=20, null=True, unique=True)
     is_owned = models.BooleanField(default=False)
     is_used = models.BooleanField(default=False)
     size = models.IntegerField()
