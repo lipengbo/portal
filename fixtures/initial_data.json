@@ -25,21 +25,11 @@
     }, 
     {
         "fields": {
-            "netaddr": "172.16.0.0/16", 
+            "netaddr": "172.16.0.100/16", 
             "type": 0
         }, 
         "model": "ipam.network", 
         "pk": 2
-    }, 
-    {
-        "fields": {
-            "is_used": true, 
-            "netaddr": "172.16.0.0/16", 
-            "owner": "0", 
-            "supernet": 2
-        }, 
-        "model": "ipam.subnet", 
-        "pk": 1
     }, 
     {
         "fields": {

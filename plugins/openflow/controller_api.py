@@ -4,6 +4,7 @@ from plugins.openflow.models import Controller
 from slice.slice_exception import DbError, ControllerUsedError
 from flowvisor_api import flowvisor_update_sice_controller
 from django.db import transaction
+from plugins.vt.api import create_vm_for_controller, delete_vm_for_controller
 import logging
 LOG = logging.getLogger("CENI")
 
@@ -17,7 +18,6 @@ def create_add_controller(slice_obj, controller_info):
             if controller_info['controller_type'] == 'default_create':
                 controller = create_default_controller(slice_obj,
                     controller_info['controller_sys'])
-                controller = slice_obj.project.islands.all()[0].controller_set.all()[0]
             else:
                 controller = create_user_defined_controller(slice_obj,
                     controller_info['controller_ip'],
@@ -70,37 +70,47 @@ def create_user_defined_controller(slice_obj, controller_ip, controller_port):
         raise DbError("数据库异常")
 
 
-@transaction.commit_on_success
+#@transaction.commit_on_success
 def create_default_controller(slice_obj, controller_sys):
     """创建默认控制器
     """
     if slice_obj:
         try:
-#             调用控制器创建接口
-            controller = Controller(
-                name=controller_sys,
-                ip='192.168.8.9',
-                port=7687,
-                http_port=0,
-                state=1,
-                island=slice_obj.get_island())
+            #调用控制器创建接口
+            #controller = Controller(
+                #name=controller_sys,
+                #ip='192.168.8.9',
+                #port=7687,
+                #http_port=0,
+                #state=1,
+                #island=slice_obj.get_island())
+            island = slice_obj.get_island()
+            #先创建虚拟机然后再创建controller
+            vm, ip = create_vm_for_controller(island_obj=island, slice_obj=slice_obj, image_name=controller_sys)
+            controller = Controller(name=controller_sys, port=6633, http_port=0, state=1, island=island)
+            controller.ip = ip
+            controller.host = vm
             controller.save()
             return controller
         except Exception, ex:
-            transaction.rollback()
+            #transaction.rollback()
+            import traceback
+            print traceback.print_exc()
             raise DbError(ex)
     else:
         raise DbError("数据库异常")
 
 
 def delete_controller(controller):
-    """创建用户自定义控制器记录
+    """删除控制器
     """
     if controller:
         if controller.name == 'user_define' and (not controller.host):
             controller.delete()
         else:
-            pass
+            #先删除虚拟机然后删除controller记录
+            delete_vm_for_controller(controller.host)
+            controller.delete()
 
 
 @transaction.commit_on_success

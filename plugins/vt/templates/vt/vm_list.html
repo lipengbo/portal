@@ -17,18 +17,18 @@
             <tbody>
             {% for vm in vms %}
                     <tr>
-                        <td>{{ vm.name }}</td>
-                        <td>IP: {{ vm.ip }}</td>
-                        <td>所属网络节点: {{ vm.server.ip }}</td>
-			<td>
+                        <td width="20%">{{ vm.name }}</td>
+                        <td width="25%">IP: {{ vm.ip }}</td>
+                        <td width="30%">所属网络节点: {{ vm.server.ip }}</td>
+			<td width="25%">
 			    {% if vm.state == 1 %}
-  			        <button type="button" class="btn btn-success start_btn">启动</button>
-			        <button type="button" class="btn">登录</button>
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-success stop_btn">停止</button>
+			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
 			    {%else%}
-  			        <button type="button" class="btn btn-success start_btn">重启</button>
-			        <button type="button" class="btn" disabled>登录</button>
+			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+			        <button type="button" onclick="" class="btn" disabled>登录</button>
 			    {%endif%}
-  			    <a data-toggle="modal" href="{% url delete_vm vm.id 1 %}" class="btn btn-primary">删除</a>
+  			    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete">删除</button>
 			</td>
                     </tr>
             {% endfor %}
@@ -36,4 +36,7 @@
         </table>
     </fieldset>
 </div>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/vm.js"></script>
 {% endblock %}

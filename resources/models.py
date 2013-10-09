@@ -1,10 +1,13 @@
 from django.db import models
 from django.db.models.base import ModelBase
-from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.db.models import F
+from django.dispatch import receiver
+from django.db.models.signals import pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.utils.translation import ugettext as _
+
+from plugins.common.vt_manager_client import VTClient
+from etc.config import function_test
 
 from project.models import Island
 from slice.models import Slice
@@ -100,6 +103,8 @@ class Server(IslandResource):
         else:
             return None
 
+    class Meta:
+        verbose_name = _("Server")
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
@@ -147,6 +152,8 @@ class Switch(SwitchResource):
             else:
                 return OVS_TYPE['RELATED']
 
+    class Meta:
+        verbose_name = _("Switch")
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
@@ -204,3 +211,14 @@ class VirtualSwitch(Switch):
 
     def get_vms(self, slice_obj):
         return slice_obj.get_vms.filter(server=self.server)
+
+    class Meta:
+        verbose_name = _("Virtual Switch")
+
+@receiver(pre_save, sender=Server)
+def vm_pre_save(sender, instance, **kwargs):
+    if not function_test:
+        info = VTClient.get_host_info(instance.ip)
+        instance.cpu = info['cpu']
+        instance.cpu = info['mem']
+        instance.cpu = info['hdd']

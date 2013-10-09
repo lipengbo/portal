@@ -9,6 +9,8 @@ from project.models import Project
 
 class ProjectForm(forms.ModelForm):
 
+    #category_name = forms.RegexField(regex="^ ", required=True, max_length=32)
+
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
 

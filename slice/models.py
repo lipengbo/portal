@@ -111,6 +111,9 @@ class Slice(models.Model):
     def get_vms(self):
         return self.virtualmachine_set.all()
 
+    def get_common_vms(self):
+        return self.virtualmachine_set.filter(type=1)
+
     def get_nws(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
         nws = []

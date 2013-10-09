@@ -223,6 +223,11 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 enable_dhcp: enable_dhcp
         },
         success: function(data) {
+            if(data.result==1)
+            {
+                //alert('Failed to operator vm!')
+                alert(data.error)
+            }
 
         }
         });
@@ -303,4 +308,27 @@ function create_vms(sliceid)
         submit_vms(sliceid);
         window.location.href='/plugins/vt/vm/list/' + sliceid + '/'
     }
+}
+
+function open_vnc(url)
+{
+    window.open(url,'','width=968,height=552')
+}
+
+function do_vm_action(url)
+{
+        $.ajax({
+        type: "GET",
+        url: url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+            if(data.result==1)
+            {
+                //alert('Failed to operator vm!')
+                alert(data.error)
+            }
+        }
+        });
 }
