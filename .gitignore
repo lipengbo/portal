@@ -4,6 +4,7 @@
 *.swp
 *.rbc
 *.pyc
+*.mo
 logs
 dev.db
 local_settings.py
