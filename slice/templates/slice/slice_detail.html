@@ -101,7 +101,7 @@
 				 	</tbody>
 				 </table>
 				{% if vms %}		
-					<a data-toggle="modal" href="{% url 'vm_list' slice_obj.id %}" class="btn btn-info edit">&gt;&gt;更多</a>
+					<a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a>
 				{%endif%}
 			  </fieldset>
 			  <fieldset>

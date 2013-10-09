@@ -44,7 +44,7 @@ $(document).ready(function() {
     });
     
     //slice详情启动停止按钮
-    $(".start_btn").click(function(){
+/*    $(".start_btn").click(function(){
         if($(this).hasClass("btn-success")){
             $(this).removeClass("btn-success").addClass("btn-danger");
             if($(this).hasClass("btn-large")){            
@@ -60,7 +60,8 @@ $(document).ready(function() {
                 $(this).text("启动");
             }           
         }
-    });
+    });      */
+    
     // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
