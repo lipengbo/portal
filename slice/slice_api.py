@@ -121,10 +121,10 @@ def delete_slice_api(slice_obj):
 #             删除dhcp
 #             删除网关
 #             删除slice网络地址
-            print 1
-            del_nw = slice_obj.get_nw()
-            print 2
-            flowspace_nw_del(slice_obj, del_nw)
+#             print 1
+#             del_nw = slice_obj.get_nw()
+#             print 2
+#             flowspace_nw_del(slice_obj, del_nw)
             print 3
             IPUsage.objects.delete_subnet(slice_obj.name)
             print 4
