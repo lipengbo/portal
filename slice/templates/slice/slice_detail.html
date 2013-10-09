@@ -105,11 +105,13 @@
 						 		</tr>
 						 	{%endif%}
 				 		{%endfor%}
+				 		{% if vms %}   
+				 		 <tr>
+				 		     <td colspan="4"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
+				 		 </tr>                             
+                        {%endif%}
 				 	</tbody>
 				 </table>
-				{% if vms %}		
-					<a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a>
-				{%endif%}
 			  </fieldset>
 			  <fieldset>
 			  	 <legend>Slice拓扑</legend>
