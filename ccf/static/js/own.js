@@ -117,8 +117,13 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 4){
-           page_function4();
-           return;
+           ret = page_function4();
+           if (!ret){
+           		nowIndex = 0;
+           }
+    	   else{
+				return;
+    	   }
        }
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
@@ -271,7 +276,13 @@ function page_function3(){
 function page_function4(){
 	var project_id = $("#project_id").text();
 	//alert(project_id);
-	submit_slice_info(project_id);
+	ret1 = submit_slice_info(project_id);
+	if (ret1){
+		return true;
+	}
+	else{
+		return false;
+	}
 }
 
 
@@ -325,6 +336,7 @@ function submit_slice_info(project_id){
 		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
+	var ajax_ret = true;
 	$.ajax({
 			type: "POST",
 			url: check_url,
@@ -339,10 +351,24 @@ function submit_slice_info(project_id){
 	            }
 	            else{
 	            	alert(data.error_info);
+	            	ajax_ret = false;
 	            }
 	        },
 	        error: function(data) {
 	        	alert("创建slice失败！");
+	        	ajax_ret = false;
 	        }
 	});
+	if(ajax_ret){
+    	return true;
+    }
+    else{
+    	var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    	var old_nw_owner_obj = document.getElementById("old_nw_owner");
+    	var old_nw_num_obj = document.getElementById("old_nw_num");
+    	old_slice_nw_obj.value = "";
+    	old_nw_owner_obj.value = "";
+    	old_nw_num_obj.value = "";
+    	return false;
+    }
 }

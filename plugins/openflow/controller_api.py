@@ -115,7 +115,6 @@ def delete_controller(controller):
             controller.delete()
 
 
-@transaction.commit_on_success
 def slice_change_controller(slice_obj, controller_info):
     """slice更改控制器
     """
@@ -124,24 +123,29 @@ def slice_change_controller(slice_obj, controller_info):
         try:
             haved_controller = slice_obj.get_controller()
             if controller_info['controller_type'] == 'default_create':
-                if haved_controller.name != controller_info['controller_sys']:
-                    delete_controller(haved_controller)
-                    controller = create_add_controller(slice_obj, controller_info)
-                    flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                        slice_obj.name, controller.ip, controller.port)
+                if haved_controller.name == controller_info['controller_sys']:
+                    return
             else:
-                if haved_controller.name != 'user_define':
-                    delete_controller(haved_controller)
-                    controller = create_add_controller(slice_obj, controller_info)
-                else:
-                    if haved_controller.ip != controller_info['controller_ip'] or haved_controller.port != int(controller_info['controller_port']):
-                        haved_controller.ip = controller_info['controller_ip']
-                        haved_controller.port = int(controller_info['controller_port'])
-                        haved_controller.save()
-                        flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                            slice_obj.name, haved_controller.ip, haved_controller.port)
+                if haved_controller.name == 'user_define' and\
+                    haved_controller.ip == controller_info['controller_ip'] and\
+                    haved_controller.port == int(controller_info['controller_port']):
+                    return
+            slice_obj.remove_resource(haved_controller)
+            controller = create_add_controller(slice_obj, controller_info)
+            flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+                slice_obj.name, controller.ip, controller.port)
         except:
-            transaction.rollback()
+            if controller:
+                try:
+                    delete_controller(controller)
+                    slice_obj.add_resource(haved_controller)
+                except:
+                    pass
             raise
+        else:
+            try:
+                delete_controller(haved_controller)
+            except:
+                pass
     else:
         raise DbError("数据库异常")
