@@ -218,7 +218,7 @@ class VirtualSwitch(Switch):
 @receiver(pre_save, sender=Server)
 def vm_pre_save(sender, instance, **kwargs):
     if not function_test:
-        info = VTClient.get_host_info(instance.ip)
+        info = VTClient().get_host_info(instance.ip)
         instance.cpu = info['cpu']
-        instance.cpu = info['mem']
-        instance.cpu = info['hdd']
+        instance.mem = info['mem']
+        instance.disk = info['hdd']
