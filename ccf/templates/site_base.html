@@ -32,7 +32,7 @@
                                     {% block nav %}
                                     	<ul class="nav">
 					                      <li class="active"><a href="/">首页</a></li>
-					                      <li><a href="#">项目</a></li>
+					                      <li><a href="{% url "project_manage" %}">项目</a></li>
 					                      <li><a href="#">消息日志</a></li>
 					                      <li><a href="#">权限</a></li>
 					                      <li><a href="#">帮助</a></li>
@@ -52,11 +52,11 @@
                 </div>
             {% endblock %}
 		{% block body_base %}
-		    {% block blank_block %}<div style="height:60px;"></div>{% endblock %}
+		    {% block blank_block %}<div class="blank_block"></div>{% endblock %}
 		    <div class="container">	        
 		    	{% block breadcrumb_base %}
 		        <ul class="breadcrumb">
-		            <li><span class="icon-home"></span><a href="{% url "project_index" %}">{% trans "Project" %}</a><span class="divider">/</span>
+		            <li><span class="icon-home"></span><a href="{% url "project_manage" %}">{% trans "Project" %}</a><span class="divider">/</span>
 		            {% block breadcrumb %}
 		            {% endblock %}
 		            </li>
