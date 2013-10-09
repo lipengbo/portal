@@ -168,7 +168,7 @@ def detail(request, slice_id):
 
 
 @login_required
-def delete(request, slice_id):
+def delete(request, slice_id, flag):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
@@ -181,8 +181,12 @@ def delete(request, slice_id):
         return redirect("forbidden")
     if 'next' in request.GET:
         return redirect(request.GET.get('next'))
-    return HttpResponseRedirect(
-        reverse("project_detail", kwargs={"id": project_id}))
+    if int(flag) == 1:
+        return HttpResponseRedirect(
+            reverse("project_detail", kwargs={"id": project_id}))
+    else:
+        return HttpResponseRedirect(
+            reverse("slice_list", kwargs={"proj_id": project_id}))
 
 
 def start_or_stop(request, slice_id, flag):
@@ -235,7 +239,7 @@ def create_nw(request, owner, nw_num):
         nw_objs = Subnet.objects.filter(owner=owner)
         if nw_objs:
             IPUsage.objects.delete_subnet(owner)
-        nw = IPUsage.objects.create_subnet(owner, int(nw_num), 120)
+        nw = IPUsage.objects.create_subnet(owner, int(nw_num), 1800)
         if nw:
             return HttpResponse(json.dumps({'value': nw}))
         else:

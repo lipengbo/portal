@@ -1,5 +1,4 @@
 {% extends "site_base.html" %}
-
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
@@ -43,19 +42,28 @@
 			  	 <legend>Slice资源</legend>
 			  	 <table class="table">
 				 	<tbody>
-				 		<tr>
-				 			<td width="20%">控制器</td>
-				 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
-				 			<td width="25%">
-							    <button type="button" class="btn btn-success start_btn">启动</button>
-						 		<button type="button" class="btn btn-info">登录</button>
-					 			{% if slice_obj.state == 0 %}
-						 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
-						 		{%else%}	
-						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
-						 		{%endif%}
-				 			</td>
-				 		</tr>
+				 		{%if controller%}
+					 		<tr>
+					 			<td width="20%">控制器</td>
+					 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
+					 			<td width="25%">
+					 				{%if controller.host%}
+					 					{% if controller.host.state == 1 %}
+									        <button type="button" onclick="do_vm_action('{% url do_vm_action controller.host.id 'destroy' %}')" class="btn btn-success stop_btn">停止</button>
+									        <button type="button" onclick="open_vnc('{% url vm_vnc controller.host.id %}')" class="btn">登录</a>
+									    {%else%}
+									        <button type="button" onclick="do_vm_action('{% url 'do_vm_action' controller.host.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+									        <button type="button" onclick="" class="btn" disabled>登录</button>
+									    {%endif%}	
+					 				{%endif%}
+						 			{% if slice_obj.state == 0 %}
+							 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
+							 		{%else%}	
+							 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
+							 		{%endif%}
+					 			</td>
+					 		</tr>
+				 		{%endif%}
 				 		{%for gw in gws%}
 					 		<tr>
 					 			<td>虚拟网关</td>
@@ -204,7 +212,7 @@
                         <tr>
                             <td>
                                 <label class="radio tab_radio2">
-                                  <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined"
+                                  <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
                                   {%if controller.name == "user_define"%}checked{%endif%}>
                                   自定义
                                 </label>

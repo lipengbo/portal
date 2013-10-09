@@ -23,6 +23,7 @@ def create_add_controller(slice_obj, controller_info):
                     controller_info['controller_ip'],
                     controller_info['controller_port'])
             slice_add_controller(slice_obj, controller)
+            return controller
         except Exception, ex:
             transaction.rollback()
             raise
@@ -125,17 +126,20 @@ def slice_change_controller(slice_obj, controller_info):
             if controller_info['controller_type'] == 'default_create':
                 if haved_controller.name != controller_info['controller_sys']:
                     delete_controller(haved_controller)
-                    create_add_controller(slice_obj, controller_info)
-                    controller = slice_obj.get_controller()
+                    controller = create_add_controller(slice_obj, controller_info)
                     flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
                         slice_obj.name, controller.ip, controller.port)
             else:
-                if haved_controller.ip != controller_info['controller_ip'] or haved_controller.port != int(controller_info['controller_port']):
-                    haved_controller.ip = controller_info['controller_ip']
-                    haved_controller.port = int(controller_info['controller_port'])
-                    haved_controller.save()
-                    flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                        slice_obj.name, haved_controller.ip, haved_controller.port)
+                if haved_controller.name != 'user_define':
+                    delete_controller(haved_controller)
+                    controller = create_add_controller(slice_obj, controller_info)
+                else:
+                    if haved_controller.ip != controller_info['controller_ip'] or haved_controller.port != int(controller_info['controller_port']):
+                        haved_controller.ip = controller_info['controller_ip']
+                        haved_controller.port = int(controller_info['controller_port'])
+                        haved_controller.save()
+                        flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+                            slice_obj.name, haved_controller.ip, haved_controller.port)
         except:
             transaction.rollback()
             raise

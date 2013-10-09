@@ -67,7 +67,7 @@ function check_slice_controller(obj_name){
 			if(objs[i].value=="default_create"){  
 				return true; 
 			}  
-			if(objs[i].value=="user_defined"){
+			if(objs[i].value=="user_define"){
 				controller_ip_port_obj = document.getElementById("controller_ip_port");
 				controller_ip_port = controller_ip_port_obj.value.split(":")
 				var info = document.getElementById("controller_ip_portInfo");
@@ -195,7 +195,7 @@ function check_nw_num(){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
 		             	old_slice_nw_obj.value = data.value;
-		             	setTimeout("nw_timeout()",110000);
+		             	setTimeout("nw_timeout()",1750000);
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;

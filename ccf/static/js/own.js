@@ -244,7 +244,7 @@ function page_function3(){
 			        + "</tbody>"
 			        + "</table>";  
 			}  
-			if(controller_type_obj[i].value=="user_defined"){
+			if(controller_type_obj[i].value=="user_define"){
 				var controller_ip_port_obj = document.getElementById("controller_ip_port");
 				var controller_ip_port = controller_ip_port_obj.value;
 				var str = "";
@@ -306,8 +306,8 @@ function submit_slice_info(project_id){
 			if(controller_type_objs[i].value=="default_create"){  
 				controller_type = "default_create";
 			}  
-			if(controller_type_objs[i].value=="user_defined"){
-				controller_type = "user_defined";
+			if(controller_type_objs[i].value=="user_define"){
+				controller_type = "user_define";
 	  		}  
 		}   
 	}
