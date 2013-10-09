@@ -162,7 +162,10 @@ def delete_member(request, id):
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.user == project.owner:
-        project.delete()
+        try:
+            project.delete()
+        except Exception, e:
+            messages.add_message(request, messages.ERROR, e)
     else:
         return redirect("forbidden")
     if 'next' in request.GET:
