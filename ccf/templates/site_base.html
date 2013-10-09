@@ -52,7 +52,7 @@
                 </div>
             {% endblock %}
 		{% block body_base %}
-		    <div style="height:60px;"></div>
+		    {% block blank_block %}<div style="height:60px;"></div>{% endblock %}
 		    <div class="container">	        
 		    	{% block breadcrumb_base %}
 		        <ul class="breadcrumb">

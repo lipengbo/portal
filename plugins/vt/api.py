@@ -16,13 +16,17 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
     ip_obj = IPUsage.objects.allocate_ip_for_controller()
     vm = VirtualMachine(slice=slice_obj, island=island_obj, ip=ip_obj)
     vm.name = image_name
-    vm.image = Image.objects.get(name=image_name)
+    images = Image.objects.filter(name=image_name)
+    if images:
+        vm.image = images[0]
     vm.flavor = Flavor.objects.get(id=default_flavor_id)
     if function_test:
-        hostlist = [switch.virtualswitch.server for switch in slice_obj.get_virtual_switches_server()]
+        #hostlist = [switch.virtualswitch.server for switch in slice_obj.get_virtual_switches_server()]
+        hostlist = Server.objects.all()
         vm.server = hostlist[0]
     else:
-        hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
+        #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
+        hostlist = [(server.id, server.ip) for server in Server.objects.all()]
         serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
         if not serverid:
             raise Exception('resource not enough')

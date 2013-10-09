@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.db.models import F
 from django.dispatch import receiver
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 from resources.models import ServiceResource, Resource, SwitchPort, Switch
 from slice.models import Slice
@@ -22,10 +23,17 @@ class Controller(ServiceResource):
     def is_used(self):
         return self.slices.all().count() > 0
 
+    class Meta:
+        verbose_name = _("Controller")
+
 
 class Flowvisor(ServiceResource):
+
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
+
+    class Meta:
+        verbose_name = _("Flowvisor")
 
 
 class FlowSpaceRule(Resource):
@@ -52,6 +60,9 @@ class Link(models.Model):
     flowvisor = models.ForeignKey(Flowvisor)
     source = models.ForeignKey(SwitchPort, related_name="source_links")
     target = models.ForeignKey(SwitchPort, related_name="target_links")
+
+    class Meta:
+        verbose_name = _("Link")
 
 class FlowvisorLinksMd5(models.Model):
     md5 = models.CharField(max_length=32)

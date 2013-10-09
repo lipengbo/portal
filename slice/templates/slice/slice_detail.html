@@ -106,8 +106,10 @@
 						 	{%endif%}
 				 		{%endfor%}
 				 	</tbody>
-				 </table>	
-				<button type="button" onclick="window.location.href='{% url 'vm_list' slice_obj.id %}'" class="btn btn-info edit">&gt;&gt;更多</button>
+				 </table>
+				{% if vms %}		
+					<a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a>
+				{%endif%}
 			  </fieldset>
 			  <fieldset>
 			  	 <legend>Slice拓扑</legend>

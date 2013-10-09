@@ -4,6 +4,8 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.utils.translation import ugettext as _
+
 from plugins.common.vt_manager_client import VTClient
 from etc.config import function_test
 
@@ -101,6 +103,8 @@ class Server(IslandResource):
         else:
             return None
 
+    class Meta:
+        verbose_name = _("Server")
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
@@ -148,6 +152,8 @@ class Switch(SwitchResource):
             else:
                 return OVS_TYPE['RELATED']
 
+    class Meta:
+        verbose_name = _("Switch")
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)
@@ -206,6 +212,8 @@ class VirtualSwitch(Switch):
     def get_vms(self, slice_obj):
         return slice_obj.get_vms.filter(server=self.server)
 
+    class Meta:
+        verbose_name = _("Virtual Switch")
 
 @receiver(pre_save, sender=Server)
 def vm_pre_save(sender, instance, **kwargs):
