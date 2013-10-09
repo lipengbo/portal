@@ -24,5 +24,77 @@
         }, 
         "model": "ipam.subnet", 
         "pk": 2
+    },
+    {
+        "pk": 1,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 1,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 2,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.sliceswitch",
+        "fields": {
+            "switch": 3,
+            "slice": 1
+        }
+    },
+    {
+        "pk": 1,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 1
+        }
+    },
+    {
+        "pk": 2,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 2
+        }
+    },
+    {
+        "pk": 3,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 3
+        }
+    },
+    {
+        "pk": 4,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 4
+        }
+    },
+    {
+        "pk": 5,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 5
+        }
+    },
+    {
+        "pk": 6,
+        "model": "resources.sliceport",
+        "fields": {
+            "slice": 1,
+            "switch_port": 6
+        }
     }
 ]

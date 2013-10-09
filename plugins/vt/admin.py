@@ -16,14 +16,14 @@ class VmAdminForm(forms.ModelForm):
 
     class Meta:
         model = VirtualMachine
-        fields = ("name", "slice", "island", "flavor", "image", "server", "enable_dhcp", "type")
+        fields = ("name", "slice", "island", "flavor", "image", "server", "enable_dhcp", "type", 'state')
 
 
 class VirtualMachineAdmin(admin.ModelAdmin):
 
     model = VirtualMachine
     form = VmAdminForm
-    list_display = ("name", "slice", "island", "flavor", "image", "server", "enable_dhcp", "type")
+    list_display = ("name", "slice", "island", "flavor", "image", "server", "enable_dhcp", "type", 'state')
 
 
 admin.site.register(VirtualMachine, VirtualMachineAdmin)

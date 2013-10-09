@@ -75,7 +75,7 @@ $(document).ready(function() {
             if (checked_ports.length > 0) {
                 var clone = $(tr).clone();
                 clone.find('label').addClass('label label-success');
-                $.each(clone.find('label.checkbox'), function (index, input) {
+                $.each(clone.find('label'), function (index, input) {
                     if (!$(input).find('.icheckbox_square-blue').hasClass("checked")) {
                         $(input).remove();
                     }

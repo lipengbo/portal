@@ -7,6 +7,7 @@
 *.mo
 logs
 dev.db
+ccf/site_media/
 local_settings.py
 .settings
 .ropeproject
