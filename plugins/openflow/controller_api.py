@@ -109,7 +109,8 @@ def delete_controller(controller):
             controller.delete()
         else:
             #先删除虚拟机然后删除controller记录
-            delete_vm_for_controller(controller.host)
+            if controller.host:
+                delete_vm_for_controller(controller.host)
             controller.delete()
 
 
