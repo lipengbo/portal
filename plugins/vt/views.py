@@ -23,6 +23,7 @@ def vm_list(request, sliceid):
     context = {}
     context['vms'] = vms
     context['sliceid'] = sliceid
+    context['slice_obj'] = Slice.objects.get(id=sliceid)
     return render(request, 'vt/vm_list.html', context)
 
 
@@ -56,6 +57,7 @@ def create_vm(request, sliceid):
         context = {}
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid
+        context['slice_obj'] = Slice.objects.get(id=sliceid)
         return render(request, 'vt/create_vm.html', context)
 
 

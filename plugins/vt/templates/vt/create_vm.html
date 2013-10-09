@@ -4,7 +4,11 @@
 {% load crispy_forms_tags %}
 
 {% block breadcrumb %}
-<li class="active">{% trans "create vm" %}</li>
+	<a href="/project/create/">创建项目</a><span class="divider">/</span>
+	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
+	<a href="/slice/create/{{ slice_obj.project.id }}/">创建Slice</a><span class="divider">/</span>
+	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
+        <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
