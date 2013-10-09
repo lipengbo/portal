@@ -28,6 +28,16 @@
 			    			<td>{{slice_obj.name}}</td>
 			    		</tr>
 			    		<tr>
+			    			<td width="50">状态：</td>
+			    			<td>
+			    				{%if slice_obj.state == 0%}
+			    				<span class="label label-important">停止</span>
+			    				{%else%}
+			    				<span class="label label-success">启动</span>
+			    				{%endif%}
+			    			</td>
+			    		</tr>
+			    		<tr>
 			    			<td class="v_top">描述：</td>
 			    			<td>{{slice_obj.description}}</td>
 			    		</tr>
