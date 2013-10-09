@@ -134,7 +134,7 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                            <label class="checkbox inline">
+                                            <label class="inline">
 		                            {% if ovs_port.switch_type == 3 %}
 						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
