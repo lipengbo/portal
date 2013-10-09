@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
 from slice.models import Slice
-from plugins.vt.models import VirtualMachine
+from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
 from django.core.urlresolvers import reverse
 from etc.config import vnctunnel, function_test
 from plugins.common.vt_manager_client import VTClient
@@ -67,6 +67,11 @@ def do_vm_action(request, vmid, action):
         try:
             vm = VirtualMachine.objects.get(id=vmid)
             if vm.do_action(action):
+                if action == "destroy":
+                    vm.state = DOMAIN_STATE_DIC['shutoff']
+                else:
+                    vm.state = DOMAIN_STATE_DIC['running']
+                vm.save()
                 return HttpResponse(json.dumps({'result': 0}))
         except Exception, e:
             return HttpResponse(json.dumps({'result': 1, 'error': str(e)}))
