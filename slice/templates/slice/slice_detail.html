@@ -16,7 +16,11 @@
 		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
 			    <legend>基本信息
-			    	<a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编 辑</a>
+			    	{% if slice_obj.state == 0 %}
+			 			<a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编辑</a>
+			 		{%else%}	
+			 			<a data-toggle="modal" href="#" class="btn btn-info edit" disabled>编辑</a>
+			 		{%endif%}
 			    </legend>
 			    <table class="table">
 			    	<tbody>
