@@ -11,6 +11,7 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
+from django.contrib import messages
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, delete_slice_api, slice_change_description
@@ -122,10 +123,9 @@ def edit_description(request, slice_id):
         try:
             slice_change_description(slice_obj, slice_description)
         except Exception, ex:
-            return render(request, 'slice/warning.html', {'info': str(ex)})
-        else:
-            return HttpResponseRedirect(
-                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+            messages.add_message(request, messages.ERROR, ex)
+    return HttpResponseRedirect(
+        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def edit_controller(request, slice_id):
@@ -145,10 +145,9 @@ def edit_controller(request, slice_id):
         try:
             slice_change_controller(slice_obj, controller_info)
         except Exception, ex:
-            return render(request, 'slice/warning.html', {'info': str(ex)})
-        else:
-            return HttpResponseRedirect(
-                reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+            messages.add_message(request, messages.ERROR, ex)
+    return HttpResponseRedirect(
+        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 #     context['slice_obj'] = slice_obj
 #     context['controller'] = slice_obj.get_controller()
 #     return render(request, 'slice/edit_slice_controller.html', context)
@@ -168,14 +167,20 @@ def detail(request, slice_id):
     return render(request, 'slice/slice_detail.html', context)
 
 
+@login_required
 def delete(request, slice_id):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
-    try:
-        slice_obj.delete()
-    except Exception, ex:
-        return render(request, 'slice/warning.html', {'info': str(ex)})
+    if request.user == slice_obj.owner:
+        try:
+            slice_obj.delete()
+        except Exception, ex:
+            messages.add_message(request, messages.ERROR, ex)
+    else:
+        return redirect("forbidden")
+    if 'next' in request.GET:
+        return redirect(request.GET.get('next'))
     return HttpResponseRedirect(
         reverse("project_detail", kwargs={"id": project_id}))
 
@@ -189,10 +194,9 @@ def start_or_stop(request, slice_id, flag):
         else:
             stop_slice_api(slice_obj)
     except Exception, ex:
-        return render(request, 'slice/warning.html', {'info': str(ex)})
-    else:
-        return HttpResponseRedirect(
-            reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+        messages.add_message(request, messages.ERROR, ex)
+    return HttpResponseRedirect(
+        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def topology(request, slice_id):

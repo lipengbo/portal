@@ -16,7 +16,11 @@
 		<div class="fill_form form-wizard">
 			  <fieldset class="base_info">
 			    <legend>基本信息
-			    	<a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编 辑</a>
+			    	{% if slice_obj.state == 0 %}
+			 			<a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编辑</a>
+			 		{%else%}	
+			 			<a data-toggle="modal" href="#" class="btn btn-info edit" disabled>编辑</a>
+			 		{%endif%}
 			    </legend>
 			    <table class="table">
 			    	<tbody>
@@ -105,11 +109,13 @@
 						 		</tr>
 						 	{%endif%}
 				 		{%endfor%}
+				 		{% if vms %}   
+				 		 <tr>
+				 		     <td colspan="4"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
+				 		 </tr>                             
+                        {%endif%}
 				 	</tbody>
 				 </table>
-				{% if vms %}		
-					<a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a>
-				{%endif%}
 			  </fieldset>
 			  <fieldset>
 			  	 <legend>Slice拓扑</legend>
@@ -189,8 +195,8 @@
                             <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
-                                  <!--<option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
-                                  <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>-->
+                                  <option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
+                                  <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>
                                 </select>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
@@ -199,7 +205,7 @@
                             <td>
                                 <label class="radio tab_radio2">
                                   <input type="radio" name="controller_type" id="optionsRadios2" value="user_defined"
-                                  {%if controller.name == "user_define"%}checked{%else%}{%endif%}>
+                                  {%if controller.name == "user_define"%}checked{%endif%}>
                                   自定义
                                 </label>
                             </td>
