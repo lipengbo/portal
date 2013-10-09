@@ -126,7 +126,10 @@ def delete_slice_api(slice_obj):
 #             print 2
 #             flowspace_nw_del(slice_obj, del_nw)
             print 3
-            IPUsage.objects.delete_subnet(slice_obj.name)
+            try:
+                IPUsage.objects.delete_subnet(slice_obj.name)
+            except:
+                pass
             print 4
 #             删除底层slice
             flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)

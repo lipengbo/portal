@@ -106,7 +106,7 @@
      <ul class="thumbnails example-sites">
          {% for slice in project.slice_set.all %}
         <li class="span3 ">
-          <a href="#" class="btn-delete close">×</a>
+          <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
           <a class="thumbnail" href="{% url slice_detail slice.id %}" target="_blank">
             <img src="{% static "img/001.png" %}" />
             <table class="table">
