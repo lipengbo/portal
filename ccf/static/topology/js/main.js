@@ -345,7 +345,7 @@ function init_svg () {
     node.append("image")
         .attr("xlink:href", function (d) {
             var show_logical = $('#show-logical').attr('checked');
-            if (d.id.indexOf('7f:ff:') == 0 && !show_logical) {
+            if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
                 d.group = 2;
             }
             var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
