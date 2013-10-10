@@ -1,7 +1,6 @@
 from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('slice.views',
-    url(r'^$', "index", name='slice_index'),
     url(r'^list/(?P<proj_id>\d+)/$', "list", name='slice_list'),
     url(r'^create/(?P<proj_id>\d+)/$', "create", name='create_slice'),
     url(r'^create_first/(?P<proj_id>\d+)/$', "create_first", name='create_first_slice'),

@@ -30,11 +30,7 @@ from plugins.vt.forms import VmForm
 from resources.models import Server
 
 
-def index(request):
-    context = {}
-    return render(request, 'slice/index.html', context)
-
-
+@login_required
 def create(request, proj_id):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
@@ -60,10 +56,10 @@ def create(request, proj_id):
     return render(request, 'slice/create_slice.html', context)
 
 
+@login_required
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
     project = get_object_or_404(Project, id=proj_id)
-    error_info = None
     if request.method == 'POST':
         try:
             user = request.user
@@ -107,6 +103,7 @@ def create_first(request, proj_id):
         return HttpResponse(result, mimetype='text/plain')
 
 
+@login_required
 def list(request, proj_id):
     """显示所有slice。"""
     project = get_object_or_404(Project, id=proj_id)
@@ -116,6 +113,7 @@ def list(request, proj_id):
     return render(request, 'slice/slice_list.html', context)
 
 
+@login_required
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -129,6 +127,7 @@ def edit_description(request, slice_id):
         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
+@login_required
 def edit_controller(request, slice_id):
     """编辑slice控制器。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -154,6 +153,7 @@ def edit_controller(request, slice_id):
 #     return render(request, 'slice/edit_slice_controller.html', context)
 
 
+@login_required
 def detail(request, slice_id):
     """编辑slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -190,6 +190,7 @@ def delete(request, slice_id, flag):
             reverse("slice_list", kwargs={"proj_id": project_id}))
 
 
+@login_required
 def start_or_stop(request, slice_id, flag):
     """启动或停止slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -204,6 +205,7 @@ def start_or_stop(request, slice_id, flag):
         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
+@login_required
 def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -213,6 +215,7 @@ def topology(request, slice_id):
     return HttpResponse(result, mimetype='text/plain')
 
 
+@login_required
 def check_slice_name(request, slice_name):
     """
     校验用户所填slice名称是否已经存在
@@ -228,6 +231,7 @@ def check_slice_name(request, slice_name):
         return HttpResponse(json.dumps({'value': 0}))
 
 
+@login_required
 def create_nw(request, owner, nw_num):
     """
     分配slice网段
@@ -249,6 +253,7 @@ def create_nw(request, owner, nw_num):
         return HttpResponse(json.dumps({'value': 0}))
 
 
+@login_required
 def delete_nw(request, owner):
     """
     删除slice网段
