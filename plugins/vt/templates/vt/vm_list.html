@@ -14,9 +14,10 @@
 {% block body %}
 <div class="fill_form form-wizard">
     <fieldset class="base_info">
-        <legend>虚拟机
-	    <a data-toggle="modal" href="{% url create_vm sliceid %}" class="btn btn-info edit">添 加</a>
+        <legend>
+            <a data-toggle="modal" href="{% url create_vm sliceid %}" class="btn btn-info edit">添 加</a>
             <a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-info edit">返 回</a>
+                                        虚拟机
         </legend>
         <table class="table">
             <tbody>
@@ -26,36 +27,34 @@
                         <td width="20%">IP: {{ vm.ip }}</td>
                         <td width="30%">所属网络节点: {{ vm.server.ip }}</td>
                         <td width="5%">
-                            {%if controller.host%}
-                                {% if vm.state == 8 %}
+                            {% if vm.state == 8 %}
                                 <img src="{% static "img/loader.gif" %}" />
                             {% elif vm.state == 9 %}
                                 <i class="icon-remove"></i>
                             {%else%}
                                 <i class="icon-ok"></i>
                             {%endif%}  
-                            {%endif%}
                         </td>
-			<td width="25%">
-			    {% if vm.state == 8 %}
-                    <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-danger stop_btn" disabled>停止</button>
-                    <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn" disabled>登录</a>
-			    {% elif vm.state == 9 %}
-                    <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-danger stop_btn" disabled>停止</button>
-                    <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn" disabled>登录</a>
-			    {% elif vm.state == 1 %}
-			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-danger stop_btn">停止</button>
-			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
-			    {%else%}
-			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
-			        <button type="button" onclick="" class="btn" disabled>登录</button>
-			    {%endif%}
-                        {%if vm.type != 0 %}
-  			    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete btn-inverse">删除</button>
-                        {%else%}
-  			    <button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
-                        {%endif%}
-			</td>
+            			<td width="25%">
+            			    {% if vm.state == 8 %}
+                                <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-danger stop_btn" disabled>停止</button>
+                                <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn" disabled>登录</a>
+            			    {% elif vm.state == 9 %}
+                                <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-danger stop_btn" disabled>停止</button>
+                                <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn" disabled>登录</a>
+            			    {% elif vm.state == 1 %}
+            			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'destroy' %}')" class="btn btn-danger stop_btn">停止</button>
+            			        <button type="button" onclick="open_vnc('{% url vm_vnc vm.id %}')" class="btn">登录</a>
+            			    {%else%}
+            			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
+            			        <button type="button" onclick="" class="btn" disabled>登录</button>
+            			    {%endif%}
+                                    {%if vm.type != 0 %}
+              			    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete btn-inverse">删除</button>
+                                    {%else%}
+              			    <button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
+                                    {%endif%};
+            			</td>
                     </tr>
             {% endfor %}
             </tbody>
