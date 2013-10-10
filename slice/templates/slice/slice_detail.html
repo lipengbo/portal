@@ -55,7 +55,14 @@
 				 		{%if controller%}
 					 		<tr>
 					 			<td width="20%">控制器</td>
-					 			<td width="55%">{{controller.ip}}：{{controller.port}}</td>
+					 			<td width="25%">IP:PORT：{{controller.ip}}:{{controller.port}}</td>
+					 			<td width="30%">
+					 				{%if controller.name == 'user_define' %}
+					 				类型：自定义
+					 				{%else%}
+					 				类型：{{controller.name}}
+					 				{%endif%}
+					 			</td>
 					 			<td width="25%">
 					 				{%if controller.host%}
 					 					{% if controller.host.state == 1 %}
@@ -78,6 +85,7 @@
 					 		<tr>
 					 			<td>虚拟网关</td>
 					 			<td>IP：{{gw.ip}}</td>
+					 			<td></td>
 					 			<td>
 					 				<button type="button" class="btn btn-success start_btn">启动</button>
 						 			<button type="button" class="btn btn-info">登录</button>
@@ -93,6 +101,7 @@
 					 		<tr>
 					 			<td>DHCP服务器</td>
 					 			<td>IP：{{dhcp.ip}}</td>
+					 			<td></td>
 					 			<td>
 					 				<button type="button" class="btn btn-success start_btn">启动</button>
 						 			<button type="button" class="btn btn-info">登录</button>
@@ -109,6 +118,7 @@
 				 <table class="table">
 				 	<tbody>
 				 		{%for vm in vms%}
+<<<<<<< HEAD
 					 		{%if vm.type == 1 %}
 						 		<tr>
 						 			<td width="20%">{{vm.name}}</td>
@@ -130,6 +140,29 @@
 						 			</td>
 						 		</tr>
 						 	{%endif%}
+=======
+				 		{%if forloop.counter <= 3 %}
+					 		<tr>
+					 			<td width="20%">{{vm.name}}</td>
+					 			<td width="25%">IP：{{vm.ip}}</td>
+					 			<td width="30%">所属网络节点：{{vm.server.ip}}</td>
+					 			<td width="25%">
+                                {% if vm.state == 8 %}
+                                    虚拟机创建中
+                                {% elif vm.state == 9 %}
+                                    虚拟机创建失败
+                                {% elif vm.state == 1 %}
+	                                <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success stop_btn">停止</button>
+	                                <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn">登录</a>
+							    {%else%}
+							        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn">启动</button>
+							        <button type="button" onclick="" class="btn" disabled>登录</button>
+							    {%endif%}
+				  			    <button type="button" onclick="window.location.href='{% url 'delete_vm' vm.id 0 %}'" class="btn btn-delete">删除</button>
+					 			</td>
+					 		</tr>
+					 	{%endif%}
+>>>>>>> 2bd8355abb160998b9b646c3b64751614c398f37
 				 		{%endfor%}
 				 		{% if vms %}   
 				 		 <tr>

@@ -55,12 +55,14 @@
 		    {% block blank_block %}<div class="blank_block"></div>{% endblock %}
 		    <div class="container">	        
 		    	{% block breadcrumb_base %}
+                {% if user.is_authenticated %}
 		        <ul class="breadcrumb">
 		            <li><span class="icon-home"></span><a href="{% url "project_manage" %}">{% trans "Project" %}</a><span class="divider">/</span>
 		            {% block breadcrumb %}
 		            {% endblock %}
 		            </li>
 		        </ul>
+                {% endif %}
 		        {% endblock %}
 		        {% include "_messages.html" %}
 		         <div class="main_wrap">	

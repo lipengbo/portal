@@ -112,6 +112,7 @@ def list(request, proj_id):
     project = get_object_or_404(Project, id=proj_id)
     context = {}
     context['project'] = project
+    context['slices'] = project.slice_set.all()
     return render(request, 'slice/slice_list.html', context)
 
 
@@ -163,7 +164,7 @@ def detail(request, slice_id):
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['gws'] = []
     context['dhcps'] = []
-    context['vms'] = slice_obj.get_vms()[0:3]
+    context['vms'] = slice_obj.get_common_vms()
     return render(request, 'slice/slice_detail.html', context)
 
 
