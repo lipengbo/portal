@@ -38,6 +38,7 @@ class Island(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    image = models.CharField(max_length=32, default='img/cat_other.png')
 
     def __unicode__(self):
         return self.name
