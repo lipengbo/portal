@@ -112,7 +112,7 @@ class VirtualMachine(IslandResource):
         else:
             vmInfo = {}
             netInfo = {}
-            vmInfo['name'] = self.name
+            vmInfo['name'] = self.uuid
             vmInfo['cpus'] = self.flavor.cpu
             vmInfo['mem'] = self.flavor.ram
             vmInfo['hdd'] = self.flavor.hdd
@@ -138,7 +138,7 @@ class VirtualMachine(IslandResource):
             print '----------------------delete a vm=%s -------------------------' % self.name
         else:
             vt_client = VTClient()
-            vt_client.delete_vm(self.server.ip, self.uuid, self.ip.ipaddr)
+            vt_client.delete_vm(self.server.ip, self.uuid)
 
     def do_action(self, action):
         if function_test:
@@ -167,7 +167,7 @@ def vm_pre_save(sender, instance, **kwargs):
     if not instance.mac:
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
     if not instance.vnc_port:
-        instance.vnc_port = 5900 + VirtualMachine.objects.filter(server=instance.server).count()
+        instance.vnc_port = 5901 + VirtualMachine.objects.filter(server=instance.server).count()
     if not instance.state:
         instance.state = DOMAIN_STATE_DIC['building']
 

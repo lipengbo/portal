@@ -20,6 +20,9 @@ class Controller(ServiceResource):
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
 
+    def on_remove_from_slice(self, slice_obj):
+        self.slices.remove(slice_obj)
+
     def is_used(self):
         return self.slices.all().count() > 0
 

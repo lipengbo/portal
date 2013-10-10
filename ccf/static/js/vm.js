@@ -329,6 +329,7 @@ function do_vm_action(url)
                 //alert('Failed to operator vm!')
                 alert(data.error)
             }
+                window.location.reload();
         }
         });
 }

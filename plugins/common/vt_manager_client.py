@@ -43,8 +43,8 @@ class VTClient(object):
         """
         return self.client.create_vm(hostip, vmInfo, netInfo)
 
-    def delete_vm(self, hostip, vname, vm_ip):
-        return self.client.delete_vm(hostip, vname, vm_ip)
+    def delete_vm(self, hostip, vname):
+        return self.client.delete_vm(hostip, vname)
 
     def get_host_info(self, hostip):
         return self.client.get_host_info(hostip)

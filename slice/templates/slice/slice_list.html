@@ -16,10 +16,11 @@ Slice列表
     <div class="fill_form">
         <fieldset>
              <legend>我的Slice<button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></legend>
+             <div class="row-fluid">
              <ul class="thumbnails example-sites">
 		         {% for slice in project.slice_set.all %}
 		        <li class="span3 thumbnail">
-		        	<a href="/slice/delete/{{ slice.id }}/" class="btn-delete close">×</a>
+		        	<a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
 		          	<a class="" href="/slice/detail/{{ slice.id }}/" target="_blank">
 		            <img src="{% static "img/001.png" %}" />
 		            <table class="table">
@@ -56,6 +57,7 @@ Slice列表
 		        </li>
 		         {% endfor %}
 		     </ul>
+		     </div>
          </fieldset>
     </div>
 {% endblock %}
