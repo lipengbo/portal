@@ -1,1 +1,1 @@
-uwsgi --module=ccf.wsgi:application --env DJANGO_SETTINGS_MODULE=ccf.settings --socket=127.0.0.1:49152 &
+uwsgi --module=ccf.wsgi:application --env DJANGO_SETTINGS_MODULE=ccf.settings --socket=127.0.0.1:49152 --processes=5 --harakiri=20 --max-requests=5000 --daemonize=logs/uwsgi.log --master --pidfile=/tmp/ccf-master.pid
