@@ -103,7 +103,7 @@
                         {% resource_num island "controller" %}
                         {% if switch_num|add:server_num|add:controller_num %}
                         <tr>
-                            <td class=""><input type="checkbox" {% if island|project_selected:form.instance %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
+                            <td class="checkboxs"><input type="checkbox" {% if island|project_selected:form.instance %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
