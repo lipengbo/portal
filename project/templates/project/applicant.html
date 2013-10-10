@@ -25,11 +25,10 @@
         <form class="fill_form" action="" method="post" accept-charset="utf-8">
             {% csrf_token %}
             <fieldset>
-                <legend>待审批成员
-                    <span class="pull-right">
-                        <input href="{% url "project_applicant" project.id %}?action=approve" class="btn btn-success " value="批准" type="submit" name="approve"/>
-                        <input type="submit" href="{% url "project_applicant" project.id %}?action=deny" class="btn btn-danger " value="拒绝" name="deny" /> 
-                    </span>
+                <legend>
+                    <button class="btn btn-success edit" type="submit" name="approve">批准</button>
+                    <button type="submit" class="btn btn-danger edit" name="deny">拒绝</button>  
+                                                                待审批成员                   
                 </legend>
                  <table class="table table-striped table-hover">
                     <thead>

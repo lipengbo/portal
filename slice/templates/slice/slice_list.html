@@ -17,7 +17,7 @@ Slice列表
 {% paginate slices %}
     <div class="fill_form">
         <fieldset>
-             <legend>我的Slice<button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></legend>
+             <legend><button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button>我的Slice</legend>
              <div class="row-fluid">
              {% for group in slices|group_by:4 %}
              <ul class="thumbnails example-sites">
