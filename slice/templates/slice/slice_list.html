@@ -4,6 +4,7 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load project_tags %}
+{% load endless %}
 
 {% block head_title %}{% trans "create project" %}{% endblock %}
 {% block breadcrumb %}
@@ -13,12 +14,14 @@ Slice列表
 {% endblock %}
 
 {% block body %}
+{% paginate slices %}
     <div class="fill_form">
         <fieldset>
              <legend>我的Slice<button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></legend>
              <div class="row-fluid">
+             {% for group in slices|group_by:4 %}
              <ul class="thumbnails example-sites">
-		         {% for slice in project.slice_set.all %}
+		         {% for slice in group %}
 		        <li class="span3 thumbnail">
 		        	<a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
 		          	<a class="" href="/slice/detail/{{ slice.id }}/" target="_blank">
@@ -57,8 +60,14 @@ Slice列表
 		        </li>
 		         {% endfor %}
 		     </ul>
+		     {% endfor %}
 		     </div>
          </fieldset>
+    </div>
+    <div class="pagination">
+        <ul>
+            {% show_pages %}
+        </ul>
     </div>
 {% endblock %}
 {% block extra_script %}
