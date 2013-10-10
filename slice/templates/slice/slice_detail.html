@@ -20,6 +20,15 @@
                     {%else%}    
                         <a data-toggle="modal" href="#" class="btn btn-info edit" disabled>编辑</a>
                     {%endif%} 
+                    {% if slice_obj.state == 0 %}
+                        <button type="button" class="btn btn-success start_btn edit start_slice" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'">
+                            启动Slice
+                        </button>
+                    {%else%}
+                        <button type="button" class="btn btn-danger start_btn edit" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'">
+                            停止Slice
+                        </button>
+                    {%endif%}
 			                         基本信息		   	
 			    </legend>
 			    <table class="table">

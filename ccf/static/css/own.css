@@ -5304,6 +5304,9 @@ legend small {
 .modal-body table tr td {
   border: none;
 }
+.sep_div {
+  margin-bottom: 20px;
+}
 .navbar-inverse .navbar-inner {
   background-color: #015581;
   background-image: -moz-linear-gradient(top, #015581, #015581);
@@ -5743,7 +5746,7 @@ table {
 }
 .example-sites li img {
   width: 100%;
-  height: 150px;
+  height: auto;
 }
 .nothing_tip {
   text-align: center;
@@ -5804,4 +5807,7 @@ table {
 .iradio_square-blue {
   float: left;
   margin-right: 5px;
+}
+.start_slice {
+  width: 118px;
 }
