@@ -102,3 +102,12 @@ def delete_vm(request, vmid, flag):
         import traceback
         LOG.debug(traceback.print_exc())
     return render(request, 'slice/warning.html', {'info': str(ex)})
+
+
+def get_vms_state_by_sliceid(request, sliceid):
+    slice_obj = get_object_or_404(Slice, id=sliceid)
+    vms = slice_obj.virtualmachine_set.all()
+    context = {}
+    context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+    context['sliceid'] = sliceid
+    return HttpResponse(json.dumps(context))
