@@ -165,6 +165,13 @@ def detail(request, slice_id):
     context['gws'] = []
     context['dhcps'] = []
     context['vms'] = slice_obj.get_common_vms()
+    context['check_vm_status'] = 0
+    if slice_obj.state == 1:
+        all_vms = slice_obj.get_vms()
+        for vm in all_vms:
+            if vm.state == 8:
+                context['check_vm_status'] = 1
+                break
     return render(request, 'slice/slice_detail.html', context)
 
 
