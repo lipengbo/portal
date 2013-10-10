@@ -5301,6 +5301,9 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
+.modal-body table tr td {
+  border: none;
+}
 .navbar-inverse .navbar-inner {
   background-color: #015581;
   background-image: -moz-linear-gradient(top, #015581, #015581);
@@ -5592,6 +5595,7 @@ table {
 }
 .fill_form fieldset .form_inline .select_input {
   margin-bottom: 0;
+  *display: inline;
 }
 .form-actions {
   border: none;
