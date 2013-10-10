@@ -37,7 +37,11 @@
 			        <button type="button" onclick="do_vm_action('{% url do_vm_action vm.id 'create' %}')" class="btn btn-success start_btn">启动</button>
 			        <button type="button" onclick="" class="btn" disabled>登录</button>
 			    {%endif%}
+                        {%if vm.type != 0 %}
   			    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete">删除</button>
+                        {%else%}
+  			    <button type="button" disabled class="btn btn-delete">删除</button>
+                        {%endif%}
 			</td>
                     </tr>
             {% endfor %}
