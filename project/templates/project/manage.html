@@ -34,7 +34,7 @@
                     <li class="span3">
                         <a href="{% url "project_delete" project.id %}?next={% url "project_manage" %}" class="btn-delete close">×</a>
                         <a class="thumbnail" href="{% url "project_detail" project.id %}" target="_blank">
-                        <img src="{% static "img/001.png" %}" />
+                        <img src="{% static project.category.image %}" />
                         <table class="table">
                             <tbody>
                                 <tr>
