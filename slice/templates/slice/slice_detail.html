@@ -25,7 +25,7 @@
                             启动Slice
                         </button>
                     {%else%}
-                        <button type="button" class="btn btn-danger start_btn edit" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'">
+                        <button type="button" class="btn btn-danger start_btn edit start_slice" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/2/'">
                             停止Slice
                         </button>
                     {%endif%}
@@ -225,6 +225,7 @@
     			  <div class="row-fluid">
     			  	<div class="span4"></div>
     			  	<div class="span4">
+					<!--
     			  	{% if slice_obj.state == 0 %}
     			  		<button type="button" class="btn btn-large btn-block btn-success start_btn" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'">
     			  			启动Slice
@@ -234,6 +235,7 @@
     			  			停止Slice
     			  		</button>
     			  	{%endif%}
+					-->
     			  	</div>
     			  	<div class="span4"></div>
     			  </div>
