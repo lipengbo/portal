@@ -5285,6 +5285,43 @@ html,
 body {
   height: 100%;
 }
+legend {
+  height: 40px;
+  font-family: "Microsoft YaHei";
+  color: #2489c5;
+  border-bottom: 1px solid #2489c5;
+}
+legend button,
+legend a {
+  margin-left: 10px !important;
+  font-family: "宋体";
+  vertical-align: middle;
+}
+legend small {
+  margin-left: 10px;
+  font-style: italic;
+}
+.navbar-inverse .navbar-inner {
+  background-color: #015581;
+  background-image: -moz-linear-gradient(top, #015581, #015581);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#015581), to(#015581));
+  background-image: -webkit-linear-gradient(top, #015581, #015581);
+  background-image: -o-linear-gradient(top, #015581, #015581);
+  background-image: linear-gradient(to bottom, #015581, #015581);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff015581', endColorstr='#ff015581', GradientType=0);
+  border-color: #0a344a;
+}
+.navbar-inverse .nav .active > a,
+.navbar-inverse .nav .active > a:hover,
+.navbar-inverse .nav .active > a:focus {
+  color: #ffffff;
+  background-color: #0a344a;
+}
+.navbar-inverse .brand,
+.navbar-inverse .nav > li > a {
+  color: #c7c7c7;
+}
 .blank_block {
   height: 60px;
 }
@@ -5321,7 +5358,7 @@ table {
 }
 .table th .btn,
 .table td .btn {
-  margin-right: 10px;
+  margin-left: 10px;
 }
 .posit_re {
   position: relative;
@@ -5432,7 +5469,7 @@ table {
   height: 260px;
 }
 #footer {
-  background-color: #1b1b1b;
+  background-color: #015581;
   border-top: 3px solid #ddd;
   color: #FFF;
   font-size: 12px;
@@ -5535,20 +5572,6 @@ table {
 }
 .fill_form fieldset textarea {
   width: 400px;
-}
-.fill_form fieldset legend {
-  font-family: "Microsoft YaHei";
-  color: #2489c5;
-  border-bottom: 1px solid #2489c5;
-}
-.fill_form fieldset legend button,
-.fill_form fieldset legend a {
-  margin-left: 10px;
-  font-family: "宋体";
-}
-.fill_form fieldset legend small {
-  margin-left: 10px;
-  font-style: italic;
 }
 .fill_form fieldset .progress {
   margin-bottom: 0;
@@ -5672,21 +5695,23 @@ table {
   color: #fff;
 }
 .index .banner .masthead h1 {
-  font-size: 80px;
+  font-size: 60px;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: 5px;
   font-family: "Microsoft YaHei";
   margin-bottom: 40px;
+  font-weight: normal;
 }
 .index .banner .masthead p {
-  font-size: 40px;
-  font-weight: 200;
+  font-size: 35px;
   line-height: 1.25;
   margin-bottom: 40px;
 }
 .index .banner .masthead .enter_btn a {
-  padding: 20px 80px;
-  font-size: 30px;
+  padding: 16px 60px;
+  font-size: 28px;
+  margin-right: 10px;
+  margin-left: 10px;
 }
 .index fieldset {
   padding: 0 15px;
