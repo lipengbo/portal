@@ -95,7 +95,11 @@
 		                				        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
 		                				    {%endif%}
 						 				{%else%}
-		            						<button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-inverse btn-delete edit">删除</button>
+						 					{%if vm.type != 0 %}
+		            							<button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-inverse btn-delete edit">删除</button>
+		                                    {%else%}
+				              			    	<button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
+				                            {%endif%}
 		                                    {% if vm.state == 8 %}
 		                                    <div id="vm_fc{{vm.id}}">
 		                                   
