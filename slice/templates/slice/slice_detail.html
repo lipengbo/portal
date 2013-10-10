@@ -83,16 +83,16 @@
 					 				{%if controller.host%}
 					 				{% if controller.host.state == 8 %}
                                         <button type="button" onclick="" class="btn edit" disabled>登录</button>
-                                            <button type="button" onclick="do_vm_action('{% url 'do_vm_action' controller.host.id 'create' %}')" class="btn btn-success start_btn edit" disabled>启动</button>
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
                                     {% elif controller.host.state == 9 %}
                                     <button type="button" onclick="" class="btn edit" disabled>登录</button>
-                                            <button type="button" onclick="do_vm_action('{% url 'do_vm_action' controller.host.id 'create' %}')" class="btn btn-success start_btn edit" disabled>启动</button>
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
 					 					{% elif controller.host.state == 1 %}
-					 					    <button type="button" onclick="open_vnc('{% url vm_vnc controller.host.id %}')" class="btn edit">登录</a>
-									        <button type="button" onclick="do_vm_action('{% url do_vm_action controller.host.id 'destroy' %}')" class="btn btn-danger stop_btn edit">停止</button>									        
+					 					    <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ controller.host.id }}')" class="btn edit">登录</a>
+									        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit">停止</button>									        
 									    {%else%}
 									        <button type="button" onclick="" class="btn edit" disabled>登录</button>
-									        <button type="button" onclick="do_vm_action('{% url 'do_vm_action' controller.host.id 'create' %}')" class="btn btn-success start_btn edit">启动</button>
+									        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit">启动</button>
 									    {%endif%}	
 					 				{%endif%}
 					 			</td>
