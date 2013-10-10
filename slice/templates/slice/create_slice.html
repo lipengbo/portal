@@ -61,7 +61,7 @@
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
-                    <label>Slice描述</label>
+                    <label class="v_top">Slice描述</label>
                     <textarea rows="5" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
@@ -287,7 +287,7 @@
                     </tbody>
                 </table>
               </fieldset>
-              <label class="checkbox inline tab_checkbox">
+              <label class="inline tab_checkbox">
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 是否配置DHCP服务器 
               </label>-->
               
@@ -341,7 +341,7 @@
                         </tr>
                     </tbody>
                  </table>
-                 <label class="checkbox">
+                 <label>
                                 {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                                      是否启动DHCP
                  </label>

@@ -56,44 +56,73 @@
 					 		<tr>
 					 			<td width="20%">控制器</td>
 					 			<td width="25%">IP:PORT：{{controller.ip}}:{{controller.port}}</td>
-					 			<td width="30%">
-					 				{%if controller.name == 'user_define' %}
-					 				类型：自定义
-					 				{%else%}
-					 				类型：{{controller.name}}
-					 				{%endif%}
-					 			</td>
 					 			<td width="25%">
-					 				{%if controller.host%}
-					 					{% if controller.host.state == 1 %}
-									        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/destroy')" class="btn btn-success stop_btn">停止</button>
-									        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ controller.host.id }}')" class="btn">登录</button>
-									    {%else%}
-									        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/create')" class="btn btn-success start_btn">启动</button>
-									        <button type="button" onclick="" class="btn" disabled>登录</button>
-									    {%endif%}	
+                                    {%if controller.name == 'user_define' %}
+                                    类型：自定义
+                                    {%else%}
+                                    类型：{{controller.name}}
+                                    {%endif%}
+                                </td>
+					 			<td width="5%">
+					 			{% if slice_obj.state == 1 %}
+					 			    {%if controller.host%}
+                                        {% if controller.host.state == 8 %}
+	                                        <img src="{% static "img/loader.gif" %}" />
+	                                    {% elif controller.host.state == 9 %}
+	                                        <i class="icon-remove"></i>
+	                                    {%else%}
+	                                        <i class="icon-ok"></i>
+	                                    {%endif%}  
+                                    {%endif%}
+                                {%endif%}
+					 			</td>
+					 			<td width="25%">			    
+					 			    {% if slice_obj.state == 0 %}
+                                        <a data-toggle="modal" href="#editSliceModal" class="btn btn-info edit">编辑</a>
+                                        {%if controller.host%}
+                                    		<button type="button" onclick="" class="btn edit" disabled>登录</button>
+                                    		{% if controller.host.state == 1 %}
+											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit" disabled>停止</button>									        
+											{%else%}
+											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
+											{%endif%}
+                                    	{%endif%}
+                                    {%else%}    
+                                        <a data-toggle="modal" href="#" class="btn btn-info edit" disabled>编辑</a>
+						 				{%if controller.host%}
+							 				{% if controller.host.state == 8 %}
+		                                        <button type="button" onclick="" class="btn edit" disabled>登录</button>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
+		                                    {% elif controller.host.state == 9 %}
+		                                    	<button type="button" onclick="" class="btn edit" disabled>登录</button>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
+							 				{% elif controller.host.state == 1 %}
+							 					<button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ controller.host.id }}')" class="btn edit">登录</a>
+											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit">停止</button>									        
+											{%else%}
+											    <button type="button" onclick="" class="btn edit" disabled>登录</button>
+											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit">启动</button>
+											{%endif%}
+						 				{%endif%}
 					 				{%endif%}
-						 			{% if slice_obj.state == 0 %}
-							 			<a data-toggle="modal" href="#editSliceModal" class="btn btn-info">编辑</a>
-							 		{%else%}	
-							 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
-							 		{%endif%}
 					 			</td>
 					 		</tr>
 				 		{%endif%}
+
 				 		{%for gw in gws%}
 					 		<tr>
 					 			<td>虚拟网关</td>
 					 			<td>IP：{{gw.ip}}</td>
 					 			<td></td>
+					 			<td></td>
 					 			<td>
-					 				<button type="button" class="btn btn-success start_btn">启动</button>
-						 			<button type="button" class="btn btn-info">登录</button>
-						 		{% if slice_obj.state == 0 %}
-						 			<a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
-						 		{%else%}
-						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
-						 		{%endif%}
+					 			    {% if slice_obj.state == 0 %}
+                                        <a data-toggle="modal" href="#" class="btn btn-info edit">编辑</a>
+                                    {%else%}
+                                        <a data-toggle="modal" href="#" class="btn btn-info edit" disabled>编辑</a>
+                                    {%endif%}
+						 			<button type="button" class="btn btn-info edit">登录</button>
+						 			<button type="button" class="btn btn-success start_btn edit">启动</button>
 					 			</td>
 					 		</tr>
 				 		{%endfor%}
@@ -102,14 +131,15 @@
 					 			<td>DHCP服务器</td>
 					 			<td>IP：{{dhcp.ip}}</td>
 					 			<td></td>
+					 			<td></td>
 					 			<td>
-					 				<button type="button" class="btn btn-success start_btn">启动</button>
-						 			<button type="button" class="btn btn-info">登录</button>
-						 		{% if slice_obj.state == 0 %}
-						 			<a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
-						 		{%else%}
-						 			<a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
-						 		{%endif%}
+					 			    {% if slice_obj.state == 0 %}
+                                        <a data-toggle="modal" href="#" class="btn btn-info edit">编辑</a>
+                                    {%else%}
+                                        <a data-toggle="modal" href="#" class="btn btn-info edit" disabled>编辑</a>
+                                    {%endif%}
+						 			<button type="button" class="btn btn-info edit">登录</button>
+						 			<button type="button" class="btn btn-success start_btn edit">启动</button>
 					 			</td>
 					 		</tr>
 					 	{%endfor%}
@@ -118,31 +148,54 @@
 				 <table class="table">
 				 	<tbody>
 				 		{%for vm in vms%}
-				 		{%if forloop.counter <= 3 %}
-					 		<tr>
-					 			<td width="20%">{{vm.name}}</td>
-					 			<td width="25%">IP：{{vm.ip}}</td>
-					 			<td width="30%">所属网络节点：{{vm.server.ip}}</td>
-					 			<td width="25%">
-                                {% if vm.state == 8 %}
-                                    虚拟机创建中
-                                {% elif vm.state == 9 %}
-                                    虚拟机创建失败
-                                {% elif vm.state == 1 %}
-	                                <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success stop_btn">停止</button>
-	                                <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn">登录</a>
-							    {%else%}
-							        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn">启动</button>
-							        <button type="button" onclick="" class="btn" disabled>登录</button>
-							    {%endif%}
-				  			    <button type="button" onclick="window.location.href='{% url 'delete_vm' vm.id 0 %}'" class="btn btn-delete">删除</button>
-					 			</td>
-					 		</tr>
-					 	{%endif%}
+					 		{%if vm.type == 1 %}
+						 		<tr>
+						 			<td width="20%">{{vm.name}}</td>
+						 			<td width="25%">IP：{{vm.ip}}</td>
+						 			<td width="25%">所属网络节点：{{vm.server.ip}}</td>
+						 			<td width="5%">
+							 			{% if slice_obj.state == 1 %}
+		                                    {% if vm.state == 8 %}
+		                                        <img src="{% static "img/loader.gif" %}" />
+		                                    {% elif vm.state == 9 %}
+		                                        <i class="icon-remove"></i>
+		                                    {%else%}
+		                                        <i class="icon-ok"></i>
+		                                    {%endif%}
+		                                {%endif%}
+                                	</td>
+						 			<td width="25%">
+						 				{% if slice_obj.state == 0 %}
+						 					<button type="button" onclick="window.location.href='{% url 'delete_vm' vm.id 0 %}'" class="btn btn-inverse btn-delete edit" disabled>删除</button>
+						 					<button type="button" onclick="" class="btn edit" disabled>登录</button>
+						 					{%if vm.state == 1 %}
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn edit" disabled>停止</button>
+		                				    {%else%}
+		                				        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
+		                				    {%endif%}
+						 				{%else%}
+		            						<button type="button" onclick="window.location.href='{% url 'delete_vm' vm.id 0 %}'" class="btn btn-inverse btn-delete edit">删除</button>
+		                                    {% if vm.state == 8 %}
+		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn edit" disabled>登录</a>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn edit" disabled>启动</button>
+		                                    {% elif vm.state == 9 %}
+		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn edit" disabled>登录</a>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn edit" disabled>启动</button>
+		                                    {% elif vm.state == 1 %}
+		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn edit">登录</a>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn edit">停止</button>
+		                				    {%else%}
+		                				        <button type="button" onclick="" class="btn edit" disabled>登录</button>
+		                				        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/create')" class="btn btn-success start_btn edit">启动</button>
+		                				    {%endif%}
+		                				{%endif%}
+						 			</td>
+						 		</tr>
+						 	{%endif%}
 				 		{%endfor%}
 				 		{% if vms %}   
 				 		 <tr>
-				 		     <td colspan="4"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
+				 		     <td colspan="5"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
 				 		 </tr>                             
                         {%endif%}
 				 	</tbody>
