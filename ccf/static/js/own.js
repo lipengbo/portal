@@ -135,6 +135,9 @@ $(document).ready(function() {
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
+       if(nowIndex == 0){
+       		$(".nav-pills .span2").removeClass("visit");
+       }
        $(".nav-pills .span2").eq(nowIndex).addClass("visit");
        $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
     });
@@ -175,6 +178,9 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
+           if ($(".icheckbox_square-blue").hasClass('disabled')) {
+               return;
+           }
            $(".icheckbox_square-blue").iCheck('check');
        } else {
            $(".icheckbox_square-blue").iCheck('uncheck');
