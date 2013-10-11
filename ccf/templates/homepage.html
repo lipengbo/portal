@@ -33,11 +33,14 @@ img {
 		      <li><a href="#topology" data-toggle="tab">物理拓扑</a></li>   
 		 </ul>
        	 
-		 <div class="tab-content tab_main">
+		 <div class="tab-content tab_main" style="height:auto;">
 		   <div class="tab-pane active" id="resource">
 		   	 <img src="{% static "img/001.png" %}" style="width:1024px;height:510px;" />
 		   </div>
-		   <div class="tab-pane" id="topology">..物理拓扑</div>
+           <div class="tab-pane" id="topology">
+                <iframe src="/topology/?no_parent=true&hide_filter=true" width="100%" height="603px;" frameborder="0">
+                </iframe>
+           </div>
 		 </div>
        
          <section id="dg-container" class="dg-container">
