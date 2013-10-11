@@ -5367,6 +5367,10 @@ table {
 .table td .btn {
   margin-left: 10px;
 }
+.pro_manage_container {
+  max-width: 980px;
+  margin: 0 auto;
+}
 .posit_re {
   position: relative;
 }
