@@ -44,9 +44,8 @@
     </div>
     <div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
         <label>项目类型</label>
-            <input class="span2" id="category-input" name="category" value="{{ form.instance.category.id }}" type="hidden">
         <div class="input-append select_input">
-            <input class="span2" id="appendedDropdownButton" name="category_name" value="{{ form.instance.category }}" type="text">
+            <input class="span2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text">
             <div class="btn-group">
                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                 <ul class="dropdown-menu">
@@ -55,19 +54,13 @@
                     {% endfor %}
                 </ul>
             </div>
-            
         </div>
         {% if form.category_name.errors %}
                 {% for error in form.category_name.errors %}
                     <span class="help-inline">{{ error }}</span>
                 {% endfor %}
         {% endif %}
-        {% if form.category.errors %}
-                {% for error in form.category.errors %}
-                    <span class="help-inline">{{ error }}</span>
-                {% endfor %}
-        {% endif %}
-    </div>     
+    </div>
   </fieldset>
   <fieldset>
     <legend>添加资源 </legend>
@@ -134,10 +127,4 @@
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
-    <script  type="text/javascript" charset="utf-8">
-        $(".select_input ul li a").click(function(){
-            var data_id = $(this).data('id');
-            $("#category-input").val(data_id);
-        }); 
-    </script>
 {% endblock %}
