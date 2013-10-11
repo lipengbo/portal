@@ -45,7 +45,7 @@
                             <th width="10%">申请状态</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="checkboxs">
                         {% for project in projects %}
                         <tr>
                             {% with project|application_status:user as status %}

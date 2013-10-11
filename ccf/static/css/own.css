@@ -864,13 +864,6 @@ fieldset {
   margin: 0;
   border: 0;
 }
-fieldset legend .btn {
-    margin-left:10px;
-}
-
-fieldset legend .btn {
-    margin-left:10px;
-}
 legend {
   display: block;
   width: 100%;
@@ -5292,6 +5285,23 @@ html,
 body {
   height: 100%;
 }
+legend {
+  *margin: 0 0 20px -7px;
+  height: 40px;
+  font-family: "Microsoft YaHei";
+  color: #2489c5;
+  border-bottom: 1px solid #2489c5;
+}
+legend button,
+legend a {
+  margin-left: 10px !important;
+  font-family: "宋体";
+  vertical-align: middle;
+}
+legend small {
+  margin-left: 10px;
+  font-style: italic;
+}
 .modal-body table tr td {
   border: none;
 }
@@ -5590,6 +5600,7 @@ table {
 .fill_form fieldset .form_inline .select_input {
   margin-bottom: 0;
   *display: inline;
+  *width: 183px;
 }
 .form-actions {
   border: none;

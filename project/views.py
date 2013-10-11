@@ -211,6 +211,7 @@ def topology(request):
     hide_filter = request.GET.get('hide_filter')
     island_id = request.GET.get('island_id', 0)
     show_virtual_switch = request.GET.get('show_virtual_switch')
+    direct = request.GET.get('direct')
     try:
         island_id = int(island_id)
     except:
@@ -236,6 +237,7 @@ def topology(request):
         'total_island': total_island,
         'total_facility':total_facility,
         'all_gre_ovs': all_gre_ovs,
+        'direct': direct,
         'no_parent': no_parent,
         'hide_filter': hide_filter,
         'show_virtual_switch':show_virtual_switch,

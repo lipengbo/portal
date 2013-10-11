@@ -15,10 +15,10 @@ $(document).ready(function() {
 	
 	//虚拟机创建页面，添加和删除按钮功能
 	$(".add").click(function(){
-		$(".sec_block").first().clone().appendTo(".vm_info_list");		
+		$(".sec_block").first().clone(true).appendTo(".vm_info_list");		
 		$(".sec_block").last().find("input[type='text']").val("");
-		$(".sec_block").last().find("input[type='checkbox']").next().remove();
-		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue')
+		//$(".sec_block").last().find("input[type='checkbox']").next().remove();
+		//$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue')
 		//$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
 		$(".sec_block").last().find("input[type='checkbox']").iCheck({
             checkboxClass: 'icheckbox_square-blue',
@@ -185,6 +185,16 @@ $(document).ready(function() {
        } else {
            $(".icheckbox_square-blue").iCheck('uncheck');
        }
+    });
+    
+    $(".checkboxs .iCheck-helper").each(function(){
+        $(this).click(function(){
+            if($(".checkboxs .checked").length==0){
+                $(".checkall .icheckbox_square-blue").iCheck('uncheck');
+            } else if($(".checkboxs .checked").length==$(".checkboxs .iCheck-helper").length) {
+                $(".checkall .icheckbox_square-blue").iCheck('check');
+            }
+        });
     });
     
     //tooltip demo
