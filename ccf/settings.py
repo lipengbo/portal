@@ -13,12 +13,12 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
-#DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.sqlite3",
-#        "NAME": "dev.db",
-#    }
-#}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "dev.db",
+#     }
+# }
 
 
 DATABASES = {
