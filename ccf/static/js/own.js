@@ -191,7 +191,7 @@ $(document).ready(function() {
         $(this).click(function(){
             if($(".checkboxs .checked").length==0){
                 $(".checkall .icheckbox_square-blue").iCheck('uncheck');
-            } else {
+            } else if($(".checkboxs .checked").length==$(".checkboxs .iCheck-helper").length) {
                 $(".checkall .icheckbox_square-blue").iCheck('check');
             }
         });
