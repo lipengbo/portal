@@ -115,21 +115,22 @@ function drawTopology(slicec){
 		$("div#content").empty();
 	}
 	else{
-		if(slicec == 0){
-			$("div#content1").empty();
-		}else if(slicec == 1){
-			$("div#content2").empty();
-		}else if(slicec == 2){
-			$("div#content3").empty();
-		}else if(slicec == 3){
-			$("div#content4").empty();
-		}
+		$("div#content"+slicec).empty();
+		//if(slicec == 0){
+		//	$("div#content1").empty();
+		//}else if(slicec == 1){
+		//	$("div#content2").empty();
+		//}else if(slicec == 2){
+		//	$("div#content3").empty();
+		//}else if(slicec == 3){
+		//	$("div#content4").empty();
+		//}
 	}
 	var static_url = $("#STATIC_URL").text();	
 	var str = "";
-	if(slicec > -1){
-		str = str + "<a href=\"/slice_detail/" + slice_id + "/1/\">";
-	}	
+	//if(slicec > -1){
+	//	str = str + "<a href=\"/slice_detail/" + slice_id + "/1/\">";
+	//}	
 	str = str + "<svg id='svgc' width='100%' height='100%' version='1.1' xmlns='http://www.w3.org/2000/svg'>"
 		
 	for(var i = 0; i < links.length; i++){
@@ -213,24 +214,25 @@ function drawTopology(slicec){
 	}
 	
 	str = str + "</svg>";
-	if(slicec > -1){
-		str = str + "</a>";
-	}
+	//if(slicec > -1){
+	//	str = str + "</a>";
+	//}
 		
 	//$("div#content").append(str);	
 	if(slicec == -1){
 		$("div#content").append(str);
 	}
 	else{
-		if(slicec == 0){
-			$("div#content1").append(str);
-		}else if(slicec == 1){
-			$("div#content2").append(str);
-		}else if(slicec == 2){
-			$("div#content3").append(str);
-		}else if(slicec == 3){
-			$("div#content4").append(str);
-		}
+		$("div#content"+slicec).append(str);
+		//if(slicec == 0){
+		//	$("div#content1").append(str);
+		//}else if(slicec == 1){
+		//	$("div#content2").append(str);
+		//}else if(slicec == 2){
+		//	$("div#content3").append(str);
+		//}else if(slicec == 3){
+		//	$("div#content4").append(str);
+		//}
 	}
 	
 }
@@ -855,10 +857,10 @@ function initCheckBoard(conti){
 		rs_pic_height = 30;
 	}
 	else{
-		rs_mbWidth = 320 * 0.9;
-		rs_mbHeight = 150;
-		rs_pic_width = 25;
-		rs_pic_height = 15;
+		rs_mbWidth = 480 * 0.9;
+		rs_mbHeight = 300;
+		rs_pic_width = 50;
+		rs_pic_height = 30;
 	}
 	mbWidth = rs_mbWidth;
 	mbHeight = rs_mbHeight;
@@ -903,6 +905,9 @@ function maxDegree (degrees){
 
 //画一个slice的拓扑，参数conti表示对应的html页面中的div编号（-1对应slice编辑页面中的div）
 function draw(conti){
+	if(conti != -1){
+		slice_id = conti;
+	}
 	initCheckBoard(conti);	
 	init();
 	//initCircleTemp();
@@ -991,29 +996,26 @@ function draw(conti){
 $(document).ready(function() {
 	topology_type = $("#topology_type").text();
 	if(topology_type == 0){
-		var slice_num = $("#slice_num").text();
-		var slice_ids = new Array();
-		if(slice_num == 0){
-	
-		}else if(slice_num == 1){			
-			slice_ids[0] = $("#slice_id1").text();						
-		}else if(slice_num == 2){
-			slice_ids[0] = $("#slice_id1").text();
-			slice_ids[1] = $("#slice_id2").text();
-		}else if(slice_num == 3){
-			slice_ids[0] = $("#slice_id1").text();
-			slice_ids[1] = $("#slice_id2").text();
-			slice_ids[2] = $("#slice_id3").text();
-		}else if(slice_num == 4){
-			slice_ids[0] = $("#slice_id1").text();
-			slice_ids[1] = $("#slice_id2").text();
-			slice_ids[2] = $("#slice_id3").text();
-			slice_ids[3] = $("#slice_id4").text();		
-		}		
-		for(var i = 0; i < slice_num; i++){			
-			slice_id = slice_ids[i];
-			draw(i);
-		}
+		//var slice_num = $("#slice_num").text();
+		//var slice_ids = new Array();
+		//if(slice_num == 0){
+	//
+		//}else if(slice_num == 1){			
+		//	slice_ids[0] = $("#slice_id1").text();						
+		//}else if(slice_num == 2){
+		//	slice_ids[0] = $("#slice_id1").text();
+		//	slice_ids[1] = $("#slice_id2").text();
+		//}else if(slice_num == 3){
+		//	slice_ids[0] = $("#slice_id1").text();
+		//	slice_ids[1] = $("#slice_id2").text();
+		//	slice_ids[2] = $("#slice_id3").text();
+		//}else if(slice_num == 4){
+		//	slice_ids[0] = $("#slice_id1").text();
+		//	slice_ids[1] = $("#slice_id2").text();
+		//	slice_ids[2] = $("#slice_id3").text();
+		//	slice_ids[3] = $("#slice_id4").text();		
+		//}	
+		home_show_slice();
 	}
 	else{
 		slice_id = $("#slice_id").text();
@@ -1028,4 +1030,73 @@ function f(){
 		draw();
 		rootIndex++;
 	}	
+}
+
+
+//首页slice拓扑展示
+function home_show_slice(){
+	check_url = "http://" + window.location.host + "/slice/get_show_slices/";
+	var str;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+        	slices = data.slices;
+        	if(slices && slices.length>0){
+        		//alert(1);
+        		$("div#slice_show").empty();
+				str = "";
+				str = str + "<div class=\"dg-wrapper\">";
+    			for(var i=0;i<slices.length;i++){
+					str = str + "<a href=\"#\">"
+						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:300px;\" alt=\"image"+i+"\">"
+						+ "</div>"
+						+ "<div>"+slices[i].name+"拓扑图</div>"
+						+ "</a>";
+				}
+				if(slices.length==1){
+					str = str + "<a href=\"#\">"
+						+ "</a>";
+					str = str + "<a href=\"#\">"
+						+ "</a>";
+				}
+				if(slices.length==2){
+					str = str + "<a href=\"#\">"
+						+ "</a>";
+				}
+				str = str + "</div>"
+					+ "<nav>"	
+					+ "<span class=\"dg-prev\">&lt;</span>"
+					+ "<span class=\"dg-next\">&gt;</span>"
+					+ "</nav>";
+				$("div#slice_show").append(str);
+				
+				//画拓扑
+				for(var i=0;i<slices.length;i++){
+					draw(slices[i].id);
+				}		
+        	}
+        	else{
+        		//alert(2);
+        		$("div#slice_show").empty();
+        		str = "";
+				str = str + "<div class=\"dg-wrapper\">";
+        		str = str + "<a href=\"#\">"
+					+ "</a>";
+				str = str + "<a href=\"#\">"
+					+ "</a>";
+				str = str + "<a href=\"#\">"
+					+ "</a>";
+				str = str + "</div>"
+					+ "<nav>"	
+					+ "<span class=\"dg-prev\">&lt;</span>"
+					+ "<span class=\"dg-next\">&gt;</span>"
+					+ "</nav>";
+				$("div#slice_show").append(str);
+        	}
+        }
+    });
 }

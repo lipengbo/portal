@@ -13,6 +13,7 @@ urlpatterns = patterns('slice.views',
     url(r'^check_slice_name/(?P<slice_name>\w+)/$', "check_slice_name", name='check_slice_name'),
     url(r'^create_nw/(?P<owner>\w+)/(?P<nw_num>\w+)/$', "create_nw", name='create_nw'),
     url(r'^delete_nw/(?P<owner>\w+)/$', "delete_nw", name='delete_nw'),
+    url(r'^get_show_slices/$', "get_show_slices", name='get_show_slices'),
 #     url(r'^change_nw_owner/(?P<nw>\w+)/(?P<new_owner>\w+)/$', "change_nw_owner", name='change_nw_owner'),
 #     url(r'^change_nw/(?P<owner>\w+)/(?P<new_owner>\w+)/$(?P<nw_num>\w+)/', "change_nw", name='change_nw'),
 )
