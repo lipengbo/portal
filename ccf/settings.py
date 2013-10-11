@@ -13,10 +13,22 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "dev.db",
+#     }
+# }
+
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "dev.db",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'ceni',  
+        'USER': 'root',  
+        'PASSWORD': '123',  
+        'HOST': '192.168.5.121',  
+        'PORT': '3306',  
     }
 }
 

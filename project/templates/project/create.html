@@ -88,7 +88,7 @@
                     <th width="40%">节点资源</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="checkboxs">
                 {% for city in cities %}
                     {% for island in city.island_set.all %}
                         {% resource_num island "switch" %}
@@ -96,7 +96,7 @@
                         {% resource_num island "controller" %}
                         {% if switch_num|add:server_num|add:controller_num %}
                         <tr>
-                            <td class="checkboxs"><input type="checkbox" {% if island|project_selected:form.instance %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
+                            <td><input type="checkbox" {% if island|project_selected:form.instance %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
