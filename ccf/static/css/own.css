@@ -864,13 +864,6 @@ fieldset {
   margin: 0;
   border: 0;
 }
-fieldset legend .btn {
-    margin-left:10px;
-}
-
-fieldset legend .btn {
-    margin-left:10px;
-}
 legend {
   display: block;
   width: 100%;
@@ -5293,6 +5286,7 @@ body {
   height: 100%;
 }
 legend {
+  *margin: 0 -7px;
   height: 40px;
   font-family: "Microsoft YaHei";
   color: #2489c5;
