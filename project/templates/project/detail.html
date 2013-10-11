@@ -106,13 +106,13 @@
 		         {% for slice in project.slice_set.all %}
 		         {% if forloop.counter <= 4  %}
 		        <li class="span3 thumbnail">
-		        	<a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
+		        	<a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
 		          	<a class="" href="/slice/detail/{{ slice.id }}/" target="_blank">
 		          	<img src="{% static slice.project.category.image %}" />
 		            <table class="table">
 		                <tbody>
 		                    <tr>
-		                        <td width="100">Slice名称：</td>
+		                        <td width="105">Slice名称：</td>
 		                        <td>{{ slice.name }}</td>
 		                    </tr>
 		                    <tr>
