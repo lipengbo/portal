@@ -864,6 +864,13 @@ fieldset {
   margin: 0;
   border: 0;
 }
+fieldset legend .btn {
+    margin-left:10px;
+}
+
+fieldset legend .btn {
+    margin-left:10px;
+}
 legend {
   display: block;
   width: 100%;

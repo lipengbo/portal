@@ -24,6 +24,11 @@ def vm_list(request, sliceid):
     context['vms'] = vms
     context['sliceid'] = sliceid
     context['slice_obj'] = Slice.objects.get(id=sliceid)
+    context['check_vm_status'] = 0
+    for vm in vms:
+        if vm.state == 8:
+            context['check_vm_status'] = 1
+            break
     return render(request, 'vt/vm_list.html', context)
 
 
