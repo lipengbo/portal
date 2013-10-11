@@ -124,7 +124,8 @@ def slice_change_controller(slice_obj, controller_info):
             haved_controller = slice_obj.get_controller()
             if controller_info['controller_type'] == 'default_create':
                 if haved_controller.name == controller_info['controller_sys']:
-                    return
+                    if haved_controller.host.state != 9:
+                        return
             else:
                 if haved_controller.name == 'user_define' and\
                     haved_controller.ip == controller_info['controller_ip'] and\

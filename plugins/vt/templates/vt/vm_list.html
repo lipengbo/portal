@@ -55,7 +55,7 @@
             			        <button type="button" onclick="" class="btn" disabled>登录</button>
             			    {%endif%}
                             {%if vm.type != 0 %}
-              			    	<button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-delete btn-inverse">删除</button>
+              			    	<a href="{% url delete_vm vm.id 1 %}" class="btn btn-delete btn-inverse">删除</a>
                             {%else%}
               			    	<button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
                             {%endif%}
@@ -96,7 +96,7 @@
 		                				    {%endif%}
 						 				{%else%}
 						 					{%if vm.type != 0 %}
-		            							<button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-inverse btn-delete edit">删除</button>
+						 						<a href="{% url delete_vm vm.id 0 %}" class="btn btn-inverse btn-delete edit">删除</a>
 		                                    {%else%}
 				              			    	<button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
 				                            {%endif%}
