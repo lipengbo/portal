@@ -5434,7 +5434,6 @@ table {
   filter: alpha(opacity=100);
 }
 .tab_main {
-  height: 510px;
   background: #fff;
   border: 1px solid #DDD;
   -moz-border-radius-bottomleft: 7px;
