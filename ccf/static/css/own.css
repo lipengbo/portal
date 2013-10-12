@@ -5697,8 +5697,7 @@ table {
   visibility: hidden;
 }
 .index {
-  /* background:#f4f4f4; */
-
+  background: #f4f4f4;
 }
 .index .banner {
   padding-top: 80px;
