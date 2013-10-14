@@ -26,8 +26,8 @@ DATABASES = {
 #         'ENGINE': 'django.db.backends.mysql',  
 #         'NAME': 'ceni',  
 #         'USER': 'root',  
-#         'PASSWORD': '123',  
-#         'HOST': '192.168.5.121',  
+#         'PASSWORD': 'cdn%nf',  
+#         'HOST': '192.168.5.120',  
 #         'PORT': '3306',  
 #     }
 # }
@@ -56,7 +56,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -164,8 +164,10 @@ INSTALLED_APPS = [
     "plugins.openflow",
     "plugins.network",
     "invite",
+    "django_cron",
 ]
 
+CRON_POLLING_FREQUENCY = 5
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
