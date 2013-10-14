@@ -5816,3 +5816,13 @@ table {
 .start_slice {
   width: 118px;
 }
+#delModal {
+  width: 300px;
+  margin-left: -101px;
+}
+.modal.fade.in {
+  top: 30%;
+}
+#registerModal.fade.in {
+  top: 10%;
+}
