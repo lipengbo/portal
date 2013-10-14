@@ -5818,7 +5818,7 @@ table {
 }
 #alertModal {
   width: 300px;
-  margin-left: -101px;
+  margin-left: -150px;
 }
 .modal.fade.in {
   top: 30%;
