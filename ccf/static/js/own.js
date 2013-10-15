@@ -352,8 +352,8 @@ function submit_slice_info(project_id){
 		}   
 	}
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
-
-	var submit_data = {"slice_name": slice_name_obj.value,
+    var user_id_obj = document.getElementById("user_id");
+	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
