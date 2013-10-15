@@ -23,5 +23,5 @@ lock_path = '/var/run/'
 default_flavor_id = 1
 rpc_connection_timeout = 150
 #单元测试的时候使用，用于关闭一些特性，比如录入一台设备时自动获取其info信息
-function_test = True
+function_test = False
 flowvisor_disable = False

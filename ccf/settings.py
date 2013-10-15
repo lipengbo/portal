@@ -26,8 +26,8 @@ DATABASES = {
 #         'ENGINE': 'django.db.backends.mysql',  
 #         'NAME': 'ceni',  
 #         'USER': 'root',  
-#         'PASSWORD': '123',  
-#         'HOST': '192.168.5.121',  
+#         'PASSWORD': 'cdn%nf',  
+#         'HOST': '192.168.5.120',  
 #         'PORT': '3306',  
 #     }
 # }
@@ -166,6 +166,7 @@ INSTALLED_APPS = [
     "invite",
 ]
 
+CRON_POLLING_FREQUENCY = 5
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.

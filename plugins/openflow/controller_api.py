@@ -97,9 +97,9 @@ def create_default_controller(slice_obj, controller_sys):
             #transaction.rollback()
             import traceback
             print traceback.print_exc()
-            raise DbError(ex)
+            raise DbError("创建控制器失败！")
     else:
-        raise DbError("数据库异常")
+        raise DbError("数据库异常！")
 
 
 def delete_controller(controller):
@@ -132,16 +132,22 @@ def slice_change_controller(slice_obj, controller_info):
                     haved_controller.port == int(controller_info['controller_port']):
                     return
             slice_obj.remove_resource(haved_controller)
+            controller = None
             controller = create_add_controller(slice_obj, controller_info)
             flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
                 slice_obj.name, controller.ip, controller.port)
         except:
-            if controller:
-                try:
+            print 'c5'
+            try:
+                print 'c7'
+                if controller:
                     delete_controller(controller)
-                    slice_obj.add_resource(haved_controller)
-                except:
-                    pass
+                print 'c8'
+                slice_obj.add_resource(haved_controller)
+                print 'c9'
+            except:
+                print 'c10'
+                pass
             raise
         else:
             try:

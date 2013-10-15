@@ -25,6 +25,7 @@ class Slice(models.Model):
     date_expired = models.DateTimeField()
     state = models.IntegerField(choices=SLICE_STATES,
             default=SLICE_STATE_STOPPED)
+#     expired = models.IntegerField(default=0)
 
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
