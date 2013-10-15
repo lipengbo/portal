@@ -71,6 +71,9 @@ class FlowvisorLinksMd5(models.Model):
     md5 = models.CharField(max_length=32)
     flowvisor = models.OneToOneField(Flowvisor)
 
+    class Meta:
+        verbose_name = _("Flowvisor link md5")
+
 @transaction.commit_on_success
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
