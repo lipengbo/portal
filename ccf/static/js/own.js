@@ -378,8 +378,7 @@ function submit_slice_info(project_id){
 	            }
 	        },
 	        error: function(data) {
-	        	alert("创建slice失败！");
-	        	ajax_ret = false;
+	        	alert("创建slice异常！");
 	        }
 	});
 	if(ajax_ret){
