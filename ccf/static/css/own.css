@@ -5754,6 +5754,7 @@ table {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
 }
 .example-sites li img {
   width: 100%;
