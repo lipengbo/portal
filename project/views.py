@@ -64,6 +64,8 @@ def invite(request, id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             users = users.filter(username__icontains=query)
             context['query'] = query
     context['users'] = users
@@ -98,12 +100,13 @@ def apply(request):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
     categories = Category.objects.all()
     context['projects'] = projects
     context['categories'] = categories
-    import pdb;pdb.set_trace()
     if request.method == 'POST':
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
