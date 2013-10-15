@@ -161,6 +161,7 @@ class SliceSwitch(models.Model):
 
     class Meta:
         unique_together = (("slice", "switch"), )
+        verbose_name = _("Slice Switch")
 
 
 class SwitchPort(Resource):
@@ -192,6 +193,7 @@ class SwitchPort(Resource):
 
     class Meta:
         unique_together = (("switch", "port"), )
+        verbose_name = _("Switch Port")
 
 
 class SlicePort(models.Model):
@@ -200,6 +202,7 @@ class SlicePort(models.Model):
 
     class Meta:
         unique_together = (("slice", "switch_port"), )
+        verbose_name = _("Slice Port")
 
 
 class VirtualSwitch(Switch):

@@ -184,10 +184,7 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
-           if ($(".icheckbox_square-blue").hasClass('disabled')) {
-               return;
-           }
-           $(".icheckbox_square-blue").iCheck('check');
+           $(".icheckbox_square-blue:not(.disabled)").iCheck('check');
        } else {
            $(".icheckbox_square-blue").iCheck('uncheck');
        }
