@@ -119,7 +119,7 @@
                     </thead>
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
-                    		<tr>
+                    		<tr class="hide switch-data">
                                     <td>{{ovs_port.switch.name}}</td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
@@ -135,7 +135,7 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                            <label class="inline">
+                                            <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
 						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
@@ -481,34 +481,41 @@
 {% endblock %}
 {% block extra_script %}
 <script>  
-	    $(document).ready(function() {
-            window.selected_ports = {};
-            window.add_port = function(port_id, is_delete) {
-                if(port_id in selected_ports) {
-                    if(is_delete) {
-                        delete selected_ports[port_id];
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('uncheck');
-                    }
-                } else {
-                    if(!is_delete) {
-                        selected_ports[port_id] = port_id;
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('check');
+    $(document).ready(function() {
+        window.selected_ports = {};
+        window.add_port = function(port_id, is_delete) {
+            var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
+            if(port_id in selected_ports) {
+                if(is_delete) {
+                    delete selected_ports[port_id];
+
+                    checkbox.iCheck('uncheck');
+                    checkbox.parents('label').hide();
+                    if(checkbox.parents('.switch-data').find('.icheckbox_square-blue.checked').length == 0) {
+                        checkbox.parents('.switch-data').hide();
                     }
                 }
-                var ports = [];
-                for(port in selected_ports) {
-                    ports.push(port);
-                };
-                $('#topology-switch').val(ports.join(","));
+            } else {
+                if(!is_delete) {
+                    selected_ports[port_id] = port_id;
+                    checkbox.parents('label').show();
+                    checkbox.iCheck('check');
+                    checkbox.parents('.switch-data').show();
+                }
+            }
+            var ports = [];
+            for(port in selected_ports) {
+                ports.push(port);
             };
-            $('input[name="switch_port_ids"]').on("ifChecked", function(){
-                selected_ports[$(this).val()] = $(this).val();
-            });
-            $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
-                delete selected_ports[$(this).val()];
-            });
-            
-});
+            $('#topology-switch').val(ports.join(","));
+        };
+        $('input[name="switch_port_ids"]').on("ifChecked", function(){
+            selected_ports[$(this).val()] = $(this).val();
+        });
+        $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
+            delete selected_ports[$(this).val()];
+        });
+    });
 </script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
