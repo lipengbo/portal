@@ -5285,6 +5285,9 @@ html,
 body {
   height: 100%;
 }
+body {
+  background: url(../img/bg.png) repeat;
+}
 legend {
   *margin: 0 0 20px -7px;
   height: 40px;
@@ -5340,9 +5343,6 @@ legend small {
 }
 .push {
   height: 72px;
-}
-body {
-  background: url(../img/bg.png) repeat;
 }
 a {
   outline: none !important;
@@ -5747,7 +5747,13 @@ table {
   top: 5px;
 }
 .example-sites li table {
+  table-layout: fixed;
   margin-bottom: 0;
+}
+.example-sites li table tbody tr td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .example-sites li img {
   width: 100%;
