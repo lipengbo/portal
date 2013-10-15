@@ -362,7 +362,7 @@ function init_svg () {
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
     node.append("text").attr("dx", 40).attr("dy", ".35em")
-        .text(function(d) { return d.name });
+        .text(function(d) { return d.db_name ? d.db_name : d.name });
     node.on("click", function (d) {
         // TODO we could add some functionality here
         if (parent.add_port) {
@@ -382,8 +382,20 @@ function init_svg () {
                             content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
-                            port.name + "(" + port.portNumber+ ")" + 
-                            "</label>";
+                            d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                        var port_pairs = {};
+                        $.each(g_links_map[d.island_id], function(index, link) {
+                            var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
+                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber) && !(port_pair_key in port_pairs)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                            }
+                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber) && !(port_pair_key in port_pairs)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                            }
+                        });
+                        content += "</label>";
                     });
                     $('.port-modal .confirm-port').unbind("click");
                     $('.port-modal .confirm-port').click(function () {

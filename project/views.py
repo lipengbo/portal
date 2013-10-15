@@ -258,10 +258,16 @@ def links_proxy(request, host, port):
     links = flowvisor.link_set.all()
     link_data = []
     for link in links:
+        if link.source.switch.island != flowvisor.island:
+            continue
+        if link.target.switch.island != flowvisor.island:
+            continue
         link_data.append({
             "dst-port": link.target.port,
+            "dst-port-name": link.target.name,
             "dst-switch": link.target.switch.dpid,
             "src-port": link.source.port,
+            "src-port-name": link.source.name,
             "src-switch": link.source.switch.dpid
             })
 
@@ -290,14 +296,14 @@ def switch_proxy(request, host, port):
     for switch_id_tuple in switch_ids_tuple:
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
-    switches = Switch.objects.filter(id__in=switch_ids)
+    switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()
         port_data = []
         for port in ports:
             port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
-        switch_data.append({"dpid": switch.dpid, "ports": port_data})
+        switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data})
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
