@@ -283,3 +283,40 @@ function showInfo(_info,msg,color){
     info.innerHTML = msg;
     info.style.color=color;
 }
+
+
+//验证网关ip
+function check_gw_ip(flag){
+    var gw_ip_obj = document.getElementById("gw_ip");
+    var info = document.getElementById("gw_ipInfo");
+    var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    
+    var reg=/^((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}?$/;//正则表达式
+    
+    if(obj.value.length > 0){
+        if(reg.test(obj.value))
+        {
+            slice_nw = old_slice_nw_obj.value;
+            gw_ip = gw_ip_obj.value;  
+            slice_ip_mask=slice_nw.split("/");
+            ip = slice_ip_mask[0];
+            mask = slice_ip_mask[1];
+            ips = ip.split(".");
+            masks = maskint_to_maskstr(mask);
+            cur_ips = nw_ip.split(".");
+            if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
+                showInfo(info,"√","green");
+                return true;
+            }
+        }
+        showInfo(info,"IP地址错误","red")   ;   
+        return false;
+    }
+    else{
+        if(flag){
+            showInfo(info,"请填写IP地址","blue");
+            return false;
+        }
+        return true;
+    } 
+}

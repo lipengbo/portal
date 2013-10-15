@@ -237,18 +237,17 @@
                         <tr>
                             <td width="70">网关宿主机</td>
                             <td>
-                                <select>
-                                  <option>server1</option>
-                                  <option>server2</option>
-                                  <option>server3</option>
+                                <select name="gw_server_id" id="gw_server_id">
                                 </select>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td><input type="text" />
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
+                            <td>
+                                <input type="text" name="gw_ip" id="gw_ip"/>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内"><i class="icon-question-sign icon-align-left"></i></a>
+                                <span id="gw_ipInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
                     </tbody>
