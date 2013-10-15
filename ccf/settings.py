@@ -164,7 +164,6 @@ INSTALLED_APPS = [
     "plugins.openflow",
     "plugins.network",
     "invite",
-    "django_cron",
 ]
 
 CRON_POLLING_FREQUENCY = 5
