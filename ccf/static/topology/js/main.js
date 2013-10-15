@@ -383,9 +383,16 @@ function init_svg () {
                         }
                         content += "value='" + port.db_id+ "'/> " + 
                             d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                        var port_pairs = {};
                         $.each(g_links_map[d.island_id], function(index, link) {
-                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
+                            var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
+                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber) && !(port_pair_key in port_pairs)) {
+                                port_pairs[port_pair_key] = '';
                                 content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                            }
+                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber) && !(port_pair_key in port_pairs)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
                             }
                         });
                         content += "</label>";

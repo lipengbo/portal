@@ -258,9 +258,9 @@ def links_proxy(request, host, port):
     links = flowvisor.link_set.all()
     link_data = []
     for link in links:
-        if link.source.switch.has_gre_tunnel:
+        if link.source.switch.island != flowvisor.island:
             continue
-        if link.target.switch.has_gre_tunnel:
+        if link.target.switch.island != flowvisor.island:
             continue
         link_data.append({
             "dst-port": link.target.port,
@@ -296,7 +296,7 @@ def switch_proxy(request, host, port):
     for switch_id_tuple in switch_ids_tuple:
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
-    switches = Switch.objects.filter(id__in=switch_ids).exclude(has_gre_tunnel=True)
+    switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()
