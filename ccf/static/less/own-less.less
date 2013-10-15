@@ -9,6 +9,7 @@ html,body {
 }
 
 legend {
+    *margin:0 0 20px -7px;
     height:40px;
     font-family: "Microsoft YaHei";
     color:#2489c5;
@@ -92,6 +93,11 @@ table {word-break:break-all;}
 	}
 }
 
+.pro_manage_container {
+    max-width:980px;
+    margin:0 auto;
+}
+
 .common {}
 
 
@@ -167,7 +173,6 @@ filter: alpha(opacity=100);
 }
 
 .tab_main {
-	height:510px;
 	background:#fff;
 	border: 1px solid #DDD;
 	-moz-border-radius-bottomleft: 7px;
@@ -332,6 +337,7 @@ width: 980px;
 		    .select_input {
 		        margin-bottom:0;
 		        *display:inline;
+		        *width:183px;
 		    }
 		}
 	}
@@ -446,7 +452,7 @@ width: 980px;
 }
 
 .index {
-    background:#fff;
+    background:#f4f4f4; 
     .banner {
         padding-top:80px;
         padding-bottom:30px;
@@ -581,4 +587,17 @@ width: 980px;
 
 .start_slice {
     width:118px;
+}
+
+#alertModal {
+    width:300px;
+    margin-left:-150px;
+}
+
+.modal.fade.in {
+    top:30%;
+}
+
+#registerModal.fade.in {
+    top:10%;
 }

@@ -202,7 +202,6 @@ def start_or_stop(request, slice_id, flag):
         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
-@login_required
 def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -266,3 +265,13 @@ def delete_nw(request, owner):
             return HttpResponse(json.dumps({'value': 0}))
     except:
         return HttpResponse(json.dumps({'value': 0}))
+
+
+def get_show_slices(request):
+    """ajax获取首页展示slice。"""
+    slice_objs = Slice.objects.all()
+    slices = []
+    for slice_obj in slice_objs:
+        slice_show = {'id': slice_obj.id, 'name': slice_obj.name}
+        slices.append(slice_show)
+    return HttpResponse(json.dumps({'slices': slices}))

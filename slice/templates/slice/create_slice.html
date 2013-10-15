@@ -104,9 +104,10 @@
                     <span class="label label-success">虚拟机关联节点</span>
                   </div>
                   <div class="main_frame">
-                      <input type="hidden" name="switches" id="topology-switch" value="" />
+                        <input type="hidden" name="switches" id="topology-switch" value="" />
                         <iframe id="topology-iframe" width="100%" height="100%" src="" frameborder="0"></iframe>
                   </div>
+                  <div class="clear"></div>
                   <table class="switch-table table table-bordered table-striped table-hover">
                     <thead>
                         <tr>
@@ -118,7 +119,7 @@
                     </thead>
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
-                    		<tr>
+                    		<tr class="hide switch-data">
                                     <td>{{ovs_port.switch.name}}</td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
@@ -134,7 +135,7 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                            <label class="inline">
+                                            <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
 						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
@@ -180,7 +181,7 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td width="71">网络地址：</td>
+                            <td width="85">网络地址：</td>
                             <td>
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -203,7 +204,7 @@
                                                                                                                                创建控制器 
                                 </label>
                             </td>
-                            <td width="85">控制器类型</td>
+                            <td width="95">控制器类型</td>
                             <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
@@ -301,26 +302,35 @@
               </div>
              </div>     
              <div class="tab_part">
-                 <fieldset class="base_info vm_info_list">
+                 <fieldset class="base_info vm_info_list tooltip-demo">
                  <legend>虚拟机信息</legend>
                  <div class="sec_block">
 		 <table class="table">             
                     <tbody>
                         <tr>
-                            <td width="100">名称</td>
+                            <td width="20%">名称</td>
                             <td>
 				<input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
-				<span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
+				<span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span>
                             </td>
+                            <!--
                             <td></td>
+                            -->
                         </tr>
                         <tr>
                             <td>模板类型</td>
                             <td>
-                                {{ vm_form.flavor }} {{vm_form.flavor.errors}}
+                                {{ vm_form.flavor }}
+                                
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
 				<span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
                             </td>
-                            <td><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                            <td>
+                                {{vm_form.flavor.errors}}
+                            </td>
+                            <!--
+                            <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                            -->
                         </tr>
                         <tr>
                             <td>镜像类型</td>
@@ -336,9 +346,13 @@
                                 <select onblur="check_vminfo()" name="server" id="id_server">
 					 <!--<option value="" selected="selected">---------</option>-->
 				</select>
+
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
 				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
                             </td>
+                            <!--
                             <td><span class="help-inline">用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定</span></td>
+                            -->
                         </tr>
                     </tbody>
                  </table>
@@ -347,7 +361,7 @@
                                                                      是否启动DHCP
                  </label>
                  <div class="operate_btn">
-                    <button class="btn btn-info del" type="button">删 除</button>
+                    <button class="btn btn-inverse del" type="button">删 除</button>
                  </div>
                 </div>          
               </fieldset>
@@ -382,7 +396,7 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="70">网络地址：</td>
+                            <td width="100">网络地址：</td>
                             <td><span id="list_slice_nw"></span></td>
                         </tr>
                     </tbody>
@@ -467,34 +481,41 @@
 {% endblock %}
 {% block extra_script %}
 <script>  
-	    $(document).ready(function() {
-            window.selected_ports = {};
-            window.add_port = function(port_id, is_delete) {
-                if(port_id in selected_ports) {
-                    if(is_delete) {
-                        delete selected_ports[port_id];
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('uncheck');
-                    }
-                } else {
-                    if(!is_delete) {
-                        selected_ports[port_id] = port_id;
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('check');
+    $(document).ready(function() {
+        window.selected_ports = {};
+        window.add_port = function(port_id, is_delete) {
+            var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
+            if(port_id in selected_ports) {
+                if(is_delete) {
+                    delete selected_ports[port_id];
+
+                    checkbox.iCheck('uncheck');
+                    checkbox.parents('label').hide();
+                    if(checkbox.parents('.switch-data').find('.icheckbox_square-blue.checked').length == 0) {
+                        checkbox.parents('.switch-data').hide();
                     }
                 }
-                var ports = [];
-                for(port in selected_ports) {
-                    ports.push(port);
-                };
-                $('#topology-switch').val(ports.join(","));
+            } else {
+                if(!is_delete) {
+                    selected_ports[port_id] = port_id;
+                    checkbox.parents('label').show();
+                    checkbox.iCheck('check');
+                    checkbox.parents('.switch-data').show();
+                }
+            }
+            var ports = [];
+            for(port in selected_ports) {
+                ports.push(port);
             };
-            $('input[name="switch_port_ids"]').on("ifChecked", function(){
-                selected_ports[$(this).val()] = $(this).val();
-            });
-            $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
-                delete selected_ports[$(this).val()];
-            });
-            
-});
+            $('#topology-switch').val(ports.join(","));
+        };
+        $('input[name="switch_port_ids"]').on("ifChecked", function(){
+            selected_ports[$(this).val()] = $(this).val();
+        });
+        $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
+            delete selected_ports[$(this).val()];
+        });
+    });
 </script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
