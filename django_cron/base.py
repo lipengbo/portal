@@ -41,7 +41,7 @@ polling_frequency = getattr(settings, "CRON_POLLING_FREQUENCY", 300)
 
 class Job(object):
     # 86400 seconds == 24 hours
-    run_every = 60
+    run_every = 86400
 
     def run(self, *args, **kwargs):
         self.job()
