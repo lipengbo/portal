@@ -4,21 +4,22 @@ function check_slice_name(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
 	var user_id_obj = document.getElementById("user_id");
+	var len;
 	//var reg = /^([u4e00-u9fa5]|[ufe30-uffa0]|[a-zA-Z_])*$/;
 	var reg = /^[a-zA-Z_]\w*$/;
 	//alert(user_id_obj.value.length);
 	if(obj.value.length > 0){
-        if(obj.value.length + user_id_obj.value.length + 1 > 45){
-            var len=44 - user_id_obj.value.length;
-            showInfo(info," * 名称长度过长（最长"+len+"）","red");
-            return false;
-        }
         if(!reg.test(obj.value)){
         	//alert("in 输入");
         	showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
         	return false;
         }
         else{
+            if(obj.value.length + user_id_obj.value.length + 1 > 45){
+                len = 44 - user_id_obj.value.length;
+                showInfo(info," * 名称长度过长（最长"+len+"）","red");
+                return false;
+            }
         	//alert("in green");
         	//alert(slice_exist);
         	isslice_exist(obj.value +"_"+user_id_obj.value);
@@ -41,13 +42,14 @@ function check_slice_name(obj_id,flag){
 function check_slice_description(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
-	if(obj.value.length > 0){
-		showInfo(info,"√","green");
-		return true;
+	var text = obj.value;
+	if(text.replace(/(^\s*)|(\s*$)/g, "").length == 0){
+	    showInfo(info," * 必填","red");
+        return false;
 	}
 	else{
-		showInfo(info," * 必填","red");
-		return false;
+		showInfo(info,"√","green");
+        return true;
 	}
 }
 //验证节点的选择
