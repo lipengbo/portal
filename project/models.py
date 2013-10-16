@@ -97,7 +97,7 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "{} - {}".format(self.user, self.project)
+        return u"{} - {}".format(self.user, self.project)
 
     class Meta:
         unique_together = (("project", "user"), )

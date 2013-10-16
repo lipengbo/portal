@@ -134,6 +134,9 @@ def create_or_edit(request, id=None):
     instance = None
     if id:
         instance = get_object_or_404(Project, id=id)
+        island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
+        print island_ids
+        context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
     else:
