@@ -146,6 +146,11 @@ class Slice(models.Model):
                 dhcp_vm_macs.append(default_flowspace.dl_src)
         return dhcp_vm_macs
 
+    def get_show_name(self):
+        slice_names = self.name.split('_')
+        if len(slice_names) > 1:
+            del slice_names[-1]
+        return ('_').join(slice_names)
 
     def __unicode__(self):
         return self.name
