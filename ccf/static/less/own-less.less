@@ -8,6 +8,10 @@ html,body {
     height:100%;
 }
 
+body {
+    background:url(../img/bg.png) repeat;
+}
+
 legend {
     *margin:0 0 20px -7px;
     height:40px;
@@ -69,10 +73,6 @@ legend {
 
 .push{
     height:72px;
-}
-
-body {
-	background:url(../img/bg.png) repeat;
 }
 
 a {outline:none !important;}
@@ -506,7 +506,14 @@ width: 980px;
             top:5px;
         }
         table {
+            table-layout:fixed;
             margin-bottom:0;
+            tbody tr td {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow:ellipsis;
+                -o-text-overflow:ellipsis;    
+            }
         }
         img {
             width:100%;

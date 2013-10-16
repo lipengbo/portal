@@ -57,12 +57,13 @@
                  <legend>基本信息</legend>
                  <div class="form_inline">
                     <label>Slice名称</label>
-                    <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" maxlength=45 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
                     <label class="v_top">Slice描述</label>
-                    <textarea rows="5" id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
                  <div class="form_inline">   
@@ -161,7 +162,7 @@
                       <option value="32">32</option>
                       <option value="64">64</option>
                     </select>
-                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
                     <span id="nw_numInfo" style="display:inline;float:none;"></span>
                 </div>
               </fieldset>
@@ -187,7 +188,7 @@
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
                             	<input type="text" value="" id="old_nw_owner" style="display:none"/>
-                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
+                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -211,7 +212,7 @@
                                   <option value="pox">pox</option>
                                   <option value="nox">nox</option>
                                 </select>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" title="此处默认创建floodlight控制器" data-toggle="tooltip" data-placement="right" title="此处默认创建floodlight控制器" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -321,7 +322,7 @@
                             <td>
                                 {{ vm_form.flavor }}
                                 
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
 				<span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td>
@@ -343,10 +344,12 @@
                             <td>关联网络节点</td>
                             <td>
                                 <select onblur="check_vminfo()" name="server" id="id_server">
-					 <!--<option value="" selected="selected">---------</option>-->
-				</select>
+                                    <!--
+					                <option value="" selected="selected">---------</option>
+                                    -->
+				                </select>
 
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
 				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
                             </td>
                             <!--

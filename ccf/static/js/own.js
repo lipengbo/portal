@@ -99,6 +99,8 @@ $(document).ready(function() {
         });
         $('.switch-manifest tbody input').attr('disabled', '');
     });
+    // 保留虚拟机页面server信息的flag
+    var vm_info_flag = true; 
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
@@ -118,7 +120,7 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 2){
-           ret = page_function2();
+           ret = page_function2(vm_info_flag);
            if (!ret){
            		return;
            }
@@ -151,6 +153,8 @@ $(document).ready(function() {
        $("html, body").scrollTop(0);
        var thisIndex = $(".prev_btn").index(this) + 1;
        var nowIndex = thisIndex - 1;
+       //alert(vm_info_flag);
+       vm_info_flag = false;
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).removeClass("visit");
@@ -184,10 +188,7 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
-           if ($(".icheckbox_square-blue").hasClass('disabled')) {
-               return;
-           }
-           $(".icheckbox_square-blue").iCheck('check');
+           $(".icheckbox_square-blue:not(.disabled)").iCheck('check');
        } else {
            $(".icheckbox_square-blue").iCheck('uncheck');
        }
@@ -241,8 +242,10 @@ function page_function1(){
 		return false;
 	}
 }
-function page_function2(){
+function page_function2(vm_info_flag){
+    if (vm_info_flag){
         fetch_serverinfo();
+    }
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -352,8 +355,8 @@ function submit_slice_info(project_id){
 		}   
 	}
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
-
-	var submit_data = {"slice_name": slice_name_obj.value,
+    var user_id_obj = document.getElementById("user_id");
+	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
@@ -384,8 +387,7 @@ function submit_slice_info(project_id){
 	            }
 	        },
 	        error: function(data) {
-	        	alert("创建slice失败！");
-	        	ajax_ret = false;
+	        	alert("创建slice异常！");
 	        }
 	});
 	if(ajax_ret){

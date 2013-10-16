@@ -278,6 +278,6 @@ def get_show_slices(request):
     slice_objs = Slice.objects.all()
     slices = []
     for slice_obj in slice_objs:
-        slice_show = {'id': slice_obj.id, 'name': slice_obj.name}
+        slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
