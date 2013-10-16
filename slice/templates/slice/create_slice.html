@@ -7,7 +7,7 @@
 
 {% block head_title %}创建Slice{% endblock %}
 {% block breadcrumb %}
-	<a href="/project/create/">创建项目</a><span class="divider">/</span>
+	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
 	<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
 	创建Slice
 {% endblock %}
@@ -57,7 +57,8 @@
                  <legend>基本信息</legend>
                  <div class="form_inline">
                     <label>Slice名称</label>
-                    <input type="text" id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" maxlength=45 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
@@ -119,7 +120,7 @@
                     </thead>
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
-                    		<tr>
+                    		<tr class="hide switch-data">
                                     <td>{{ovs_port.switch.name}}</td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
@@ -135,7 +136,7 @@
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
-                                            <label class="inline">
+                                            <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
 						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
@@ -161,7 +162,7 @@
                       <option value="32">32</option>
                       <option value="64">64</option>
                     </select>
-                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段" data-original-title="用户选择SLICE所需要的IP地址数量，目前最多只提供64个，系统会自动分配网络段"><i class="icon-question-sign icon-align-left"></i></a>
                     <span id="nw_numInfo" style="display:inline;float:none;"></span>
                 </div>
               </fieldset>
@@ -187,7 +188,7 @@
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
                             	<input type="text" value="" id="old_nw_owner" style="display:none"/>
-                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
+                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                     </tbody>
@@ -211,7 +212,7 @@
                                   <option value="pox">pox</option>
                                   <option value="nox">nox</option>
                                 </select>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" title="此处默认创建floodlight控制器" data-toggle="tooltip" data-placement="right" title="此处默认创建floodlight控制器" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -322,7 +323,7 @@
                             <td>
                                 {{ vm_form.flavor }}
                                 
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
 				<span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
                             </td>
                             <td>
@@ -349,7 +350,7 @@
                                     -->
 				                </select>
 
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
 				<span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
                             </td>
                             <!--
@@ -483,34 +484,41 @@
 {% endblock %}
 {% block extra_script %}
 <script>  
-	    $(document).ready(function() {
-            window.selected_ports = {};
-            window.add_port = function(port_id, is_delete) {
-                if(port_id in selected_ports) {
-                    if(is_delete) {
-                        delete selected_ports[port_id];
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('uncheck');
-                    }
-                } else {
-                    if(!is_delete) {
-                        selected_ports[port_id] = port_id;
-                        $('input[name="switch_port_ids"][value="' + port_id + '"]').iCheck('check');
+    $(document).ready(function() {
+        window.selected_ports = {};
+        window.add_port = function(port_id, is_delete) {
+            var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
+            if(port_id in selected_ports) {
+                if(is_delete) {
+                    delete selected_ports[port_id];
+
+                    checkbox.iCheck('uncheck');
+                    checkbox.parents('label').hide();
+                    if(checkbox.parents('.switch-data').find('.icheckbox_square-blue.checked').length == 0) {
+                        checkbox.parents('.switch-data').hide();
                     }
                 }
-                var ports = [];
-                for(port in selected_ports) {
-                    ports.push(port);
-                };
-                $('#topology-switch').val(ports.join(","));
+            } else {
+                if(!is_delete) {
+                    selected_ports[port_id] = port_id;
+                    checkbox.parents('label').show();
+                    checkbox.iCheck('check');
+                    checkbox.parents('.switch-data').show();
+                }
+            }
+            var ports = [];
+            for(port in selected_ports) {
+                ports.push(port);
             };
-            $('input[name="switch_port_ids"]').on("ifChecked", function(){
-                selected_ports[$(this).val()] = $(this).val();
-            });
-            $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
-                delete selected_ports[$(this).val()];
-            });
-            
-});
+            $('#topology-switch').val(ports.join(","));
+        };
+        $('input[name="switch_port_ids"]').on("ifChecked", function(){
+            selected_ports[$(this).val()] = $(this).val();
+        });
+        $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
+            delete selected_ports[$(this).val()];
+        });
+    });
 </script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>

@@ -188,10 +188,7 @@ $(document).ready(function() {
    //全选全不选
     $(".checkall .iCheck-helper").click(function(){
        if($(this).parent(".icheckbox_square-blue").hasClass("checked")){
-           if ($(".icheckbox_square-blue").hasClass('disabled')) {
-               return;
-           }
-           $(".icheckbox_square-blue").iCheck('check');
+           $(".icheckbox_square-blue:not(.disabled)").iCheck('check');
        } else {
            $(".icheckbox_square-blue").iCheck('uncheck');
        }
@@ -358,8 +355,8 @@ function submit_slice_info(project_id){
 		}   
 	}
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
-
-	var submit_data = {"slice_name": slice_name_obj.value,
+    var user_id_obj = document.getElementById("user_id");
+	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
@@ -390,8 +387,7 @@ function submit_slice_info(project_id){
 	            }
 	        },
 	        error: function(data) {
-	        	alert("创建slice失败！");
-	        	ajax_ret = false;
+	        	alert("创建slice异常！");
 	        }
 	});
 	if(ajax_ret){

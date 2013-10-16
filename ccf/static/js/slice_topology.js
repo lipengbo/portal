@@ -858,7 +858,7 @@ function initCheckBoard(conti){
 	}
 	else{
 		rs_mbWidth = 480 * 0.9;
-		rs_mbHeight = 300;
+		rs_mbHeight = 220;
 		rs_pic_width = 50;
 		rs_pic_height = 30;
 	}
@@ -1052,7 +1052,7 @@ function home_show_slice(){
 				str = str + "<div class=\"dg-wrapper\">";
     			for(var i=0;i<slices.length;i++){
 					str = str + "<a href=\"#\">"
-						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:300px;\" alt=\"image"+i+"\">"
+						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:260px; top:41px\" alt=\"image"+i+"\">"
 						+ "</div>"
 						+ "<div>"+slices[i].name+"拓扑图</div>"
 						+ "</a>";

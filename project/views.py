@@ -64,6 +64,8 @@ def invite(request, id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             users = users.filter(username__icontains=query)
             context['query'] = query
     context['users'] = users
@@ -71,14 +73,17 @@ def invite(request, id):
     if request.method == 'POST':
         user_ids = request.POST.getlist('user')
         message = request.POST.get('message')
-        for user_id in user_ids:
-            user = get_object_or_404(User, id=user_id)
-            form = InvitationForm({'message': message, 'to_user': user_id})
-            if form.is_valid():
-                invitation = form.save(commit=False)
-                invitation.from_user = request.user
-                invitation.target = project
-                invitation.save()
+        if message:
+            for user_id in user_ids:
+                user = get_object_or_404(User, id=user_id)
+                form = InvitationForm({'message': message, 'to_user': user_id})
+                if form.is_valid():
+                    invitation = form.save(commit=False)
+                    invitation.from_user = request.user
+                    invitation.target = project
+                    invitation.save()
+        else:
+            messages.add_message(request, messages.ERROR, _("Invitation message is required."))
     return render(request, 'project/invite.html', context)
 
 @login_required
@@ -95,6 +100,8 @@ def apply(request):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
     categories = Category.objects.all()
@@ -103,17 +110,20 @@ def apply(request):
     if request.method == 'POST':
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
-        for project_id in project_ids:
-            project = get_object_or_404(Project, id=project_id)
-            form = ApplicationForm({"to_user": project.owner.id, "message": message})
-            if form.is_valid():
-                application = form.save(commit=False)
-                application.target = project
-                application.from_user = user
-                try:
-                    application.save()
-                except IntegrityError:
-                    pass
+        if message:
+            for project_id in project_ids:
+                project = get_object_or_404(Project, id=project_id)
+                form = ApplicationForm({"to_user": project.owner.id, "message": message})
+                if form.is_valid():
+                    application = form.save(commit=False)
+                    application.target = project
+                    application.from_user = user
+                    try:
+                        application.save()
+                    except IntegrityError:
+                        pass
+        else:
+            messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)
 
 @login_required

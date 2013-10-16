@@ -240,12 +240,18 @@ def create_nw(request, owner, nw_num):
         nw_objs = Subnet.objects.filter(owner=owner)
         if nw_objs:
             IPUsage.objects.delete_subnet(owner)
+        print "net work 1"
         nw = IPUsage.objects.create_subnet(owner, int(nw_num), 1800)
+        print "net work 2"
         if nw:
+            print "net work 3"
             return HttpResponse(json.dumps({'value': nw}))
         else:
+            print "net work 4"
             return HttpResponse(json.dumps({'value': 0}))
     except Exception, ex:
+        print "net work 5"
+        print ex
         return HttpResponse(json.dumps({'value': 0}))
 
 
@@ -272,6 +278,6 @@ def get_show_slices(request):
     slice_objs = Slice.objects.all()
     slices = []
     for slice_obj in slice_objs:
-        slice_show = {'id': slice_obj.id, 'name': slice_obj.name}
+        slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
