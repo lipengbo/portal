@@ -63,6 +63,15 @@ class Project(models.Model):
         project_membership, created = Membership.objects.get_or_create(project=self,
                 user=user, defaults={'is_owner': is_owner})
 
+    def dismiss(self, user):
+        try:
+            project_membership = Membership.objects.get(project=self,
+                user=user)
+        except Membership.DoesNotExist:
+            pass
+        else:
+            project_membership.delete()
+
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
 

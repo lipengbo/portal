@@ -180,7 +180,7 @@ def delete_project(request, id):
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
     else:
-        return redirect("forbidden")
+        project.dismiss(request.user)
     if 'next' in request.GET:
         return redirect(request.GET.get('next'))
     return redirect("project_index")
