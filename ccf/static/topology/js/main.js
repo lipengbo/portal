@@ -364,10 +364,10 @@ function init_svg () {
             }
             var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
             if (d.id.indexOf('00:ee:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
+                ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
             }
             if (d.id.indexOf('00:ff:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
+                ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
             }
 
             /*
