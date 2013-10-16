@@ -212,6 +212,7 @@ function recompose_dpid(dpid) {
 function highlight( data, i, element ) {
     //d3.select( element ).attr( "stroke", "black" );
 
+    var d = data;
     var content = "";
     
     if (data.id in origin_nodes_map) {
@@ -226,11 +227,24 @@ function highlight( data, i, element ) {
             "</tr>";
         $.each(origin_data.ports, function(index, port){
             var state = port.state == 1 ? "活跃" : "非活跃";
-            content += "<tr>" + 
-                "<td>" + port.name + "(" + port.portNumber+ ")</td>" + 
-            //    "<td>" + state + "</td>" + 
-            //    "<td>" + port.hardwareAddress + "</td>" + 
-                "</tr>";
+            content += "<tr><td>"; 
+                        content += d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                        var port_pairs = {};
+                        $.each(g_links_map[d.island_id], function(index, link) {
+                            var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
+                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                            }
+                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
+                                port_pairs[port_pair_key] = '';
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                            }
+                        });
+                        content += "</td></tr>";
         });
         content += "</table>";
         tooltip.showTooltip(content, d3.event);
@@ -392,11 +406,14 @@ function init_svg () {
                         var port_pairs = {};
                         $.each(g_links_map[d.island_id], function(index, link) {
                             var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
-                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber) && !(port_pair_key in port_pairs)) {
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
+                            if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
                                 content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
                             }
-                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber) && !(port_pair_key in port_pairs)) {
+                            if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
                                 content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
                             }
