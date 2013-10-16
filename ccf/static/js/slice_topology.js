@@ -34,6 +34,11 @@ var levelNodesWidth;
 var levelHostsWidth;
 var swHostNum;//交换机下挂主机个数，预留
 
+//弧形显示
+var levelNodesRadian;
+var levelHostsRadian;
+var radius;
+
 //标记交换机与交换机的连线是否被用
 var linksSign;
 //标记交换机是否被遍历到
@@ -620,6 +625,9 @@ function init(){
 	hosts_special = null;
 	host_links = null;
 	host_vss = null;
+	levelNodesRadian = null;
+    levelHostsRadian = null;
+    radius = 0;
 
 	switches = new Array();
 	hosts = new Array();
@@ -640,6 +648,8 @@ function init(){
 	hosts_special = new Array();
 	host_links = new Array();
 	host_vss = new Array();
+	levelNodesRadian = new Array();
+    levelHostsRadian = new Array();
 	
 	var tempLinks = new Array();
 	var srcLinks = new Array();
@@ -760,6 +770,9 @@ function initCircleTemp(){
 	hosts_special = null;
 	host_links = null;
 	host_vss = null;
+	levelNodesRadian = null;
+    levelHostsRadian = null;
+    radius = 0;
 
 	switches = new Array();
 	hosts = new Array();
@@ -780,6 +793,8 @@ function initCircleTemp(){
 	hosts_special = new Array();
 	host_links = new Array();
 	host_vss = new Array();
+	levelNodesRadian = new Array();
+    levelHostsRadian = new Array();
 		
 	switches[0] = new Array("00:01", 0, 0);			switches[1] = new Array("00:02", 0, 0);
 	switches[2] = new Array("00:03", 0, 0);			switches[3] = new Array("00:04", 0, 0);
