@@ -9,7 +9,7 @@
 {% block breadcrumb %}我的项目{% endblock %}
 
 {% block body %}
-{% paginate  projects  %}
+{% paginate 12 projects  %}
         <div class="fill_form">
             <fieldset>
                 <legend><button type="button" class="btn btn-info edit" onclick="window.history.back();">返 回</button>我的项目</legend>
@@ -20,32 +20,7 @@
                     {% for group in projects|group_by:4 %}
                     <ul class="thumbnails example-sites">
                         {% for project in group %}
-                        <li class="span3">
-                            <a href="{% url project_delete project.id %}" class="btn-delete close">×</a>
-                            <a class="thumbnail" href="{% url project_detail project.id %}" target="_blank">
-                                <img src="{% static project.category.image %}" />
-                                <table class="table">
-                                    <tbody>
-                                        <tr>
-                                            <td width="80">项目名称：</td>
-                                            <td>{{ project.name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="top">Slice个数：</td>
-                                            <td>{{ project.slice_set.count }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="top">成员个数：</td>
-                                            <td>{{ project.memberships.count }}个</td>
-                                        </tr>
-                                        <tr>
-                                            <td valign="top">创建者：</td>
-                                            <td>{{ project.owner }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </a>
-                        </li>
+                        {% include "project/_project.html" %}
                         {% endfor %}
                     </ul>
                     {% endfor %}
