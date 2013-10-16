@@ -99,8 +99,6 @@ $(document).ready(function() {
         });
         $('.switch-manifest tbody input').attr('disabled', '');
     });
-    // 保留虚拟机页面server信息的flag
-    var vm_info_flag = true; 
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
@@ -120,7 +118,7 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 2){
-           ret = page_function2(vm_info_flag);
+           ret = page_function2();
            if (!ret){
            		return;
            }
@@ -154,7 +152,6 @@ $(document).ready(function() {
        var thisIndex = $(".prev_btn").index(this) + 1;
        var nowIndex = thisIndex - 1;
        //alert(vm_info_flag);
-       vm_info_flag = false;
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).removeClass("visit");
@@ -242,10 +239,8 @@ function page_function1(){
 		return false;
 	}
 }
-function page_function2(vm_info_flag){
-    if (vm_info_flag){
-        fetch_serverinfo();
-    }
+function page_function2(){
+    fetch_serverinfo();
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
