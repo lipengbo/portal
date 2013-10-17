@@ -8,7 +8,7 @@
 glance_host = '192.168.5.107'
 glance_port = 9292
 vnctunnel = '127.0.0.1'
-vt_manager_ip = '192.168.5.122'
+vt_manager_ip = '127.0.0.1'
 vt_manager_port = 8891
 
 
@@ -23,5 +23,5 @@ lock_path = '/var/run/'
 default_flavor_id = 1
 rpc_connection_timeout = 150
 #单元测试的时候使用，用于关闭一些特性，比如录入一台设备时自动获取其info信息
-function_test = True
+function_test = False
 flowvisor_disable = False
