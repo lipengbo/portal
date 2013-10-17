@@ -96,7 +96,15 @@
                             return false;
                          }
                     });
-                });
+                    
+                    //列表框，指针放上去时显示删除图标                 
+                    $(".example-sites li").mouseenter(function(){
+                        $(this).children(".close").stop(true,false).fadeIn();
+                    });
+                    $(".example-sites li").mouseleave(function(){
+                        $(this).children(".close").stop(false,true).hide();
+                    });               
+                });               
             </script>
             {% block extra_script %}{% endblock %}
         {% endblock %}

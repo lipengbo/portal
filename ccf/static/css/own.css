@@ -5305,7 +5305,7 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
-.modal-body table tr td {
+legend_first .modal-body table tr td {
   border: none;
 }
 .sep_div {
@@ -5605,6 +5605,9 @@ table {
   *display: inline;
   *width: 183px;
 }
+.fill_form fieldset .form_inline .select_input .dropdown-menu {
+  left: -140px;
+}
 .form-actions {
   border: none;
   background: none;
@@ -5741,10 +5744,11 @@ table {
   margin-bottom: 0;
 }
 .example-sites li .close {
+  display: none;
   font-size: 40px;
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 10px;
+  top: 10px;
 }
 .example-sites li table {
   table-layout: fixed;
@@ -5832,4 +5836,7 @@ table {
 }
 #registerModal.fade.in {
   top: 10%;
+}
+hr {
+  margin: 20px 0 0 0;
 }

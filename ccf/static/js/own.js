@@ -203,9 +203,8 @@ $(document).ready(function() {
     
     //tooltip demo
      $('.tooltip-demo').tooltip({
-      selector: "a[data-toggle=tooltip]"
-    });
-
+       selector: "a[data-toggle=tooltip]"
+     });
 });
 
 

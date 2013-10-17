@@ -29,6 +29,7 @@ legend {
     }
 }
 
+legend_first
 .modal-body {
     table tr td {
         border:none;
@@ -338,6 +339,9 @@ width: 980px;
 		        margin-bottom:0;
 		        *display:inline;
 		        *width:183px;
+		        .dropdown-menu{
+		            left:-140px;
+		        }
 		    }
 		}
 	}
@@ -500,11 +504,12 @@ width: 980px;
         position:relative;
         margin-bottom:0;
         .close {
+            display:none;
             font-size:40px;
             position:absolute;
-            right:5px;
-            top:5px;
-        }
+            right:10px;
+            top:10px;
+        }              
         table {
             table-layout:fixed;
             margin-bottom:0;
@@ -512,14 +517,14 @@ width: 980px;
                 overflow: hidden;
                 white-space: nowrap;
                 text-overflow:ellipsis;
-                -o-text-overflow:ellipsis;    
+                -o-text-overflow:ellipsis;
             }
         }
         img {
             width:100%;
             height:auto;
         }
-    }        
+    }   
 }
 
 .nothing_tip {
@@ -607,4 +612,12 @@ width: 980px;
 
 #registerModal.fade.in {
     top:10%;
+}
+
+hr {
+    margin:20px 0 0 0;
+}
+
+.tab_part {
+  
 }
