@@ -1,0 +1,39 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load project_tags %}
+<li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+    <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
+    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
+    <img src="{% static slice.project.category.image %}" />
+    <table class="table">
+        <tbody>
+            <tr>
+                <td width="105">Slice名称：</td>
+                <td>{{ slice.get_show_name }}</td>
+            </tr>
+            <tr>
+                <td valign="top">创建者：</td>
+                <td>{{ slice.owner }}</td>
+            </tr>
+            <tr>
+                <td valign="top">状态：</td>
+                <td>
+                {%if slice.state == 0 %}
+                停止
+                {%else%}
+                启动
+                {%endif%}
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">网络节点个数：</td>
+                <td>{{ slice.get_switches.count }}个</td>
+            </tr>
+            <tr>
+                <td valign="top">虚拟机个数：</td>
+                <td>{{ slice.get_common_vms.count }}个</td>
+            </tr>
+        </tbody>
+    </table>
+  </a>
+</li>
