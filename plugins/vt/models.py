@@ -58,6 +58,8 @@ class Image(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name = _("Image")
 
 class Flavor(models.Model):
     name = models.CharField(max_length=64)
@@ -67,6 +69,9 @@ class Flavor(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _("Flavor")
 
 
 class VirtualMachine(IslandResource):
@@ -149,6 +154,9 @@ class VirtualMachine(IslandResource):
             result = vt_client.do_domain_action(self.server.ip, self.uuid, action)
         return result
 
+    class Meta:
+        verbose_name = _("Virtual Machine")
+
 
 class HostMac(models.Model):
     mac = models.CharField(max_length=32)
@@ -156,6 +164,10 @@ class HostMac(models.Model):
     host_id = models.PositiveIntegerField()
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     host = generic.GenericForeignKey('host_type', 'host_id')
+
+
+    class Meta:
+        verbose_name = _("Host Mac")
 
 
 @receiver(pre_save, sender=VirtualMachine)

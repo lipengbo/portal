@@ -3,29 +3,35 @@ function check_slice_name(obj_id,flag){
 	//alert("in check_slice_form");
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
+	var user_id_obj = document.getElementById("user_id");
+	var len;
 	//var reg = /^([u4e00-u9fa5]|[ufe30-uffa0]|[a-zA-Z_])*$/;
 	var reg = /^[a-zA-Z_]\w*$/;
-	//alert(obj.value.length);
+	//alert(user_id_obj.value.length);
 	if(obj.value.length > 0){
-		if(!reg.test(obj.value)){
-			//alert("in 输入");
-			showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
-			return false;
-		}
-		else{
-			//alert("in green");
-			//alert(slice_exist);
-			isslice_exist(obj.value);
-			if(slice_exist){
-				//alert(slice_exist);
-				showInfo(info," * 该slice已经存在","red");
-				return false;
-			}
-			else{
-				showInfo(info,"√","green");
-				return true;
-			}
-		}
+        if(!reg.test(obj.value)){
+        	//alert("in 输入");
+        	showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
+        	return false;
+        }
+        else{
+            if(obj.value.length + user_id_obj.value.length + 1 > 45){
+                len = 44 - user_id_obj.value.length;
+                showInfo(info," * 名称长度过长（最长"+len+"）","red");
+                return false;
+            }
+        	//alert("in green");
+        	//alert(slice_exist);
+        	isslice_exist(obj.value +"_"+user_id_obj.value);
+        	if(slice_exist){
+        		showInfo(info," * 该slice已经存在","red");
+        		return false;
+        	}
+        	else{
+        		showInfo(info,"√","green");
+        		return true;
+        	}
+        }
 	}
 	else{
 		showInfo(info," * 必填","red");
@@ -36,13 +42,14 @@ function check_slice_name(obj_id,flag){
 function check_slice_description(obj_id,flag){
 	var obj = document.getElementById(obj_id);
 	var info = document.getElementById(obj_id+"Info"); 
-	if(obj.value.length > 0){
-		showInfo(info,"√","green");
-		return true;
+	var text = obj.value;
+	if(text.replace(/(^\s*)|(\s*$)/g, "").length == 0){
+	    showInfo(info," * 必填","red");
+        return false;
 	}
 	else{
-		showInfo(info," * 必填","red");
-		return false;
+		showInfo(info,"√","green");
+        return true;
 	}
 }
 //验证节点的选择
@@ -156,7 +163,8 @@ function check_nw_num(){
 	var old_nw_num_obj = document.getElementById("old_nw_num");
 	var slice_nw_obj = document.getElementById("slice_nw");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
-	var slice_name = slice_name_obj.value;
+	var user_id_obj = document.getElementById("user_id");
+	var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
 	var old_nw_owner = old_nw_owner_obj.value;
 	var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
 	var old_nw_num = old_nw_num_obj.value;
