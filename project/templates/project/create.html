@@ -96,7 +96,7 @@
                         {% resource_num island "controller" %}
                         {% if switch_num|add:server_num|add:controller_num %}
                         <tr>
-                            <td><input type="checkbox" {% if island|project_selected:form.instance %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
+                            <td><input type="checkbox" {% if island|project_selected:form.instance %}{% if island.id in slice_islands %} class="sliced" {% endif %}checked{% endif %} name="islands" value="{{ island.id }}"></td>
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
@@ -127,4 +127,13 @@
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var has_slice = {% if has_slice %} true {% else %} false{% endif %};
+    $('input[type="checkbox"]').on('ifUnchecked', function(event){
+        if($(event.currentTarget).hasClass('sliced')) {
+            alert("已经有Slice创建，如果希望更换节点请先删除该节点上的Slice");
+            throw Error();
+        }
+    });
+</script>
 {% endblock %}

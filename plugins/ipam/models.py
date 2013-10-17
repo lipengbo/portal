@@ -172,6 +172,7 @@ class Network(models.Model):
 
     class Meta:
         ordering = ['id', ]
+        verbose_name = _("Network")
 
 
 class Subnet(models.Model):
@@ -191,6 +192,7 @@ class Subnet(models.Model):
 
     class Meta:
         ordering = ['id', ]
+        verbose_name = _("Subnet")
 
 
 class IPUsage(models.Model):
@@ -204,6 +206,7 @@ class IPUsage(models.Model):
 
     class Meta:
         ordering = ['id', ]
+        verbose_name = _("Ip usage")
 
 
 @receiver(post_save, sender=Network)

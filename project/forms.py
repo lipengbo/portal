@@ -9,7 +9,7 @@ from project.models import Project, Category
 
 class ProjectForm(forms.ModelForm):
 
-    category_name = forms.RegexField(regex=u"^[\w\u4e00-\u9fa5]+$", required=True, max_length=32)
+    category_name = forms.RegexField(regex=u"^[\w\u4e00-\u9fa5]+$", required=True, max_length=64)
 
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)

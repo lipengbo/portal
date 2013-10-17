@@ -151,6 +151,7 @@ $(document).ready(function() {
        $("html, body").scrollTop(0);
        var thisIndex = $(".prev_btn").index(this) + 1;
        var nowIndex = thisIndex - 1;
+       //alert(vm_info_flag);
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        $(".nav-pills .span2").eq(thisIndex).removeClass("visit");
@@ -238,7 +239,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
-        fetch_serverinfo();
+    fetch_serverinfo();
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -348,8 +349,8 @@ function submit_slice_info(project_id){
 		}   
 	}
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
-
-	var submit_data = {"slice_name": slice_name_obj.value,
+    var user_id_obj = document.getElementById("user_id");
+	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,

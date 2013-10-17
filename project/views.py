@@ -64,6 +64,8 @@ def invite(request, id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             users = users.filter(username__icontains=query)
             context['query'] = query
     context['users'] = users
@@ -98,12 +100,13 @@ def apply(request):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
+            if len(query) > 256:
+                query = query[:256]
             projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
     categories = Category.objects.all()
     context['projects'] = projects
     context['categories'] = categories
-    import pdb;pdb.set_trace()
     if request.method == 'POST':
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
@@ -131,6 +134,9 @@ def create_or_edit(request, id=None):
     instance = None
     if id:
         instance = get_object_or_404(Project, id=id)
+        island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
+        print island_ids
+        context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
     else:
@@ -174,7 +180,7 @@ def delete_project(request, id):
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
     else:
-        return redirect("forbidden")
+        project.dismiss(request.user)
     if 'next' in request.GET:
         return redirect(request.GET.get('next'))
     return redirect("project_index")
@@ -182,6 +188,8 @@ def delete_project(request, id):
 @login_required
 def applicant(request, id):
     project = get_object_or_404(Project, id=id)
+    if not (request.user == project.owner):
+        return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
     context = {}
