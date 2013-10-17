@@ -94,7 +94,7 @@
                                         {%if controller.host%}
                                     		<button type="button" onclick="" class="btn edit" disabled>登录</button>
                                     		{% if controller.host.state == 1 %}
-											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit" disabled>停止</button>									        
+											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit" disabled>停止</button>									        
 											{%else%}
 											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
 											{%endif%}
@@ -114,7 +114,7 @@
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit" disabled>启动</button>
 							 				{% elif controller.host.state == 1 %}
 							 					<button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ controller.host.id }}')" class="btn edit">登录</button>
-											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit">停止</button>									        
+											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/destroy')" class="btn btn-danger stop_btn edit">停止</button>									        
 											{%else%}
 											    <button type="button" onclick="" class="btn edit" disabled>登录</button>
 											    <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ controller.host.id }}/create')" class="btn btn-success start_btn edit">启动</button>
@@ -197,11 +197,11 @@
 		                                    <div id="vm_fc{{vm.id}}">
 		                                    	<input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
 		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn edit" disabled>登录</a>
-		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn edit" disabled>启动</button>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-success start_btn edit" disabled>启动</button>
 		                                    </div>
 		                                    {% elif vm.state == 9 %}
 		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn edit" disabled>登录</a>
-		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn edit" disabled>启动</button>
+		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-success start_btn edit" disabled>启动</button>
 		                                    {% elif vm.state == 1 %}
 		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn edit">登录</a>
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn edit">停止</button>

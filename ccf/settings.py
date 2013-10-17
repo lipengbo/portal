@@ -23,12 +23,21 @@ DATABASES = {
 
 # DATABASES = {
 #     'default': {
+<<<<<<< HEAD
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ceni',
+#         'USER': 'root',
+#         'PASSWORD': '123',
+#         'HOST': '192.168.5.121',
+#         'PORT': '3306',
+=======
 #         'ENGINE': 'django.db.backends.mysql',  
 #         'NAME': 'ceni',  
 #         'USER': 'root',  
 #         'PASSWORD': 'cdn%nf',  
 #         'HOST': '192.168.5.120',  
 #         'PORT': '3306',  
+>>>>>>> 843047331be835b9a41af32d43211b0393e2deb8
 #     }
 # }
 
