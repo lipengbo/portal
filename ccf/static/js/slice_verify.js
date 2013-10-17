@@ -243,7 +243,7 @@ function check_switch_port(){
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var info = document.getElementById("switch_portInfo");
 	for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(switch_port_ids_obj[i].checked){
+		if(!switch_port_ids_obj[i].disabled){
 			//alert(switch_port_ids_obj[i].value);
 			switch_port_id = switch_port_ids_obj[i].value;
 			switchtype_obj = document.getElementById("switchtype"+switch_port_id);
