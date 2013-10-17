@@ -342,12 +342,7 @@ function drawSwitch(fatherObj, level){
     }
     for(var j = 0; j < hosts.length; j++){
       if(hosts[j][1] == fatherObj[0]){
-            m = radian / 2.0 - hnum levelHostsRadian[level] * (used_hnum + 0.6);
-            a = radius * Math.sin(m);
-            b = radius * Math.cos(m);
-            hosts[j][2] = mbLeft + mbWidth / 2.0 - a;
-            levelUsedHostsNum[level]++;
-            hosts[j][3] = mbTop - radius + b + levelHeight * (level + 0.6);
+            
         }
     }
     
@@ -1165,7 +1160,7 @@ function home_show_slice(){
 				str = str + "<div class=\"dg-wrapper\">";
     			for(var i=0;i<slices.length;i++){
 					str = str + "<a href=\"#\">"
-						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:260px; top:41px\" alt=\"image"+i+"\">"
+						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:260px; top:41px; background-image:url('" + static_url + "img/slice_bj.png');\" alt=\"image"+i+"\">"
 						+ "</div>"
 						+ "<div>"+slices[i].name+"拓扑图</div>"
 						+ "</a>";
