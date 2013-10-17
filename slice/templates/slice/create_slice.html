@@ -138,9 +138,9 @@
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-						<input type="checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
+						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
 					    {%else%}
-						<input type="checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
+						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}"/>{{port.port}}
 		                            {%endif%}
 	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
@@ -492,9 +492,9 @@
                 if(is_delete) {
                     delete selected_ports[port_id];
 
-                    checkbox.iCheck('uncheck');
+                    checkbox.attr('disabled', "");
                     checkbox.parents('label').hide();
-                    if(checkbox.parents('.switch-data').find('.icheckbox_square-blue.checked').length == 0) {
+                    if(checkbox.parents('.switch-data').find('input.port-checkbox:not([disabled])').length == 0) {
                         checkbox.parents('.switch-data').hide();
                     }
                 }
@@ -502,7 +502,7 @@
                 if(!is_delete) {
                     selected_ports[port_id] = port_id;
                     checkbox.parents('label').show();
-                    checkbox.iCheck('check');
+                    checkbox.removeAttr('disabled');
                     checkbox.parents('.switch-data').show();
                 }
             }
