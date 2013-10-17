@@ -13,24 +13,24 @@ ADMINS = [
 
 MANAGERS = ADMINS
 
-DATABASES = {
-    'default': {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "dev.db",
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'ceni',  
-#         'USER': 'root',  
-#         'PASSWORD': 'cdn%nf',  
-#         'HOST': '192.168.5.120',  
-#         'PORT': '3306',  
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": "dev.db",
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'ceni',  
+        'USER': 'root',  
+        'PASSWORD': 'cdn%nf',  
+        'HOST': '192.168.5.120',  
+        'PORT': '3306',  
+    }
+}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
