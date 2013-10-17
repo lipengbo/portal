@@ -87,6 +87,7 @@ function getSwitchIndex(Dpip){
 
 //判断是否有重叠的连线
 function isBlocked(i){
+    return false;
 	var srcDpid = links[i][0];
 	var dstDpid = links[i][1];
 	var srcIndex = getSwitchIndex(srcDpid);
@@ -170,7 +171,6 @@ function drawTopology(slicec){
 					+ "</g> ";
 			}			
 		}
-	
 	}
 	
 	
@@ -663,11 +663,11 @@ function checkBoard(treei){
 		forwardTreeNodes = forwardTreeNodes + treeLevelNodes[i];
 	}
 	mbLeft = rs_mbWidth * forwardTreeNodes/totalLevelNodes;
-	mbTop = mbTop * sf;
 	
     pic_width = rs_pic_width * sf;
     pic_height = rs_pic_height * sf;
     levelHeight = pic_height * 3;
+    mbTop = levelHeight * 0.1;
 }
 
 
@@ -964,7 +964,7 @@ function initCheckBoard(conti){
 	}
 	else{
 		rs_mbWidth = 480 * 0.9;
-		rs_mbHeight = 260;
+		rs_mbHeight = 170;
 		rs_pic_width = 60;
 		rs_pic_height = 60;
 	}
@@ -1078,7 +1078,7 @@ function draw(conti){
 	//根据树的最大层数确定缩放比例
 	var curlevel = ((mbHeight - 2.0 * mbTop - pic_height)/(3.0 * pic_height)) - 1
 	if(maxTreeLevels > curlevel){
-		ysf = mbHeight/(mbHeight + levelHeight * (maxTreeLevels-parseInt(curlevel)));
+		ysf = mbHeight/(3.0 * (maxTreeLevels + 1)* pic_height + pic_height + 2.0 * mbTop);
 	}
 	sf = ysf;
 
@@ -1143,6 +1143,7 @@ function f(){
 
 //首页slice拓扑展示
 function home_show_slice(){
+    var static_url = $("#STATIC_URL").text();
 	check_url = "http://" + window.location.host + "/slice/get_show_slices/";
 	var str;
     $.ajax({
@@ -1160,7 +1161,7 @@ function home_show_slice(){
 				str = str + "<div class=\"dg-wrapper\">";
     			for(var i=0;i<slices.length;i++){
 					str = str + "<a href=\"#\">"
-						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:260px; top:41px; background-image:url('" + static_url + "img/slice_bj.png');\" alt=\"image"+i+"\">"
+						+ "<div class=\"slice_content\" id=\"content"+slices[i].id+"\" style=\"height:170px; top:140px;\" alt=\"image"+i+"\">"
 						+ "</div>"
 						+ "<div>"+slices[i].name+"拓扑图</div>"
 						+ "</a>";

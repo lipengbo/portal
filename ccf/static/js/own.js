@@ -317,7 +317,7 @@ function submit_slice_info(project_id){
 	var controller_type;
 	var j = 0;
     for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(switch_port_ids_obj[i].checked){
+		if(!switch_port_ids_obj[i].disabled){
 			//alert(switch_port_ids_obj[i].value);
 			if(j==0){
 				switch_port_ids = switch_port_ids_obj[i].value;

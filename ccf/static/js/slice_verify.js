@@ -243,7 +243,7 @@ function check_switch_port(){
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var info = document.getElementById("switch_portInfo");
 	for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(switch_port_ids_obj[i].checked){
+		if(!switch_port_ids_obj[i].disabled){
 			//alert(switch_port_ids_obj[i].value);
 			switch_port_id = switch_port_ids_obj[i].value;
 			switchtype_obj = document.getElementById("switchtype"+switch_port_id);
@@ -341,19 +341,23 @@ function check_dhcp_ip(flag){
         if(reg.test(src_obj.value) && reg.test(des_obj.value))
         {
             slice_nw = old_slice_nw_obj.value;
-            gw_ip = gw_ip_obj.value;  
+            src_ip = src_obj.value;  
             slice_ip_mask=slice_nw.split("/");
             ip = slice_ip_mask[0];
             mask = slice_ip_mask[1];
             ips = ip.split(".");
             masks = maskint_to_maskstr(mask);
-            cur_ips = nw_ip.split(".");
+            cur_ips = src_ip.split(".");
             if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
-                showInfo(info,"√","green");
-                return true;
+                des_ip = des_obj.value; 
+                cur_ips = des_ip.split(".");
+                if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
+                    showInfo(info,"√","green");
+                    return true;
+                }
             }
         }
-        showInfo(info,"IP地址错误","red")   ;   
+        showInfo(info,"IP地址错误","red");   
         return false;
     }
     else{
