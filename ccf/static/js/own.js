@@ -84,18 +84,8 @@ $(document).ready(function() {
     $('.btn-step4').click(function () {
         $('.switch-manifest tbody').html('');
         $.each($('.switch-table tbody tr'), function (index, tr) {
-            var checked_ports = $(tr).find('.icheckbox_square-blue.checked');
-            if (checked_ports.length > 0) {
-                var clone = $(tr).clone();
-                clone.find('label').addClass('label label-success');
-                $.each(clone.find('label'), function (index, input) {
-                    if (!$(input).find('.icheckbox_square-blue').hasClass("checked")) {
-                        $(input).remove();
-                    }
-                });
-                clone.find('.icheckbox_square-blue.checked').remove();
-                $('.switch-manifest tbody').append(clone);
-            }
+            var clone = $(tr).clone();
+            $('.switch-manifest tbody').append(clone);
         });
         $('.switch-manifest tbody input').attr('disabled', '');
     });

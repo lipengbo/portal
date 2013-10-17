@@ -124,43 +124,8 @@
              <ul class="thumbnails example-sites">
 		         {% for slice in project.slice_set.all %}
 		         {% if forloop.counter <= 4  %}
-		        <li class="span3 thumbnail">
-		        	<a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
-		          	<a class="" href="/slice/detail/{{ slice.id }}/" target="_blank">
-		          	<img src="{% static slice.project.category.image %}" />
-		            <table class="table">
-		                <tbody>
-		                    <tr>
-		                        <td width="105">Slice名称：</td>
-		                        <td>{{ slice.get_show_name }}</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">创建者：</td>
-		                        <td>{{ slice.owner }}</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">状态：</td>
-		                        <td>
-		                        {%if slice.state == 0 %}
-		                        停止
-		                        {%else%}
-		                        启动
-		                        {%endif%}
-		                        </td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">网络节点个数：</td>
-		                        <td>{{ slice.get_switches.count }}个</td>
-		                    </tr>
-		                    <tr>
-		                        <td valign="top">虚拟机个数：</td>
-		                        <td>{{ slice.get_common_vms.count }}个</td>
-		                    </tr>
-		                </tbody>
-		            </table>
-		          </a>
-		        </li>
-		        {%endif%}
+		               {% include "slice/_slice.html" %}
+		         {%endif%}
 		         {% endfor %}
 		     </ul>
 		     </div>
