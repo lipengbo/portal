@@ -3,7 +3,7 @@
 {% load project_tags %}
 <li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
                             <a href="{% url project_delete project.id %}" class="btn-delete close">×</a>
-                            <a class="thumbnail" href="{% url project_detail project.id %}" target="_blank">
+                            <a class="thumbnail" href="{% url project_detail project.id %}">
                                 <img src="{% static project.category.image %}" />
                                 <table class="table">
                                     <tbody>
