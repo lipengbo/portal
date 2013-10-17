@@ -8,7 +8,7 @@
 glance_host = '192.168.5.107'
 glance_port = 9292
 vnctunnel = '127.0.0.1'
-vt_manager_ip = '192.168.5.122'
+vt_manager_ip = '127.0.0.1'
 vt_manager_port = 8891
 
 
