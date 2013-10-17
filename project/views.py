@@ -134,6 +134,9 @@ def create_or_edit(request, id=None):
     instance = None
     if id:
         instance = get_object_or_404(Project, id=id)
+        island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
+        print island_ids
+        context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
     else:
@@ -177,7 +180,7 @@ def delete_project(request, id):
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
     else:
-        return redirect("forbidden")
+        project.dismiss(request.user)
     if 'next' in request.GET:
         return redirect(request.GET.get('next'))
     return redirect("project_index")
@@ -185,6 +188,8 @@ def delete_project(request, id):
 @login_required
 def applicant(request, id):
     project = get_object_or_404(Project, id=id)
+    if not (request.user == project.owner):
+        return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
     context = {}

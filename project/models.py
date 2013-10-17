@@ -63,6 +63,15 @@ class Project(models.Model):
         project_membership, created = Membership.objects.get_or_create(project=self,
                 user=user, defaults={'is_owner': is_owner})
 
+    def dismiss(self, user):
+        try:
+            project_membership = Membership.objects.get(project=self,
+                user=user)
+        except Membership.DoesNotExist:
+            pass
+        else:
+            project_membership.delete()
+
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
 
@@ -97,7 +106,7 @@ class Membership(models.Model):
     date_joined = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
-        return "{} - {}".format(self.user, self.project)
+        return u"{} - {}".format(self.user, self.project)
 
     class Meta:
         unique_together = (("project", "user"), )

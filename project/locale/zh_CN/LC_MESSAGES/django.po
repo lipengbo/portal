@@ -68,7 +68,7 @@ msgstr "创建项目"
 
 #: templates/project/detail.html:7 templates/project/detail.html.py:10
 msgid "Project Detail"
-msgstr "项目信息"
+msgstr "项目详情"
 
 #: templates/project/detail.html:15
 msgid "Edit"
