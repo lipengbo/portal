@@ -262,7 +262,7 @@ function get_select_server_name(){
     var j =0
     for(var i=0;i<switch_port_ids_obj.length;i++){
         obj = switch_port_ids_obj[i];
-        if(obj.checked){
+        if(!obj.disabled){
             servername = obj.getAttribute("servername");
             if( servername && not_contains(results, servername))
             {
@@ -280,7 +280,7 @@ function get_select_server_id(){
     var j =0
     for(var i=0;i<switch_port_ids_obj.length;i++){
         obj = switch_port_ids_obj[i];
-        if(obj.checked){
+        if(!obj.disabled){
             serverid = obj.getAttribute("serverid");
             if( serverid && not_contains(results, serverid))
             {
