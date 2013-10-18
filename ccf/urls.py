@@ -2,14 +2,15 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
-from django.views.generic.simple import direct_to_template
+#from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
-#import xadmin
-#xadmin.autodiscover()
+import xadmin
+xadmin.autodiscover()
 
-#from xadmin.plugins import xversion #xversion.registe_models()
+from xadmin.plugins import xversion
+xversion.registe_models()
 
 urlpatterns = patterns("",
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
@@ -40,7 +41,7 @@ urlpatterns = patterns("",
 
 
     url(r'^topology/$', 'project.views.topology', name="topology_view"),
-    url(r'^(topology/.+\.html)$', direct_to_template, ),
+    #    url(r'^(topology/.+\.html)$', direct_to_template, ),
     url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/aggregate/json', 'project.views.swicth_aggregate'),
     url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/desc/json', 'project.views.swicth_desc'),
     url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/device/', 'project.views.device_proxy'),
@@ -58,8 +59,8 @@ urlpatterns = patterns("",
     url(r"^slice/", include("slice.urls")),
     url(r"^plugins/vt/", include("plugins.vt.urls")),
     url(r"^invite/", include("invite.urls")),
-    url(r"^admin/", include(admin.site.urls)),
-#    url(r'^xadmin/', include(xadmin.site.urls)),
+    #url(r"^admin/", include(admin.site.urls)),
+    url(r'^admin/', include(xadmin.site.urls)),
     url(r"^accounts/", include("account.urls")),
 )
 

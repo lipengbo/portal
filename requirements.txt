@@ -11,3 +11,4 @@ django-crispy-forms==1.4.0
 eventlet==0.14.0
 django-endless-pagination==2.0
 MySQL-python==1.2.4
+django-xadmin==1.0.0

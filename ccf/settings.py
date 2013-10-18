@@ -145,10 +145,10 @@ INSTALLED_APPS = [
     "django_forms_bootstrap",
 
     # external
-    #'xadmin',
-    #'django_extensions',
+    'xadmin',
+    'django_extensions',
     'crispy_forms',
-    #'reversion',
+    'reversion',
     "account",
     "metron",
     "eventlog",
