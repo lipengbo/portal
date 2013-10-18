@@ -6,11 +6,11 @@ from django.views.generic import TemplateView
 
 from django.contrib import admin
 admin.autodiscover()
-import xadmin
-xadmin.autodiscover()
+#import xadmin
+#xadmin.autodiscover()
 
-from xadmin.plugins import xversion
-xversion.registe_models()
+#from xadmin.plugins import xversion
+#xversion.registe_models()
 
 urlpatterns = patterns("",
     url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
@@ -59,8 +59,8 @@ urlpatterns = patterns("",
     url(r"^slice/", include("slice.urls")),
     url(r"^plugins/vt/", include("plugins.vt.urls")),
     url(r"^invite/", include("invite.urls")),
-    #url(r"^admin/", include(admin.site.urls)),
-    url(r'^admin/', include(xadmin.site.urls)),
+    url(r"^admin/", include(admin.site.urls)),
+    #url(r'^admin/', include(xadmin.site.urls)),
     url(r"^accounts/", include("account.urls")),
 )
 
