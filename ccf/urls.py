@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
-#from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
@@ -41,7 +41,7 @@ urlpatterns = patterns("",
 
 
     url(r'^topology/$', 'project.views.topology', name="topology_view"),
-    #    url(r'^(topology/.+\.html)$', direct_to_template, ),
+    url(r'^(topology/.+\.html)$', direct_to_template, ),
     url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/aggregate/json', 'project.views.swicth_aggregate'),
     url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/core/switch/(?P<dpid>[\w:]+)/desc/json', 'project.views.swicth_desc'),
     url(r'^direct/(?P<host>[\d\.]+):(?P<port>\d+)/wm/device/', 'project.views.device_proxy'),
