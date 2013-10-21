@@ -7,7 +7,7 @@ var pic_width;
 var pic_height;
 
 //用于存储拓扑信息的数据结构
-var switches;	// (DPIP, x, y)
+var switches;	// (DPIP, x, y, width_num, loc, host_num)
 var hosts;	// (MAC, DPIP, x1, y1, x2, y2, status)
 var links;	// (src_dpid, des_dpid, x1, y1, x2, y2)
 var hosts_special;	// (MAC, x1, y1, drawed, status)
@@ -24,6 +24,7 @@ var ysf;
 var xsf;
 var levelHeight;
 var levelNum;
+var curTreeNum;
 
 //每层交换机个数，主机个数，已确定坐标的交换机个数，主机个数，交换机宽度，主机宽度
 var levelNodesNum;
@@ -71,7 +72,7 @@ function setSwHostNum(){
 	for(var i = 0; i < switches.length; i++){
 		for(var j = 0; j < hosts.length; j++){
 			if(hosts[j][1] == switches[i][0]){
-				swHostNum[i]++;
+				switches[i][5]++;
 			}
 		}
 	}
@@ -176,7 +177,16 @@ function drawTopology(slicec){
 	
 	for(var i = 0; i < switches.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>"
-				+ "<image xlink:href='" + static_url + "img/switch.png' x='" + switches[i][1] + "' y='" + switches[i][2] + "" +
+				+ "<image xlink:href='" + static_url;
+				if(switches[i][6] == 1){
+				    str = str + "img/sw7.jpg";
+				}else if(switches[i][6] == 2){
+				    str = str + "img/sw6.jpg";
+				}else{
+				    str = str + "img/sw5.jpg";
+				}
+				
+		str = str + "' x='" + switches[i][1] + "' y='" + switches[i][2] + "" +
 						"' width='" + pic_width + "' height='" + pic_height + "'></image>"
 				+ "<title>" + switches[i][0] + "</title>"
 			+ "</g> ";
@@ -196,7 +206,7 @@ function drawTopology(slicec){
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/sv2.jpg' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts[i][0] + "</title>  "
@@ -321,36 +331,34 @@ function drawSwitch(fatherObj, level){
     }
     
     //确定该交换机下接一个交换机的主机的坐标
+    var curUsedHostsNum = 0; 
     for(var j = 0; j < hosts.length; j++){
       if(hosts[j][1] == fatherObj[0]){
-            m = radian / 2.0 - levelHostsRadian[level] * (levelUsedHostsNum[level] + 0.6);
+            if(fatherObj[5] == 0){
+                p = radian / treeLevelNodes[curTreeNum] * fatherObj[3];
+            }else{
+                p = radian / treeLevelNodes[curTreeNum] / fatherObj[5] * fatherObj[3];
+            }
+            if(fatherObj[0] == '00:03'){
+                alert(fatherObj);
+                alert(treeLevelNodes[curTreeNum]);
+            }
+            m = radian / 2.0 - (radian / treeLevelNodes[curTreeNum]) * fatherObj[4] - p * (curUsedHostsNum + 0.51);
             a = radius * Math.sin(m);
             b = radius * Math.cos(m);
             hosts[j][2] = mbLeft + mbWidth / 2.0 - a;
+            curUsedHostsNum ++;
             levelUsedHostsNum[level]++;
             hosts[j][3] = mbTop - radius + b + levelHeight * (level + 0.6);
         }
     }
     
-    //确定该交换机下接一个交换机的主机的坐标
-    var hnum = 0;
-    var used_hnum = 0;
-    for(var j = 0; j < hosts.length; j++){
-      if(hosts[j][1] == fatherObj[0]){
-            hnum++;
-      }
-    }
-    for(var j = 0; j < hosts.length; j++){
-      if(hosts[j][1] == fatherObj[0]){
-            
-        }
-    }
     
     //确定该交换机的坐标
     //alert(mbWidth);
     //alert(radius * Math.sin(radian / 2.0));
     for(var i = 0; i < childSw.length; i++){
-        m = radian / 2.0 - levelNodesRadian[level] * (levelUsedNodesNum[level] + 0.5);
+        m = radian / 2.0 - (radian / treeLevelNodes[curTreeNum]) * (childSw[i][4] + (childSw[i][3] / 2.0));
         //alert("m");
         //alert(level);
         //alert(radian);
@@ -360,7 +368,7 @@ function drawSwitch(fatherObj, level){
         a = radius * Math.sin(m);
         b = radius * Math.cos(m);
         childSw[i][1] = mbLeft + mbWidth / 2.0 - a;
-        levelUsedNodesNum[level]++;
+        levelUsedNodesNum[level] = levelUsedNodesNum[level] + childSw[i][3];
         childSw[i][2] = mbTop - radius + b + levelHeight * (level + 1); 
         //alert(childSw[i][1]);
         //alert(childSw[i][2]);
@@ -432,6 +440,18 @@ function setLocation(){
 	}
 	initLevelNodesNum(rootSw, 0);
 	resetLinksSign();
+	initLevelNodesWidth(rootSw, 0);
+	resetLinksSign();
+	initLevelNodesLoc(rootSw, 0);
+    resetLinksSign();
+    //alert(switches[0]);
+   // alert(switches[1]);
+    //alert(switches[2]);
+    //alert(switches[3]);
+    //alert(switches[4]);
+   // alert(switches[5]);
+   // alert(switches[6]);
+   // alert(switches[7]);
 	
 	//计算树中每层的主机所占宽度，交换机所占宽度
 	for(var i = 0; i <= levelNum; i++){	
@@ -653,6 +673,75 @@ function initLevelNodesNum(fatherObj, level){
 	for(var i = 0; i < childSw.length; i++){
 		initLevelNodesNum(childSw[i], level+1);
 	}
+}
+
+//获取交换机的宽度
+function initLevelNodesWidth(fatherObj, level){
+    if(fatherObj == null){
+        return;
+    }
+    fatherObj[3] = 0;
+    var childSw = new Array();
+    var cnum = 0;
+    var HostNum = 0;
+    for(var i = 0; i < links.length; i++){
+        if(linksSign[i] != 1 && links[i][0] == fatherObj[0]){
+            linksSign[i] = 1;
+            var DestDpip = links[i][1];
+            childSw[cnum] = getSwitch(DestDpip);
+            cnum++;
+        }else if(linksSign[i] != 1 && links[i][1] == fatherObj[0]){
+            linksSign[i] = 1;
+            var DestDpip = links[i][0];
+            childSw[cnum] = getSwitch(DestDpip);
+            cnum++;
+        }
+    }
+    
+    if(cnum == 0){
+        fatherObj[3] = 1;
+        return;
+    }
+    
+    for(var i = 0; i < childSw.length; i++){
+        initLevelNodesWidth(childSw[i], level+1);
+        fatherObj[3] = fatherObj[3] + childSw[i][3];
+    }
+}
+
+//获取交换机的宽度
+function initLevelNodesLoc(fatherObj, level){
+    if(fatherObj == null){
+        return;
+    }
+    
+    var childSw = new Array();
+    var cnum = 0;
+    var HostNum = 0;
+    for(var i = 0; i < links.length; i++){
+        if(linksSign[i] != 1 && links[i][0] == fatherObj[0]){
+            linksSign[i] = 1;
+            var DestDpip = links[i][1];
+            childSw[cnum] = getSwitch(DestDpip);
+            cnum++;
+        }else if(linksSign[i] != 1 && links[i][1] == fatherObj[0]){
+            linksSign[i] = 1;
+            var DestDpip = links[i][0];
+            childSw[cnum] = getSwitch(DestDpip);
+            cnum++;
+        }
+    }
+    
+    if(level == 0){
+        fatherObj[4] = 0;
+    }
+    
+    var curLevelNodesWidth = 0;
+    for(var i = 0; i < childSw.length; i++){
+        childSw[i][4] = fatherObj[4] + curLevelNodesWidth;
+        initLevelNodesLoc(childSw[i], level+1);
+        curLevelNodesWidth = curLevelNodesWidth + childSw[i][3];
+    }
 }
 
 //确定当前树的画布位置
@@ -888,17 +977,17 @@ function initCircleTemp(){
 	levelNodesRadian = new Array();
     levelHostsRadian = new Array();
 		
-	switches[0] = new Array("00:01", 0, 0);			switches[1] = new Array("00:02", 0, 0);
-	switches[2] = new Array("00:03", 0, 0);			switches[3] = new Array("00:04", 0, 0);
-	switches[4] = new Array("00:05", 0, 0);			switches[5] = new Array("00:06", 0, 0);
-	switches[6] = new Array("00:07", 0, 0);			switches[7] = new Array("00:08", 0, 0);
-	switches[8] = new Array("00:09", 0, 0);			switches[9] = new Array("00:10", 0, 0);
-	switches[10] = new Array("00:11", 0, 0);		
+	switches[0] = new Array("00:01", 0, 0, 0, 0, 0, 3);			switches[1] = new Array("00:02", 0, 0, 0, 0, 0, 2);
+	switches[2] = new Array("00:03", 0, 0, 0, 0, 0, 1);			switches[3] = new Array("00:04", 0, 0, 0, 0, 0, 2);
+	switches[4] = new Array("00:05", 0, 0, 0, 0, 0, 3);			switches[5] = new Array("00:06", 0, 0, 0, 0, 0, 2);
+	switches[6] = new Array("00:07", 0, 0, 0, 0, 0, 2);			switches[7] = new Array("00:08", 0, 0, 0, 0, 0, 2);
+	switches[8] = new Array("00:09", 0, 0, 0, 0, 0, 3);			switches[9] = new Array("00:10", 0, 0, 0, 0, 0, 2);
+	switches[10] = new Array("00:11", 0, 0, 0, 0, 0, 2);		
 	
-	switches[11] = new Array("00:13", 0, 0);		switches[12] = new Array("00:14", 0, 0);
-	switches[13] = new Array("00:15", 0, 0);		switches[14] = new Array("00:16", 0, 0);
+	switches[11] = new Array("00:13", 0, 0, 0, 0, 0, 3);		switches[12] = new Array("00:14", 0, 0, 0, 0, 0, 3);
+	switches[13] = new Array("00:15", 0, 0, 0, 0, 0, 2);		switches[14] = new Array("00:16", 0, 0, 0, 0, 0, 3);
 
-	switches[15] = new Array("00:17", 0, 0);
+	switches[15] = new Array("00:17", 0, 0, 0, 0, 0, 2);
 	
 	for(var i = 0; i < switches.length; i++){
 		sw_in_circle[i] = 0;
@@ -948,10 +1037,10 @@ function initCircleTemp(){
 	hosts[11] = new Array("10","00:14",0, 0, 0, 0, 0)
 	hosts[12] = new Array("10","00:16",0, 0, 0, 0, 0)
 	
-	hosts_special[0] = new Array("08", 0, 0, 0, 1)
-	hosts_special[1] = new Array("09", 0, 0, 0, 0)
-	host_links[0] = new Array("08", 4, -1, "00:01", "00:05", "00:03", "00:09")
-	host_links[1] = new Array("09", 3, -1, "00:11", "00:08", "00:13")
+	//hosts_special[0] = new Array("08", 0, 0, 0, 1)
+	//hosts_special[1] = new Array("09", 0, 0, 0, 0)
+	//host_links[0] = new Array("08", 4, -1, "00:01", "00:05", "00:03", "00:09")
+	//host_links[1] = new Array("09", 3, -1, "00:11", "00:08", "00:13")
 }
 
 //初始化画布，图标
@@ -1064,9 +1153,12 @@ function draw(conti){
 		}
 		initLevelNodesNum(rootSw, 0);
 		resetLinksSign();
-		treeLevelNodes[treeNum]=currMaxLevelNodes;
+		initLevelNodesWidth(rootSw, 0);
+		resetLinksSign();
+		treeLevelNodes[treeNum]=rootSw[3];
+		//treeLevelNodes[treeNum]=currMaxLevelNodes;
 		
-		totalLevelNodes = totalLevelNodes + currMaxLevelNodes;
+		totalLevelNodes = totalLevelNodes + rootSw[3];
 		treeNum++;
 		currMaxLevelNodes = 0;
 	}
@@ -1087,10 +1179,12 @@ function draw(conti){
 		host_links[k][2] = -1;
 	}
 	//确定slice中的树的各元素坐标
+	setSwHostNum();
 	for(var i=0; i<treeNum; i++){
 		rootIndex = treeRootIndexs[i];
 		setRootSwitch();
 		levelNum = treeLevels[i];
+		curTreeNum = i;
 		//确定当前树的画布位置
 		checkBoard(i);
 		//确定树中各元素坐标
