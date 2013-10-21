@@ -417,6 +417,10 @@ function init_svg () {
                                 port_pairs[port_pair_key] = '';
                                 content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
                             }
+                            port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
+                            if (port_pair_key in port_pairs) {
+                                return;
+                            }
                             if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
                                 content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";

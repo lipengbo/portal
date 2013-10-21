@@ -841,11 +841,11 @@ function initCircleTemp(){
 	hosts[11] = new Array("10","00:14",0, 0, 0, 0, 0)
 	hosts[12] = new Array("10","00:16",0, 0, 0, 0, 0)
 	
-	hosts_special[0] = new Array("08", 0, 0, 0, 1)
+	//hosts_special[0] = new Array("08", 0, 0, 0, 1)
 	//host_links[0] = new Array("08", 2, -1, "00:01", "00:02")
-	hosts_special[1] = new Array("09", 0, 0, 0, 0)
-	host_links[0] = new Array("08", 4, -1, "00:01", "00:05", "00:03", "00:09")
-	host_links[1] = new Array("09", 3, -1, "00:11", "00:08", "00:13")
+	//hosts_special[1] = new Array("09", 0, 0, 0, 0)
+	//host_links[0] = new Array("08", 4, -1, "00:01", "00:05", "00:03", "00:09")
+	//host_links[1] = new Array("09", 3, -1, "00:11", "00:08", "00:13")
 }
 
 //初始化画布，图标
