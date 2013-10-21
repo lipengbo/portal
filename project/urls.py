@@ -12,4 +12,5 @@ urlpatterns = patterns('project.views',
     url(r'^manage/$', "manage", name='project_manage'),
     url(r'^invite/(?P<id>\d+)/$', "invite", name='project_invite'),
     url(r'^admin_list/$', "admin_list", name='admin_project_list'),
+    url(r'^view/(?P<id>\d+)/$', "view", name='project_view'),
 )

@@ -330,3 +330,11 @@ def admin_list(request):
     context = {}
     context['projects'] = projects
     return render(request, 'project/admin_list.html', context)
+
+
+@login_required
+def view(request):
+    projects = Project.objects.all()
+    context = {}
+    context['projects'] = projects
+    return render(request, 'project/admin_list.html', context)
