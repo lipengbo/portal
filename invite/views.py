@@ -51,10 +51,7 @@ def accept(request, kind="invite", key=""):
 
     user = request.user
 
-    if user.is_authenticated():
-        redirect_url = "/"
-    else:
-        redirect_url = "account_login"
+    redirect_url = "notifications:all"
     return redirect(redirect_url)
 
 def reject(request, kind="invite", key=""):
@@ -67,8 +64,5 @@ def reject(request, kind="invite", key=""):
 
     user = request.user
 
-    if user.is_authenticated():
-        redirect_url = "/"
-    else:
-        redirect_url = "account_login"
+    redirect_url = "notifications:all"
     return redirect(redirect_url)
