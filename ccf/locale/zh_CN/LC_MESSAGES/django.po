@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-21 09:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+
+#: templates/_account_bar.html:24
+msgid "Admin"
+msgstr ""
+
+#: templates/_account_bar.html:28
+msgid "Log out"
+msgstr ""
+
+#: templates/_account_bar.html:33
+msgid "Log in"
+msgstr ""
+
+#: templates/_account_bar.html:35
+msgid "Sign up"
+msgstr ""
+
+#: templates/apply_project.html:7 templates/create_project.html:7
+#: templates/create_slice.html:7 templates/create_slice1.html:7
+#: templates/create_slice2.html:7 templates/detail_project.html:7
+#: templates/detail_slice.html:7 templates/invite_member.html:7
+#: templates/list_project.html:7 templates/list_slice.html:7
+#: templates/list_vm.html:7 templates/logs.html:7 templates/logs_handle.html:7
+#: templates/member_check.html:7
+msgid "create project"
+msgstr ""
+
+#: templates/help.html:7 templates/homepage.html:7 templates/index.html:6
+msgid "Welcome"
+msgstr ""
+
+#: templates/login.html:7
+msgid "help"
+msgstr ""
+
+#: templates/site_base.html:62
+msgid "Project"
+msgstr ""
+
+#: templates/notifications/list.html:3 templates/notifications/list.html:8
+msgid "Notifications"
+msgstr "晓曦"
+
+#: templates/notifications/list.html:9
+msgid "All"
+msgstr "全部"
+
+#: templates/notifications/list.html:10
+msgid "Unread"
+msgstr "未读"
+
+#: templates/notifications/list.html:13
+msgid "Mark as all read "
+msgstr "标记全部已读"
+
+#: templates/notifications/list.html:22
+msgid "No notifications at the moment"
+msgstr "目前没有任何通知消息"
+
+#: templates/notifications/notice.html:9
+msgid "Mark as read"
+msgstr "标记为已读"
+
+#: templates/notifications/notice.html:20
+msgid "ago"
+msgstr "前"
+
+#: templates/notifications/notice.txt:4
+msgid "Click link below to view the detail notification."
+msgstr ""
