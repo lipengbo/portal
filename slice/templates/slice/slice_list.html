@@ -13,7 +13,7 @@ Slice列表
 {% endblock %}
 
 {% block body %}
-{% paginate slices %}
+{% paginate 12 slices %}
     <div class="fill_form">
         <fieldset>
              <legend><button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button>我的Slice</legend>

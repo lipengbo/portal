@@ -322,3 +322,11 @@ def switch_proxy(request, host, port):
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
+
+
+@login_required
+def admin_list(request):
+    projects = Project.objects.all()
+    context = {}
+    context['projects'] = projects
+    return render(request, 'project/admin_list.html', context)

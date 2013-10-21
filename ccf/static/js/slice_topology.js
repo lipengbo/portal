@@ -202,7 +202,7 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts[i][6] == 0){
-			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/sv2.jpg' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
@@ -1105,8 +1105,8 @@ function draw(conti){
 		slice_id = conti;
 	}
 	initCheckBoard(conti);	
-	//init();
-    initCircleTemp();
+	init();
+    //initCircleTemp();
 	
 	//确定slice中有几棵树，每棵树的层数，宽度
 	var degrees = getDegrees(links)

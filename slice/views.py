@@ -281,3 +281,11 @@ def get_show_slices(request):
         slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
+
+
+@login_required
+def admin_list(request):
+    slice_objs = Slice.objects.all()
+    context = {}
+    context['slices'] = slice_objs
+    return render(request, 'slice/admin_list.html', context)
