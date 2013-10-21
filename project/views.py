@@ -191,7 +191,7 @@ def applicant(request, id):
     if not (request.user == project.owner):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
-    applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
+    applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
     context = {}
     context['applications'] = applications
     context['project'] = project
