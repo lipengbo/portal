@@ -69,8 +69,8 @@
                             <th width="20%">IP地址</th>
                             <th width="15%">宿主机</th>
                             {% if slice_obj.state == 1 %}
-                                <th width="5%">状态</th>
-                                <th width="25%">操作</th>
+                                <th width="6%">状态</th>
+                                <th width="24%">操作</th>
                             {%else%}
                                 <th width="30%">操作</th>
                             {%endif%}
@@ -231,18 +231,16 @@
 						 		   {%endif%}
 						 		</tr>
 						 	{%endif%}	
-				 		{%endfor%}
-				 		{% if vms %}   
-				 		 <tr>
-				 		     {% if slice_obj.state == 1 %}
-				 		         <td colspan="6"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
-				 		     {%else%}
-				 		         <td colspan="5"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
-				 		     {%endif%}
-				 		 </tr>                             
-                        {%endif%}
+				 		{%endfor%}		 	
 				 	</tbody>
 				 </table>
+				    {% if vms %}                           
+                         {% if slice_obj.state == 1 %}
+                             <a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a>
+                         {%else%}
+                             <a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a>
+                         {%endif%}                                              
+                    {%endif%}
 				 <div class="clear" style="display: none" >
 				 	<p id="check_vm">{{check_vm_status}}</p>
 				 </div>
