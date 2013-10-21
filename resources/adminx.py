@@ -19,6 +19,3 @@ class ServerAdmin(object):
 xadmin.site.register(Server, ServerAdmin)
 xadmin.site.register(Switch)
 xadmin.site.register(VirtualSwitch)
-
-
-
