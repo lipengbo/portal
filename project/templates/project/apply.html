@@ -56,10 +56,14 @@
                             <td>{{ project.category }}</td>
                             <td>
                                 {% if status.is_apply %}
-                                    {% if status.state == 1%}
+                                    {% if status.accepted == 1%}
                                     <span class="text-success">已接受</span>
                                     {% else %}
-                                    <span class="text-error">未审批</span>
+                                        {% if status.accepted == 2 %}
+                                            <span class="text-error">未通过</span>
+                                        {% else %}
+                                            <span class="text-info">未审批</span>
+                                        {% endif %}
                                     {% endif %}
                                 {% else %}
                                     未申请
