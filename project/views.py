@@ -184,7 +184,7 @@ def delete_member(request, id):
 @login_required
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
-    if request.user == project.owner:
+    if request.user.is_superuser or request.user == project.owner:
         try:
             project.delete()
         except Exception, e:
@@ -332,19 +332,3 @@ def switch_proxy(request, host, port):
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
-
-
-@login_required
-def admin_list(request):
-    projects = Project.objects.all()
-    context = {}
-    context['projects'] = projects
-    return render(request, 'project/admin_list.html', context)
-
-
-@login_required
-def view(request, id):
-    project = get_object_or_404(Project, id=id)
-    context = {}
-    context['project'] = project
-    return render(request, 'project/view.html', context)

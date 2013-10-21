@@ -7,7 +7,7 @@ var pic_width;
 var pic_height;
 
 //用于存储拓扑信息的数据结构
-var switches;	// (DPIP, x, y, width_num, loc, host_num)
+var switches;	// (DPIP, x, y, width_num, loc, host_num, type)
 var hosts;	// (MAC, DPIP, x1, y1, x2, y2, status)
 var links;	// (src_dpid, des_dpid, x1, y1, x2, y2)
 var hosts_special;	// (MAC, x1, y1, drawed, status)
@@ -849,7 +849,7 @@ function init(){
 			specials = responseTxt.specials;
 			//获取数据库中该slice的交换机信息
 			for(var key=0; key< switches.length; key++){
-				switches[key] = new Array(switches[key].dpid, 0, 0);
+				switches[key] = new Array(switches[key].dpid, 0, 0, 0, 0, 0, 2);
 			}
 			//获取数据库中该slice的交换机的连接信息
 			for(var key=0; key< srcLinks.length; key++){

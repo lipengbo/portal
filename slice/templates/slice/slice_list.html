@@ -5,18 +5,22 @@
 {% load staticfiles %}
 {% load endless %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block head_title %}SLICE列表{% endblock %}
 {% block breadcrumb %}
-<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
-<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
-Slice列表
+    {%if extent_html == "base_site.html" %}
+        <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
+    {%endif%}
+    Slice列表
 {% endblock %}
 
 {% block body %}
 {% paginate 12 slices %}
     <div class="fill_form">
         <fieldset>
-             <legend><button type="button" class="btn btn-info edit" onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button>我的Slice</legend>
+             <legend>
+                 <button type="button" class="btn btn-info edit" onclick="window.history.back();">返 回</button>
+                 Slice列表
+             </legend>
              <div class="row-fluid">
              {% for group in slices|group_by:4 %}
              <ul class="thumbnails example-sites">

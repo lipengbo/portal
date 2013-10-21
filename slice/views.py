@@ -100,14 +100,16 @@ def create_first(request, proj_id):
 def list(request, proj_id):
     """显示所有slice。"""
     user = request.user
-    project = get_object_or_404(Project, id=proj_id)
     context = {}
-    context['project'] = project
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
-        context['slices'] = Slice.objects.all()
     else:
         context['extent_html'] = "site_base.html"
+    if int(proj_id) == 0:
+        context['slices'] = Slice.objects.all()
+    else:
+        project = get_object_or_404(Project, id=proj_id)
+        context['project'] = project
         context['slices'] = project.slice_set.all()
     return render(request, 'slice/slice_list.html', context)
 
@@ -153,7 +155,12 @@ def edit_controller(request, slice_id):
 def detail(request, slice_id):
     """编辑slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    user = request.user
     context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
@@ -176,7 +183,7 @@ def delete(request, slice_id, flag):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
-    if request.user == slice_obj.owner:
+    if request.user.is_superuser or request.user == slice_obj.owner:
         try:
             slice_obj.delete()
         except Exception, ex:
@@ -287,23 +294,3 @@ def get_show_slices(request):
         slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
-
-
-@login_required
-def admin_list(request, proj_id):
-    slice_objs = Slice.objects.all()
-    context = {}
-    context['slices'] = slice_objs
-    return render(request, 'slice/admin_list.html', context)
-
-
-@login_required
-def view(request, slice_id):
-    if int(proj_id) == 0:
-        slice_objs = Slice.objects.all()
-    else:
-        project = get_object_or_404(Project, id=proj_id)
-        slice_objs = project.slice_set.all()
-    context = {}
-    context['slices'] = slice_objs
-    return render(request, 'slice/admin_list.html', context)

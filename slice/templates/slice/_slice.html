@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="span3" {% if extent_html == "base_site.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
     <img src="{% static slice.project.category.image %}" />
@@ -25,6 +25,16 @@
                 {%endif%}
                 </td>
             </tr>
+            {%if extent_html == "base_site.html" %}
+            {%else%}
+                <tr>
+                    <td valign="top">所属项目：</td>
+                    <td>
+                    {{slice.project.name}}
+                    </td>
+                </tr>
+            {%endif%}
+            
             <tr>
                 <td valign="top">网络节点个数：</td>
                 <td>{{ slice.get_switches.count }}个</td>
