@@ -17,11 +17,10 @@
     <table class="table table-striped table-hover">
        <thead>
             <tr>
-                <th width="20%">{% trans "Project Name" %}</th>
+                <th width="25%">{% trans "Project Name" %}</th>
                 <th width="35%">{% trans "Project Description" %}</th>
-                <th width="15%">{% trans "Creator" %}</th>
+                <th width="25%">{% trans "Creator" %}</th>
                 <th width="15%">{% trans "Category" %}</th>
-                <th width="15%">{% trans "Selected Islands" %}</th>
             </tr>
         </thead>  
         <tbody>   
@@ -30,11 +29,6 @@
                     <td>{{ project.description }}</td>
                     <td>{{ project.owner }}</td>
                     <td><span class="label label-success">{{ project.category }}</span></td>
-                    <td>
-                        {% for island in project.islands.all %}
-                            {{ island.name }}
-                        {% endfor %}
-                    </td>
                </tr>    
             <!--    <tr>
                     <td width="71">{% trans "Project Name" %}：</td>
