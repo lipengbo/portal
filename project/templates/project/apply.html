@@ -49,14 +49,14 @@
                         {% for project in projects %}
                         <tr>
                             {% with project|application_status:user as status %}
-                            <td><input type="checkbox" name="project_id" {% if status.accepted or user == project.owner %}disabled{% endif %} value="{{ project.id }}"></td>
+                            <td><input type="checkbox" name="project_id" {% if status.state == 1 or user == project.owner %}disabled{% endif %} value="{{ project.id }}"></td>
                             <td>{{ project.name }}</td>
                             <td>{{ project.description }}</td>
                             <td>{{ project.owner }}</td>
                             <td>{{ project.category }}</td>
                             <td>
                                 {% if status.is_apply %}
-                                    {% if status.accepted %}
+                                    {% if status.state == 1%}
                                     <span class="text-success">已接受</span>
                                     {% else %}
                                     <span class="text-error">未审批</span>

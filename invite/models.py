@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
 from django.conf import settings
 
+from notifications import notify
 
 # Create your models here.
 class InvitationManager(models.Manager):
@@ -27,7 +28,7 @@ class Connection(models.Model):
     to_user = models.ForeignKey(User, related_name="%(app_label)s_%(class)s_to_invitations", verbose_name=_("Invitee"))
 
     message = models.TextField(verbose_name=_("Message"))
-    accepted = models.BooleanField(default=False)
+    state = models.IntegerField(default=0, choices=((0, _("created")),(1, _("Accepted")), (2, _("Rejected"))))
     key = models.CharField(max_length=32, unique=True)
 
     target_type = models.ForeignKey(ContentType)
@@ -43,6 +44,27 @@ class Connection(models.Model):
             name = self.target.__unicode__()
         return name
 
+    def reject(self):
+        self.state = 2
+        self.save()
+
+    def actions(self):
+        if self.state != 0:
+            return
+
+        return [
+                {
+                    'action_level': 'success',
+                    'action_url': reverse('invite_accept', args=(self.get_kind(), self.key)),
+                    'action_title': _('Accept')
+                },
+                {
+                    'action_level': 'error',
+                    'action_url': reverse('invite_reject', args=(self.get_kind(), self.key)),
+                    'action_title': _('Reject')
+                },
+        ]
+
     class Meta:
 
         abstract = True
@@ -51,9 +73,12 @@ class Invitation(Connection):
 
     objects = InvitationManager()
 
+    def get_kind(self):
+        return "invite"
+
     def accept(self):
         self.target.accept(self.to_user)
-        self.accepted = True
+        self.state = 1
         self.save()
 
     def accept_link(self):
@@ -62,29 +87,31 @@ class Invitation(Connection):
 
     def send(self):
         body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        notify.send(self.from_user, recipient=self.to_user, verb=_('invited you to join in'), action_object=self,
+                description=self.message, target=self.target)
         send_mail(_("You have an invitation"), body, settings.FROM_EMAIL, [self.to_user.email])
-
 
     class Meta:
         verbose_name = _("Invitation")
 
 class Application(Connection):
 
+    def get_kind(self):
+        return "apply"
+
     def accept(self):
         self.target.accept(self.from_user)
-        self.accepted = True
+        self.state = 1
         self.save()
-
-    def deny(self):
-        self.delete()
 
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
         return link
 
-
     def send(self):
         body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        notify.send(self.from_user, recipient=self.to_user, verb=_('applied to join in'), action_object=self,
+                description=self.message, target=self.target)
         send_mail(_("You have an application"), body, settings.FROM_EMAIL, [self.to_user.email])
 
     class Meta:

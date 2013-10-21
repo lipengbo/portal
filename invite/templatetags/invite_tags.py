@@ -13,5 +13,5 @@ def application_status(target, user):
     except Application.DoesNotExist:
         return {'is_apply': False, 'accepted': False}
     else:
-        return {'is_apply': True, 'accepted': application.accepted}
+        return {'is_apply': True, 'accepted': application.state == 1}
     

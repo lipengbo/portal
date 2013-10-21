@@ -203,7 +203,7 @@ def applicant(request, id):
             if 'approve' in request.POST:
                 application.accept()
             elif 'deny' in request.POST:
-                application.deny()
+                application.reject()
 
     return render(request, 'project/applicant.html', context)
 

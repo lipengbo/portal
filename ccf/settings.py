@@ -154,6 +154,7 @@ INSTALLED_APPS = [
     "metron",
     "eventlog",
     "endless_pagination",
+    "notifications",
 
     # project
     "ccf",
