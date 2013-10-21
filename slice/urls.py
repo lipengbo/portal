@@ -14,6 +14,6 @@ urlpatterns = patterns('slice.views',
     url(r'^create_nw/(?P<owner>\w+)/(?P<nw_num>\w+)/$', "create_nw", name='create_nw'),
     url(r'^delete_nw/(?P<owner>\w+)/$', "delete_nw", name='delete_nw'),
     url(r'^get_show_slices/$', "get_show_slices", name='get_show_slices'),
-    url(r'^admin_list/$', "admin_list", name='admin_slice_list'),
+    url(r'^admin_list/(?P<proj_id>\d+)/$', "admin_list", name='admin_slice_list'),
     url(r'^view/(?P<slice_id>\d+)/$', "view", name='slice_view'),
 )

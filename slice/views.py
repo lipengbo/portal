@@ -284,7 +284,7 @@ def get_show_slices(request):
 
 
 @login_required
-def admin_list(request):
+def admin_list(request, proj_id):
     slice_objs = Slice.objects.all()
     context = {}
     context['slices'] = slice_objs
@@ -292,8 +292,12 @@ def admin_list(request):
 
 
 @login_required
-def view(request):
-    slice_objs = Slice.objects.all()
+def view(request, slice_id):
+    if int(proj_id) == 0:
+        slice_objs = Slice.objects.all()
+    else:
+        project = get_object_or_404(Project, id=proj_id)
+        slice_objs = project.slice_set.all()
     context = {}
     context['slices'] = slice_objs
     return render(request, 'slice/admin_list.html', context)

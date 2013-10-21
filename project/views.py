@@ -333,8 +333,8 @@ def admin_list(request):
 
 
 @login_required
-def view(request):
-    projects = Project.objects.all()
+def view(request, id):
+    project = get_object_or_404(Project, id=id)
     context = {}
-    context['projects'] = projects
-    return render(request, 'project/admin_list.html', context)
+    context['project'] = project
+    return render(request, 'project/view.html', context)
