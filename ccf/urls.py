@@ -2,6 +2,9 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+
+from profiles.views import SignupView
+from profiles.forms import SignupForm
 #from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
@@ -39,6 +42,8 @@ urlpatterns = patterns("",
     url(r"^map/$", TemplateView.as_view(template_name="index.html"), name="map"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
+
+    url(r"^accounts/signup/$", SignupView.as_view(form_class=SignupForm), name="account_signup"),
 
     url(r'^topology/$', 'project.views.topology', name="topology_view"),
     #    url(r'^(topology/.+\.html)$', direct_to_template, ),

@@ -149,6 +149,7 @@ INSTALLED_APPS = [
     #'django_extensions',
     'crispy_forms',
     #'reversion',
+    "idios",
     "account",
     "metron",
     "eventlog",
@@ -158,6 +159,7 @@ INSTALLED_APPS = [
     "ccf",
     "slice",
     "project",
+    "profiles",
     "resources",
     "plugins.vt",
     "plugins.ipam",
@@ -256,6 +258,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 ANONYMOUS_USER_ID = -1
 
