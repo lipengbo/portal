@@ -99,10 +99,16 @@ def create_first(request, proj_id):
 @login_required
 def list(request, proj_id):
     """显示所有slice。"""
+    user = request.user
     project = get_object_or_404(Project, id=proj_id)
     context = {}
     context['project'] = project
-    context['slices'] = project.slice_set.all()
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+        context['slices'] = Slice.objects.all()
+    else:
+        context['extent_html'] = "site_base.html"
+        context['slices'] = project.slice_set.all()
     return render(request, 'slice/slice_list.html', context)
 
 

@@ -27,16 +27,26 @@ from plugins.openflow.models import Flowvisor
 @login_required
 def index(request):
     user = request.user
-    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
-    projects = Project.objects.filter(id__in=project_ids)
     context = {}
+    if user.is_superuser:
+        projects = Project.objects.all()
+        context['extent_html'] = "admin_base.html"
+    else:
+        project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+        projects = Project.objects.filter(id__in=project_ids)
+        context['extent_html'] = "site_base.html"
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
 @login_required
 def detail(request, id):
+    user = request.user
     project = get_object_or_404(Project, id=id)
     context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['project'] = project
     return render(request, 'project/detail.html', context)
 
