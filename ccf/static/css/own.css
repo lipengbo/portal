@@ -5627,7 +5627,7 @@ table {
 .base_info .table td {
   border: none;
 }
-.base_info .sec_block {
+.sec_block {
   background: #dff0d8;
   padding: 10px;
   border-bottom: 1px solid #ddd;
