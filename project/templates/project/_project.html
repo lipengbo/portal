@@ -4,8 +4,7 @@
 <li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
                             <a href="{% url project_delete project.id %}" class="btn-delete close">×</a>
                             <div class="thumbnail">
-                                <img src="{{ STATIC_URL}}img/5.jpg" />
-                              <!--  <img src="{% static project.category.image %}" />  -->
+                                <img src="{% static project.category.image %}" />  
                                 <h5>名称：{{ project.name }}</h5>
                                 <p>{{ project.description }}</p>
                                 <hr />
