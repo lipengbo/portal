@@ -58,7 +58,7 @@ msgstr ""
 
 #: templates/notifications/list.html:3 templates/notifications/list.html:8
 msgid "Notifications"
-msgstr "晓曦"
+msgstr "消息"
 
 #: templates/notifications/list.html:9
 msgid "All"
