@@ -15,8 +15,7 @@
 <div class="well banner">
     <header class="jumbotron masthead">
       <div class="inner">
-        <h1>欢迎进入CENI实验平台</h1>
-        <p>您可以通过创建或参与一个项目进行实验</p>
+        <p><img src="{{ STATIC_URL}}img/banner-word.png" width="726" height="119" /></p>
         <p class="enter_btn">
           <a href="{% url "project_apply" %}" class="btn">参与项目</a>
           <a href="{% url "project_create" %}" class="btn btn-warning">创建项目</a>
@@ -35,7 +34,7 @@
                     {% endfor %}
                   </ul>
                   {% if projects|length == 4 %}
-                  <a class="edit view_more" href="{% url "project_index" %}">查看更多>></a>
+                  <a class="edit view_more" href="{% url "project_index" %}">More<b class="icon-play"></b></a>
                   {% endif %}
 </div>
 </div>
