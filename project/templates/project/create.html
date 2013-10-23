@@ -132,6 +132,7 @@
     $('input[type="checkbox"]').on('ifUnchecked', function(event){
         if($(event.currentTarget).hasClass('sliced')) {
             alert("已经有Slice创建，如果希望更换节点请先删除该节点上的Slice");
+            $(event.currentTarget).iCheck('check');
             throw Error();
         }
     });
