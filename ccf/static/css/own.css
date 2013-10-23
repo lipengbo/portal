@@ -5404,6 +5404,10 @@ table {
 .table td .btn {
   margin-right: 10px;
 }
+.table th .label,
+.table td .label {
+  white-space: normal;
+}
 .pro_manage_container {
   border-top: 1px solid #fff;
   padding-top: 20px;
