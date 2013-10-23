@@ -14,4 +14,5 @@ urlpatterns = patterns('slice.views',
     url(r'^create_nw/(?P<owner>\w+)/(?P<nw_num>\w+)/$', "create_nw", name='create_nw'),
     url(r'^delete_nw/(?P<owner>\w+)/$', "delete_nw", name='delete_nw'),
     url(r'^get_show_slices/$', "get_show_slices", name='get_show_slices'),
+    url(r'^topology_test/$', "topology_test", name='topology_test'),
 )

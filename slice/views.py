@@ -294,3 +294,8 @@ def get_show_slices(request):
         slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
+
+
+def topology_test(request):
+    """拓扑测试"""
+    return render(request, 'design_topology.html', {})
