@@ -94,7 +94,7 @@ img {
                                 <td>{{controller.ip}}:{{controller.port}}</td>
                                 <td>
                                     {%if controller.host%}
-                                        {{controller.host.ip}}
+                                        {{controller.host.server.ip}}
                                     {%endif%}
                                 </td>
                                 {% if slice_obj.state == 1 %}
