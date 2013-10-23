@@ -2,7 +2,11 @@
 {% load staticfiles %}
 {% load project_tags %}
 <li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+    {%if slices%}
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
+    {%else%}
+    <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
+    {%endif%}
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
     <img src="{% static slice.project.category.image %}" />
     <table class="table">
