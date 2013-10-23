@@ -5622,6 +5622,7 @@ table {
   margin-bottom: 0;
 }
 .fill_form fieldset .form_inline {
+  margin-top: 0;
   margin-bottom: 10px;
 }
 .fill_form fieldset .form_inline label {
@@ -5812,6 +5813,8 @@ table {
   position: absolute;
   right: 10px;
   top: 10px;
+  opacity: 0.5;
+  filter: alpha(opacity=50);
 }
 .example-sites li .thumbnail {
   padding: 4px 4px 11px 4px;
