@@ -71,6 +71,9 @@
                     </tbody>
                  </table>
               </fieldset>
+              {% if not projects %}
+              <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+              {% endif %}
         <div class="pagination">
           <ul>
               {% show_pages %}
