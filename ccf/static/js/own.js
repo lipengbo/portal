@@ -183,7 +183,7 @@ $(document).ready(function() {
     
     $(".checkboxs .iCheck-helper").each(function(){
         $(this).click(function(){
-            if($(".checkboxs .checked").length==0){
+            if($(".checkboxs .checked").length<$(".checkboxs .iCheck-helper").length){
                 $(".checkall .icheckbox_square-blue").iCheck('uncheck');
             } else if($(".checkboxs .checked").length==$(".checkboxs .iCheck-helper").length) {
                 $(".checkall .icheckbox_square-blue").iCheck('check');
