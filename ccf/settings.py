@@ -167,6 +167,7 @@ INSTALLED_APPS = [
     "plugins.openflow",
     "plugins.network",
     "invite",
+    "nexus"
 ]
 
 CRON_POLLING_FREQUENCY = 5

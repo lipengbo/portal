@@ -152,6 +152,13 @@ class Switch(SwitchResource):
             else:
                 return OVS_TYPE['RELATED']
 
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('has_gre_tunnel'),
+        }
+        return options
+
     class Meta:
         verbose_name = _("Switch")
 
