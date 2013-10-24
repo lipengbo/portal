@@ -1,0 +1,69 @@
+{% extends "site_base.html" %}
+{% block body %}
+<button id="ovs_watch">OVS 性能监控</button>
+<div id="div_ovs_data" style="display:none">
+<table>
+<tr>
+<td>
+    <div class="row">
+        <div class="">
+            <ul class="nav nav-pills" id="br_info"></ul>
+         </div>
+    </div>
+</td>
+</tr>
+<tr>
+<td>
+	<canvas id="port_perf_chart" width="500" height="300">
+</td>
+</tr>
+</table>
+    <button id="back" >返回</button>   
+</div>
+<div id="div_normal_data" style="display">
+<table border="1">
+    <tr>
+    <td>
+	<div>
+		<div style="position: relative; right: 30px">cpu使用率(%)：</div>
+		<canvas id="cpu_perf_chart" width="500" height="300">
+	</div>
+    </td>
+    <td>
+        <div>内存使用率(%)：</div>
+        <canvas id="mem_perf_chart" width="500" height="300">
+    </td>
+    <tr>
+    <td>
+    <div>
+        <canvas id="net_perf_chart" width="500" height="300">
+    </div>
+    </td>
+    <td>
+    <div>
+        <canvas id="disk_perf_chart" width="500" height="300">
+    </div>
+</td>
+</tr>
+</table>
+</div>
+{% endblock %}
+{% block extra_script %}
+        <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
+        <script src="{{ STATIC_URL }}js/monitor.js" ></script>
+        <script>
+            $(function(){
+                init({{ host_id }});
+            })
+            $('#ovs_watch').click(function(){
+                $('#div_normal_data').hide();
+		//show之前去获取该机器的网桥和端口信息
+		get_br_info(1);
+                $('#div_ovs_data').show();
+            });
+            $('#back').click(function(){
+                $('#div_normal_data').show();
+                $('#div_ovs_data').hide();
+            });
+        </script>
+{% endblock %}

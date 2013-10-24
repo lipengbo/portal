@@ -281,3 +281,39 @@ def get_show_slices(request):
         slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
+
+
+import random
+
+def monitor_vm(request, host_id, vm_id):
+    print host_id, vm_id
+    return render(request, "slice/monitor.html", {'host_id' : host_id, 'vm_id' : vm_id})
+
+def monitor_host(request, host_id):
+    return render(request, "slice/monitor.html", {'host_id' : host_id})
+
+def monitor_ovs(request, host_id):
+    return HttpResponse(json.dumps([{'br_name' : "br0", 'ports' : ['eth0', 'eth1']},
+                                    {'br_name' : 'br1', 'ports' : ['eth2', 'eth3']}]))
+
+def monitor_port(request):
+    if request.method == 'POST':
+        print request.POST.get("host_id"), "^^^^^^^^^"
+    return HttpResponse(json.dumps({"test":"test"}))
+
+def update_vm_performace_data(request, host_id, vm_id):
+    """
+    监控虚拟机性能
+    """
+    performace_data = {'cpu_use':random.randint(1, 100), 'mem_use':random.randint(1, 100),
+                       'net_recv_data':random.randint(1, 100), 'net_send_data' : random.randint(1,50),
+                       'disk_use':random.randint(1, 100)}
+    print host_id, "*******", performace_data
+    return HttpResponse(json.dumps(performace_data))
+
+def update_host_performace_data(request, host_id):
+    """
+    监控主机性能
+    """
+    performace_data = {'cpu_use':random.randint(1, 100), 'mem_use':random.randint(1, 100), 'net_use':random.randint(1, 100), 'disk_use':random.randint(1, 100)}
+    return HttpResponse(json.dumps(performace_data))
