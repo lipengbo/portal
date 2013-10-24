@@ -93,7 +93,7 @@
                     <td>{{ membership.user }}</td>
                     <td>{{ membership.user }}</td>
                     <td>
-                        <a href={% if not membership.is_owner %}"{% url project_delete_member membership.id  %}"{% else %}"javascript:;" {% endif %} class="btn btn-info {% if membership.is_owner %}disabled{% else %} btn-delete {% endif %}">{% trans "Remove" %}</a>
+                        <a href={% if not membership.is_owner %}"{% url project_delete_member membership.id  %}"{% else %}"javascript:;" {% endif %} class="btn btn-inverse {% if membership.is_owner %}disabled{% else %} btn-delete {% endif %}">{% trans "Remove" %}</a>
                         {% if not membership.is_owner %}
                         {% endif %}
                     </td>
