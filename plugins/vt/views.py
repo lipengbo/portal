@@ -17,7 +17,6 @@ from resources.models import Server
 import logging
 LOG = logging.getLogger('plugins')
 
-
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     context = {}
@@ -32,7 +31,10 @@ def vm_list(request, sliceid):
     return render(request, 'vt/vm_list.html', context)
 
 
-def create_vm(request, sliceid):
+def create_vm(request, sliceid, from_link):
+    """
+    from_link : 记录链接跳转的入口，以便返回原来的页面。 0 为从slic详情页面转入， 1为从虚拟机列表页面转入
+    """
     if request.method == 'POST':
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
@@ -63,6 +65,7 @@ def create_vm(request, sliceid):
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
+        context['from_link'] = from_link
         return render(request, 'vt/create_vm.html', context)
 
 
