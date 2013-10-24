@@ -26,7 +26,7 @@
         <form action="" method="post" accept-charset="utf-8">
             {% csrf_token %}
             <fieldset>
-                 <legend><a data-toggle="modal" href="#inviteModal" class="btn btn-info edit">邀请</a>邀请成员</legend>
+                 <legend><a  href="javascript:;" id="invite-button" class="btn disabled btn-info edit">邀请</a>邀请成员</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -46,19 +46,15 @@
                     </tbody>
                  </table>
               </fieldset>
+              {% if not users %}
+              <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+              {% endif %}
         <div class="pagination">
           <ul>
               {% show_pages %}
           </ul>
         </div>
-        <div class="form-actions">
-          <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4"><button type="button" onclick="window.history.back();" class="btn btn-info btn-large btn-block">返 回</button></div>
-            <div class="span4"></div>
-          </div>
-        </div>
-        <div id="inviteModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div id="inviteModal" class="modal hide in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3 id="myModalLabel">邀请</h3>      
@@ -82,5 +78,23 @@
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('.checkboxs input').on('ifChecked', function(event){
+        $('#invite-button').removeClass('disabled');
+    });
+    $('.checkboxs input').on('ifUnchecked', function(event){
+        if($('.checkboxs .checked').length == 1) {
+            $('#invite-button').addClass('disabled');
+        } else {
+            $('#invite-button').removeClass('disabled');
+        }
+    });
+    $('#invite-button').click(function() {
+        if($(this).hasClass('disabled')) {
+            return;
+        }
+        $("#inviteModal").modal();
+    });
+</script>
 {% endblock %}
 

@@ -5367,6 +5367,10 @@ table {
 .table td .btn {
   margin-right: 10px;
 }
+.table th .label,
+.table td .label {
+  white-space: normal;
+}
 .pro_manage_container {
   max-width: 980px;
   margin: 0 auto;
