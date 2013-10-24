@@ -229,14 +229,20 @@ def get_slice_topology(slice_obj):
 #     交换机
     try:
         switches = []
-        switch_dpids = []
-        switch_ports = slice_obj.get_switch_ports()
-        for switch_port in switch_ports:
-            switch_dpids.append(switch_port.switch.dpid)
-        switch_dpids = list(set(switch_dpids))
-        for switch_dpid in switch_dpids:
-            switch = {'dpid': switch_dpid}
+        switch_objs = slice_obj.get_switches()
+        for switch_obj in switch_objs:
+            switch = {'dpid': switch_obj.dpid,
+                      'name': switch_obj.name,
+                      'type': switch_obj.type(),
+                      'id': switch_obj.id}
             switches.append(switch)
+        switch_ports = slice_obj.get_switch_ports()
+#         for switch_port in switch_ports:
+#             switch_dpids.append(switch_port.switch.dpid)
+#         switch_dpids = list(set(switch_dpids))
+#         for switch_dpid in switch_dpids:
+#             switch = {'dpid': switch_dpid, 'name':}
+#             switches.append(switch)
     #     链接
         links = []
         flowvisor = slice_obj.get_flowvisor()
@@ -245,7 +251,11 @@ def get_slice_topology(slice_obj):
                 source__in=switch_ports, target__in=switch_ports)
         for link_obj in link_objs:
             link = {'src_switch': link_obj.source.switch.dpid,
-                    'dst_switch': link_obj.target.switch.dpid}
+                    'src_port_name': link_obj.source.name,
+                    'src_port': link_obj.source.port,
+                    'dst_switch': link_obj.target.switch.dpid,
+                    'dst_port': link_obj.target.port,
+                    'dst_port_name': link_obj.target.name}
             links.append(link)
     #     虚拟机
         specials = []
@@ -258,13 +268,14 @@ def get_slice_topology(slice_obj):
         for vm in vms:
             virtual_switch = vm.server.get_link_vs()
             if virtual_switch:
-                if vm.state == 1:
-                    host_status = 1
-                else:
-                    host_status = 0
                 if vm.type == 1:
-                    vm_info = {'macAddress': vm.ip.ipaddr, 'switchDPID': virtual_switch.dpid,
-                                'hostid': vm.id, 'hostStatus': host_status}
+                    vm_info = {'macAddress': vm.mac,
+                               'switchDPID': virtual_switch.dpid,
+                               'hostid': vm.id,
+                               'hostStatus': vm.state,
+                               'name': vm.name,
+                               'ip': vm.ip.ipaddr,
+                               'vnc_port': vm.vnc_port}
                     normals.append(vm_info)
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials}
