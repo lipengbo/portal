@@ -106,5 +106,6 @@ msgstr "提交"
 msgid "Vm list"
 msgstr "虚拟机列表"
 
+#: plugins/vt/api.py:35 plugins/vt/views.py:51
 msgid "resource not enough"
 msgstr "宿主机资源不足"
