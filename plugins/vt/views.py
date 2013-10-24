@@ -15,6 +15,7 @@ from etc.config import vnctunnel, function_test
 from plugins.common.vt_manager_client import VTClient
 from resources.models import Server
 import logging
+from django.utils.translation import ugettext as _
 LOG = logging.getLogger('plugins')
 
 def vm_list(request, sliceid):
@@ -47,7 +48,7 @@ def create_vm(request, sliceid, from_link):
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
                     if not serverid:
-                        raise Exception('resource not enough')
+                        raise Exception(_('resource not enough'))
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
