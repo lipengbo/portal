@@ -13,10 +13,12 @@ from django.forms.models import modelform_factory
 
 from nexus.templatetags.nexus_tags import get_fields
 
+@login_required
 def index(request):
     context = {}
     return render(request, 'nexus/index.html', context)
 
+@login_required
 def list_objects(request, app_label, model_class):
     context = {}
     ModelClass = get_model(app_label, model_class, False)
@@ -26,6 +28,7 @@ def list_objects(request, app_label, model_class):
     context['ModelClass'] = ModelClass
     return render(request, 'nexus/list.html', context)
 
+@login_required
 def add_or_edit(request, app_label, model_class, id=None):
     context = {}
     Model = get_model(app_label, model_class, False)
@@ -44,3 +47,12 @@ def add_or_edit(request, app_label, model_class, id=None):
             return redirect('nexus_list', app_label=app_label, model_class=model_class)
         context['formset'] = formset
     return render(request, 'nexus/add.html', context)
+
+@login_required
+def delete_objects(request, app_label, model_class):
+    if request.method == 'POST':
+        ids = request.POST.getlist('id')
+        Model = get_model(app_label, model_class, False)
+        Model.objects.filter(id__in=ids).delete()
+        return redirect('nexus_list', app_label=app_label, model_class=model_class)
+
