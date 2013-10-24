@@ -253,7 +253,10 @@ function fetch_serverinfo(){
         content = content + server_names[i];
         content = content + '</option>';
     }
-    insert_content_to_obj('id_server',content);
+    var objs = $("[id='id_server']");
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = obj.innerHTML + content;
+    }
 }
 
 function get_select_server_name(){
