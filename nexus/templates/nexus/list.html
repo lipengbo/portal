@@ -7,10 +7,10 @@
 <div class="well">
         <a class="btn" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{% trans class_name %}</a>
 </div>
-<table class="table">
+<table class="table table-bordered">
     <thead>
         <tr>
-            <th></th>
+            <th>{% trans class_name %}</th>
             {% for field in ModelClass|get_fields %}
                 <th>{{ field.name }}</th>
             {% endfor %}

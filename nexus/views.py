@@ -30,14 +30,17 @@ def add_or_edit(request, app_label, model_class, id=None):
     context = {}
     Model = get_model(app_label, model_class, False)
     fields = get_fields(Model, True)
-    print fields
     ModelForm = modelform_factory(Model, fields=tuple(fields))
-    if request.method == 'GET':
-        context['formset'] = ModelForm
+    if id:
+        instance = get_object_or_404(Model, id=id)
     else:
-        formset = ModelForm(request.POST)
-        instances = formset.save()
+        instance = None
+    if request.method == 'GET':
+        context['formset'] = ModelForm(instance=instance)
+    else:
+        formset = ModelForm(request.POST, instance=instance)
+        if formset.is_valid():
+            instances = formset.save()
+            return redirect('nexus_list', app_label=app_label, model_class=model_class)
         context['formset'] = formset
-        return redirect('nexus_list', app_label=app_label, model_class=model_class)
     return render(request, 'nexus/add.html', context)
-
