@@ -1,13 +1,16 @@
 {% extends "site_base.html" %}
 {% load nexus_tags %}
 {% load i18n %}
+{% load endless %}
 
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
+{% paginate 20 objects %}
 <form action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
 <div class="well">
-    <button type="submit" class="btn btn-danger" name="action" value="delete" href="{% url nexus_delete app_label class_name|lower %}">{% trans "Delete" %}{% trans class_name %}</button>
+    <input type="hidden" name="action" id="action" value="">
+    <button type="submit" class="delete-action btn-input btn-delete btn btn-danger" href="{% url nexus_delete app_label class_name|lower %}">{% trans "Delete" %}{% trans class_name %}</button>
     <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{% trans class_name %}</a>
 </div>
 <table class="table table-bordered">
@@ -34,9 +37,19 @@
     {% endfor %}
     </tbody>
 </table>
+        <div class="pagination">
+            <ul>
+                {% show_pages %}
+            </ul>
+        </div>
 {% endwith %}
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('.delete-action').click(function(){
+        $('#action').val('delete');
+    });
+</script>
 {% endblock %}
 </form>
