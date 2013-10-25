@@ -175,6 +175,7 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
+    context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -299,3 +300,8 @@ def get_show_slices(request):
 def topology_test(request):
     """拓扑测试"""
     return render(request, 'design_topology.html', {})
+
+
+def topology_d3(request):
+    """拓扑测试"""
+    return render(request, 'slice/slice_topology.html', {})

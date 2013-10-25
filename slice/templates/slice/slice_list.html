@@ -7,7 +7,7 @@
 
 {% block head_title %}SLICE列表{% endblock %}
 {% block breadcrumb %}
-    {%if extent_html == "base_site.html" %}
+    {%if extent_html == "site_base.html" %}
         <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
     {%endif%}
     Slice列表
@@ -18,7 +18,7 @@
     <div class="fill_form">
         <fieldset>
              <legend>
-                {%if extent_html == "base_site.html" %}
+                {%if extent_html == "site_base.html" %}
                 我的Slice
                 {%else%}
                 Slice列表

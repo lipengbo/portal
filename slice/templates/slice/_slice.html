@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load project_tags %}
 <!--
-<li class="span3" {% if extent_html == "base_site.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="span3" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
     {%if slices%}
         <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
     {%else%}
@@ -30,7 +30,7 @@
                 {%endif%}
                 </td>
             </tr>
-            {%if extent_html == "base_site.html" %}
+            {%if extent_html == "site_base.html" %}
             {%else%}
                 <tr>
                     <td valign="top">所属项目：</td>

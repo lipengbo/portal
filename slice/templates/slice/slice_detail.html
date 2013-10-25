@@ -12,7 +12,7 @@ img {
 </style>
 {% endblock %}-->
 {% block breadcrumb %}
-    {%if extent_html == "base_site.html" %}
+    {%if extent_html == "site_base.html" %}
 	   <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
 	{%endif%}
 	Slice详情
@@ -23,7 +23,7 @@ img {
 		<div class="fill_form form-wizard">
 			  <fieldset>
 			    <legend>
-			        {%if extent_html == "base_site.html" %}
+			        {%if extent_html == "site_base.html" %}
     			        {% if slice_obj.state == 0 %}
                             <a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编辑</a>
                             <button type="button" class="btn btn-success start_btn edit start_slice" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'">
@@ -68,7 +68,7 @@ img {
     <div class="fill_form form-wizard">		    
         <fieldset class="base_info">
             <legend>
-			    {%if extent_html == "base_site.html" %}
+			    {%if extent_html == "site_base.html" %}
                     {% if slice_obj.state == 0 %}
                         <a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit">编辑</a>
                         <button type="button" class="btn btn-success start_btn edit start_slice" onclick="document.location='/slice/start_or_stop/{{ slice_obj.id }}/1/'">
@@ -95,10 +95,11 @@ img {
             <div class="row-fluid">
                 <div class="span2"></div>
                 <div class="span8">
-                    <div id="content" style="background-color:#FFFFFF; width:100%; height:300px"></div>
+                    <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/" frameborder="0"></iframe>
+                    <!--<div id="content" style="background-color:#FFFFFF; width:100%; height:300px"></div>-->
                 </div>
                 <div class="span2"></div>
-            </div>                   
+            </div>                  
             <div class="clear" style="display: none" >
                 <p id="slice_id">{{slice_obj.id}}</p>
                 <p id="topology_type">1</p>
@@ -107,15 +108,15 @@ img {
         </fieldset>
 		<fieldset>
             <legend>
-                {%if extent_html == "base_site.html" %}
-                    <a data-toggle="modal" href="/plugins/vt/create/vm/{{ slice_obj.id }}" class="btn btn-info edit">添加虚拟机</a>
+                {%if extent_html == "site_base.html" %}
+                    <a data-toggle="modal" href="/plugins/vt/create/vm/{{ slice_obj.id }}/0/" class="btn btn-info edit">添加虚拟机</a>
                 {%endif%}
                 Slice资源
             </legend>
 		  	 <table class="table table-striped table-hover">
 		  	    <thead>
                     <tr>
-                        {%if extent_html == "base_site.html" %}
+                        {%if extent_html == "site_base.html" %}
                             <th width="20%">名称</th>
                             <th width="15%">资源类型</th>
                             <th width="20%">IP地址</th>
@@ -172,7 +173,7 @@ img {
                                     {%endif%}
                                </td>
                             {%endif%}
-                            {%if extent_html == "base_site.html" %}
+                            {%if extent_html == "site_base.html" %}
                                 {% if slice_obj.state == 1 %}
 					 			   <td>
                                         {%if controller.host%}
@@ -272,7 +273,7 @@ img {
                                     {%endif%}
                                 </td>
                             {%endif%}
-				 			{%if extent_html == "base_site.html" %}
+				 			{%if extent_html == "site_base.html" %}
 					 			{% if slice_obj.state == 1 %}
                                 	<td>
                                         {% if vm.state == 8 %}
@@ -316,15 +317,6 @@ img {
                             {%endif%}
 					 	</tr>
 			 		{%endfor%}
-			 		{% if vms %}   
-			 		 <tr>
-			 		     {% if slice_obj.state == 1 %}
-			 		         <td colspan="6"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
-			 		     {%else%}
-			 		         <td colspan="5"><a href="{% url 'vm_list' slice_obj.id %}" class="edit">更多&gt;&gt;</a></td>
-			 		     {%endif%}
-			 		 </tr>                             
-                    {%endif%}
 			 	</tbody>
 			 </table>
 		    {% if vms %}                           

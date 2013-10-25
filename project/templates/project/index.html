@@ -7,14 +7,14 @@
 {% load endless %}
 
 {% block head_title %}
-    {%if extent_html == "base_site.html" %}
+    {%if extent_html == "site_base.html" %}
         我的项目
     {%else%}
         所有项目
     {%endif%}
 {% endblock %}
 {% block breadcrumb %}
-    {%if extent_html == "base_site.html" %}
+    {%if extent_html == "site_base.html" %}
         我的项目
     {%else%}
         所有项目
@@ -34,13 +34,13 @@
         <div class="fill_form">            
             <fieldset>
                 <legend>
-                    {%if extent_html == "base_site.html" %}
+                    {%if extent_html == "site_base.html" %}
                         我的项目
                     {%else%}
                         所有项目
                     {%endif%}
                 </legend>
-                {%if extent_html == "base_site.html" %}
+                {%if extent_html == "site_base.html" %}
                     <div class="alert alert-info">
                          <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
                     </div>
