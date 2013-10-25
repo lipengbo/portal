@@ -23,7 +23,15 @@
 
 {% block body %}
 {% paginate 12 projects  %}
-        <div class="fill_form">
+        <div class="search">
+            <form class="form-search">
+              <div class="input-append">
+                  <input type="text" name="query" value="" class="span2 search-query">
+                  <button type="submit" class="btn">搜索</button>
+              </div>
+            </form>
+        </div>
+        <div class="fill_form">            
             <fieldset>
                 <legend>
                     {%if extent_html == "base_site.html" %}
