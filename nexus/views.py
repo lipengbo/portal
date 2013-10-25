@@ -20,6 +20,10 @@ def index(request):
 
 @login_required
 def list_objects(request, app_label, model_class):
+    if request.method == 'POST':
+        action_name = request.POST.get('action')
+        if action_name == 'delete':
+            return delete_action(request, app_label, model_class)
     context = {}
     ModelClass = get_model(app_label, model_class, False)
     objects = ModelClass.objects.order_by('-id')
@@ -49,7 +53,7 @@ def add_or_edit(request, app_label, model_class, id=None):
     return render(request, 'nexus/add.html', context)
 
 @login_required
-def delete_objects(request, app_label, model_class):
+def delete_action(request, app_label, model_class):
     if request.method == 'POST':
         ids = request.POST.getlist('id')
         Model = get_model(app_label, model_class, False)

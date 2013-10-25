@@ -155,7 +155,7 @@ class Switch(SwitchResource):
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('has_gre_tunnel'),
+            'exclude_fields': ('has_gre_tunnel', ),
         }
         return options
 

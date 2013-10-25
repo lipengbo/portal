@@ -4,14 +4,16 @@
 
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
+<form action="" method="post" accept-charset="utf-8">
+    {% csrf_token %}
 <div class="well">
-    <a class="btn btn-danger" href="{% url nexus_delete app_label class_name|lower %}">{% trans "Delete" %}{% trans class_name %}</a>
-    <a class="btn btn-success" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{% trans class_name %}</a>
+    <button type="submit" class="btn btn-danger" name="action" value="delete" href="{% url nexus_delete app_label class_name|lower %}">{% trans "Delete" %}{% trans class_name %}</button>
+    <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{% trans class_name %}</a>
 </div>
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th><input type="checkbox" name="some_name" value=""></th>
+            <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
             <th>{% trans class_name %}</th>
             {% for field in ModelClass|get_fields %}
                 <th>{{ field.name }}</th>
@@ -22,7 +24,7 @@
     {% for object in objects %}
         <tr>
             <td>
-                <input type="checkbox" name="some_name" value="">
+                <input type="checkbox" name="id" value="{{ object.id }}">
             </td>
             <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</td>
             {% for field in object|get_fields %}
@@ -34,3 +36,7 @@
 </table>
 {% endwith %}
 {% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+{% endblock %}
+</form>
