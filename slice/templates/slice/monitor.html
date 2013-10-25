@@ -38,6 +38,8 @@
     <div>
         <canvas id="net_perf_chart" width="500" height="300">
     </div>
+        <br/>
+        <div id="net_info"></div>
     </td>
     <td>
     <div>
@@ -53,12 +55,12 @@
         <script src="{{ STATIC_URL }}js/monitor.js" ></script>
         <script>
             $(function(){
-                init({{ host_id }});
+                init(1, 2);
             })
             $('#ovs_watch').click(function(){
                 $('#div_normal_data').hide();
-		//show之前去获取该机器的网桥和端口信息
-		get_br_info(1);
+		        //show之前去获取该机器的网桥和端口信息
+		        get_br_info(1);
                 $('#div_ovs_data').show();
             });
             $('#back').click(function(){
