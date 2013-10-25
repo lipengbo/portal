@@ -303,12 +303,26 @@ performace_data = {'cpu_use' : random.randint(1, 100),
                    'net_recv_data' : random.randint(1, 100),
                    'net_send_data' : random.randint(1, 100),
                    'disk_use' : random.randint(1, 100)}
+
 def update_vm_performace_data(request, host_id, vm_id):
     """
     监控虚拟机性能
     """
-    print host_id, "*******", performace_data
-    return render("monitor_vm.html")
+    vm_perf_data = {"mem": {"total": 262144, "percent": 100, "free": 0, "used": 262144},
+     "net": {"4f6f91d4": [5522, 984, 7080755, 12, 0, 0, 0, 0],
+             "4f6f91d5": [123, 84, 0755, 12, 0, 0, 0, 0]},
+     "disk": {"total": 858993459200.0, "percent": 0.067138671875, "free": 8416742400.0, "used": 576716800.0},
+     "cpu": 0.0}
+    net_data = {}
+    for (key, value) in vm_perf_data["net"].items():
+        net_data[key] = [ value[0], value[1] ]
+    disk_data = {"free" : vm_perf_data["disk"]["free"], "used" : vm_perf_data["disk"]["used"]}
+    print net_data
+    return HttpResponse(json.dumps({'cpu_use' : vm_perf_data["cpu"],
+                                    'mem_use' : vm_perf_data["mem"]["percent"],
+                                    'net' : net_data,
+                                    'disk_use' : disk_data
+                                    }))
 
 def update_host_performace_data(request, host_id):
     return HttpResponse(json.dumps(performace_data))

@@ -3,11 +3,14 @@
 var cpu_values = [];
 var mem_values = [];
 var net_values = [];
+var ports = [];
 var net_recv_values = [];
 var net_send_values = [];
 var br_values = [];
 var port_recv_values = [];
 var port_send_values = [];
+var disk_free;
+var disk_used
 
 for (var i=0; i<150; i++){
     cpu_values[i] = 0 + "";
@@ -83,14 +86,17 @@ var net_chart_data = {
     ]
 }
 
+var disk_options = {
+    animation : false
+}
 var disk_chart_data = [
 	{
-		value: 30,
-		color:"#CD661D"
+		value: disk_free,
+		color: "#99CC66"
 	},
 	{
-		value : 50,
-		color : "#66CCCC"
+		value : disk_used,
+		color : "#FF3366"
 	}
 ];
 
@@ -125,11 +131,18 @@ var port_chart_data = {
     var net_chart = new Chart(ctx_net);
 
 	var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
-	new Chart(ctx_disk).Doughnut(disk_chart_data);   
+	//new Chart(ctx_disk).Doughnut(disk_chart_data);   
 
 	var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
 
     var port_chart = new Chart(ctx_port);
+
+function switch_port(num){
+	alert(ports[num][0]);
+	net_chart_data["datasets"][0]["data"] = ports[num][0];
+	net_chart_data["datasets"][1]["data"] = ports[num][1];
+	new Chart(ctx_net).Line(net_chart_data, net_options);
+}
 
 function get_performace_data(host_id, vm_id){
     var url;
@@ -156,7 +169,10 @@ function get_performace_data(host_id, vm_id){
 				mem_values.push(performace_data['mem_use']);
 				mem_chart_data["datasets"][0]["data"] = mem_values;
 				new Chart(ctx_mem).Line(mem_chart_data, mem_options);
-
+                disk_chart_data[0]["value"] = performace_data['disk_use']['free']
+                disk_chart_data[1]["value"] = performace_data['disk_use']['used']
+                new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
+                /*
 				net_recv_values.shift();
 				net_recv_values.push(performace_data['net_recv_data']);
 		
@@ -165,6 +181,32 @@ function get_performace_data(host_id, vm_id){
 				net_chart_data["datasets"][0]["data"] = net_recv_values;
 				net_chart_data["datasets"][1]["data"] = net_send_values;
 				new Chart(ctx_net).Line(net_chart_data, net_options);
+                */
+
+                var net_info_content = "";
+				
+				var num = 0;
+				
+                $.each(performace_data.net, function(port, data){
+					send_data[num].shift();
+					send_data[num].push(data[0]);
+
+					recv_data[num].shift();
+					recv_data[num].push(data[1]);
+
+					ports[num][0] = send_data;
+					ports[num][1] = recv_data;
+
+                    net_info_content = net_info_content + "<button id='id_port' onclick='switch_port(" + num + ")'>" + port + "</button>【send: "+ data[0] +", recv:"+ data[1] +"】<br/>";
+					num++;
+                });
+                document.getElementById("net_info").innerHTML = net_info_content;
+
+                //默认显示第一个网卡的信息
+				net_chart_data["datasets"][0]["data"] = ports[1][0];
+				net_chart_data["datasets"][1]["data"] = ports[1][1];
+				new Chart(ctx_net).Line(net_chart_data, net_options);
+
 
             }
      });
