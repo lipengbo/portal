@@ -281,3 +281,17 @@ def get_show_slices(request):
         slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
+
+import random
+def monitor_vm(request, host_id):
+    print host_id
+    return render(request, "slice/monitor_vm.html", {'host_id' : host_id})
+
+def update_vm_perfomace_data(request, host_id):
+    """
+    监控虚拟机性能
+    """
+    performace_data = {'cpu_use':random.randint(1, 100), 'mem_use':random.randint(1, 100), 'net_use':random.randint(1, 100), 'disk_use':random.randint(1, 100)}
+    print host_id, "*******", performace_data
+    return render("monitor_vm.html")
+
