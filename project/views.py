@@ -122,6 +122,7 @@ def apply(request):
                         application.save()
                     except IntegrityError:
                         pass
+            messages.add_message(request, messages.INFO, _("Application is submitted, please wait to audit."))
         else:
             messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)

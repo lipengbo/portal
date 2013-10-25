@@ -89,11 +89,14 @@
               <h3 id="myModalLabel">申请</h3>      
             </div>
                 <div class="modal-body">
+                        <div class="alert message-error alert-error hide">
+                            消息是必填项
+                        </div>
                       <table class="table">
                           <tbody>
                               <tr>
                                   <td width="150" class="v_top text_r">申请理由</td>
-                                  <td><textarea rows="3" name="message"></textarea></td>
+                                  <td><textarea id="message" rows="3" name="message"></textarea></td>
                               </tr>
                               <tr>
                                   <td class="text_r">申请角色</td>
@@ -112,7 +115,7 @@
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-info" data-dismiss="modal">取消</button>
-                  <button type="submit" class="btn btn-info">提交申请</button>
+                  <button id="apply-submit" type="submit" class="btn btn-info">提交申请</button>
                 </div>
          </div>
   </form>
@@ -143,6 +146,12 @@
             return;
         }
         $("#applyModal").modal();
+    });
+    $('#apply-submit').click(function() {
+            if(!$('#message').val()) {
+                $('.message-error').show();
+                return false;
+            }
     });
 </script>
 {% endblock %}

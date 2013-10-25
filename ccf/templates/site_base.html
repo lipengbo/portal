@@ -86,30 +86,41 @@
                     $('input').iCheck({
                         checkboxClass: 'icheckbox_square-blue',
                         radioClass: 'iradio_square-blue',
-                        increaseArea: '20%' // optional
+                        increaseArea: '20%'  // optional
                     });
+                    $('')
                     $('.btn-delete').click(function(){
-                         var result = confirm("你确定要删除?");
-                         if (result) {
-                            return true;
-                         } else {
-                            return false;
-                         }
+                        $('#alertModal').modal();
+                        var self = $(this);
+                        $('.delete-confirm').click(function(){
+                            window.location.href = self.attr('href');
+                        });
+                        return false;
                     });
-                    
                     //列表框，指针放上去时显示删除图标                 
                     $(".example-sites li").mouseenter(function(){
                         $(this).children(".close").stop(true,false).fadeIn();
                     });
                     $(".example-sites li").mouseleave(function(){
                         $(this).children(".close").stop(false,true).hide();
-                    });               
-                });               
+                    });
+                });
             </script>
             {% block extra_script %}{% endblock %}
         {% endblock %}
 		
 {% block extra_body_base %}
+
+<div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-body">
+      <p class="text-center">确定删除吗？</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-info delete-cancel" data-dismiss="modal">取消</button>
+      <button class="btn delete-confirm btn-info" data-dismiss="modal">确定</button>
+    </div>           
+ </div>
+
     {% analytics %}
     {% block extra_body %}
     	{% block footer_base %}
