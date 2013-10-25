@@ -2,7 +2,11 @@
 {% load staticfiles %}
 {% load project_tags %}
 <li class="span3" {% if extent_html == "base_site.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
-    <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
+    {%if slices%}
+        <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
+    {%else%}
+        <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
+    {%endif%}
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
     <img src="{% static slice.project.category.image %}" />
     <table class="table">

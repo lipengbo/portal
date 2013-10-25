@@ -311,7 +311,7 @@
                         <tr>
                             <td width="20%">名称</td>
                             <td width="30%">
-				                <input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />				
+				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />				
                             </td>                           
                             <td>
                                 <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span>
@@ -377,7 +377,7 @@
                  <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>序号</th>
+                            <th>名称</th>
                             <th>DPID</th>
                             <th>节点类型</th>
                             <th>所选端口</th>

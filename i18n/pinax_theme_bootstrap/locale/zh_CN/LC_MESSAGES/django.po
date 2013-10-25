@@ -106,13 +106,12 @@ msgid "Delete my password"
 msgstr ""
 
 #: templates/account/password_reset_done.html:15
-#, fuzzy, python-format
 msgid ""
 "We have sent you an email. If you do not receive it within a few minutes, "
-"contact us at <a href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>."
+"try resending or contact us at <a href=\"mailto:%(THEME_CONTACT_EMAIL)s\">%(THEME_CONTACT_EMAIL)s</a>."
 msgstr ""
-"我们已经发送了一封电子邮件到<b>%(email)s</b>进行验证，请按照提供的链接完成最后的注册过程。如果您在几分钟内没有收到我们的邮件，请联系我们：<a"
-" href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>。"
+"我们已经发送了一封电子邮件。如果您在几分钟内没有收到我们的邮件，请联系我们：<a"
+" href=\"mailto:%(THEME_CONTACT_EMAIL)s\">%(THEME_CONTACT_EMAIL)s</a>。"
 
 #: templates/account/password_reset_from_key.html:8
 msgid "Bad Token"
@@ -544,10 +543,10 @@ msgstr "重置我的密码"
 #, python-format
 msgid ""
 "If you have any trouble resetting your password, contact us at <a "
-"href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>."
+"href=\"mailto:%(THEME_CONTACT_EMAIL)s\">%(THEME_CONTACT_EMAIL)s</a>."
 msgstr ""
 "如果您在重置密码时有任何困难，请联系我们：<a "
-"href=\"mailto:%(CONTACT_EMAIL)s\">%(CONTACT_EMAIL)s</a>。"
+"href=\"mailto:%(THEME_CONTACT_EMAIL)s\">%(THEME_CONTACT_EMAIL)s</a>。"
 
 #: templates/account/signup.html:7 templates/account/signup.html.py:10
 msgid "Sign Up"

@@ -26,7 +26,6 @@
         <div class="fill_form">
             <fieldset>
                 <legend>
-                    <button type="button" class="btn btn-info edit" onclick="window.history.back();">返 回</button>
                     {%if extent_html == "base_site.html" %}
                         我的项目
                     {%else%}
@@ -38,7 +37,6 @@
                          <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
                     </div>
                 {%endif%}
-                
                 <div class="row-fluid">
                     {% for group in projects|group_by:4 %}
                     <ul class="thumbnails example-sites">

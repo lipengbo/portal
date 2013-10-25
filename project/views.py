@@ -100,7 +100,7 @@ def invite(request, id):
 def apply(request):
     context = {}
     user = request.user
-    projects = Project.objects.all()
+    projects = Project.objects.all().exclude(owner=user)
     if 'category' in request.GET:
         cat_id = request.GET.get('category')
         if cat_id and cat_id != u'-1':
@@ -132,6 +132,7 @@ def apply(request):
                         application.save()
                     except IntegrityError:
                         pass
+            messages.add_message(request, messages.INFO, _("Application is submitted, please wait to audit."))
         else:
             messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)

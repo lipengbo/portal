@@ -18,8 +18,11 @@
     <div class="fill_form">
         <fieldset>
              <legend>
-                 <button type="button" class="btn btn-info edit" onclick="window.history.back();">返 回</button>
-                 Slice列表
+                {%if extent_html == "base_site.html" %}
+                我的Slice
+                {%else%}
+                Slice列表
+                {%endif%}
              </legend>
              <div class="row-fluid">
              {% for group in slices|group_by:4 %}
