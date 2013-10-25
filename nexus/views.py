@@ -36,6 +36,8 @@ def list_objects(request, app_label, model_class):
 def add_or_edit(request, app_label, model_class, id=None):
     context = {}
     Model = get_model(app_label, model_class, False)
+    context['ModelClass'] = Model
+    context['app_label'] = app_label
     fields = get_fields(Model, True)
     ModelForm = modelform_factory(Model, fields=tuple(fields))
     if id:
@@ -53,10 +55,13 @@ def add_or_edit(request, app_label, model_class, id=None):
     return render(request, 'nexus/add.html', context)
 
 @login_required
-def delete_action(request, app_label, model_class):
+def delete_action(request, app_label, model_class, id=None):
+    Model = get_model(app_label, model_class, False)
     if request.method == 'POST':
         ids = request.POST.getlist('id')
-        Model = get_model(app_label, model_class, False)
         Model.objects.filter(id__in=ids).delete()
-        return redirect('nexus_list', app_label=app_label, model_class=model_class)
-
+    else:
+        if id:
+            instance = get_object_or_404(Model, id=id)
+            instance.delete()
+    return redirect('nexus_list', app_label=app_label, model_class=model_class)

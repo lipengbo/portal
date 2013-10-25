@@ -3,6 +3,12 @@
 {% load i18n %}
 {% load endless %}
 
+{% block breadcrumb %}
+{% with ModelClass|get_class_name as class_name  %}
+<a href="{% url nexus_list app_label class_name|lower %}">{% trans class_name %}{% trans "Admin" %}</a>
+{% endwith %}
+{% endblock %}
+
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
 {% paginate 20 objects %}
@@ -10,7 +16,7 @@
     {% csrf_token %}
 <div class="well">
     <input type="hidden" name="action" id="action" value="">
-    <button type="submit" class="delete-action btn-input btn-delete btn btn-danger" href="{% url nexus_delete app_label class_name|lower %}">{% trans "Delete" %}{% trans class_name %}</button>
+    <button type="submit" class="delete-action btn-input btn-delete btn btn-danger">{% trans "Delete" %}{% trans class_name %}</button>
     <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{% trans class_name %}</a>
 </div>
 <table class="table table-bordered">
@@ -18,9 +24,10 @@
         <tr>
             <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
             <th>{% trans class_name %}</th>
-            {% for field in ModelClass|get_fields %}
-                <th>{{ field.name }}</th>
+            {% for field in ModelClass|get_display_fields %}
+                <th>{{ field.verbose_name }}</th>
             {% endfor %}
+            <th>{% trans "Action" %}</th>
         </tr>
     </thead>
     <tbody>
@@ -30,9 +37,16 @@
                 <input type="checkbox" name="id" value="{{ object.id }}">
             </td>
             <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</td>
-            {% for field in object|get_fields %}
-            <td>{{ object|get_value:field.name }}</td>
+            {% for field in object|get_display_fields %}
+                <td>{{ object|get_value:field.name }}</td>
             {% endfor %}
+            <td>
+                <div class="btn-groups">
+                    <a href="" class="btn btn-small">{% trans "Monitor" %}</a>
+                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
+                    <a href="{% url nexus_delete app_label class_name|lower object.id %}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
+                </div>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

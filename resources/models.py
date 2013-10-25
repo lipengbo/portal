@@ -57,7 +57,7 @@ class Resource(models.Model):
 
 
 class IslandResource(Resource):
-    island = models.ForeignKey(Island)
+    island = models.ForeignKey(Island, verbose_name=_("Island"))
 
     class Meta:
         abstract = True
@@ -108,8 +108,8 @@ class Server(IslandResource):
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
+    port = models.IntegerField(verbose_name=_("Port"))
+    http_port = models.IntegerField(verbose_name=_("Http Port"))
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     dpid = models.CharField(max_length=256)
@@ -155,7 +155,7 @@ class Switch(SwitchResource):
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('has_gre_tunnel', ),
+            'exclude_fields': ('has_gre_tunnel', 'name', 'password', 'username'),
         }
         return options
 

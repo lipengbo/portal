@@ -2,18 +2,28 @@ from django.template.defaultfilters import register
 from django.conf import settings
 
 @register.filter
+def get_display_fields(obj, only_name=False):
+    return _get_fields(obj, only_name, True)
+
 def get_fields(obj, only_name=False):
-    fields = obj._meta.local_fields
+    return _get_fields(obj, only_name, False)
+
+def _get_fields(obj, only_name=False, for_display=True):
+    fields = obj._meta.fields
     display_fields = []
     for field in fields:
         if isinstance(obj, type):
             clazz = obj
         else:
             clazz = obj.__class__
-        try:
-            excludes = list(clazz.admin_options()['exclude_fields'])
-        except AttributeError:
+        if for_display:
+            try:
+                excludes = list(clazz.admin_options()['exclude_fields'])
+            except AttributeError:
+                excludes = []
+        else:
             excludes = []
+
         excludes.append('id')
         if field.name not in excludes:
             if not field.editable:
@@ -31,5 +41,4 @@ def get_value(obj, key):
 @register.filter
 def get_class_name(obj):
     name = obj.__class__.__name__
-    print name.__str__()
     return name

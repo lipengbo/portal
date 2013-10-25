@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-15 07:44+0000\n"
+"POT-Creation-Date: 2013-10-25 15:43+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,22 +22,30 @@ msgstr ""
 msgid "Server"
 msgstr "服务器"
 
-#: models.py:156
+#: models.py:111
+msgid "Port"
+msgstr "端口"
+
+#: models.py:112
+msgid "Http Port"
+msgstr "Http端口"
+
+#: models.py:163
 msgid "Switch"
 msgstr "交换机"
 
-#: models.py:164
+#: models.py:171
 msgid "Slice Switch"
 msgstr "Slice使用到的交换机"
 
-#: models.py:196
+#: models.py:203
 msgid "Switch Port"
 msgstr "交换机端口关联表"
 
-#: models.py:205
+#: models.py:212
 msgid "Slice Port"
 msgstr "Slice使用的端口"
 
-#: models.py:219
+#: models.py:226
 msgid "Virtual Switch"
 msgstr "虚拟交换机"
