@@ -333,3 +333,17 @@ def switch_proxy(request, host, port):
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
+
+
+@login_required
+def member(request, id):
+    user = request.user
+    project = get_object_or_404(Project, id=id)
+    context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
+    context['project'] = project
+    context['members'] = project.membership_set.all()
+    return render(request, 'project/member.html', context)

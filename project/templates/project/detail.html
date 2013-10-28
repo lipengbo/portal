@@ -29,48 +29,12 @@
             </tr>
         </thead>  
         <tbody>   
-               <tr>
-                    <td>{{ project.name }}</td>
-                    <td>{{ project.description }}</td>
-                    <td>{{ project.owner }}</td>
-                    <td><span class="label label-success">{{ project.category }}</span></td>
-               </tr>    
-            <!--    <tr>
-                    <td width="71">{% trans "Project Name" %}：</td>
-                    <td>
-                        {{ project.name }}
-                    </td>
-                </tr>
-                <tr>
-                    <td width="71">{% trans "Project Description" %}：</td>
-                    <td>{{ project.description }}</td>
-                </tr>
-                <tr>
-                    <td width="71">
-                        {% trans "Creator" %}：
-                    </td>
-                    <td>
-                        {{ project.owner }}
-                    </td>
-                </tr>
-                <tr>
-                    <td width="71">
-                        {% trans "Category" %}：
-                    </td>
-                    <td>
-                        <span class="label label-success">{{ project.category }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="71">
-                        {% trans "Selected Islands" %}：
-                    </td>
-                    <td>
-                        {% for island in project.islands.all %}
-                            {{ island.name }}
-                        {% endfor %}
-                    <td>
-                </tr>   -->
+           <tr>
+                <td>{{ project.name }}</td>
+                <td>{{ project.description }}</td>
+                <td>{{ project.owner }}</td>
+                <td><span class="label label-success">{{ project.category }}</span></td>
+           </tr> 
         </tbody>
     </table>
 </fieldset>
@@ -89,12 +53,13 @@
                 <tr>
                     <th width="20%">{% trans "No." %}</th>
                     <th width="30%">{% trans "Member name" %}</th>
-                    <th width="30%">{% trans "Company/Organization" %}</th>
-                    <th width="20%">{% trans "Actions" %}</th>
+                    <th width="35%">{% trans "Company/Organization" %}</th>
+                    <th width="15%">{% trans "Actions" %}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for membership in project.membership_set.all %}
+                {% if forloop.counter <= 4  %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ membership.user }}</td>
@@ -110,12 +75,13 @@
                         {%endif%} 
                     </td>
                 </tr>
+                {%endif%}
                 {% endfor %}
             </tbody>
         </table>    
     </div>
 </div>
-<a class="edit view_more" href="#">More&nbsp;<i class="icon-caret-right"></i></a>
+<a class="edit view_more" href="{% url project_member project.id  %}">More&nbsp;<i class="icon-caret-right"></i></a>
 </fieldset>
     {%if extent_html == "site_base.html" %}
       <div class="row-fluid sep_div">
@@ -124,9 +90,9 @@
     {%endif%}
   <fieldset>
       <legend>
-          {% if  project.slice_set.count > 4%}
+         <!-- {% if  project.slice_set.count > 4%}
             <button type="button" class="btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button>
-          {% endif %}
+          {% endif %}-->
           Slice
       </legend>        
         <div class="row-fluid">
@@ -137,8 +103,8 @@
 		         {%endif%}
 		         {% endfor %}
 		     </ul>
-		     </div>
-		     <a class="edit view_more" href="#">More&nbsp;<i class="icon-caret-right"></i></a>
+		</div>
+		<a class="edit view_more" href="/slice/list/{{ project.id }}/">More&nbsp;<i class="icon-caret-right"></i></a>
   </fieldset>
   </div>
 {% endblock %}

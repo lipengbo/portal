@@ -297,11 +297,16 @@ def get_show_slices(request):
     return HttpResponse(json.dumps({'slices': slices}))
 
 
-def topology_test(request):
+def topology_test(request, slice_id):
     """拓扑测试"""
-    return render(request, 'design_topology.html', {})
+    context = {}
+    context['slice_id'] = slice_id
+    return render(request, 'design_topology.html', context)
 
 
 def topology_d3(request):
     """拓扑测试"""
-    return render(request, 'slice/slice_topology.html', {})
+    slice_id = request.GET.get('slice_id')
+    context = {}
+    context['slice_id'] = slice_id
+    return render(request, 'slice/slice_topology.html', context)

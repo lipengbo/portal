@@ -52,13 +52,13 @@
     </table>
   </a>
 -->
-<li class="span6" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="span6" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
     {%if slices%}
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
     {%else%}
     <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
     {%endif%}
-    <div class="thumbnail" href="/slice/detail/{{ slice.id }}/">
+    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
         <div class="row-fluid">
             <div class="span5">
                 <div class="slice_left">
@@ -73,5 +73,5 @@
             </div>
             <div class="span7"></div>
         </div>
-    </div>
+    </a>
 </li>
