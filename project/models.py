@@ -73,7 +73,7 @@ class Project(models.Model):
         else:
             project_membership.delete()
             notify.send(user, recipient=self.owner,
-                    verb=_('quit from'), action_object=self, target=self)
+                    verb=_(' quit from'), action_object=self, target=self)
 
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
