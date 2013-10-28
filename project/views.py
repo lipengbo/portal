@@ -289,21 +289,18 @@ def links_proxy(request, host, port):
 
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
-@login_required
 def links_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = client.get_links()
     return HttpResponse(json.dumps(data), content_type="application/json")
 
-@login_required
 def switch_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = json.dumps(client.get_switches())
     return HttpResponse(data, content_type="application/json")
 
-@login_required
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
