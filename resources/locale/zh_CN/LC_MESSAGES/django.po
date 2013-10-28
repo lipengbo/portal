@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-25 15:43+0800\n"
+"POT-Creation-Date: 2013-10-28 13:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,34 +18,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:107
+#: models.py:60
+msgid "Island"
+msgstr ""
+
+#: models.py:77
+msgid "Stopped"
+msgstr "停止"
+
+#: models.py:77
+msgid "Started"
+msgstr "启动"
+
+#: models.py:114
 msgid "Server"
 msgstr "服务器"
 
-#: models.py:111
+#: models.py:118
 msgid "Port"
 msgstr "端口"
 
-#: models.py:112
+#: models.py:119
 msgid "Http Port"
 msgstr "Http端口"
 
-#: models.py:163
+#: models.py:170
 msgid "Switch"
 msgstr "交换机"
 
-#: models.py:171
+#: models.py:178
 msgid "Slice Switch"
 msgstr "Slice使用到的交换机"
 
-#: models.py:203
+#: models.py:210
 msgid "Switch Port"
 msgstr "交换机端口关联表"
 
-#: models.py:212
+#: models.py:219
 msgid "Slice Port"
 msgstr "Slice使用的端口"
 
-#: models.py:226
+#: models.py:233
 msgid "Virtual Switch"
 msgstr "虚拟交换机"

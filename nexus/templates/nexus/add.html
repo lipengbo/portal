@@ -5,9 +5,11 @@
 
 {% block breadcrumb %}
     {% with ModelClass|get_class_name as class_name  %}
-    <a href="{% url nexus_list app_label class_name|lower %}">{% trans class_name %}{% trans "Admin" %}</a>
+    {% with ModelClass|get_class_verbose_name as class_verbose_name %}
+    <a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a>
     <span class="divider">/</span>
-    {% trans "Add" %}{% trans class_name %}
+    {% trans "Add" %}{{ class_verbose_name }}
+    {% endwith %}
     {% endwith %}
 {% endblock %}
 

@@ -74,7 +74,7 @@ class ServiceResource(IslandResource):
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
-    state = models.IntegerField()
+    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1)
 
     def __unicode__(self):
         return self.name
@@ -102,6 +102,13 @@ class Server(IslandResource):
             return virtualswitchs[0]
         else:
             return None
+
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', 'password', 'username'),
+        }
+        return options
 
     class Meta:
         verbose_name = _("Server")

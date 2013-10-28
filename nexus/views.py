@@ -12,6 +12,7 @@ from django.db.models import get_model
 from django.forms.models import modelform_factory
 
 from nexus.templatetags.nexus_tags import get_fields
+from nexus.forms import BaseForm
 
 @login_required
 def index(request):
@@ -39,7 +40,7 @@ def add_or_edit(request, app_label, model_class, id=None):
     context['ModelClass'] = Model
     context['app_label'] = app_label
     fields = get_fields(Model, True)
-    ModelForm = modelform_factory(Model, fields=tuple(fields))
+    ModelForm = modelform_factory(Model, fields=tuple(fields), form=BaseForm)
     if id:
         instance = get_object_or_404(Model, id=id)
     else:

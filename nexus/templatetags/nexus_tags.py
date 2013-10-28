@@ -42,3 +42,8 @@ def get_value(obj, key):
 def get_class_name(obj):
     name = obj.__class__.__name__
     return name
+
+@register.filter
+def get_class_verbose_name(obj):
+    name = obj._meta.verbose_name
+    return name

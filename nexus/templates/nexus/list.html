@@ -5,25 +5,28 @@
 
 {% block breadcrumb %}
 {% with ModelClass|get_class_name as class_name  %}
-<a href="{% url nexus_list app_label class_name|lower %}">{% trans class_name %}{% trans "Admin" %}</a>
+{% with ModelClass|get_class_verbose_name as class_verbose_name %}
+<a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a>
+{% endwith %}
 {% endwith %}
 {% endblock %}
 
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
+{% with ModelClass|get_class_verbose_name as class_verbose_name %}
 {% paginate 20 objects %}
 <form action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
 <div class="well">
     <input type="hidden" name="action" id="action" value="">
-    <button type="submit" class="delete-action btn-input btn-delete btn btn-danger">{% trans "Delete" %}{% trans class_name %}</button>
-    <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{% trans class_name %}</a>
+    <button type="submit" class="delete-action btn-input btn-delete btn btn-danger">{% trans "Delete" %}{{ class_verbose_name }}</button>
+    <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{{ class_verbose_name }}</a>
 </div>
 <table class="table table-bordered">
     <thead>
         <tr>
             <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
-            <th>{% trans class_name %}</th>
+            <th>{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
                 <th>{{ field.verbose_name }}</th>
             {% endfor %}
@@ -56,6 +59,7 @@
                 {% show_pages %}
             </ul>
         </div>
+{% endwith %}
 {% endwith %}
 {% endblock %}
 {% block extra_script %}
