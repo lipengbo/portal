@@ -306,9 +306,10 @@ def topology_test(request, slice_id):
 
 def topology_d3(request):
     """拓扑测试"""
-    slice_id = request.GET.get('slice_id')
     context = {}
-    context['slice_id'] = slice_id
+    context['slice_id'] = request.GET.get('slice_id')
+    context['width'] = request.GET.get('width')
+    context['height'] = request.GET.get('height')
     return render(request, 'slice/slice_topology.html', context)
 
 

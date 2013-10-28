@@ -1,57 +1,6 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<!--
-<li class="span3" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
-    {%if slices%}
-        <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
-    {%else%}
-        <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
-    {%endif%}
-    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
-    <img src="{% static slice.project.category.image %}" />
-    <table class="table">
-        <tbody>
-            <tr>
-                <td width="105">Slice名称：</td>
-                <td>{{ slice.get_show_name }}</td>
-            </tr>
-            <tr>
-                <td valign="top">创建者：</td>
-                <td>{{ slice.owner }}</td>
-            </tr>
-            <tr>
-                <td valign="top">状态：</td>
-                <td>
-                {%if slice.state == 0 %}
-                停止
-                {%else%}
-                启动
-                {%endif%}
-                </td>
-            </tr>
-            {%if extent_html == "site_base.html" %}
-            {%else%}
-                <tr>
-                    <td valign="top">所属项目：</td>
-                    <td>
-                    {{slice.project.name}}
-                    </td>
-                </tr>
-            {%endif%}
-            
-            <tr>
-                <td valign="top">网络节点个数：</td>
-                <td>{{ slice.get_switches.count }}个</td>
-            </tr>
-            <tr>
-                <td valign="top">虚拟机个数：</td>
-                <td>{{ slice.get_common_vms.count }}个</td>
-            </tr>
-        </tbody>
-    </table>
-  </a>
--->
 <li class="span6 slice_topology" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
     {%if slices%}
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
@@ -64,31 +13,34 @@
                 <div class="slice_left">
                     <img src="{% static "img/cat_cloud.jpg" %}" />
                     <ul>
-                        <li><i class="icon-file-alt icon-large"></i>Slice一</li>
-                        <li><i class="icon-user icon-large"></i>ccf</li>
-                        <li><i class="icon-rss icon-large"></i>开启</li>
+                        <li><i class="icon-file-alt icon-large"></i>{{ slice.get_show_name }}</li>
+                        <li><i class="icon-user icon-large"></i>{{ slice.owner }}</li>
+                        <li><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}停止{%else%}启动{%endif%}</li>
                     </ul>
                     <div class="circle_bar">
-                        <canvas id="swCanvas" name="swCanvas" width="135" height="20" data-text="交换机（sw）"></canvas>
+                        <canvas class="swCanvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
                         <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".1" value="35">
                     </div>
                     <div class="circle_bar">
-                        <canvas id="vmCanvas" width="135" height="20" data-text="虚拟机（VM）"></canvas>
+                        <canvas class="swCanvas" id="vmCanvas{{slice.id}}" width="135" height="20" data-text="虚拟机（VM）"></canvas>
                         <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".1" value="50">
                     </div>
                     <div class="circle_bar">
-                        <canvas id="ipCanvas" width="135" height="20" data-text="IP地址（IP）"></canvas>
+                        <canvas class="swCanvas" id="ipCanvas{{slice.id}}" width="135" height="20" data-text="IP地址（IP）"></canvas>
                         <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".1" value="80">
                     </div>
                     <div class="slice_date">
-                        <i class="icon-calendar icon-large"></i>2013.10.01-2013.10.31
+                        <i class="icon-calendar icon-large"></i>{{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
                     </div>
                 </div>        
             </div>
             <div class="span7">
                 <div class="slice_right">
+                    <div>
+                    <iframe scrolling="no" id="topologyiframe" width="250" height="250" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=250" frameborder="0"></iframe>
+                    </div>
                     <div class="slice_text">
-                        说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明
+                        {{slice.description}}
                     </div>
                 </div>
             </div>

@@ -205,7 +205,6 @@ $(document).ready(function() {
      
      //slice_list slice文字说明显示与隐藏
      $(".slice_topology").mouseenter(function(){
-          alert('slice');
          $(this).find(".slice_text").stop().animate({bottom:"0"});
      }).mouseleave(function(){
          $(this).find(".slice_text").stop().animate({bottom:"-67px"});
