@@ -109,12 +109,6 @@ class VirtualMachine(IslandResource):
     def get_broadcast(self):
         return str(self.ip.supernet.get_network().broadcast)
 
-    def get_gateway_private_ip(self):
-        return VirtualMachine.objects.get(slice=self.slice, type=2).ip.ipaddr
-
-    def get_gateway_public_ip(self):
-        return self.gateway_ip.supernet.get_gateway_ip()
-
     def get_gateway_prefixlen(self):
         return self.gateway_ip.supernet.get_network().prefixlen
 
@@ -136,14 +130,15 @@ class VirtualMachine(IslandResource):
             vmInfo['network'] = []
             network = {}
             network['address'] = self.get_ipaddr() + '/' + str(self.get_prefixlen())
-            network['gateway'] = self.get_gateway_private_ip()
+            network['gateway'] = self.ip.supernet.get_gateway_ip()
             vmInfo['network'].append(network)
             if self.gateway_ip:
                 network = {}
-                network['address'] = self.gateway_ip.ipaddr + '/' + str(self.get_gateway_public_ip())
-                network['gateway'] = self.get_gateway_public_ip()
+                network['address'] = self.gateway_ip.ipaddr + '/' + str(self.gateway_ip.supernet.get_network().prefixlen)
+                network['gateway'] = self.gateway_ip.supernet.get_gateway_ip()
                 vmInfo['network'].append(network)
             agent_client = AgentClient(self.server.ip)
+            print vmInfo
             agent_client.create_vm(vmInfo)
 
     def delete_vm(self):

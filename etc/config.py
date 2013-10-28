@@ -14,6 +14,7 @@ vt_manager_port = 8891
 #[agent-service]
 compute_service_port = 8886
 monitor_service_port = 8887
+ovs_service_port = 8889
 
 
 def generate_glance_url():
