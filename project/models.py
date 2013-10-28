@@ -13,6 +13,7 @@ from django.utils.translation import ugettext as _
 from guardian.shortcuts import assign_perm
 
 from invite.models import Invitation
+from notifications import notify
 
 
 class City(models.Model):
@@ -71,6 +72,8 @@ class Project(models.Model):
             pass
         else:
             project_membership.delete()
+            notify.send(user, recipient=self.owner,
+                    verb=_('quit from'), action_object=self, target=self)
 
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)

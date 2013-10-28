@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save, m2m_changed, pre_save
 from django.db.models import F
 from django.dispatch import receiver
+from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -14,6 +15,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 
 from notifications import notify
+from notifications.models import Notification
 
 # Create your models here.
 class InvitationManager(models.Manager):
@@ -89,7 +91,6 @@ class Invitation(Connection):
         body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         notify.send(self.from_user, recipient=self.to_user, verb=_('invited you to join in'), action_object=self,
                 description=self.message, target=self.target)
-        send_mail(_("You have an invitation"), body, settings.FROM_EMAIL, [self.to_user.email])
 
     class Meta:
         verbose_name = _("Invitation")
@@ -112,7 +113,6 @@ class Application(Connection):
         body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         notify.send(self.from_user, recipient=self.to_user, verb=_('applied to join in'), action_object=self,
                 description=self.message, target=self.target)
-        send_mail(_("You have an application"), body, settings.FROM_EMAIL, [self.to_user.email])
 
     class Meta:
         verbose_name = _("Application")
@@ -132,3 +132,12 @@ def generate_key(sender, instance, **kwargs):
 def send_invite(sender, instance, created, **kwargs):
     if created:
         instance.send()
+
+@receiver(post_save, sender=Notification)
+def send_notification_email(sender, instance, created, **kwargs):
+    site = Site.objects.get_current()
+    content = render_to_string('notifications/notice.txt', {'notice': instance,
+        'notification_link': "http://" + site.domain + reverse("notifications:all")})
+    site_name = site.name
+    send_mail(_('[%(site_name)s] You have new notification messages') % {'site_name': site_name}, content,
+              settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)
