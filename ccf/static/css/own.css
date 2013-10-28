@@ -6093,6 +6093,9 @@ table {
 .tp_block {
   border: 2px solid #ababab;
   background: #fff;
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 }
 .carousel_defined {
   margin-bottom: 0;
@@ -6114,4 +6117,16 @@ table {
 }
 .margin_rows {
   margin-bottom: 20px;
+}
+.nums_block {
+  border: 1px solid #3182ad;
+}
+.nums_block .nums_top {
+  height: 90px;
+  background: #3398cc;
+}
+.nums_block .nums_bottom {
+  height: 40px;
+  line-height: 40px;
+  background: #0a5da3;
 }
