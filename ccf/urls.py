@@ -35,6 +35,7 @@ urlpatterns = patterns("",
     url(r"^logs_handle/", TemplateView.as_view(template_name="logs_handle.html"), name="demo"),
     url(r"^member_check/", TemplateView.as_view(template_name="member_check.html"), name="demo"),
     url(r"^invite_member/", TemplateView.as_view(template_name="invite_member.html"), name="demo"),
+    url(r"^manage_index/", TemplateView.as_view(template_name="manage_index.html"), name="demo"),
 
     url(r"^map/$", TemplateView.as_view(template_name="index.html"), name="map"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
