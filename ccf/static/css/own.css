@@ -6124,6 +6124,13 @@ table {
 .nums_block .nums_top {
   height: 90px;
   background: #3398cc;
+  position: relative;
+}
+.nums_block .nums_top i {
+  font-size: 32px;
+  color: #fff;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
 }
 .nums_block .nums_bottom {
   height: 40px;
