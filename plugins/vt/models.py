@@ -8,7 +8,7 @@ from resources.models import IslandResource, Server
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
-from plugins.common.vt_manager_client import VTClient
+from plugins.common.agent_client import AgentClient
 from django.utils.translation import ugettext as _
 from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
@@ -61,6 +61,7 @@ class Image(models.Model):
     class Meta:
         verbose_name = _("Image")
 
+
 class Flavor(models.Model):
     name = models.CharField(max_length=64)
     cpu = models.IntegerField()
@@ -76,10 +77,10 @@ class Flavor(models.Model):
 
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=36, null=True, unique=True)
-    ip = models.ForeignKey(IPUsage, null=True)
+    ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
+    gateway_ip = models.ForeignKey(IPUsage, null=True, related_name="gateway_set")
     mac = models.CharField(max_length=20, null=True)
     enable_dhcp = models.BooleanField(default=True)
-    vnc_port = models.IntegerField(null=True)
     slice = models.ForeignKey(Slice)
     flavor = models.ForeignKey(Flavor)
     image = models.ForeignKey(Image)
@@ -108,6 +109,15 @@ class VirtualMachine(IslandResource):
     def get_broadcast(self):
         return str(self.ip.supernet.get_network().broadcast)
 
+    def get_gateway_private_ip(self):
+        return VirtualMachine.objects.get(slice=self.slice, type=2).ip.ipaddr
+
+    def get_gateway_public_ip(self):
+        return self.gateway_ip.supernet.get_gateway_ip()
+
+    def get_gateway_prefixlen(self):
+        return self.gateway_ip.supernet.get_network().prefixlen
+
     def get_slice_id(self):
         return self.slice.id
 
@@ -116,42 +126,40 @@ class VirtualMachine(IslandResource):
             print '----------------------create a vm=%s -------------------------' % self.name
         else:
             vmInfo = {}
-            netInfo = {}
             vmInfo['name'] = self.uuid
-            vmInfo['cpus'] = self.flavor.cpu
             vmInfo['mem'] = self.flavor.ram
-            vmInfo['hdd'] = self.flavor.hdd
-            vmInfo['mac'] = self.mac
+            vmInfo['cpus'] = self.flavor.cpu
             vmInfo['img'] = self.image.uuid
+            vmInfo['hdd'] = self.flavor.hdd
             vmInfo['glanceURL'] = self.image.url
             vmInfo['type'] = self.type
-            vmInfo['vnc_port'] = self.vnc_port
-            if self.type == 0:
-                vmInfo['dhcp'] = 0
-            else:
-                vmInfo['dhcp'] = 1
-            netInfo['ip'] = self.get_ipaddr()
-            netInfo['netmask'] = self.get_netmask()
-            netInfo['broadcast'] = self.get_broadcast()
-            netInfo['gateway'] = self.get_network()
-            netInfo['dns'] = '8.8.8.8'
-            vt_client = VTClient()
-            vt_client.create_vm(self.server.ip, vmInfo, netInfo)
+            vmInfo['network'] = []
+            network = {}
+            network['address'] = self.get_ipaddr() + '/' + str(self.get_prefixlen())
+            network['gateway'] = self.get_gateway_private_ip()
+            vmInfo['network'].append(network)
+            if self.gateway_ip:
+                network = {}
+                network['address'] = self.gateway_ip.ipaddr + '/' + str(self.get_gateway_public_ip())
+                network['gateway'] = self.get_gateway_public_ip()
+                vmInfo['network'].append(network)
+            agent_client = AgentClient(self.server.ip)
+            agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
         if function_test:
             print '----------------------delete a vm=%s -------------------------' % self.name
         else:
-            vt_client = VTClient()
-            vt_client.delete_vm(self.server.ip, self.uuid)
+            agent_client = AgentClient(self.server.ip)
+            agent_client.create_vm(self.uuid)
 
     def do_action(self, action):
         if function_test:
             print '----------------------vm action=%s-------------------------' % action
             result = True
         else:
-            vt_client = VTClient()
-            result = vt_client.do_domain_action(self.server.ip, self.uuid, action)
+            agent_client = AgentClient(self.server.ip)
+            result = agent_client.do_domain_action(self.uuid, action)
         return result
 
     class Meta:
@@ -165,7 +173,6 @@ class HostMac(models.Model):
     #: the switch that the rule is applied on, can be Switch or VirtualSwitch
     host = generic.GenericForeignKey('host_type', 'host_id')
 
-
     class Meta:
         verbose_name = _("Host Mac")
 
@@ -178,8 +185,6 @@ def vm_pre_save(sender, instance, **kwargs):
         instance.uuid = utils.gen_uuid()
     if not instance.mac:
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
-    if not instance.vnc_port:
-        instance.vnc_port = 5901 + VirtualMachine.objects.filter(server=instance.server).count()
     if not instance.state:
         instance.state = DOMAIN_STATE_DIC['building']
 
@@ -198,3 +203,5 @@ def vm_pre_delete(sender, instance, **kwargs):
 @receiver(post_delete, sender=VirtualMachine)
 def vm_post_delete(sender, instance, **kwargs):
     IPUsage.objects.release_ip(instance.ip)
+    if instance.gateway_ip:
+        IPUsage.objects.release_ip(instance.gateway_ip)

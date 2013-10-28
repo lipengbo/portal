@@ -13,6 +13,7 @@ from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
 from django.core.urlresolvers import reverse
 from etc.config import vnctunnel, function_test
 from plugins.common.vt_manager_client import VTClient
+from plugins.common.agent_client import AgentClient
 from resources.models import Server
 import logging
 LOG = logging.getLogger('plugins')
@@ -86,7 +87,7 @@ def do_vm_action(request, vmid, action):
 def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
-    vnc_port = vm.vnc_port
+    vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
     context = {}
     context['host_ip'] = host_ip
     context['vnc_port'] = vnc_port
