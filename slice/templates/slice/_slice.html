@@ -1,43 +1,46 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<li class="span3" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="span6 slice_topology" {% if user != project.owner %}style="background:#ddd;"{% endif %}>
     {%if slices%}
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
     {%else%}
     <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
     {%endif%}
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
-    <img src="{% static slice.project.category.image %}" />
-    <table class="table">
-        <tbody>
-            <tr>
-                <td width="105">Slice名称：</td>
-                <td>{{ slice.get_show_name }}</td>
-            </tr>
-            <tr>
-                <td valign="top">创建者：</td>
-                <td>{{ slice.owner }}</td>
-            </tr>
-            <tr>
-                <td valign="top">状态：</td>
-                <td>
-                {%if slice.state == 0 %}
-                停止
-                {%else%}
-                启动
-                {%endif%}
-                </td>
-            </tr>
-            <tr>
-                <td valign="top">网络节点个数：</td>
-                <td>{{ slice.get_switches.count }}个</td>
-            </tr>
-            <tr>
-                <td valign="top">虚拟机个数：</td>
-                <td>{{ slice.get_common_vms.count }}个</td>
-            </tr>
-        </tbody>
-    </table>
-  </a>
+        <div class="row-fluid slice_list">
+            <div class="span5">
+                <div class="slice_left">
+                    <img src="{% static "img/cat_cloud.jpg" %}" />
+                    <ul>
+                        <li><i class="icon-file-alt icon-large"></i>Slice一</li>
+                        <li><i class="icon-user icon-large"></i>ccf</li>
+                        <li><i class="icon-rss icon-large"></i>开启</li>
+                    </ul>
+                    <div class="circle_bar">
+                        <canvas id="swCanvas" name="swCanvas" width="135" height="20" data-text="交换机（sw）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".1" value="35">
+                    </div>
+                    <div class="circle_bar">
+                        <canvas id="vmCanvas" width="135" height="20" data-text="虚拟机（VM）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".1" value="50">
+                    </div>
+                    <div class="circle_bar">
+                        <canvas id="ipCanvas" width="135" height="20" data-text="IP地址（IP）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".1" value="80">
+                    </div>
+                    <div class="slice_date">
+                        <i class="icon-calendar icon-large"></i>2013.10.01-2013.10.31
+                    </div>
+                </div>        
+            </div>
+            <div class="span7">
+                <div class="slice_right">
+                    <div class="slice_text">
+                        说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
 </li>
