@@ -208,7 +208,7 @@ function submit_vms(sliceid)
 
 function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
 {
-        url = "/plugins/vt/create/vm/"+sliceid+"/";
+        url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
         type: "POST",
         url: url,
