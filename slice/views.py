@@ -321,11 +321,12 @@ def update_vm_performace_data(request):
     else:
         for (key, value), bps_data in zip(vm_perf_data["net"].items(), pre_net_data):
             net_data[key] = [value[0], value[1],
-                           value[0] - int(bps_data.split(':')[0]),
-                           value[1] - int(bps_data.split(':')[1])]
+                           #value[0] - int(bps_data.split(':')[0]),
+                           #value[1] - int(bps_data.split(':')[1])]
+                            200, 300]
 
 
-    disk_data = {"free" : vm_perf_data["disk"]["free"], "used" : vm_perf_data["disk"]["used"]}
+    disk_data = {"free" : int(vm_perf_data["disk"]["free"]/8/1024/1024), "used" : int(vm_perf_data["disk"]["used"]/8/1024/1024)}
     #print net_data
     return HttpResponse(json.dumps({'cpu_use' : vm_perf_data["cpu"],
                                     'mem_use' : vm_perf_data["mem"]["percent"],

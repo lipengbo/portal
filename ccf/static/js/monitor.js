@@ -1,6 +1,7 @@
 
 // 各个图的初始化数据
 var cpu_values = [];
+var cpu_values_x_lable = [];
 var mem_values = [];
 var net_values = [];
 var ports = [];
@@ -12,8 +13,9 @@ var port_send_values = [];
 var disk_free;
 var disk_used
 
-for (var i=0; i<150; i++){
-    cpu_values[i] = 0 + "";
+for (var i=0; i<50; i++){
+	cpu_values[i] = 0 + "";
+    cpu_values_x_lable[i] = "";
 }
 
 for (var i=0; i<50; i++){
@@ -30,7 +32,7 @@ for (var i=0; i<10; i++){
 }
 
 var cpu_chart_data = {
-    labels : cpu_values,
+    labels : cpu_values_x_lable,
     datasets : [
         {
             fillColor : "rgba(153,204,153,0.3)",
@@ -63,7 +65,11 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : false
+	scaleOverride : true,
+	scaleStartValue : 0,
+	scaleSteps : 20,
+	scaleStepWidth : 20,
+	
 }
 
 var net_chart_data = {
@@ -187,6 +193,11 @@ function get_performace_data(host_id, vm_id){
                 disk_chart_data[0]["value"] = performace_data['disk_use']['free']
                 disk_chart_data[1]["value"] = performace_data['disk_use']['used']
                 new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
+
+                document.getElementById("disk_use").innerHTML = '<span style="background:#ff3366;"></span>已使用 : ' 
+								+ performace_data['disk_use']['used'] + " MB";
+                document.getElementById("disk_free").innerHTML ='<span style="background:#99cc66;"></span>未使用 : '
+								+ performace_data['disk_use']['free'] + " MB";
 
                 var net_info_content = "";
                 pre_net_data = [];
