@@ -52,26 +52,46 @@
     </table>
   </a>
 -->
-<li class="span6" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="span6 slice_topology" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
     {%if slices%}
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
     {%else%}
     <a href="/slice/delete/{{ slice.id }}/1/" class="btn-delete close">×</a>
     {%endif%}
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
-        <div class="row-fluid">
+        <div class="row-fluid slice_list">
             <div class="span5">
                 <div class="slice_left">
                     <img src="{% static "img/cat_cloud.jpg" %}" />
                     <ul>
-                        <li><i class="icon-file-alt icon-large"></i>项目一</li>
+                        <li><i class="icon-file-alt icon-large"></i>Slice一</li>
                         <li><i class="icon-user icon-large"></i>ccf</li>
                         <li><i class="icon-rss icon-large"></i>开启</li>
                     </ul>
-                </div>
-                
+                    <div class="circle_bar">
+                        <canvas id="swCanvas" name="swCanvas" width="135" height="20" data-text="交换机（sw）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".1" value="35">
+                    </div>
+                    <div class="circle_bar">
+                        <canvas id="vmCanvas" width="135" height="20" data-text="虚拟机（VM）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".1" value="50">
+                    </div>
+                    <div class="circle_bar">
+                        <canvas id="ipCanvas" width="135" height="20" data-text="IP地址（IP）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".1" value="80">
+                    </div>
+                    <div class="slice_date">
+                        <i class="icon-calendar icon-large"></i>2013.10.01-2013.10.31
+                    </div>
+                </div>        
             </div>
-            <div class="span7"></div>
+            <div class="span7">
+                <div class="slice_right">
+                    <div class="slice_text">
+                        说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明说明
+                    </div>
+                </div>
+            </div>
         </div>
     </a>
 </li>
