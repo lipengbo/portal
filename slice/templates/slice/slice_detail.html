@@ -120,24 +120,24 @@ img {
                             <th width="20%">名称</th>
                             <th width="15%">资源类型</th>
                             <th width="20%">IP地址</th>
-                            <th width="15%">宿主机</th>
                             {% if slice_obj.state == 1 %}
+                                <th width="15%">宿主机</th>
                                 <th width="5%">状态</th>
-                                <th width="25%">操作</th>
                             {%else%}
-                                <th width="30%">操作</th>
+                                <th width="20%">宿主机</th>
                             {%endif%}
+                                <th width="25%">操作</th>
                         {%else%}
                             <th width="20%">名称</th>
                             <th width="20%">资源类型</th>
                             <th width="20%">IP地址</th>
-                            <th width="15%">宿主机</th>
                             {% if slice_obj.state == 1 %}
+                                <th width="15%">宿主机</th>
                                 <th width="5%">状态</th>
-                                <th width="20%">操作</th>
                             {%else%}
-                                <th width="25%">操作</th>
+                                <th width="20%">宿主机</th>
                             {%endif%}
+                                <th width="20%">操作</th>
                         {%endif%}
                     </tr>
                 </thead>

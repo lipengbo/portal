@@ -98,7 +98,7 @@
         <div class="row-fluid">
              <ul class="thumbnails example-sites">
 		         {% for slice in project.slice_set.all %}
-		         {% if forloop.counter <= 4  %}
+		         {% if forloop.counter <= 2  %}
 		               {% include "slice/_slice.html" %}
 		         {%endif%}
 		         {% endfor %}

@@ -5861,9 +5861,7 @@ table {
 .example-sites li .thumbnail .slice_left .circle_bar {
   position: relative;
 }
-.example-sites li .thumbnail .slice_left .circle_bar #swCanvas,
-.example-sites li .thumbnail .slice_left .circle_bar #vmCanvas,
-.example-sites li .thumbnail .slice_left .circle_bar #ipCanvas {
+.example-sites li .thumbnail .slice_left .circle_bar .circle_canvas {
   position: absolute;
   left: 30px;
   top: 9px;
@@ -5888,6 +5886,7 @@ table {
   position: relative;
 }
 .example-sites li .thumbnail .slice_right .slice_text {
+  width: 100%;
   position: absolute;
   bottom: -67px;
   font-size: 12px;

@@ -18,16 +18,19 @@
                         <li><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}停止{%else%}启动{%endif%}</li>
                     </ul>
                     <div class="circle_bar">
-                        <canvas class="swCanvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
-                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".1" value="35">
+                        <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="36" data-height="36"
+                        data-min="0" data-max="100" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_switches.count}}">
                     </div>
                     <div class="circle_bar">
-                        <canvas class="swCanvas" id="vmCanvas{{slice.id}}" width="135" height="20" data-text="虚拟机（VM）"></canvas>
-                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".1" value="50">
+                        <canvas class="circle_canvas" id="vmCanvas{{slice.id}}" width="135" height="20" data-text="虚拟机（VM）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="36" data-height="36" 
+                        data-min="0" data-max="100" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_common_vms.count}}">
                     </div>
                     <div class="circle_bar">
-                        <canvas class="swCanvas" id="ipCanvas{{slice.id}}" width="135" height="20" data-text="IP地址（IP）"></canvas>
-                        <input readonly="readonly" class="knob" data-width="20%" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".1" value="80">
+                        <canvas class="circle_canvas" id="ipCanvas{{slice.id}}" width="135" height="20" data-text="IP地址（IP）"></canvas>
+                        <input readonly="readonly" class="knob" data-width="36" data-height="36" 
+                        data-min="0" data-max="100" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_nw_num}}">
                     </div>
                     <div class="slice_date">
                         <i class="icon-calendar icon-large"></i>{{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
@@ -37,7 +40,7 @@
             <div class="span7">
                 <div class="slice_right">
                     <div>
-                    <iframe scrolling="no" id="topologyiframe" width="250" height="250" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=250" frameborder="0"></iframe>
+                    <iframe scrolling="no" id="topologyiframe" width="250" height="320" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=320" frameborder="0"></iframe>
                     </div>
                     <div class="slice_text">
                         {{slice.description}}

@@ -39,17 +39,18 @@
                                           <li class="active"><a href="/">首页</a></li>
                                           <li><a href="{% url "project_index" %}">项目</a></li>
                                           <li><a href="{% url "slice_list" 0 %}">slice</a></li>
-                                          <li><a href="#">权限</a></li>
-                                          <li><a href="#">帮助</a></li>
+                                          <li><a href="#">基础设施</a></li>
+                                          <li><a href="#">消息日志</a></li>
+                                          <li><a href="#">系统配置</a></li>
                                         </ul>
                                         {% comment %}
                                             <ul class="nav">
                                                 <li><a href="#tab_one">One</a></li>
                                                 <li><a href="#tab_two">Two</a></li>
                                             </ul>
-                                        {% endcomment %}
+                                        {% endcomment %} 
                                     {% endblock %}
-                                    {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
+
                                 </div>
                             {% endblock %}
                         </div>

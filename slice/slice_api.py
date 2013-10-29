@@ -19,7 +19,8 @@ import logging
 LOG = logging.getLogger("ccf")
 
 
-def create_slice_step(project, name, description, island, user, ovs_ports, controller_info, slice_nw):
+def create_slice_step(project, name, description, island, user, ovs_ports,\
+    controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
     slice_obj = None
     try:
         print 1
@@ -31,21 +32,25 @@ def create_slice_step(project, name, description, island, user, ovs_ports, contr
         print 4
         flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
         print 5
+#         创建并添加网段
         IPUsage.objects.subnet_create_success(slice_obj.name)
         print 6
         flowspace_nw_add(slice_obj, [], slice_nw)
         print 7
-#         创建并添加网段
 #         创建并添加网关
+        create_add_gw(slice_obj, gw_host_id, gw_ip)
+        print 8
 #         创建并添加dhcp
+        create_add_dhcp(slice_obj, dhcp_selected)
+        print 9
 #         创建并添加虚拟机
         return slice_obj
     except:
-        print 8
-        if slice_obj:
-            print 9
-            slice_obj.delete()
         print 10
+        if slice_obj:
+            print 11
+            slice_obj.delete()
+        print 12
         raise
 
 

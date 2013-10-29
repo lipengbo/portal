@@ -129,6 +129,16 @@ class Slice(models.Model):
         except:
             return None
 
+    def get_nw_num(self):
+        nw = self.get_nw()
+        nw_num = 0
+        if nw:
+            nw_num = 1
+            num = int(nw.split('/')[1])
+            for i in range(0, (32 - num)):
+                nw_num = 2 * nw_num
+        return nw_num
+
     def get_gws(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
         gws = []

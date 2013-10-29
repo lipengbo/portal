@@ -14,7 +14,7 @@
 {% endblock %}
 
 {% block body %}
-{% paginate 12 slices %}
+{% paginate 4 slices %}
     <div class="fill_form">
         <fieldset>
              <legend>
@@ -25,13 +25,15 @@
                 {%endif%}
              </legend>
              <div class="row-fluid">
-             {% for group in slices|group_by:4 %}
+             {%if slices%}
+             {% for group in slices|group_by:2 %}
              <ul class="thumbnails example-sites">
 		         {% for slice in group %}
 		              {% include "slice/_slice.html" %}
 		         {% endfor %}
 		     </ul>
 		     {% endfor %}
+		     {%endif%}
 		     </div>
          </fieldset>
     </div>

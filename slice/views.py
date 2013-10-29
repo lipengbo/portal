@@ -86,8 +86,12 @@ def create_first(request, proj_id):
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
             slice_nw = request.POST.get("slice_nw")
+            gw_host_id = request.POST.get("gw_host_id")
+            gw_ip = request.POST.get("gw_ip")
+            dhcp_selected = request.POST.get("dhcp_selected")
             slice_obj = create_slice_step(project, slice_name,
-                slice_description, island, user, ovs_ports, controller_info, slice_nw)
+                slice_description, island, user, ovs_ports, controller_info,
+                slice_nw, gw_host_id, gw_ip, dhcp_selected)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
@@ -175,7 +179,6 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
-    context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 
