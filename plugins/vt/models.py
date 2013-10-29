@@ -9,7 +9,6 @@ from slice.models import Slice
 from plugins.ipam.models import IPUsage
 from plugins.common import utils
 from plugins.common.agent_client import AgentClient
-from plugins.common.ovs_client import get_portid_by_name
 from django.utils.translation import ugettext as _
 from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
@@ -140,7 +139,6 @@ class VirtualMachine(IslandResource):
                 network['gateway'] = self.gateway_public_ip.supernet.get_gateway_ip()
                 vmInfo['network'].append(network)
             agent_client = AgentClient(self.server.ip)
-            print vmInfo
             agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
@@ -184,12 +182,6 @@ def vm_pre_save(sender, instance, **kwargs):
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
     if not instance.state:
         instance.state = DOMAIN_STATE_DIC['building']
-    if instance.state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']] and (not instance.switch_port):
-        switch = instance.server.virtualswitch_set.all()[0]
-        port = get_portid_by_name(instance.ip.ipaddr, instance.uuid)
-        switch_port = SwitchPort(switch=switch, port=port, slice=instance.slice)
-        switch_port.save()
-        instance.switch_port = switch_port
 
 
 @receiver(post_save, sender=VirtualMachine)
@@ -201,11 +193,12 @@ def vm_post_save(sender, instance, **kwargs):
 @receiver(pre_delete, sender=VirtualMachine)
 def vm_pre_delete(sender, instance, **kwargs):
     instance.delete_vm()
-    instance.switch_port.delete()
+    if instance.switch_port:
+        instance.switch_port.delete()
 
 
 @receiver(post_delete, sender=VirtualMachine)
 def vm_post_delete(sender, instance, **kwargs):
     IPUsage.objects.release_ip(instance.ip)
-    if instance.gateway_ip:
-        IPUsage.objects.release_ip(instance.gateway_ip)
+    if instance.gateway_public_ip:
+        IPUsage.objects.release_ip(instance.gateway_public_ip)
