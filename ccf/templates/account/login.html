@@ -21,19 +21,36 @@
     		<img src="{% static "img/title2.png" %}" />
     	</div>
     	<form class="login-form" method='post'>
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            {% endif %}
             {% csrf_token %}
     		<div class="row-fluid">
     			<div class="span4">   	
-    			  <div class="control-group">		
-    				<input type="text" name="username" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
+                    <div class="control-group {% if form.username.errors %}error{% endif %}">		
+                      <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
     				<label class="login-field-icon fui-user" for="login-name"></label>
+                    {% if form.username.errors %}
+                            {% for error in form.username.errors %}
+                                <span class="help-inline">{{ error }}</span>
+                            {% endfor %}
+                    {% endif %}
     			  </div>				  
     			</div>
     			<div class="span4">
-    			  <div class="control-group">	
-    				<input type="password" class="login-field" name="password" value="" placeholder="请输入密码" id="login-pass">
-    				<label class="login-field-icon fui-lock" for="login-name"></label>
-    			  </div>
+                    <div class="control-group {% if form.password.errors %}error{% endif %}">	
+                        <input type="password" class="login-field" name="password" value="" placeholder="请输入密码" id="login-pass">
+                        <label class="login-field-icon fui-lock" for="login-name"></label>
+                        {% if form.password.errors %}
+                                {% for error in form.password.errors %}
+                                    <span class="help-inline">{{ error }}</span>
+                                {% endfor %}
+                        {% endif %}
+    			    </div>
     			</div>
     			<div class="span2">
     				<button href="#" class="btn btn-large btn-block btn-info" type="submit">登 录</button>
