@@ -5822,93 +5822,6 @@ table {
   top: 10px;
   z-index: 10;
 }
-.example-sites li .thumbnail {
-  padding: 4px;
-  border: 1px solid #9c9c9c;
-}
-.example-sites li .thumbnail .slice_list {
-  height: 325px;
-  overflow: hidden;
-}
-.example-sites li .thumbnail .slice_list .span5,
-.example-sites li .thumbnail .slice_list .span7 {
-  height: 100%;
-}
-.example-sites li .thumbnail a {
-  margin-left: 10px;
-  color: #6699cc;
-}
-.example-sites li .thumbnail .slice_left {
-  height: 100%;
-  border-right: 1px solid #9c9c9c;
-}
-.example-sites li .thumbnail .slice_left ul {
-  margin-bottom: 10px;
-}
-.example-sites li .thumbnail .slice_left ul li {
-  padding: 5px 0 5px 5px;
-  border-bottom: 1px solid #ccc;
-  color: #333;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 12px;
-}
-.example-sites li .thumbnail .slice_left ul li i {
-  color: #989898;
-  margin-right: 10px;
-}
-.example-sites li .thumbnail .slice_left .circle_bar {
-  position: relative;
-}
-.example-sites li .thumbnail .slice_left .circle_bar #swCanvas,
-.example-sites li .thumbnail .slice_left .circle_bar #vmCanvas,
-.example-sites li .thumbnail .slice_left .circle_bar #ipCanvas {
-  position: absolute;
-  left: 30px;
-  top: 9px;
-}
-.example-sites li .thumbnail .slice_left .circle_bar input {
-  cursor: default;
-}
-.example-sites li .thumbnail .slice_left .slice_date {
-  color: #333;
-  margin-top: 5px;
-  padding-left: 5px;
-  padding-top: 5px;
-  border-top: 1px solid #ccc;
-  font-size: 12px;
-}
-.example-sites li .thumbnail .slice_left .slice_date i {
-  color: #989898;
-  margin-right: 10px;
-}
-.example-sites li .thumbnail .slice_right {
-  height: 100%;
-  position: relative;
-}
-.example-sites li .thumbnail .slice_right .slice_text {
-  position: absolute;
-  bottom: -67px;
-  font-size: 12px;
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  padding: 5px;
-  overflow: hidden;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -o-box;
-  display: box;
-  -webkit-line-clamp: 3;
-  -moz-line-clamp: 3;
-  -o-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  -o-box-orient: vertical;
-  box-orient: vertical;
-  word-break: break-all;
-}
 .example-sites li .thumbnail:hover,
 .example-sites li .thumbnail:focus {
   border-color: #0088cc;
@@ -5962,6 +5875,92 @@ table {
   margin: 4px;
   border-top: 1px solid #e7e7e7;
   border-bottom: 1px solid #dddddd;
+}
+.thumbnail {
+  padding: 4px;
+  border: 1px solid #9c9c9c;
+}
+.thumbnail .slice_list {
+  height: 325px;
+  overflow: hidden;
+}
+.thumbnail .slice_list .span5,
+.thumbnail .slice_list .span7 {
+  height: 100%;
+}
+.thumbnail a {
+  margin-left: 10px;
+  color: #6699cc;
+}
+.thumbnail .slice_left {
+  height: 100%;
+  border-right: 1px solid #9c9c9c;
+}
+.thumbnail .slice_left ul {
+  margin-bottom: 10px;
+}
+.thumbnail .slice_left ul li {
+  padding: 5px 0 5px 5px;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 12px;
+}
+.thumbnail .slice_left ul li i {
+  color: #989898;
+  margin-right: 10px;
+}
+.thumbnail .slice_left .circle_bar {
+  position: relative;
+}
+.thumbnail .slice_left .circle_bar .circle_canvas {
+  position: absolute;
+  left: 30px;
+  top: 9px;
+}
+.thumbnail .slice_left .circle_bar input {
+  cursor: default;
+}
+.thumbnail .slice_left .slice_date {
+  color: #333;
+  margin-top: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  border-top: 1px solid #ccc;
+  font-size: 12px;
+}
+.thumbnail .slice_left .slice_date i {
+  color: #989898;
+  margin-right: 10px;
+}
+.thumbnail .slice_right {
+  height: 100%;
+  position: relative;
+}
+.thumbnail .slice_right .slice_text {
+  width: 100%;
+  position: absolute;
+  bottom: -67px;
+  font-size: 12px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 5px;
+  overflow: hidden;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -o-box;
+  display: box;
+  -webkit-line-clamp: 3;
+  -moz-line-clamp: 3;
+  -o-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -o-box-orient: vertical;
+  box-orient: vertical;
+  word-break: break-all;
 }
 .nothing_tip {
   text-align: center;
@@ -6090,4 +6089,54 @@ table {
   background: -webkit-linear-gradient(top, #ffffff, #f3f3f3);
   background: -o-linear-gradient(top, #ffffff, #f3f3f3);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f3f3f3', GradientType=0);
+}
+.tp_block {
+  border: 2px solid #ababab;
+  background: #fff;
+  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.carousel_defined {
+  margin-bottom: 0;
+}
+.carousel_defined .thumbnail {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+.control_defined {
+  top: 50%;
+  opacity: 0.2;
+  filter: alpha(opacity=20);
+}
+.control_defined:hover,
+.control_defined:focus {
+  opacity: 0.5;
+  filter: alpha(opacity=50);
+}
+.margin_rows {
+  margin-bottom: 20px;
+}
+.nums_block {
+  border: 1px solid #3182ad;
+}
+.nums_block .nums_top {
+  height: 90px;
+  background: #3398cc;
+  position: relative;
+}
+.nums_block .nums_top i {
+  font-size: 32px;
+  color: #fff;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
+.nums_block .nums_bottom {
+  height: 40px;
+  line-height: 40px;
+  background: #0a5da3;
 }

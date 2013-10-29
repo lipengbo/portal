@@ -202,6 +202,9 @@ $(document).ready(function() {
      }).mouseleave(function(){
          $(this).find(".slice_text").stop().animate({bottom:"-67px"});
      });
+     
+     //管理员首页轮播
+     $('#myCarousel').carousel();
 });
 
 
