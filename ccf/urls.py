@@ -63,6 +63,7 @@ urlpatterns = patterns("",
     url(r"^admin/", include(admin.site.urls)),
     #url(r'^admin/', include(xadmin.site.urls)),
     url(r"^accounts/", include("account.urls")),
+    url(r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', name='xmlrpc'),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

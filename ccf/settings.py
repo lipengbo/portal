@@ -23,12 +23,12 @@ DATABASES = {
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'ceni',  
-#         'USER': 'root',  
-#         'PASSWORD': 'cdn%nf',  
-#         'HOST': '192.168.5.120',  
-#         'PORT': '3306',  
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ceni',
+#         'USER': 'root',
+#         'PASSWORD': 'cdn%nf',
+#         'HOST': '192.168.5.120',
+#         'PORT': '3306',
 #     }
 # }
 
@@ -154,6 +154,9 @@ INSTALLED_APPS = [
     "eventlog",
     "endless_pagination",
 
+    #xmlrpc
+    'django_xmlrpc',
+
     # project
     "ccf",
     "slice",
@@ -165,6 +168,8 @@ INSTALLED_APPS = [
     "plugins.network",
     "invite",
 ]
+
+XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
 
 CRON_POLLING_FREQUENCY = 5
 # A sample logging configuration. The only tangible logging

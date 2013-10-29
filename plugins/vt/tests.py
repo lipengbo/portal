@@ -26,7 +26,8 @@ class VMCreate(TestCase):
         island_obj = Island.objects.get(id=1)
         slice_obj = Slice.objects.get(id=1)
         image_name = 'floodlight'
-        vm = create_vm_for_gateway(island_obj, slice_obj, image_name)
+        server_id = 1
+        vm = create_vm_for_gateway(island_obj, slice_obj, server_id, image_name=image_name)
         self.assertTrue(vm)
 
     def test_create_vm_for_slice(self):

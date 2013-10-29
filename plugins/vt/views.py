@@ -123,3 +123,15 @@ def get_vms_state_by_sliceid(request, sliceid):
 def get_slice_gateway_ip(request, slice_name):
     subnet = get_object_or_404(Subnet, owner=slice_name)
     return HttpResponse(json.dumps({'ipaddr': subnet.get_gateway_ip()}))
+
+
+def set_domain_state(vname, state):
+    print '----------------------------------'
+    print 'set_domain_state'
+    print '----------------------------------'
+    try:
+        VirtualMachine.objects.filter(uuid=vname).update(state=state)
+    except:
+        pass
+    finally:
+        return True
