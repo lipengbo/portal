@@ -1,0 +1,133 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}{% trans "help" %}{% endblock %}
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/own-flatui.css" %}" />       
+{% endblock %}
+{% block body_class %}login_bg{% endblock %}
+{% block topbar_base %}{% endblock %}
+{% block breadcrumb_base %}{% endblock %}
+
+{% block body %}
+{% block blank_block %}{% endblock %}
+    	<div class="login_logo">
+    		<img src="{% static "img/logo.png" %}" />
+    	</div>
+    	<div class="login_title">
+    		<img src="{% static "img/title2.png" %}" />
+    	</div>
+    	<form class="login-form" method='post'>
+            {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                <div class="alert alert-error">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% csrf_token %}
+    		<div class="row-fluid">
+    			<div class="span4">   	
+                    <div class="control-group {% if form.username.errors %}error{% endif %}">		
+                      <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
+    				<label class="login-field-icon fui-user" for="login-name"></label>
+                    {% if form.username.errors %}
+                            {% for error in form.username.errors %}
+                                <span class="help-inline">{{ error }}</span>
+                            {% endfor %}
+                    {% endif %}
+    			  </div>				  
+    			</div>
+    			<div class="span4">
+                    <div class="control-group {% if form.password.errors %}error{% endif %}">	
+                        <input type="password" class="login-field" name="password" value="" placeholder="请输入密码" id="login-pass">
+                        <label class="login-field-icon fui-lock" for="login-name"></label>
+                        {% if form.password.errors %}
+                                {% for error in form.password.errors %}
+                                    <span class="help-inline">{{ error }}</span>
+                                {% endfor %}
+                        {% endif %}
+    			    </div>
+    			</div>
+    			<div class="span2">
+    				<button href="#" class="btn btn-large btn-block btn-info" type="submit">登 录</button>
+    			</div>
+    			<div class="span2">
+    				<a data-toggle="modal" href="#registerModal" class="btn btn-large btn-block btn-info" id="register">注册</a>
+    			</div>
+    		</div>
+    	</form>
+        <div id="registerModal" class="modal hide fade">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>注册</h3>
+            </div>
+            	<form class="signup-form form-horizontal pop_form">
+            <div class="modal-body">
+				  <fieldset>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">用户名</label>
+				      <div class="controls">
+				        <input type="text" name="username" class="input-xlarge" id="input01" placeholde="字母，数字，汉字皆可"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">密码</label>
+				      <div class="controls">
+				        <input type="password" name="password" class="input-xlarge" id="input01" placeholde="字母，数字、特殊符号皆可"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">重复密码</label>
+				      <div class="controls">
+				        <input type="password" class="input-xlarge" name="password_confirm" id="input01" placeholde="请再次确认密码"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">Email</label>
+				      <div class="controls">
+				        <input type="text" class="input-xlarge" id="input01" name="email" placeholde="请输入常用邮箱"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">所属单位</label>
+				      <div class="controls">
+				        <input type="text" class="input-xlarge" id="input01" name="organization" placeholde="请输入您所在单位"><span>*</span>
+				      </div>
+				    </div>
+				    <div class="control-group">
+				      <label class="control-label" for="input01">固定电话</label>
+				      <div class="controls">
+                          <input type="text" class="input-xlarge" id="input01" name="phone" placeholde="请输入您的固定电话"><span>*</span>
+				      </div>
+				    </div>
+				  </fieldset>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-info btn_register">注册</button>
+            </div>
+				</form>
+          </div>
+          
+{% endblock %}
+
+{% block footer_base %}{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" charset="utf-8">
+    $('.signup-form').submit(function(){
+            $.post('/accounts/signup/', $(this).serialize(), function(data){
+                if(data.indexOf('DOCTYPE') < 0) {
+                    $('.signup-form fieldset').html(data);
+                } else {
+                    window.location.href = '/';
+
+                }
+            });
+        return false;
+    });
+</script>
+{% endblock %}

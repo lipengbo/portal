@@ -149,15 +149,18 @@ INSTALLED_APPS = [
     #'django_extensions',
     'crispy_forms',
     #'reversion',
+    "idios",
     "account",
     "metron",
     "eventlog",
     "endless_pagination",
+    "notifications",
 
     # project
     "ccf",
     "slice",
     "project",
+    "profiles",
     "resources",
     "plugins.vt",
     "plugins.ipam",
@@ -165,6 +168,7 @@ INSTALLED_APPS = [
     "plugins.network",
     "invite",
     "django_cron",
+    "nexus"
 ]
 
 CRON_POLLING_FREQUENCY = 5
@@ -257,6 +261,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 ANONYMOUS_USER_ID = -1
 

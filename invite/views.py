@@ -51,8 +51,18 @@ def accept(request, kind="invite", key=""):
 
     user = request.user
 
-    if user.is_authenticated():
-        redirect_url = "/"
+    redirect_url = "notifications:all"
+    return redirect(redirect_url)
+
+def reject(request, kind="invite", key=""):
+    if kind == 'apply':
+        ModelClass = Application
     else:
-        redirect_url = "account_login"
+        ModelClass = Invitation
+    model = get_object_or_404(ModelClass, key=key)
+    model.reject()
+
+    user = request.user
+
+    redirect_url = "notifications:all"
     return redirect(redirect_url)

@@ -26,11 +26,12 @@
         <div class="search">
             <form class="form-search">
               <div class="input-append">
-                  <input type="text" name="query" value="" class="span2 search-query">
+                  <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
                   <button type="submit" class="btn">搜索</button>
               </div>
             </form>
         </div>
+
         <div class="fill_form">            
             <fieldset>
                 <legend>
@@ -45,6 +46,7 @@
                          <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
                     </div>
                 {%endif%}
+
                 <div class="row-fluid">
                     {% for group in projects|group_by:4 %}
                     <ul class="thumbnails example-sites">
@@ -54,7 +56,6 @@
                     </ul>
                     {% endfor %}
                 </div>
-            </fieldset>
         </div>
         <div class="pagination">
             <ul>

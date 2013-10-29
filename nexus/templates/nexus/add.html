@@ -1,0 +1,24 @@
+{% extends "site_base.html" %}
+{% load nexus_tags %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block breadcrumb %}
+    {% with ModelClass|get_class_name as class_name  %}
+    {% with ModelClass|get_class_verbose_name as class_verbose_name %}
+    <a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a>
+    <span class="divider">/</span>
+    {% trans "Add" %}{{ class_verbose_name }}
+    {% endwith %}
+    {% endwith %}
+{% endblock %}
+
+{% block body %}
+<form class="form-horizontal" method="post" action="">
+    {% csrf_token %}
+    {{ formset|crispy }}
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+    </div>
+</form>
+{% endblock %}

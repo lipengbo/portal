@@ -38,7 +38,7 @@
                                     	<ul class="nav">
 					                      <li class="active"><a href="/">首页</a></li>
 					                      <li><a href="{% url "project_manage" %}">项目</a></li>
-					                      <li><a href="#">消息日志</a></li>
+					                      <li><a href="{% url "notifications:all" %}">消息</a></li>
 					                      <li><a href="#">权限</a></li>
 					                      <li><a href="#">帮助</a></li>
 					                    </ul>
@@ -93,9 +93,20 @@
                         increaseArea: '20%'  // optional
                     });
                     $('')
-                    $('.btn-delete').click(function(){
+                    $('.btn-input.btn-delete').click(function(){
+                        $('#alertModal').modal();
+                        var form = $(this).parents('form')
+                        var self = $(this);
+                        $('.delete-confirm').unbind('click');
+                        $('.delete-confirm').click(function(){
+                            form.submit();
+                        });
+                        return false;
+                    });
+                    $('a.btn-delete').click(function(){
                         $('#alertModal').modal();
                         var self = $(this);
+                        $('.delete-confirm').unbind('click');
                         $('.delete-confirm').click(function(){
                             window.location.href = self.attr('href');
                         });
