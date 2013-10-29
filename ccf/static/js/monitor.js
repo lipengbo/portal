@@ -65,10 +65,10 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : true,
-	scaleStartValue : 0,
-	scaleSteps : 20,
-	scaleStepWidth : 20,
+	scaleOverride : false
+	//scaleStartValue : 0,
+	//scaleSteps : 20,
+	//scaleStepWidth : 20,
 	
 }
 
