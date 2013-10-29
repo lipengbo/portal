@@ -234,11 +234,17 @@ function page_function0(){
 	}
 }
 function page_function1(){
+	
 	//ret1 = check_switch_port();
 	var ret2 = check_nw_num();
 	//alert(ret1);
 	//alert(ret2);
 	if (ret2){
+		var slice_name_obj = document.getElementById("slice_name");
+    	var user_id_obj = document.getElementById("user_id");
+		var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
+    	fetch_serverinfo();
+    	fetch_gw_ip(slice_name);
 		return true;
 	}
 	else{
@@ -365,7 +371,10 @@ function submit_slice_info(project_id){
 						"controller_ip": controller_ip_port[0],
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
-						"slice_nw": old_slice_nw_obj.value
+						"slice_nw": old_slice_nw_obj.value,
+						"gw_host_id": 0,
+						"gw_ip": "192.168.6.7",
+						"dhcp_selected": 1
 		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";

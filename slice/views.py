@@ -86,8 +86,12 @@ def create_first(request, proj_id):
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
             slice_nw = request.POST.get("slice_nw")
+            gw_host_id = request.POST.get("gw_host_id")
+            gw_ip = request.POST.get("gw_ip")
+            dhcp_selected = request.POST.get("dhcp_selected")
             slice_obj = create_slice_step(project, slice_name,
-                slice_description, island, user, ovs_ports, controller_info, slice_nw)
+                slice_description, island, user, ovs_ports, controller_info,
+                slice_nw, gw_host_id, gw_ip, dhcp_selected)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
@@ -99,10 +103,18 @@ def create_first(request, proj_id):
 @login_required
 def list(request, proj_id):
     """显示所有slice。"""
-    project = get_object_or_404(Project, id=proj_id)
+    user = request.user
     context = {}
-    context['project'] = project
-    context['slices'] = project.slice_set.all()
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
+    if int(proj_id) == 0:
+        context['slices'] = Slice.objects.all()
+    else:
+        project = get_object_or_404(Project, id=proj_id)
+        context['project'] = project
+        context['slices'] = project.slice_set.all()
     return render(request, 'slice/slice_list.html', context)
 
 
@@ -147,13 +159,18 @@ def edit_controller(request, slice_id):
 def detail(request, slice_id):
     """编辑slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    user = request.user
     context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
     context['flowvisor'] = slice_obj.get_flowvisor()
-    context['gws'] = []
-    context['dhcps'] = []
+    context['gw'] = slice_obj.get_gw()
+    context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
     context['check_vm_status'] = 0
     if slice_obj.state == 1:
@@ -162,6 +179,7 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
+#     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -170,7 +188,7 @@ def delete(request, slice_id, flag):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
-    if request.user == slice_obj.owner:
+    if request.user.is_superuser or request.user == slice_obj.owner:
         try:
             slice_obj.delete()
         except Exception, ex:
@@ -206,7 +224,7 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
-    print jsondatas
+#     print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
@@ -281,6 +299,23 @@ def get_show_slices(request):
         slice_show = {'id': slice_obj.id, 'name': slice_obj.get_show_name()}
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
+
+
+def topology_test(request, slice_id):
+    """拓扑测试"""
+    context = {}
+    context['slice_id'] = slice_id
+    return render(request, 'design_topology.html', context)
+
+
+def topology_d3(request):
+    """拓扑测试"""
+    context = {}
+    context['slice_id'] = request.GET.get('slice_id')
+    context['width'] = request.GET.get('width')
+    context['height'] = request.GET.get('height')
+    return render(request, 'slice/slice_topology.html', context)
+
 
 import random
 def monitor_vm(request, host_id, vm_id):

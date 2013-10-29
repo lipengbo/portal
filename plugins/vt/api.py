@@ -43,7 +43,7 @@ def delete_vm_for_controller(vm):
     vm.delete()
 
 
-def create_vm_for_gateway(island_obj, slice_obj, image_name='gateway'):
+def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway', enabled_dhcp=True):
     ip_obj = IPUsage.objects.allocate_ip_for_controller()
     gateway_ip_obj = IPUsage.objects.allocate_ip(slice_obj.name)
     vm = VirtualMachine(slice=slice_obj, island=island_obj, gateway_ip=gateway_ip_obj, ip=ip_obj)
@@ -65,7 +65,7 @@ def create_vm_for_gateway(island_obj, slice_obj, image_name='gateway'):
         vm.server = Server.objects.get(id=serverid)
     vm.type = 2
     vm.save()
-    return vm, str(gateway_ip_obj)
+    return vm
 
 
 def delete_vm_for_gateway(vm):

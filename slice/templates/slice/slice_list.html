@@ -1,30 +1,39 @@
-{% extends "site_base.html" %}
+{% extends extent_html %}
 
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
 {% load endless %}
 
-{% block head_title %}{% trans "create project" %}{% endblock %}
+{% block head_title %}SLICE列表{% endblock %}
 {% block breadcrumb %}
-<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
-<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
-Slice列表
+    {%if extent_html == "site_base.html" %}
+        <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
+    {%endif%}
+    Slice列表
 {% endblock %}
 
 {% block body %}
-{% paginate slices %}
+{% paginate 4 slices %}
     <div class="fill_form">
         <fieldset>
-             <legend>我的Slice</legend>
+             <legend>
+                {%if extent_html == "site_base.html" %}
+                我的Slice
+                {%else%}
+                Slice列表
+                {%endif%}
+             </legend>
              <div class="row-fluid">
-             {% for group in slices|group_by:4 %}
+             {%if slices%}
+             {% for group in slices|group_by:2 %}
              <ul class="thumbnails example-sites">
 		         {% for slice in group %}
 		              {% include "slice/_slice.html" %}
 		         {% endfor %}
 		     </ul>
 		     {% endfor %}
+		     {%endif%}
 		     </div>
          </fieldset>
     </div>
@@ -35,4 +44,6 @@ Slice列表
     </div>
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
+<script src="{{ STATIC_URL}}js/slice_list.js"></script>
 {% endblock %}

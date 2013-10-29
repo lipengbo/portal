@@ -259,6 +259,20 @@ function fetch_serverinfo(){
     }
 }
 
+function fetch_gw_ip(slice_name){
+    $.ajax({
+        url : "/plugins/vt/get_slice_gateway_ip/" + slice_name + "/",
+        type : "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType : "json",
+        error : function(e){
+            alert("error");
+        },
+        success : function(gw_ips){
+            document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
+        }
+    });
+}
 function get_select_server_name(){
     var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
     var results = new Array();

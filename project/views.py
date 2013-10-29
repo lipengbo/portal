@@ -19,6 +19,7 @@ from project.models import Project, Membership, Category
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
+from slice.models import Slice
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -28,8 +29,14 @@ from plugins.openflow.models import Flowvisor
 def index(request):
     context = {}
     user = request.user
-    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
-    projects = Project.objects.filter(id__in=project_ids)
+    context = {}
+    if user.is_superuser:
+        projects = Project.objects.all()
+        context['extent_html'] = "admin_base.html"
+    else:
+        project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+        projects = Project.objects.filter(id__in=project_ids)
+        context['extent_html'] = "site_base.html"
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -40,8 +47,13 @@ def index(request):
 
 @login_required
 def detail(request, id):
+    user = request.user
     project = get_object_or_404(Project, id=id)
     context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['project'] = project
     return render(request, 'project/detail.html', context)
 
@@ -180,7 +192,7 @@ def delete_member(request, id):
 @login_required
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
-    if request.user == project.owner:
+    if request.user.is_superuser or request.user == project.owner:
         try:
             project.delete()
         except Exception, e:
@@ -325,3 +337,28 @@ def switch_proxy(request, host, port):
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
+
+
+@login_required
+def member(request, id):
+    user = request.user
+    project = get_object_or_404(Project, id=id)
+    context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
+    context['project'] = project
+    context['members'] = project.membership_set.all()
+    return render(request, 'project/member.html', context)
+
+
+@login_required
+def manage_index(request):
+    user = request.user
+    context = {}
+    if user.is_superuser:
+        context['slices'] = Slice.objects.all()
+        return render(request, 'manage_index.html', context)
+    else:
+        return redirect("forbidden")
