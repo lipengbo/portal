@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-15 06:14+0000\n"
+"POT-Creation-Date: 2013-10-28 15:56+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,43 +18,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:26
+#: models.py:27
 msgid "City"
 msgstr "城市"
 
-#: models.py:37 models.py:53
+#: models.py:38 models.py:54
 msgid "Island"
 msgstr "节点"
 
-#: models.py:47 models.py:56 templates/project/detail.html:40
+#: models.py:48 models.py:57 templates/project/detail.html:23
+#: templates/project/detail.html.py:53
 msgid "Category"
 msgstr "类型"
 
-#: models.py:51 templates/project/detail.html:21
+#: models.py:52 templates/project/detail.html:20
+#: templates/project/detail.html.py:34
 msgid "Project Name"
 msgstr "项目名称"
 
-#: models.py:52 templates/project/detail.html:27
+#: models.py:53 templates/project/detail.html:21
+#: templates/project/detail.html.py:40
 msgid "Project Description"
 msgstr "项目描述"
 
-#: models.py:55
+#: models.py:56
 msgid "Memberships"
 msgstr "成员"
 
-#: models.py:91
+#: models.py:76
+msgid " quit from"
+msgstr "退出了项目："
+
+#: models.py:103
 msgid "Project"
 msgstr "项目"
 
-#: models.py:104
+#: models.py:116
 msgid "Membership"
 msgstr "成员"
 
-#: views.py:84
+#: views.py:86
 msgid "Invitation message is required."
 msgstr "邀请消息是必填项"
 
-#: views.py:123
+#: views.py:125
+msgid "Application is submitted, please wait to audit."
+msgstr "申请已经提交，请等待审批"
+
+#: views.py:127
 msgid "Application message is required."
 msgstr "申请理由是必填项"
 
@@ -70,51 +81,51 @@ msgstr "创建项目"
 msgid "Project Detail"
 msgstr "项目详情"
 
-#: templates/project/detail.html:15
+#: templates/project/detail.html:16
 msgid "Edit"
 msgstr "编辑"
 
-#: templates/project/detail.html:15
+#: templates/project/detail.html:16
 msgid "Basic info"
 msgstr "基本信息"
 
-#: templates/project/detail.html:32
+#: templates/project/detail.html:22 templates/project/detail.html.py:45
 msgid "Creator"
 msgstr "创建者"
 
-#: templates/project/detail.html:48
+#: templates/project/detail.html:61
 msgid "Selected Islands"
 msgstr "选择节点"
 
-#: templates/project/detail.html:63
+#: templates/project/detail.html:74
 msgid "View pending members"
 msgstr "查看待审批成员"
 
-#: templates/project/detail.html:64
+#: templates/project/detail.html:75
 msgid "Invite members"
 msgstr "邀请成员"
 
-#: templates/project/detail.html:65
+#: templates/project/detail.html:76
 msgid "Members"
 msgstr "成员"
 
-#: templates/project/detail.html:72
+#: templates/project/detail.html:83
 msgid "No."
 msgstr "序号"
 
-#: templates/project/detail.html:73
+#: templates/project/detail.html:84
 msgid "Member name"
 msgstr "成员"
 
-#: templates/project/detail.html:74
+#: templates/project/detail.html:85
 msgid "Company/Organization"
 msgstr "所在单位"
 
-#: templates/project/detail.html:75
+#: templates/project/detail.html:86
 msgid "Actions"
 msgstr "操作"
 
-#: templates/project/detail.html:85
+#: templates/project/detail.html:96
 msgid "Remove"
 msgstr "删除"
 

@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
-from plugins.common.vt_manager_client import VTClient
+from plugins.common.agent_client import AgentClient
 from etc.config import function_test
 
 from project.models import Island
@@ -57,7 +57,7 @@ class Resource(models.Model):
 
 
 class IslandResource(Resource):
-    island = models.ForeignKey(Island)
+    island = models.ForeignKey(Island, verbose_name=_("Island"))
 
     class Meta:
         abstract = True
@@ -74,7 +74,7 @@ class ServiceResource(IslandResource):
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
-    state = models.IntegerField()
+    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1)
 
     def __unicode__(self):
         return self.name
@@ -103,13 +103,20 @@ class Server(IslandResource):
         else:
             return None
 
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', 'password', 'username'),
+        }
+        return options
+
     class Meta:
         verbose_name = _("Server")
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
+    port = models.IntegerField(verbose_name=_("Port"))
+    http_port = models.IntegerField(verbose_name=_("Http Port"))
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     dpid = models.CharField(max_length=256)
@@ -151,6 +158,13 @@ class Switch(SwitchResource):
                 return OVS_TYPE['EXTERNAL']
             else:
                 return OVS_TYPE['RELATED']
+
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('has_gre_tunnel', 'name', 'password', 'username'),
+        }
+        return options
 
     class Meta:
         verbose_name = _("Switch")
@@ -218,10 +232,12 @@ class VirtualSwitch(Switch):
     class Meta:
         verbose_name = _("Virtual Switch")
 
+
 @receiver(pre_save, sender=Server)
 def vm_pre_save(sender, instance, **kwargs):
     if not function_test:
-        info = VTClient().get_host_info(instance.ip)
+        agent_client = AgentClient(instance.ip)
+        info = agent_client.get_host_info()
         instance.cpu = info['cpu']
         instance.mem = info['mem']
         instance.disk = info['hdd']

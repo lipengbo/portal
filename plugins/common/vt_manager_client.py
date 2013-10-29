@@ -14,37 +14,3 @@ class VTClient(object):
 
     def schedul(self, vcpu, mem, disk, hostlist):
         return self.client.schedul(vcpu, mem, disk, hostlist)
-
-    def do_domain_action(self, hostip, vname, action):
-        return self.client.do_domain_action(hostip, vname, action)
-
-    def create_vm(self, hostip, vmInfo, netInfo):
-        """
-        vmInfo:
-            {
-                'name': name,
-                'mem': mem,
-                'cpus': cpus,
-                'img': imageUUID,
-                'mac': mac,
-                'hdd': imageSize 2G,
-                'dhcp': 1 or 0,
-                'glanceURL': glanceURL,
-                'type':0/1/2 0 controller 1 slice 2 gateway
-            }
-        netInfo:
-            {
-                'ip': address,
-                'netmask': netmask,
-                'broadcast': broadcast,
-                'gateway': gateway,
-                'dns': dns,
-            }
-        """
-        return self.client.create_vm(hostip, vmInfo, netInfo)
-
-    def delete_vm(self, hostip, vname):
-        return self.client.delete_vm(hostip, vname)
-
-    def get_host_info(self, hostip):
-        return self.client.get_host_info(hostip)

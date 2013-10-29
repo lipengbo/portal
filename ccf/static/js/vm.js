@@ -208,7 +208,7 @@ function submit_vms(sliceid)
 
 function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
 {
-        url = "/plugins/vt/create/vm/"+sliceid+"/";
+        url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
         type: "POST",
         url: url,
@@ -253,7 +253,10 @@ function fetch_serverinfo(){
         content = content + server_names[i];
         content = content + '</option>';
     }
-    insert_content_to_obj('id_server',content);
+    var objs = $("[id='id_server']");
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = obj.innerHTML + content;
+    }
 }
 
 function get_select_server_name(){

@@ -26,8 +26,8 @@
             {% csrf_token %}
             <fieldset>
                 <legend>
-                    <button class="btn btn-success edit" type="submit" name="approve">批准</button>
-                    <button type="submit" class="btn btn-danger edit" name="deny">拒绝</button>  
+                    <button class="btn disabled action-btn btn-success edit" type="submit" name="approve">批准</button>
+                    <button type="submit" class="btn disabled action-btn btn-danger edit" name="deny">拒绝</button>  
                                                                 待审批成员                   
                 </legend>
                  <table class="table table-striped table-hover">
@@ -61,16 +61,26 @@
                         {% show_pages %}
                     </ul>
                 </div>
-        <div class="form-actions">
-          <div class="row-fluid">
-            <div class="span4"></div>
-            <div class="span4"><button type="button" onclick="window.history.back();" class="btn btn-large btn-block">返 回</button></div>
-            <div class="span4"></div>
-          </div>
-        </div>
         </form>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $('.checkboxs input').on('ifChecked', function(event){
+        $('.action-btn').removeClass('disabled');
+    });
+    $('.checkboxs input').on('ifUnchecked', function(event){
+        if($('.checkboxs .checked').length == 1) {
+            $('.action-btn').addClass('disabled');
+        } else {
+            $('.action-btn').removeClass('disabled');
+        }
+    });
+    $('.action-btn').click(function(){
+        if($(this).hasClass('disabled')) {
+            return false;
+        }
+    });
+</script>
 {% endblock %}
 

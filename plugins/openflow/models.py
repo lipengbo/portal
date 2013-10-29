@@ -35,6 +35,14 @@ class Flowvisor(ServiceResource):
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
 
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', 'password', 'username'),
+            'ct_model': ('resources', 'server')
+        }
+        return options
+
     class Meta:
         verbose_name = _("Flowvisor")
 
