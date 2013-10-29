@@ -5897,7 +5897,7 @@ table {
   border-right: 1px solid #9c9c9c;
 }
 .thumbnail .slice_left ul {
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 }
 .thumbnail .slice_left ul li {
   padding: 5px 0 5px 5px;
@@ -5922,6 +5922,7 @@ table {
 }
 .thumbnail .slice_left .circle_bar input {
   cursor: default;
+  font-size: 12px !important;
 }
 .thumbnail .slice_left .slice_date {
   color: #333;
@@ -6197,4 +6198,7 @@ table {
 }
 .nums_block:hover .nums_bottom i {
   opacity: 1;
+}
+.btn-large {
+  padding: 9px 19px;
 }
