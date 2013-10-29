@@ -1,0 +1,36 @@
+{% extends "theme_base.html" %}
+
+{% block extra_style %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/slice_topology_d3.css">
+    <style type="text/css" media="">
+            .navbar {
+                display: none;
+            }
+            #footer{
+                display: none;
+            }
+            .breadcrumb {
+                display: none;
+            }
+            .body {
+                margin-left:0;
+                border-top:none !important;
+            }
+    </style>
+{% endblock %}
+{% block body %}
+<div class="topology">
+    
+</div>
+<div class="clear" style="display: none" >
+    <p id="slice_id">{{slice_id}}</p>
+    <p id="width">{{width}}</p>
+    <p id="height">{{height}}</p>
+    <p id="STATIC_URL">{{STATIC_URL}}</p>
+</div>
+{% endblock %}
+{% block extra_script %}
+    <script src="{{ STATIC_URL }}js/d3.v3.min.js"></script>
+    <script src="{{ STATIC_URL }}topology/lib/custom-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}js/slice_topology_d3.js"></script>  
+{% endblock %}

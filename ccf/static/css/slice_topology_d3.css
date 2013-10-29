@@ -1,0 +1,128 @@
+svg {
+  //background: url(../img/svg-bg.png)repeat-y -300px 19px;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+//svg:not(.active):not(.ctrl) {
+//  cursor: crosshair;
+//}
+
+path.link {
+  fill: none;
+  stroke: #000;
+  stroke-width: 4px;
+  cursor: default;
+}
+
+svg:not(.active):not(.ctrl) path.link {
+  cursor: pointer;
+}
+
+path.link.selected {
+  stroke-dasharray: 10,2;
+}
+
+path.link.dragline {
+  pointer-events: none;
+}
+
+path.link.hidden {
+  stroke-width: 0;
+}
+
+image.node {
+  stroke-width: 1.5px;
+  cursor: pointer;
+}
+
+image.node.reflexive {
+  stroke: #000 !important;
+  stroke-width: 2.5px;
+}
+
+text {
+  font: 12px sans-serif;
+  pointer-events: none;
+  color:white;
+}
+
+text.id {
+  text-anchor: middle;
+  font-weight: bold;
+}
+
+.nav {
+    background:none;
+    height:auto;
+}
+.modal .popover div.arrow {
+    overflow:visible;
+}
+.popover.bottom {
+    background:none;
+    height: auto;
+    line-height:auto;
+}
+.input-prepend .popover-content {
+    font-size:14px;
+}
+.modal-backdrop {
+    opacity:0.2;
+}
+.wizard-modal {
+    opacity:0.9;
+}
+
+.form-actions {
+    margin-top:0;
+}
+
+h2 {
+    margin:0
+}
+
+ul {
+    margin:0;
+}
+
+.alert {
+    display: block;
+}
+.step2 {
+    position: absolute;
+    top: 440px;
+    margin-left: -12px;
+}
+
+.wizard-modal.modal .nav-list > li > a.validation-error {
+    background-color: red;
+    color: white;
+}
+.wizard-modal.modal .nav-list > li.already-visited > a.wizard-nav-link.validation-error {
+    color: white;
+}
+
+.tooltip {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    border: 1px solid #e0e0e0;
+    background-color: #fefefe;
+    opacity: .9;
+    color: black;
+    padding: 10px;
+    width: 300px;
+    z-index: 10;
+}
+
+.tooltip .title a {
+    font-size: 8pt;
+    font-weight: bold;
+    color: #000;
+}
+

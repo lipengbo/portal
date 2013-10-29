@@ -365,7 +365,10 @@ function submit_slice_info(project_id){
 						"controller_ip": controller_ip_port[0],
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
-						"slice_nw": old_slice_nw_obj.value
+						"slice_nw": old_slice_nw_obj.value,
+						"gw_host_id": 0,
+						"gw_ip": "192.168.6.7",
+						"dhcp_selected": 1
 		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";

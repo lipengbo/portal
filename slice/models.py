@@ -26,7 +26,6 @@ class Slice(models.Model):
     state = models.IntegerField(choices=SLICE_STATES,
             default=SLICE_STATE_STOPPED)
 #     expired = models.IntegerField(default=0)
-
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
     def add_island(self, island):
@@ -130,6 +129,16 @@ class Slice(models.Model):
         except:
             return None
 
+    def get_nw_num(self):
+        nw = self.get_nw()
+        nw_num = 0
+        if nw:
+            nw_num = 1
+            num = int(nw.split('/')[1])
+            for i in range(0, (32 - num)):
+                nw_num = 2 * nw_num
+        return nw_num
+
     def get_gws(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
         gws = []
@@ -137,6 +146,20 @@ class Slice(models.Model):
             if default_flowspace.dl_src != '':
                 gws.append(default_flowspace.dl_src)
         return gws
+
+    def get_gw(self):
+        gws = self.virtualmachine_set.filter(type=2)
+        if gws:
+            return gws[0]
+        else:
+            return None
+
+    def get_dhcp(self):
+        gws = self.virtualmachine_set.filter(type=2, enable_dhcp=True)
+        if gws:
+            return gws[0]
+        else:
+            return None
 
     def get_dhcp_vm_macs(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='')
