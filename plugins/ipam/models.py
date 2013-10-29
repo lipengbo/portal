@@ -90,8 +90,8 @@ class IPManager(models.Manager):
     def get_unowned_subnet(self, subnets, timeout):
         unowned_subnets = subnets.filter(is_owned=False)
         for sub in unowned_subnets:
-            if datetime.datetime.now(tz=pytz.UTC) >= sub.update_time + datetime.timedelta(seconds=timeout):
-#             if datetime.datetime.now() >= sub.update_time + datetime.timedelta(seconds=timeout):
+#             if datetime.datetime.now(tz=pytz.UTC) >= sub.update_time + datetime.timedelta(seconds=timeout):
+            if datetime.datetime.now() >= sub.update_time + datetime.timedelta(seconds=timeout):
                 return sub
         return False
 
