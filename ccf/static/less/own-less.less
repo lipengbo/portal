@@ -222,7 +222,6 @@ filter: alpha(opacity=100);
 
 .tab_main {
 	background:#fff;
-	border: 1px solid #DDD;
 	-moz-border-radius-bottomleft: 7px;
 	-moz-border-radius-bottomright: 7px;
 	-moz-border-radius-topright: 0px;
@@ -239,6 +238,21 @@ filter: alpha(opacity=100);
 	overflow:hidden;
 	text-align:center;
 	border-bottom:4px solid #34495e;
+	.tab-pane {
+	    position:relative;	   
+	    span {
+	        position:absolute;
+	        cursor:pointer;
+	    }
+	    .enlarge {	        
+	        top:20px;
+	        left:20px;
+	    }
+	    .shrink {
+            top:80px;
+            left:20px;
+	    }
+	}
 }
 
 
