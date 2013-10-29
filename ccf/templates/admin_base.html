@@ -36,7 +36,7 @@
                                 <div class="nav-collapse collapse">
                                     {% block nav %}
                                         <ul class="nav">
-                                          <li class="active"><a href="/">首页</a></li>
+                                          <li class="active"><a href="{% url "manage_index" %}">首页</a></li>
                                           <li><a href="{% url "project_index" %}">项目</a></li>
                                           <li><a href="{% url "slice_list" 0 %}">slice</a></li>
                                           <li><a href="#">基础设施</a></li>

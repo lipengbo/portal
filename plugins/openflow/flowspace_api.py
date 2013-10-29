@@ -66,7 +66,7 @@ def flowspace_gw_add(slice_obj, new_gateway):
         Slice.objects.get(id=slice_obj.id)
     except Slice.DoesNotExist:
         return False
-    if new_gateway and not slice_obj.get_gw():
+    if new_gateway and (new_gateway not in slice_obj.get_gws()):
         name = str(slice_obj.name) + '_df'
         haved_nw = slice_obj.get_nw()
         if haved_nw:
@@ -111,7 +111,7 @@ def flowspace_dhcp_add(slice_obj, new_dhcp):
         name = str(slice_obj.name) + '_df'
         haved_vms = slice_obj.get_vms()
         for haved_vm in haved_vms:
-            if haved_vm.mac not in dhcp_vm_macs:
+            if haved_vm.mac and (haved_vm.mac not in dhcp_vm_macs):
                 create_default_flowspace(slice_obj, name, '1', '', '',
                     '', str(haved_vm.mac), '', '', '', '', '', '', '', '')
                 dhcp_vm_macs.append(haved_vm.mac)

@@ -7,7 +7,7 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_update_slice_status, flowvisor_add_slice
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
     flowspace_nw_add, flowspace_nw_del, flowspace_gw_add, flowspace_dhcp_add,\
-    flowspace_dhcp_del
+    flowspace_dhcp_del, flowspace_gw_del
 from plugins.openflow.controller_api import slice_change_controller,\
     slice_add_controller, delete_controller, create_add_controller
 from plugins.vt.api import create_vm_for_gateway, delete_vm_for_gateway
@@ -46,7 +46,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
             print 8
             gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enabled_dhcp=enabled_dhcp)
             print 9
-            flowspace_gw_add(slice_obj, gw.mac)
+#             flowspace_gw_add(slice_obj, gw.mac)
         print 10
 #         创建并添加虚拟机
         return slice_obj
@@ -213,9 +213,14 @@ def update_slice_virtual_network(slice_obj):
     except:
         raise
     flowspace_dhcp_del(slice_obj, True)
+    del_gateways = slice_obj.get_gws()
+    for del_gateway in del_gateways:
+        flowspace_gw_del(slice_obj, del_gateway)
     gw = slice_obj.get_gw()
-    if gw and gw.enable_dhcp:
-        flowspace_dhcp_add(slice_obj, True)
+    if gw and gw.state != 8 and gw.state != 9:
+        flowspace_gw_add(slice_obj, gw.mac)
+        if gw.enable_dhcp:
+            flowspace_dhcp_add(slice_obj, True)
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
     for switch_port in switch_ports:

@@ -179,11 +179,11 @@ function drawTopology(slicec){
 		str = str + "<g class='node' transform='translate(10,10)'>"
 				+ "<image xlink:href='" + static_url;
 				if(switches[i][6] == 1){
-				    str = str + "img/sw7.jpg";
+				    str = str + "img/ovs.png";
 				}else if(switches[i][6] == 2){
-				    str = str + "img/sw6.jpg";
+				    str = str + "img/ovs.png";
 				}else{
-				    str = str + "img/sw5.jpg";
+				    str = str + "img/ovs.png";
 				}
 				
 		str = str + "' x='" + switches[i][1] + "' y='" + switches[i][2] + "" +
@@ -202,11 +202,11 @@ function drawTopology(slicec){
 	for(var i = 0; i < hosts.length; i++){
 		str = str + "<g class='node' transform='translate(10,10)'>";
 		if (hosts[i][6] == 0){
-			str = str + "<image xlink:href='" + static_url + "img/sv2.jpg' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		else{
-			str = str + "<image xlink:href='" + static_url + "img/sv2.jpg' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
+			str = str + "<image xlink:href='" + static_url + "img/host_down.png' x='" + hosts[i][2] + "' y='" + hosts[i][3] + "" +
 					"' width='" + pic_width + "' height='" + pic_height + "'></image>";
 		}
 		str = str+ "<title>ip:" + hosts[i][0] + "</title>  "

@@ -19,6 +19,7 @@ from project.models import Project, Membership, Category
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
+from slice.models import Slice
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -28,7 +29,6 @@ from plugins.openflow.models import Flowvisor
 def index(request):
     context = {}
     user = request.user
-<<<<<<< HEAD
     context = {}
     if user.is_superuser:
         projects = Project.objects.all()
@@ -37,15 +37,11 @@ def index(request):
         project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
         projects = Project.objects.filter(id__in=project_ids)
         context['extent_html'] = "site_base.html"
-=======
-    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
-    projects = Project.objects.filter(id__in=project_ids)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
             projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
->>>>>>> f103ae9868aeb758828349d7e33ee2970337b97f
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
@@ -355,3 +351,14 @@ def member(request, id):
     context['project'] = project
     context['members'] = project.membership_set.all()
     return render(request, 'project/member.html', context)
+
+
+@login_required
+def manage_index(request):
+    user = request.user
+    context = {}
+    if user.is_superuser:
+        context['slices'] = Slice.objects.all()
+        return render(request, 'manage_index.html', context)
+    else:
+        return redirect("forbidden")
