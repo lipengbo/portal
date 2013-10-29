@@ -5308,7 +5308,7 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
-legend_first .modal-body table tr td {
+.modal-body table tr td {
   border: none;
 }
 .sep_div {
@@ -6091,11 +6091,16 @@ table {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f3f3f3', GradientType=0);
 }
 .tp_block {
+  height: 335px;
+  overflow: hidden;
   border: 2px solid #ababab;
   background: #fff;
   -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+}
+.tp_block.tp_charts {
+  height: 250px;
 }
 .carousel_defined {
   margin-bottom: 0;
@@ -6119,24 +6124,77 @@ table {
   margin-bottom: 20px;
 }
 .nums_block {
-  border: 1px solid #3182ad;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  outline: none;
+}
+.nums_block a:hover {
+  text-decoration: none;
 }
 .nums_block .nums_top {
   height: 90px;
-  background: #3398cc;
+  line-height: 90px;
   position: relative;
 }
-.nums_block .nums_top i {
+.nums_block .nums_top i,
+.nums_block .nums_top img {
   font-size: 32px;
   color: #fff;
   opacity: 0.6;
   filter: alpha(opacity=60);
   position: absolute;
-  left: 10px;
+  left: 20px;
   bottom: 10px;
+  transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  /* Firefox 4 */
+
+  -webkit-transition: opacity 0.5s;
+  /* Safari 和 Chrome */
+
+  -o-transition: opacity 0.5s;
+}
+.nums_block .nums_top span {
+  color: #fff;
+  font-size: 42px;
+  text-decoration: none;
+  float: right;
+  margin-right: 30px;
 }
 .nums_block .nums_bottom {
-  height: 40px;
-  line-height: 40px;
-  background: #0a5da3;
+  height: 30px;
+  line-height: 30px;
+}
+.nums_block .nums_bottom span {
+  margin-left: 20px;
+  color: #fff;
+  font-weight: bold;
+}
+.nums_block .nums_bottom i {
+  font-size: 20px;
+  color: #fff;
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+  float: right;
+  margin-top: 5px;
+  margin-right: 10px;
+  transition: opacity 0.5s;
+  -moz-transition: opacity 0.5s;
+  /* Firefox 4 */
+
+  -webkit-transition: opacity 0.5s;
+  /* Safari 和 Chrome */
+
+  -o-transition: opacity 0.5s;
+}
+.nums_block:hover {
+  box-shadow: 0 0 10px #51cbee;
+  -webkit-box-shadow: 0 0 10px #51cbee;
+  -moz-box-shadow: 0 0 10px #51cbee;
+}
+.nums_block:hover .nums_top img {
+  opacity: 1;
+}
+.nums_block:hover .nums_bottom i {
+  opacity: 1;
 }
