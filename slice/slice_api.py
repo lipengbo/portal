@@ -6,9 +6,11 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
     flowvisor_update_slice_status, flowvisor_add_slice
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
-    flowspace_nw_add, flowspace_nw_del
+    flowspace_nw_add, flowspace_nw_del, flowspace_gw_add, flowspace_dhcp_add,\
+    flowspace_dhcp_del, flowspace_gw_del
 from plugins.openflow.controller_api import slice_change_controller,\
     slice_add_controller, delete_controller, create_add_controller
+from plugins.vt.api import create_vm_for_gateway, delete_vm_for_gateway
 from resources.ovs_api import slice_add_ovs_ports
 from plugins.ipam.models import IPUsage
 from django.db import transaction
@@ -19,7 +21,8 @@ import logging
 LOG = logging.getLogger("ccf")
 
 
-def create_slice_step(project, name, description, island, user, ovs_ports, controller_info, slice_nw):
+def create_slice_step(project, name, description, island, user, ovs_ports,\
+    controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
     slice_obj = None
     try:
         print 1
@@ -31,21 +34,28 @@ def create_slice_step(project, name, description, island, user, ovs_ports, contr
         print 4
         flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
         print 5
+#         创建并添加网段
         IPUsage.objects.subnet_create_success(slice_obj.name)
         print 6
         flowspace_nw_add(slice_obj, [], slice_nw)
-        print 7
-#         创建并添加网段
 #         创建并添加网关
 #         创建并添加dhcp
+        enabled_dhcp = (int(dhcp_selected) == 1)
+        print 7
+        if int(gw_host_id) > 0:
+            print 8
+            gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enabled_dhcp=enabled_dhcp)
+            print 9
+#             flowspace_gw_add(slice_obj, gw.mac)
+        print 10
 #         创建并添加虚拟机
         return slice_obj
     except:
-        print 8
+        print 11
         if slice_obj:
-            print 9
+            print 12
             slice_obj.delete()
-        print 10
+        print 13
         raise
 
 
@@ -61,9 +71,8 @@ def create_slice_api(project, name, description, island, user):
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
                 date_now = datetime.datetime.now()
-                date_delta = datetime.timedelta(seconds=5)
-#                 date_delta = datetime.timedelta(days=30)
-                print date_delta
+#                 date_delta = datetime.timedelta(seconds=5)
+                date_delta = datetime.timedelta(days=30)
                 expiration_date = date_now + date_delta
                 try:
                     slice_obj = Slice(owner=user,
@@ -203,6 +212,15 @@ def update_slice_virtual_network(slice_obj):
         flowvisor_del_flowspace(flowvisor, flowspace_name)
     except:
         raise
+    flowspace_dhcp_del(slice_obj, True)
+    del_gateways = slice_obj.get_gws()
+    for del_gateway in del_gateways:
+        flowspace_gw_del(slice_obj, del_gateway)
+    gw = slice_obj.get_gw()
+    if gw and gw.state != 8 and gw.state != 9:
+        flowspace_gw_add(slice_obj, gw.mac)
+        if gw.enable_dhcp:
+            flowspace_dhcp_add(slice_obj, True)
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
     for switch_port in switch_ports:
@@ -226,18 +244,24 @@ def update_slice_virtual_network(slice_obj):
 def get_slice_topology(slice_obj):
     """获取slice拓扑信息
     """
-    LOG.debug('get_slice_topology')
+    print 'get_slice_topology'
 #     交换机
     try:
         switches = []
-        switch_dpids = []
-        switch_ports = slice_obj.get_switch_ports()
-        for switch_port in switch_ports:
-            switch_dpids.append(switch_port.switch.dpid)
-        switch_dpids = list(set(switch_dpids))
-        for switch_dpid in switch_dpids:
-            switch = {'dpid': switch_dpid}
+        switch_objs = slice_obj.get_switches()
+        for switch_obj in switch_objs:
+            switch = {'dpid': switch_obj.dpid,
+                      'name': switch_obj.name,
+                      'type': switch_obj.type(),
+                      'id': switch_obj.id}
             switches.append(switch)
+        switch_ports = slice_obj.get_switch_ports()
+#         for switch_port in switch_ports:
+#             switch_dpids.append(switch_port.switch.dpid)
+#         switch_dpids = list(set(switch_dpids))
+#         for switch_dpid in switch_dpids:
+#             switch = {'dpid': switch_dpid, 'name':}
+#             switches.append(switch)
     #     链接
         links = []
         flowvisor = slice_obj.get_flowvisor()
@@ -246,7 +270,11 @@ def get_slice_topology(slice_obj):
                 source__in=switch_ports, target__in=switch_ports)
         for link_obj in link_objs:
             link = {'src_switch': link_obj.source.switch.dpid,
-                    'dst_switch': link_obj.target.switch.dpid}
+                    'src_port_name': link_obj.source.name,
+                    'src_port': link_obj.source.port,
+                    'dst_switch': link_obj.target.switch.dpid,
+                    'dst_port': link_obj.target.port,
+                    'dst_port_name': link_obj.target.name}
             links.append(link)
     #     虚拟机
         specials = []
@@ -259,19 +287,22 @@ def get_slice_topology(slice_obj):
         for vm in vms:
             virtual_switch = vm.server.get_link_vs()
             if virtual_switch:
-                if vm.state == 1:
-                    host_status = 1
-                else:
-                    host_status = 0
                 if vm.type == 1:
-                    vm_info = {'macAddress': vm.ip.ipaddr, 'switchDPID': virtual_switch.dpid,
-                                'hostid': vm.id, 'hostStatus': host_status}
+                    vm_info = {'macAddress': vm.mac,
+                               'switchDPID': virtual_switch.dpid,
+                               'hostid': vm.id,
+                               'hostStatus': vm.state,
+                               'name': vm.name,
+                               'ip': vm.ip.ipaddr}
                     normals.append(vm_info)
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials}
     except Exception, ex:
+        print 1
+        print ex
         return []
     else:
+        print 2
         return topology
 
 

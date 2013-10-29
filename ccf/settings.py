@@ -56,7 +56,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
@@ -149,10 +149,12 @@ INSTALLED_APPS = [
     #'django_extensions',
     'crispy_forms',
     #'reversion',
+    "idios",
     "account",
     "metron",
     "eventlog",
     "endless_pagination",
+    "notifications",
 
     #xmlrpc
     'django_xmlrpc',
@@ -161,12 +163,15 @@ INSTALLED_APPS = [
     "ccf",
     "slice",
     "project",
+    "profiles",
     "resources",
     "plugins.vt",
     "plugins.ipam",
     "plugins.openflow",
     "plugins.network",
     "invite",
+    "django_cron",
+    "nexus"
 ]
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
@@ -261,6 +266,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
+
+AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 ANONYMOUS_USER_ID = -1
 

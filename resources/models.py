@@ -57,7 +57,7 @@ class Resource(models.Model):
 
 
 class IslandResource(Resource):
-    island = models.ForeignKey(Island)
+    island = models.ForeignKey(Island, verbose_name=_("Island"))
 
     class Meta:
         abstract = True
@@ -74,7 +74,7 @@ class ServiceResource(IslandResource):
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
-    state = models.IntegerField()
+    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1)
 
     def __unicode__(self):
         return self.name
@@ -103,13 +103,20 @@ class Server(IslandResource):
         else:
             return None
 
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', 'password', 'username'),
+        }
+        return options
+
     class Meta:
         verbose_name = _("Server")
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
+    port = models.IntegerField(verbose_name=_("Port"))
+    http_port = models.IntegerField(verbose_name=_("Http Port"))
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     dpid = models.CharField(max_length=256)
@@ -151,6 +158,13 @@ class Switch(SwitchResource):
                 return OVS_TYPE['EXTERNAL']
             else:
                 return OVS_TYPE['RELATED']
+
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('has_gre_tunnel', 'name', 'password', 'username'),
+        }
+        return options
 
     class Meta:
         verbose_name = _("Switch")

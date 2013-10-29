@@ -16,7 +16,7 @@
     <fieldset>
         <legend>
             <a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-info edit">返 回</a>
-            <a data-toggle="modal" href="{% url create_vm sliceid %}" class="btn btn-info edit">添 加</a>
+            <a data-toggle="modal" href="/plugins/vt/create/vm/{{ sliceid }}/1/" class="btn btn-info edit">添 加</a>
                                         虚拟机
         </legend>
         <!--<table class="table">
@@ -110,14 +110,14 @@
 		                                    <span id="vm_fc{{vm.id}}">        
 		                                    	<input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn" disabled>启动</button>
-		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn" disabled>登录</a>
+		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn" disabled>登录</button>
 		                                    </span>
 		                                    {% elif vm.state == 9 %}
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/{{ vm.id }}/destroy')" class="btn btn-success start_btn" disabled>启动</button>
-		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn" disabled>登录</a>
+		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn" disabled>登录</button>
 		                                    {% elif vm.state == 1 %} 
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn">停止</button>
-		                				        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn">登录</a>
+		                				        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn">登录</button>
 		                				    {%else%}
 		                				        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/create')" class="btn btn-success start_btn">启动</button>
 		                				        <button type="button" onclick="" class="btn" disabled>登录</button>

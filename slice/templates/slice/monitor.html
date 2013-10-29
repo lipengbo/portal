@@ -55,11 +55,14 @@
                 <div class="title">
                     <h4>
                         <span class="icon-bar-chart icon-large"></span>
-                        <span>cpu使用率(%)</span>
+                        <span>网络流量(b/s)</span>
+			        	<select class="span4" id="ports_info" onChange="change_port(this.options[this.options.selectedIndex].value)">							
+						</select>
                     </h4>
                 </div>
                 <div class="content" style="padding-bottom:0;">
                     <canvas id="net_perf_chart" width="439" height="300"></canvas>
+		   			<div id="net_info"></div>
                 </div>
             </div>
         </div>
@@ -68,49 +71,19 @@
                 <div class="title">
                     <h4>
                         <span class="icon-bar-chart icon-large"></span>
-                        <span>内存使用率(%)</span>
+                        <span>磁盘使用情况(MB)</span>
                     </h4>
                 </div>
                 <div class="content" style="padding-bottom:0;">
                     <canvas id="disk_perf_chart" width="439" height="300"></canvas>
                     <div class="chart_tip">
-                        <p><span style="background:#ff3366;"></span>已使用</p>
-                        <p><span style="background:#99cc66;"></span>未使用</p>
+                        <p id="disk_use"></p>
+                        <p id="disk_free"></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-    
-<table border="1">
-    <tr>
-    <td>
-	<div>
-		<div style="position: relative; right: 30px">cpu使用率(%)：</div>
-		<canvas id="cpu_perf_chart" width="500" height="300">
-	</div>
-    </td>
-    <td>
-        <div>内存使用率(%)：</div>
-        <canvas id="mem_perf_chart" width="500" height="300">
-    </td>
-    <tr>
-    <td>
-    <div>
-        <canvas id="net_perf_chart" width="500" height="300">
-    </div>
-        <br/>
-        <div id="net_info"></div>
-    </td>
-    <td>
-    <div>
-        <canvas id="disk_perf_chart" width="500" height="300">
-    </div>
-</td>
-</tr>
-</table>
 </div>
 {% endblock %}
 {% block extra_script %}

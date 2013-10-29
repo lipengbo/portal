@@ -16,6 +16,10 @@ $(document).ready(function() {
 	//虚拟机创建页面，添加和删除按钮功能
 	$(".add").click(function(){
 		$(".sec_block").first().clone().appendTo(".vm_info_list");		
+        var spans_info = $(".sec_block").last().find("span");
+        for (var i=0; i<spans_info.length; i++){
+            spans_info[i].innerHTML = '';
+        }
 		$(".sec_block").last().find("input[type='text']").val("");
 		$(".sec_block").last().find("input[type='checkbox']").next().remove();
 		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue');
@@ -79,6 +83,9 @@ $(document).ready(function() {
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
         $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        selected_ports = {};
+        $('.switch-table tbody tr').hide();
+        $('.switch-table tbody tr label').hide();
     });
     
     $('.btn-step4').click(function () {
@@ -227,11 +234,17 @@ function page_function0(){
 	}
 }
 function page_function1(){
+	
 	//ret1 = check_switch_port();
 	var ret2 = check_nw_num();
 	//alert(ret1);
 	//alert(ret2);
 	if (ret2){
+		var slice_name_obj = document.getElementById("slice_name");
+    	var user_id_obj = document.getElementById("user_id");
+		var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
+    	fetch_serverinfo();
+    	fetch_gw_ip(slice_name);
 		return true;
 	}
 	else{
@@ -358,7 +371,10 @@ function submit_slice_info(project_id){
 						"controller_ip": controller_ip_port[0],
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
-						"slice_nw": old_slice_nw_obj.value
+						"slice_nw": old_slice_nw_obj.value,
+						"gw_host_id": 0,
+						"gw_ip": "192.168.6.7",
+						"dhcp_selected": 1
 		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";

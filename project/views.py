@@ -19,6 +19,7 @@ from project.models import Project, Membership, Category
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
+from slice.models import Slice
 
 from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
@@ -26,17 +27,33 @@ from plugins.openflow.models import Flowvisor
 
 @login_required
 def index(request):
-    user = request.user
-    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
-    projects = Project.objects.filter(id__in=project_ids)
     context = {}
+    user = request.user
+    context = {}
+    if user.is_superuser:
+        projects = Project.objects.all()
+        context['extent_html'] = "admin_base.html"
+    else:
+        project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+        projects = Project.objects.filter(id__in=project_ids)
+        context['extent_html'] = "site_base.html"
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            context['query'] = query
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
 @login_required
 def detail(request, id):
+    user = request.user
     project = get_object_or_404(Project, id=id)
     context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['project'] = project
     return render(request, 'project/detail.html', context)
 
@@ -90,7 +107,7 @@ def invite(request, id):
 def apply(request):
     context = {}
     user = request.user
-    projects = Project.objects.all()
+    projects = Project.objects.all().exclude(owner=user)
     if 'category' in request.GET:
         cat_id = request.GET.get('category')
         if cat_id and cat_id != u'-1':
@@ -122,6 +139,7 @@ def apply(request):
                         application.save()
                     except IntegrityError:
                         pass
+            messages.add_message(request, messages.INFO, _("Application is submitted, please wait to audit."))
         else:
             messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)
@@ -174,7 +192,7 @@ def delete_member(request, id):
 @login_required
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
-    if request.user == project.owner:
+    if request.user.is_superuser or request.user == project.owner:
         try:
             project.delete()
         except Exception, e:
@@ -191,7 +209,7 @@ def applicant(request, id):
     if not (request.user == project.owner):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
-    applications = Application.objects.filter(target_id=project.id, target_type=target_type, accepted=False)
+    applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
     context = {}
     context['applications'] = applications
     context['project'] = project
@@ -203,7 +221,7 @@ def applicant(request, id):
             if 'approve' in request.POST:
                 application.accept()
             elif 'deny' in request.POST:
-                application.deny()
+                application.reject()
 
     return render(request, 'project/applicant.html', context)
 
@@ -288,21 +306,18 @@ def links_proxy(request, host, port):
 
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
-@login_required
 def links_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = client.get_links()
     return HttpResponse(json.dumps(data), content_type="application/json")
 
-@login_required
 def switch_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = json.dumps(client.get_switches())
     return HttpResponse(data, content_type="application/json")
 
-@login_required
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
@@ -322,3 +337,28 @@ def switch_proxy(request, host, port):
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
+
+
+@login_required
+def member(request, id):
+    user = request.user
+    project = get_object_or_404(Project, id=id)
+    context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
+    context['project'] = project
+    context['members'] = project.membership_set.all()
+    return render(request, 'project/member.html', context)
+
+
+@login_required
+def manage_index(request):
+    user = request.user
+    context = {}
+    if user.is_superuser:
+        context['slices'] = Slice.objects.all()
+        return render(request, 'manage_index.html', context)
+    else:
+        return redirect("forbidden")

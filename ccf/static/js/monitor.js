@@ -1,6 +1,7 @@
 
 // 各个图的初始化数据
 var cpu_values = [];
+var cpu_values_x_lable = [];
 var mem_values = [];
 var net_values = [];
 var ports = [];
@@ -12,8 +13,9 @@ var port_send_values = [];
 var disk_free;
 var disk_used
 
-for (var i=0; i<150; i++){
-    cpu_values[i] = 0 + "";
+for (var i=0; i<50; i++){
+	cpu_values[i] = 0 + "";
+    cpu_values_x_lable[i] = "";
 }
 
 for (var i=0; i<50; i++){
@@ -30,7 +32,7 @@ for (var i=0; i<10; i++){
 }
 
 var cpu_chart_data = {
-    labels : cpu_values,
+    labels : cpu_values_x_lable,
     datasets : [
         {
             fillColor : "rgba(153,204,153,0.3)",
@@ -64,6 +66,10 @@ var net_options = {
 	pointDot : true,
 	bezierCurve : true,
 	scaleOverride : false
+	//scaleStartValue : 0,
+	//scaleSteps : 20,
+	//scaleStepWidth : 20,
+	
 }
 
 var net_chart_data = {
@@ -120,40 +126,64 @@ var port_chart_data = {
 }
 
  	var ctx_cpu = document.getElementById('cpu_perf_chart').getContext("2d");
-    var cpu_chart = new Chart(ctx_cpu);
+    //var cpu_chart = new Chart(ctx_cpu);
     
 
 	var ctx_mem = document.getElementById('mem_perf_chart').getContext("2d");
-    var mem_chart = new Chart(ctx_mem);
+    //var mem_chart = new Chart(ctx_mem);
     
 
 	var ctx_net = document.getElementById('net_perf_chart').getContext("2d");
-    var net_chart = new Chart(ctx_net);
+    //var net_chart = new Chart(ctx_net);
 
 	var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
 	//new Chart(ctx_disk).Doughnut(disk_chart_data);   
 
 	var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
 
-    var port_chart = new Chart(ctx_port);
+    //var port_chart = new Chart(ctx_port);
 
+
+
+//是否初始化net信息数组的标志位
+var flag = true; 
+var show_port_num = 0;
+var net_info = "";
+var net_info_content = ["", ""];
 function switch_port(num){
-	alert(ports[num][0]);
+	show_port_num = num;
+}
+
+function show_port(num){
 	net_chart_data["datasets"][0]["data"] = ports[num][0];
 	net_chart_data["datasets"][1]["data"] = ports[num][1];
 	new Chart(ctx_net).Line(net_chart_data, net_options);
+	document.getElementById("net_info").innerHTML = net_info_content[num];
+	
 }
 
+function change_port(option){
+	show_port_num = option;
+	show_port(option);
+	//alert(net_info_content[arg.value]);
+	
+}
+var pre_net_data = [];
 function get_performace_data(host_id, vm_id){
-    var url;
+    var url = '/slice/update_performace_data/';
+    var post_data = 'host_id=' + host_id + '&pre_net_data=' + pre_net_data;
     if (vm_id == undefined){
-        url = '/slice/update_performace_data/host/' + host_id +'/';
+        //url = '/slice/update_performace_data/host/' + host_id +'/';
+        //post_data = 'host_id=' + host_id + '&pre_net_data=' + pre_net_data;
     }else{
-        url = '/slice/update_performace_data/vm/' + host_id + '/' + vm_id + '/';
+        //url = '/slice/update_performace_data/vm/' + host_id + '/' + vm_id + '/';
+        post_data = post_data + '&vm_id=' + vm_id;
     }
+    //alert('['+pre_net_data.toString() + ']');
     $.ajax({
         url: url,
-        type: 'GET',
+        type: 'POST',
+        data: post_data,
         dataType: 'json',
         timeout: 1000,
         error: function(){
@@ -172,42 +202,44 @@ function get_performace_data(host_id, vm_id){
                 disk_chart_data[0]["value"] = performace_data['disk_use']['free']
                 disk_chart_data[1]["value"] = performace_data['disk_use']['used']
                 new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
-                /*
-				net_recv_values.shift();
-				net_recv_values.push(performace_data['net_recv_data']);
-		
-				net_send_values.shift();
-				net_send_values.push(performace_data['net_send_data']);
-				net_chart_data["datasets"][0]["data"] = net_recv_values;
-				net_chart_data["datasets"][1]["data"] = net_send_values;
-				new Chart(ctx_net).Line(net_chart_data, net_options);
-                */
 
-                var net_info_content = "";
-				
+                document.getElementById("disk_use").innerHTML = '<span style="background:#ff3366;"></span>已使用 : ' 
+								+ performace_data['disk_use']['used'] + " MB";
+                document.getElementById("disk_free").innerHTML ='<span style="background:#99cc66;"></span>未使用 : '
+								+ performace_data['disk_use']['free'] + " MB";
+
+                var port_info_content = "";//"<option selected>请选择网卡</option>";
+				//var net_info_content = [];
+                pre_net_data = [];
 				var num = 0;
-				
                 $.each(performace_data.net, function(port, data){
-					send_data[num].shift();
-					send_data[num].push(data[0]);
+					if(flag){
+						ports.push([]);
+						ports[num][0] = net_recv_values.slice(0);
+						ports[num][1] = net_send_values.slice(0);
+					}
+					
+					ports[num][0].shift();
+					ports[num][0].push(data[2]);
 
-					recv_data[num].shift();
-					recv_data[num].push(data[1]);
+					ports[num][1].shift();
+					ports[num][1].push(data[3]);
 
-					ports[num][0] = send_data;
-					ports[num][1] = recv_data;
-
-                    net_info_content = net_info_content + "<button id='id_port' onclick='switch_port(" + num + ")'>" + port + "</button>【send: "+ data[0] +", recv:"+ data[1] +"】<br/>";
+                    pre_net_data.push(data[0]+':'+data[1]);
+				
+					
+                    port_info_content = port_info_content + "<option value="+num+">"+port+"</option>"
+					net_info_content[num] = "【send: "+ data[0] +", recv:"+ data[1] +" send_bps : "+ 
+                                    	data[2] +"b/s, recv_bps:"+ data[3] + "b/s】";
 					num++;
                 });
-                document.getElementById("net_info").innerHTML = net_info_content;
+				flag = false;
+                document.getElementById("ports_info").innerHTML = port_info_content;
+				
+				//show_port(show_port_num);
+				change_port(show_port_num);
 
-                //默认显示第一个网卡的信息
-				net_chart_data["datasets"][0]["data"] = ports[1][0];
-				net_chart_data["datasets"][1]["data"] = ports[1][1];
-				new Chart(ctx_net).Line(net_chart_data, net_options);
-
-
+				
             }
      });
 }

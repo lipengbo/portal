@@ -30,10 +30,10 @@
                 </form>
             </div>
             <div class="clearfix"></div>
-          <form action="" method="POST" class="base_info">
+          <form action="" method="POST">
               {% csrf_token %}
             <fieldset>
-                 <legend><a data-toggle="modal" href="#applyModal" class="btn btn-info edit">申请加入</a>项目列表</legend>
+                 <legend><a id="apply-button" href="javascript:;" class="btn btn-info disabled edit">申请加入</a>项目列表</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -49,17 +49,21 @@
                         {% for project in projects %}
                         <tr>
                             {% with project|application_status:user as status %}
-                            <td><input type="checkbox" name="project_id" {% if status.accepted or user == project.owner %}disabled{% endif %} value="{{ project.id }}"></td>
+                            <td><input type="checkbox" name="project_id" {% if status.is_apply or user == project.owner %}disabled{% endif %} value="{{ project.id }}"></td>
                             <td>{{ project.name }}</td>
                             <td>{{ project.description }}</td>
                             <td>{{ project.owner }}</td>
                             <td>{{ project.category }}</td>
                             <td>
                                 {% if status.is_apply %}
-                                    {% if status.accepted %}
+                                    {% if status.accepted == 1%}
                                     <span class="text-success">已接受</span>
                                     {% else %}
-                                    <span class="text-error">未审批</span>
+                                        {% if status.accepted == 2 %}
+                                            <span class="text-error">未通过</span>
+                                        {% else %}
+                                            <span class="text-info">未审批</span>
+                                        {% endif %}
                                     {% endif %}
                                 {% else %}
                                     未申请
@@ -79,17 +83,20 @@
               {% show_pages %}
           </ul>
         </div>   
-        <div id="applyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div id="applyModal" class="modal hide in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3 id="myModalLabel">申请</h3>      
             </div>
                 <div class="modal-body">
+                        <div class="alert message-error alert-error hide">
+                            消息是必填项
+                        </div>
                       <table class="table">
                           <tbody>
                               <tr>
                                   <td width="150" class="v_top text_r">申请理由</td>
-                                  <td><textarea rows="3" name="message"></textarea></td>
+                                  <td><textarea id="message" rows="3" name="message"></textarea></td>
                               </tr>
                               <tr>
                                   <td class="text_r">申请角色</td>
@@ -108,7 +115,7 @@
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-info" data-dismiss="modal">取消</button>
-                  <button type="submit" class="btn btn-info">提交申请</button>
+                  <button id="apply-submit" type="submit" class="btn btn-info">提交申请</button>
                 </div>
          </div>
   </form>
@@ -123,6 +130,28 @@
         } else {
             window.location.href= "?"
         }
+    });
+    $('.checkboxs input').on('ifChecked', function(event){
+        $('#apply-button').removeClass('disabled');
+    });
+    $('.checkboxs input').on('ifUnchecked', function(event){
+        if($('.checkboxs .checked').length == 1) {
+            $('#apply-button').addClass('disabled');
+        } else {
+            $('#apply-button').removeClass('disabled');
+        }
+    });
+    $('#apply-button').click(function() {
+        if($(this).hasClass('disabled')) {
+            return;
+        }
+        $("#applyModal").modal();
+    });
+    $('#apply-submit').click(function() {
+            if(!$('#message').val()) {
+                $('.message-error').show();
+                return false;
+            }
     });
 </script>
 {% endblock %}

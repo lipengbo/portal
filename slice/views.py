@@ -28,6 +28,7 @@ from slice.models import Slice
 
 from plugins.vt.forms import VmForm
 from resources.models import Server
+from plugins.common.agent_client import AgentClient
 
 
 @login_required
@@ -86,8 +87,12 @@ def create_first(request, proj_id):
                 port_ids.append(int(switch_port_id))
             ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
             slice_nw = request.POST.get("slice_nw")
+            gw_host_id = request.POST.get("gw_host_id")
+            gw_ip = request.POST.get("gw_ip")
+            dhcp_selected = request.POST.get("dhcp_selected")
             slice_obj = create_slice_step(project, slice_name,
-                slice_description, island, user, ovs_ports, controller_info, slice_nw)
+                slice_description, island, user, ovs_ports, controller_info,
+                slice_nw, gw_host_id, gw_ip, dhcp_selected)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
@@ -99,10 +104,18 @@ def create_first(request, proj_id):
 @login_required
 def list(request, proj_id):
     """显示所有slice。"""
-    project = get_object_or_404(Project, id=proj_id)
+    user = request.user
     context = {}
-    context['project'] = project
-    context['slices'] = project.slice_set.all()
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
+    if int(proj_id) == 0:
+        context['slices'] = Slice.objects.all()
+    else:
+        project = get_object_or_404(Project, id=proj_id)
+        context['project'] = project
+        context['slices'] = project.slice_set.all()
     return render(request, 'slice/slice_list.html', context)
 
 
@@ -147,13 +160,18 @@ def edit_controller(request, slice_id):
 def detail(request, slice_id):
     """编辑slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    user = request.user
     context = {}
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
     context['flowvisor'] = slice_obj.get_flowvisor()
-    context['gws'] = []
-    context['dhcps'] = []
+    context['gw'] = slice_obj.get_gw()
+    context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
     context['check_vm_status'] = 0
     if slice_obj.state == 1:
@@ -162,6 +180,7 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
+#     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -170,7 +189,7 @@ def delete(request, slice_id, flag):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     project_id = slice_obj.project.id
-    if request.user == slice_obj.owner:
+    if request.user.is_superuser or request.user == slice_obj.owner:
         try:
             slice_obj.delete()
         except Exception, ex:
@@ -206,7 +225,7 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
-    print jsondatas
+#     print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
@@ -282,6 +301,23 @@ def get_show_slices(request):
         slices.append(slice_show)
     return HttpResponse(json.dumps({'slices': slices}))
 
+
+def topology_test(request, slice_id):
+    """拓扑测试"""
+    context = {}
+    context['slice_id'] = slice_id
+    return render(request, 'design_topology.html', context)
+
+
+def topology_d3(request):
+    """拓扑测试"""
+    context = {}
+    context['slice_id'] = request.GET.get('slice_id')
+    context['width'] = request.GET.get('width')
+    context['height'] = request.GET.get('height')
+    return render(request, 'slice/slice_topology.html', context)
+
+
 import random
 def monitor_vm(request, host_id, vm_id):
     print host_id
@@ -304,24 +340,50 @@ performace_data = {'cpu_use' : random.randint(1, 100),
                    'net_send_data' : random.randint(1, 100),
                    'disk_use' : random.randint(1, 100)}
 
-def update_vm_performace_data(request, host_id, vm_id):
+def update_vm_performace_data(request):
     """
     监控虚拟机性能
     """
-    vm_perf_data = {"mem": {"total": 262144, "percent": 100, "free": 0, "used": 262144},
-     "net": {"4f6f91d4": [5522, 984, 7080755, 12, 0, 0, 0, 0],
-             "4f6f91d5": [123, 84, 0755, 12, 0, 0, 0, 0]},
-     "disk": {"total": 858993459200.0, "percent": 0.067138671875, "free": 8416742400.0, "used": 576716800.0},
-     "cpu": 0.0}
+    pre_net_data = request.POST.get("pre_net_data").split(',')
+    vm_name = request.POST.get("vm_name")
+    agent_ip = request.POST.get("server_ip")
+    agent = AgentClient(ip = "192.168.5.122")
+    vm_perf_data = json.loads(agent.get_domain_status("4f6f91d4-2af5-481d-afc6-8217c70db938"))
+    host_perf_data = json.loads(agent.get_host_status())
+    #print host_perf_data
+
+
+
+
+
+
+
+    # vm_perf_data = {"mem": {"total": 262144, "percent": 100, "free": 0, "used": 262144},
+    # "net": {"4f6f91d4": [5522, 984, 7080755, 12, 0, 0, 0, 0],
+    #        "4f6f91d5": [123, 84, 0755, 12, 0, 0, 0, 0]},
+    #"disk": {"total": 858993459200.0, "percent": 0.067138671875, "free": 8416742400.0, "used": 576716800.0},
+    #"cpu": 0.0}
     net_data = {}
-    for (key, value) in vm_perf_data["net"].items():
-        net_data[key] = [ value[0], value[1] ]
-    disk_data = {"free" : vm_perf_data["disk"]["free"], "used" : vm_perf_data["disk"]["used"]}
-    print net_data
+    if pre_net_data[0] == '':
+        for (key, value) in host_perf_data["net"].items():
+            net_data[key] = [value[0], value[1], 0, 0]
+    else:
+        for (key, value), bps_data in zip(host_perf_data["net"].items(), pre_net_data):
+            net_data[key] = [value[0], value[1],
+                           value[0] - int(bps_data.split(':')[0]),
+                           value[1] - int(bps_data.split(':')[1])]
+                            #200, 300]
+
+    for (key, value) in host_perf_data["disk"].items():
+        host_disk_data = {"free" : int(value[2])/8/1024/1024, "used" : int(value[1]/8/1024/1024)}
+        break
+
+    domain_disk_data = {"free" : int(vm_perf_data["disk"]["free"]/8/1024/1024), "used" : int(vm_perf_data["disk"]["used"]/8/1024/1024)}
+    #print net_data
     return HttpResponse(json.dumps({'cpu_use' : vm_perf_data["cpu"],
                                     'mem_use' : vm_perf_data["mem"]["percent"],
                                     'net' : net_data,
-                                    'disk_use' : disk_data
+                                    'disk_use' : host_disk_data
                                     }))
 
 def update_host_performace_data(request, host_id):

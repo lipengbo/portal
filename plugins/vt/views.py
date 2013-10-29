@@ -17,8 +17,8 @@ from plugins.common.agent_client import AgentClient
 from plugins.ipam.models import Subnet
 from resources.models import Server
 import logging
+from django.utils.translation import ugettext as _
 LOG = logging.getLogger('plugins')
-
 
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
@@ -34,7 +34,10 @@ def vm_list(request, sliceid):
     return render(request, 'vt/vm_list.html', context)
 
 
-def create_vm(request, sliceid):
+def create_vm(request, sliceid, from_link):
+    """
+    from_link : 记录链接跳转的入口，以便返回原来的页面。 0 为从slic详情页面转入， 1为从虚拟机列表页面转入
+    """
     if request.method == 'POST':
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
@@ -47,7 +50,7 @@ def create_vm(request, sliceid):
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
                     if not serverid:
-                        raise Exception('resource not enough')
+                        raise Exception(_('resource not enough'))
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
@@ -65,6 +68,7 @@ def create_vm(request, sliceid):
         context['vm_form'] = vm_form
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
+        context['from_link'] = from_link
         return render(request, 'vt/create_vm.html', context)
 
 
@@ -118,7 +122,6 @@ def get_vms_state_by_sliceid(request, sliceid):
     context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
     context['sliceid'] = sliceid
     return HttpResponse(json.dumps(context))
-
 
 def get_slice_gateway_ip(request, slice_name):
     subnet = get_object_or_404(Subnet, owner=slice_name)

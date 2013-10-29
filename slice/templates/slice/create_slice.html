@@ -183,7 +183,7 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td width="85">网络地址：</td>
+                            <td width="150">网络地址</td>
                             <td>
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -200,13 +200,13 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="200">
+                            <td width="150">
                                 <label class="tab_radio1" for="optionsRadios1">
                                     <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
                                                                                                                                创建控制器 
                                 </label>
                             </td>
-                            <td width="95">控制器类型</td>
+                            <td width="100">控制器类型</td>
                             <td>
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
@@ -232,14 +232,14 @@
                     </tbody>
                 </table>
               </fieldset>
-              <!--<fieldset class="base_info tooltip-demo">
+              <fieldset class="base_info tooltip-demo">
                  <legend>虚拟网关配置<small>(可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="70">网关宿主机</td>
+                            <td width="150">网关宿主机</td>
                             <td>
-                                <select>
+                                <select id="id_server">
                                   <option>server1</option>
                                   <option>server2</option>
                                   <option>server3</option>
@@ -249,14 +249,17 @@
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td><input type="text" />
+                            <td><input type="text" id="gateway_ip"/>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
+=======
+                            <td>
+                                <span id="gw_ipInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info hide_form tooltip-demo">
+              <!--<fieldset class="base_info hide_form tooltip-demo">
                  <legend>DHCP服务器配置<small>(可选)</small></legend>
                  <table class="table">
                     <tbody>
@@ -269,7 +272,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td width="200">
+                            <td width="150">
                                 <label class="tab_radio4">
                                   <input type="radio" name="dhcp_type" id="optionsRadios4" value="user_define" checked>
                                   自定义DHCP服务
@@ -278,21 +281,25 @@
                             <td width="100">DHCP地址池</td>
                             <td width="35">开始</td>
                             <td width="120">
-                                <input type="text" class="input-small">
+                                <input type="text" class="input-small" id="dhcp_src_ip" name="dhcp_src_ip">
                             </td>
                             <td width="35">结束</td>
                             <td>
-                                <input type="text" class="input-small">
+                                <input type="text" class="input-small" id="dhcp_des_ip" name="dhcp_des_ip">
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户为DHCP分配地址池，地址池必须包含在第2步获取的网络段内部"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
 
                     </tbody>
                 </table>
-              </fieldset>
+<<<<<<< HEAD
+            </fieldset>-->
+=======
+              </fieldset>-->
+>>>>>>> b16edd848082c67a34cda900e99752327ca91d51
               <label class="inline tab_checkbox">
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 是否配置DHCP服务器 
-              </label>-->
+              </label>
               
               <div class="form-actions">
                   <div class="row-fluid">
@@ -312,7 +319,7 @@
                         <tr>
                             <td width="20%">名称</td>
                             <td width="30%">
-				                <input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />				
+				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />				
                             </td>                           
                             <td>
                                 <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span>

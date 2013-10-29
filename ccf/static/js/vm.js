@@ -208,7 +208,7 @@ function submit_vms(sliceid)
 
 function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
 {
-        url = "/plugins/vt/create/vm/"+sliceid+"/";
+        url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
         type: "POST",
         url: url,
@@ -253,9 +253,26 @@ function fetch_serverinfo(){
         content = content + server_names[i];
         content = content + '</option>';
     }
-    insert_content_to_obj('id_server',content);
+    var objs = $("[id='id_server']");
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = obj.innerHTML + content;
+    }
 }
 
+function fetch_gw_ip(slice_name){
+    $.ajax({
+        url : "/plugins/vt/get_slice_gateway_ip/" + slice_name + "/",
+        type : "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType : "json",
+        error : function(e){
+            alert("error");
+        },
+        success : function(gw_ips){
+            document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
+        }
+    });
+}
 function get_select_server_name(){
     var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
     var results = new Array();

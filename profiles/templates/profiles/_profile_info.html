@@ -1,0 +1,5 @@
+{% load i18n %}
+<div class="profile_info">
+    {% if profile.organization %}<p><b>{% trans "Organization" %}</b>: {{ profile.organization }}</p>{% endif %}
+    {% if profile.phone %}<p><b>{% trans "Phone" %}</b>: {{ profile.phone}}</p>{% endif %}
+</div>

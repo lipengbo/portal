@@ -12,6 +12,9 @@ from resources.models import Server
 from etc.config import function_test
 
 
+from django.utils.translation import ugettext as _
+
+
 def create_vm_for_controller(island_obj, slice_obj, image_name):
     ip_obj = IPUsage.objects.allocate_ip_for_controller()
     vm = VirtualMachine(slice=slice_obj, island=island_obj, ip=ip_obj)
@@ -29,7 +32,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         hostlist = [(server.id, server.ip) for server in Server.objects.all()]
         serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
         if not serverid:
-            raise Exception('resource not enough')
+            raise Exception(_("resource not enough"))
         vm.server = Server.objects.get(id=serverid)
     vm.type = 0
     vm.save()

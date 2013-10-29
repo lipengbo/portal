@@ -2,10 +2,17 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
+
+import notifications
+
+from profiles.views import SignupView
+from profiles.forms import SignupForm
 from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
+# import django_cron
+# django_cron.autodiscover()
 #import xadmin
 #xadmin.autodiscover()
 
@@ -35,11 +42,14 @@ urlpatterns = patterns("",
     url(r"^logs_handle/", TemplateView.as_view(template_name="logs_handle.html"), name="demo"),
     url(r"^member_check/", TemplateView.as_view(template_name="member_check.html"), name="demo"),
     url(r"^invite_member/", TemplateView.as_view(template_name="invite_member.html"), name="demo"),
-    url(r"^manage_index/", TemplateView.as_view(template_name="manage_index.html"), name="demo"),
+    url(r"^manage_index/", 'project.views.manage_index', name="manage_index"),
 
     url(r"^map/$", TemplateView.as_view(template_name="index.html"), name="map"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
+
+    url(r"^accounts/signup/$", SignupView.as_view(form_class=SignupForm), name="account_signup"),
+    url('^notifications/', include(notifications.urls)),
 
     url(r'^topology/$', 'project.views.topology', name="topology_view"),
     url(r'^(topology/.+\.html)$', direct_to_template, ),
@@ -64,6 +74,7 @@ urlpatterns = patterns("",
     #url(r'^admin/', include(xadmin.site.urls)),
     url(r"^accounts/", include("account.urls")),
     url(r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', name='xmlrpc'),
+    url(r"^nexus/", include("nexus.urls")),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

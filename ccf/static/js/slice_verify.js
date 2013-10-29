@@ -291,3 +291,129 @@ function showInfo(_info,msg,color){
     info.innerHTML = msg;
     info.style.color=color;
 }
+
+
+//验证网关ip
+function check_gw_ip(flag){
+    var gw_ip_obj = document.getElementById("gw_ip");
+    var info = document.getElementById("gw_ipInfo");
+    var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    
+    var reg=/^((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}?$/;//正则表达式
+    
+    if(obj.value.length > 0){
+        if(reg.test(obj.value))
+        {
+            slice_nw = old_slice_nw_obj.value;
+            gw_ip = gw_ip_obj.value;  
+            slice_ip_mask=slice_nw.split("/");
+            ip = slice_ip_mask[0];
+            mask = slice_ip_mask[1];
+            ips = ip.split(".");
+            masks = maskint_to_maskstr(mask);
+            cur_ips = nw_ip.split(".");
+            if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
+                showInfo(info,"√","green");
+                return true;
+            }
+        }
+        showInfo(info,"IP地址错误","red")   ;   
+        return false;
+    }
+    else{
+        if(flag){
+            showInfo(info,"请填写IP地址","blue");
+            return false;
+        }
+        return true;
+    } 
+}
+
+//验证dhcp的ip段
+function check_dhcp_ip(flag){
+    var src_obj = document.getElementById("dhcp_src_ip");
+    var des_obj = document.getElementById("dhcp_des_ip");
+    var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    
+    var reg=/^((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)(\.((25[0-5])|(2[0-4]\d)|(1\d\d)|([1-9]\d)|\d)){3}?$/;//正则表达式
+    
+     if(src_obj.value.length > 0 && des_obj.value.length > 0){
+        if(reg.test(src_obj.value) && reg.test(des_obj.value))
+        {
+            slice_nw = old_slice_nw_obj.value;
+            src_ip = src_obj.value;  
+            slice_ip_mask=slice_nw.split("/");
+            ip = slice_ip_mask[0];
+            mask = slice_ip_mask[1];
+            ips = ip.split(".");
+            masks = maskint_to_maskstr(mask);
+            cur_ips = src_ip.split(".");
+            if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
+                des_ip = des_obj.value; 
+                cur_ips = des_ip.split(".");
+                if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
+                    showInfo(info,"√","green");
+                    return true;
+                }
+            }
+        }
+        showInfo(info,"IP地址错误","red");   
+        return false;
+    }
+    else{
+        if(flag){
+            showInfo(info,"请填写IP地址","blue");
+            return false;
+        }
+        return true;
+    } 
+    
+}
+
+
+function maskint_to_maskstr(mask){
+    masks = new Array(255, 255, 255, 255);
+    if(0<=mask && mask<=8){
+        masks = new Array(trans(mask), 0, 0, 0);
+    }
+    if(9<=mask && mask<=16){
+        masks = new Array(255, trans(mask-8), 0, 0);
+    }
+    if(17<=mask && mask<=24){
+        masks = new Array(255, 255, trans(mask-16), 0);
+    }
+    if(25<=mask && mask<=32){
+        masks = new Array(255, 255, 255, trans(mask-24));
+    }   
+    return masks ;
+}
+
+function trans(mask){
+    if(mask==0){
+        return 0;
+    }
+    if(mask==1){
+        return 128;
+    }
+    if(mask==2){
+        return 192;
+    }
+    if(mask==3){
+        return 224;
+    }
+    if(mask==4){
+        return 240;
+    }
+    if(mask==5){
+        return 248;
+    }
+    if(mask==6){
+        return 252;
+    }
+    if(mask==7){
+        return 254;
+    }
+    if(mask==8){
+        return 255;
+    }
+}
