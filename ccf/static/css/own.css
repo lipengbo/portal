@@ -5487,7 +5487,6 @@ table {
 }
 .tab_main {
   background: #fff;
-  border: 1px solid #DDD;
   -moz-border-radius-bottomleft: 7px;
   -moz-border-radius-bottomright: 7px;
   -moz-border-radius-topright: 0px;
@@ -5504,6 +5503,21 @@ table {
   overflow: hidden;
   text-align: center;
   border-bottom: 4px solid #34495e;
+}
+.tab_main .tab-pane {
+  position: relative;
+}
+.tab_main .tab-pane span {
+  position: absolute;
+  cursor: pointer;
+}
+.tab_main .tab-pane .enlarge {
+  top: 20px;
+  left: 20px;
+}
+.tab_main .tab-pane .shrink {
+  top: 80px;
+  left: 20px;
 }
 .title_bg {
   background: url(../img/feature-line.png) center bottom;
