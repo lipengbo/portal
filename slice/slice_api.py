@@ -6,9 +6,11 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
     flowvisor_update_slice_status, flowvisor_add_slice
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
-    flowspace_nw_add, flowspace_nw_del
+    flowspace_nw_add, flowspace_nw_del, flowspace_gw_add, flowspace_dhcp_add,\
+    flowspace_dhcp_del
 from plugins.openflow.controller_api import slice_change_controller,\
     slice_add_controller, delete_controller, create_add_controller
+from plugins.vt.api import create_vm_for_gateway, delete_vm_for_gateway
 from resources.ovs_api import slice_add_ovs_ports
 from plugins.ipam.models import IPUsage
 from django.db import transaction
@@ -36,21 +38,24 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
         IPUsage.objects.subnet_create_success(slice_obj.name)
         print 6
         flowspace_nw_add(slice_obj, [], slice_nw)
-        print 7
 #         创建并添加网关
-        create_add_gw(slice_obj, gw_host_id, gw_ip)
-        print 8
 #         创建并添加dhcp
-        create_add_dhcp(slice_obj, dhcp_selected)
-        print 9
+        enabled_dhcp = (int(dhcp_selected) == 1)
+        print 7
+        if int(gw_host_id) > 0:
+            print 8
+            gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enabled_dhcp=enabled_dhcp)
+            print 9
+            flowspace_gw_add(slice_obj, gw.mac)
+        print 10
 #         创建并添加虚拟机
         return slice_obj
     except:
-        print 10
+        print 11
         if slice_obj:
-            print 11
+            print 12
             slice_obj.delete()
-        print 12
+        print 13
         raise
 
 
@@ -207,6 +212,10 @@ def update_slice_virtual_network(slice_obj):
         flowvisor_del_flowspace(flowvisor, flowspace_name)
     except:
         raise
+    flowspace_dhcp_del(slice_obj, True)
+    gw = slice_obj.get_gw()
+    if gw and gw.enable_dhcp:
+        flowspace_dhcp_add(slice_obj, True)
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
     for switch_port in switch_ports:
@@ -230,7 +239,7 @@ def update_slice_virtual_network(slice_obj):
 def get_slice_topology(slice_obj):
     """获取slice拓扑信息
     """
-    LOG.debug('get_slice_topology')
+    print 'get_slice_topology'
 #     交换机
     try:
         switches = []
@@ -279,14 +288,16 @@ def get_slice_topology(slice_obj):
                                'hostid': vm.id,
                                'hostStatus': vm.state,
                                'name': vm.name,
-                               'ip': vm.ip.ipaddr,
-                               'vnc_port': vm.vnc_port}
+                               'ip': vm.ip.ipaddr}
                     normals.append(vm_info)
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials}
     except Exception, ex:
+        print 1
+        print ex
         return []
     else:
+        print 2
         return topology
 
 

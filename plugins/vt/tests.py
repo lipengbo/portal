@@ -6,7 +6,7 @@ Replace this with more appropriate tests for your application.
 """
 
 from django.test import TestCase
-from api import create_vm_for_controller
+from api import create_vm_for_controller, create_vm_for_gateway
 from slice.models import Slice
 from project.models import Island
 import json
@@ -22,6 +22,13 @@ class VMCreate(TestCase):
         vm = create_vm_for_controller(island_obj, slice_obj, image_name)
         self.assertTrue(vm)
 
+    def test_create_vm_for_gateway(self):
+        island_obj = Island.objects.get(id=1)
+        slice_obj = Slice.objects.get(id=1)
+        image_name = 'floodlight'
+        vm = create_vm_for_gateway(island_obj, slice_obj, image_name)
+        self.assertTrue(vm)
+
     def test_create_vm_for_slice(self):
         context = {}
         context['name'] = 'vm1'
@@ -32,3 +39,13 @@ class VMCreate(TestCase):
         response = self.client.post(path='/plugins/vt/create/vm/1/', data=context)
         result = json.loads(response.content)
         self.assertTrue(result.get('result') == 0)
+
+
+class Gateway_ip(TestCase):
+    fixtures = ['lpb_pemission.json', 'lpb_project_data.json', 'lpb_resource.json', 'lpb_image_data.json', 'lpb_unittest.json']
+
+    def test_get_slice_gateway_ip(self):
+        slice_obj = Slice.objects.get(id=1)
+        response = self.client.get(path='/plugins/vt/get_slice_gateway_ip/%s/' % slice_obj.name)
+        result = json.loads(response.content)
+        self.assertTrue(result.get('ipaddr') == '10.0.0.1')

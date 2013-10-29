@@ -219,40 +219,118 @@ img {
 				 		</tr>
 			 		{%endif%}
 
-			 		<!--{%for gw in gws%}
+			 		{%if gw %}
 				 		<tr>
+				 		    <td>gateway</td>
 				 			<td>虚拟网关</td>
-				 			<td>IP：{{gw.ip}}</td>
-				 			<td></td>
-				 			<td></td>
-				 			<td>
-				 			    <button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn btn-info">登录</button>
-					 			{% if slice_obj.state == 0 %}
-                                    <a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
+				 			<td>{{gw.ip}}</td>
+				 			<td>{{gw.server.ip}}</td>
+                            {% if slice_obj.state == 1 %}
+                                <td>
+                                    {% if gw.state == 8 %}
+                                    <div id="gw_st{{gw.id}}">
+                                        <img src="{% static "img/loader.gif" %}" />
+                                    </div>
+                                    {% elif gw.state == 9 %}
+                                        <i class="icon-remove"></i>
+                                    {%else%}
+                                        <i class="icon-ok"></i>
+                                    {%endif%}
+                                </td>
+                            {%endif%}
+				 			{%if extent_html == "site_base.html" %}
+                                {% if slice_obj.state == 1 %}
+                                   <td>
+                                        {% if gw.state == 8 %}
+                                            <span id="gw_fc{{gw.id}}">
+                                                <input class="aa" type="checkbox" name="check_vm_ids" value="{{gw.id}}" checked style="display:none"/>
+                                                <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ gw.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
+                                                <button type="button" onclick="" class="btn" disabled>登录</button> 
+                                            </span>
+                                        {% elif gw.state == 9 %}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ gw.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
+                                            <button type="button" onclick="" class="btn" disabled>登录</button>
+                                        {% elif gw.state == 1 %}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ gw.id }}/destroy')" class="btn btn-danger stop_btn">停止</button>                                          
+                                            <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ gw.id }}')" class="btn">登录</button>
+                                        {%else%}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ gw.id }}/create')" class="btn btn-success start_btn">启动</button>
+                                            <button type="button" onclick="" class="btn" disabled>登录</button>
+                                        {%endif%}
+                                   </td>
                                 {%else%}
-                                    <a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
+                                   <td>                 
+                                        {% if gw.state == 1 %}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ gw.id }}/destroy')" class="btn btn-danger stop_btn" disabled>停止</button>                                          
+                                        {%else%}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ gw.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
+                                        {%endif%}
+                                        <button type="button" onclick="" class="btn" disabled>登录</button>
+                                   </td>
                                 {%endif%}
-				 			</td>
+                            {%else%}
+                                <td>
+                                   <button type="button" onclick="" class="btn">监控</button>
+                                </td>
+                            {%endif%}
 				 		</tr>
-			 		{%endfor%}
-			 		{%for dhcp in dhcps%}
+			 		{%endif%}
+			 		{%if dhcp%}
 				 		<tr>
+				 		    <td>dhcp</td>
 				 			<td>DHCP服务器</td>
-				 			<td>IP：{{dhcp.ip}}</td>
-				 			<td></td>
-				 			<td></td>
-				 			<td>
-				 			    <button type="button" class="btn btn-success start_btn">启动</button>
-					 			<button type="button" class="btn btn-info">登录</button>
-					 			{% if slice_obj.state == 0 %}
-                                    <a data-toggle="modal" href="#" class="btn btn-info">编辑</a>
+				 			<td>{{dhcp.ip}}</td>
+				 			<td>{{dhcp.server.ip}}</td>
+                            {% if slice_obj.state == 1 %}
+                                <td>
+                                    {% if dhcp.state == 8 %}
+                                    <div id="dhcp_st{{dhcp.id}}">
+                                        <img src="{% static "img/loader.gif" %}" />
+                                    </div>
+                                    {% elif dhcp.state == 9 %}
+                                        <i class="icon-remove"></i>
+                                    {%else%}
+                                        <i class="icon-ok"></i>
+                                    {%endif%}
+                                </td>
+                            {%endif%}
+				 			{%if extent_html == "site_base.html" %}
+                                {% if slice_obj.state == 1 %}
+                                   <td>
+                                        {% if dhcp.state == 8 %}
+                                            <span id="dhcp_fc{{dhcp.id}}">
+                                                <input class="aa" type="checkbox" name="check_vm_ids" value="{{dhcp.id}}" checked style="display:none"/>
+                                                <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
+                                                <button type="button" onclick="" class="btn" disabled>登录</button> 
+                                            </span>
+                                        {% elif dhcp.state == 9 %}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
+                                            <button type="button" onclick="" class="btn" disabled>登录</button>
+                                        {% elif dhcp.state == 1 %}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/destroy')" class="btn btn-danger stop_btn">停止</button>                                          
+                                            <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ dhcp.id }}')" class="btn">登录</button>
+                                        {%else%}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/create')" class="btn btn-success start_btn">启动</button>
+                                            <button type="button" onclick="" class="btn" disabled>登录</button>
+                                        {%endif%}
+                                   </td>
                                 {%else%}
-                                    <a data-toggle="modal" href="#" class="btn btn-info" disabled>编辑</a>
+                                   <td>                 
+                                        {% if dhcp.state == 1 %}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/destroy')" class="btn btn-danger stop_btn" disabled>停止</button>                                          
+                                        {%else%}
+                                            <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
+                                        {%endif%}
+                                        <button type="button" onclick="" class="btn" disabled>登录</button>
+                                   </td>
                                 {%endif%}
-				 			</td>
+                            {%else%}
+                                <td>
+                                   <button type="button" onclick="" class="btn">监控</button>
+                                </td>
+                            {%endif%}
 				 		</tr>
-				 	{%endfor%}-->
+				 	{%endif%}
 
 			 		{%for vm in vms%}
 				 		<tr>

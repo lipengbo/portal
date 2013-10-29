@@ -187,6 +187,15 @@ class Subnet(models.Model):
     def get_network(self):
         return na.Network(self.netaddr)
 
+    def get_gateway_ip(self):
+        if self.supernet.type == 0:
+            gateway_ip = self.netaddr.partition('/')[0]
+        else:
+            subnet_network = self.get_network()
+            new_ipaddr = subnet_network.get_host(0)
+            gateway_ip = str(new_ipaddr)
+        return gateway_ip
+
     def __unicode__(self):
         return self.netaddr
 

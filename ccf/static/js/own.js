@@ -209,6 +209,9 @@ $(document).ready(function() {
      }).mouseleave(function(){
          $(this).find(".slice_text").stop().animate({bottom:"-67px"});
      });
+     
+     //管理员首页轮播
+     $('#myCarousel').carousel();
 });
 
 
@@ -364,7 +367,7 @@ function submit_slice_info(project_id){
 						"switch_port_ids": switch_port_ids,
 						"slice_nw": old_slice_nw_obj.value,
 						"gw_host_id": 1,
-						"gw_ip": 192.168.6.7,
+						"gw_ip": "192.168.6.7",
 						"dhcp_selected": 1
 		};
 

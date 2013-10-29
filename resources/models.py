@@ -6,7 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
-from plugins.common.vt_manager_client import VTClient
+from plugins.common.agent_client import AgentClient
 from etc.config import function_test
 
 from project.models import Island
@@ -218,10 +218,12 @@ class VirtualSwitch(Switch):
     class Meta:
         verbose_name = _("Virtual Switch")
 
+
 @receiver(pre_save, sender=Server)
 def vm_pre_save(sender, instance, **kwargs):
     if not function_test:
-        info = VTClient().get_host_info(instance.ip)
+        agent_client = AgentClient(instance.ip)
+        info = agent_client.get_host_info()
         instance.cpu = info['cpu']
         instance.mem = info['mem']
         instance.disk = info['hdd']

@@ -169,8 +169,8 @@ def detail(request, slice_id):
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
     context['flowvisor'] = slice_obj.get_flowvisor()
-    context['gws'] = []
-    context['dhcps'] = []
+    context['gw'] = slice_obj.get_gw()
+    context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
     context['check_vm_status'] = 0
     if slice_obj.state == 1:
@@ -179,6 +179,7 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
+#     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 
