@@ -22,4 +22,5 @@ urlpatterns = patterns('slice.views',
     url(r'^update_performace_data/vm/(?P<host_id>\d+)/(?P<vm_id>\d+)/$', "update_vm_performace_data", name="update_vm_performace_data"),
 #     url(r'^change_nw_owner/(?P<nw>\w+)/(?P<new_owner>\w+)/$', "change_nw_owner", name='change_nw_owner'),
 #     url(r'^change_nw/(?P<owner>\w+)/(?P<new_owner>\w+)/$(?P<nw_num>\w+)/', "change_nw", name='change_nw'),
+
 )
