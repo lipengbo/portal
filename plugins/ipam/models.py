@@ -84,9 +84,6 @@ class IPManager(models.Manager):
         ip.save()
         return ip
 
-    def allocate_ip_for_gateway(self):
-        return self.allocate_ip_for_controller()
-
     def release_ip_for_controller(self, ip):
         return self.release_ip(ip)
 
@@ -191,7 +188,13 @@ class Subnet(models.Model):
         return na.Network(self.netaddr)
 
     def get_gateway_ip(self):
-        return self.netaddr.partition('/')[0]
+        if self.supernet.type == 0:
+            gateway_ip = self.netaddr.partition('/')[0]
+        else:
+            subnet_network = self.get_network()
+            new_ipaddr = subnet_network.get_host(0)
+            gateway_ip = str(new_ipaddr)
+        return gateway_ip
 
     def __unicode__(self):
         return self.netaddr
