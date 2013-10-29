@@ -11,4 +11,4 @@ from idios.models import ProfileBase
 
 class Profile(ProfileBase):
     organization = models.CharField(max_length=64, null=True, verbose_name=_("Organization"))
-    phone = models.CharField(max_length=11, null=True)
+    phone = models.CharField(max_length=11, null=True, verbose_name=_("Phone"))

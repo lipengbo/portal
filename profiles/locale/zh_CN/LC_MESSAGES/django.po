@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-28 10:01+0800\n"
+"POT-Creation-Date: 2013-10-28 17:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,46 +18,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:13 templates/profiles/_profile_info.html:5
-msgid "Location"
-msgstr "所在地"
+#: forms.py:8 models.py:13 templates/profiles/_profile_info.html:3
+#: templates/profiles/_profile_item.html:11
+msgid "Organization"
+msgstr "所属单位"
 
-#: models.py:14 templates/profiles/_profile_info.html:6
-msgid "Website"
-msgstr "个人网站"
+#: forms.py:9 models.py:14 templates/profiles/_profile_info.html:4
+#: templates/profiles/_profile_item.html:12
+msgid "Phone"
+msgstr "固定电话"
 
-#: models.py:15
-msgid "Signature"
-msgstr "签名"
-
-#: models.py:16
-msgid "about"
-msgstr "关于我"
-
-#: models.py:18
-msgid "Douban"
-msgstr "豆瓣"
-
-#: models.py:19
-msgid "Weibo"
-msgstr "新浪微博"
-
-#: models.py:20
-msgid "Twitter"
-msgstr ""
-
-#: models.py:21
-msgid "Github"
-msgstr ""
-
-#: models.py:22
-msgid "Dribbble"
-msgstr ""
-
-#: templates/profiles/_profile_info.html:3
-msgid "Name"
-msgstr "姓名"
-
-#: templates/profiles/_profile_info.html:4
-msgid "About"
-msgstr "关于"
