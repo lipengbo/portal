@@ -26,10 +26,15 @@ from plugins.openflow.models import Flowvisor
 
 @login_required
 def index(request):
+    context = {}
     user = request.user
     project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
     projects = Project.objects.filter(id__in=project_ids)
-    context = {}
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            context['query'] = query
     context['projects'] = projects
     return render(request, 'project/index.html', context)
 
