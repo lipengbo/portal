@@ -234,11 +234,17 @@ function page_function0(){
 	}
 }
 function page_function1(){
+	
 	//ret1 = check_switch_port();
 	var ret2 = check_nw_num();
 	//alert(ret1);
 	//alert(ret2);
 	if (ret2){
+		var slice_name_obj = document.getElementById("slice_name");
+    	var user_id_obj = document.getElementById("user_id");
+		var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
+    	fetch_serverinfo();
+    	fetch_gw_ip(slice_name);
 		return true;
 	}
 	else{

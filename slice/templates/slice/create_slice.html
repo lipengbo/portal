@@ -232,14 +232,14 @@
                     </tbody>
                 </table>
               </fieldset>
-              <!--<fieldset class="base_info tooltip-demo">
+              <fieldset class="base_info tooltip-demo">
                  <legend>虚拟网关配置<small>(可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
                             <td width="70">网关宿主机</td>
                             <td>
-                                <select>
+                                <select id="id_server">
                                   <option>server1</option>
                                   <option>server2</option>
                                   <option>server3</option>
@@ -249,14 +249,14 @@
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td><input type="text" />
+                            <td><input type="text" id="gateway_ip"/>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
               </fieldset>
-              <fieldset class="base_info hide_form tooltip-demo">
+              <!--<fieldset class="base_info hide_form tooltip-demo">
                  <legend>DHCP服务器配置<small>(可选)</small></legend>
                  <table class="table">
                     <tbody>
@@ -289,10 +289,10 @@
 
                     </tbody>
                 </table>
-              </fieldset>
+            </fieldset>-->
               <label class="inline tab_checkbox">
                   <input type="checkbox" id="inlineCheckbox1" value="option1"> 是否配置DHCP服务器 
-              </label>-->
+              </label>
               
               <div class="form-actions">
                   <div class="row-fluid">

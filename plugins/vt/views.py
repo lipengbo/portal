@@ -123,7 +123,6 @@ def get_vms_state_by_sliceid(request, sliceid):
     context['sliceid'] = sliceid
     return HttpResponse(json.dumps(context))
 
-
 def get_slice_gateway_ip(request, slice_name):
     subnet = get_object_or_404(Subnet, owner=slice_name)
     return HttpResponse(json.dumps({'ipaddr': subnet.get_gateway_ip()}))
