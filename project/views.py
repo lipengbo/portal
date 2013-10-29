@@ -90,7 +90,7 @@ def invite(request, id):
 def apply(request):
     context = {}
     user = request.user
-    projects = Project.objects.all()
+    projects = Project.objects.all().exclude(owner=user)
     if 'category' in request.GET:
         cat_id = request.GET.get('category')
         if cat_id and cat_id != u'-1':
@@ -122,6 +122,7 @@ def apply(request):
                         application.save()
                     except IntegrityError:
                         pass
+            messages.add_message(request, messages.INFO, _("Application is submitted, please wait to audit."))
         else:
             messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)
@@ -288,21 +289,18 @@ def links_proxy(request, host, port):
 
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
-@login_required
 def links_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = client.get_links()
     return HttpResponse(json.dumps(data), content_type="application/json")
 
-@login_required
 def switch_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
     data = json.dumps(client.get_switches())
     return HttpResponse(data, content_type="application/json")
 
-@login_required
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)

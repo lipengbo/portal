@@ -10,5 +10,28 @@
                                 <hr />
                                 <a href="{% url project_detail project.id %}">查看</a>
                             </div>
+                            <a class="thumbnail" href="{% url project_detail project.id %}">
+                                <img src="{% static project.category.image %}" />
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td width="80">项目名称：</td>
+                                            <td>{{ project.name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top">Slice个数：</td>
+                                            <td>{{ project.slice_set.count }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top">成员个数：</td>
+                                            <td>{{ project.memberships.count }}个</td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top">创建者：</td>
+                                            <td>{{ project.owner }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </a>
                         </li>
 

@@ -49,7 +49,7 @@ class Category(models.Model):
 class Project(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256, verbose_name=_("Project Name"))
-    description = models.TextField(verbose_name=_("Project Description"))
+    description = models.CharField(max_length=1024, verbose_name=_("Project Description"))
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
             related_name="project_belongs", verbose_name=_("Memberships")) 

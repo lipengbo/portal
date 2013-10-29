@@ -22,7 +22,7 @@
             <tr>
                 <td width="20%">名称</td>
                 <td width="30%">
-                    <input id="id_name" onblur="check_vminfo()" type="text" name="name" maxlength="20" />
+                    <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />
                 </td>
                 <td>
                     <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
@@ -67,14 +67,18 @@
     </label>
     <div class="operate_btn">
         <button class="btn btn-inverse del" type="button">删 除</button>
-    </div>
+    </div> 
     </div>          
     </fieldset>
     <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>
     <div class="form-actions">
         <div class="row-fluid">
-          <div class="span3"></div>
+            <div class="span3"></div>
+          {% if from_link == '0' %}
+          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+          {% else %}
           <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          {% endif %}
           <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }})">{% trans "Submit" %}</button></div>
           <div class="span3"></div>
         </div>

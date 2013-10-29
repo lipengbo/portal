@@ -16,6 +16,10 @@ $(document).ready(function() {
 	//虚拟机创建页面，添加和删除按钮功能
 	$(".add").click(function(){
 		$(".sec_block").first().clone().appendTo(".vm_info_list");		
+        var spans_info = $(".sec_block").last().find("span");
+        for (var i=0; i<spans_info.length; i++){
+            spans_info[i].innerHTML = '';
+        }
 		$(".sec_block").last().find("input[type='text']").val("");
 		$(".sec_block").last().find("input[type='checkbox']").next().remove();
 		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue');
@@ -79,6 +83,9 @@ $(document).ready(function() {
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
         $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        selected_ports = {};
+        $('.switch-table tbody tr').hide();
+        $('.switch-table tbody tr label').hide();
     });
     
     $('.btn-step4').click(function () {
