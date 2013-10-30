@@ -171,7 +171,8 @@ INSTALLED_APPS = [
     "plugins.network",
     "invite",
     "django_cron",
-    "nexus"
+    "nexus",
+    "monitor"
 ]
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)

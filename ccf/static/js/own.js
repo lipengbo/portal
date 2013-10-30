@@ -243,7 +243,7 @@ function page_function1(){
 		var slice_name_obj = document.getElementById("slice_name");
     	var user_id_obj = document.getElementById("user_id");
 		var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
-    	fetch_serverinfo();
+    	fetch_serverinfo("id_server_gw");
     	fetch_gw_ip(slice_name);
 		return true;
 	}
@@ -252,7 +252,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
-    fetch_serverinfo();
+    fetch_serverinfo("id_server");
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;

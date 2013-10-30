@@ -1,0 +1,112 @@
+{% extends "site_base.html" %}
+{% block body %}
+<button id="ovs_watch">OVS 性能监控</button>
+<div id="div_ovs_data" style="display:none">
+<table>
+<tr>
+<td>
+    <div class="row">
+        <div class="">
+            <ul class="nav nav-pills" id="br_info"></ul>
+         </div>
+    </div>
+</td>
+</tr>
+<tr>
+<td>
+	<canvas id="port_perf_chart" width="430" height="300">
+</td>
+</tr>
+</table>
+    <button id="back" >返回</button>   
+</div>
+<div id="div_normal_data" style="display">
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="box gradient">
+                <div class="title">
+                    <h4>
+                        <span class="icon-bar-chart icon-large"></span>
+                        <span>cpu使用率(<span id="cpu_percent"></span>%)</span>
+                    </h4>
+                </div>
+                <div class="content" style="padding-bottom:0;">
+                    <canvas id="cpu_perf_chart" width="439" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="span6">
+            <div class="box gradient">
+                <div class="title">
+                    <h4>
+                        <span class="icon-bar-chart icon-large"></span>
+                        <span>内存使用率(<span id="mem_percent"></span>%)</span>
+                    </h4>
+                </div>
+                <div class="content" style="padding-bottom:0;">
+                    <canvas id="mem_perf_chart" width="439" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+     </div>   
+    <div class="row-fluid">
+        <div class="span6">
+            <div class="box gradient">
+                <div class="title">
+                    <h4>
+                        <span class="icon-bar-chart icon-large"></span>
+                        <span>网络流量(b/s)</span>
+			        	<select class="span4" id="ports_info" onChange="change_port(this.options[this.options.selectedIndex].value)">							
+						</select>
+                    </h4>
+                </div>
+                <div class="content" style="padding-bottom:0;">
+                    <canvas id="net_perf_chart" width="439" height="300"></canvas>
+		   			<div id="net_info"></div>
+                </div>
+            </div>
+        </div>
+        <div class="span6">
+            <div class="box gradient">
+                <div class="title">
+                    <h4>
+                        <span class="icon-bar-chart icon-large"></span>
+                        <span>磁盘使用情况(MB)</span>
+                    </h4>
+                </div>
+                <div class="content" style="padding-bottom:0;">
+                    <canvas id="disk_perf_chart" width="439" height="300"></canvas>
+                    <div class="chart_tip">
+                        <p id="disk_use"></p>
+                        <p id="disk_free"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block extra_script %}
+        <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
+        <script src="{{ STATIC_URL }}js/monitor.js" ></script>
+        <script>
+            $(function(){
+                var vm_id = {{ vm_id }}
+                if ({{ vm_id }} == 0){
+                    init({{host_id}}, undefined);
+                }else{
+                    init({{ host_id }}, {{ vm_id }});
+                }
+            })
+            $('#ovs_watch').click(function(){
+                $('#div_normal_data').hide();
+		        //show之前去获取该机器的网桥和端口信息
+		        get_br_info(1);
+                $('#div_ovs_data').show();
+            });
+            $('#back').click(function(){
+                $('#div_normal_data').show();
+                $('#div_ovs_data').hide();
+            });
+        </script>
+{% endblock %}

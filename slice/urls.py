@@ -16,11 +16,5 @@ urlpatterns = patterns('slice.views',
     url(r'^get_show_slices/$', "get_show_slices", name='get_show_slices'),
     url(r'^topology_test/(?P<slice_id>\d+)/$', "topology_test", name='topology_test'),
     url(r'^topology_d3/$', "topology_d3", name='topology_d3'),
-    url(r'^monitor/vm/(?P<host_id>\d+)/(?P<vm_id>\d+)/$', "monitor_vm", name="monitor_vm"),
-    url(r'^monitor/host/(?P<host_id>\d+)/$', "monitor_host", name="monitor_host"),
-    url(r"^monitor/ovs/(?P<host_id>\d+)/$", "monitor_ovs", name="monitor_ovs"),
-    url(r"^monitor/port/$", "monitor_port", name="monitor_port"),
-    url(r'^update_performace_data/host/(?P<host_id>\d+)/$', "update_host_performace_data", name="update_host_performace_data"),
-    #url(r'^update_performace_data/vm/(?P<host_id>\d+)/(?P<vm_id>\d+)/$', "update_vm_performace_data", name="update_vm_performace_data"),
-    url(r'^update_performace_data/$', "update_vm_performace_data", name="update_vm_performace_data"),
+    
 )
