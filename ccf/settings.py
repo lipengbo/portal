@@ -23,12 +23,12 @@ DATABASES = {
 
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',  
-#         'NAME': 'ceni',  
-#         'USER': 'root',  
-#         'PASSWORD': 'cdn%nf',  
-#         'HOST': '192.168.5.120',  
-#         'PORT': '3306',  
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ceni',
+#         'USER': 'root',
+#         'PASSWORD': 'cdn%nf',
+#         'HOST': '192.168.5.120',
+#         'PORT': '3306',
 #     }
 # }
 
@@ -168,7 +168,8 @@ INSTALLED_APPS = [
     "plugins.network",
     "invite",
     "django_cron",
-    "nexus"
+    "nexus",
+    "monitor"
 ]
 
 CRON_POLLING_FREQUENCY = 5
