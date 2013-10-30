@@ -476,9 +476,9 @@ function restart() {
     //.classed('reflexive', function(d) { return d.reflexive; })
     .on('click', function(d) {
         if(d.type == 'switch'){
-            window.top.location.href = "http://" + window.location.host + "/moniter/switch/"+d.yid+"/";
+            window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
         }else{
-            window.top.location.href = "http://" + window.location.host + "/moniter/vm/"+d.yid+"/";
+            window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
         }  
     })
     .on('mouseover', function(d) {
