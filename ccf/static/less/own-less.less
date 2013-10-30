@@ -238,11 +238,15 @@ filter: alpha(opacity=100);
 	overflow:hidden;
 	text-align:center;
 	border-bottom:4px solid #34495e;
+	.tab_map {
+	    height:679px;
+	}
 	.tab-pane {
-	    position:relative;	   
+	    position:relative;	  
 	    span {
 	        position:absolute;
 	        cursor:pointer;
+	        z-index:10;
 	    }
 	    .enlarge {	        
 	        top:20px;
@@ -251,6 +255,11 @@ filter: alpha(opacity=100);
 	    .shrink {
             top:80px;
             left:20px;
+	    }
+	    .map, .map2 {
+	        position:absolute;
+	        top:0;
+	        left:0;
 	    }
 	}
 }
