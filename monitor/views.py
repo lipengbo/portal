@@ -6,8 +6,12 @@ from plugins.common.ovs_client import get_bridge_list, get_bridge_port_list,get_
 from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from resources.models import Server, Switch
+from plugins.vt.models import VirtualMachine
 
 import random
+
+
+
 def monitor_vm(request, host_id, vm_id):
     print host_id
     return render(request, "slice/monitor.html", {'host_id' : host_id})
@@ -41,6 +45,8 @@ def update_port_performace_data(request):
     switch_id = request.POST.get("switch_id")
     br_name = request.POST.get("br")
     port_name = request.POST.get("port")
+    pre_recv_data = request.POST.get("pre_recv_data")
+    pre_send_data = request.POST.get("pre_send_data")
 
     #print switch_id,"  ", br_name, "  ", port_name
     switch = get_object_or_404(Switch, id = switch_id)
@@ -51,9 +57,11 @@ def update_port_performace_data(request):
         if br['name'] == br_name:
             for port in br['ports']:
                 if port['name'] == port_name:
-                    recv_data = int(port['stats']['recv']['byte'])/1024/0124
-                    send_data = int(port['stats']['send']['byte'])/1024/1024
-    performace_port_data = {'port_recv_data' : recv_data, 'port_send_data' : send_data}
+                    recv_data = int(port['stats']['recv']['byte'])
+                    send_data = int(port['stats']['send']['byte'])
+    print recv_data, ":", send_data
+    performace_port_data = {'port_recv_data' : recv_data, 'port_send_data' : send_data,
+                            'recv_bps' : recv_data - int(pre_recv_data), 'send_bps' : send_data - int(pre_send_data)}
     return HttpResponse(json.dumps(performace_port_data))
 
 performace_data = {'cpu_use' : random.randint(1, 100),
@@ -68,7 +76,8 @@ def update_vm_performace_data(request):
     """
     pre_net_data = request.POST.get("pre_net_data").split(',')
     vm_name = request.POST.get("vm_name")
-    agent_ip = request.POST.get("server_ip")
+    vm = get_object_or_404(VirtualMachine, uuid = vm_name )
+    agent_ip = request.POST.get(vm.server.ip)
     agent = AgentClient(ip = "192.168.5.122")
     vm_perf_data = json.loads(agent.get_domain_status("4f6f91d4-2af5-481d-afc6-8217c70db938"))
 

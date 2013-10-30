@@ -122,6 +122,26 @@ var disk_chart_data = [
     //var port_chart = new Chart(ctx_port);
 
 
+function data_process(data){
+    unit = 'byte'
+    data = data/8/1024 //byte
+    if (data > 1024){
+		data = data/1024 //KB
+        unit = 'KB'
+        if (data > 1024){
+			data = data/1024 //MB
+            unit = 'MB'
+            if (data >1024){
+				data = data/1024 //GB
+                unit = 'GB'
+			}
+                
+		}
+            
+
+	}
+    return Math.round(data) + unit
+}
 
 //是否初始化net信息数组的标志位
 var flag = true; 
@@ -132,12 +152,21 @@ function switch_port(num){
 	show_port_num = num;
 }
 
+
+
+function show_net_content(num){
+	document.getElementById("id_net_send").innerHTML = data_process(net_info_content[num][0]);
+	document.getElementById("id_net_send_bps").innerHTML = net_info_content[num][1];
+	document.getElementById("id_net_recv").innerHTML = data_process(net_info_content[num][2]);
+	document.getElementById("id_net_recv_bps").innerHTML = net_info_content[num][3];
+}
+
 function show_port(num){
 	net_chart_data["datasets"][0]["data"] = ports[num][0];
 	net_chart_data["datasets"][1]["data"] = ports[num][1];
 	new Chart(ctx_net).Line(net_chart_data, net_options);
-	document.getElementById("net_info").innerHTML = net_info_content[num];
-	
+	//document.getElementById("net_info").innerHTML = net_info_content[num];
+	show_net_content(num);
 }
 
 function change_port(option){
@@ -178,8 +207,8 @@ function get_performace_data(host_id, vm_id){
                 document.getElementById("mem_percent").innerHTML = performace_data['mem_use'];
 				mem_chart_data["datasets"][0]["data"] = mem_values;
 				new Chart(ctx_mem).Line(mem_chart_data, mem_options);
-                disk_chart_data[0]["value"] = performace_data['disk_use']['free']
-                disk_chart_data[1]["value"] = performace_data['disk_use']['used']
+                disk_chart_data[0]["value"] = performace_data['disk_use']['free'];
+                disk_chart_data[1]["value"] = performace_data['disk_use']['used'];
                 new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
 
                 document.getElementById("disk_use").innerHTML = '<span style="background:#ff3366;"></span>已使用 : ' 
@@ -208,8 +237,8 @@ function get_performace_data(host_id, vm_id){
 				
 					
                     port_info_content = port_info_content + "<option value="+num+">"+port+"</option>"
-					net_info_content[num] = "【send: "+ data[0] +", recv:"+ data[1] +" send_bps : "+ 
-                                    	data[2] +"b/s, recv_bps:"+ data[3] + "b/s】";
+					net_info_content[num] = [data[0], data[2], data[1], data[3]];
+
 					num++;
                 });
 				flag = false;
