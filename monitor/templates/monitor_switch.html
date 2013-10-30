@@ -1,0 +1,28 @@
+{% extends "site_base.html" %}
+{% block body %}
+	<table>
+		<tr>
+			<td>
+    			<div class="row">
+        		<div class="">
+            		<ul class="nav nav-pills" id="br_info"></ul>
+         		</div>
+    			</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<canvas id="port_perf_chart" width="430" height="300">
+			</td>
+			</tr>
+	</table>
+{% endblock %}
+{% block extra_script %}
+	<script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
+    <script src="{{ STATIC_URL }}js/monitor_switch.js" ></script>
+	<script>
+		$(function(){
+			get_br_info({{ switch_id }});
+		})
+	</script>
+{% endblock %}
