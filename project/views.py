@@ -31,7 +31,7 @@ def home(request):
     if user.is_authenticated():
         if user.is_superuser:
             return redirect('manage_index')
-        return redirect('project_index')
+        return redirect('project_manage')
     else:
         return redirect('account_login')
 
@@ -342,6 +342,8 @@ def switch_proxy(request, host, port):
         ports = switch.switchport_set.all()
         port_data = []
         for port in ports:
+            if port.virtualmachine_set.all().count() > 0:
+                continue
             port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
         switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data})
 
@@ -369,6 +371,7 @@ def manage_index(request):
     context = {}
     if user.is_superuser:
         context['slices'] = Slice.objects.all()
+        context['projects'] = Project.objects.all()
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")

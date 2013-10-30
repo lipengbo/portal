@@ -1,4 +1,5 @@
 {% extends "admin_base.html" %}
+{% load url from future %}
 {% load i18n %}
 {% load staticfiles %}
 
@@ -23,10 +24,10 @@
     </div>
     <div class="span3">
         <div class="nums_block" style="border:1px solid #2fb157;">
-          <a href="#">
+          <a href="{% url "project_index" %}">
             <div class="nums_top" style="background:#34cc67;">
                 <img src="{% static "img/project.png" %}" width="32" />                
-                <span>100</span>
+                <span>{{projects.count}}</span>
             </div>
             <div class="nums_bottom" style="background:#09a32b;">
                 <span>项目</span>
@@ -37,7 +38,7 @@
     </div>  
     <div class="span3">
         <div class="nums_block" style="border:1px solid #893080;">
-          <a href="#">
+          <a href="{% url "slice_list" 0 %}">
             <div class="nums_top" style="background:#993399;">
                 <img src="{% static "img/slice.png" %}" width="32" />
                 <span>{{slices.count}}</span>
@@ -67,7 +68,10 @@
 
 <div class="row-fluid margin_rows">
     <div class="span6">
-        <div class="tp_block"></div>
+        <div class="tp_block">
+            <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true" width="100%" height="603px;" frameborder="0">
+            </iframe>
+        </div>
     </div>
     <div class="span6">
         <div class="tp_block">          

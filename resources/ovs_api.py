@@ -22,7 +22,12 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
         for ovs_port in ovs_ports:
             slice_obj.add_resource(ovs_port)
             if ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
-                flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
+                try:
+                    ovs_port.switch.virtualswitch
+                except VirtualSwitch.DoesNotExist:
+                    pass
+                else:
+                    flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
     except Exception, ex:
         transaction.rollback()
         raise DbError(ex)
