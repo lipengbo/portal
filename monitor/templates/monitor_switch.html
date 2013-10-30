@@ -1,21 +1,7 @@
 {% extends "site_base.html" %}
 {% block body %}
-	<table>
-		<tr>
-			<td>
-    			<div class="row">
-        		<div class="">
-            		<ul class="nav nav-pills" id="br_info"></ul>
-         		</div>
-    			</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<canvas id="port_perf_chart" width="430" height="300">
-			</td>
-			</tr>
-	</table>
+    <ul class="nav nav-pills" id="br_info"></ul>
+    <canvas id="port_perf_chart" width="430" height="300">
 {% endblock %}
 {% block extra_script %}
 	<script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>

@@ -15,7 +15,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db.models import Q
 
-from project.models import Project, Membership, Category
+from project.models import Project, Membership, Category, Island
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
@@ -371,7 +371,9 @@ def manage_index(request):
     context = {}
     if user.is_superuser:
         context['slices'] = Slice.objects.all()
-        context['projects'] = Project.objects.all()
+        context['total_islands'] = Island.objects.all().count()
+        context['total_projects'] = Project.objects.all().count()
+        context['total_users'] = User.objects.all().count()
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")
