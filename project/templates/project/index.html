@@ -40,11 +40,15 @@
                         所有项目
                     {%endif%}
                 </legend>
-                {%if extent_html == "site_base.html" %}
-                    <div class="alert alert-info">
-                         <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
-                    </div>
-                {%endif%}
+                {% if not projects %}
+                    <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                {% else %}
+                    {%if extent_html == "site_base.html" %}
+                        <div class="alert alert-info">
+                             <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
+                        </div>
+                    {%endif%}
+                {% endif %}
 
                 <div class="row-fluid">
                     {% for group in projects|group_by:4 %}

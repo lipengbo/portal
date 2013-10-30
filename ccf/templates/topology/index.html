@@ -1,15 +1,19 @@
 {% extends "site_base.html" %}
+
 {% block head_title_base %}
     未来网络实验设施控制框架
 {% endblock %}
+
 {% block body_class %}
 {% if no_parent %}
 {% else %}
 common
 {% endif %}
 {% endblock %}
+
 {% block breadcrumb_base %}
 {% endblock %}
+
 {% block extra_style %}
     <link href="{{ STATIC_URL }}topology/css/topology.css?v=1" rel="stylesheet">
     <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui.css" rel="Stylesheet" />
@@ -21,6 +25,12 @@ common
             .navbar {
                 display: none;
             }
+            .blank_block {
+                height:0;
+            }
+            .push {
+                height:0;
+            }
             #footer{
                 display: none;
             }
@@ -30,6 +40,9 @@ common
             .body {
                 margin-left:0;
                 border-top:none !important;
+            }
+            body {
+                padding:0;
             }
         {% endif %}
     </style>
