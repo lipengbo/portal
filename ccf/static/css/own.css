@@ -5470,8 +5470,8 @@ table {
   border-right: 30px solid transparent;
   border-bottom: 30px solid #0b4073;
   border-bottom-color: #777\9;
-  opacity: .3;
-  filter: alpha(opacity=30);
+  opacity: .5;
+  filter: alpha(opacity=50);
 }
 #tabs a:hover,
 #tabs a:focus {
@@ -5780,7 +5780,7 @@ table {
 .index .banner .masthead p {
   font-size: 35px;
   line-height: 1.25;
-  margin-bottom: 40px;
+  margin-bottom: 55px;
 }
 .index .banner .masthead .enter_btn a {
   line-height: normal;
@@ -5955,7 +5955,6 @@ table {
   position: relative;
 }
 .thumbnail .slice_right .slice_text {
-  width: 100%;
   position: absolute;
   bottom: -67px;
   font-size: 12px;

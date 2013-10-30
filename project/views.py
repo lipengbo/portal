@@ -25,6 +25,16 @@ from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 
+
+def home(request):
+    user = request.user
+    if user.is_authenticated():
+        if user.is_superuser:
+            return redirect('manage_index')
+        return redirect('project_manage')
+    else:
+        return redirect('account_login')
+
 @login_required
 def index(request):
     context = {}
@@ -332,6 +342,8 @@ def switch_proxy(request, host, port):
         ports = switch.switchport_set.all()
         port_data = []
         for port in ports:
+            if port.virtualmachine_set.all().count() > 0:
+                continue
             port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
         switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data})
 
