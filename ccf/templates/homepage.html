@@ -38,10 +38,11 @@ img {
 		 </ul>
        	 
 		 <div class="tab-content tab_main" style="height:auto;">
-		   <div class="tab-pane active" id="resource">
+		   <div class="tab-pane active tab_map" id="resource">
 		     <span class="enlarge"><img src="{% static "img/subtract-01.png" %}" /></span>
 		     <span class="shrink"><img src="{% static "img/subtract-02.png" %}" /></span>
-		   	 <img src="{% static "img/map_fir.jpg" %}" style="width:100%" class="map" />
+		   	 <img src="{% static "img/map_fir.jpg" %}" style="width:100%" class="map" width="980" height="679" />
+		   	 <img src="{% static "img/map_sec.jpg" %}" style="width:100%" class="map2 hide" width="980" height="679" />		  
 		   </div>
            <div class="tab-pane" id="topology">
                 <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true" width="100%" height="603px;" frameborder="0">
@@ -67,12 +68,19 @@ img {
 <script type="text/javascript">
     $(function() {
     	$('#dg-container').gallery();
-    	$(".enlarge img").click(function(){
+   /* 	$(".enlarge img").click(function(){
     	    $(".map").attr("src","{% static 'img/map_sec.jpg' %}");
     	});
     	$(".shrink img").click(function(){
             $(".map").attr("src","{% static 'img/map_fir.jpg' %}");
-        });
+        });         */
+       
+       $(".enlarge img").click(function(){
+           $(".map2").stop().fadeIn();
+       });
+       $(".shrink img").click(function(){
+           $(".map2").fadeOut();
+       });
     });
 </script>
 {% endblock %}

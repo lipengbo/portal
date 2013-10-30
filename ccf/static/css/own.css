@@ -5504,12 +5504,16 @@ table {
   text-align: center;
   border-bottom: 4px solid #34495e;
 }
+.tab_main .tab_map {
+  height: 679px;
+}
 .tab_main .tab-pane {
   position: relative;
 }
 .tab_main .tab-pane span {
   position: absolute;
   cursor: pointer;
+  z-index: 10;
 }
 .tab_main .tab-pane .enlarge {
   top: 20px;
@@ -5518,6 +5522,12 @@ table {
 .tab_main .tab-pane .shrink {
   top: 80px;
   left: 20px;
+}
+.tab_main .tab-pane .map,
+.tab_main .tab-pane .map2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .title_bg {
   background: url(../img/feature-line.png) center bottom;
@@ -5955,6 +5965,7 @@ table {
   position: relative;
 }
 .thumbnail .slice_right .slice_text {
+  min-width: 95%;
   position: absolute;
   bottom: -67px;
   font-size: 12px;
