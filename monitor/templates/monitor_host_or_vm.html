@@ -68,13 +68,13 @@
                         <tbody>
                             <tr>
                                 <td width="9%"><img src="{% static "img/upload.png" %}" width="20" /></td>
-                                <td width="45%">send：11111111</td>
-                                <td width="45%">send_bps：2222222</td>
+                                <td width="45%">总发送量：<span id="id_net_send"></span></td>
+                                <td width="45%">每秒发送量：<span id="id_net_send_bps"></span>b/s</td>
                             </tr>
                             <tr>
                                 <td><img src="{% static "img/download.png" %}" width="20" /></td>
-                                <td>recv：1111111</td>
-                                <td>recv_bps：2222222</td>
+                                <td>总接收量：<span id="id_net_recv"></span></td>
+                                <td>每秒接收量：<span id="id_net_recv_bps"></span>b/s</td>
                             </tr>
                         </tbody>
                     </table>
