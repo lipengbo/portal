@@ -25,6 +25,16 @@ from resources.models import Switch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 
+
+def home(request):
+    user = request.user
+    if user.is_authenticated():
+        if user.is_superuser:
+            return redirect('manage_index')
+        return redirect('project_index')
+    else:
+        return redirect('account_login')
+
 @login_required
 def index(request):
     context = {}
