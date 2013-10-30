@@ -5470,8 +5470,8 @@ table {
   border-right: 30px solid transparent;
   border-bottom: 30px solid #0b4073;
   border-bottom-color: #777\9;
-  opacity: .3;
-  filter: alpha(opacity=30);
+  opacity: .5;
+  filter: alpha(opacity=50);
 }
 #tabs a:hover,
 #tabs a:focus {
@@ -5504,12 +5504,16 @@ table {
   text-align: center;
   border-bottom: 4px solid #34495e;
 }
+.tab_main .tab_map {
+  height: 679px;
+}
 .tab_main .tab-pane {
   position: relative;
 }
 .tab_main .tab-pane span {
   position: absolute;
   cursor: pointer;
+  z-index: 10;
 }
 .tab_main .tab-pane .enlarge {
   top: 20px;
@@ -5518,6 +5522,12 @@ table {
 .tab_main .tab-pane .shrink {
   top: 80px;
   left: 20px;
+}
+.tab_main .tab-pane .map,
+.tab_main .tab-pane .map2 {
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 .title_bg {
   background: url(../img/feature-line.png) center bottom;
@@ -5780,7 +5790,7 @@ table {
 .index .banner .masthead p {
   font-size: 35px;
   line-height: 1.25;
-  margin-bottom: 40px;
+  margin-bottom: 55px;
 }
 .index .banner .masthead .enter_btn a {
   line-height: normal;
@@ -5955,7 +5965,7 @@ table {
   position: relative;
 }
 .thumbnail .slice_right .slice_text {
-  width: 100%;
+  min-width: 95%;
   position: absolute;
   bottom: -67px;
   font-size: 12px;

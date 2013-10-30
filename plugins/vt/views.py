@@ -138,8 +138,9 @@ def set_domain_state(vname, state):
         if state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
             switch = vm.server.virtualswitch_set.all()[0]
             port = get_portid_by_name(vm.server.ip, vm.uuid)
-            switch_port = SwitchPort(switch=switch, port=port)
+            switch_port = SwitchPort(switch=switch, port=port, name=vm.name)
             switch_port.save()
+            vm.slice.add_resource(switch_port)
             vm.switch_port = switch_port
         vm.save()
     except:

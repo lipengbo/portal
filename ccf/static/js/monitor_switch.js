@@ -1,0 +1,98 @@
+var br_values = [];
+var port_recv_values = [];
+var port_send_values = [];
+
+for (var i=0; i<10; i++){
+	br_values[i] = "";
+	port_send_values[i] = 0;
+	port_recv_values[i] = 0;
+}
+
+var port_options = {
+	animation : false,
+	bezierCurve : true,
+	scaleOverride : false
+}
+
+
+var port_chart_data = {
+    labels : br_values,
+    datasets : [
+        {
+            fillColor : "rgba(153,204,255,0)",
+			strokeColor : "rgba(0,153,204,1)",
+			pointColor : "rgba(0,153,204,1)",
+            pointStrokeColor : "#fff",
+            data : port_recv_values
+        },
+		{
+            fillColor : "rgba(204,204,255,0)",
+			strokeColor : "rgba(204,0,51,0.8)",
+			pointColor : "rgba(204,0,51,0.8)",
+            pointStrokeColor : "#fff",
+            data : port_send_values
+        }
+    ]
+}
+
+
+var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
+var port_chart = new Chart(ctx_port);
+
+function get_br_info(switch_id){
+	 
+    $.ajax({
+        url: '/monitor/get_br_info/' + switch_id + '/',
+        type : 'GET',
+        dataType : 'json',
+        error : function(){
+            alert("get bridge information error!");
+        },
+        success : function(br_info){
+            //alert(br_info[0]["ports"].length);
+            //alert(br_info.length);
+            var context = '';
+            for(var i=0; i<br_info.length; i++){
+                var br = br_info[i]["br_name"];
+                context = context + "<li class='dropdown active'><a class='dropdown-toggle' data-toggle='dropdown' href='#'>"+ br +"</a><ul class='dropdown-menu'>";
+                for (var j=0; j<br_info[i]["ports"].length; j++){
+                    var port = br_info[i]["ports"][j];
+					args = switch_id + ",\"" +br +"\",\"" + port +"\"";
+                    context = context + "<li><a href='#' onclick='get_port_info(" + args + ")'>"+ port + "</a></li>";
+
+                }
+                context = context + "</ul></li>";
+            }
+
+            document.getElementById('br_info').innerHTML = context;
+        }
+    });
+}
+
+function update_port_data(switch_id, br, port){
+	$.ajax({
+		url: '/monitor/port/',
+		type : 'POST',
+		data : "switch_id=" + switch_id + "&br=" + br + "&port=" + port,
+		dataType : 'json',
+		success : function(port_data){
+		
+			port_recv_values.shift();
+			port_recv_values.push(port_data['port_recv_data']);
+			port_chart_data["datasets"][0]["data"] = port_recv_values;
+
+			port_send_values.shift();
+			port_send_values.push(port_data['port_send_data']);
+			port_chart_data["datasets"][1]["data"] = port_send_values;
+			
+			new Chart(ctx_port).Line(port_chart_data, port_options);
+		}
+	});
+}
+
+var port_timer;
+function get_port_info(switch_id, br, port){
+	clearTimeout(port_timer);
+	update_port_data(switch_id, br, port);
+    port_timer = setTimeout(function(){get_port_info(switch_id, br, port)}, 1000);
+}

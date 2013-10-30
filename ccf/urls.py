@@ -20,7 +20,7 @@ admin.autodiscover()
 #xversion.registe_models()
 
 urlpatterns = patterns("",
-    url(r"^$", TemplateView.as_view(template_name="homepage.html"), name="home"),
+    url(r"^$",  "project.views.home", name="home"),
     url(r"^login/", TemplateView.as_view(template_name="login.html"), name="demo"),
     url(r"^help/", TemplateView.as_view(template_name="help.html"), name="demo"),
     url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="demo"),
@@ -75,6 +75,7 @@ urlpatterns = patterns("",
     url(r"^accounts/", include("account.urls")),
     url(r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', name='xmlrpc'),
     url(r"^nexus/", include("nexus.urls")),
+	url(r"^monitor/", include("monitor.urls")),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

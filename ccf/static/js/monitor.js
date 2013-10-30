@@ -3,13 +3,11 @@
 var cpu_values = [];
 var cpu_values_x_lable = [];
 var mem_values = [];
+var mem_values_x_lable = [];
 var net_values = [];
 var ports = [];
 var net_recv_values = [];
 var net_send_values = [];
-var br_values = [];
-var port_recv_values = [];
-var port_send_values = [];
 var disk_free;
 var disk_used
 
@@ -20,15 +18,13 @@ for (var i=0; i<50; i++){
 
 for (var i=0; i<50; i++){
 	mem_values[i] = 0 + "";
+    mem_values_x_lable[i] = "";
 }
 
 for (var i=0; i<10; i++){
 	net_values[i] = "";
 	net_recv_values[i] = 0;
 	net_send_values[i] = 0;
-	br_values[i] = "";
-	port_send_values[i] = 0;
-	port_recv_values[i] = 0;
 }
 
 var cpu_chart_data = {
@@ -49,7 +45,7 @@ var mem_options = {
 }
 
 var mem_chart_data = {
-    labels : mem_values,
+    labels : mem_values_x_lable,
     datasets : [
         {
             fillColor : "rgba(255,204,204,0.3)",
@@ -106,24 +102,6 @@ var disk_chart_data = [
 	}
 ];
 
-var port_options = {
-	animation : false
-}
-var port_chart_data = {
-	labels : br_values,
-	datasets : [
-		{
-			fillColor : "rgba(220,220,220,0.5)",
-			strokeColor : "rgba(220,220,220,1)",
-			data : port_recv_values
-		},
-		{
-			fillColor : "rgba(151,187,205,0.5)",
-			strokeColor : "rgba(151,187,205,1)",
-			data : port_send_values
-		}
-	]
-}
 
  	var ctx_cpu = document.getElementById('cpu_perf_chart').getContext("2d");
     //var cpu_chart = new Chart(ctx_cpu);
@@ -139,7 +117,7 @@ var port_chart_data = {
 	var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
 	//new Chart(ctx_disk).Doughnut(disk_chart_data);   
 
-	var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
+	//var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
 
     //var port_chart = new Chart(ctx_port);
 
@@ -170,13 +148,12 @@ function change_port(option){
 }
 var pre_net_data = [];
 function get_performace_data(host_id, vm_id){
-    var url = '/slice/update_performace_data/';
+    var url;
     var post_data = 'host_id=' + host_id + '&pre_net_data=' + pre_net_data;
     if (vm_id == undefined){
-        //url = '/slice/update_performace_data/host/' + host_id +'/';
-        //post_data = 'host_id=' + host_id + '&pre_net_data=' + pre_net_data;
-    }else{
-        //url = '/slice/update_performace_data/vm/' + host_id + '/' + vm_id + '/';
+        url = '/monitor/update_performace_data/host/';
+    }else{ 
+        url = '/monitor/update_performace_data/vm/';
         post_data = post_data + '&vm_id=' + vm_id;
     }
     //alert('['+pre_net_data.toString() + ']');
@@ -192,11 +169,13 @@ function get_performace_data(host_id, vm_id){
         success: function(performace_data){
 				cpu_values.shift();
 				cpu_values.push(performace_data['cpu_use']);
+                document.getElementById("cpu_percent").innerHTML = performace_data['cpu_use'];
 				cpu_chart_data["datasets"][0]["data"] = cpu_values;
 				new Chart(ctx_cpu).Line(cpu_chart_data);
 
 				mem_values.shift();
 				mem_values.push(performace_data['mem_use']);
+                document.getElementById("mem_percent").innerHTML = performace_data['mem_use'];
 				mem_chart_data["datasets"][0]["data"] = mem_values;
 				new Chart(ctx_mem).Line(mem_chart_data, mem_options);
                 disk_chart_data[0]["value"] = performace_data['disk_use']['free']
@@ -249,61 +228,7 @@ function init(host_id, vm_id){
 	setTimeout(function(){init(host_id, vm_id)}, 1000);
 }
 
-function update_port_data(host_id, br, port){
-	$.ajax({
-		url: '/slice/monitor/port/',
-		method: 'POST',
-		//data : "host_id = " + host_id,
-		dataType : 'json',
-		success : function(port_data){
-		
-			port_recv_values.shift();
-			port_recv_values.push(port_data['port_recv_data']);
-			port_chart_data["datasets"][0]["data"] = port_recv_values;
 
-			port_send_values.shift();
-			port_send_values.push(port_data['port_send_data']);
-			port_chart_data["datasets"][1]["data"] = port_send_values;
-			
-			new Chart(ctx_port).Bar(port_chart_data, port_options);
-		}
-	});
-}
 
-var port_timer;
-function get_port_info(host_id, br, port){
-	clearTimeout(port_timer);
-	update_port_data(host_id, br, port);
-    port_timer = setTimeout(function(){get_port_info(host_id, br, port)}, 1000);
-}
 
-function get_br_info(host_id){
-	 
-    $.ajax({
-        url: '/slice/monitor/ovs/' + host_id + '/',
-        type : 'GET',
-        dataType : 'json',
-        error : function(){
-            alert("get bridge information error!");
-        },
-        success : function(br_info){
-            //alert(br_info[0]["ports"].length);
-            //alert(br_info.length);
-            var context = '';
-            for(var i=0; i<br_info.length; i++){
-                var br = br_info[i]["br_name"];
-                context = context + "<li class='dropdown active'><a class='dropdown-toggle' data-toggle='dropdown' href='#'>"+ br +"</a><ul class='dropdown-menu'>";
-                for (var j=0; j<br_info[i]["ports"].length; j++){
-                    var port = br_info[i]["ports"][j];
-					args = host_id + ",\"" +br +"\",\"" + port +"\"";
-                    context = context + "<li><a href='#' onclick='get_port_info(" + args + ")'>"+ port + "</a></li>";
-
-                }
-                context = context + "</ul></li>";
-            }
-
-            document.getElementById('br_info').innerHTML = context;
-        }
-    });
-}
 

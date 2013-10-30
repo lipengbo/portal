@@ -212,7 +212,7 @@ img {
 					 		{%else%}
 					 		    <td>
     					 		    {%if controller.host%}
-    					 		        <button type="button" onclick="" class="btn">监控</button>
+    					 		        <button type="button" onclick="document.location='/monitor/vm/{{ controller.host.id }}/'" class="btn">监控</button>
     					 		    {%endif%}
 					 		    </td>
 					 		{%endif%}
@@ -270,7 +270,7 @@ img {
                                 {%endif%}
                             {%else%}
                                 <td>
-                                   <button type="button" onclick="" class="btn">监控</button>
+                                   <button type="button" onclick="document.location='/monitor/vm/{{ gw.id }}/'" class="btn">监控</button>
                                 </td>
                             {%endif%}
 				 		</tr>
@@ -326,7 +326,7 @@ img {
                                 {%endif%}
                             {%else%}
                                 <td>
-                                   <button type="button" onclick="" class="btn">监控</button>
+                                   <button type="button" onclick="document.location='/monitor/vm/{{ dhcp.id }}/'" class="btn">监控</button>
                                 </td>
                             {%endif%}
 				 		</tr>
@@ -385,7 +385,7 @@ img {
 					 		   {%endif%}
 					 		{%else%}
 					 		   <td>
-                                    <button type="button" onclick="" class="btn">监控</button>
+                                    <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
                                     {%if slice_obj.state == 1%}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
                                     {%else%}

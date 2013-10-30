@@ -242,7 +242,7 @@ function showInfo(_info,msg,color){
 
 
 //获取被用户选择的server
-function fetch_serverinfo(){
+function fetch_serverinfo(id){
     server_names = get_select_server_name();
     server_ids = get_select_server_id();
     content = '<option value="" selected="selected">---------</option>';
@@ -253,7 +253,7 @@ function fetch_serverinfo(){
         content = content + server_names[i];
         content = content + '</option>';
     }
-    var objs = $("[id='id_server']");
+    var objs = $("[id='"+id+"']");
     for (var i=0; i<objs.length; i++){
         objs[i].innerHTML = obj.innerHTML + content;
     }

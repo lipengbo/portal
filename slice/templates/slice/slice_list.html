@@ -4,6 +4,7 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load endless %}
+{% load project_tags %}
 
 {% block head_title %}SLICE列表{% endblock %}
 {% block breadcrumb %}
@@ -15,6 +16,14 @@
 
 {% block body %}
 {% paginate 4 slices %}
+    <div class="search">
+        <form class="form-search">
+          <div class="input-append">
+              <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
+              <button type="submit" class="btn">搜索</button>
+          </div>
+        </form>
+    </div>
     <div class="fill_form">
         <fieldset>
              <legend>
@@ -25,7 +34,7 @@
                 {%endif%}
              </legend>
              <div class="row-fluid">
-             {%if slices%}
+             {%if slices %}
              {% for group in slices|group_by:2 %}
              <ul class="thumbnails example-sites">
 		         {% for slice in group %}
@@ -46,4 +55,5 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
+<script src="{{ STATIC_URL}}js/own.js"></script>
 {% endblock %}

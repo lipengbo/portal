@@ -203,8 +203,8 @@ color: #fff;
 border-right: 30px solid transparent;
 border-bottom: 30px solid #0b4073;
 border-bottom-color: #777\9;
-opacity: .3;
-filter: alpha(opacity=30);
+opacity: .5;
+filter: alpha(opacity=50);
 }
 
 #tabs a:hover, #tabs a:focus {
@@ -238,11 +238,15 @@ filter: alpha(opacity=100);
 	overflow:hidden;
 	text-align:center;
 	border-bottom:4px solid #34495e;
+	.tab_map {
+	    height:679px;
+	}
 	.tab-pane {
-	    position:relative;	   
+	    position:relative;	  
 	    span {
 	        position:absolute;
 	        cursor:pointer;
+	        z-index:10;
 	    }
 	    .enlarge {	        
 	        top:20px;
@@ -251,6 +255,11 @@ filter: alpha(opacity=100);
 	    .shrink {
             top:80px;
             left:20px;
+	    }
+	    .map, .map2 {
+	        position:absolute;
+	        top:0;
+	        left:0;
 	    }
 	}
 }
@@ -535,7 +544,7 @@ filter: alpha(opacity=100);
             p {
                 font-size: 35px;
                 line-height: 1.25;
-                margin-bottom:40px;
+                margin-bottom:55px;
             }
             .enter_btn {
                 a {
@@ -710,8 +719,8 @@ filter: alpha(opacity=100);
     .slice_right {
         height:100%;
         position:relative;
-        .slice_text {
-            width:100%;
+        .slice_text { 
+            min-width:95%;           
             position:absolute;
             bottom:-67px;
             font-size:12px;
