@@ -92,7 +92,7 @@ function check_vm_status(slice_id){
 								
 								$("span#controller_fc"+cur_vm_id).empty();
 								str = "";
-								str = str +  "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
+								str = str +  "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
 									+ "<button type=\"button\" onclick=\"open_vnc('/plugins/vt/vm/vnc/"+cur_vm_id+"')\" class=\"btn\">登录</button>";
 								$("span#controller_fc"+cur_vm_id).append(str);
 								
@@ -103,7 +103,7 @@ function check_vm_status(slice_id){
                                 
                                 $("span#gw_fc"+cur_vm_id).empty();
                                 str = "";
-                                str = str +  "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
+                                str = str +  "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
                                     + "<button type=\"button\" onclick=\"open_vnc('/plugins/vt/vm/vnc/"+cur_vm_id+"')\" class=\"btn\">登录</button>";
                                 $("span#gw_fc"+cur_vm_id).append(str);
                                 
@@ -114,7 +114,7 @@ function check_vm_status(slice_id){
                                 
                                 $("span#dhcp_fc"+cur_vm_id).empty();
                                 str = "";
-                                str = str +  "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
+                                str = str +  "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
                                     + "<button type=\"button\" onclick=\"open_vnc('/plugins/vt/vm/vnc/"+cur_vm_id+"')\" class=\"btn\">登录</button>";
                                 $("span#dhcp_fc"+cur_vm_id).append(str);
 								
@@ -125,7 +125,7 @@ function check_vm_status(slice_id){
 								
 								$("span#vm_fc"+cur_vm_id).empty();
 								str = "";
-								str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
+								str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/destroy')\" class=\"btn btn-danger stop_btn\">停止</button>"
 									+ "<button type=\"button\" onclick=\"open_vnc('/plugins/vt/vm/vnc/"+cur_vm_id+"')\" class=\"btn\">登录</button>";
 								$("span#vm_fc"+cur_vm_id).append(str);
 							}else{
@@ -136,7 +136,7 @@ function check_vm_status(slice_id){
 								
 								$("span#controller_fc"+cur_vm_id).empty();
 								str = "";
-								str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
+								str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
 									+ "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
 								$("span#controller_fc"+cur_vm_id).append(str);
 								
@@ -147,7 +147,7 @@ function check_vm_status(slice_id){
                                 
                                 $("span#gw_fc"+cur_vm_id).empty();
                                 str = "";
-                                str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
+                                str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
                                     + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
                                 $("span#gw_fc"+cur_vm_id).append(str);
                                 
@@ -158,7 +158,7 @@ function check_vm_status(slice_id){
                                 
                                 $("span#dhcp_fc"+cur_vm_id).empty();
                                 str = "";
-                                str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
+                                str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
                                     + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
                                 $("span#dhcp_fc"+cur_vm_id).append(str);
 								
@@ -169,7 +169,7 @@ function check_vm_status(slice_id){
 								
 								$("span#vm_fc"+cur_vm_id).empty();
 								str = "";
-								str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
+								str = str + "<button type=\"button\" onclick=\"do_vm_action('/plugins/vt/do/vm/action/"+cur_vm_id+"/create')\" class=\"btn btn-success start_btn\">启动</button>"
 									+ "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
 								$("span#vm_fc"+cur_vm_id).append(str);
 							}
