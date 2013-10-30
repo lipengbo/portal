@@ -1,6 +1,14 @@
-Ä}q(Uplugins.common.agent_client]qUAgentClientqaUplugins.vt.api]q(Udelete_vm_for_controllerqUcreate_vm_for_gatewayqUdelete_vm_for_gatewayqUcreate_vm_for_controllerqeUplugins.vt.models]q	(Uvm_pre_deleteq
-Uvm_post_deleteqUvm_post_saveqUHostMacqUVM_TYPEqUDOMAIN_STATE_TUPLEqUVirtualMachineqUDOMAIN_STATE_DICqUvm_pre_saveqU
-HOST_STATEqUImageqUFlavorqeU plugins.common.vt_manager_client]qUVTClientqaU
-etc.config]q(Umonitor_service_portqUrpc_connection_timeoutqUvt_manager_portqUovs_service_portqU	lock_pathqUglance_portqUdomain_count_infinityqUflowvisor_disableq Uglance_hostq!Uvt_manager_ipq"U	vnctunnelq#Ugenerate_glance_urlq$Udefault_flavor_idq%Ufunction_testq&Ucompute_service_portq'eUplugins.vt.tests]q((U
-Gateway_ipq)UVMCreateq*eUplugins.network.models]q+(Ugateway_pre_saveq,UGatewayq-eUplugins.vt.urls]q.Uurlpatternsq/aUplugins.vt.views]q0(ULOGq1Uvm_listq2U	delete_vmq3Uget_slice_gateway_ipq4Udo_vm_actionq5Uvncq6U	create_vmq7Uget_vms_state_by_sliceidq8eUresources.models]q9(USliceSwitchq:UOVS_TYPEq;UServiceResourceq<UResourceq=UServerq>Uvm_pre_saveq?USwitchq@UVirtualSwitchqAUSwitchResourceqBU	SlicePortqCU
-SwitchPortqDUIslandResourceqEUResourceBaseqFeUplugins.ipam.models]qG(USubnetqHUIPUsageqIUNetworkqJUcreate_base_subnetqKU	IPManagerqLUsubnet_pre_saveqMeu.
+Ä}q(Uplugins.common.ovs_client]q(U
+add_bridgeqUget_controllerqUget_bridge_listqUget_bridge_nameqUset_controllerqUget_portid_by_nameqUget_dpidq	Uget_switch_statq
+Udel_controllerqU
+del_bridgeqUadd_bridge_portqUget_bridge_port_listqUdel_portqUadd_portqeUccf.urls]qUurlpatternsqaUplugins.vt.api]q(Udelete_vm_for_controllerqUcreate_vm_for_gatewayqUdelete_vm_for_gatewayqUcreate_vm_for_controllerqeUplugins.vt.models]q(Uvm_pre_deleteqUvm_post_deleteqUvm_post_saveqUHostMacqUVM_TYPEqUDOMAIN_STATE_TUPLEqUVirtualMachineqUDOMAIN_STATE_DICq Uvm_pre_saveq!U
+HOST_STATEq"UImageq#UFlavorq$eU plugins.common.vt_manager_client]q%UVTClientq&aU
+etc.config]q'(Umonitor_service_portq(Urpc_connection_timeoutq)Uvt_manager_portq*Uovs_service_portq+U	lock_pathq,Uglance_portq-Udomain_count_infinityq.Uflowvisor_disableq/Uglance_hostq0Uvt_manager_ipq1U	vnctunnelq2Ugenerate_glance_urlq3Udefault_flavor_idq4Ufunction_testq5Ucompute_service_portq6eUplugins.vt.tests]q7(Utest_create_vm_for_controllerq8Utest_create_vm_for_gatewayq9U
+Gateway_ipq:UVMCreateq;eUplugins.network.models]q<(Ugateway_pre_saveq=UGatewayq>eUplugins.vt.urls]q?Uurlpatternsq@aUplugins.vt.views]qA(ULOGqBUvm_listqCUset_domain_stateqDU	delete_vmqEUget_slice_gateway_ipqFUdo_vm_actionqGUvncqHU	create_vmqIUget_vms_state_by_sliceidqJeUccf.settings]qK(UAUTHENTICATION_BACKENDSqLUCRISPY_TEMPLATE_PACKqMUMANAGERSqNU	DATABASESqOUSITE_IDqPUACCOUNT_LOGIN_REDIRECT_URLqQU
+FROM_EMAILqRUACCOUNT_OPEN_SIGNUPqSUROOT_URLCONFqTU
+EMAIL_PORTqUULANGUAGE_CODEqVUUSE_I18NqWUCRON_POLLING_FREQUENCYqXU
+SECRET_KEYqYUACCOUNT_LOGOUT_REDIRECT_URLqZUMIDDLEWARE_CLASSESq[UEMAIL_HOST_PASSWORDq\UPACKAGE_ROOTq]USTATIC_ROOTq^UACCOUNT_REQUIRED_EMAILq_U&ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYSq`U	TIME_ZONEqaUTEMPLATE_LOADERSqbUACCOUNT_USE_OPENIDqcUWSGI_APPLICATIONqdULOCALE_PATHSqeUEMAIL_BACKENDqfUANONYMOUS_USER_IDqgU
+EMAIL_HOSTqhUDEFAULT_FROM_EMAILqiUTEMPLATE_DIRSqjUPROJECT_ROOTqkULOGGINGqlUSTATICFILES_FINDERSqmUACCOUNT_EMAIL_AUTHENTICATIONqnU
+STATIC_URLqoUXMLRPC_METHODSqpUUSE_L10NqqUDEBUGqrUUSE_TZqsUFIXTURE_DIRSqtUINSTALLED_APPSquU
+MEDIA_ROOTqvUSTATICFILES_DIRSqwUACCOUNT_EMAIL_VERIFICATIONqxUADMINSqyUTEMPLATE_DEBUGqzUTEMPLATE_CONTEXT_PROCESSORSq{UEMAIL_HOST_USERq|U	MEDIA_URLq}eUresources.models]q~(USliceSwitchqUOVS_TYPEqÄUServiceResourceqÅUResourceqÇUServerqÉUvm_pre_saveqÑUSwitchqÖUVirtualSwitchqÜUSwitchResourceqáU	SlicePortqàU
+SwitchPortqâUIslandResourceqäUResourceBaseqãeUplugins.ipam.models]qå(USubnetqçUIPUsageqéUNetworkqèUcreate_base_subnetqêU	IPManagerqëUsubnet_pre_saveqíeUplugins.common.agent_client]qìUAgentClientqîau.

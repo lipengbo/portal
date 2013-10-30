@@ -65,10 +65,10 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : true,
-	scaleStartValue : 0,
-	scaleSteps : 20,
-	scaleStepWidth : 20,
+	scaleOverride : false
+	//scaleStartValue : 0,
+	//scaleSteps : 20,
+	//scaleStepWidth : 20,
 	
 }
 
@@ -148,7 +148,8 @@ var port_chart_data = {
 //是否初始化net信息数组的标志位
 var flag = true; 
 var show_port_num = 0;
-
+var net_info = "";
+var net_info_content = ["", ""];
 function switch_port(num){
 	show_port_num = num;
 }
@@ -157,8 +158,16 @@ function show_port(num){
 	net_chart_data["datasets"][0]["data"] = ports[num][0];
 	net_chart_data["datasets"][1]["data"] = ports[num][1];
 	new Chart(ctx_net).Line(net_chart_data, net_options);
+	document.getElementById("net_info").innerHTML = net_info_content[num];
+	
 }
 
+function change_port(option){
+	show_port_num = option;
+	show_port(option);
+	//alert(net_info_content[arg.value]);
+	
+}
 var pre_net_data = [];
 function get_performace_data(host_id, vm_id){
     var url = '/slice/update_performace_data/';
@@ -199,7 +208,8 @@ function get_performace_data(host_id, vm_id){
                 document.getElementById("disk_free").innerHTML ='<span style="background:#99cc66;"></span>未使用 : '
 								+ performace_data['disk_use']['free'] + " MB";
 
-                var net_info_content = "";
+                var port_info_content = "";//"<option selected>请选择网卡</option>";
+				//var net_info_content = [];
                 pre_net_data = [];
 				var num = 0;
                 $.each(performace_data.net, function(port, data){
@@ -218,17 +228,16 @@ function get_performace_data(host_id, vm_id){
                     pre_net_data.push(data[0]+':'+data[1]);
 				
 					
-                    net_info_content = net_info_content + 
-                                    "<button id='id_port' onclick='switch_port(" +
-                                    num + ")'>" + port + "</button>【send: "+ 
-                                    data[0] +", recv:"+ data[1] +" send_bps : "+ 
-                                    data[2] +"b/s, recv_bps:"+ data[3] + "b/s】<br/>";
+                    port_info_content = port_info_content + "<option value="+num+">"+port+"</option>"
+					net_info_content[num] = "【send: "+ data[0] +", recv:"+ data[1] +" send_bps : "+ 
+                                    	data[2] +"b/s, recv_bps:"+ data[3] + "b/s】";
 					num++;
                 });
 				flag = false;
-                document.getElementById("net_info").innerHTML = net_info_content;
+                document.getElementById("ports_info").innerHTML = port_info_content;
 				
-				show_port(show_port_num);
+				//show_port(show_port_num);
+				change_port(show_port_num);
 
 				
             }

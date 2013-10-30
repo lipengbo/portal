@@ -1,8 +1,8 @@
 [
     {
         "fields": {
-            "date_created": "2013-10-08T05:08:26.916Z", 
-            "date_expired": "2013-10-08T13:08:18Z", 
+            "date_created": "2013-10-08T05:08:26.916", 
+            "date_expired": "2013-10-08T13:08:18", 
             "description": "slice01", 
             "name": "slice01", 
             "owner": 1, 
@@ -20,7 +20,7 @@
             "owner": "slice01", 
             "size": 64, 
             "supernet": 1, 
-            "update_time": "2013-10-08T05:24:36.330Z"
+            "update_time": "2013-10-08T05:24:36.330"
         }, 
         "model": "ipam.subnet", 
         "pk": 2
