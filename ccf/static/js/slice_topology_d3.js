@@ -475,7 +475,11 @@ function restart() {
    // .style('stroke', function(d) { return d3.rgb(colors(color_map[d.type])).darker().toString(); })
     //.classed('reflexive', function(d) { return d.reflexive; })
     .on('click', function(d) {
-       window.top.location.href = "http://" + window.location.host + "/slice/detail/"+2+"/";
+        if(d.type == 'switch'){
+            window.top.location.href = "http://" + window.location.host + "/moniter/switch/"+d.yid+"/";
+        }else{
+            window.top.location.href = "http://" + window.location.host + "/moniter/vm/"+d.yid+"/";
+        }  
     })
     .on('mouseover', function(d) {
         highlight( d, this );
