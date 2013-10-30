@@ -12,6 +12,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 from django.contrib import messages
+from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, delete_slice_api, slice_change_description
@@ -89,6 +90,9 @@ def create_first(request, proj_id):
             gw_host_id = request.POST.get("gw_host_id")
             gw_ip = request.POST.get("gw_ip")
             dhcp_selected = request.POST.get("dhcp_selected")
+            print gw_host_id
+            print gw_ip
+            print dhcp_selected
             slice_obj = create_slice_step(project, slice_name,
                 slice_description, island, user, ovs_ports, controller_info,
                 slice_nw, gw_host_id, gw_ip, dhcp_selected)
@@ -110,11 +114,17 @@ def list(request, proj_id):
     else:
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
-        context['slices'] = Slice.objects.all()
+        slice_objs = Slice.objects.all()
     else:
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
-        context['slices'] = project.slice_set.all()
+        slice_objs = project.slice_set.all()
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            slice_objs = slice_objs.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            context['query'] = query
+    context['slices'] = slice_objs
     return render(request, 'slice/slice_list.html', context)
 
 

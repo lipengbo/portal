@@ -15,6 +15,14 @@
 
 {% block body %}
 {% paginate 4 slices %}
+    <div class="search">
+        <form class="form-search">
+          <div class="input-append">
+              <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
+              <button type="submit" class="btn">搜索</button>
+          </div>
+        </form>
+    </div>
     <div class="fill_form">
         <fieldset>
              <legend>

@@ -28,7 +28,9 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
         print 1
         slice_obj = create_slice_api(project, name, description, island, user)
         print 2
+        print ovs_ports
         slice_add_ovs_ports(slice_obj, ovs_ports)
+        print slice_obj.get_switches()
         print 3
         create_add_controller(slice_obj, controller_info)
         print 4
@@ -255,6 +257,7 @@ def get_slice_topology(slice_obj):
                       'type': switch_obj.type(),
                       'id': switch_obj.id}
             switches.append(switch)
+        print switches
         switch_ports = slice_obj.get_switch_ports()
 #         for switch_port in switch_ports:
 #             switch_dpids.append(switch_port.switch.dpid)

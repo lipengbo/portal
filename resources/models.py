@@ -149,15 +149,14 @@ class Switch(SwitchResource):
         slice_switches.delete()
 
     def type(self):
+        if self.has_gre_tunnel:
+            return OVS_TYPE['EXTERNAL']
         try:
             self.virtualswitch
         except VirtualSwitch.DoesNotExist:
             return OVS_TYPE['NOMAL']
         else:
-            if self.has_gre_tunnel:
-                return OVS_TYPE['EXTERNAL']
-            else:
-                return OVS_TYPE['RELATED']
+            return OVS_TYPE['RELATED']
 
     @staticmethod
     def admin_options():

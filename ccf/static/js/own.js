@@ -336,8 +336,12 @@ function submit_slice_info(project_id){
 	var controller_ip_port_obj = document.getElementById("controller_ip_port");
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
+	var id_server_obj = document.getElementById("gw_server_id");
+	var gateway_ip_obj = document.getElementById("gateway_ip");
+	var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	var switch_port_ids = "";
 	var controller_type;
+	var dhcp_selected = 0;
 	var j = 0;
     for(var i=0;i<switch_port_ids_obj.length;i++){
 		if(!switch_port_ids_obj[i].disabled){
@@ -361,6 +365,11 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
+	for(var i=0;i<dhcp_selected_obj.length;i++){  
+        if(dhcp_selected_obj[i].checked){  
+            dhcp_selected = 1; 
+        }   
+    }
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
     var user_id_obj = document.getElementById("user_id");
 	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
@@ -372,9 +381,9 @@ function submit_slice_info(project_id){
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
 						"slice_nw": old_slice_nw_obj.value,
-						"gw_host_id": 0,
-						"gw_ip": "192.168.6.7",
-						"dhcp_selected": 1
+						"gw_host_id": 1,
+						"gw_ip": gateway_ip_obj.value,
+						"dhcp_selected": dhcp_selected
 		};
 
 	check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
