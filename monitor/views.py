@@ -4,6 +4,7 @@ import json
 from plugins.common.agent_client import AgentClient
 from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
+from resources.models import Server
 
 import random
 def monitor_vm(request, host_id, vm_id):
@@ -11,7 +12,7 @@ def monitor_vm(request, host_id, vm_id):
     return render(request, "slice/monitor.html", {'host_id' : host_id})
 
 def monitor_host(request, host_id):
-    pass
+    return render(request, "monitor.html", {'host_id' : host_id, "vm_id" : 0})
 
 def monitor_ovs(request, host_id):
     return HttpResponse(json.dumps([{'br_name' : 'br0', 'ports' : ['eth0', 'eth1']}
@@ -36,7 +37,7 @@ def update_vm_performace_data(request):
     agent_ip = request.POST.get("server_ip")
     agent = AgentClient(ip = "192.168.5.122")
     vm_perf_data = json.loads(agent.get_domain_status("4f6f91d4-2af5-481d-afc6-8217c70db938"))
-    host_perf_data = json.loads(agent.get_host_status())
+
     #print host_perf_data
 
 
@@ -73,5 +74,29 @@ def update_vm_performace_data(request):
                                     'disk_use' : host_disk_data
                                     }))
 
-def update_host_performace_data(request, host_id):
-    return HttpResponse(json.dumps(performace_data))
+def update_host_performace_data(request):
+    host_id = request.POST.get("host_id")
+    pre_net_data = request.POST.get("pre_net_data").split(',')
+    server = get_object_or_404(Server, id = host_id)
+    agent = AgentClient(ip = server.ip)
+    host_perf_data = json.loads(agent.get_host_status())
+    #print host_perf_data
+    net_data = {}
+    if pre_net_data[0] == '':
+        for (key, value) in host_perf_data["net"].items():
+            net_data[key] = [value[0], value[1], 0, 0]
+    else:
+        for (key, value), bps_data in zip(host_perf_data["net"].items(), pre_net_data):
+            net_data[key] = [value[0], value[1],
+                           value[0] - int(bps_data.split(':')[0]),
+                           value[1] - int(bps_data.split(':')[1])]
+
+    for (key, value) in host_perf_data["disk"].items():
+        host_disk_data = {"free" : int(value[2])/8/1024/1024, "used" : int(value[1]/8/1024/1024)}
+        break
+
+    return HttpResponse(json.dumps({'cpu_use' : host_perf_data["cpu"],
+                                    'mem_use' : host_perf_data["mem"][2],
+                                    'net' : net_data,
+                                    'disk_use' : host_disk_data
+                                    }))

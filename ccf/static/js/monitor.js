@@ -3,6 +3,7 @@
 var cpu_values = [];
 var cpu_values_x_lable = [];
 var mem_values = [];
+var mem_values_x_lable = [];
 var net_values = [];
 var ports = [];
 var net_recv_values = [];
@@ -20,6 +21,7 @@ for (var i=0; i<50; i++){
 
 for (var i=0; i<50; i++){
 	mem_values[i] = 0 + "";
+    mem_values_x_lable[i] = "";
 }
 
 for (var i=0; i<10; i++){
@@ -49,7 +51,7 @@ var mem_options = {
 }
 
 var mem_chart_data = {
-    labels : mem_values,
+    labels : mem_values_x_lable,
     datasets : [
         {
             fillColor : "rgba(255,204,204,0.3)",
@@ -170,13 +172,12 @@ function change_port(option){
 }
 var pre_net_data = [];
 function get_performace_data(host_id, vm_id){
-    var url = '/slice/update_performace_data/';
+    var url;
     var post_data = 'host_id=' + host_id + '&pre_net_data=' + pre_net_data;
     if (vm_id == undefined){
-        //url = '/slice/update_performace_data/host/' + host_id +'/';
-        //post_data = 'host_id=' + host_id + '&pre_net_data=' + pre_net_data;
-    }else{
-        //url = '/slice/update_performace_data/vm/' + host_id + '/' + vm_id + '/';
+        url = '/monitor/update_performace_data/host/';
+    }else{ 
+        url = '/monitor/update_performace_data/vm/';
         post_data = post_data + '&vm_id=' + vm_id;
     }
     //alert('['+pre_net_data.toString() + ']');
@@ -192,11 +193,13 @@ function get_performace_data(host_id, vm_id){
         success: function(performace_data){
 				cpu_values.shift();
 				cpu_values.push(performace_data['cpu_use']);
+                document.getElementById("cpu_percent").innerHTML = performace_data['cpu_use'];
 				cpu_chart_data["datasets"][0]["data"] = cpu_values;
 				new Chart(ctx_cpu).Line(cpu_chart_data);
 
 				mem_values.shift();
 				mem_values.push(performace_data['mem_use']);
+                document.getElementById("mem_percent").innerHTML = performace_data['mem_use'];
 				mem_chart_data["datasets"][0]["data"] = mem_values;
 				new Chart(ctx_mem).Line(mem_chart_data, mem_options);
                 disk_chart_data[0]["value"] = performace_data['disk_use']['free']

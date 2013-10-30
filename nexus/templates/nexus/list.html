@@ -42,10 +42,10 @@
             <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</td>
             {% for field in object|get_display_fields %}
                 <td>{{ object|get_value:field.name }}</td>
-            {% endfor %}
+            {% endfor %} 
             <td>
                 <div class="btn-groups">
-                    <a href="" class="btn btn-small">{% trans "Monitor" %}</a>
+                    <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
                 </div>

@@ -27,7 +27,7 @@
                 <div class="title">
                     <h4>
                         <span class="icon-bar-chart icon-large"></span>
-                        <span>cpu使用率(%)</span>
+                        <span>cpu使用率(<span id="cpu_percent"></span>%)</span>
                     </h4>
                 </div>
                 <div class="content" style="padding-bottom:0;">
@@ -40,7 +40,7 @@
                 <div class="title">
                     <h4>
                         <span class="icon-bar-chart icon-large"></span>
-                        <span>内存使用率(%)</span>
+                        <span>内存使用率(<span id="mem_percent"></span>%)</span>
                     </h4>
                 </div>
                 <div class="content" style="padding-bottom:0;">
@@ -91,7 +91,12 @@
         <script src="{{ STATIC_URL }}js/monitor.js" ></script>
         <script>
             $(function(){
-                init(1, 2);
+                var vm_id = {{ vm_id }}
+                if ({{ vm_id }} == 0){
+                    init({{host_id}}, undefined);
+                }else{
+                    init({{ host_id }}, {{ vm_id }});
+                }
             })
             $('#ovs_watch').click(function(){
                 $('#div_normal_data').hide();
