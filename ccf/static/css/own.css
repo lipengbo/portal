@@ -5955,6 +5955,7 @@ table {
   position: relative;
 }
 .thumbnail .slice_right .slice_text {
+  min-width: 95%;
   position: absolute;
   bottom: -67px;
   font-size: 12px;
