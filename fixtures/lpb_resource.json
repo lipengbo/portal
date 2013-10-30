@@ -4,7 +4,7 @@
         "model": "resources.server",
         "fields": {
             "username": "root",
-            "update_time": "2013-09-24T03:04:21.302Z",
+            "update_time": "2013-09-24T03:04:21.302",
             "disk": 32,
             "name": "server111",
             "mem": 32,

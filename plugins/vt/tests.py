@@ -12,21 +12,32 @@ from project.models import Island
 import json
 
 
+def test_create_vm_for_controller():
+    island_obj = Island.objects.get(id=1)
+    slice_obj = Slice.objects.get(id=1)
+    image_name = 'floodlight'
+    vm = create_vm_for_controller(island_obj, slice_obj, image_name)
+    return vm
+
+
+def test_create_vm_for_gateway():
+    island_obj = Island.objects.get(id=1)
+    slice_obj = Slice.objects.get(id=1)
+    image_name = 'floodlight'
+    server_id = 1
+    vm = create_vm_for_gateway(island_obj, slice_obj, server_id, image_name=image_name)
+    return vm
+
+
 class VMCreate(TestCase):
     fixtures = ['lpb_pemission.json', 'lpb_project_data.json', 'lpb_resource.json', 'lpb_image_data.json', 'lpb_unittest.json']
 
     def test_create_vm_for_controller(self):
-        island_obj = Island.objects.get(id=1)
-        slice_obj = Slice.objects.get(id=1)
-        image_name = 'floodlight'
-        vm = create_vm_for_controller(island_obj, slice_obj, image_name)
+        vm = test_create_vm_for_controller()
         self.assertTrue(vm)
 
     def test_create_vm_for_gateway(self):
-        island_obj = Island.objects.get(id=1)
-        slice_obj = Slice.objects.get(id=1)
-        image_name = 'floodlight'
-        vm = create_vm_for_gateway(island_obj, slice_obj, image_name)
+        vm = test_create_vm_for_gateway()
         self.assertTrue(vm)
 
     def test_create_vm_for_slice(self):
@@ -36,7 +47,7 @@ class VMCreate(TestCase):
         context['image'] = 1
         context['server'] = 1
         context['enable_dhcp'] = True
-        response = self.client.post(path='/plugins/vt/create/vm/1/', data=context)
+        response = self.client.post(path='/plugins/vt/create/vm/1/1/', data=context)
         result = json.loads(response.content)
         self.assertTrue(result.get('result') == 0)
 

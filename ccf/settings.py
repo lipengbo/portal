@@ -156,6 +156,9 @@ INSTALLED_APPS = [
     "endless_pagination",
     "notifications",
 
+    #xmlrpc
+    'django_xmlrpc',
+
     # project
     "ccf",
     "slice",
@@ -171,6 +174,8 @@ INSTALLED_APPS = [
     "nexus",
     "monitor"
 ]
+
+XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
 
 CRON_POLLING_FREQUENCY = 5
 # A sample logging configuration. The only tangible logging

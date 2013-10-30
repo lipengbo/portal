@@ -4,6 +4,7 @@
 # Date:Mon Sep 23 18:36:59 CST 2013
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
+import traceback
 import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
@@ -14,11 +15,13 @@ from django.core.urlresolvers import reverse
 from etc.config import vnctunnel, function_test
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
+from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
-from resources.models import Server
+from resources.models import Server, SwitchPort
 import logging
 from django.utils.translation import ugettext as _
 LOG = logging.getLogger('plugins')
+
 
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
@@ -110,7 +113,6 @@ def delete_vm(request, vmid, flag):
         else:
             return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
     except Exception, ex:
-        import traceback
         LOG.debug(traceback.print_exc())
     return render(request, 'slice/warning.html', {'info': str(ex)})
 
@@ -123,6 +125,24 @@ def get_vms_state_by_sliceid(request, sliceid):
     context['sliceid'] = sliceid
     return HttpResponse(json.dumps(context))
 
+
 def get_slice_gateway_ip(request, slice_name):
     subnet = get_object_or_404(Subnet, owner=slice_name)
     return HttpResponse(json.dumps({'ipaddr': subnet.get_gateway_ip()}))
+
+
+def set_domain_state(vname, state):
+    try:
+        vm = VirtualMachine.objects.get(uuid=vname)
+        vm.state = state
+        if state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
+            switch = vm.server.virtualswitch_set.all()[0]
+            port = get_portid_by_name(vm.server.ip, vm.uuid)
+            switch_port = SwitchPort(switch=switch, port=port)
+            switch_port.save()
+            vm.switch_port = switch_port
+        vm.save()
+    except:
+        LOG.debug(traceback.print_exc())
+    finally:
+        return True
