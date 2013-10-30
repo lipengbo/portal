@@ -2,10 +2,10 @@
 import json
 
 from plugins.common.agent_client import AgentClient
-from plugins.common.ovs_client import get_bridge_list
+from plugins.common.ovs_client import get_bridge_list, get_bridge_port_list,get_switch_stat
 from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from resources.models import Server
+from resources.models import Server, Switch
 
 import random
 def monitor_vm(request, host_id, vm_id):
@@ -22,14 +22,38 @@ def monitor_switch(request, switch_id):
 
 
 def get_br_info(request, switch_id):
-    print get_bridge_list("192.168.5.122")
-    return HttpResponse(json.dumps([{'br_name' : 'br0', 'ports' : ['eth0', 'eth1']}
-                                    ,{'br_name' : 'br1', 'ports' : ['eth2', 'eth3'] }]))
+    switch = get_object_or_404(Switch, id = switch_id)
+    #br_dict = {'br_name' : '', 'ports' : []}
+    br_info = []
+    for br in get_bridge_list(switch.ip):
+        br_dict = {'br_name' : '', 'ports' : []}
+        br_dict['br_name'] = br
+        for port in get_bridge_port_list(switch.ip, br):
+            br_dict['ports'].append(port)
+        if len(br_dict['ports']) > 0:
+            br_info.append(br_dict)
+    #print br_info
+    return HttpResponse(json.dumps(br_info))
 
 
 
-def monitor_port(request):
-    performace_port_data = {'port_recv_data' : random.randint(50,200), 'port_send_data' : random.randint(1, 100)}
+def update_port_performace_data(request):
+    switch_id = request.POST.get("switch_id")
+    br_name = request.POST.get("br")
+    port_name = request.POST.get("port")
+
+    #print switch_id,"  ", br_name, "  ", port_name
+    switch = get_object_or_404(Switch, id = switch_id)
+    switch_stat = get_switch_stat(switch.ip)
+    recv_data = 0
+    send_data = 0
+    for br in switch_stat:
+        if br['name'] == br_name:
+            for port in br['ports']:
+                if port['name'] == port_name:
+                    recv_data = int(port['stats']['recv']['byte'])/1024/0124
+                    send_data = int(port['stats']['send']['byte'])/1024/1024
+    performace_port_data = {'port_recv_data' : recv_data, 'port_send_data' : send_data}
     return HttpResponse(json.dumps(performace_port_data))
 
 performace_data = {'cpu_use' : random.randint(1, 100),

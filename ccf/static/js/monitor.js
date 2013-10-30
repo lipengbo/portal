@@ -8,9 +8,6 @@ var net_values = [];
 var ports = [];
 var net_recv_values = [];
 var net_send_values = [];
-var br_values = [];
-var port_recv_values = [];
-var port_send_values = [];
 var disk_free;
 var disk_used
 
@@ -28,9 +25,6 @@ for (var i=0; i<10; i++){
 	net_values[i] = "";
 	net_recv_values[i] = 0;
 	net_send_values[i] = 0;
-	br_values[i] = "";
-	port_send_values[i] = 0;
-	port_recv_values[i] = 0;
 }
 
 var cpu_chart_data = {

@@ -120,7 +120,7 @@ var create_node = function(d, point, trigger) {
       node.height = d.height;
       node.x = d.x;
       node.y = d.y;
-      node.have_port = false;
+      //node.have_port = false;
       if (node.type == 'vm') {
         node.limit = 1;    
       }
@@ -191,6 +191,7 @@ function inittpdata(){
                     nodes_data[node.id-1].yid = switches[i].id;
                     nodes_data[node.id-1].name = switches[i].name;
                     nodes_data[node.id-1].type_id = switches[i].type;
+                    nodes_data[node.id-1].ports = switches[i].ports;
                     if(switches[i].type == 1){
                         nodes_data[node.id-1].icon = 'img/ovs.png';
                     }else if(switches[i].type == 2){
@@ -217,8 +218,8 @@ function inittpdata(){
                 if(flag){
                     src_node_id = get_node(srcLinks[i].src_switch);
                     dst_node_id = get_node(srcLinks[i].dst_switch);
-                    nodes_data[src_node_id-1].have_port = true;
-                    nodes_data[dst_node_id-1].have_port = true;
+                    //nodes_data[src_node_id-1].have_port = true;
+                    //nodes_data[dst_node_id-1].have_port = true;
                     if(src_node_id && dst_node_id){
                         link = {source: nodes_data[src_node_id-1], target: nodes_data[dst_node_id-1], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
@@ -323,23 +324,36 @@ function highlight( data, element ) {
     //alert(data.type);
     if (data.type == 'switch') {
         content += "<h6>dpid：" + data.key + "</h6>";
-        if(data.have_port){
+        if(data.ports){
             content += "<table class='table'>" + 
             "<tr><th>端口</th>" + 
             "</tr>";
-            $.each(links, function(index, link){
-                if(link.source.id == data.id && link.target.type == 'switch'){
+            //alert(data.ports[0].name);
+            for (var i = 0; i < data.ports.length; i++) {
+                flag = false;
+                for (var j = 0; j < links.length; j++) {
+                    if(links[j].source.id == data.id && links[j].target.type == 'switch' && links[j].src_port_name == data.ports[i].name && links[j].src_port == data.ports[i].port){
+                        content += "<tr><td>"; 
+                        content += links[j].source.name + ":" + links[j].src_port_name + "(" + links[j].src_port+ ")";
+                        content += ' <-----> ' + links[j].target.name + ":" + links[j].dst_port_name + "(" + links[j].dst_port + ")";
+                        content += "</td></tr>";
+                        flag = true;
+                        break;
+                    }else if(links[j].target.id == data.id && links[j].source.type == 'switch' && links[j].dst_port_name == data.ports[i].name && links[j].dst_port == data.ports[i].port){
+                        content += "<tr><td>"; 
+                        content += links[j].target.name + ":" + links[j].dst_port_name + "(" + links[j].dst_port+ ")";
+                        content += ' <-----> ' + links[j].source.name + ":" + links[j].src_port_name + "(" + links[j].src_port + ")";
+                        content += "</td></tr>";
+                        flag = true;
+                        break;
+                    }
+                } 
+                if(!flag){
                     content += "<tr><td>"; 
-                    content += link.source.name + ":" + link.src_port_name + "(" + link.src_port+ ")";
-                    content += ' <-----> ' + link.target.name + ":" + link.dst_port_name + "(" + link.dst_port + ")";
-                    content += "</td></tr>";
-                }else if(link.target.id == data.id && link.source.type == 'switch'){
-                    content += "<tr><td>"; 
-                    content += link.target.name + ":" + link.dst_port_name + "(" + link.dst_port+ ")";
-                    content += ' <-----> ' + link.source.name + ":" + link.src_port_name + "(" + link.src_port + ")";
+                    content += data.name + ":" + data.ports[i].name + "(" + data.ports[i].port+ ")";
                     content += "</td></tr>";
                 }
-            }); 
+            }
             content += "</table>";
         }
         tooltip.showTooltip(content, d3.event);

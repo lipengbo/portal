@@ -72,11 +72,17 @@ class Slice(models.Model):
             return None
 
     def get_switches(self):
-        return self.switch_set.all()
+        controller_vms = self.get_controller_vms()
+        swich_ids = []
+        for controller_vm in controller_vms:
+            if controller_vm.switch_port:
+                if self.switchport_set.filter(switch=controller_vm.switch_port.switch).count() == 1:
+                    swich_ids.append(controller_vm.switch_port.switch.id)
+        return self.switch_set.exclude(id__in=swich_ids)
 
     def get_virtual_switches(self):
         from resources.models import VirtualSwitch
-        switches = self.switch_set.all()
+        switches = self.get_switches()
         virtual_switches = []
         for switch in switches:
             if switch.is_virtual():
@@ -86,7 +92,7 @@ class Slice(models.Model):
 
     def get_virtual_switches_gre(self):
         from resources.models import VirtualSwitch
-        switches = self.switch_set.all()
+        switches = self.get_switches()
         virtual_switches = []
         for switch in switches:
             if switch.is_virtual() and switch.has_gre_tunnel:
@@ -95,7 +101,7 @@ class Slice(models.Model):
 
     def get_virtual_switches_server(self):
         from resources.models import VirtualSwitch
-        switches = self.switch_set.all()
+        switches = self.get_switches()
         virtual_switches = []
         for switch in switches:
             if switch.is_virtual() and not switch.has_gre_tunnel:
@@ -108,11 +114,17 @@ class Slice(models.Model):
     def get_switch_ports(self):
         return self.switchport_set.all()
 
+    def get_one_switch_ports(self, switch):
+        return self.switchport_set.filter(switch=switch)
+
     def get_vms(self):
         return self.virtualmachine_set.all()
 
     def get_common_vms(self):
         return self.virtualmachine_set.filter(type=1)
+
+    def get_controller_vms(self):
+        return self.virtualmachine_set.filter(type=0)
 
     def get_nws(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='0x800')
