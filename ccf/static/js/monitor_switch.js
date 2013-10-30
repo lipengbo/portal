@@ -1,20 +1,38 @@
-var port_options = {
-	animation : false
+var br_values = [];
+var port_recv_values = [];
+var port_send_values = [];
+
+for (var i=0; i<10; i++){
+	br_values[i] = "";
+	port_send_values[i] = 0;
+	port_recv_values[i] = 0;
 }
+
+var port_options = {
+	animation : false,
+	bezierCurve : true,
+	scaleOverride : false
+}
+
+
 var port_chart_data = {
-	labels : br_values,
-	datasets : [
+    labels : br_values,
+    datasets : [
+        {
+            fillColor : "rgba(153,204,255,0)",
+			strokeColor : "rgba(0,153,204,1)",
+			pointColor : "rgba(0,153,204,1)",
+            pointStrokeColor : "#fff",
+            data : port_recv_values
+        },
 		{
-			fillColor : "rgba(220,220,220,0.5)",
-			strokeColor : "rgba(220,220,220,1)",
-			data : port_recv_values
-		},
-		{
-			fillColor : "rgba(151,187,205,0.5)",
-			strokeColor : "rgba(151,187,205,1)",
-			data : port_send_values
-		}
-	]
+            fillColor : "rgba(204,204,255,0)",
+			strokeColor : "rgba(204,0,51,0.8)",
+			pointColor : "rgba(204,0,51,0.8)",
+            pointStrokeColor : "#fff",
+            data : port_send_values
+        }
+    ]
 }
 
 
@@ -51,11 +69,11 @@ function get_br_info(switch_id){
     });
 }
 
-function update_port_data(host_id, br, port){
+function update_port_data(switch_id, br, port){
 	$.ajax({
-		url: '/slice/monitor/port/',
-		method: 'POST',
-		//data : "host_id = " + host_id,
+		url: '/monitor/port/',
+		type : 'POST',
+		data : "switch_id=" + switch_id + "&br=" + br + "&port=" + port,
 		dataType : 'json',
 		success : function(port_data){
 		
@@ -67,14 +85,14 @@ function update_port_data(host_id, br, port){
 			port_send_values.push(port_data['port_send_data']);
 			port_chart_data["datasets"][1]["data"] = port_send_values;
 			
-			new Chart(ctx_port).Bar(port_chart_data, port_options);
+			new Chart(ctx_port).Line(port_chart_data, port_options);
 		}
 	});
 }
 
 var port_timer;
-function get_port_info(host_id, br, port){
+function get_port_info(switch_id, br, port){
 	clearTimeout(port_timer);
-	update_port_data(host_id, br, port);
-    port_timer = setTimeout(function(){get_port_info(host_id, br, port)}, 1000);
+	update_port_data(switch_id, br, port);
+    port_timer = setTimeout(function(){get_port_info(switch_id, br, port)}, 1000);
 }
