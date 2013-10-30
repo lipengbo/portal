@@ -2,6 +2,7 @@
 import json
 
 from plugins.common.agent_client import AgentClient
+from plugins.common.ovs_client import get_bridge_list
 from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from resources.models import Server
@@ -12,11 +13,20 @@ def monitor_vm(request, host_id, vm_id):
     return render(request, "slice/monitor.html", {'host_id' : host_id})
 
 def monitor_host(request, host_id):
-    return render(request, "monitor.html", {'host_id' : host_id, "vm_id" : 0})
+    return render(request, "monitor_host_or_vm.html", {'host_id' : host_id, "vm_id" : 0})
 
-def monitor_ovs(request, host_id):
+def monitor_switch(request, switch_id):
+    return render(request, "monitor_switch.html", {'switch_id' : switch_id})
+    #return HttpResponse(json.dumps([{'br_name' : 'br0', 'ports' : ['eth0', 'eth1']}
+     #                               ,{'br_name' : 'br1', 'ports' : ['eth2', 'eth3'] }]))
+
+
+def get_br_info(request, switch_id):
+    print get_bridge_list("192.168.5.122")
     return HttpResponse(json.dumps([{'br_name' : 'br0', 'ports' : ['eth0', 'eth1']}
                                     ,{'br_name' : 'br1', 'ports' : ['eth2', 'eth3'] }]))
+
+
 
 def monitor_port(request):
     performace_port_data = {'port_recv_data' : random.randint(50,200), 'port_send_data' : random.randint(1, 100)}
