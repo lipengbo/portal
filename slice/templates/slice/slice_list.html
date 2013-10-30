@@ -33,7 +33,7 @@
                 {%endif%}
              </legend>
              <div class="row-fluid">
-             {%if slices%}
+             {%if slices %}
              {% for group in slices|group_by:2 %}
              <ul class="thumbnails example-sites">
 		         {% for slice in group %}

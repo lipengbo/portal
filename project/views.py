@@ -371,6 +371,7 @@ def manage_index(request):
     context = {}
     if user.is_superuser:
         context['slices'] = Slice.objects.all()
+        context['projects'] = Project.objects.all()
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")
