@@ -67,9 +67,12 @@ img {
 <script type="text/javascript">
     $(function() {
     	$('#dg-container').gallery();
-    	$(".enlarge img").click(function(){alert(1);
+    	$(".enlarge img").click(function(){
     	    $(".map").attr("src","{% static 'img/map_sec.jpg' %}");
     	});
+    	$(".shrink img").click(function(){
+            $(".map").attr("src","{% static 'img/map_fir.jpg' %}");
+        });
     });
 </script>
 {% endblock %}

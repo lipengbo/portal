@@ -1135,14 +1135,14 @@
     }, 
     {
         "fields": {
-            "date_joined": "2013-10-08T09:39:32.018Z", 
+            "date_joined": "2013-10-08T09:39:32.018", 
             "email": "a@1.com", 
             "first_name": "", 
             "groups": [], 
             "is_active": true, 
             "is_staff": true, 
             "is_superuser": true, 
-            "last_login": "2013-10-08T09:39:32.018Z", 
+            "last_login": "2013-10-08T09:39:32.018", 
             "last_name": "", 
             "password": "pbkdf2_sha256$10000$GDSeuEXoo8Pc$3r9Zlesjp2wnKMnjVX8v/ohyZzxjcKB+0KEUmsU2I/g=", 
             "user_permissions": [

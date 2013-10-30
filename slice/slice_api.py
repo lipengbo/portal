@@ -44,9 +44,9 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
 #         创建并添加dhcp
         enabled_dhcp = (int(dhcp_selected) == 1)
         print 7
-        if int(gw_host_id) > 0:
+        if gw_host_id and int(gw_host_id) > 0:
             print 8
-            gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enabled_dhcp=enabled_dhcp)
+            gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enable_dhcp=enabled_dhcp)
             print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
         print 10
@@ -250,13 +250,20 @@ def get_slice_topology(slice_obj):
 #     交换机
     try:
         switches = []
+        dpids = []
         switch_objs = slice_obj.get_switches()
         for switch_obj in switch_objs:
+            ports = []
+            one_switch_ports = slice_obj.get_one_switch_ports(switch_obj)
+            for one_switch_port in one_switch_ports:
+                ports.append({'name': one_switch_port.name, 'port': one_switch_port.port})
             switch = {'dpid': switch_obj.dpid,
                       'name': switch_obj.name,
                       'type': switch_obj.type(),
-                      'id': switch_obj.id}
+                      'id': switch_obj.id,
+                      'ports':ports}
             switches.append(switch)
+            dpids.append(switch_obj.dpid)
         print switches
         switch_ports = slice_obj.get_switch_ports()
 #         for switch_port in switch_ports:
@@ -272,13 +279,14 @@ def get_slice_topology(slice_obj):
             link_objs = flowvisor.link_set.filter(
                 source__in=switch_ports, target__in=switch_ports)
         for link_obj in link_objs:
-            link = {'src_switch': link_obj.source.switch.dpid,
-                    'src_port_name': link_obj.source.name,
-                    'src_port': link_obj.source.port,
-                    'dst_switch': link_obj.target.switch.dpid,
-                    'dst_port': link_obj.target.port,
-                    'dst_port_name': link_obj.target.name}
-            links.append(link)
+            if (link_obj.source.switch.dpid in dpids) and (link_obj.target.switch.dpid in dpids):
+                link = {'src_switch': link_obj.source.switch.dpid,
+                        'src_port_name': link_obj.source.name,
+                        'src_port': link_obj.source.port,
+                        'dst_switch': link_obj.target.switch.dpid,
+                        'dst_port': link_obj.target.port,
+                        'dst_port_name': link_obj.target.name}
+                links.append(link)
     #     虚拟机
         specials = []
         normals = []

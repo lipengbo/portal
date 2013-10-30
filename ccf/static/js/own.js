@@ -243,7 +243,7 @@ function page_function1(){
 		var slice_name_obj = document.getElementById("slice_name");
     	var user_id_obj = document.getElementById("user_id");
 		var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
-    	fetch_serverinfo();
+    	fetch_serverinfo("id_server_gw");
     	fetch_gw_ip(slice_name);
 		return true;
 	}
@@ -252,7 +252,7 @@ function page_function1(){
 	}
 }
 function page_function2(){
-    fetch_serverinfo();
+    fetch_serverinfo("id_server");
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		return true;
@@ -336,7 +336,7 @@ function submit_slice_info(project_id){
 	var controller_ip_port_obj = document.getElementById("controller_ip_port");
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
-	var id_server_obj = document.getElementById("gw_server_id");
+	var id_server_gw_obj = document.getElementById("id_server_gw");
 	var gateway_ip_obj = document.getElementById("gateway_ip");
 	var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	var switch_port_ids = "";
@@ -365,11 +365,10 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
-	for(var i=0;i<dhcp_selected_obj.length;i++){  
-        if(dhcp_selected_obj[i].checked){  
-            dhcp_selected = 1; 
-        }   
-    }
+    if(dhcp_selected_obj.checked){ 
+       // alert(1); 
+        dhcp_selected = 1; 
+    }   
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
     var user_id_obj = document.getElementById("user_id");
 	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
@@ -381,7 +380,7 @@ function submit_slice_info(project_id){
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
 						"slice_nw": old_slice_nw_obj.value,
-						"gw_host_id": 1,
+						"gw_host_id": id_server_gw_obj.value,
 						"gw_ip": gateway_ip_obj.value,
 						"dhcp_selected": dhcp_selected
 		};
