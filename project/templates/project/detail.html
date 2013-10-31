@@ -63,7 +63,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ membership.user }}</td>
-                    <td>{{ membership.user }}</td>
+                    <td>{{ membership.user.get_profile.organization }}</td>
                     <td>
                             <a href={% if not membership.is_owner %}"{% url project_delete_member membership.id  %}"{% else %}"javascript:;"{% endif %} 
                                 class="btn btn-inverse{% if membership.is_owner %}disabled{% else %} btn-delete {% endif %}">

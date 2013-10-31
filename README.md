@@ -20,7 +20,9 @@ Getting Started:
     python manage.py syncdb
     python manage.py runserver
 
-[plugins/ipam]
+=====================
+
+plugins/ipam:
   [功能]
   1、网络管理：用于且分子网，它管理两种类型的网络
                type0:基础设施管理层面的IP地址管理，用于分配给Controller
@@ -54,14 +56,16 @@ Getting Started:
       函数调用： def release_ip(self, ip)
       函数调用： def release_ip_for_controller(self, ip)
 
+=====================
 
-[plugins/vt]
+plugins/vt:
   [功能]
   1、Flavor管理：提供了init方法用于导入初始flavor配置，提供了admin界面，用于管理flavor。需要提醒的是当Flavor被删除时依赖与它的虚拟机也都会被删除
   2、Image管理：提供了init方法用于导入glance server中已经存在的image，目前没有提供完备的Image管理功能；所以在安装环境前先上传image到glance server，然后在ccf的etc/config.py中配置glance server；然后按照ccf安装，启动流程启动ccf即可
   3、虚拟机管理：目前管理着两种虚拟机
      a、vm for slice：提供了端到端的解决方案
      b、vm for controller：提供了create_vm_for_controller ; delete_vm_for_controller接口；controller宿主机的选择采用了调度的方式，Flavor采用默认方式（需要在etc/config.py中配置），Image的选择根据Image的名字（即controller type name == image name），这就要求image中必须要含有floodlight、nox、pox等名字的image（详情请查看Image 管理）
+  4、新增调度功能
 
   [接口]
   1、create_vm_for_controller(island_obj, slice_obj, image_name):由俊霞调用
@@ -71,12 +75,18 @@ Getting Started:
       参数说明：vm对象
       返回值：如果错误会有Exception
 
-[plugins/network]
-  [功能]
+=====================
 
+plugins/network:
+  [功能]
+   1、添加gateway功能
+   2、添加的dhcp功能，本期不支持dhcp自定义
+   3、新增ovs监控功能
   [接口]
 
-[plugins/common]
+=====================
+
+plugins/common:
   [功能]
   1、提供基础的工具集，比如文件操作，进程，命令行，异常处理
   2、glance client：由于自有glanceclient安装问题比较多，所以重写了一个glance client（安装文档中可以吧所有有关glance client安装的步骤都去掉）

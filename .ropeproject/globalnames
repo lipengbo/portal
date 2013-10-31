@@ -1,15 +1,15 @@
 Ä}q(Uplugins.common.ovs_client]q(U
 add_bridgeqUget_controllerqUget_bridge_listqUget_bridge_nameqUset_controllerqUget_portid_by_nameqUget_dpidq	Uget_switch_statq
 Udel_controllerqU
-del_bridgeqUadd_bridge_portqUget_bridge_port_listqUdel_portqUadd_portqeUplugins.vt.views]q(ULOGqUvm_listqUset_domain_stateqU	delete_vmqUget_slice_gateway_ipqUdo_vm_actionqUvncqU	create_vmqUget_vms_state_by_sliceidqeUplugins.vt.api]q(Udelete_vm_for_controllerqUcreate_vm_for_gatewayqUdelete_vm_for_gatewayqUcreate_vm_for_controllerqeUplugins.vt.models]q (Uvm_pre_deleteq!Uvm_post_deleteq"Uvm_post_saveq#UHostMacq$UVM_TYPEq%UDOMAIN_STATE_TUPLEq&UVirtualMachineq'UDOMAIN_STATE_DICq(Uvm_pre_saveq)U
-HOST_STATEq*UImageq+UFlavorq,eU plugins.common.vt_manager_client]q-UVTClientq.aU
-etc.config]q/(Umonitor_service_portq0Urpc_connection_timeoutq1Uvt_manager_portq2Uovs_service_portq3U	lock_pathq4Uglance_portq5Udomain_count_infinityq6Uflowvisor_disableq7Uglance_hostq8Uvt_manager_ipq9U	vnctunnelq:Ugenerate_glance_urlq;Udefault_flavor_idq<Ufunction_testq=Ucompute_service_portq>eUplugins.vt.tests]q?(Utest_create_vm_for_controllerq@Utest_create_vm_for_gatewayqAU
-Gateway_ipqBUVMCreateqCeUplugins.network.models]qD(Ugateway_pre_saveqEUGatewayqFeUplugins.vt.urls]qGUurlpatternsqHaUccf.urls]qIUurlpatternsqJaUccf.settings]qK(UAUTHENTICATION_BACKENDSqLUCRISPY_TEMPLATE_PACKqMUMANAGERSqNU	DATABASESqOUSITE_IDqPUACCOUNT_LOGIN_REDIRECT_URLqQU
-FROM_EMAILqRUACCOUNT_OPEN_SIGNUPqSUROOT_URLCONFqTU
-EMAIL_PORTqUULANGUAGE_CODEqVUUSE_I18NqWUCRON_POLLING_FREQUENCYqXU
-SECRET_KEYqYUACCOUNT_LOGOUT_REDIRECT_URLqZUMIDDLEWARE_CLASSESq[UEMAIL_HOST_PASSWORDq\UPACKAGE_ROOTq]USTATIC_ROOTq^UACCOUNT_REQUIRED_EMAILq_U&ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYSq`U	TIME_ZONEqaUTEMPLATE_LOADERSqbUACCOUNT_USE_OPENIDqcUWSGI_APPLICATIONqdULOCALE_PATHSqeUEMAIL_BACKENDqfUANONYMOUS_USER_IDqgU
-EMAIL_HOSTqhUDEFAULT_FROM_EMAILqiUTEMPLATE_DIRSqjUPROJECT_ROOTqkULOGGINGqlUSTATICFILES_FINDERSqmUACCOUNT_EMAIL_AUTHENTICATIONqnU
-STATIC_URLqoUXMLRPC_METHODSqpUUSE_L10NqqUDEBUGqrUUSE_TZqsUFIXTURE_DIRSqtUINSTALLED_APPSquU
-MEDIA_ROOTqvUSTATICFILES_DIRSqwUACCOUNT_EMAIL_VERIFICATIONqxUADMINSqyUTEMPLATE_DEBUGqzUTEMPLATE_CONTEXT_PROCESSORSq{UEMAIL_HOST_USERq|U	MEDIA_URLq}eUresources.models]q~(USliceSwitchqUOVS_TYPEqÄUServiceResourceqÅUResourceqÇUServerqÉUvm_pre_saveqÑUSwitchqÖUVirtualSwitchqÜUSwitchResourceqáU	SlicePortqàU
-SwitchPortqâUIslandResourceqäUResourceBaseqãeUplugins.openflow.models]qå(UFlowSpaceRuleqçUupdate_linksqéU	FlowvisorqèULinkqêU
-ControllerqëUFlowvisorLinksMd5qíeUplugins.ipam.models]qì(USubnetqîUIPUsageqïUNetworkqñUcreate_base_subnetqóU	IPManagerqòUsubnet_pre_saveqôeUplugins.common.agent_client]qöUAgentClientqõau.
+del_bridgeqUadd_bridge_portqUget_bridge_port_listqUdel_portqUadd_portqeUccf.urls]qUurlpatternsqaUplugins.vt.api]q(Udelete_vm_for_controllerqUcreate_vm_for_gatewayqUdelete_vm_for_gatewayqUcreate_vm_for_controllerqeUplugins.vt.models]q(Uvm_pre_deleteqUvm_post_deleteqUvm_post_saveqUHostMacqUVM_TYPEqUDOMAIN_STATE_TUPLEqUVirtualMachineqUDOMAIN_STATE_DICq Uvm_pre_saveq!U
+HOST_STATEq"UImageq#UFlavorq$eU plugins.common.vt_manager_client]q%UVTClientq&aU
+etc.config]q'(Umonitor_service_portq(Urpc_connection_timeoutq)Uvt_manager_portq*Uovs_service_portq+Uunique_hosts_per_allocq,Umax_memq-Umax_cpuq.U	lock_pathq/Uglance_portq0Udomain_count_infinityq1Uflowvisor_disableq2Uglance_hostq3Uvt_manager_ipq4U	vnctunnelq5Ugenerate_glance_urlq6Umax_diskq7Udefault_flavor_idq8Ufunction_testq9Ucompute_service_portq:Uuse_vt_manager_to_schedulq;eUplugins.vt.tests]q<(Utest_create_vm_for_controllerq=Utest_create_vm_for_gatewayq>U
+Gateway_ipq?UVMCreateq@eUplugins.network.models]qA(Ugateway_pre_saveqBUGatewayqCeUplugins.vt.urls]qDUurlpatternsqEaUplugins.vt.views]qF(ULOGqGUvm_listqHUset_domain_stateqIU	delete_vmqJUget_slice_gateway_ipqKUdo_vm_actionqLUvncqMU	create_vmqNUget_vms_state_by_sliceidqOeUccf.settings]qP(UAUTHENTICATION_BACKENDSqQUCRISPY_TEMPLATE_PACKqRUMANAGERSqSU	DATABASESqTUSITE_IDqUUACCOUNT_LOGIN_REDIRECT_URLqVU
+FROM_EMAILqWUACCOUNT_OPEN_SIGNUPqXUROOT_URLCONFqYU
+EMAIL_PORTqZULANGUAGE_CODEq[UUSE_I18Nq\UCRON_POLLING_FREQUENCYq]U
+SECRET_KEYq^UACCOUNT_LOGOUT_REDIRECT_URLq_UMIDDLEWARE_CLASSESq`UEMAIL_HOST_PASSWORDqaUPACKAGE_ROOTqbUSTATIC_ROOTqcUACCOUNT_REQUIRED_EMAILqdU&ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYSqeU	TIME_ZONEqfUTEMPLATE_LOADERSqgUACCOUNT_USE_OPENIDqhUWSGI_APPLICATIONqiULOCALE_PATHSqjUEMAIL_BACKENDqkUANONYMOUS_USER_IDqlU
+EMAIL_HOSTqmUDEFAULT_FROM_EMAILqnUTEMPLATE_DIRSqoUPROJECT_ROOTqpULOGGINGqqUSTATICFILES_FINDERSqrUACCOUNT_EMAIL_AUTHENTICATIONqsU
+STATIC_URLqtUXMLRPC_METHODSquUUSE_L10NqvUDEBUGqwUUSE_TZqxUFIXTURE_DIRSqyUINSTALLED_APPSqzU
+MEDIA_ROOTq{USTATICFILES_DIRSq|UACCOUNT_EMAIL_VERIFICATIONq}UADMINSq~UTEMPLATE_DEBUGqUTEMPLATE_CONTEXT_PROCESSORSqÄUEMAIL_HOST_USERqÅU	MEDIA_URLqÇeUresources.models]qÉ(USliceSwitchqÑUOVS_TYPEqÖUServiceResourceqÜUResourceqáUServerqàUvm_pre_saveqâUSwitchqäUVirtualSwitchqãUSwitchResourceqåU	SlicePortqçU
+SwitchPortqéUIslandResourceqèUResourceBaseqêeUplugins.openflow.models]që(UFlowSpaceRuleqíUupdate_linksqìU	FlowvisorqîULinkqïU
+ControllerqñUFlowvisorLinksMd5qóeUplugins.ipam.models]qò(USubnetqôUIPUsageqöUNetworkqõUcreate_base_subnetqúU	IPManagerqùUsubnet_pre_saveqûeUplugins.common.agent_client]qüUAgentClientq†au.
