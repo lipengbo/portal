@@ -12,7 +12,7 @@
         <div class="nums_block" style="border:1px solid #3182ad;">
           <a href="#">
             <div class="nums_top" style="background:#3398cc;">
-                <img src="{% static "img/node.png" %}" width="40" />                
+                <img src="{% static "img/node.png" %}" width="60" />                
                 <span>{{ total_islands }}</span>
             </div>
             <div class="nums_bottom" style="background:#0a5da3;">
@@ -26,7 +26,7 @@
         <div class="nums_block" style="border:1px solid #2fb157;">
           <a href="{% url "project_index" %}">
             <div class="nums_top" style="background:#34cc67;">
-                <img src="{% static "img/project.png" %}" width="32" />                
+                <img src="{% static "img/project.png" %}" width="60" />                
                 <span>{{ total_projects }}</span>
             </div>
             <div class="nums_bottom" style="background:#09a32b;">
@@ -40,7 +40,7 @@
         <div class="nums_block" style="border:1px solid #893080;">
           <a href="{% url "slice_list" 0 %}">
             <div class="nums_top" style="background:#993399;">
-                <img src="{% static "img/slice.png" %}" width="32" />
+                <img src="{% static "img/slice.png" %}" width="60" />
                 <span>{{slices.count}}</span>
             </div>
             <div class="nums_bottom" style="background:#5c0b58;">
@@ -54,7 +54,7 @@
         <div class="nums_block" style="border:1px solid #e5b232;">
           <a href="#">
             <div class="nums_top" style="background:#ffcc33;">
-                <img src="{% static "img/user.png" %}" width="40" />
+                <img src="{% static "img/user.png" %}" width="60" />
                 <span>{{ total_users }}</span>
             </div>
             <div class="nums_bottom" style="background:#fea30a;">
@@ -367,13 +367,13 @@
         context.fillText(canvasTitle,55,13);        
     });
 
-	if({{ host_id }} == -1){
-		document.getElementById("show_server").innerHTML = "<h2>当前没有添加服务器</h2>"
+	if(-1 == -1){
+		document.getElementById("show_server").innerHTML = "<h4 class='text-center' style='margin-top:23%;'><small><i>当前没有添加服务器</i></small></h4>"
 	}else{
 		monitor_host({{ host_id }});
 	}
 	
-	if ({{ switch_id }} == -1){
+	if (-1 == -1){
 		document.getElementById("show_switch").innerHTML = "<h2>当前没有添加交换机</h2>"
 	}else{
 		get_br_info({{ switch_id }}, false);
