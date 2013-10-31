@@ -109,7 +109,8 @@ def update_vm_performace_data(request):
                             #200, 300]
 
 
-    domain_disk_data = {"free" : int(vm_perf_data["disk"]["free"]/8/1024/1024), "used" : int(vm_perf_data["disk"]["used"]/8/1024/1024)}
+    domain_disk_data = {"free" : int(vm_perf_data["disk"]["free"]),
+                        "used" : int(vm_perf_data["disk"]["used"])}
     #print net_data
     return HttpResponse(json.dumps({'cpu_use' : vm_perf_data["cpu"],
                                     'mem_use' : vm_perf_data["mem"]["percent"],
