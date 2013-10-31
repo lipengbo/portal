@@ -376,8 +376,14 @@ def manage_index(request):
         context['total_islands'] = Island.objects.all().count()
         context['total_projects'] = Project.objects.all().count()
         context['total_users'] = User.objects.all().count()
-        context['host_id'] = Server.objects.all()[0].id
-        context['switch_id'] = Switch.objects.all()[0].id
+        if Server.objects.all() > 0:
+            context['host_id'] = Server.objects.all()[0].id
+        else:
+            context['host_id'] = -1
+        if Switch.objects.all() > 0:
+            context['switch_id'] = Switch.objects.all()[0].id
+        else:
+            context['switch_id'] = -1
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")
