@@ -306,11 +306,19 @@
 		monitor_host({{ host_id }});
 	}
 	
-	if (switch_id == -1){
+	if ({{switch_id}} == -1){
 		document.getElementById("show_switch").innerHTML = "<h4 class='text-center' style='margin-top:23%;'><small><i>当前没有添加交换机</i></small></h4>"
 	}else{
 		get_br_info({{ switch_id }}, false);
 	}
+
+	$('#show_server').click(function(){
+		window.location.href = '{% url "nexus_list" "resources" "server" %}'
+	});
+
+	$('#show_switch').click(function(){
+		window.location.href = '{% url "nexus_list" "resources" "switch" %}'
+	})
 	
 	
       
