@@ -11,6 +11,8 @@ var net_send_values = [];
 var disk_free;
 var disk_used
 
+
+
 for (var i=0; i<50; i++){
 	cpu_values[i] = 0 + "";
     cpu_values_x_lable[i] = "";
@@ -104,22 +106,14 @@ var disk_chart_data = [
 
 
  	var ctx_cpu = document.getElementById('cpu_perf_chart').getContext("2d");
-    //var cpu_chart = new Chart(ctx_cpu);
-    
-
 	var ctx_mem = document.getElementById('mem_perf_chart').getContext("2d");
-    //var mem_chart = new Chart(ctx_mem);
-    
-
 	var ctx_net = document.getElementById('net_perf_chart').getContext("2d");
-    //var net_chart = new Chart(ctx_net);
-
 	var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
-	//new Chart(ctx_disk).Doughnut(disk_chart_data);   
+	
 
-	//var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
 
-    //var port_chart = new Chart(ctx_port);
+// 管理员首页展示数据
+
 
 
 function data_process(data){
