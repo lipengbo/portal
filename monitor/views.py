@@ -8,7 +8,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from resources.models import Server, Switch
 from plugins.vt.models import VirtualMachine
 
-import random
 
 
 
@@ -22,13 +21,10 @@ def monitor_host(request, host_id):
 
 def monitor_switch(request, switch_id):
     return render(request, "monitor_switch.html", {'switch_id' : switch_id})
-    #return HttpResponse(json.dumps([{'br_name' : 'br0', 'ports' : ['eth0', 'eth1']}
-     #                               ,{'br_name' : 'br1', 'ports' : ['eth2', 'eth3'] }]))
 
 
 def get_br_info(request, switch_id):
     switch = get_object_or_404(Switch, id = switch_id)
-    #br_dict = {'br_name' : '', 'ports' : []}
     br_info = []
     for br in get_bridge_list(switch.ip):
         br_dict = {'br_name' : '', 'ports' : []}
@@ -37,7 +33,6 @@ def get_br_info(request, switch_id):
             br_dict['ports'].append(port)
         if len(br_dict['ports']) > 0:
             br_info.append(br_dict)
-    #print br_info
     return HttpResponse(json.dumps(br_info))
 
 
@@ -49,7 +44,6 @@ def update_port_performace_data(request):
     pre_recv_data = request.POST.get("pre_recv_data")
     pre_send_data = request.POST.get("pre_send_data")
 
-    #print switch_id,"  ", br_name, "  ", port_name
     switch = get_object_or_404(Switch, id = switch_id)
     switch_stat = get_switch_stat(switch.ip)
     recv_data = 0
@@ -60,16 +54,10 @@ def update_port_performace_data(request):
                 if port['name'] == port_name:
                     recv_data = int(port['stats']['recv']['byte'])
                     send_data = int(port['stats']['send']['byte'])
-    print recv_data, ":", send_data
     performace_port_data = {'port_recv_data' : recv_data, 'port_send_data' : send_data,
                             'recv_bps' : recv_data - int(pre_recv_data), 'send_bps' : send_data - int(pre_send_data)}
     return HttpResponse(json.dumps(performace_port_data))
 
-performace_data = {'cpu_use' : random.randint(1, 100),
-                   'mem_use' : random.randint(1, 100),
-                   'net_recv_data' : random.randint(1, 100),
-                   'net_send_data' : random.randint(1, 100),
-                   'disk_use' : random.randint(1, 100)}
 
 def update_vm_performace_data(request):
     """
@@ -80,11 +68,8 @@ def update_vm_performace_data(request):
     vm = get_object_or_404(VirtualMachine, id = vm_id )
     agent_ip = vm.server.ip
     agent = AgentClient(ip = agent_ip)
-    print agent_ip
-    print agent.get_domain_status(vm.uuid)
     vm_perf_data = json.loads(agent.get_domain_status(vm.uuid))
 
-    print vm_perf_data
 
 
 
@@ -109,7 +94,8 @@ def update_vm_performace_data(request):
                             #200, 300]
 
 
-    domain_disk_data = {"free" : int(vm_perf_data["disk"]["free"]/8/1024/1024), "used" : int(vm_perf_data["disk"]["used"]/8/1024/1024)}
+    domain_disk_data = {"free" : int(vm_perf_data["disk"]["free"]),
+                        "used" : int(vm_perf_data["disk"]["used"])}
     #print net_data
     return HttpResponse(json.dumps({'cpu_use' : vm_perf_data["cpu"],
                                     'mem_use' : vm_perf_data["mem"]["percent"],
@@ -135,7 +121,7 @@ def update_host_performace_data(request):
                            value[1] - int(bps_data.split(':')[1])]
 
     for (key, value) in host_perf_data["disk"].items():
-        host_disk_data = {"free" : int(value[2])/8/1024/1024, "used" : int(value[1]/8/1024/1024)}
+        host_disk_data = {"free" : int(value[2]), "used" : int(value[1])}
         break
 
     return HttpResponse(json.dumps({'cpu_use' : host_perf_data["cpu"],

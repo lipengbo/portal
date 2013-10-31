@@ -1,6 +1,16 @@
 {% extends "site_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
+
+{% block breadcrumb %}
+{% if vm_id == 0%}
+服务器
+{% else%}
+虚拟机
+{% endif %}
+监控
+{% endblock %}
+
 {% block body %}
 
 <div id="div_normal_data" style="display">
