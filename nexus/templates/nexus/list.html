@@ -14,10 +14,10 @@
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
-{% if class_name != 'Island' and class_name != 'City' %}
+{% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}
 <div class="well">
 <form action="" class="form-inline" method="get">
-    <label for="id_island__city">City:</label>
+    <label for="id_island__city">城市：</label>
     <select name="island__city" id="id_island__city">
         <option value="">---------</option>
         {% for city in cities %}
@@ -26,7 +26,7 @@
             {% endif %}>{{ city }}</option>
         {% endfor %}
     </select>
-    <label for="id_island">节点:</label>
+    <label for="id_island">节点：</label>
     <select name="island" id="id_island">
         <option value="">---------</option>
         {% for island in current_city.island_set.all %}
@@ -64,10 +64,10 @@
             <td>
                 <input type="checkbox" name="id" value="{{ object.id }}">
             </td>
-            <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</td>
+            <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
                 <td>{{ object|get_value:field.name }}</td>
-            {% endfor %} 
+            {% endfor %}
             <td>
                 <div class="btn-groups">
                     {% if class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}

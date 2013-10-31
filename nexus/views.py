@@ -34,7 +34,9 @@ def list_objects(request, app_label, model_class):
         class Meta:
             model = ModelClass
             if model_class == 'island':
-                field = ['island',]
+                fields = []
+            elif model_class == 'user':
+                fields = []
             else:
                 fields = ['island__city', 'island']
     objects = ModelClass.objects.order_by('-id')

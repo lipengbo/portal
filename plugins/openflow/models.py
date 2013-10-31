@@ -38,7 +38,7 @@ class Flowvisor(ServiceResource):
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('name', 'password', 'username'),
+            'exclude_fields': ('name', 'password', 'username', 'port', 'http_port', 'content_type', 'object_id'),
             'ct_model': ('resources', 'server')
         }
         return options

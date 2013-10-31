@@ -16,7 +16,8 @@
             <li><a href="{% url notifications:unread %}">{% trans "Unread" %}</a></li>
         </ul>
         <hr>
-        <a href="{% url notifications:mark_all_as_read %}" class="btn btn-info ">{% trans "Mark as all read "%}</a>
+        <a href="{% url notifications:mark_all_as_read %}" class="btn btn-info">{% trans "Mark as all read "%}</a>
+        <hr>
     </div>
     <div class="span10">
         {% if notifications %}

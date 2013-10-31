@@ -32,7 +32,7 @@ class Resource(models.Model):
 
     __metaclass__ = ResourceBase
 
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256, verbose_name=_("name"))
 
     def on_create_slice(self):
         pass
@@ -74,7 +74,7 @@ class ServiceResource(IslandResource):
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
-    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1)
+    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
 
     def __unicode__(self):
         return self.name
@@ -86,14 +86,14 @@ class ServiceResource(IslandResource):
 class Server(IslandResource):
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
-    state = models.IntegerField(null=True)
+    state = models.IntegerField(null=True, verbose_name=_("state"), choices=((0, _("Not available")), (1, _("Available"))))
     cpu = models.CharField(max_length=256, null=True, default=0)
-    mem = models.IntegerField(null=True, default=0)
-    bandwidth = models.IntegerField(null=True, default=0)
-    disk = models.IntegerField(null=True, default=0)
+    mem = models.IntegerField(null=True, default=0, verbose_name=_("memory"))
+    bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
+    disk = models.IntegerField(null=True, default=0, verbose_name=_("disk"))
     ip = models.IPAddressField(null=False, unique=True)
     mac = models.CharField(max_length=256, null=True)
-    os = models.CharField(max_length=256, null=True)
+    os = models.CharField(max_length=256, null=True, verbose_name=_("os"))
     update_time = models.DateTimeField(auto_now_add=True)
 
     def get_link_vs(self):
@@ -223,7 +223,7 @@ class VirtualSwitch(Switch):
     """
         A virtual switch service that created on a Physical Server
     """
-    server = models.ForeignKey(Server)
+    server = models.ForeignKey(Server, verbose_name=_("Server"))
 
     def get_vms(self, slice_obj):
         return slice_obj.get_vms.filter(server=self.server)

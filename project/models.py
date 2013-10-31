@@ -16,8 +16,8 @@ from invite.models import Invitation
 from notifications import notify
 
 class City(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.TextField()
+    name = models.CharField(max_length=256, verbose_name=_("name"))
+    description = models.TextField(verbose_name=_("description"))
 
     def __unicode__(self):
         return self.name
@@ -26,9 +26,9 @@ class City(models.Model):
         verbose_name = _("City")
 
 class Island(models.Model):
-    name = models.CharField(max_length=256)
-    description = models.TextField()
-    city = models.ForeignKey(City)
+    name = models.CharField(max_length=256, verbose_name=_("name"))
+    description = models.TextField(verbose_name=_("description"))
+    city = models.ForeignKey(City, verbose_name=_("City"))
 
     def __unicode__(self):
         return self.name
