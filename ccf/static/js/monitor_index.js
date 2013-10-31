@@ -50,7 +50,7 @@ function get_host_data(host_id){
         dataType: 'json',
         timeout: 1000,
         error: function(){
-            alert('Get performace data error!');
+            //alert('Get performace data error!');
         },
         success: function(performace_data){
 			cpu_values.shift();
