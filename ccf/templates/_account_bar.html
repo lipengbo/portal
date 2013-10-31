@@ -5,6 +5,7 @@
 <div class="pull-right">
     <ul class="nav pull-right">
         {% if request.user.is_authenticated %}
+            {% if not user.is_superuser %}
             <li>
                 <a href="{% url "project_create" %}">创建项目</a>
             </li>
@@ -14,6 +15,7 @@
             <li>
                 <a href="{% url "project_apply" %}">申请加入项目</a>
             </li>
+            {% endif %}
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                     {% user_display request.user %}
