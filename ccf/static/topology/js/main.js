@@ -23,6 +23,11 @@ var g_links = [];
 var width = 700,
     height = 400;
 
+if (size == 'small') {
+    width = 500;
+    height = 300;
+}
+
 var color = d3.scale.category20();
 var g_nodes_map = {};
 var g_links_map = {};

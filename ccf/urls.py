@@ -21,6 +21,7 @@ admin.autodiscover()
 
 urlpatterns = patterns("",
     url(r"^$",  "project.views.home", name="home"),
+    url(r"^global/$", TemplateView.as_view(template_name="homepage.html"), name="global"),
     url(r"^login/", TemplateView.as_view(template_name="login.html"), name="demo"),
     url(r"^help/", TemplateView.as_view(template_name="help.html"), name="demo"),
     url(r"^create_project/", TemplateView.as_view(template_name="create_project.html"), name="demo"),

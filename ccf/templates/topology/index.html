@@ -22,6 +22,9 @@ common
     {% endif %}
     <style type="text/css" media="">
         {% if no_parent %}
+            .container {
+                width: auto !important;
+            }
             .navbar {
                 display: none;
             }
@@ -54,7 +57,6 @@ common
 <div class="row-fluid">
     <div class="span12">
         {% if not no_parent %}
-        
         <div class="hero-unit">
                 <div class="tempStats">
                     <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
@@ -187,6 +189,7 @@ common
 <script type="text/javascript" charset="utf-8">
     var no_parent = {% if no_parent %}true;{% else %}false;
     {% endif %}
+    var size = "{{ size }}";
 </script>
 <script src="{{ STATIC_URL }}topology/js/main.js?v=5"></script>
 <script type="text/javascript" charset="utf-8">
