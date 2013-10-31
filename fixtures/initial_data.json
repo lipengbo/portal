@@ -25,7 +25,7 @@
     }, 
     {
         "fields": {
-            "netaddr": "172.16.0.100/16", 
+            "netaddr": "192.168.5.200/24", 
             "type": 0
         }, 
         "model": "ipam.network", 

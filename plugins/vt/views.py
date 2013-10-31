@@ -133,17 +133,19 @@ def get_slice_gateway_ip(request, slice_name):
 
 def set_domain_state(vname, state):
     try:
-        vm = VirtualMachine.objects.get(uuid=vname)
-        vm.state = state
+        vm_query = VirtualMachine.objects.filter(uuid=vname)
         if state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
-            switch = vm.server.virtualswitch_set.all()[0]
-            port = get_portid_by_name(vm.server.ip, vm.uuid)
-            switch_port = SwitchPort(switch=switch, port=port, name=vm.name)
+            host = vm_query[0].server
+            slice = vm_query[0].slice
+            name = vm_query[0].name
+            switch = host.virtualswitch_set.all()[0]
+            port = get_portid_by_name(host.ip, vname)
+            switch_port = SwitchPort(switch=switch, port=port, name=name)
             switch_port.save()
-            vm.slice.add_resource(switch_port)
-            vm.switch_port = switch_port
-        vm.save()
+            slice.add_resource(switch_port)
+            vm_query.update(state=state, switch_port=switch_port)
     except:
+        vm_query.update(state=state)
         LOG.debug(traceback.print_exc())
     finally:
         return True
