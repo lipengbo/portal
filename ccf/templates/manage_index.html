@@ -75,6 +75,7 @@
     </div>
     <div class="span6">
         <div class="tp_block">
+            {%if slices%}
             <div id="myCarousel" class="carousel slide carousel_defined">
               <!-- Carousel items -->
               <div class="carousel-inner">
@@ -133,7 +134,11 @@
               <a class="carousel-control left control_defined" href="#myCarousel" data-slide="prev">&lsaquo;</a>
               <a class="carousel-control right control_defined" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>     
-                 
+            {%else%}
+                <div class="alert alert-block nothing_tip">
+                     <h4>没有已创建的SLICE！</h4>
+                </div>
+            {%endif%}  
         </div>       
     </div>
 </div>
