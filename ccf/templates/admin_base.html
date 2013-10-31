@@ -35,7 +35,7 @@
                                                     <li><a href="{% url "nexus_list" "openflow" "flowvisor" %}"><i class="icon-cog"></i> {% trans "Flowvisor" %}</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="#">消息日志</a></li>
+                                            <li><a href="{% url "notifications:all" %}">消息日志</a></li>
                                             <li><a href="#">系统配置</a></li>
                                         </ul>
                                         {% comment %}
