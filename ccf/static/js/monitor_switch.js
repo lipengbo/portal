@@ -19,14 +19,14 @@ var port_chart_data = {
     labels : br_values,
     datasets : [
         {
-            fillColor : "rgba(153,204,255,0)",
+            fillColor : "rgba(153,204,255,0.5)",
 			strokeColor : "rgba(0,153,204,1)",
 			pointColor : "rgba(0,153,204,1)",
             pointStrokeColor : "#fff",
             data : port_recv_values
         },
 		{
-            fillColor : "rgba(204,204,255,0)",
+            fillColor : "rgba(204,204,255,0.5)",
 			strokeColor : "rgba(204,0,51,0.8)",
 			pointColor : "rgba(204,0,51,0.8)",
             pointStrokeColor : "#fff",
@@ -69,7 +69,7 @@ function get_br_info(switch_id, flag){
         type : 'GET',
         dataType : 'json',
         error : function(){
-            alert("get bridge information error!");
+            //alert("get bridge information error!");
         },
         success : function(br_info){
             var context = '';

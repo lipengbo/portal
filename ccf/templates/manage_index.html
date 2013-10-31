@@ -10,7 +10,7 @@
 <div class="row-fluid margin_rows">
     <div class="span3">
         <div class="nums_block" style="border:1px solid #3182ad;">
-          <a href="#">
+          <a href="{% url "nexus_list" "project" "island" %}">
             <div class="nums_top" style="background:#3398cc;">
                 <img src="{% static "img/node.png" %}" width="60" />                
                 <span>{{ total_islands }}</span>
@@ -52,7 +52,7 @@
     </div>  
     <div class="span3">
         <div class="nums_block" style="border:1px solid #e5b232;">
-          <a href="#">
+          <a href="{% url "nexus_list" "auth" "user" %}">
             <div class="nums_top" style="background:#ffcc33;">
                 <img src="{% static "img/user.png" %}" width="60" />
                 <span>{{ total_users }}</span>
@@ -75,6 +75,7 @@
     </div>
     <div class="span6">
         <div class="tp_block">
+            {%if slices%}
             <div id="myCarousel" class="carousel slide carousel_defined">
               <!-- Carousel items -->
               <div class="carousel-inner">
@@ -90,9 +91,9 @@
                                     <div class="slice_left">
                                         <img src="{% static slice.project.category.image %}" />
                                         <ul>
-                                            <li><i class="icon-file-alt icon-large"></i>{{ slice.get_show_name }}</li>
+                                            <li><i class="icon-file-alt icon-large"></i><b>{{ slice.get_show_name }}</b></li>
                                             <li><i class="icon-user icon-large"></i>{{ slice.owner }}</li>
-                                            <li><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}停止{%else%}启动{%endif%}</li>
+                                            <li><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
                                         </ul>
                                         <div class="circle_bar">
                                             <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
@@ -128,88 +129,16 @@
                         </a>
                     </div>
                 {%endfor%}
-                <!--<div class="item slice_topology">
-                    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
-                        <div class="row-fluid slice_list">
-                            <div class="span5">
-                                <div class="slice_left">
-                                    <img src="{% static "img/cat_cloud.jpg" %}" />
-                                    <ul>
-                                        <li><i class="icon-file-alt icon-large"></i>Slice一</li>
-                                        <li><i class="icon-user icon-large"></i>ccf</li>
-                                        <li><i class="icon-rss icon-large"></i>开启</li>
-                                    </ul>
-                                    <div class="circle_bar">
-                                        <canvas class="circle_canvas" id="swCanvas" width="135" height="20" data-text="交换机（sw）"></canvas>
-                                        <input readonly="readonly" class="knob" data-width="36" data-height="36" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".1" value="1000">
-                                    </div>
-                                    <div class="circle_bar">
-                                        <canvas class="circle_canvas" id="vmCanvas" width="135" height="20" data-text="虚拟机（VM）"></canvas>
-                                        <input readonly="readonly" class="knob" data-width="36" data-height="36" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".1" value="50">
-                                    </div>
-                                    <div class="circle_bar">
-                                        <canvas class="circle_canvas" id="ipCanvas" width="135" height="20" data-text="IP地址（IP）"></canvas>
-                                        <input readonly="readonly" class="knob" data-width="36" data-height="36" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".1" value="80">
-                                    </div>
-                                    <div class="slice_date">
-                                        <i class="icon-calendar icon-large"></i>2013.10.01-2013.10.31
-                                    </div>
-                                </div>        
-                            </div>
-                            <div class="span7">
-                                <div class="slice_right">
-                                    <div class="slice_text">
-                                        说明说明说明
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="item slice_topology">
-                    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
-                        <div class="row-fluid slice_list">
-                            <div class="span5">
-                                <div class="slice_left">
-                                    <img src="{% static "img/cat_cloud.jpg" %}" />
-                                    <ul>
-                                        <li><i class="icon-file-alt icon-large"></i>Slice一</li>
-                                        <li><i class="icon-user icon-large"></i>ccf</li>
-                                        <li><i class="icon-rss icon-large"></i>开启</li>
-                                    </ul>
-                                    <div class="circle_bar">
-                                        <canvas class="circle_canvas" id="swCanvas" width="135" height="20" data-text="交换机（sw）"></canvas>
-                                        <input readonly="readonly" class="knob" data-width="36" data-height="36" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".1" value="1000">
-                                    </div>
-                                    <div class="circle_bar">
-                                        <canvas class="circle_canvas" id="vmCanvas" width="135" height="20" data-text="虚拟机（VM）"></canvas>
-                                        <input readonly="readonly" class="knob" data-width="36" data-height="36" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".1" value="50">
-                                    </div>
-                                    <div class="circle_bar">
-                                        <canvas class="circle_canvas" id="ipCanvas" width="135" height="20" data-text="IP地址（IP）"></canvas>
-                                        <input readonly="readonly" class="knob" data-width="36" data-height="36" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".1" value="80">
-                                    </div>
-                                    <div class="slice_date">
-                                        <i class="icon-calendar icon-large"></i>2013.10.01-2013.10.31
-                                    </div>
-                                </div>        
-                            </div>
-                            <div class="span7">
-                                <div class="slice_right">
-                                    <div class="slice_text">
-                                        说明说明说明
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>-->
               </div>
               <!-- Carousel nav -->
               <a class="carousel-control left control_defined" href="#myCarousel" data-slide="prev">&lsaquo;</a>
               <a class="carousel-control right control_defined" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>     
-                 
+            {%else%}
+                <div class="alert alert-block nothing_tip">
+                     <h4>没有已创建的SLICE！</h4>
+                </div>
+            {%endif%}  
         </div>       
     </div>
 </div>
@@ -243,8 +172,8 @@
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
-<script src="{{ STATIC_URL }}js/monitor_index.js" ></script>
-<script src="{{ STATIC_URL }}js/monitor_switch.js" ></script>
+<script src="{{ STATIC_URL }}js/monitor_index.js?v=1" ></script>
+<script src="{{ STATIC_URL }}js/monitor_switch.js?v=1" ></script>
 <script>
     $(function($) {
 
