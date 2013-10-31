@@ -26,17 +26,11 @@ lock_path = '/var/run/'
 default_flavor_id = 1
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
-<<<<<<< HEAD
 #单元测试的时候使用，当系统发布的时候该值必须为False
 function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
 flowvisor_disable = False
 #本期可以不用部署vt_manager；当use_vt_manager_to_schedul = False不需部署vt_manager；当use_vt_manager_to_schedul = True需要部署vt_manager；
-=======
-#单元测试的时候使用，用于关闭一些特性，比如录入一台设备时自动获取其info信息
-function_test = True
-flowvisor_disable = True
->>>>>>> c684aeb9ebc9a77c44a8a5df3b3edbd9a8abe7bb
 use_vt_manager_to_schedul = False
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效
 #单台机器最多允许创建的虚拟机的数量
