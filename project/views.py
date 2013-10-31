@@ -376,11 +376,11 @@ def manage_index(request):
         context['total_islands'] = Island.objects.all().count()
         context['total_projects'] = Project.objects.all().count()
         context['total_users'] = User.objects.all().count()
-        if Server.objects.all() > 0:
+        if Server.objects.all():
             context['host_id'] = Server.objects.all()[0].id
         else:
             context['host_id'] = -1
-        if Switch.objects.all() > 0:
+        if Switch.objects.all():
             context['switch_id'] = Switch.objects.all()[0].id
         else:
             context['switch_id'] = -1

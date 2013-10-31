@@ -367,7 +367,7 @@
 		monitor_host({{ host_id }});
 	}
 	
-	if ({{ switch_id }} = -1){
+	if ({{ switch_id }} == -1){
 		document.getElementById("show_switch").innerHTML = "<h2>当前没有添加交换机</h2>"
 	}else{
 		get_br_info({{ switch_id }}, false);
