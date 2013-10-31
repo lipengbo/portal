@@ -61,7 +61,7 @@ var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
 var port_chart = new Chart(ctx_port);
 
 
-function get_br_info(switch_id){
+function get_br_info(switch_id, flag){
 	var default_show_br;
 	var default_show_port;	 
     $.ajax({
@@ -86,9 +86,11 @@ function get_br_info(switch_id){
                 }
                 context = context + "</ul></li>";
             }
-
-            document.getElementById('br_info').innerHTML = context;
-			get_port_info(switch_id, default_show_br, default_show_port)
+			if(flag){
+				document.getElementById('br_info').innerHTML = context;
+			}
+            
+			get_port_info(switch_id, default_show_br, default_show_port, flag)
         }
 		
     });
@@ -98,7 +100,7 @@ function get_br_info(switch_id){
 
 var pre_recv_data = 0;
 var pre_send_data = 0;
-function update_port_data(switch_id, br, port){
+function update_port_data(switch_id, br, port, flag){
 	$.ajax({
 		url: '/monitor/port/',
 		type : 'POST',
@@ -117,18 +119,22 @@ function update_port_data(switch_id, br, port){
 			port_chart_data["datasets"][1]["data"] = port_send_values;
 			pre_send_data = port_data['port_send_data']
 			new Chart(ctx_port).Line(port_chart_data, port_options);
-			document.getElementById('id_port_send').innerHTML = data_process(port_data['port_send_data']);
+			if(flag){
+				document.getElementById('id_port_send').innerHTML = data_process(port_data['port_send_data']);
+				document.getElementById('id_port_recv').innerHTML = data_process(port_data['port_recv_data']);
+			}
 			document.getElementById('id_port_send_bps').innerHTML = data_process(port_data['send_bps']);
-			document.getElementById('id_port_recv').innerHTML = data_process(port_data['port_recv_data']);
 			document.getElementById('id_port_recv_bps').innerHTML = data_process(port_data['recv_bps']);
+			
 			
 		}
 	});
 }
 
 var port_timer;
-function get_port_info(switch_id, br, port){
+function get_port_info(switch_id, br, port, flag){
+	
 	clearTimeout(port_timer);
-	update_port_data(switch_id, br, port);
-    port_timer = setTimeout(function(){get_port_info(switch_id, br, port)}, 1000);
+	update_port_data(switch_id, br, port, flag);
+    port_timer = setTimeout(function(){get_port_info(switch_id, br, port, flag)}, 1000);
 }

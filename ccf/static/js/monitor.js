@@ -109,10 +109,9 @@ var disk_chart_data = [
 	var ctx_mem = document.getElementById('mem_perf_chart').getContext("2d");
 	var ctx_net = document.getElementById('net_perf_chart').getContext("2d");
 	var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
-	
 
 
-// 管理员首页展示数据
+
 
 
 
@@ -201,6 +200,7 @@ function get_performace_data(host_id, vm_id){
                 document.getElementById("mem_percent").innerHTML = performace_data['mem_use'];
 				mem_chart_data["datasets"][0]["data"] = mem_values;
 				new Chart(ctx_mem).Line(mem_chart_data, mem_options);
+
                 disk_chart_data[0]["value"] = performace_data['disk_use']['free'];
                 disk_chart_data[1]["value"] = performace_data['disk_use']['used'];
                 new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
@@ -237,7 +237,7 @@ function get_performace_data(host_id, vm_id){
                 });
 				flag = false;
                 document.getElementById("ports_info").innerHTML = port_info_content;
-				
+				//alert(pre_net_data)
 				//show_port(show_port_num);
 				change_port(show_port_num);
 
@@ -250,6 +250,8 @@ function init(host_id, vm_id){
 	get_performace_data(host_id, vm_id);
 	setTimeout(function(){init(host_id, vm_id)}, 1000);
 }
+
+
 
 
 

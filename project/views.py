@@ -21,7 +21,7 @@ from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
 from slice.models import Slice
 
-from resources.models import Switch
+from resources.models import Switch, Server
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 
@@ -374,6 +374,8 @@ def manage_index(request):
         context['total_islands'] = Island.objects.all().count()
         context['total_projects'] = Project.objects.all().count()
         context['total_users'] = User.objects.all().count()
+        context['host_id'] = Server.objects.all()[0].id
+        context['switch_id'] = Switch.objects.all()[0].id
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")

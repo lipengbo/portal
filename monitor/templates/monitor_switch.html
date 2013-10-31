@@ -10,12 +10,12 @@
                             <tr>
                                 <td width="9%"><img src="{% static "img/upload.png" %}" width="20" /></td>
                                 <td width="45%">总发送量：<span id="id_port_send"></td>
-                                <td width="45%">每秒发送量：<sqan id="id_port_send_bps">/S</td>
+                                <td width="45%">每秒发送量：<span id="id_port_send_bps">/S</td>
                             </tr>
                             <tr>
                                 <td><img src="{% static "img/download.png" %}" width="20" /></td>
                                 <td>总接收量：<span id="id_port_recv"></td>
-                                <td>每秒接收量：<sqan id="id_port_recv_bps">/S</td>
+                                <td>每秒接收量：<span id="id_port_recv_bps">/S</td>
                             </tr>
                             
                         </tbody>
@@ -27,7 +27,7 @@
     <script src="{{ STATIC_URL }}js/monitor_switch.js" ></script>
 	<script>
 		$(function(){
-			get_br_info({{ switch_id }});
+			get_br_info({{ switch_id }}, true);
 		})
 	</script>
 {% endblock %}

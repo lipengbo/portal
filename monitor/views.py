@@ -143,3 +143,13 @@ def update_host_performace_data(request):
                                     'net' : net_data,
                                     'disk_use' : host_disk_data
                                     }))
+
+
+def update_index_performace_data(request):
+    host_id = request.POST.get("host_id")
+    server = get_object_or_404(Server, id = host_id)
+    agent = AgentClient(ip = server.ip)
+    host_perf_data = json.loads(agent.get_host_status())
+    return HttpResponse(json.dumps({'cpu_use' : host_perf_data['cpu'],
+                                    'mem_use' : host_perf_data['mem'][2]}))
+
