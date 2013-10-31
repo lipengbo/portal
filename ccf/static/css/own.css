@@ -5969,7 +5969,7 @@ table {
   position: absolute;
   bottom: -67px;
   font-size: 12px;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(51, 152, 204, 0.85);
   color: #fff;
   padding: 5px;
   overflow: hidden;
@@ -6118,7 +6118,6 @@ table {
 .tp_block {
   height: 335px;
   overflow: hidden;
-  border: 2px solid #ababab;
   background: #fff;
   -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
   -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
@@ -6134,6 +6133,7 @@ table {
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
+  border: none;
 }
 .control_defined {
   top: 50%;
@@ -6225,4 +6225,7 @@ table {
 }
 .btn-large {
   padding: 9px 19px;
+}
+.base_device_list {
+  margin: 0;
 }

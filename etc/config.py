@@ -36,8 +36,8 @@ use_vt_manager_to_schedul = False
 #单台机器最多允许创建的虚拟机的数量
 unique_hosts_per_alloc = 10
 #可以创建虚拟机的主机，cpu、mem的最大负载，取值为百分必的形式，如下代表百分之80
-max_cpu = 80
-max_mem = 80
+max_cpu = 100
+max_mem = 100
 #可以创建虚拟机的主机，至少要有10G的磁盘剩余
 max_disk = 10
 #[vt_manager]只有在use_vt_manager_to_schedul = True时才生效
