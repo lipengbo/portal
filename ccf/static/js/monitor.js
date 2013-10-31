@@ -10,6 +10,7 @@ var net_recv_values = [];
 var net_send_values = [];
 var disk_free;
 var disk_used
+var isScaleOverride = false;
 
 
 
@@ -27,6 +28,7 @@ for (var i=0; i<10; i++){
 	net_values[i] = "";
 	net_recv_values[i] = 0;
 	net_send_values[i] = 0;
+	
 }
 
 var cpu_chart_data = {
@@ -63,10 +65,7 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : false,
-	scaleStartValue : 0,
-	scaleSteps : null,
-	scaleStepWidth : null,
+	scaleOverride : false
 	
 }
 
@@ -89,6 +88,7 @@ var net_chart_data = {
         }
     ]
 }
+
 
 var disk_options = {
     animation : false
@@ -113,11 +113,33 @@ var disk_chart_data = [
 
 
 
+function count(data){
+	var sum = 0;
+	for(var i=0; i<data.length; i++){
+		sum += data[i];
+	}
+	return sum;
+}
 
 
-function data_process(data){
-    unit = 'byte'
-    data = data/8/1024 //byte
+
+function data_process(data){    
+    if (data > 1024){
+		data = data/1024 //KB
+        if (data > 1024){
+			data = data/1024 //MB
+            if (data >1024){
+				data = data/1024 //GB
+			}
+                
+		}
+            
+
+	}
+    return Math.round(data);
+}
+
+function data_process_unit(data, unit){
     if (data > 1024){
 		data = data/1024 //KB
         unit = 'KB'
@@ -133,7 +155,7 @@ function data_process(data){
             
 
 	}
-    return Math.round(data) + unit
+    return unit
 }
 
 //是否初始化net信息数组的标志位
@@ -148,13 +170,18 @@ function switch_port(num){
 
 
 function show_net_content(num){
-	document.getElementById("id_net_send").innerHTML = data_process(net_info_content[num][0]);
+	document.getElementById("id_net_send").innerHTML = data_process(net_info_content[num][0]) 
+													 + data_process_unit(net_info_content[num][0], 'bit');
 	document.getElementById("id_net_send_bps").innerHTML = net_info_content[num][1];
-	document.getElementById("id_net_recv").innerHTML = data_process(net_info_content[num][2]);
+	document.getElementById("id_net_recv").innerHTML = data_process(net_info_content[num][2])
+												 + data_process_unit(net_info_content[num][2], 'bit');
 	document.getElementById("id_net_recv_bps").innerHTML = net_info_content[num][3];
 }
 
 function show_port(num){
+	if(count(ports[num][0]) == 0 && count(ports[num][1]) == 0){
+		net_options['scaleOverride'] = true;
+	}
 	net_chart_data["datasets"][0]["data"] = ports[num][0];
 	net_chart_data["datasets"][1]["data"] = ports[num][1];
 	new Chart(ctx_net).Line(net_chart_data, net_options);
@@ -206,9 +233,9 @@ function get_performace_data(host_id, vm_id){
                 new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
 
                 document.getElementById("disk_use").innerHTML = '<span style="background:#ff3366;"></span>已使用 : ' 
-								+ performace_data['disk_use']['used'] + " MB";
+								+ data_process(performace_data['disk_use']['used']) + data_process_unit(performace_data['disk_use']['used'], 'byte');
                 document.getElementById("disk_free").innerHTML ='<span style="background:#99cc66;"></span>未使用 : '
-								+ performace_data['disk_use']['free'] + " MB";
+								+ data_process(performace_data['disk_use']['free']) + data_process_unit(performace_data['disk_use']['free'], 'byte');
 
                 var port_info_content = "";//"<option selected>请选择网卡</option>";
 				//var net_info_content = [];
