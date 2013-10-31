@@ -5965,6 +5965,7 @@ table {
   position: relative;
 }
 .thumbnail .slice_right .slice_text {
+  height: 57px;
   min-width: 95%;
   position: absolute;
   bottom: -67px;
@@ -6128,6 +6129,7 @@ table {
 }
 .carousel_defined {
   margin-bottom: 0;
+  height: 100%;
 }
 .carousel_defined .thumbnail {
   -webkit-border-radius: 0;

@@ -12,7 +12,7 @@
         <div class="nums_block" style="border:1px solid #3182ad;">
           <a href="{% url "nexus_list" "project" "island" %}">
             <div class="nums_top" style="background:#3398cc;">
-                <img src="{% static "img/node.png" %}" width="40" />                
+                <img src="{% static "img/node.png" %}" width="60" />                
                 <span>{{ total_islands }}</span>
             </div>
             <div class="nums_bottom" style="background:#0a5da3;">
@@ -26,7 +26,7 @@
         <div class="nums_block" style="border:1px solid #2fb157;">
           <a href="{% url "project_index" %}">
             <div class="nums_top" style="background:#34cc67;">
-                <img src="{% static "img/project.png" %}" width="32" />                
+                <img src="{% static "img/project.png" %}" width="60" />                
                 <span>{{ total_projects }}</span>
             </div>
             <div class="nums_bottom" style="background:#09a32b;">
@@ -40,7 +40,7 @@
         <div class="nums_block" style="border:1px solid #893080;">
           <a href="{% url "slice_list" 0 %}">
             <div class="nums_top" style="background:#993399;">
-                <img src="{% static "img/slice.png" %}" width="32" />
+                <img src="{% static "img/slice.png" %}" width="60" />
                 <span>{{slices.count}}</span>
             </div>
             <div class="nums_bottom" style="background:#5c0b58;">
@@ -54,7 +54,7 @@
         <div class="nums_block" style="border:1px solid #e5b232;">
           <a href="{% url "nexus_list" "auth" "user" %}">
             <div class="nums_top" style="background:#ffcc33;">
-                <img src="{% static "img/user.png" %}" width="40" />
+                <img src="{% static "img/user.png" %}" width="60" />
                 <span>{{ total_users }}</span>
             </div>
             <div class="nums_bottom" style="background:#fea30a;">
@@ -75,6 +75,7 @@
     </div>
     <div class="span6">
         <div class="tp_block">
+            {%if slices%}
             <div id="myCarousel" class="carousel slide carousel_defined">
               <!-- Carousel items -->
               <div class="carousel-inner">
@@ -133,7 +134,11 @@
               <a class="carousel-control left control_defined" href="#myCarousel" data-slide="prev">&lsaquo;</a>
               <a class="carousel-control right control_defined" href="#myCarousel" data-slide="next">&rsaquo;</a>
             </div>     
-                 
+            {%else%}
+                <div class="alert alert-block nothing_tip">
+                     <h4>没有已创建的SLICE！</h4>
+                </div>
+            {%endif%}  
         </div>       
     </div>
 </div>
@@ -291,13 +296,13 @@
         context.fillText(canvasTitle,55,13);        
     });
 
-	if({{ host_id }} == -1){
-		document.getElementById("show_server").innerHTML = "<h2>当前没有添加服务器</h2>"
+	if(-1 == -1){
+		document.getElementById("show_server").innerHTML = "<h4 class='text-center' style='margin-top:23%;'><small><i>当前没有添加服务器</i></small></h4>"
 	}else{
 		monitor_host({{ host_id }});
 	}
 	
-	if ({{ switch_id }} == -1){
+	if (-1 == -1){
 		document.getElementById("show_switch").innerHTML = "<h2>当前没有添加交换机</h2>"
 	}else{
 		get_br_info({{ switch_id }}, false);
