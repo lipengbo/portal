@@ -161,7 +161,7 @@ class Switch(SwitchResource):
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('has_gre_tunnel', 'name', 'password', 'username'),
+            'exclude_fields': ('switch_ptr', 'port', 'http_port', 'has_gre_tunnel', 'name', 'password', 'username'),
         }
         return options
 

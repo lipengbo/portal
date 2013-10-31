@@ -14,6 +14,31 @@
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
+{% if class_name != 'Island' and class_name != 'City' %}
+<div class="well">
+<form action="" class="form-inline" method="get">
+    <label for="id_island__city">City:</label>
+    <select name="island__city" id="id_island__city">
+        <option value="">---------</option>
+        {% for city in cities %}
+            <option value="{{ city.id }}" {% if city.id == current_city.id %}
+            selected
+            {% endif %}>{{ city }}</option>
+        {% endfor %}
+    </select>
+    <label for="id_island">节点:</label>
+    <select name="island" id="id_island">
+        <option value="">---------</option>
+        {% for island in current_city.island_set.all %}
+        <option value="{{ island.id }}" {% if current_island.id == island.id %}
+        selected
+        {% endif %}>{{ island.name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="" value="筛选" class="btn btn-info">
+</form>
+</div>
+{% endif %}
 {% paginate 20 objects %}
 <form action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
@@ -69,6 +94,12 @@
 <script type="text/javascript" charset="utf-8">
     $('.delete-action').click(function(){
         $('#action').val('delete');
+    });
+    $('#id_island__city').change(function(){
+        var city_id = $(this).val();
+        $.get('{% url nexus_islands %}', {'city_id': city_id}, function(data){
+            $('#id_island').html(data)
+        })
     });
 </script>
 {% endblock %}

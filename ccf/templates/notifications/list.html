@@ -3,6 +3,10 @@
 
 {% block head_title %}{% trans "Notifications" %}{% endblock %}
 
+{% block breadcrumb %}
+{% trans "Notifications" %}
+{% endblock %}
+
 {% block body %}
 <div class="row-fluid">
     <div class="span2 columns">
@@ -12,7 +16,7 @@
             <li><a href="{% url notifications:unread %}">{% trans "Unread" %}</a></li>
         </ul>
         <hr>
-        <a href="{% url notifications:mark_all_as_read %}" class="btn btn-primary">{% trans "Mark as all read "%}</a>
+        <a href="{% url notifications:mark_all_as_read %}" class="btn btn-info ">{% trans "Mark as all read "%}</a>
     </div>
     <div class="span10">
         {% if notifications %}

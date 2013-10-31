@@ -15,7 +15,6 @@ from guardian.shortcuts import assign_perm
 from invite.models import Invitation
 from notifications import notify
 
-
 class City(models.Model):
     name = models.CharField(max_length=256)
     description = models.TextField()
