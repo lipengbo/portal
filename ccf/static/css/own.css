@@ -5372,7 +5372,7 @@ legend small {
   text-shadow: none;
 }
 .blank_block {
-  height: 60px;
+  height: 42px;
 }
 .wrapper_all {
   min-height: 100%;
@@ -5451,7 +5451,6 @@ table {
   padding: 0;
   list-style: none;
   border-bottom: 4px solid #0b4073;
-  margin-top: 40px;
 }
 #tabs li {
   float: left;
@@ -5499,7 +5498,7 @@ table {
   display: block;
   margin: 0 auto;
   position: relative;
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   overflow: hidden;
   text-align: center;
   border-bottom: 4px solid #34495e;
@@ -5557,6 +5556,7 @@ table {
   margin-top: 20px;
 }
 .breadcrumb {
+  margin: 20px 0 20px;
   background: #eee;
 }
 .breadcrumb .icon-home {
@@ -5965,7 +5965,7 @@ table {
   position: relative;
 }
 .thumbnail .slice_right .slice_text {
-  height: 57px;
+  max-height: 57px;
   min-width: 95%;
   position: absolute;
   bottom: -67px;
@@ -6126,6 +6126,7 @@ table {
 }
 .tp_block.tp_charts {
   height: 250px;
+  cursor: pointer;
 }
 .carousel_defined {
   margin-bottom: 0;
@@ -6160,7 +6161,6 @@ table {
 }
 .nums_block .nums_top {
   height: 90px;
-  line-height: 90px;
   position: relative;
 }
 .nums_block .nums_top i,
@@ -6181,12 +6181,21 @@ table {
 
   -o-transition: opacity 0.5s;
 }
-.nums_block .nums_top span {
+.nums_block .nums_top span.total_nums {
   color: #fff;
   font-size: 42px;
   text-decoration: none;
-  float: right;
-  margin-right: 30px;
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+.nums_block .nums_top span.total_name {
+  position: absolute;
+  right: 20px;
+  top: 56px;
+  font-size: 20px;
+  color: #fff;
+  font-family: "Microsoft YaHei";
 }
 .nums_block .nums_bottom {
   height: 30px;
@@ -6195,7 +6204,6 @@ table {
 .nums_block .nums_bottom span {
   margin-left: 20px;
   color: #fff;
-  font-weight: bold;
 }
 .nums_block .nums_bottom i {
   font-size: 20px;
@@ -6230,4 +6238,38 @@ table {
 }
 .base_device_list {
   margin: 0;
+}
+.project-body .navbar-inverse .nav .pro_menu > a,
+.slice-body .navbar-inverse .nav .slice_menu > a,
+.nexus-body .navbar-inverse .nav .device_menu > a,
+.notifications-body .navbar-inverse .nav .news_menu > a,
+.home-body .navbar-inverse .nav .index_menu > a {
+  color: #ffffff;
+  background-color: #9a9a9a;
+  background-image: -moz-linear-gradient(top, #cbcbcb, #585858);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#cbcbcb), to(#585858));
+  background-image: -webkit-linear-gradient(top, #cbcbcb, #585858);
+  background-image: -o-linear-gradient(top, #cbcbcb, #585858);
+  background-image: linear-gradient(to bottom, #cbcbcb, #585858);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcbcbcb', endColorstr='#ff585858', GradientType=0);
+  border-bottom: 1px solid #a0a0a0;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+.project-body .navbar-inverse .nav .pro_menu > a:focus,
+.slice-body .navbar-inverse .nav .slice_menu > a:focus,
+.nexus-body .navbar-inverse .nav .device_menu > a:focus,
+.notifications-body .navbar-inverse .nav .news_menu > a:focus,
+.home-body .navbar-inverse .nav .index_menu > a:focus {
+  color: #ffffff;
+  background-color: #9a9a9a;
+  background-image: -moz-linear-gradient(top, #cbcbcb, #585858);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#cbcbcb), to(#585858));
+  background-image: -webkit-linear-gradient(top, #cbcbcb, #585858);
+  background-image: -o-linear-gradient(top, #cbcbcb, #585858);
+  background-image: linear-gradient(to bottom, #cbcbcb, #585858);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffcbcbcb', endColorstr='#ff585858', GradientType=0);
+  border-bottom: 1px solid #a0a0a0;
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
