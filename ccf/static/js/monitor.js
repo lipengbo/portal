@@ -63,10 +63,10 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : false
-	//scaleStartValue : 0,
-	//scaleSteps : 20,
-	//scaleStepWidth : 20,
+	scaleOverride : false,
+	scaleStartValue : 0,
+	scaleSteps : null,
+	scaleStepWidth : null,
 	
 }
 
@@ -191,13 +191,13 @@ function get_performace_data(host_id, vm_id){
         success: function(performace_data){
 				cpu_values.shift();
 				cpu_values.push(performace_data['cpu_use']);
-                document.getElementById("cpu_percent").innerHTML = performace_data['cpu_use'];
+                document.getElementById("cpu_percent").innerHTML = Math.round(performace_data['cpu_use']*100)/100;
 				cpu_chart_data["datasets"][0]["data"] = cpu_values;
 				new Chart(ctx_cpu).Line(cpu_chart_data);
 
 				mem_values.shift();
 				mem_values.push(performace_data['mem_use']);
-                document.getElementById("mem_percent").innerHTML = performace_data['mem_use'];
+                document.getElementById("mem_percent").innerHTML = Math.round(performace_data['mem_use']*100)/100;
 				mem_chart_data["datasets"][0]["data"] = mem_values;
 				new Chart(ctx_mem).Line(mem_chart_data, mem_options);
 

@@ -10,7 +10,7 @@
 <div class="row-fluid margin_rows">
     <div class="span3">
         <div class="nums_block" style="border:1px solid #3182ad;">
-          <a href="#">
+          <a href="{% url "nexus_list" "project" "island" %}">
             <div class="nums_top" style="background:#3398cc;">
                 <img src="{% static "img/node.png" %}" width="40" />                
                 <span>{{ total_islands }}</span>
@@ -52,7 +52,7 @@
     </div>  
     <div class="span3">
         <div class="nums_block" style="border:1px solid #e5b232;">
-          <a href="#">
+          <a href="{% url "nexus_list" "auth" "user" %}">
             <div class="nums_top" style="background:#ffcc33;">
                 <img src="{% static "img/user.png" %}" width="40" />
                 <span>{{ total_users }}</span>
@@ -172,8 +172,8 @@
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
-<script src="{{ STATIC_URL }}js/monitor_index.js" ></script>
-<script src="{{ STATIC_URL }}js/monitor_switch.js" ></script>
+<script src="{{ STATIC_URL }}js/monitor_index.js?v=1" ></script>
+<script src="{{ STATIC_URL }}js/monitor_switch.js?v=1" ></script>
 <script>
     $(function($) {
 

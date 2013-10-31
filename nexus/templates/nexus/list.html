@@ -45,7 +45,9 @@
             {% endfor %} 
             <td>
                 <div class="btn-groups">
-                    <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
+                    {% if class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
+                        <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
+                    {% endif %}
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
                 </div>
