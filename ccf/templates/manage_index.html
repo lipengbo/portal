@@ -217,17 +217,22 @@
 <div class="row-fluid margin_rows">
     <div class="span6">
         <div class="tp_block tp_charts">
-			<canvas id="manage_server_chart" width="439" height="230"></canvas>
-			<div>cpu:<span id="id_cpu_index"></span>%
-				 内存:<span id="id_mem_index"></span>%
-			</div>
+            <div class="pull-right" style="margin:5px 10px 5px 0">
+                cpu:<span id="id_cpu_index"></span>%
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    内存:<span id="id_mem_index"></span>%
+            </div>
+			<canvas id="manage_server_chart" width="460" height="210" style="margin-left:10px;"></canvas>			
 		</div>        
     </div>
     <div class="span6">
         <div class="tp_block tp_charts">
-			<canvas id="port_perf_chart" width="430" height="230"></canvas><br/>	
-			每秒接收量：<span id="id_port_recv_bps"></span>/S
-			每秒发送量：<span id="id_port_send_bps"></span>/S	
+            <div class="pull-right" style="margin:5px 10px 5px 0">
+                                                    每秒接收量：<span id="id_port_recv_bps"></span>/S
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    每秒发送量：<span id="id_port_send_bps"></span>/S 
+            </div>
+			<canvas id="port_perf_chart" width="460" height="210" style="margin-left:10px;"></canvas><br/>				
 		</div>
     </div>
 </div>
