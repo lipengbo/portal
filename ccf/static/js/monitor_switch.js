@@ -35,9 +35,23 @@ var port_chart_data = {
     ]
 }
 
-function data_process(data){
-    unit = 'byte'
-    data = data/1024 //byte
+function data_process(data){    
+    if (data > 1024){
+		data = data/1024 //KB
+        if (data > 1024){
+			data = data/1024 //MB
+            if (data >1024){
+				data = data/1024 //GB
+			}
+                
+		}
+            
+
+	}
+    return Math.round(data);
+}
+
+function data_process_unit(data, unit){
     if (data > 1024){
 		data = data/1024 //KB
         unit = 'KB'
@@ -53,7 +67,7 @@ function data_process(data){
             
 
 	}
-    return Math.round(data) + unit
+    return unit
 }
 
 
@@ -120,11 +134,11 @@ function update_port_data(switch_id, br, port, flag){
 			pre_send_data = port_data['port_send_data']
 			new Chart(ctx_port).Line(port_chart_data, port_options);
 			if(flag){
-				document.getElementById('id_port_send').innerHTML = data_process(port_data['port_send_data']);
-				document.getElementById('id_port_recv').innerHTML = data_process(port_data['port_recv_data']);
+				document.getElementById('id_port_send').innerHTML = data_process(port_data['port_send_data']) + data_process_unit(port_data['port_send_data'], 'bit');
+				document.getElementById('id_port_recv').innerHTML = data_process(port_data['port_recv_data']) + data_process_unit(port_data['port_recv_data'], 'bit');
 			}
-			document.getElementById('id_port_send_bps').innerHTML = data_process(port_data['send_bps']);
-			document.getElementById('id_port_recv_bps').innerHTML = data_process(port_data['recv_bps']);
+			document.getElementById('id_port_send_bps').innerHTML = data_process(port_data['send_bps']) + data_process_unit(port_data['send_bps'], 'bit');
+			document.getElementById('id_port_recv_bps').innerHTML = data_process(port_data['recv_bps']) + data_process_unit(port_data['recv_bps'], 'bit');
 			
 			
 		}

@@ -296,13 +296,13 @@
         context.fillText(canvasTitle,55,13);        
     });
 
-	if(-1 == -1){
+	if( {{ host_id }} == -1){
 		document.getElementById("show_server").innerHTML = "<h4 class='text-center' style='margin-top:23%;'><small><i>当前没有添加服务器</i></small></h4>"
 	}else{
 		monitor_host({{ host_id }});
 	}
 	
-	if (-1 == -1){
+	if ({{ switch_id }} == -1){
 		document.getElementById("show_switch").innerHTML = "<h2>当前没有添加交换机</h2>"
 	}else{
 		get_br_info({{ switch_id }}, false);
