@@ -216,7 +216,7 @@
 
 <div class="row-fluid margin_rows">
     <div class="span6">
-        <div class="tp_block tp_charts">
+        <div class="tp_block tp_charts" id = "show_server">
 			<canvas id="manage_server_chart" width="439" height="230"></canvas>
 			<div>cpu:<span id="id_cpu_index"></span>%
 				 内存:<span id="id_mem_index"></span>%
@@ -224,7 +224,7 @@
 		</div>        
     </div>
     <div class="span6">
-        <div class="tp_block tp_charts">
+        <div class="tp_block tp_charts" id="show_switch">
 			<canvas id="port_perf_chart" width="430" height="230"></canvas><br/>	
 			每秒接收量：<span id="id_port_recv_bps"></span>/S
 			每秒发送量：<span id="id_port_send_bps"></span>/S	
@@ -361,8 +361,19 @@
         context.fillText(canvasTitle,55,13);        
     });
 
-	monitor_host({{ host_id }});
-	get_br_info({{ switch_id }}, false);
+	if({{ host_id }} == -1){
+		document.getElementById("show_server").innerHTML = "<h2>当前没有添加服务器</h2>"
+	}else{
+		monitor_host({{ host_id }});
+	}
+	
+	if ({{ switch_id }} = -1){
+		document.getElementById("show_switch").innerHTML = "<h2>当前没有添加交换机</h2>"
+	}else{
+		get_br_info({{ switch_id }}, false);
+	}
+	
+	
       
 </script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
