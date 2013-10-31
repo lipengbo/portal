@@ -37,10 +37,10 @@
                                     {% block nav %}
                                     	<ul class="nav">
                                             {% if user.is_superuser %}
-                                                <li class="active"><a href="{% url "manage_index" %}">首页</a></li>
-                                                <li><a href="{% url "project_index" %}">项目</a></li>
-                                                <li><a href="{% url "slice_list" 0 %}">slice</a></li>
-                                                <li class="dropdown base_device">
+                                                <li class="index_menu"><a href="{% url "manage_index" %}">首页</a></li>
+                                                <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>
+                                                <li class="slice_menu"><a href="{% url "slice_list" 0 %}">slice</a></li>
+                                                <li class="device_menu dropdown base_device">
                                                     <a href="{% url "global" %}">
                                                         基础设施
                                                         <b class="caret"></b>
@@ -54,8 +54,8 @@
                                                         <li><a href="{% url "nexus_list" "openflow" "flowvisor" %}"><i class="icon-cog"></i> {% trans "Flowvisor" %}</a></li>
                                                     </ul>
                                                 </li>
-                                                <li><a href="{% url "notifications:all" %}">消息日志</a></li>
-                                                <li><a href="#">系统配置</a></li>
+                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志</a></li>
+                                                <li class="system_menu"><a href="#">系统配置</a></li>
                                             {% else %}
 					                            <li class="active"><a href="/">首页</a></li>
 					                            <li><a href="{% url "project_manage" %}">项目</a></li>
@@ -145,6 +145,14 @@
                     $(".example-sites li").mouseleave(function(){
                         $(this).children(".close").stop(false,true).hide();
                     });
+                    
+                    //菜单下拉      
+                    $(".base_device").hover(function(){
+                          if(!$(".base_device_list").is(":animated")){
+                             $(".base_device_list").toggle();    
+                          }
+ 
+                    });     
                 });
             </script>
             {% block extra_script %}{% endblock %}
