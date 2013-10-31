@@ -18,20 +18,10 @@ img {
 </style>
 {% endblock %}
 {% block body_class %}home{% endblock %}
-{% block topbar_base %}{% endblock %}
-{% block breadcrumb_base %}{% endblock %}
+
 
 {% block body %}
-{% block blank_block %}{% endblock %}
-       	 <div class="top posit_re">
-       	 	<div class="logo">
-       		  <img src="{% static "img/logo.png" %}" width="400" align="baseline" />
-       	    </div>
-       	    <div class="begin_button">
-                <a href="{% url "project_manage" %}" class="btn btn-large btn-block btn-inverse">开始实验</a>
-       	    </div>
-       	 </div>
-		
+       	
 		 <ul id="tabs">
 		      <li class="active"><a href="#resource" data-toggle="tab">资源</a></li>
 		      <li><a href="#topology" data-toggle="tab">物理拓扑</a></li>   

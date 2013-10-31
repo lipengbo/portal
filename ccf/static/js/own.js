@@ -211,15 +211,7 @@ $(document).ready(function() {
      });
      
      //管理员首页轮播
-     $('#myCarousel').carousel();
-     
-     //菜单下拉      
-      $(".base_device").hover(function(){
-          if(!$(".base_device_list").is(":animated")){
-             $(".base_device_list").toggle();    
-          }
- 
-      });      
+     $('#myCarousel').carousel();          
        
 });
 
