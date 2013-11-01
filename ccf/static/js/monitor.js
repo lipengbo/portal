@@ -216,6 +216,7 @@ function get_performace_data(host_id, vm_id){
                 //alert('Get performace data error!');
             },
         success: function(performace_data){
+				net_options['scaleOverride'] = false;
 				cpu_values.shift();
 				cpu_values.push(performace_data['cpu_use']);
                 document.getElementById("cpu_percent").innerHTML = Math.round(performace_data['cpu_use']*100)/100;

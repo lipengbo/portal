@@ -39,7 +39,12 @@ def _get_fields(obj, only_name=False, for_display=True):
 
 @register.filter
 def get_value(obj, key):
-    return getattr(obj, key)
+    field = obj._meta.get_field_by_name(key)
+    if field and field[0].choices:
+        return getattr(obj, 'get_' + key + '_display')()
+    else:
+        return getattr(obj, key)
+
 
 @register.filter
 def get_class_name(obj):
