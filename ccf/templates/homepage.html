@@ -22,7 +22,16 @@ img {
 {% block breadcrumb %}基础设施{% endblock %}
 
 {% block body %}
-       	
+
+<div class="row-fluid">
+            <div class="span2"><a href="{% url "nexus_list" "project" "city" %}"><i class="icon-cog"></i> {% trans "City" %}</a></div>
+            <div class="span2"><a href="{% url "nexus_list" "project" "island" %}"><i class="icon-cog"></i> {% trans "Island" %}</a></div>
+            <div class="span2"><a href="{% url "nexus_list" "resources" "server" %}"><i class="icon-cog"></i> {% trans "Server" %}</a></div>
+            <div class="span2"><a href="{% url "nexus_list" "resources" "switch" %}"><i class="icon-cog"></i> {% trans "Switch" %}</a></div>
+            <div class="span2"><a href="{% url "nexus_list" "resources" "virtualswitch" %}"><i class="icon-cog"></i> {% trans "Virtual Switch" %}</a></div>
+            <div class="span2"><a href="{% url "nexus_list" "openflow" "flowvisor" %}"><i class="icon-cog"></i> {% trans "Flowvisor" %}</a></div>
+</div>
+
 		 <ul id="tabs">
 		      <li class="active"><a href="#resource" data-toggle="tab">资源</a></li>
 		      <li><a href="#topology" data-toggle="tab">物理拓扑</a></li>   
