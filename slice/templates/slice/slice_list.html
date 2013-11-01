@@ -26,13 +26,13 @@
     </div>
     <div class="fill_form">
         <fieldset>
-             <legend>
+             
                 {%if extent_html == "site_base.html" %}
-                我的Slice
+                <legend>我的Slice</legend>
                 {%else%}
-                Slice列表
+                <h3 class="list_title">虚网（Slice）</h3>
+                <p class="list_lead">青云为您提供一种随时获取的、弹性的计算能力，这种计算能力的体现就是<em>主机 (Instance)</em>。主机就是一台配置好了的服务器，它有您期望的硬件配置、操作系统和网络配置。通常情况下，您的请求可以在10秒到60秒的时间之内完成，所以您完全可以动态地、按需使用计算能力。</p>
                 {%endif%}
-             </legend>
              {% if not slices %}
                 {%if query %}
                 <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
