@@ -33,6 +33,13 @@
                 Slice列表
                 {%endif%}
              </legend>
+             {% if not slices %}
+                {%if query %}
+                <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                {%else%}
+                <p class="alert alert-info">当前没有SLICE</p>
+                {%endif%}
+             {% endif %}
              <div class="row-fluid">
              {%if slices %}
              {% for group in slices|group_by:2 %}
