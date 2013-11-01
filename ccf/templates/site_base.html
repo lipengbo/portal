@@ -40,19 +40,10 @@
                                                 <li class="index_menu"><a href="{% url "manage_index" %}">首页</a></li>
                                                 <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>
                                                 <li class="slice_menu"><a href="{% url "slice_list" 0 %}">slice</a></li>
-                                                <li class="device_menu dropdown base_device">
+                                                <li class="device_menu">
                                                     <a href="{% url "global" %}">
                                                         基础设施
-                                                        <b class="caret"></b>
                                                     </a>
-                                                    <ul class="dropdown-menu base_device_list">
-                                                        <li><a href="{% url "nexus_list" "project" "city" %}"><i class="icon-cog"></i> {% trans "City" %}</a></li>
-                                                        <li><a href="{% url "nexus_list" "project" "island" %}"><i class="icon-cog"></i> {% trans "Island" %}</a></li>
-                                                        <li><a href="{% url "nexus_list" "resources" "server" %}"><i class="icon-cog"></i> {% trans "Server" %}</a></li>
-                                                        <li><a href="{% url "nexus_list" "resources" "switch" %}"><i class="icon-cog"></i> {% trans "Switch" %}</a></li>
-                                                        <li><a href="{% url "nexus_list" "resources" "virtualswitch" %}"><i class="icon-cog"></i> {% trans "Virtual Switch" %}</a></li>
-                                                        <li><a href="{% url "nexus_list" "openflow" "flowvisor" %}"><i class="icon-cog"></i> {% trans "Flowvisor" %}</a></li>
-                                                    </ul>
                                                 </li>
                                                 <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志</a></li>
                                                 <li class="system_menu"><a href="#">系统配置</a></li>
