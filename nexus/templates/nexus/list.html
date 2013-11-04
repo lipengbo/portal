@@ -1,6 +1,7 @@
 {% extends "admin_base.html" %}
 {% load nexus_tags %}
 {% load i18n %}
+{% load staticfiles %}
 {% load endless %}
 
 {% block breadcrumb %}
@@ -14,7 +15,17 @@
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
+
+<ul class="nav nav-tabs base_device_tab">
+  <li class="active"><a href="#"><img src="{% static "img/cs.png" %}" width="20" />城市</a></li>
+  <li><a href="#"><i class="icon-sitemap"></i>节点</a></li>
+  <li><a href="#"><img src="{% static "img/fwq.png" %}" width="20" />服务器</a></li>
+  <li><a href="#"><img src="{% static "img/jhj.png" %}" width="20" />交换机</a></li>
+  <li><a href="#"><img src="{% static "img/fv.png" %}" width="20" />Flowvisor</a></li>
+</ul>
+
 {% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}
+
 <div class="well">
 <form action="" class="form-inline" method="get">
     <label for="id_island__city">城市：</label>
@@ -50,12 +61,12 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
-            <th>{{ class_verbose_name }}</th>
+            <th class="checkall" width="10%"><input type="checkbox" name="some_name" value=""></th>
+            <th width="20%">{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
-                <th>{{ field.verbose_name }}</th>
+                <th width="25%">{{ field.verbose_name }}</th>
             {% endfor %}
-            <th>{% trans "Action" %}</th>
+            <th width="20%">{% trans "Action" %}</th>
         </tr>
     </thead>
     <tbody>

@@ -6286,3 +6286,16 @@ table {
   line-height: 1.5;
   margin-bottom: 30px;
 }
+.base_device_tab img,
+.base_device_tab i {
+  margin-right: 10px;
+}
+.base_device_tab i {
+  font-size: 20px;
+  vertical-align: middle;
+  color: #993399;
+}
+.base_device_tab img {
+  width: 20px;
+  height: 20px;
+}

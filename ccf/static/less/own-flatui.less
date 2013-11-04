@@ -1,7 +1,7 @@
 @import "flatui-less/flat-ui.less";
 
 .login_bg {
-	background:#c9d7e7;
+	background:#fff;
 	min-width:980px;
 	.main {
 	    padding-top:0px;
@@ -21,10 +21,15 @@
 		font-family:"黑体";
 	}
 	.login-form {
+	    background:#bbb;
+	    .border-radius(0 0 6px 6px);
 		input {
 			height:auto;
-			width:299px;
+			width:299px;			
 		}	
+	}
+	.login-form:before {
+	    border-color: transparent #bbb transparent transparent;
 	}
 	.login-field {
 	    margin-bottom:0 !important;
