@@ -5320,7 +5320,8 @@ legend small {
   margin-bottom: 20px;
 }
 .navbar-inverse .navbar-inner {
-  background: #333 !important;
+  /*background: #333 !important;*/
+  background: #ffffff none repeat !important;
   background: #fff;
   filter: alpha(opacity=60);
   border-bottom: 1px solid #336699;
