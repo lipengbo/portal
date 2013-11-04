@@ -3866,7 +3866,7 @@ body.vjs-full-window {
   margin-left: 20px;
 }
 .login_bg {
-  background: #c9d7e7;
+  background: #fff;
   min-width: 980px;
 }
 .login_bg .main {
@@ -3886,9 +3886,18 @@ body.vjs-full-window {
   font-size: 70px;
   font-family: "黑体";
 }
+.login_bg .login-form {
+  background: #bbb;
+  -webkit-border-radius: 0 0 6px 6px;
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+}
 .login_bg .login-form input {
   height: auto;
   width: 299px;
+}
+.login_bg .login-form:before {
+  border-color: transparent #bbb transparent transparent;
 }
 .login_bg .login-field {
   margin-bottom: 0 !important;
