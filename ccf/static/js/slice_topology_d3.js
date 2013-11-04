@@ -167,9 +167,9 @@ function get_node(key){
     return;
 }
 
+var slice_id = $("#slice_id").text();
 function inittpdata(){
     //获取数据库中该slice的拓扑信息 
-    var slice_id = $("#slice_id").text();
     var topology_url = "http://" + window.location.host + "/slice/topology/"+slice_id+"/";
     $.ajax({
         type: "GET",
@@ -181,6 +181,17 @@ function inittpdata(){
             switches = data.switches;
             srcLinks = data.links;
             normals = data.normals;
+            max_bandwidth = data.max_bandwidth;
+            bandwidth = data.bandwidth;
+            //构造获取带宽的参数
+            for(var i=0; i< max_bandwidth.length; i++){
+                if(bd_data == ''){
+                    bd_data = bd_data + max_bandwidth[i].id;
+                }else{
+                    bd_data = bd_data + ',' + max_bandwidth[i].id;
+                }
+            }
+            //alert(bd_data);
             //获取数据库中该slice的交换机信息
             for(var i=0; i< switches.length; i++){
                 icon_data[2].key = switches[i].dpid;
@@ -221,10 +232,25 @@ function inittpdata(){
                     //nodes_data[src_node_id-1].have_port = true;
                     //nodes_data[dst_node_id-1].have_port = true;
                     if(src_node_id && dst_node_id){
+                        capacity = 0;
+                        pre_band = 0;
+                        src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port_name;
+                        dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port_name;
+                        for(var k=0; k< max_bandwidth.length; k++){
+                            if(src_id == max_bandwidth[k].id){
+                                capacity = max_bandwidth[k].bd;
+                                pre_band = bandwidth[k].bd;
+                                break;
+                            }else if(dst_id == max_bandwidth[k].id){
+                                capacity = max_bandwidth[k].bd;
+                                pre_band = bandwidth[k].bd;
+                                break;
+                            }  
+                        }
                         link = {source: nodes_data[src_node_id-1], target: nodes_data[dst_node_id-1], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
                             dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
-                            capacity: gre_ovs_capacity[i]};
+                            capacity: capacity, pre_band: pre_band, bandwidth: 0};
                         links.push(link);
                     }
                  }
@@ -254,6 +280,8 @@ function inittpdata(){
         }
     });
 }
+
+var bd_data = '';
 
 inittpdata();
 
@@ -318,6 +346,15 @@ function tick() {
   });
 }
 
+
+function bd_show(bandwidth){
+    if(bandwidth >= 1000000000){
+        bd = bandwidth/1000000000;
+        bd = bd.toFixed(2)
+        return ''+bd+'';
+    }
+}
+
 function highlight( data, element ) {
     //d3.select( element ).attr( "stroke", "black" );
     var content = "";
@@ -371,7 +408,10 @@ function highlight( data, element ) {
         content += "</table>";
         tooltip.showTooltip(content, d3.event);
    }else if(data.type == 'switchswitch'){
-        content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
+        bandwidth_show = bd_show(data.bandwidth);
+        capacity_show = bd_show(data.capacity);
+       // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
+        content += "<h6>带宽使用：" + data.bandwidth + "b/" + data.capacity + "</h6>";
         content += "<table class='table'>" + 
             "<tr><th>端口</th></tr>";
         content += "<tr><td>"; 
@@ -414,9 +454,10 @@ function restart() {
         var color = 'black';
         
         if (d.type == 'switchswitch') {
-            var rand_num = Math.random();
-            var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
-            d.bandwidth = bandwidth.toFixed(2);
+            //var rand_num = Math.random();
+           // var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
+            //d.bandwidth = bandwidth.toFixed(2);
+            var rand_num = d.bandwidth / d.capacity;
             if (rand_num < 0.3) {
                 color = 'green';   
             } else if (rand_num < 0.6) {
@@ -673,4 +714,65 @@ function random_refresh () {
         random_refresh();
     }, refresh_time);
 }
-random_refresh();
+
+var submit_data = {"info": bd_data};
+function random_refresh2 () {
+    setTimeout(function  () {
+        //alert('in');
+        check_url = "http://" + window.location.host + "/slice/update_links_bandwidths/"+slice_id+"/";
+        var ajax_ret = true;
+        $.ajax({
+                type: "POST",
+                url: check_url,
+                dataType: "json",
+                data: submit_data,
+                async: false, 
+                success: function(data) {
+                    if (data.bandwidth){
+                          var ph = path.selectAll('.link');
+                          bandwidth = data.bandwidth;
+                          ph.style("stroke", function (d) { 
+                            var color = 'black';
+                            
+                            if (d.type == 'switchswitch') {
+
+                                    capacity = 0;
+                                    pre_band = 0;
+                                    src_id = '' + d.source.yid + '_' + d.src_port_name;
+                                    dst_id = '' + d.target.yid + '_' + d.dst_port_name;
+                                    for(var k=0; k< bandwidth.length; k++){
+                                        if(src_id == bandwidth[k].id){
+                                            d.bandwidth = (bandwidth[k].bd - d.pre_band) * 1000 / refresh_time;
+                                            d.pre_band = bandwidth[k].bd;
+                                            break;
+                                        }else if(dst_id == max_bandwidth[k].id){
+                                            d.bandwidth = (bandwidth[k].bd - d.pre_band) * 1000 / refresh_time;
+                                            d.pre_band = bandwidth[k].bd;
+                                            break;
+                                        }  
+                                    }
+                                //d.bandwidth = bandwidth.toFixed(2);
+                                var rand_num = d.bandwidth / d.capacity;
+                                if (rand_num < 0.3) {
+                                    color = 'green';   
+                                } else if (rand_num < 0.6) {
+                                    color = 'yellow';
+                                } else if (rand_num < 0.9) {
+                                    color = 'orange';
+                                } else {
+                                    color = 'red';
+                                }
+                            }
+                            return color; 
+                        });
+                    }
+                },
+                error: function(data) {
+                   // alert("更新失败！");
+                }
+        });
+        refresh_time = Math.floor(Math.random() * 10000 + 2000 );
+        random_refresh2();
+    }, refresh_time);
+}  
+random_refresh2();
