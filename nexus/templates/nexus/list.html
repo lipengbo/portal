@@ -58,7 +58,7 @@
             <th>{% trans "Action" %}</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody class="checkboxs">
     {% for object in objects %}
         <tr>
             <td>
@@ -66,8 +66,8 @@
             </td>
             <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
-                <td title="{{ object|get_value:field.name}}">
-                {% if  object|get_value:field.name|length > 50 %}
+                <td title="{{ object|get_value:field.name}}" class="field.name">
+                {% if  object|get_value:field.name|truncatewords:"100000"|length > 50 %}
                     {{ object|get_value:field.name|slice:"50" }}...
                 {% else %}
                     {{ object|get_value:field.name }}
