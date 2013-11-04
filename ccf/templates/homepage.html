@@ -23,13 +23,13 @@ img {
 
 {% block body %}
 
-<div class="row-fluid">
-            <div class="span2"><a href="{% url "nexus_list" "project" "city" %}"><i class="icon-cog"></i> {% trans "City" %}</a></div>
-            <div class="span2"><a href="{% url "nexus_list" "project" "island" %}"><i class="icon-cog"></i> {% trans "Island" %}</a></div>
-            <div class="span2"><a href="{% url "nexus_list" "resources" "server" %}"><i class="icon-cog"></i> {% trans "Server" %}</a></div>
-            <div class="span2"><a href="{% url "nexus_list" "resources" "switch" %}"><i class="icon-cog"></i> {% trans "Switch" %}</a></div>
-            <div class="span2"><a href="{% url "nexus_list" "resources" "virtualswitch" %}"><i class="icon-cog"></i> {% trans "Virtual Switch" %}</a></div>
-            <div class="span2"><a href="{% url "nexus_list" "openflow" "flowvisor" %}"><i class="icon-cog"></i> {% trans "Flowvisor" %}</a></div>
+<div class="row-fluid margin_rows">
+            <div class="span2 text-center"><a href="{% url "nexus_list" "project" "city" %}"><i class="icon-cog"></i> {% trans "City" %}</a></div>
+            <div class="span2 text-center"><a href="{% url "nexus_list" "project" "island" %}"><i class="icon-cog"></i> {% trans "Island" %}</a></div>
+            <div class="span2 text-center"><a href="{% url "nexus_list" "resources" "server" %}"><i class="icon-cog"></i> {% trans "Server" %}</a></div>
+            <div class="span2 text-center"><a href="{% url "nexus_list" "resources" "switch" %}"><i class="icon-cog"></i> {% trans "Switch" %}</a></div>
+            <div class="span2 text-center"><a href="{% url "nexus_list" "resources" "virtualswitch" %}"><i class="icon-cog"></i> {% trans "Virtual Switch" %}</a></div>
+            <div class="span2 text-center"><a href="{% url "nexus_list" "openflow" "flowvisor" %}"><i class="icon-cog"></i> {% trans "Flowvisor" %}</a></div>
 </div>
 
 		 <ul id="tabs">
