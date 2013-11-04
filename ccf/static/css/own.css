@@ -5320,10 +5320,7 @@ legend small {
   margin-bottom: 20px;
 }
 .navbar-inverse .navbar-inner {
-  /*background: #333 !important;*/
-  background: #ffffff none repeat !important;
-  background: #fff;
-  filter: alpha(opacity=60);
+  background: #333;
   border-bottom: 1px solid #336699;
 }
 .navbar-inverse .nav > li > a:hover {
@@ -6129,9 +6126,9 @@ table {
   height: 585px;
   overflow: hidden;
   background: #fff;
-  -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
 }
 .tp_block.tp_charts {
   height: 250px;
