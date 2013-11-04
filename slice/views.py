@@ -15,7 +15,8 @@ from django.contrib import messages
 from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
-    stop_slice_api, get_slice_topology, delete_slice_api, slice_change_description
+    stop_slice_api, get_slice_topology, slice_change_description,\
+    get_links_bandwidths
 from plugins.openflow.controller_api import slice_change_controller
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
@@ -29,8 +30,6 @@ from slice.models import Slice
 
 from plugins.vt.forms import VmForm
 from resources.models import Server
-from plugins.common.ovs_client import get_switch_stat
-from resources.models import Switch
 
 
 @login_required
@@ -199,6 +198,7 @@ def detail(request, slice_id):
 def delete(request, slice_id, flag):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    user = request.user
     project_id = slice_obj.project.id
     if request.user.is_superuser or request.user == slice_obj.owner:
         try:
@@ -213,6 +213,8 @@ def delete(request, slice_id, flag):
         return HttpResponseRedirect(
             reverse("project_detail", kwargs={"id": project_id}))
     else:
+        if user.is_superuser:
+            project_id = 0
         return HttpResponseRedirect(
             reverse("slice_list", kwargs={"proj_id": project_id}))
 
@@ -331,31 +333,7 @@ def topology_d3(request):
     return render(request, 'slice/slice_topology.html', context)
 
 
-# def update_links_bandwidths(request):
-#     links = request.POST.get("links")
-#     for link in links:
-#         pre_bandwidth = link.bandwidth
-#         switch = get_object_or_404(Switch, id = link.src_id)
-#         switch_stat = get_switch_stat(switch.ip)
-#         recv_data = 0
-#         send_data = 0
-#         for br in switch_stat:
-#             if br['name'] == br_name:
-#                 for port in br['ports']:
-#                     if port['name'] == port_name:
-#                         recv_data = int(port['stats']['recv']['byte'])
-#                         send_data = int(port['stats']['send']['byte'])
-#         
-#     switch = get_object_or_404(Switch, id = switch_id)
-#     switch_stat = get_switch_stat(switch.ip)
-#     recv_data = 0
-#     send_data = 0
-#     for br in switch_stat:
-#         if br['name'] == br_name:
-#             for port in br['ports']:
-#                 if port['name'] == port_name:
-#                     recv_data = int(port['stats']['recv']['byte'])
-#                     send_data = int(port['stats']['send']['byte'])
-#     performace_port_data = {'port_recv_data' : recv_data, 'port_send_data' : send_data,
-#                             'recv_bps' : recv_data - int(pre_recv_data), 'send_bps' : send_data - int(pre_send_data)}
-#     return HttpResponse(json.dumps(performace_port_data))
+def update_links_bandwidths(request):
+    switchs_ports = request.POST.get("switchs_ports")
+    ret = get_links_bandwidths(switchs_ports)
+    return HttpResponse(json.dumps(ret))
