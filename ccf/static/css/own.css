@@ -5806,7 +5806,8 @@ table {
 .index fieldset legend {
   text-align: center;
 }
-.view_more {
+.view_more,
+.view_more:visited {
   color: #484848;
   font-weight: bold;
   -webkit-transition: all 1s ease-in-out;
@@ -5814,9 +5815,7 @@ table {
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
-.view_more:visited,
-.view_more:hover,
-.view_more:focus {
+.view_more:hover {
   color: #484848;
   font-weight: bold;
   -moz-transform: rotate(360deg);
