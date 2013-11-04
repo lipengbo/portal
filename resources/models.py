@@ -107,6 +107,7 @@ class Server(IslandResource):
     def admin_options():
         options = {
             'exclude_fields': ('name', 'password', 'username'),
+            'form_exclude_fields': ('cpu', 'disk', 'mem'),
         }
         return options
 

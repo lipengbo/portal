@@ -22,7 +22,10 @@ def _get_fields(obj, only_name=False, for_display=True):
             except AttributeError:
                 excludes = []
         else:
-            excludes = []
+            try:
+                excludes = list(clazz.admin_options()['form_exclude_fields'])
+            except AttributeError:
+                excludes = []
 
         excludes.append('id')
         excludes.append('password')
