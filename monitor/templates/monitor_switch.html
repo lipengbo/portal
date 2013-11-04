@@ -4,9 +4,12 @@
 {% block breadcrumb %}交换机监控{% endblock %}
 {% block body %}
     <ul class="nav nav-pills" id="br_info"></ul>
-	<div id="main_show">
-    	<canvas id="port_perf_chart" width="430" height="300"></canvas>
-		<table class="table table-bordered" width="100%" style="margin-bottom:0;">
+
+				<div id="current_br_port">
+				</div>
+				<div id="main_show">
+    			<canvas id="port_perf_chart" width="530" height="300"></canvas>
+					<table class="table table-bordered" width="100%" style="margin-bottom:0;">
                         <tbody>
                             <tr>
                                 <td width="9%"><img src="{% static "img/upload.png" %}" width="20" /></td>
@@ -18,14 +21,16 @@
                                 <td>总接收量：<span id="id_port_recv"></td>
                                 <td>每秒接收量：<span id="id_port_recv_bps">/S</td>
                             </tr>
-                            
                         </tbody>
                     </table>
+		
 	</div>
+	
 {% endblock %}
 {% block extra_script %}
 	<script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
-    <script src="{{ STATIC_URL }}js/monitor_switch.js" ></script>
+	<script src="{{ STATIC_URL }}js/common.js?v=1" ></script>
+    <script src="{{ STATIC_URL }}js/monitor_switch.js?v=1" ></script>
 	<script>
 		$(function(){
 			get_br_info({{ switch_id }}, true);

@@ -48,11 +48,10 @@
                                                 <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志</a></li>
                                                 <li class="system_menu"><a href="#">系统配置</a></li>
                                             {% else %}
-					                            <li class="active"><a href="/">首页</a></li>
-					                            <li><a href="{% url "project_manage" %}">项目</a></li>
-					                            <li><a href="{% url "notifications:all" %}">消息</a></li>
+					                            <li class="index_menu"><a href="{% url "project_manage" %}">首页</a></li>
+					                            <li class="news_menu"><a href="{% url "notifications:all" %}">消息</a></li>
 					                            <li><a href="#">权限</a></li>
-					                            <li><a href="#">帮助</a></li>
+					                            <li><a href="#" class="help_menu">帮助</a></li>
                                             {% endif %}
 					                    </ul>
                                         {% comment %}
@@ -87,8 +86,8 @@
                 {% endif %}
 		        {% endblock %}
 		        {% include "_messages.html" %}
-		         <div class="main_wrap">	
-		           <div class="main">	             		        
+		         <div class="">	
+		           <div class="main2">	             		        
     		        {% block body %}
     		        {% endblock %}	
     		       </div>                
