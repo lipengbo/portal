@@ -5291,7 +5291,7 @@ body {
 body {
   /* background:url(../img/body-bg.png) repeat; */
 
-  background: #eee;
+  background: #fff;
 }
 .main2 {
   padding-top: 20px;
@@ -5814,16 +5814,16 @@ table {
 .index fieldset legend {
   text-align: center;
 }
-.view_more {
-  color: #484848;
+.view_more,
+.view_more:visited {
+  color: #484848 !important;
   font-weight: bold;
   -webkit-transition: all 1s ease-in-out;
   -moz-transition: all 1s ease-in-out;
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
-.view_more:hover,
-.view_more:focus {
+.view_more:hover {
   color: #484848;
   font-weight: bold;
   -moz-transform: rotate(360deg);
@@ -6273,10 +6273,6 @@ table {
 .django-body .navbar-inverse .nav .create_menu > a .caret {
   border-top-color: #f89406;
   border-bottom-color: #f89406;
-}
-.table tr td,
-.table tr th {
-  background: #fff;
 }
 .table-striped tbody > tr:nth-child(odd) > td,
 .table-striped tbody > tr:nth-child(odd) > th {
