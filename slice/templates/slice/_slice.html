@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<li class="span6 slice_topology" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="span6 slice_topology" {% if extent_html == "site_base.html" and user != project.owner %}{% endif %}>
     {%if slices%}
     <a href="/slice/delete/{{ slice.id }}/2/" class="btn-delete close">×</a>
     {%else%}
@@ -42,9 +42,9 @@
                     <div>
                     <iframe scrolling="no" id="topologyiframe" width="250" height="320" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=320" frameborder="0"></iframe>
                     </div>
-                    <div class="slice_text">
+                 <!--   <div class="slice_text">
                         {{slice.description}}
-                    </div>
+                    </div>  -->
                 </div>
             </div>
         </div>

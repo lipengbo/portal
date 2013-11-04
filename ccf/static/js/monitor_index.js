@@ -52,7 +52,7 @@ function get_host_data(host_id){
         error: function(){
             //alert('Get performace data error!');
         },
-        success: function(performace_data){
+	success: function(performace_data){
 			cpu_values.shift();
 			cpu_values.push(performace_data['cpu_use']);
             //document.getElementById("cpu_percent").innerHTML = performace_data['cpu_use'];

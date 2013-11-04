@@ -13,6 +13,8 @@ from plugins.openflow.controller_api import slice_change_controller,\
 from plugins.vt.api import create_vm_for_gateway, delete_vm_for_gateway
 from resources.ovs_api import slice_add_ovs_ports
 from plugins.ipam.models import IPUsage
+from plugins.common.ovs_client import get_switch_stat
+from resources.models import Switch
 from django.db import transaction
 import time
 import datetime
@@ -315,6 +317,26 @@ def get_slice_topology(slice_obj):
     else:
         print 2
         return topology
+
+
+def get_links_bandwidths(switchs_ports):
+    ret = {}
+    for switch_ports in switchs_ports:
+        try:
+            switch = Switch.objects.get(id = switch_ports['id'])
+        except:
+            pass
+        else:
+            switch_stat = get_switch_stat(switch.ip)
+            recv_data = 0
+            send_data = 0
+            for br in switch_stat:
+                for port in br['ports']:
+                    if port['name'] in switch_ports['port_names']:
+                        recv_data = int(port['stats']['recv']['byte'])
+                        send_data = int(port['stats']['send']['byte'])
+                        ret[switch.id + '_' + port['name']] = recv_data + send_data
+    return ret
 
 
 def get_slice_resource(slice_obj):

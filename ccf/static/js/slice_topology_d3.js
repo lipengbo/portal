@@ -581,8 +581,9 @@ function restart() {
 
   // show node IDs
   g.append('svg:text')
-      .attr('x', function(d) { return d.width / 2 - d.x + 5; })
+      .attr('x', function(d) { return d.width / 2 ; })
       .attr('y', 4)
+      .attr('style', "text-anchor: start")
       .attr('class', 'id')
       .attr('fill', '#000')
       .text(function(d) { return d.name; });
