@@ -29,7 +29,8 @@ from slice.models import Slice
 
 from plugins.vt.forms import VmForm
 from resources.models import Server
-
+from plugins.common.ovs_client import get_switch_stat
+from resources.models import Switch
 
 
 @login_required
@@ -330,4 +331,31 @@ def topology_d3(request):
     return render(request, 'slice/slice_topology.html', context)
 
 
-
+# def update_links_bandwidths(request):
+#     links = request.POST.get("links")
+#     for link in links:
+#         pre_bandwidth = link.bandwidth
+#         switch = get_object_or_404(Switch, id = link.src_id)
+#         switch_stat = get_switch_stat(switch.ip)
+#         recv_data = 0
+#         send_data = 0
+#         for br in switch_stat:
+#             if br['name'] == br_name:
+#                 for port in br['ports']:
+#                     if port['name'] == port_name:
+#                         recv_data = int(port['stats']['recv']['byte'])
+#                         send_data = int(port['stats']['send']['byte'])
+#         
+#     switch = get_object_or_404(Switch, id = switch_id)
+#     switch_stat = get_switch_stat(switch.ip)
+#     recv_data = 0
+#     send_data = 0
+#     for br in switch_stat:
+#         if br['name'] == br_name:
+#             for port in br['ports']:
+#                 if port['name'] == port_name:
+#                     recv_data = int(port['stats']['recv']['byte'])
+#                     send_data = int(port['stats']['send']['byte'])
+#     performace_port_data = {'port_recv_data' : recv_data, 'port_send_data' : send_data,
+#                             'recv_bps' : recv_data - int(pre_recv_data), 'send_bps' : send_data - int(pre_send_data)}
+#     return HttpResponse(json.dumps(performace_port_data))
