@@ -5317,7 +5317,7 @@ legend small {
 .navbar-inverse .navbar-inner {
   background: #ffffff none repeat !important;
   background: #fff;
-  filter: alpha(opacity=60);
+  filter: alpha(opacity=100);
   border-bottom: 1px solid #336699;
 }
 .navbar-inverse .nav > li > a:focus,
@@ -5814,6 +5814,7 @@ table {
   -o-transition: all 1s ease-in-out;
   transition: all 1s ease-in-out;
 }
+.view_more:visited,
 .view_more:hover,
 .view_more:focus {
   color: #484848;
