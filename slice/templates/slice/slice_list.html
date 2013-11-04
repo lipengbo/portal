@@ -26,13 +26,20 @@
     </div>
     <div class="fill_form">
         <fieldset>
-             <legend>
+             
                 {%if extent_html == "site_base.html" %}
-                我的Slice
+                <legend>我的Slice</legend>
                 {%else%}
-                Slice列表
+                <h3 class="list_title">虚网（Slice）</h3>
+                <p class="list_lead">Slice可自动提取用户电子信箱内电子收据上的信息，包括发货通知、跟踪号码、退货政策和客户服务信息等，然后以一种清晰的模式保存，这样用户就不必再担心包裹何时到达，以及整个圣诞节期间的购物消费额等问题。</p>
                 {%endif%}
-             </legend>
+             {% if not slices %}
+                {%if query %}
+                <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                {%else%}
+                <p class="alert alert-info">当前没有SLICE</p>
+                {%endif%}
+             {% endif %}
              <div class="row-fluid">
              {%if slices %}
              {% for group in slices|group_by:2 %}
