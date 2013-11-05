@@ -122,7 +122,7 @@ class SwitchResource(IslandResource):
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     dpid = models.CharField(max_length=256)
-    has_gre_tunnel = models.BooleanField(default=False)
+    has_gre_tunnel = models.BooleanField(default=False, verbose_name=_("Has GRE tunnel"))
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 
     def __unicode__(self):
