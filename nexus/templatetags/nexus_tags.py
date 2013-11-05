@@ -19,12 +19,12 @@ def _get_fields(obj, only_name=False, for_display=True):
         if for_display:
             try:
                 excludes = list(clazz.admin_options()['exclude_fields'])
-            except AttributeError:
+            except :
                 excludes = []
         else:
             try:
                 excludes = list(clazz.admin_options()['form_exclude_fields'])
-            except AttributeError:
+            except :
                 excludes = []
 
         excludes.append('id')
@@ -58,3 +58,11 @@ def get_class_name(obj):
 def get_class_verbose_name(obj):
     name = obj._meta.verbose_name
     return name
+
+@register.filter
+def get_related_models(obj):
+    clazz = obj.__class__
+    try:
+        return clazz.admin_options()['related_models']
+    except :
+        return []

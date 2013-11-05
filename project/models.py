@@ -22,6 +22,13 @@ class City(models.Model):
     def __unicode__(self):
         return self.name
 
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', ),
+        }
+        return options
+
     class Meta:
         verbose_name = _("City")
 
