@@ -10,6 +10,8 @@ from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 from django.db.models import get_model
 from django.forms.models import modelform_factory
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 from nexus.templatetags.nexus_tags import get_fields
 from nexus.forms import BaseForm
@@ -18,11 +20,13 @@ import django_filters
 
 
 @login_required
+@staff_member_required
 def index(request):
     context = {}
     return render(request, 'nexus/index.html', context)
 
 @login_required
+@staff_member_required
 def list_objects(request, app_label, model_class):
     if request.method == 'POST':
         action_name = request.POST.get('action')
@@ -65,7 +69,9 @@ def get_islands(request):
     for island in islands:
         html += '<option value="' + str(island.id) + '">' + island.name + '</option>'
     return HttpResponse(html)
+
 @login_required
+@staff_member_required
 def add_or_edit(request, app_label, model_class, id=None):
     context = {}
     Model = get_model(app_label, model_class, False)
@@ -88,6 +94,7 @@ def add_or_edit(request, app_label, model_class, id=None):
     return render(request, 'nexus/add.html', context)
 
 @login_required
+@staff_member_required
 def delete_action(request, app_label, model_class, id=None):
     Model = get_model(app_label, model_class, False)
     if request.method == 'POST':
