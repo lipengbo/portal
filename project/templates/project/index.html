@@ -34,13 +34,19 @@
 
         <div class="fill_form">            
                     {%if extent_html == "site_base.html" %}
-                        <legend>我的项目</legend>
+                    <legend>我的项目</legend>
                     {%else%}
+                    <div class="well">
                         <h3 class="list_title">项目（Project）</h3>
                         <p class="list_lead">项目是一件事情、一项独一无二的任务，也可以理解为是在一定的时间和一定的预算内所要达到的预期目的。项目侧重于过程，它是一个动态的概念，例如我们可以把一条高速公路的建设过程视为项目，但不可以把高速公路本身称为项目。</p>
+                    </div>
                     {%endif%}
                 {% if not projects %}
-                    <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                    {% if query %}
+                        <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                    {% else %}
+                        <p class="alert alert-info">暂无记录</p>
+                    {% endif %}
                 {% else %}
                     {%if extent_html == "site_base.html" %}
                         <div class="alert alert-info">

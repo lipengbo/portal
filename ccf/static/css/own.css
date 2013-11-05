@@ -6299,3 +6299,40 @@ table {
   width: 20px;
   height: 20px;
 }
+.button-circle i {
+  font-size: 32px;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  display: block !important;
+}
+.button-circle span {
+  font-family: "Microsoft YaHei";
+}
+a.button-primary:hover,
+a.button-action:hover,
+a.button-highlight:hover,
+a.button-caution:hover,
+a.button-royal:hover {
+  text-decoration: none;
+  color: #fff;
+}
+a.button-primary:active {
+  background: #1495b7;
+  color: #005065;
+}
+a.button-action:active {
+  background: #76a312;
+  color: #374f00;
+}
+a.button-highlight:active {
+  background: #d8891e;
+  color: #8d5303;
+}
+a.button-caution:active {
+  background: #cd5240;
+  color: #952312;
+}
+a.button-royal:active {
+  background: #764479;
+  color: #3e1740;
+}
