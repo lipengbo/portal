@@ -26,11 +26,11 @@
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
 <div class="row-fluid margin_rows">
     <div class="span1"></div>
-    <div class="span2"><span class="button-wrap active"><a href="#" class="button button-circle button-primary"><i class="cs"></i>城市</a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-action"><i class="icon-sitemap"></i>节点</a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-highlight"><i class="fwq"></i>服务器</a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-caution"><i class="jhj"></i>交换机</a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-royal"><i class="fv"></i>Flowvisor</a></span></div>
+    <div class="span2"><span class="button-wrap {% if class_name == 'City' %}active{% endif %}"><a href="{% url nexus_list "project" "city" %}" class="button button-circle button-primary"><i class="cs"></i>城市</a></span></div>
+    <div class="span2"><span class="button-wrap {% if class_name == 'Island' %}active{% endif %}"><a href="{% url nexus_list "project" "island" %}" class="button button-circle button-action"><i class="icon-sitemap"></i>节点</a></span></div>
+    <div class="span2"><span class="button-wrap {% if class_name == 'Server' %}active{% endif %}"><a href="{% url nexus_list "resources" "server" %}" class="button button-circle button-highlight"><i class="fwq"></i>服务器</a></span></div>
+    <div class="span2"><span class="button-wrap {% if class_name == 'Switch' %}active{% endif %}"><a href="{% url nexus_list "resources" "switch" %}" class="button button-circle button-caution"><i class="jhj"></i>交换机</a></span></div>
+    <div class="span2"><span class="button-wrap {% if class_name == 'Flowvisor' %}active{% endif %}"><a href="{% url nexus_list "openflow" "flowvisor" %}" class="button button-circle button-royal"><i class="fv"></i>Flowvisor</a></span></div>
     <div class="span1"></div>
 </div>
 
