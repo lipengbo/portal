@@ -1075,17 +1075,31 @@ filter: alpha(opacity=100);
     }
 }
 
-
+a.button-circle:focus {
+    text-decoration:none;
+    color:#fff;
+}
 .button-circle {
+    font-family:"Microsoft YaHei";
+    font-size:16px;
     i {
-        font-size:32px;
+        font-size:34px;
         margin-top:25px;
         margin-bottom:10px;        
         display:block !important;
-        
+        height:34px;
     }
-    span {
-        font-family:"Microsoft YaHei";
+    i.cs {
+        background:url(../img/cs.png) no-repeat top center;
+    }
+    i.fwq {
+        background:url(../img/fwq.png) no-repeat top center;
+    }
+    i.jhj {
+        background:url(../img/jhj.png) no-repeat top center;
+    }
+    i.fv {
+        background:url(../img/fv.png) no-repeat top center;
     }
 }
 a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.button-royal {
@@ -1097,6 +1111,9 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
 a.button-primary:active {
   background: #1495b7;
   color: #005065;
+  i {
+      background:url(../img/cs1.png) no-repeat top center;
+  }
 }
 a.button-action:active {
   background: #76a312;
@@ -1105,12 +1122,60 @@ a.button-action:active {
 a.button-highlight:active {
   background: #d8891e;
   color: #8d5303;
+  i {
+      background:url(../img/fwq1.png) no-repeat top center;
+  }
 }
 a.button-caution:active {
   background: #cd5240;
   color: #952312;
+  i {
+      background:url(../img/jhj1.png) no-repeat top center;
+  }
 }
 a.button-royal:active {
   background: #764479;
   color: #3e1740;
+  i {
+      background:url(../img/fv1.png) no-repeat top center;
+  }
+}
+
+.button-wrap.active {
+  a.button-circle {
+      text-shadow: 0 1px 1px white;
+      box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px white;
+  }
+  a.button-primary {
+      background: #1495b7;
+      color: #005065;      
+      i {
+          background:url(../img/cs1.png) no-repeat top center;
+      }
+  }
+  a.button-action {
+      background: #76a312;
+      color: #374f00;
+  }
+  a.button-highlight {
+      background: #d8891e;
+      color: #8d5303;
+      i {
+          background:url(../img/fwq1.png) no-repeat top center;
+      }
+  }
+  a.button-caution {
+      background: #cd5240;
+      color: #952312;
+      i {
+          background:url(../img/jhj1.png) no-repeat top center;
+      }
+  }
+  a.button-royal {
+      background: #764479;
+      color: #3e1740;
+      i {
+          background:url(../img/fv1.png) no-repeat top center;
+      }
+  }    
 }
