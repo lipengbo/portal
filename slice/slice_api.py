@@ -266,7 +266,7 @@ def get_slice_topology(slice_obj):
                       'ports':ports}
             switches.append(switch)
             dpids.append(switch_obj.dpid)
-        print switches
+#         print switches
         switch_ports = slice_obj.get_switch_ports()
 #         for switch_port in switch_ports:
 #             switch_dpids.append(switch_port.switch.dpid)
@@ -276,6 +276,8 @@ def get_slice_topology(slice_obj):
 #             switches.append(switch)
     #     链接
         links = []
+        switch_ids = []
+        port_names = {}
         flowvisor = slice_obj.get_flowvisor()
         if flowvisor:
             link_objs = flowvisor.link_set.filter(
@@ -289,6 +291,22 @@ def get_slice_topology(slice_obj):
                         'dst_port': link_obj.target.port,
                         'dst_port_name': link_obj.target.name}
                 links.append(link)
+                if link_obj.source.switch.id in switch_ids:
+                    if link_obj.source.name not in port_names[link_obj.source.switch.id]:
+                        port_names[link_obj.source.switch.id].append(link_obj.source.name)
+                else:
+                    if link_obj.target.switch.id in switch_ids:
+                        if link_obj.target.name not in port_names[link_obj.target.switch.id]:
+                            port_names[link_obj.target.switch.id].append(link_obj.target.name)
+                    else:
+                        switch_ids.append(link_obj.source.switch.id)
+                        port_names[link_obj.source.switch.id] = [link_obj.source.name]
+    #     带宽
+        switchs_ports = []
+        for switch_id in switch_ids:
+            switchs_ports.append({'id': switch_id, 'port_names': port_names[switch_id]})
+        max_bandwidth = get_links_max_bandwidths(switchs_ports)
+        bandwidth = get_links_bandwidths(switchs_ports)
     #     虚拟机
         specials = []
         normals = []
@@ -309,7 +327,8 @@ def get_slice_topology(slice_obj):
                                'ip': vm.ip.ipaddr}
                     normals.append(vm_info)
         topology = {'switches': switches, 'links': links,
-                    'normals': normals, 'specials': specials}
+                    'normals': normals, 'specials': specials,
+                    'bandwidth': bandwidth, 'max_bandwidth': max_bandwidth}
     except Exception, ex:
         print 1
         print ex
@@ -320,7 +339,8 @@ def get_slice_topology(slice_obj):
 
 
 def get_links_bandwidths(switchs_ports):
-    ret = {}
+    print 'get_links_bandwidths'
+    ret = []
     for switch_ports in switchs_ports:
         try:
             switch = Switch.objects.get(id = switch_ports['id'])
@@ -335,7 +355,23 @@ def get_links_bandwidths(switchs_ports):
                     if port['name'] in switch_ports['port_names']:
                         recv_data = int(port['stats']['recv']['byte'])
                         send_data = int(port['stats']['send']['byte'])
-                        ret[switch.id + '_' + port['name']] = recv_data + send_data
+                        ret.append({'id': (str(switch.id) + '_' + port['name']), 'bd': (recv_data + send_data)})
+    return ret
+
+
+def get_links_max_bandwidths(switchs_ports):
+    print 'get_links_max_bandwidths'
+    ret = []
+    for switch_ports in switchs_ports:
+        try:
+            switch = Switch.objects.get(id = switch_ports['id'])
+        except:
+            pass
+        else:
+            for port in switch_ports['port_names']:
+                print 5
+                ret.append({'id': (str(switch.id) + '_' + port), 'bd': '1111000000'})
+                print 6
     return ret
 
 

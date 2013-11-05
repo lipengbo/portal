@@ -119,7 +119,8 @@ img {
 		  	    <thead>
                     <tr>
                         {%if extent_html == "site_base.html" %}
-                            <th width="20%">名称</th>
+                            <th width="10%">名称</th>
+                            <th width="10%">uuid</th>
                             <th width="15%">资源类型</th>
                             <th width="20%">IP地址</th>
                             {% if slice_obj.state == 1 %}
@@ -130,7 +131,8 @@ img {
                             {%endif%}
                                 <th width="25%">操作</th>
                         {%else%}
-                            <th width="20%">名称</th>
+                            <th width="10%">名称</th>
+                            <th width="10%">uuid</th>
                             <th width="20%">资源类型</th>
                             <th width="20%">IP地址</th>
                             {% if slice_obj.state == 1 %}
@@ -153,6 +155,7 @@ img {
                                 {{controller.name}}
                                 {%endif%}
                             </td>
+                            <td>uuid</td>
                             <td>控制器</td>
                             <td>{{controller.ip}}:{{controller.port}}</td>
                             <td>
@@ -224,6 +227,7 @@ img {
 			 		{%if gw %}
 				 		<tr>
 				 		    <td>gateway</td>
+				 		    <td>uuid</td>
 				 			<td>虚拟网关</td>
 				 			<td>{{gw.ip}}</td>
 				 			<td>{{gw.server.ip}}</td>
@@ -280,6 +284,7 @@ img {
 			 		{%if dhcp%}
 				 		<tr>
 				 		    <td>dhcp</td>
+				 		    <td>uuid</td>
 				 			<td>DHCP服务器</td>
 				 			<td>{{dhcp.ip}}</td>
 				 			<td>{{dhcp.server.ip}}</td>
@@ -337,6 +342,7 @@ img {
 			 		{%for vm in vms%}
 				 		<tr>
 				 			<td>{{vm.name}}</td>
+				 			<td>uuid</td>
 				 			<td>虚拟机</td>
 				 			<td>{{vm.ip}}</td>
 				 			<td>{{vm.server.ip}}</td>
