@@ -330,6 +330,7 @@ def topology_d3(request):
     context['slice_id'] = request.GET.get('slice_id')
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
+    context['top'] = request.GET.get('top')
     return render(request, 'slice/slice_topology.html', context)
 
 
