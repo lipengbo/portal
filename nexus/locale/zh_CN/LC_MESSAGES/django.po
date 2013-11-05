@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-30 02:20+0000\n"
+"POT-Creation-Date: 2013-11-04 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,8 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: templates/nexus/add.html:11 templates/nexus/list.html:23
+#: templates/nexus/add.html:11 templates/nexus/list.html:49
+#: templates/nexus/list.html.py:87
 msgid "Add"
 msgstr ""
 
@@ -30,18 +31,18 @@ msgstr ""
 msgid "Save"
 msgstr "保存"
 
-#: templates/nexus/list.html:22 templates/nexus/list.html.py:50
+#: templates/nexus/list.html:47 templates/nexus/list.html.py:85
 msgid "Delete"
 msgstr "删除"
 
-#: templates/nexus/list.html:33
+#: templates/nexus/list.html:60
 msgid "Action"
 msgstr "操作"
 
-#: templates/nexus/list.html:48
+#: templates/nexus/list.html:82
 msgid "Monitor"
 msgstr "监控"
 
-#: templates/nexus/list.html:49
+#: templates/nexus/list.html:84
 msgid "Edit"
 msgstr "编辑"

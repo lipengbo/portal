@@ -42,7 +42,11 @@
                     </div>
                     {%endif%}
                 {% if not projects %}
-                    <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                    {% if query %}
+                        <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+                    {% else %}
+                        <p class="alert alert-info">暂无记录</p>
+                    {% endif %}
                 {% else %}
                     {%if extent_html == "site_base.html" %}
                         <div class="alert alert-info">

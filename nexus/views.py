@@ -27,7 +27,7 @@ def list_objects(request, app_label, model_class):
     if request.method == 'POST':
         action_name = request.POST.get('action')
         if action_name == 'delete':
-            return delete_action(request, app_label, model_class)
+            delete_action(request, app_label, model_class)
     context = {}
     ModelClass = get_model(app_label, model_class, False)
     class NexusFilter(django_filters.FilterSet):
@@ -61,7 +61,7 @@ def list_objects(request, app_label, model_class):
 def get_islands(request):
     city_id = request.GET.get('city_id')
     islands = Island.objects.filter(city__id=city_id)
-    html = ''
+    html = '<option value="">---------</option>'
     for island in islands:
         html += '<option value="' + str(island.id) + '">' + island.name + '</option>'
     return HttpResponse(html)
@@ -97,4 +97,7 @@ def delete_action(request, app_label, model_class, id=None):
         if id:
             instance = get_object_or_404(Model, id=id)
             instance.delete()
+    redirect_url = request.GET.get('next')
+    if redirect_url:
+        return redirect(redirect_url)
     return redirect('nexus_list', app_label=app_label, model_class=model_class)

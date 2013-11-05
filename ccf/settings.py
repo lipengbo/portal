@@ -17,6 +17,7 @@ DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": "dev.db",
+        'TEST_CHARSET': 'UTF8',
     }
 }
 
@@ -39,7 +40,7 @@ DATABASES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Shanghai"
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -255,6 +256,7 @@ ACCOUNT_EMAIL_AUTHENTICATION = False
 ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
+ACCOUNT_EMAIL_UNIQUE = True
 
 EMAIL_HOST = 'mail.fnic.cn'
 EMAIL_PORT = '25'
