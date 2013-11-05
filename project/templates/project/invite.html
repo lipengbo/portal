@@ -40,7 +40,7 @@
                         <tr>
                             <td><input type="checkbox" name="user" value="{{ user.id }}" ></td>
                             <td>{{ user }}</td>
-                            <td></td>                         
+                            <td>{{ user.get_profile.organization|default:"未填写" }}</td>                         
                         </tr>
                         {% endfor %}
                     </tbody>
