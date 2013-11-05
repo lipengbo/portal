@@ -22,6 +22,10 @@ def _get_fields(obj, only_name=False, for_display=True):
                 excludes = list(clazz.admin_options()['exclude_fields'])
             except :
                 excludes = []
+            if clazz.__name__ == 'User':
+                excludes.append('password')
+                excludes.append('username')
+                excludes.append('date_joined')
         else:
             try:
                 excludes = list(clazz.admin_options()['form_exclude_fields'])
@@ -29,9 +33,6 @@ def _get_fields(obj, only_name=False, for_display=True):
                 excludes = []
 
         excludes.append('id')
-        excludes.append('password')
-        excludes.append('username')
-        excludes.append('date_joined')
         if field.name not in excludes:
             if not field.editable:
                 continue

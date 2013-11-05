@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-05 02:05+0000\n"
+"POT-Creation-Date: 2013-11-05 17:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,14 @@ msgstr ""
 #: models.py:60
 msgid "Island"
 msgstr ""
+
+#: models.py:70 models.py:87 models.py:122
+msgid "username"
+msgstr "用户名"
+
+#: models.py:71 models.py:88 models.py:123
+msgid "password"
+msgstr "密码"
 
 #: models.py:77
 msgid "Stopped"
