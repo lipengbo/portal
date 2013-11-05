@@ -8,7 +8,7 @@
     {% with ModelClass|get_class_verbose_name as class_verbose_name %}
     <a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a>
     <span class="divider">/</span>
-    {% trans "Add" %}{{ class_verbose_name }}
+    {% if formset.instance.id %}{% trans "Edit"%}{% else %}{% trans "Add" %}{% endif %}{{ class_verbose_name }}
     {% endwith %}
     {% endwith %}
 {% endblock %}
