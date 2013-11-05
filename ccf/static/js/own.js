@@ -309,6 +309,51 @@ function page_function3(){
 		}   
 	}
 	$("div#list_controller").append(str); 
+	//网关
+	var id_server_gw_obj = document.getElementById("id_server_gw_pp");
+    var gateway_ip_obj = document.getElementById("gateway_ip");
+    var dhcp_selected_obj = document.getElementById("dhcp_selected");
+    var id_server_gw_index;
+    if(id_server_gw_obj){
+        id_server_gw_index = id_server_gw_obj.selectedIndex;
+    }
+	$("div#list_gw").empty();
+    var str = "";
+    if(id_server_gw_obj && gateway_ip_obj && id_server_gw_obj.value && gateway_ip_obj.value){  
+        
+        str = str + "<table class=\"table\">"
+                + "<tbody><tr>"
+                        +"<td width=\"100\">网关宿主机：</td>"
+                        +"<td>"+ id_server_gw_obj.options[id_server_gw_index].text +"</td></tr>"
+                    +"<tr><td>网关IP地址：</td>"
+                        +"<td>"+ gateway_ip_obj.value +"</td></tr>";
+        
+        if(dhcp_selected_obj.checked){
+           str = str + "<tr><td colspan=2>"
+          // +"<label class=\"inline tab_checkbox\">"
+           //   +"<input type=\"checkbox\" value=\"dhcp\" id=\"dhcp_show\" checked disabled> 是否配置DHCP服务器</label></td></tr>";
+           +"配置DHCP服务器</td></tr>";
+           
+        }else{
+           str = str + "<tr><td colspan=2>"
+          // +"<label class=\"inline tab_checkbox\">"
+           //   +"<input type=\"checkbox\" value=\"dhcp\" id=\"dhcp_show\" disabled> 是否配置DHCP服务器</label></td></tr>";
+           +"未配置DHCP服务器</td></tr>";
+        }
+        str = str + "</tbody></table>";  
+    }else{
+        str = str + "<table class=\"table\">"
+                + "<tbody><tr>"
+                        +"<td>未配置</td>"                 
+        str = str + "</tr></tbody></table>"; 
+    }  
+
+    $("div#list_gw").append(str); 
+    //$("#dhcp_show").iCheck({
+    //        checkboxClass: 'icheckbox_square-blue',
+    //        radioClass: 'iradio_square-blue',
+    //        increaseArea: '20%' // optional
+   // });
         //虚拟机
         fetch_vminfo();
         return check_vminfo()
@@ -366,12 +411,18 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
-    if(dhcp_selected_obj.checked){ 
+    if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
        // alert(1); 
         dhcp_selected = 1; 
     }   
 	var controller_ip_port = controller_ip_port_obj.value.split(":");
     var user_id_obj = document.getElementById("user_id");
+    var id_server_gw_obj_value = 0;
+    var gateway_ip_obj_value = '';
+    if(id_server_gw_obj && gateway_ip_obj && id_server_gw_obj.value && gateway_ip_obj.value){
+        id_server_gw_obj_value = id_server_gw_obj.value;
+        gateway_ip_obj_value = gateway_ip_obj.value;
+    }
 	var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
 						"slice_description": slice_description_obj.value,
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
@@ -381,8 +432,8 @@ function submit_slice_info(project_id){
 						"controller_port": controller_ip_port[1],
 						"switch_port_ids": switch_port_ids,
 						"slice_nw": old_slice_nw_obj.value,
-						"gw_host_id": id_server_gw_obj.value,
-						"gw_ip": gateway_ip_obj.value,
+						"gw_host_id": id_server_gw_obj_value,
+						"gw_ip": gateway_ip_obj_value,
 						"dhcp_selected": dhcp_selected
 		};
 

@@ -1,17 +1,84 @@
 // set up SVG for D3
 var mode = "design";
-//var width  = 620,
- //   height = 300,
- //   colors = d3.scale.category10();
 
 var width  = $("#width").text(),
     height = $("#height").text(),
     colors = d3.scale.category10();
 
+function initboard(){
+    $("div#topology_top").empty();
+    var str = "";
+    str = str + "<svg id='svgc' width='100%' height='100%' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+    str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='15'>链路负载(%)</text>";
+    str = str + "<text style=\"fill:black;font-size:10pt\" x='95' y='15'>0~30</text>";
+    str = str + "<line x1='135' y1='10' x2='155' y2='10' style=\"stroke:green;stroke-width:2\"/>";
+    str = str + "<text style=\"fill:black;font-size:10pt\" x='165' y='15'>30~60</text>";
+    str = str + "<line x1='210' y1='10' x2='230' y2='10' style=\"stroke:yellow;stroke-width:2\"/>";
+    str = str + "<text style=\"fill:black;font-size:10pt\" x='240' y='15'>60~90</text>";
+    str = str + "<line x1='285' y1='10' x2='305' y2='10' style=\"stroke:orange;stroke-width:2\"/>";
+    str = str + "<text style=\"fill:black;font-size:10pt\" x='315' y='15'>90~100</text>";
+    str = str + "<line x1='365' y1='10' x2='385' y2='10' style=\"stroke:red;stroke-width:2\"/>";
+    str = str + "</svg>";
+    $("div#topology_top").append(str);
+}
+function initboard2(){
+    svg.append('svg:text')
+      .attr('x', 0)
+      .attr('y', 15)
+      .attr('style', "fill:black;font-size:8pt")
+      .text("链路负载(%)");
+    svg.append('svg:text')
+      .attr('x', 0)
+      .attr('y', 35)
+      .attr('style', "fill:black;font-size:8pt")
+      .text("0~30");
+    svg.append('svg:line')
+      .attr('x1', 40)
+      .attr('y1', 30)
+      .attr('x2', 60)
+      .attr('y2', 30)
+      .attr('style', "stroke:green;stroke-width:2")
+    svg.append('svg:text')
+      .attr('x', 70)
+      .attr('y', 35)
+      .attr('style', "fill:black;font-size:8pt")
+      .text("30~60");
+    svg.append('svg:line')
+      .attr('x1', 115)
+      .attr('y1', 30)
+      .attr('x2', 135)
+      .attr('y2', 30)
+      .attr('style', "stroke:yellow;stroke-width:2")
+    svg.append('svg:text')
+      .attr('x', 0)
+      .attr('y', 50)
+      .attr('style', "fill:black;font-size:8pt")
+      .text("60~90");
+    svg.append('svg:line')
+      .attr('x1', 40)
+      .attr('y1', 45)
+      .attr('x2', 60)
+      .attr('y2', 45)
+      .attr('style', "stroke:orange;stroke-width:2")
+    svg.append('svg:text')
+      .attr('x', 70)
+      .attr('y', 50)
+      .attr('style', "fill:black;font-size:8pt")
+      .text("60~100");
+    svg.append('svg:line')
+      .attr('x1', 115)
+      .attr('y1', 45)
+      .attr('x2', 135)
+      .attr('y2', 45)
+      .attr('style', "stroke:red;stroke-width:2")
+}
+//initboard()
+
 var svg = d3.select('.topology')
   .append('svg')
   .attr('width', width)
   .attr('height', height);
+
 var board = svg.append('svg:g')
     .call(d3.behavior.zoom().on("zoom", rescale))
     .on("dblclick.zoom", null)
@@ -19,7 +86,9 @@ var board = svg.append('svg:g')
     .on("mousemove", mousemove)
     .on("mousedown", mousedown)
     .on("mouseup", mouseup);
-    
+
+initboard2();
+   
 var tooltip = CustomTooltip( "posts_tooltip", 240 );
 
 var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
@@ -350,8 +419,20 @@ function tick() {
 function bd_show(bandwidth){
     if(bandwidth >= 1000000000){
         bd = bandwidth/1000000000;
-        bd = bd.toFixed(2)
-        return ''+bd+'';
+        bd = bd.toFixed(2);
+        return ''+bd+'Gb';
+    }else if(bandwidth >= 1000000){
+        bd = bandwidth/1000000;
+        bd = bd.toFixed(2);
+        return ''+bd+'Mb';
+    }else if(bandwidth >= 1000){
+        bd = bandwidth/1000;
+        bd = bd.toFixed(2);
+        return ''+bd+'Kb';
+    }else{
+        bd = bandwidth;
+        bd = bd.toFixed(2);
+        return ''+bd+'b';
     }
 }
 
@@ -411,7 +492,7 @@ function highlight( data, element ) {
         bandwidth_show = bd_show(data.bandwidth);
         capacity_show = bd_show(data.capacity);
        // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
-        content += "<h6>带宽使用：" + data.bandwidth + "b/" + data.capacity + "</h6>";
+        content += "<h6>带宽使用：" + bandwidth_show + "/" + capacity_show + "</h6>";
         content += "<table class='table'>" + 
             "<tr><th>端口</th></tr>";
         content += "<tr><td>"; 
@@ -690,7 +771,7 @@ var refresh_time = 10000;
 function random_refresh () {
     setTimeout(function  () {
         //alert('in');
-        refresh_time = Math.floor(Math.random() * 10000 + 2000 );
+        refresh_time = Math.floor(Math.random() * 10000 + 10000 );
         var ph = path.selectAll('.link');
           ph.style("stroke", function (d) { 
             var color = 'black';
