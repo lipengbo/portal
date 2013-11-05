@@ -78,7 +78,7 @@
             {% endfor %}
             <td>
                 <div class="btn-groups">
-                    {% if class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
+                    {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
