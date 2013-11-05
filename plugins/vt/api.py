@@ -61,7 +61,7 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         hostlist = [(host_server.id, host_server.ip)]
         serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
         if not serverid:
-            raise Exception('resource not enough')
+            raise Exception(_('resource not enough'))
         vm.server = Server.objects.get(id=serverid)
     vm.type = 2
     vm.save()

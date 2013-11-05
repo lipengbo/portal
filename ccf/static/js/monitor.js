@@ -11,25 +11,37 @@ var net_send_values = [];
 var disk_free;
 var disk_used
 var isScaleOverride = false;
+var data_y = [];
 
 
 
-for (var i=0; i<50; i++){
+for (var i=0; i<11; i++){
 	cpu_values[i] = 0 + "";
     cpu_values_x_lable[i] = "";
 }
+cpu_values_x_lable[10] = "0s";
+cpu_values_x_lable[5] = "5s";
+cpu_values_x_lable[0] = "10s";
 
-for (var i=0; i<50; i++){
+for (var i=0; i<11; i++){
 	mem_values[i] = 0 + "";
     mem_values_x_lable[i] = "";
 }
 
-for (var i=0; i<10; i++){
+mem_values_x_lable[10] = "0s";
+mem_values_x_lable[5] = "5s";
+mem_values_x_lable[0] = "10s";
+
+for (var i=0; i<11; i++){
 	net_values[i] = "";
 	net_recv_values[i] = 0;
 	net_send_values[i] = 0;
 	
 }
+
+net_values[10] = "0s";
+net_values[5] = "5s";
+net_values[0] = "10s"
 
 var cpu_chart_data = {
     labels : cpu_values_x_lable,
@@ -65,7 +77,8 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : false
+	scaleOverride : false,
+	scaleFontSize: 11
 	
 }
 
@@ -73,16 +86,16 @@ var net_chart_data = {
     labels : net_values,
     datasets : [
         {
-            fillColor : "rgba(153,204,255,0)",
-			strokeColor : "rgba(0,153,204,1)",
-			pointColor : "rgba(0,153,204,1)",
+            fillColor : "rgba(204,204,255,0)",
+			strokeColor : "rgba(204,0,51,1)",
+			pointColor : "rgba(204,0,51,1)",
             pointStrokeColor : "#fff",
             data : net_recv_values
         },
 		{
-            fillColor : "rgba(204,204,255,0)",
-			strokeColor : "rgba(204,0,51,0.8)",
-			pointColor : "rgba(204,0,51,0.8)",
+            fillColor : "rgba(153,204,255,0)",
+			strokeColor : "rgba(0,153,204,0.5)",
+			pointColor : "rgba(0,153,204,0.5)",
             pointStrokeColor : "#fff",
             data : net_send_values
         }
@@ -112,52 +125,6 @@ var disk_chart_data = [
 
 
 
-
-function count(data){
-	var sum = 0;
-	for(var i=0; i<data.length; i++){
-		sum += data[i];
-	}
-	return sum;
-}
-
-
-
-function data_process(data){    
-    if (data > 1024){
-		data = data/1024 //KB
-        if (data > 1024){
-			data = data/1024 //MB
-            if (data >1024){
-				data = data/1024 //GB
-			}
-                
-		}
-            
-
-	}
-    return Math.round(data);
-}
-
-function data_process_unit(data, unit){
-    if (data > 1024){
-		data = data/1024 //KB
-        unit = 'KB'
-        if (data > 1024){
-			data = data/1024 //MB
-            unit = 'MB'
-            if (data >1024){
-				data = data/1024 //GB
-                unit = 'GB'
-			}
-                
-		}
-            
-
-	}
-    return unit
-}
-
 //是否初始化net信息数组的标志位
 var flag = true; 
 var show_port_num = 0;
@@ -172,10 +139,11 @@ function switch_port(num){
 function show_net_content(num){
 	document.getElementById("id_net_send").innerHTML = data_process(net_info_content[num][0]) 
 													 + data_process_unit(net_info_content[num][0], 'bit');
-	document.getElementById("id_net_send_bps").innerHTML = net_info_content[num][1];
+	document.getElementById("id_net_send_bps").innerHTML = math_round(data_y[num][0]) + data_y[num][2];
 	document.getElementById("id_net_recv").innerHTML = data_process(net_info_content[num][2])
 												 + data_process_unit(net_info_content[num][2], 'bit');
-	document.getElementById("id_net_recv_bps").innerHTML = net_info_content[num][3];
+	document.getElementById("id_net_recv_bps").innerHTML = math_round(data_y[num][1]) + data_y[num][2];
+	document.getElementById("net_unit").innerHTML = data_y[num][2];
 }
 
 function show_port(num){
@@ -185,14 +153,13 @@ function show_port(num){
 	net_chart_data["datasets"][0]["data"] = ports[num][0];
 	net_chart_data["datasets"][1]["data"] = ports[num][1];
 	new Chart(ctx_net).Line(net_chart_data, net_options);
-	//document.getElementById("net_info").innerHTML = net_info_content[num];
 	show_net_content(num);
 }
 
 function change_port(option){
 	show_port_num = option;
+	$('#ports_info').val(option);
 	show_port(option);
-	//alert(net_info_content[arg.value]);
 	
 }
 var pre_net_data = [];
@@ -205,12 +172,12 @@ function get_performace_data(host_id, vm_id){
         url = '/monitor/update_performace_data/vm/';
         post_data = post_data + '&vm_id=' + vm_id;
     }
-    //alert('['+pre_net_data.toString() + ']');
     $.ajax({
         url: url,
         type: 'POST',
         data: post_data,
         dataType: 'json',
+		//async: false,
         timeout: 1000,
         error: function(){
                 //alert('Get performace data error!');
@@ -238,22 +205,33 @@ function get_performace_data(host_id, vm_id){
                 document.getElementById("disk_free").innerHTML ='<span style="background:#99cc66;"></span>未使用 : '
 								+ data_process(performace_data['disk_use']['free']) + data_process_unit(performace_data['disk_use']['free'], 'byte');
 
-                var port_info_content = "";//"<option selected>请选择网卡</option>";
-				//var net_info_content = [];
+                var port_info_content = "";
                 pre_net_data = [];
 				var num = 0;
+
+				/*
+				net_values.shift();
+				if(get_seconds()%2 == 0){
+					//alert(get_seconds());
+					net_values.push(clock());
+				}else{
+					net_values.push("");
+				}*/
+				
+
                 $.each(performace_data.net, function(port, data){
 					if(flag){
 						ports.push([]);
+						data_y.push([]);
 						ports[num][0] = net_recv_values.slice(0);
 						ports[num][1] = net_send_values.slice(0);
 					}
-					
+					data_y[num] = data_process_for_Y([data[2], data[3], 'bit'])
 					ports[num][0].shift();
-					ports[num][0].push(data[2]);
+					ports[num][0].push(data_y[num][0]);
 
 					ports[num][1].shift();
-					ports[num][1].push(data[3]);
+					ports[num][1].push(data_y[num][1]);
 
                     pre_net_data.push(data[0]+':'+data[1]);
 				
@@ -263,6 +241,7 @@ function get_performace_data(host_id, vm_id){
 
 					num++;
                 });
+
 				flag = false;
                 document.getElementById("ports_info").innerHTML = port_info_content;
 				//alert(pre_net_data)
