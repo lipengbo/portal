@@ -90,7 +90,6 @@ function update_port_data(switch_id, br, port, flag){
 		data : "switch_id=" + switch_id + "&br=" + br + "&port=" + port 
 				+ "&pre_recv_data=" + pre_recv_data +"&pre_send_data=" + pre_send_data,
 		dataType : 'json',
-		async: false,
 		timeout : 1000,
 		success : function(port_data){
 			port_options['scaleOverride'] = false;

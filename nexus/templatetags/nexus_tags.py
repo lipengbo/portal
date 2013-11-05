@@ -1,5 +1,6 @@
 from django.template.defaultfilters import register
 from django.conf import settings
+from django.db.models import get_model
 
 @register.filter
 def get_display_fields(obj, only_name=False):
@@ -19,10 +20,13 @@ def _get_fields(obj, only_name=False, for_display=True):
         if for_display:
             try:
                 excludes = list(clazz.admin_options()['exclude_fields'])
-            except AttributeError:
+            except :
                 excludes = []
         else:
-            excludes = []
+            try:
+                excludes = list(clazz.admin_options()['form_exclude_fields'])
+            except :
+                excludes = []
 
         excludes.append('id')
         excludes.append('password')
@@ -55,3 +59,16 @@ def get_class_name(obj):
 def get_class_verbose_name(obj):
     name = obj._meta.verbose_name
     return name
+
+@register.filter
+def get_related_models(obj):
+    clazz = obj.__class__
+    try:
+        related_models = clazz.admin_options()['related_models']
+        for model in related_models:
+            ModelClass = get_model(model['app_label'], model['model'], False)
+            name = ModelClass._meta.verbose_name
+            model['name'] = name
+        return related_models
+    except :
+        return []

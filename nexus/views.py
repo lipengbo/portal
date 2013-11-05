@@ -10,6 +10,8 @@ from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 from django.db.models import get_model
 from django.forms.models import modelform_factory
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 from nexus.templatetags.nexus_tags import get_fields
 from nexus.forms import BaseForm
@@ -18,16 +20,18 @@ import django_filters
 
 
 @login_required
+@staff_member_required
 def index(request):
     context = {}
     return render(request, 'nexus/index.html', context)
 
 @login_required
+@staff_member_required
 def list_objects(request, app_label, model_class):
     if request.method == 'POST':
         action_name = request.POST.get('action')
         if action_name == 'delete':
-            return delete_action(request, app_label, model_class)
+            delete_action(request, app_label, model_class)
     context = {}
     ModelClass = get_model(app_label, model_class, False)
     class NexusFilter(django_filters.FilterSet):
@@ -61,11 +65,13 @@ def list_objects(request, app_label, model_class):
 def get_islands(request):
     city_id = request.GET.get('city_id')
     islands = Island.objects.filter(city__id=city_id)
-    html = ''
+    html = '<option value="">---------</option>'
     for island in islands:
         html += '<option value="' + str(island.id) + '">' + island.name + '</option>'
     return HttpResponse(html)
+
 @login_required
+@staff_member_required
 def add_or_edit(request, app_label, model_class, id=None):
     context = {}
     Model = get_model(app_label, model_class, False)
@@ -88,6 +94,7 @@ def add_or_edit(request, app_label, model_class, id=None):
     return render(request, 'nexus/add.html', context)
 
 @login_required
+@staff_member_required
 def delete_action(request, app_label, model_class, id=None):
     Model = get_model(app_label, model_class, False)
     if request.method == 'POST':
@@ -97,4 +104,7 @@ def delete_action(request, app_label, model_class, id=None):
         if id:
             instance = get_object_or_404(Model, id=id)
             instance.delete()
+    redirect_url = request.GET.get('next')
+    if redirect_url:
+        return redirect(redirect_url)
     return redirect('nexus_list', app_label=app_label, model_class=model_class)

@@ -93,7 +93,8 @@ img {
         <fieldset>
             <legend>Slice拓扑</legend>
             <div class="row-fluid">
-                <div class="span2"></div>
+                <div class="span2">
+                </div>
                 <div class="span8">
                     <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300" frameborder="0"></iframe>
                     <!--<div id="content" style="background-color:#FFFFFF; width:100%; height:300px"></div>-->
@@ -305,7 +306,7 @@ img {
                                    <td>
                                         {% if dhcp.state == 8 %}
                                             <span id="dhcp_fc{{dhcp.id}}">
-                                                <input class="aa" type="checkbox" name="check_vm_ids" value="{{dhcp.id}}" checked style="display:none"/>
+                                                <!--<input class="aa" type="checkbox" name="check_vm_ids" value="{{dhcp.id}}" checked style="display:none"/>-->
                                                 <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ dhcp.id }}/create')" class="btn btn-success start_btn" disabled>启动</button>
                                                 <button type="button" onclick="" class="btn" disabled>登录</button> 
                                             </span>
