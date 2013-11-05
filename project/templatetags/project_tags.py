@@ -17,8 +17,7 @@ def resource_ratio(num, total):
 @register.simple_tag(takes_context=True)
 def get_total_resources(context):
     context['total_resource'] = Resource.registry['switch'].objects.count() + \
-            Resource.registry['server'].objects.count() + \
-            Resource.registry['controller'].objects.count()
+            Resource.registry['server'].objects.count()
     return ''
 
 @register.simple_tag(takes_context=True)
