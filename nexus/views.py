@@ -61,7 +61,7 @@ def list_objects(request, app_label, model_class):
 def get_islands(request):
     city_id = request.GET.get('city_id')
     islands = Island.objects.filter(city__id=city_id)
-    html = ''
+    html = '<option value="">---------</option>'
     for island in islands:
         html += '<option value="' + str(island.id) + '">' + island.name + '</option>'
     return HttpResponse(html)
