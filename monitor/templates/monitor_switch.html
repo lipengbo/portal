@@ -3,6 +3,7 @@
 {% load staticfiles %}
 {% block breadcrumb %}交换机监控{% endblock %}
 {% block body %}
+	<h4>交换机：{{ switch_name }} <span id="current_br"></span><span id="current_port"></span></h4>
     <ul class="nav nav-pills" id="br_info"></ul>
 
 				<div id="current_br_port">

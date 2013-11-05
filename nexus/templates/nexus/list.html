@@ -120,7 +120,7 @@
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
                     {% for related in object|get_related_models %}
-                    <a href="{% url nexus_add related.app_label related.model|lower %}" class="btn btn-small">{% trans "Add" %}{% trans related.model %}</a>
+                    <a href="{% url nexus_add related.app_label related.model|lower %}" class="btn btn-small">{% trans "Add" %}{% trans related.name %}</a>
                     {% endfor %}
                 </div>
             </td>

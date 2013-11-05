@@ -15,22 +15,33 @@ var data_y = [];
 
 
 
-for (var i=0; i<50; i++){
+for (var i=0; i<11; i++){
 	cpu_values[i] = 0 + "";
     cpu_values_x_lable[i] = "";
 }
+cpu_values_x_lable[10] = "0s";
+cpu_values_x_lable[5] = "5s";
+cpu_values_x_lable[0] = "10s";
 
-for (var i=0; i<50; i++){
+for (var i=0; i<11; i++){
 	mem_values[i] = 0 + "";
     mem_values_x_lable[i] = "";
 }
 
-for (var i=0; i<10; i++){
+mem_values_x_lable[10] = "0s";
+mem_values_x_lable[5] = "5s";
+mem_values_x_lable[0] = "10s";
+
+for (var i=0; i<11; i++){
 	net_values[i] = "";
 	net_recv_values[i] = 0;
 	net_send_values[i] = 0;
 	
 }
+
+net_values[10] = "0s";
+net_values[5] = "5s";
+net_values[0] = "10s"
 
 var cpu_chart_data = {
     labels : cpu_values_x_lable,
@@ -66,7 +77,8 @@ var mem_chart_data = {
 var net_options = {
 	pointDot : true,
 	bezierCurve : true,
-	scaleOverride : false
+	scaleOverride : false,
+	scaleFontSize: 11
 	
 }
 
@@ -148,6 +160,7 @@ function show_port(num){
 
 function change_port(option){
 	show_port_num = option;
+	$('#ports_info').val(option);
 	show_port(option);
 	
 }
@@ -166,6 +179,7 @@ function get_performace_data(host_id, vm_id){
         type: 'POST',
         data: post_data,
         dataType: 'json',
+		//async: false,
         timeout: 1000,
         error: function(){
                 //alert('Get performace data error!');
@@ -196,6 +210,17 @@ function get_performace_data(host_id, vm_id){
                 var port_info_content = "";
                 pre_net_data = [];
 				var num = 0;
+
+				/*
+				net_values.shift();
+				if(get_seconds()%2 == 0){
+					//alert(get_seconds());
+					net_values.push(clock());
+				}else{
+					net_values.push("");
+				}*/
+				
+
                 $.each(performace_data.net, function(port, data){
 					if(flag){
 						ports.push([]);
@@ -218,6 +243,7 @@ function get_performace_data(host_id, vm_id){
 
 					num++;
                 });
+
 				flag = false;
                 document.getElementById("ports_info").innerHTML = port_info_content;
 				//alert(pre_net_data)

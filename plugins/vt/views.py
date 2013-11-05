@@ -6,6 +6,7 @@
 # E-mail:lipengbo10054444@gmail.com
 import traceback
 import json
+import errno
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
@@ -59,7 +60,7 @@ def create_vm(request, sliceid, from_link):
                 vm.save()
                 return HttpResponse(json.dumps({'result': 0}))
             except Exception, e:
-                return HttpResponse(json.dumps({'result': 1, 'error': str(e)}))
+                return HttpResponse(json.dumps({'result': 1, 'error': str(e[0].encode('utf8'))}))
         return HttpResponse(json.dumps({'result': 1, 'error': 'vm invalide'}))
     else:
         vm_form = VmForm()
@@ -88,7 +89,10 @@ def do_vm_action(request, vmid, action):
                 vm.save()
                 return HttpResponse(json.dumps({'result': 0}))
         except Exception, e:
-            return HttpResponse(json.dumps({'result': 1, 'error': str(e)}))
+            errmsg = e[0]
+            if e[0] == errno.ECONNREFUSED:
+                errmsg = _("connection refused")
+            return HttpResponse(json.dumps({'result': 1, 'error': str(errmsg.encode('utf8'))}))
     return HttpResponse(json.dumps({'result': 1, 'error': 'operator failed!'}))
 
 

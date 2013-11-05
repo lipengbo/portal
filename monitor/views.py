@@ -20,7 +20,9 @@ def monitor_host(request, host_id):
     return render(request, "monitor_host_or_vm.html", {'host_id' : host_id, "vm_id" : 0})
 
 def monitor_switch(request, switch_id):
-    return render(request, "monitor_switch.html", {'switch_id' : switch_id})
+    switch = get_object_or_404(Switch, id=switch_id)
+    return render(request, "monitor_switch.html", {'switch_id' : switch_id,
+                                                   'switch_name' : switch.name})
 
 
 def get_br_info(request, switch_id):
