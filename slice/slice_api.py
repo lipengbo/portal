@@ -18,6 +18,7 @@ from resources.models import Switch
 from django.db import transaction
 import time
 import datetime
+import traceback
 
 import logging
 LOG = logging.getLogger("ccf")
@@ -48,7 +49,11 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
         print 7
         if gw_host_id and int(gw_host_id) > 0:
             print 8
-            gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enable_dhcp=enabled_dhcp)
+            try:
+                gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enable_dhcp=enabled_dhcp)
+            except Exception, ex:
+                LOG.debug(traceback.print_exc())
+                raise DbError("创建网关失败！")
             print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
         print 10
@@ -356,6 +361,9 @@ def get_links_bandwidths(switchs_ports):
                         recv_data = int(port['stats']['recv']['byte'])
                         send_data = int(port['stats']['send']['byte'])
                         ret.append({'id': (str(switch.id) + '_' + port['name']), 'bd': (recv_data + send_data)})
+                        switch_ports['port_names'].remove(port['name'])
+            for port_name in switch_ports['port_names']:
+                ret.append({'id': (str(switch.id) + '_' + port_name), 'bd': 0})
     return ret
 
 
