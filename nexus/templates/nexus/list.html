@@ -4,6 +4,10 @@
 {% load staticfiles %}
 {% load endless %}
 
+{% block extra_style %}
+<link rel="stylesheet" href="{% static "css/buttons.css" %}">   
+{% endblock %}
+
 {% block breadcrumb %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
@@ -15,7 +19,17 @@
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
+<div class="row-fluid margin_rows">
+    <div class="span1"></div>
+    <div class="span2"><span class=""><a href="#" class="button button-circle button-primary glow button-rounded"><img src="{% static "img/cs.png" %}" /><br />aaa</a></span></div>
+    <div class="span2"><span class=""><a href="#" class="button button-circle button-action glow button-rounded"></a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-highlight">press me</a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-caution">press me</a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-royal">press me</a></span></div>
+    <div class="span1"></div>
+</div>
 
+<!--
 <ul class="nav nav-tabs base_device_tab">
   <li class="active"><a href="#"><img src="{% static "img/cs.png" %}" width="20" />城市</a></li>
   <li><a href="#"><i class="icon-sitemap"></i>节点</a></li>
@@ -23,6 +37,7 @@
   <li><a href="#"><img src="{% static "img/jhj.png" %}" width="20" />交换机</a></li>
   <li><a href="#"><img src="{% static "img/fv.png" %}" width="20" />Flowvisor</a></li>
 </ul>
+-->
 
 {% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}
 
@@ -61,12 +76,12 @@
 <table class="table table-bordered">
     <thead>
         <tr>
-            <th class="checkall" width="10%"><input type="checkbox" name="some_name" value=""></th>
-            <th width="20%">{{ class_verbose_name }}</th>
+            <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
+            <th>{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
-                <th width="25%">{{ field.verbose_name }}</th>
+                <th>{{ field.verbose_name }}</th>
             {% endfor %}
-            <th width="20%">{% trans "Action" %}</th>
+            <th>{% trans "Action" %}</th>
         </tr>
     </thead>
     <tbody>
