@@ -212,7 +212,8 @@ $(document).ready(function() {
      
      //管理员首页轮播
      $('#myCarousel').carousel();          
-       
+     
+
 });
 
 
