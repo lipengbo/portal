@@ -6303,27 +6303,27 @@ a.button-circle:focus {
   text-decoration: none;
   color: #fff;
 }
-.button-circle {
+a.button-circle {
   font-family: "Microsoft YaHei";
   font-size: 16px;
 }
-.button-circle i {
+a.button-circle i {
   font-size: 34px;
   margin-top: 25px;
   margin-bottom: 10px;
   display: block !important;
   height: 34px;
 }
-.button-circle i.cs {
+a.button-circle i.cs {
   background: url(../img/cs.png) no-repeat top center;
 }
-.button-circle i.fwq {
+a.button-circle i.fwq {
   background: url(../img/fwq.png) no-repeat top center;
 }
-.button-circle i.jhj {
+a.button-circle i.jhj {
   background: url(../img/jhj.png) no-repeat top center;
 }
-.button-circle i.fv {
+a.button-circle i.fv {
   background: url(../img/fv.png) no-repeat top center;
 }
 a.button-primary:hover,
