@@ -6,6 +6,16 @@
 
 {% block extra_style %}
 <link rel="stylesheet" href="{% static "css/buttons.css" %}">   
+<style type="text/css">
+    .button-circle {
+        line-height:normal;
+    }
+    
+    .button-circle img {
+        margin-top:25px;
+        margin-bottom:10px;
+    }
+</style>
 {% endblock %}
 
 {% block breadcrumb %}
@@ -21,11 +31,11 @@
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
 <div class="row-fluid margin_rows">
     <div class="span1"></div>
-    <div class="span2"><span class=""><a href="#" class="button button-circle button-primary glow button-rounded"><img src="{% static "img/cs.png" %}" /><br />aaa</a></span></div>
-    <div class="span2"><span class=""><a href="#" class="button button-circle button-action glow button-rounded"></a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-highlight">press me</a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-caution">press me</a></span></div>
-    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-royal">press me</a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-primary"><img src="{% static "img/cs1.png" %}" /><br />aaa</a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-action"><i class="icon-sitemap"></i><span>节点</span></a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-highlight"><img src="{% static "img/cs1.png" %}" /><br />aaa</a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-caution"><img src="{% static "img/cs1.png" %}" /><br />aaa</a></span></div>
+    <div class="span2"><span class="button-wrap"><a href="#" class="button button-circle button-royal"><img src="{% static "img/cs1.png" %}" /><br />aaa</a></span></div>
     <div class="span1"></div>
 </div>
 

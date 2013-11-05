@@ -50,9 +50,10 @@
                         <span>网络流量(<span id="net_unit"></span>/s)</span>			        	
                     </h4>
                 </div>
-                <div class="content">
+                <div class="content"> 
+                    <span>(<span id="net_unit"></span>/s)</span>           
                     <select class="span4 pull-right" id="ports_info" onChange="change_port(this.options[this.options.selectedIndex].value)">                           
-                    </select>
+                    </select>                   
                     <canvas id="net_perf_chart" width="439" height="173"></canvas>
                     <table class="table table-bordered" width="100%" style="margin-bottom:0;">
                         <tbody>
