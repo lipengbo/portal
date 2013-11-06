@@ -106,7 +106,7 @@ class Server(IslandResource):
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('name', 'password', 'username'),
+            'exclude_fields': ('name', 'password', 'username', 'disk', 'mem', 'bandwidth'),
             'form_exclude_fields': ('cpu', 'disk', 'mem'),
             'related_models': [{'app_label': 'resources', 'model':'virtualswitch'}],
         }

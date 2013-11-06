@@ -90,7 +90,7 @@ def create_slice_api(project, name, description, island, user):
                 try:
                     slice_obj = Slice(owner=user,
                         name=name,
-#                         show_name=show_name,
+                        show_name=show_name,
                         description=description,
                         project=project,
                         date_expired=expiration_date)

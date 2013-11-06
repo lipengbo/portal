@@ -234,7 +234,11 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
             if(data.result==1)
             {
                 //alert('Failed to operator vm!')
-                alert(data.error)
+                //alert(data.error)
+                $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">" + data.error + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
             }
 
         }
