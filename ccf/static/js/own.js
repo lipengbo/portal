@@ -319,7 +319,7 @@ function page_function3(){
 	}
 	$("div#list_controller").append(str); 
 	//网关
-	var id_server_gw_obj = document.getElementById("id_server_gw_pp");
+	var id_server_gw_obj = document.getElementById("id_server_gw");
     var gateway_ip_obj = document.getElementById("gateway_ip");
     var dhcp_selected_obj = document.getElementById("dhcp_selected");
     var id_server_gw_index;
