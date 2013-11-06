@@ -6061,6 +6061,10 @@ table {
   width: 300px;
   margin-left: -150px;
 }
+#slicealertModal {
+  width: 300px;
+  margin-left: -150px;
+}
 .modal.fade.in {
   top: 30%;
 }

@@ -123,7 +123,7 @@ def list(request, proj_id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
-            slice_objs = slice_objs.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            slice_objs = slice_objs.filter(Q(show_name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
     context['slices'] = slice_objs
     return render(request, 'slice/slice_list.html', context)
@@ -190,7 +190,7 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
-    context['extent_html'] = "site_base.html"
+#     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 

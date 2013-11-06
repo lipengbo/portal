@@ -461,12 +461,20 @@ function submit_slice_info(project_id){
 	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
 	            }
 	            else{
-	            	alert(data.error_info);
+	            	//alert(data.error_info);
+	            	$("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
 	            	ajax_ret = false;
 	            }
 	        },
 	        error: function(data) {
-	        	alert("创建slice异常！");
+	        	//alert("创建slice异常！");
+	        	$("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">" + "创建slice异常！" + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
 	        }
 	});
 	if(ajax_ret){
