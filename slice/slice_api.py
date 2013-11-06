@@ -83,9 +83,14 @@ def create_slice_api(project, name, description, island, user):
 #                 date_delta = datetime.timedelta(seconds=5)
                 date_delta = datetime.timedelta(days=30)
                 expiration_date = date_now + date_delta
+                slice_names = name.split('_')
+                if len(slice_names) > 1:
+                    del slice_names[-1]
+                show_name = ('_').join(slice_names)
                 try:
                     slice_obj = Slice(owner=user,
                         name=name,
+#                         show_name=show_name,
                         description=description,
                         project=project,
                         date_expired=expiration_date)

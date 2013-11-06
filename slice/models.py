@@ -19,6 +19,7 @@ SLICE_STATES = (
 class Slice(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
+#     show_name = models.CharField(max_length=256)
     description = models.TextField()
     project = models.ForeignKey(Project)
     date_created = models.DateTimeField(auto_now_add=True)
