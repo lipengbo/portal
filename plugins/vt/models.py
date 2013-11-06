@@ -72,7 +72,7 @@ class Flavor(models.Model):
     hdd = models.IntegerField()
 
     def __unicode__(self):
-        return self.name
+        return _(self.name)
 
     class Meta:
         verbose_name = _("Flavor")

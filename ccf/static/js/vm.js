@@ -23,19 +23,19 @@ function check_vm_name(obj){
                 if(obj.value.length > 0){
                         if(!reg.test(obj.value))
                         {
-                                showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
+                               // showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
                                 results[i] = false;
                         }
                         else
                         {
-                                showInfo(info,"√","green");
+                               // showInfo(info,"√","green");
                                 results[i] = true;
                         }
                 
                 }
                 else
                 {
-                        showInfo(info," * 该项为必填项","red");
+                       // showInfo(info," * 该项为必填项","red");
                         results[i] = false;
                 }	
         }
@@ -47,18 +47,22 @@ function check_vm_name(obj){
         return result
 }
 
-function desc_msg(obj, value){
-	var data = "name="+obj+"&obj_id="+value;
+function desc_msg(name, value, i){
+	var data = "name="+name+"&obj_id="+value;
 	$.ajax({
 		url : '/plugins/vt/get_flavor_msg/',
 		type : 'POST',
 		data: data,
 		dataType: 'json',
 		success:function(data){
-			if(obj=='flavor'){
-				//alert(data['cpu']);		
-			}else if(obj == 'image'){
+			if(name == 'flavor'){
+				$('[name="cpu"]')[i].innerHTML = data['cpu'];
+				$('[name="ram"]')[i].innerHTML = data['ram'];
+				$('[name="hdd"]')[i].innerHTML = data['hdd'];		
+			}else if(name == 'image'){
 				//alert(data['username']);
+				$('[name="username"]')[i].innerHTML = data['username'];
+				$('[name="password"]')[i].innerHTML = data['password'];
 			}
 		}
 	});
@@ -79,23 +83,24 @@ function check_vm_select(obj){
                obj = objs[i];
                info = infos[i];
                if(obj.selectedIndex == 0){
-                       showInfo(info," * 该项为必填项","red")
+                       //showInfo(info," * 该项为必填项","red")
                         results[i] = false;
                }
                else
                {
-                       showInfo(info,"√","green");
+                       //showInfo(info,"√","green");
                        results[i] = true
 					   if(field == 'flavor'){
-							//desc_msg('flavor', $('#id_flavor').val());
-							alert('hhhhh');
-							alert(obj.value)
+							$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
+							desc_msg('flavor', obj.value, i);
+							
 						}
 						else if(field == 'image'){
-							//desc_msg('image', $('#id_image').val());						
+							$('[name="image_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
+							desc_msg('image', obj.value, i);				
 						}
 						else if(field == 'server'){
-							document.getElementById('server_msg').innerHTML = $('#id_server').find("option:selected").text();				
+							$('[name="server_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
 						}
                }	
         }
