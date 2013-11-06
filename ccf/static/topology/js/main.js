@@ -72,7 +72,7 @@ var svg = svg_obj.append('g')
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
-    .attr('fill', 'white');
+    .attr('fill', '#eee');
 var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
 var gre_ovs_capacity = [];
 for (var i = 0; i < gre_ovses.length; i++) {
