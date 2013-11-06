@@ -22,9 +22,10 @@
 {% endblock %}
 
 {% block body %}
+默认登录用户名{{vm.image.username}}，密码{{vm.image.password}}，登录虚拟机后请修改密码！
 {% if vm.state == 1 %}
   <div id="vncviewer">
-    <applet archive="/site_media/static/java/vncviewer.jar" code="com.tightvnc.vncviewer.VncViewer" width="800" height="600">
+    <applet archive="/site_media/static/java/vncviewer.jar" code="com.tightvnc.vncviewer.VncViewer" width="800" height="700">
       <param name="SOCKETFACTORY" value="com.tightvnc.vncviewer.SshTunneledSocketFactory">
       <param name="SSHHOST" value="{{ tunnel_host }}">
       <param name="HOST" value="{{ host_ip }}">
