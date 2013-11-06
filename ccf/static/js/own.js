@@ -19,7 +19,7 @@ $(document).ready(function() {
         var spans_info = $(".sec_block").last().find("span");
         for (var i=0; i<spans_info.length; i++){
             spans_info[i].innerHTML = '';
-        }
+        } 
 		$(".sec_block").last().find("input[type='text']").val("");
 		$(".sec_block").last().find("input[type='checkbox']").next().remove();
 		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue');
