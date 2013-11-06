@@ -32,8 +32,8 @@ $(document).ready(function() {
 		$(".sec_block").last().find(".del").css("visibility","visible");
 		$(".sec_block:odd").css("background","#d9edf7");
 		$(".del").click(function(){
-           $(this).parent(".operate_btn").parent(".sec_block").remove();
-           $(".sec_block").css("background","#dff0d8");
+           $(this).parent(".operate_btn").parent(".span5").parent(".vm_well_wrap").parent(".sec_block").remove();
+           $(".sec_block").css("background","#ffe3e6");
            $(".sec_block:odd").css("background","#d9edf7");
         });
 	});

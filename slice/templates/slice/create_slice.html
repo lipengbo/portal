@@ -303,63 +303,112 @@
               </div>
              </div>     
              <div class="tab_part">
-                 <fieldset class="base_info vm_info_list tooltip-demo">
+                 <fieldset class="vm_info_list tooltip-demo">
                  <legend>虚拟机信息</legend>
-                 <div class="sec_block">
-		          <table class="table">             
-                    <tbody>
-                        <tr>
-                            <td width="20%">名称</td>
-                            <td width="30%">
-				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />				
-                            </td>                           
-                            <td>
-                                <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span>
-                            </td>                           
-                        </tr>
-                        <tr>
-                            <td>模板类型</td>
-                            <td>
-                                {{ vm_form.flavor }}                               
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>				
-                            </td>
-                            <td>
-                                {{vm_form.flavor.errors}}
-                                <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
-                            </td>
-                            <!--
-                            <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
-                            -->
-                        </tr>
-                        <tr>
-                            <td>镜像类型</td>
-                            <td>{{ vm_form.image }}</td>
-                            <td>
-                                {{vm_form.image.errors}}
-                                <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>关联网络节点</td>
-                            <td>
-                                <select onblur="check_vminfo()" name="server" id="id_server">
-                                </select>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>				
-                            </td>
-                            
-                            <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span></td>
-                            
-                        </tr>
-                    </tbody>
-                 </table>
-                 <label>
-                                {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                                                                     是否启动DHCP
-                 </label>
-                 <div class="operate_btn">
-                    <button class="btn btn-inverse del" type="button">删 除</button>
-                 </div>
-                </div>          
+                 <div class="sec_block"> 
+                   <div class="row-fluid vm_well_wrap"> 
+                     <div class="span5 base_info">        
+    		          <table class="table">             
+                        <tbody>
+                            <tr>
+                                <td width="30%">名称</td>
+                                <td>
+    				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />	
+    				                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a>             			
+                                </td>                           
+                              <!--  <td>
+                                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span> 
+                                </td>     -->                      
+                            </tr>
+                            <tr>
+                                <td>模板类型</td>
+                                <td>
+                                    {{ vm_form.flavor }}                               
+                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>				
+                                </td>
+                          <!--      <td>
+                                    {{vm_form.flavor.errors}}
+                                    <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
+                            </td>  -->
+                                <!--
+                                <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
+                                -->
+                            </tr>
+                            <tr>
+                                <td>镜像类型</td>
+                                <td>
+                                    {{ vm_form.image }}
+                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a>             
+                                </td>
+                           <!--     <td>
+                                    {{vm_form.image.errors}}
+                                    <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
+                            </td>   -->
+                            </tr>
+                            <tr>
+                                <td>关联网络节点</td>
+                                <td>
+                                    <select onblur="check_vminfo()" name="server" id="id_server">
+                                    </select>
+                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>				
+                                </td>
+                                
+                            <!--    <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span></td>
+                          -->      
+                            </tr>
+                        </tbody>
+                     </table>                                
+                     <label>
+                                    {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+                                                                         是否启动DHCP
+                     </label>
+                     <div class="operate_btn">
+                        <button class="btn btn-inverse del" type="button">删 除</button>
+                     </div>
+                   </div>
+                   <div class="span7">
+                       <div class="vm_well">
+                           <h4>虚拟机配置</h4>
+                           <table class="table table-bordered table-condensed">
+                               <tbody>
+                                   <tr>
+                                      <td width="80">类型：</td>
+                                      <td colspan="5">微型</td>
+                                   </tr>
+                                   <tr>
+                                       <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU：</td>
+                                       <td>二核</td>
+                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存：</td>
+                                       <td>8G</td>
+                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘：</td>
+                                       <td>800M</td>
+                                   </tr>
+                                   <tr>
+                                      <td>宿主机：</td>
+                                      <td colspan="5">server-20.7</td>
+                                   </tr>
+                                   <tr>
+                                      <td>镜像：</td>
+                                      <td colspan="5">server-20.7</td>
+                                   </tr>
+                                   <tr>
+                                      <td>宿主机：</td>
+                                      <td colspan="5">Ubuntu server</td>
+                                   </tr>
+                                   <tr>
+                                      <td>用户名：</td>
+                                      <td colspan="5">xxxxxxx</td>
+                                   </tr>
+                                   <tr>
+                                      <td>密码：</td>
+                                      <td colspan="5">xxxxx</td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                       </div>
+                   </div> 
+                 </div>                
+               </div>          
               </fieldset>
               <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>               
               <div class="form-actions">
