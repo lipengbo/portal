@@ -64,7 +64,7 @@ function initboard2(){
       .attr('x', 70)
       .attr('y', 50)
       .attr('style', "fill:black;font-size:8pt")
-      .text("60~100");
+      .text("90~100");
     svg.append('svg:line')
       .attr('x1', 115)
       .attr('y1', 45)
