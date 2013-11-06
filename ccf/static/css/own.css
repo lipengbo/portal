@@ -6331,11 +6331,13 @@ a.button-royal:hover {
   text-decoration: none;
   color: #fff;
 }
-a.button-primary:active {
+a.button-primary:active,
+a.button-primary:visited {
   background: #1495b7;
   color: #005065;
 }
-a.button-primary:active i {
+a.button-primary:active i,
+a.button-primary:visited i {
   background: url(../img/cs1.png) no-repeat top center;
 }
 a.button-action:active {
