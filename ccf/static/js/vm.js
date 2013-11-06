@@ -47,7 +47,21 @@ function check_vm_name(obj){
         return result
 }
 
-function desc_flavor(value){
+function desc_msg(obj, value){
+	var data = "name="+obj+"&obj_id="+value;
+	$.ajax({
+		url : '/plugins/vt/get_flavor_msg/',
+		type : 'POST',
+		data: data,
+		dataType: 'json',
+		success:function(data){
+			if(obj=='flavor'){
+				//alert(data['cpu']);		
+			}else if(obj == 'image'){
+				//alert(data['username']);
+			}
+		}
+	});
 	
 }
 
@@ -73,7 +87,15 @@ function check_vm_select(obj){
                        showInfo(info,"√","green");
                        results[i] = true
 					   if(field == 'flavor'){
-							desc_flavor($('#id_flavor').val());
+							//desc_msg('flavor', $('#id_flavor').val());
+							alert('hhhhh');
+							alert(obj.value)
+						}
+						else if(field == 'image'){
+							//desc_msg('image', $('#id_image').val());						
+						}
+						else if(field == 'server'){
+							document.getElementById('server_msg').innerHTML = $('#id_server').find("option:selected").text();				
 						}
                }	
         }

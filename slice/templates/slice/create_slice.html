@@ -317,6 +317,7 @@
                             </td>                           
                             <td>
                                 <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span>
+								
                             </td>                           
                         </tr>
                         <tr>
@@ -328,6 +329,7 @@
                             <td>
                                 {{vm_form.flavor.errors}}
                                 <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
+								<span id="flavor_msg"></span>
                             </td>
                             <!--
                             <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
@@ -339,17 +341,20 @@
                             <td>
                                 {{vm_form.image.errors}}
                                 <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
+								<span id="image_msg"></span>
                             </td>
                         </tr>
                         <tr>
-                            <td>关联网络节点</td>
+                            <td>宿主机</td>
                             <td>
                                 <select onblur="check_vminfo()" name="server" id="id_server">
                                 </select>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>				
                             </td>
                             
-                            <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span></td>
+                            <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
+								<span id="server_msg"></span>				
+							</td>
                             
                         </tr>
                     </tbody>
@@ -491,6 +496,7 @@
         $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
             delete selected_ports[$(this).val()];
         });
+
     });
 </script> 
 <script src="{{ STATIC_URL}}js/own.js"></script>
