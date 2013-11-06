@@ -190,7 +190,7 @@ def detail(request, slice_id):
             if vm.state == 8:
                 context['check_vm_status'] = 1
                 break
-#     context['extent_html'] = "site_base.html"
+    context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 

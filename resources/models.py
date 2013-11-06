@@ -67,8 +67,8 @@ class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField()
     http_port = models.IntegerField()
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, verbose_name=_("username"))
+    password = models.CharField(max_length=20, verbose_name=_("password"))
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     #: served on a ComputeResource like Server or VirtualMachine
@@ -84,8 +84,8 @@ class ServiceResource(IslandResource):
 
 
 class Server(IslandResource):
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, verbose_name=_("username"))
+    password = models.CharField(max_length=20, verbose_name=_("password"))
     state = models.IntegerField(null=True, verbose_name=_("state"), choices=((0, _("Not available")), (1, _("Available"))))
     cpu = models.CharField(max_length=256, null=True, default=0)
     mem = models.IntegerField(null=True, default=0, verbose_name=_("memory"))
@@ -119,8 +119,8 @@ class SwitchResource(IslandResource):
     ip = models.IPAddressField()
     port = models.IntegerField(verbose_name=_("Port"))
     http_port = models.IntegerField(verbose_name=_("Http Port"))
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
+    username = models.CharField(max_length=20, verbose_name=_("username"))
+    password = models.CharField(max_length=20, verbose_name=_("password"))
     dpid = models.CharField(max_length=256)
     has_gre_tunnel = models.BooleanField(default=False, verbose_name=_("Has GRE tunnel"))
     slices = models.ManyToManyField(Slice, through="SliceSwitch")

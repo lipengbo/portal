@@ -5,13 +5,14 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 from django import forms
-from models import VirtualMachine
-
+from models import VirtualMachine, Image
 
 class VmForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VmForm, self).__init__(*args, **kwargs)
+        self.fields['image'].queryset = Image.objects.exclude(
+                                        name__in=['gateway', 'floodlight'])
 
     class Meta:
         model = VirtualMachine

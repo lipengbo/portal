@@ -2,11 +2,15 @@ var br_values = [];
 var port_recv_values = [];
 var port_send_values = [];
 
-for (var i=0; i<10; i++){
+for (var i=0; i<11; i++){
 	br_values[i] = "";
 	port_send_values[i] = 0;
 	port_recv_values[i] = 0;
 }
+br_values[10]="0s";
+br_values[5]="5s";
+br_values[0]="10s";
+
 
 var port_options = {
 	animation : false,
@@ -47,7 +51,7 @@ function get_br_info(switch_id, flag){
         type : 'GET',
         dataType : 'json',
         error : function(){
-            //alert("get bridge information error!");
+            alert("获取网桥信息失败， 请检查agent是否启动并设置了ovs服务！");
         },
         success : function(br_info){
             var context = '';
@@ -115,6 +119,8 @@ function update_port_data(switch_id, br, port, flag){
 
 var port_timer;
 function get_port_info(switch_id, br, port, flag){
+	document.getElementById('current_br').innerHTML = " > 网桥：" + br;
+	document.getElementById('current_port').innerHTML = " > 端口：" + port;
 	clearTimeout(port_timer);
 	update_port_data(switch_id, br, port, flag);
     port_timer = setTimeout(function(){get_port_info(switch_id, br, port, flag)}, 1000);

@@ -80,5 +80,8 @@ function clock()
 	s=checkTime(s)
 	return h+":"+m+":"+s
 }
+function get_seconds(){
+	return (new Date()).getSeconds();
+}
 
 

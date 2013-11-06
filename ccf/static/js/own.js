@@ -242,11 +242,18 @@ function page_function1(){
 	//alert(ret1);
 	//alert(ret2);
 	if (ret2){
+		
 		var slice_name_obj = document.getElementById("slice_name");
     	var user_id_obj = document.getElementById("user_id");
 		var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
     	fetch_serverinfo("id_server_gw");
     	fetch_gw_ip(slice_name);
+
+		if(check_ovs_gw()){
+			$('#gw_setting').show();
+		}else{
+			$('#gw_setting').hide();
+		}
 		return true;
 	}
 	else{
@@ -257,6 +264,7 @@ function page_function2(){
     fetch_serverinfo("id_server");
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
+		//
 		return true;
 	}
 	else{

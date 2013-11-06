@@ -47,8 +47,13 @@ function check_vm_name(obj){
         return result
 }
 
+function desc_flavor(value){
+	
+}
+
 //验证vm的flavor,image,server等以select形式提供的选项不能为空
 function check_vm_select(obj){
+	var field = obj;
 	//var obj = document.getElementById(obj);
 	var objs = document.getElementsByName(obj);
 	//var info = document.getElementById(obj+"Info"); 
@@ -67,6 +72,9 @@ function check_vm_select(obj){
                {
                        showInfo(info,"√","green");
                        results[i] = true
+					   if(field == 'flavor'){
+							desc_flavor($('#id_flavor').val());
+						}
                }	
         }
         for(var i=0; i < objs.length; i++)
@@ -273,13 +281,21 @@ function fetch_gw_ip(slice_name){
         }
     });
 }
+var ovs_check_flag = false;
+function check_ovs_gw(){
+	return ovs_check_flag;
+}
 function get_select_server_name(){
     var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
     var results = new Array();
     var j =0
+	ovs_check_flag = false;
     for(var i=0;i<switch_port_ids_obj.length;i++){
         obj = switch_port_ids_obj[i];
         if(!obj.disabled){
+			if(obj.getAttribute("switchtype") == 2){
+				ovs_check_flag = true;
+			}
             servername = obj.getAttribute("servername");
             if( servername && not_contains(results, servername))
             {
@@ -350,3 +366,10 @@ function do_vm_action(url)
         }
         });
 }
+
+function show_uuid(objs){
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = objs[i].innerHTML.split("-")[0] + "...";
+    }
+}
+
