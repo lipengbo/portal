@@ -315,8 +315,9 @@
                             <tr>
                                 <td width="30%">名称</td>
                                 <td>
-    				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />	
-    				                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a>             			
+    				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />									<span name="nameInfo"></span>
+<!--
+    				                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left" name="icon_msg"></i></a> -->            			
                                 </td>                           
                               <!--  <td>
                                     <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span> 
@@ -325,9 +326,9 @@
                             <tr>
                                 <td>模板类型</td>
                                 <td>
-                                    {{ vm_form.flavor }}                               
-                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
-									{{vm_form.flavor.errors}}
+                                    {{ vm_form.flavor }} <span name="flavorInfo"></span>                              
+                                    <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
+									{{vm_form.flavor.errors}} -->
                                     				
                                 </td>
                           <!--      <td>
@@ -340,9 +341,9 @@
                             <tr>
                                 <td>镜像类型</td>
                                 <td>
-                                    {{ vm_form.image }}
-                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a> 
-									{{vm_form.image.errors}}
+                                    {{ vm_form.image }} <span name="imageInfo"></span>
+                                    <!--<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a> 
+									{{vm_form.image.errors}}-->
                                                 
                                 </td>
                            <!--     <td>
@@ -354,7 +355,8 @@
                                 <td>
                                     <select onblur="check_vminfo()" name="server" id="id_server">
                                     </select>
-                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
+									<span name="serverInfo"></span>
+                                   <!-- <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>-->
 													
                                 </td>
                                 

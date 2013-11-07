@@ -28,6 +28,11 @@ LOG = logging.getLogger('plugins')
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     context = {}
+    user = request.user
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['vms'] = vms
     context['sliceid'] = sliceid
     context['slice_obj'] = Slice.objects.get(id=sliceid)

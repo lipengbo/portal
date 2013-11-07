@@ -13,8 +13,10 @@ from plugins.vt.models import VirtualMachine
 
 def monitor_vm(request, vm_id):
     vm = get_object_or_404(VirtualMachine, id=vm_id)
+    print "------------", vm.slice.id
     return render(request, "monitor_host_or_vm.html",
-                  {'host_id' : vm.server.id, "vm_id" : vm_id})
+                  {'host_id' : vm.server.id, "vm_id" : vm_id,
+                   "slice_id": vm.slice.id, "project_id" : vm.slice.project.id})
 
 def monitor_host(request, host_id):
     return render(request, "monitor_host_or_vm.html", {'host_id' : host_id, "vm_id" : 0})

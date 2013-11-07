@@ -213,7 +213,10 @@ $(document).ready(function() {
      //管理员首页轮播
      $('#myCarousel').carousel();          
      
-
+    // 基础设施页面按钮点击效果
+    $(".device_link").mouseup(function(){
+        $(this).addClass("active");
+    });
 });
 
 

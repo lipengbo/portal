@@ -6331,38 +6331,6 @@ a.button-royal:hover {
   text-decoration: none;
   color: #fff;
 }
-a.button-primary:active {
-  background: #1495b7;
-  color: #005065;
-}
-a.button-primary:active i {
-  background: url(../img/cs1.png) no-repeat top center;
-}
-a.button-action:active {
-  background: #76a312;
-  color: #374f00;
-}
-a.button-highlight:active {
-  background: #d8891e;
-  color: #8d5303;
-}
-a.button-highlight:active i {
-  background: url(../img/fwq1.png) no-repeat top center;
-}
-a.button-caution:active {
-  background: #cd5240;
-  color: #952312;
-}
-a.button-caution:active i {
-  background: url(../img/jhj1.png) no-repeat top center;
-}
-a.button-royal:active {
-  background: #764479;
-  color: #3e1740;
-}
-a.button-royal:active i {
-  background: url(../img/fv1.png) no-repeat top center;
-}
 .button-wrap.active a.button-circle {
   text-shadow: 0 1px 1px white;
   box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.3), 0px 1px 0px #ffffff;
@@ -6413,12 +6381,10 @@ a.button-royal:active i {
   padding-bottom: 10px;
 }
 .vm_well_wrap .vm_well {
-  padding-bottom: 10px;
+  height: 279px;
   border-left: 1px solid #ddd;
-  padding: 5px 15px 10px 15px;
+  padding: 5px 15px 0px 15px;
   background: #f5f5f5;
-  height: 100%;
-  margin-left: #ddd;
 }
 .vm_well_wrap .vm_well table tr td {
   background: #fff;

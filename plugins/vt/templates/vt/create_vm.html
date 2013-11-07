@@ -2,7 +2,7 @@
 {% load bootstrap_tags %}
 {% load i18n %}
 {% load crispy_forms_tags %}
-
+{% load staticfiles %}
 {% block breadcrumb %}
 	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
 	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
@@ -11,53 +11,59 @@
         <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
+<div id="alert_msg"></div>
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
-    <fieldset class="base_info vm_info_list">
+    <fieldset class="vm_info_list">
     <legend>虚拟机信息</legend>
     <div class="sec_block">
     {% csrf_token %}
-    
+  <div class="row-fluid vm_well_wrap"> 
+    <div class="span5 base_info">       
     <table class="table">
         <tbody>
             <tr>
-                <td width="20%">名称</td>
-                <td width="30%">
-                    <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />
-                </td>
+                <td width="30%">名称</td>
                 <td>
-                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
+                    <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />
+                    <span name="nameInfo"></span>                         
                 </td>
+
+           <!--     <td>
+ <a id="id_nameInfo" name="nameInfo" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>           
+                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
+            </td>   -->
             </tr>
             <tr>
                 <td>模板类型</td>
                 <td>
-                    {{ vm_form.flavor }} 
-		<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
+                    {{ vm_form.flavor }} <span name="flavorInfo"></span>
+		     <!--       <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a-->
                 </td>
-                <td>{{vm_form.flavor.errors}}
+            <!--    <td>{{vm_form.flavor.errors}}
                     <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
-                </td>
+            </td>   -->
             </tr>
             <tr>
                 <td>镜像类型</td>
                 <td>
-                    {{ vm_form.image }} 
+                    {{ vm_form.image }} <span name="imageInfo"></span>
+                    <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a-->                    
                 </td>
-                <td>
+            <!--    <td>
                     {{vm_form.image.errors}}
                     <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
-                </td>
+            </td>      -->
             </tr>
             <tr>
                 <td>宿主机</td>
                 <td>
-                    {{ vm_form.server }} 
-		<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>
+                    {{ vm_form.server }} <span name="serverInfo"></span>
+		            <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a-->
                 </td>
-                <td>
+            <!--    <td>
                     {{vm_form.server.errors}}
                     <span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
-                </td>
+            </td>   -->
             </tr>
         </tbody>
     </table>
@@ -68,7 +74,47 @@
     <div class="operate_btn">
         <button class="btn btn-inverse del" type="button">删 除</button>
     </div> 
-    </div>          
+    </div>     
+    
+    <div class="span7">
+       <div class="vm_well">
+           <h4>虚拟机配置</h4>
+           <table class="table table-bordered table-condensed">
+               <tbody>
+                   <tr>
+                      <td width="80">类型</td>
+                      <td colspan="5"><span name="flavor_msg"></span></td>
+                   </tr>
+                   <tr>
+                       <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
+                       <td><span name="cpu"></span>核</td>
+                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
+                       <td><span name="ram"></span>MB</td>
+                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
+                       <td><span name="hdd"></span>GB</td>
+                   </tr>
+                   <tr>
+                      <td>宿主机</td>
+                      <td colspan="5"><span name="server_msg"></span></td>
+                   </tr>
+                   <tr>
+                      <td>镜像</td>
+                      <td colspan="5"><span name="image_msg"></span></td>
+                   </tr>
+                   <tr>
+                      <td>用户名</td>
+                      <td colspan="5"><span name="username"><span></td>
+                   </tr>
+                   <tr>
+                      <td>密码</td>
+                      <td colspan="5"><span name="password"></span></td>
+                   </tr>
+               </tbody>
+           </table>
+       </div>
+   </div>   
+   </div>                
+   </div>   
     </fieldset>
     <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>
     <div class="form-actions">
@@ -85,7 +131,6 @@
     </div>
 </form>
 {% endblock %}
-</form>
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>

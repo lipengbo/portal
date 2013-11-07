@@ -10,7 +10,7 @@ function check_vminfo(){
 function check_vm_name(obj){
 	//var obj = document.getElementById(obj);
 	//var info = document.getElementById(obj+"Info"); 
-        var objs = document.getElementsByName(obj);
+    var objs = document.getElementsByName(obj);
 	var infos = document.getElementsByName(obj+"Info"); 
 	var reg = /^[a-zA-Z_]\w*$/;
 	//alert(obj.value.length);
@@ -23,19 +23,19 @@ function check_vm_name(obj){
                 if(obj.value.length > 0){
                         if(!reg.test(obj.value))
                         {
-                               // showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
+                                showMsg(info,"请输入字母数字下划线的组合（不以数字开头）","err");
                                 results[i] = false;
                         }
                         else
                         {
-                               // showInfo(info,"√","green");
+                                showMsg(info,"","ok");
                                 results[i] = true;
                         }
                 
                 }
                 else
                 {
-                       // showInfo(info," * 该项为必填项","red");
+                        showMsg(info,"该项为必填项","err");
                         results[i] = false;
                 }	
         }
@@ -60,7 +60,6 @@ function desc_msg(name, value, i){
 				$('[name="ram"]')[i].innerHTML = data['ram'];
 				$('[name="hdd"]')[i].innerHTML = data['hdd'];		
 			}else if(name == 'image'){
-				//alert(data['username']);
 				$('[name="username"]')[i].innerHTML = data['username'];
 				$('[name="password"]')[i].innerHTML = data['password'];
 			}
@@ -83,12 +82,12 @@ function check_vm_select(obj){
                obj = objs[i];
                info = infos[i];
                if(obj.selectedIndex == 0){
-                       //showInfo(info," * 该项为必填项","red")
+                        showMsg(info,"该项为必填项","err")
                         results[i] = false;
                }
                else
                {
-                       //showInfo(info,"√","green");
+                       showMsg(info,"","ok");
                        results[i] = true
 					   if(field == 'flavor'){
 							$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
@@ -275,6 +274,18 @@ function showInfo(_info,msg,color){
     info.style.color=color;
 }
 
+function showMsg(_info, msg, state){
+	var info=_info;
+	if(state == 'ok'){
+		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title=""><i class="icon-ok"></i></a>';
+		info.innerHTML = "√";
+		info.style.color = "green";
+	}else{
+		info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
+		
+	}
+}
+
 
 //获取被用户选择的server
 function fetch_serverinfo(id){
@@ -301,7 +312,7 @@ function fetch_gw_ip(slice_name){
         contentType: "application/json; charset=utf-8",
         dataType : "json",
         error : function(e){
-            alert("error");
+            alert("获取网关IP出错！");
         },
         success : function(gw_ips){
             document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
@@ -387,9 +398,10 @@ function do_vm_action(url)
             if(data.result==1)
             {
                 //alert('Failed to operator vm!')
-                alert(data.error)
+                //alert(data.error)
+				document.getElementById('alert_msg').innerHTML = '<div class="alert alert-error">'+data.error+'</div>';
             }
-                window.location.reload();
+               // window.location.reload();
         }
         });
 }

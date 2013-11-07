@@ -1,11 +1,16 @@
 {% extends "site_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
+{% load url from future %}
+{% load staticfiles %}
 
 {% block breadcrumb %}
 {% if vm_id == 0%}
-服务器监控
+<a href="/nexus/resources/server/">服务器管理</a><span class="divider">/</span>
+<li class="active">服务器监控</li>
 {% else%}
+<a href="{% url 'project_detail' project_id %}">项目详情</a><span class="divider">/</span>
+<a href="{% url 'slice_detail' slice_id %}">slice详情</a><span class="divider">/</span>
 虚拟机监控
 {% endif %}
 {% endblock %}

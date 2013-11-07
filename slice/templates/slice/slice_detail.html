@@ -109,10 +109,12 @@ img {
             </div>
         </fieldset>
 		<fieldset>
+		<div id="alert_msg"></div>
             <legend>
                 {%if extent_html == "site_base.html" %}
                     <a data-toggle="modal" href="/plugins/vt/create/vm/{{ slice_obj.id }}/0/" class="btn btn-info edit">添加虚拟机</a>
                 {%endif%}
+
                 Slice资源
             </legend>
 		  	 <table class="table table-striped table-hover tooltip-demo">
