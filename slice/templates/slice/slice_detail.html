@@ -323,9 +323,9 @@ img {
                                         <button type="button" onclick="" class="btn" disabled>登录</button>
                                     {%endif%}
                 				{% if slice_obj.state == 1 %}
-                				    <a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
-                				{%else%}
                 				    <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>删除</button>
+                				{%else%}
+                				    <a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
 				 			    {%endif%}
 				 			    </td>
 					 		   
@@ -341,10 +341,10 @@ img {
                                     {%else%}
                                         <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
                                     {%endif%}
-                                    {%if slice_obj.state == 1%}
-                                        <a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
-                                    {%else%}
+                                    {% if slice_obj.state == 1 %}
                                         <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>删除</button>
+                                    {%else%}
+                                        <a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
                                     {%endif%}
                                </td>
                             {%endif%}
@@ -361,6 +361,11 @@ img {
             {%endif%}
 			 <div class="clear" style="display: none" >
 			 	<p id="check_vm">{{check_vm_status}}</p>
+			 	{%if extent_html == "site_base.html" %}
+			 	<p id="admin">0</p>
+			 	{%else%}
+			 	<p id="admin">1</p>
+			 	{%endif%}
 			 </div>
 		  </fieldset>			  		 
 		</div>
