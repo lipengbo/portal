@@ -184,12 +184,12 @@ def detail(request, slice_id):
     context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
     context['check_vm_status'] = 0
-    if slice_obj.state == 1:
-        all_vms = slice_obj.get_vms()
-        for vm in all_vms:
-            if vm.state == 8:
-                context['check_vm_status'] = 1
-                break
+#     if slice_obj.state == 1:
+    all_vms = slice_obj.get_vms()
+    for vm in all_vms:
+        if vm.state == 8:
+            context['check_vm_status'] = 1
+            break
 #     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 

@@ -108,7 +108,7 @@ function check_vm_status(slice_id){
                     }else if(status == 1){
                         $("div#controller_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-play\"></i>";
                         $("div#controller_st"+cur_vm_id).append(str);
                         
                         $("span#controller_fc"+cur_vm_id).empty();
@@ -119,7 +119,7 @@ function check_vm_status(slice_id){
                         
                         $("div#gw_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-play\"></i>";
                         $("div#gw_st"+cur_vm_id).append(str);
                         
                         $("span#gw_fc"+cur_vm_id).empty();
@@ -130,7 +130,7 @@ function check_vm_status(slice_id){
                         
                         $("div#dhcp_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-play\"></i>";
                         $("div#dhcp_st"+cur_vm_id).append(str);
                         
                         $("span#dhcp_fc"+cur_vm_id).empty();
@@ -141,7 +141,7 @@ function check_vm_status(slice_id){
                         
                         $("div#vm_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-play\"></i>";
                         $("div#vm_st"+cur_vm_id).append(str);
                         
                         $("span#vm_fc"+cur_vm_id).empty();
@@ -152,7 +152,7 @@ function check_vm_status(slice_id){
                     }else{
                         $("div#controller_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-pause\"></i>";
                         $("div#controller_st"+cur_vm_id).append(str);
                         
                         $("span#controller_fc"+cur_vm_id).empty();
@@ -163,7 +163,7 @@ function check_vm_status(slice_id){
                         
                         $("div#gw_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-pause\"></i>";
                         $("div#gw_st"+cur_vm_id).append(str);
                         
                         $("span#gw_fc"+cur_vm_id).empty();
@@ -174,7 +174,7 @@ function check_vm_status(slice_id){
                         
                         $("div#dhcp_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-pause\"></i>";
                         $("div#dhcp_st"+cur_vm_id).append(str);
                         
                         $("span#dhcp_fc"+cur_vm_id).empty();
@@ -185,7 +185,7 @@ function check_vm_status(slice_id){
                         
                         $("div#vm_st"+cur_vm_id).empty();
                         str = "";
-                        str = str + "<i class=\"icon-ok\"></i>";
+                        str = str + "<i class=\"icon-pause\"></i>";
                         $("div#vm_st"+cur_vm_id).append(str);
                         
                         $("span#vm_fc"+cur_vm_id).empty();
