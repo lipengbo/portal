@@ -314,8 +314,8 @@ function inittpdata(){
                         src_bandwidth = 0;
                         dst_capacity = 0;
                         dst_bandwidth = 0;
-                        src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port_name;
-                        dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port_name;
+                        src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port;
+                        dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port;
                         for(var k=0; k< bandwidth.length; k++){
                             count = 0;
                             if(src_id == bandwidth[k].id){
@@ -840,12 +840,13 @@ function random_refresh2 () {
                     if (data.bandwidth){
                           var ph = path.selectAll('.link');
                           bandwidth = data.bandwidth;
+                          alert(data.bandwidth);
                           ph.style("stroke", function (d) { 
                             var color = 'black';
                             
                             if (d.type == 'switchswitch') {
-                                    src_id = '' + d.source.yid + '_' + d.src_port_name;
-                                    dst_id = '' + d.target.yid + '_' + d.dst_port_name;
+                                    src_id = '' + d.source.yid + '_' + d.src_port;
+                                    dst_id = '' + d.target.yid + '_' + d.dst_port;
                                     for(var k=0; k< bandwidth.length; k++){
                                         count = 0;
                                         if(src_id == bandwidth[k].id){
