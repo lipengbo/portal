@@ -20,6 +20,7 @@ from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
 from models import Image, Flavor
 from resources.models import Server, SwitchPort
+from plugins.vt import api
 import logging
 from django.utils.translation import ugettext as _
 LOG = logging.getLogger('plugins')
@@ -87,13 +88,8 @@ def do_vm_action(request, vmid, action):
     if action in operator:
         try:
             vm = VirtualMachine.objects.get(id=vmid)
-            if vm.do_action(action):
-                if action == "destroy":
-                    vm.state = DOMAIN_STATE_DIC['shutoff']
-                else:
-                    vm.state = DOMAIN_STATE_DIC['running']
-                vm.save()
-                return HttpResponse(json.dumps({'result': 0}))
+            api.do_vm_action(vm, action)
+            return HttpResponse(json.dumps({'result': 0}))
         except Exception, e:
             errmsg = e[0]
             if e[0] == errno.ECONNREFUSED:

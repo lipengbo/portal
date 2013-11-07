@@ -6148,10 +6148,13 @@ table {
 .tp_block ul li span b {
   margin-right: 15px;
 }
-.tp_block ul li div {
+.tp_block ul li div.tp_bar {
   height: 3px;
   width: 40px;
   display: inline-block;
+  zoom: 1;
+  *display: inline;
+  *line-height: 42px;
 }
 .tp_block.tp_charts {
   height: 250px;
@@ -6420,11 +6423,14 @@ a.button-royal:hover {
   height: 20px;
 }
 .tp_title {
-  color: #ccc;
-  font-family: "Microsoft YaHei";
-  background: #666;
+  background: #0a5da3;
   padding: 10px;
 }
 .tp_title h4 {
   margin: 0;
+  color: #fff;
+  font-family: "Microsoft YaHei";
+}
+.tp_title h4 small {
+  color: #fff;
 }
