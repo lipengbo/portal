@@ -447,7 +447,7 @@ filter: alpha(opacity=100);
 }
 
 .sec_block {
-    background:#ffe3e6;
+    background:#ffffff;
     padding:10px;
     border-bottom:1px solid #ddd;
 }
@@ -908,10 +908,35 @@ filter: alpha(opacity=100);
 .tp_block {
   height:585px;
   overflow:hidden;
-  background:#fff;
+  background:#eee;
   -webkit-box-shadow: 0 0px 10px rgba(0,0,0,.5);
   -moz-box-shadow: 0 0px 10px rgba(0,0,0,.5);
   box-shadow: 0 0px 10px rgba(0,0,0,.5); 
+  ul {
+      background:#f5f5f5;
+      overflow:hidden;
+    li {
+        float:left;
+        display:inline;
+        padding:10px;
+        margin-right:5px;
+        font-family: "Microsoft YaHei";
+        span,div {
+            vertical-align:middle;
+        }
+        span {
+            margin-right:5px;
+            b {
+                margin-right:15px;
+            }
+        }
+        div {
+            height:3px;
+            width:40px;
+            display:inline-block;            
+        }
+    }
+  }
 }
 
 .tp_block.tp_charts {
@@ -1056,7 +1081,7 @@ filter: alpha(opacity=100);
     color: #555;
     font-size: 14px;
     line-height: 1.5;
-    margin-bottom:30px;
+    margin-bottom:20px;
 }
 
 .base_device_tab {
@@ -1164,7 +1189,6 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
         height:279px;
         border-left:1px solid #ddd;  
         padding:5px 15px 0px 15px;
-        background:#f5f5f5;
         table tr td {
             background:#fff;
             img {
@@ -1173,6 +1197,15 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
                 height:20px;
             }
         }
+    }
 }
 
+.tp_title {
+    color:#ccc;
+    font-family:"Microsoft YaHei";
+    background:#666;
+    padding:10px;
+    h4 {
+        margin:0;
+    }
 }

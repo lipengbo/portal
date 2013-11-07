@@ -96,7 +96,15 @@
           
 {% endblock %}
 
-{% block footer_base %}{% endblock %}
+{% block extra_body %}
+    {% block footer_base %}
+        <footer>
+            {% block footer %}
+                {% include "_footer.html" %}
+            {% endblock %}
+        </footer>
+    {% endblock %}
+{% endblock %}
 
 {% block extra_script %}
 {% endblock %}

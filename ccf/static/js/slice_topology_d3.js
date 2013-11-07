@@ -840,6 +840,7 @@ function random_refresh2 () {
                     if (data.bandwidth){
                           var ph = path.selectAll('.link');
                           bandwidth = data.bandwidth;
+                          alert(data.bandwidth);
                           ph.style("stroke", function (d) { 
                             var color = 'black';
                             

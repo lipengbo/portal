@@ -73,8 +73,18 @@
 <div class="row-fluid margin_rows">
     <div class="span12">
         <div class="tp_block">
-            <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true&size=big" width="100%" height="603px;" frameborder="0">
-            </iframe>
+          <div class="tp_title">
+            <h4>全网物理拓扑<small>（网络拓扑链路通过SDN控制器实时获取）</small></h4>
+          </div>
+          <ul>
+              <li><span><b>链路负载（%）</b>0~30</span><div style="background:#267e28;"></div></li>
+              <li><span>30~60</span><div style="background:#f0f074;"></div></li>
+              <li><span>60~90</span><div style="background:#cfa14b;"></div></li>
+              <li><span>90~100</span><div style="background:#a72527;"></div></li>
+              <li><span>无数据</span><div style="background:#000;"></div></li>
+          </ul>
+          <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true&size=big" width="100%" height="603px;" frameborder="0">
+          </iframe>            
         </div>
     </div>
   <!--  <div class="span6">
@@ -302,7 +312,7 @@
         context.fillStyle="#000000";    
         context.fillText(canvasTitle,55,13);        
     });
-
+/*
 	if( {{ host_id }} == -1){
 		document.getElementById("show_server").innerHTML = "<h4 class='text-center' style='margin-top:23%;'><small><i>当前没有添加服务器</i></small></h4>"
 	}else{
@@ -323,7 +333,7 @@
 		window.location.href = '{% url "nexus_list" "resources" "switch" %}'
 	})
 	
-	
+	*/
       
 </script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
