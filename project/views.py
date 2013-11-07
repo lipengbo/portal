@@ -178,7 +178,8 @@ def create_or_edit(request, id=None):
                 category = Category(name=category_name)
                 category.save()
             project.category = category
-            project.owner = user
+            if not id:
+                project.owner = user
             project.save()
             form.save_m2m()
             return redirect('project_detail', id=project.id)

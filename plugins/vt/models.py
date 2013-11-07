@@ -59,7 +59,7 @@ class Image(models.Model):
     os = models.CharField(null = True, max_length = 256)
 
     def __unicode__(self):
-        return self.os
+        return self.os and self.os or ""
 
     class Meta:
         verbose_name = _("Image")
