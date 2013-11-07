@@ -69,10 +69,14 @@ var svg = svg_obj.append('g')
     .attr('class', 'wrap')
     .on("mouseup", mouseup)
     .on("mousedown", mousedown);
+    var rect_color = 'white';
+    if (size == 'big') {
+        rect_color = '#f5f5f5';
+    }
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
-    .attr('fill', '#eee');
+    .attr('fill', rect_color);
 var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
 var gre_ovs_capacity = [];
 for (var i = 0; i < gre_ovses.length; i++) {
@@ -375,11 +379,20 @@ function init_svg () {
                 d.group = 2;
             }
             var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
+            if (!show_logical) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
+            }
             if (d.id.indexOf('00:ee:') == 0) {
                 ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
+                if (!show_logical) {
+                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway.png?v=4';
+                }
             }
             if (d.id.indexOf('00:ff:') == 0) {
                 ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
+                if (!show_logical) {
+                    ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
+                }
             }
 
             /*
