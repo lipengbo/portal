@@ -3887,7 +3887,7 @@ body.vjs-full-window {
   font-family: "黑体";
 }
 .login_bg .login-form {
-  background: #bbb;
+  background: #666;
   -webkit-border-radius: 0 0 6px 6px;
   -moz-border-radius: 0 0 6px 6px;
   border-radius: 0 0 6px 6px;
@@ -3897,7 +3897,7 @@ body.vjs-full-window {
   width: 299px;
 }
 .login_bg .login-form:before {
-  border-color: transparent #bbb transparent transparent;
+  border-color: transparent #666 transparent transparent;
 }
 .login_bg .login-field {
   margin-bottom: 0 !important;
@@ -3921,8 +3921,4 @@ body.vjs-full-window {
 }
 .pop_form .control-label {
   width: 140px;
-}
-.login_bg #footer {
-  background: transparent;
-  color: #333;
 }
