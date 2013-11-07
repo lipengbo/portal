@@ -6122,7 +6122,7 @@ table {
 .tp_block {
   height: 585px;
   overflow: hidden;
-  background: #eee;
+  background: #f5f5f5;
   -webkit-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
