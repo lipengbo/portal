@@ -9,9 +9,15 @@
 {% block head_title %}SLICE列表{% endblock %}
 {% block breadcrumb %}
     {%if extent_html == "site_base.html" %}
+        <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>  
+        Slice列表
+    {%else%}
+        {%if project%}
+        <a href="/project/">项目</a><span class="divider">/</span>
         <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
+        {%endif%}
+        虚网
     {%endif%}
-    Slice列表
 {% endblock %}
 
 {% block body %}

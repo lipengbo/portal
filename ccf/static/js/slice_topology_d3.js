@@ -525,8 +525,8 @@ function highlight( data, element ) {
         
         content += "<table class='table'>";
         content += "<tr><td>总带宽利用率：" + rand + "%</td></tr>";
-        content += "<tr><td>" + data.source.name + "-->" + data.target.name + "带宽使用：" + src_bandwidth_show + "/" + src_capacity_show + "</td></tr>";
-        content += "<tr><td>" + data.target.name + "-->" + data.source.name + "带宽使用：" + dst_bandwidth_show + "/" + dst_capacity_show + "</td></tr>";
+        content += "<tr><td>" + data.source.name + "-->" + data.target.name + "：" + src_bandwidth_show + "/" + src_capacity_show + "</td></tr>";
+        content += "<tr><td>" + data.target.name + "-->" + data.source.name + "：" + dst_bandwidth_show + "/" + dst_capacity_show + "</td></tr>";
         content += "</table>";
         tooltip.showTooltip(content, d3.event);
         //} else if (data.bandwidth) {
