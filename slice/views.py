@@ -331,6 +331,11 @@ def topology_d3(request):
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
+    user = request.user
+    if user and user.is_superuser:
+        context['admin'] = 1
+    else:
+        context['admin'] = 0
     return render(request, 'slice/slice_topology.html', context)
 
 
