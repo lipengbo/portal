@@ -112,3 +112,21 @@ msgstr "宿主机资源不足"
 
 msgid "connection refused"
 msgstr "远程连接失败"
+
+msgid "micro"
+msgstr "微型"
+
+msgid "mini"
+msgstr "迷你型"
+
+msgid "small"
+msgstr "小型"
+
+msgid "medium"
+msgstr "中型"
+
+msgid "large"
+msgstr "大型"
+
+msgid "xlarge"
+msgstr "超大型"

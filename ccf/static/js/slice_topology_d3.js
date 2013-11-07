@@ -1,6 +1,7 @@
 // set up SVG for D3
 var mode = "design";
 
+var admin = $("#admin").text();
 var width  = $("#width").text(),
     height = $("#height").text(),
     colors = d3.scale.category10();
@@ -597,11 +598,13 @@ function restart() {
    // .style('stroke', function(d) { return d3.rgb(colors(color_map[d.type])).darker().toString(); })
     //.classed('reflexive', function(d) { return d.reflexive; })
     .on('click', function(d) {
-        if(d.type == 'switch'){
-            window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
-        }else{
-            window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
-        }  
+        if(admin == 1){
+            if(d.type == 'switch'){
+                window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
+            }else{
+                window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
+            }  
+        }
     })
     .on('mouseover', function(d) {
         highlight( d, this );
