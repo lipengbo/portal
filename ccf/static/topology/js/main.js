@@ -402,7 +402,7 @@ function init_svg () {
                 }
             }
             */
-            return d.group==1 ? ovs_image : STATIC_URL + "topology/img/host.png?v=5"
+            return d.group==1 ? ovs_image : STATIC_URL + "topology/img/server-phy.png?v=5"
         })
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
