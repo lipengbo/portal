@@ -90,7 +90,7 @@ def create_slice_api(project, name, description, island, user):
                 try:
                     slice_obj = Slice(owner=user,
                         name=name,
-#                         show_name=show_name,
+                        show_name=show_name,
                         description=description,
                         project=project,
                         date_expired=expiration_date)
@@ -181,6 +181,7 @@ def start_slice_api(slice_obj):
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
             try:
+                
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, True)
             except Exception:
@@ -284,7 +285,7 @@ def get_slice_topology(slice_obj):
 #         for switch_dpid in switch_dpids:
 #             switch = {'dpid': switch_dpid, 'name':}
 #             switches.append(switch)
-    #     链接
+#     链接
         links = []
         switch_ids = []
         port_names = {}

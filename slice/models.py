@@ -19,7 +19,7 @@ SLICE_STATES = (
 class Slice(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
-#     show_name = models.CharField(max_length=256)
+    show_name = models.CharField(max_length=256)
     description = models.TextField()
     project = models.ForeignKey(Project)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -183,10 +183,11 @@ class Slice(models.Model):
         return dhcp_vm_macs
 
     def get_show_name(self):
-        slice_names = self.name.split('_')
-        if len(slice_names) > 1:
-            del slice_names[-1]
-        return ('_').join(slice_names)
+#         slice_names = self.name.split('_')
+#         if len(slice_names) > 1:
+#             del slice_names[-1]
+#         return ('_').join(slice_names)
+        return self.show_name
 
     def __unicode__(self):
         return self.name

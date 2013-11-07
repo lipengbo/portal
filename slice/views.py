@@ -123,7 +123,7 @@ def list(request, proj_id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
-            slice_objs = slice_objs.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            slice_objs = slice_objs.filter(Q(show_name__icontains=query)|Q(description__icontains=query))
             context['query'] = query
     context['slices'] = slice_objs
     return render(request, 'slice/slice_list.html', context)
@@ -184,13 +184,13 @@ def detail(request, slice_id):
     context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
     context['check_vm_status'] = 0
-    if slice_obj.state == 1:
-        all_vms = slice_obj.get_vms()
-        for vm in all_vms:
-            if vm.state == 8:
-                context['check_vm_status'] = 1
-                break
-    #context['extent_html'] = "site_base.html"
+#     if slice_obj.state == 1:
+    all_vms = slice_obj.get_vms()
+    for vm in all_vms:
+        if vm.state == 8:
+            context['check_vm_status'] = 1
+            break
+#     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -331,6 +331,11 @@ def topology_d3(request):
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
+    user = request.user
+    if user and user.is_superuser:
+        context['admin'] = 1
+    else:
+        context['admin'] = 0
     return render(request, 'slice/slice_topology.html', context)
 
 
