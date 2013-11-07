@@ -316,7 +316,9 @@ function fetch_gw_ip(slice_name){
         contentType: "application/json; charset=utf-8",
         dataType : "json",
         error : function(e){
-            alert("获取网关IP出错！");
+			document.getElementById('alert_msg').innerHTML = "获取网关IP出错！";
+			$('#alertModal').modal('show');
+            //alert("获取网关IP出错！");
         },
         success : function(gw_ips){
             document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
@@ -401,11 +403,11 @@ function do_vm_action(url)
         success: function(data) {
             if(data.result==1)
             {
-                //alert('Failed to operator vm!')
-                //alert(data.error)
-				document.getElementById('alert_msg').innerHTML = '<div class="alert alert-error">'+data.error+'</div>';
-            }
-               // window.location.reload();
+				document.getElementById('alert_msg').innerHTML = data.error;
+				$('#alertModal').modal('show');
+            }else{
+                window.location.reload();
+			}
         }
         });
 }

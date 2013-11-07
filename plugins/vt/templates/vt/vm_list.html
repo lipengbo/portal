@@ -12,7 +12,17 @@
 {% endblock %}
 
 {% block body %}
-<div id="alert_msg"></div>
+<!--div id="alert_msg"></div-->
+<!--警告框-->
+<div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-body">
+      <p class="text-center" id="alert_msg"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn-info" data-dismiss="modal"id="alert_close">确定</button>
+    </div>           
+ </div>
+
 <div class="fill_form form-wizard">
     <fieldset>
         <legend>
@@ -73,7 +83,7 @@
         		            <th width="15%">资源类型</th>
         		            <th width="15%">IP地址</th>
         		            <th width="15%">所属节点</th>
-							<th width="5%"></th>
+							<th width="5%">状态</th>
         		            <th width="25%">操作</th>
         		        </tr>
         		    </thead>
@@ -86,7 +96,7 @@
 									<td>虚拟机</td>
 						 			<td>{{vm.ip}}</td>
 						 			<td>{{vm.server.ip}}</td>
-						 			<td>
+						 			<!--td>
 							 			{% if slice_obj.state == 1 %}
 		                                    {% if vm.state == 8 %}
 		                                    <div id="vm_st{{vm.id}}">
@@ -98,7 +108,20 @@
 		                                        <i class="icon-ok"></i>
 		                                    {%endif%}
 		                                {%endif%}
-                                	</td>
+                                	</td-->
+									<td>
+                                    {% if vm.state == 8 %}
+                                    <div id="vm_st{{vm.id}}">
+                                        <img src="{% static "img/loader.gif" %}" />
+                                    </div>
+                                    {% elif vm.state == 9 %}
+                                        <i class="icon-remove"></i>
+                                    {%elif vm.state == 1 %}
+                                        <i class="icon-play"></i>
+                                    {%else%}
+                                        <i class="icon-pause"></i>
+                                    {%endif%}  
+                                </td>
 									
 						 			<td>
 										{% if extent_html == "site_base.html" %}
@@ -154,6 +177,11 @@
     </fieldset>
     <div class="clear" style="display: none" >
 	 	<p id="check_vm">{{check_vm_status}}</p>
+		{%if extent_html == "site_base.html" %}
+			<p id="admin">0</p>
+		{%else%}
+		 	<p id="admin">1</p>
+		{%endif%}
 	 	<p id="slice_id">{{slice_obj.id}}</p>
 	</div>
 </div>
@@ -162,10 +190,12 @@
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status.js"></script>
+<script src="{{ STATIC_URL}}bootstrap/js/bootstrap-modal.js"></script>
 <script>
 	$(function(){
         $(".aa").iCheck("destroy");
-        show_uuid($("[id='uuid']"))
+        show_uuid($("[id='uuid']"));
+		$('#alert_close').on("click", function(){window.location.reload();})
 	})
 </script>
 {% endblock %}
