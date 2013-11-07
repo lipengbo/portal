@@ -18,6 +18,7 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
+from models import Image, Flavor
 from resources.models import Server, SwitchPort
 import logging
 from django.utils.translation import ugettext as _
@@ -27,6 +28,11 @@ LOG = logging.getLogger('plugins')
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     context = {}
+    user = request.user
+    if user.is_superuser:
+        context['extent_html'] = "admin_base.html"
+    else:
+        context['extent_html'] = "site_base.html"
     context['vms'] = vms
     context['sliceid'] = sliceid
     context['slice_obj'] = Slice.objects.get(id=sliceid)
@@ -153,3 +159,14 @@ def set_domain_state(vname, state):
         LOG.debug(traceback.print_exc())
     finally:
         return True
+
+def get_flavor_msg(request):
+    name = request.POST.get("name")
+    obj_id = request.POST.get("obj_id")
+    if name == 'flavor':
+        flavor = get_object_or_404(Flavor, id=obj_id)
+        return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
+    if name == 'image':
+        image = get_object_or_404(Image, id=obj_id)
+        print image.username, image.password
+        return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))

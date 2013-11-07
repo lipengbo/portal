@@ -34,7 +34,7 @@ flowvisor_disable = False
 use_vt_manager_to_schedul = False
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效
 #单台机器最多允许创建的虚拟机的数量
-unique_hosts_per_alloc = 10
+unique_hosts_per_alloc = 100
 #可以创建虚拟机的主机，cpu、mem的最大负载，取值为百分必的形式，如下代表百分之80
 max_cpu = 100
 max_mem = 100

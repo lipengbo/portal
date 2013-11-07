@@ -1,4 +1,4 @@
-{% extends "site_base.html" %}
+{% extends extent_html %}
 {% load bootstrap_tags %}
 {% load i18n %}
 {% load staticfiles %}
@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block body %}
+<div id="alert_msg"></div>
 <div class="fill_form form-wizard">
     <fieldset>
         <legend>
@@ -98,7 +99,9 @@
 		                                    {%endif%}
 		                                {%endif%}
                                 	</td>
+									
 						 			<td>
+										{% if extent_html == "site_base.html" %}
 						 				{% if slice_obj.state == 0 %}
 						 					{%if vm.state == 1 %}
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn" disabled>停止</button>
@@ -125,11 +128,22 @@
 		                				        <button type="button" onclick="" class="btn" disabled>登录</button>
 		                				    {%endif%}
 		                				    {%if vm.type != 0 %}
-                                                <a href="{% url delete_vm vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
+                                                <a href="{% url delete_vm vm.id 1 %}" class="btn btn-inverse btn-delete">删除</a>
                                             {%else%}
                                                 <button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
                                             {%endif%}
 		                				{%endif%}
+										{%else%}
+					 		   
+                                    <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
+                                    {%if slice_obj.state == 1%}
+                                        <a href="{% url delete_vm vm.id 1 %}" class="btn btn-inverse btn-delete">删除</a>
+                                    {%else%}
+                                        <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>删除</button>
+                                    {%endif%}
+                               
+									{%endif%}
+
 						 			</td>
 						 		</tr>
 						 	{%endif%}
