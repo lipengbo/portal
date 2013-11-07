@@ -13,7 +13,7 @@ from plugins.openflow.controller_api import slice_change_controller,\
 from plugins.vt.api import create_vm_for_gateway, delete_vm_for_gateway
 from resources.ovs_api import slice_add_ovs_ports
 from plugins.ipam.models import IPUsage
-from plugins.common.ovs_client import get_switch_stat
+from plugins.common.ovs_client import get_switch_stat, get_sFlow_metric
 from resources.models import Switch
 from django.db import transaction
 import time
@@ -288,7 +288,7 @@ def get_slice_topology(slice_obj):
 #     链接
         links = []
         switch_ids = []
-        port_names = {}
+        ports = {}
         flowvisor = slice_obj.get_flowvisor()
         if flowvisor:
             link_objs = flowvisor.link_set.filter(
@@ -303,21 +303,19 @@ def get_slice_topology(slice_obj):
                         'dst_port_name': link_obj.target.name}
                 links.append(link)
                 if link_obj.source.switch.id in switch_ids:
-                    if link_obj.source.name not in port_names[link_obj.source.switch.id]:
-                        port_names[link_obj.source.switch.id].append(link_obj.source.name)
+                    if link_obj.source.port not in ports[link_obj.source.switch.id]:
+                        ports[link_obj.source.switch.id].append(link_obj.source.port)
                 else:
-                    if link_obj.target.switch.id in switch_ids:
-                        if link_obj.target.name not in port_names[link_obj.target.switch.id]:
-                            port_names[link_obj.target.switch.id].append(link_obj.target.name)
-                    else:
-                        switch_ids.append(link_obj.source.switch.id)
-                        port_names[link_obj.source.switch.id] = [link_obj.source.name]
+                    switch_ids.append(link_obj.source.switch.id)
+                    ports[link_obj.source.switch.id] = [link_obj.source.port]
+                if link_obj.target.switch.id in switch_ids:
+                    if link_obj.target.port not in ports[link_obj.target.switch.id]:
+                        ports[link_obj.target.switch.id].append(link_obj.target.port)
+                else:
+                    switch_ids.append(link_obj.target.switch.id)
+                    ports[link_obj.target.switch.id] = [link_obj.target.port]
     #     带宽
-        switchs_ports = []
-        for switch_id in switch_ids:
-            switchs_ports.append({'id': switch_id, 'port_names': port_names[switch_id]})
-        max_bandwidth = get_links_max_bandwidths(switchs_ports)
-        bandwidth = get_links_bandwidths(switchs_ports)
+        maclist = []
     #     虚拟机
         specials = []
         normals = []
@@ -327,6 +325,8 @@ def get_slice_topology(slice_obj):
             servers.append(virtual_switch.server)
         vms = slice_obj.get_vms()
         for vm in vms:
+            mac = ''.join(vm.mac.split(':')).upper()
+            maclist.append(mac)
             virtual_switch = vm.server.get_link_vs()
             if virtual_switch:
                 if vm.type == 1:
@@ -337,9 +337,15 @@ def get_slice_topology(slice_obj):
                                'name': vm.name,
                                'ip': vm.ip.ipaddr}
                     normals.append(vm_info)
+#     带宽
+        switchs_ports = []
+        for switch_id in switch_ids:
+            switchs_ports.append({'id': switch_id, 'ports': ports[switch_id]})
+        bandwidth = get_slice_links_bandwidths(switchs_ports, maclist)
+
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials,
-                    'bandwidth': bandwidth, 'max_bandwidth': max_bandwidth}
+                    'bandwidth': bandwidth, 'maclist': maclist}
     except Exception, ex:
         print 1
         print ex
@@ -386,6 +392,37 @@ def get_links_max_bandwidths(switchs_ports):
                 print 5
                 ret.append({'id': (str(switch.id) + '_' + port), 'bd': '1111000000'})
                 print 6
+    return ret
+
+
+def get_slice_links_bandwidths(switchs_ports, maclist):
+    print 'get_slice_links_bandwidths'
+    print switchs_ports
+    print maclist
+    ret = []
+    for switch_ports in switchs_ports:
+        try:
+            switch = Switch.objects.get(id = switch_ports['id'])
+        except:
+            pass
+        else:
+            for port in switch_ports['ports']:
+                try:
+                    print "b1"
+                    band = get_sFlow_metric(switch.ip, switch.dpid, int(port), maclist)
+                    print "b2"
+                except Exception, ex:
+                    print "b3"
+                    print ex
+                    ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
+                else:
+                    print "b4"
+                    print band
+                    if band:
+                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1], 'total_bd': (band[0] * 8.0)})
+                    else:
+                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
+                    print "b5"
     return ret
 
 

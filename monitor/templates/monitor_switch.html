@@ -1,7 +1,11 @@
 {% extends "site_base.html" %}
 {% load i18n %}
 {% load staticfiles %}
-{% block breadcrumb %}交换机监控{% endblock %}
+{% block breadcrumb %}
+<a href="/nexus/resources/switch/">交换机管理</a><span class="divider">/</span>
+<li class="active">交换机监控</li>
+
+{% endblock %}
 {% block body %}
 	<h4>交换机：{{ switch_name }} <span id="current_br"></span><span id="current_port"></span></h4>
     <ul class="nav nav-pills" id="br_info"></ul>

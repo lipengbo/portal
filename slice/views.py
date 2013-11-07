@@ -16,7 +16,7 @@ from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
-    get_links_bandwidths
+    get_slice_links_bandwidths
 from plugins.openflow.controller_api import slice_change_controller
 from plugins.openflow.flowvisor_api import flowvisor_add_slice
 from plugins.openflow.models import Controller
@@ -343,23 +343,25 @@ def update_links_bandwidths(request, slice_id):
     print 'update_links_bandwidths'
     switchs_ports = []
     switch_ids = []
-    port_names = {}
+    ports = {}
     info = request.POST.get("info")
+    maclist = request.POST.get("maclist")
     id_ports = info.split(',')
+    maclist = maclist.split(',')
     print 8
     for id_port in id_ports:
         idport = id_port.split('_')
         if len(idport) > 1:
             if int(idport[0]) in switch_ids:
-                if idport[1] not in port_names[int(idport[0])]:
-                    port_names[int(idport[0])].append(idport[1])
+                if idport[1] not in ports[int(idport[0])]:
+                    ports[int(idport[0])].append(idport[1])
             else:
                 switch_ids.append(int(idport[0]))
-                port_names[int(idport[0])] = [idport[1]]
+                ports[int(idport[0])] = [idport[1]]
     for switch_id in switch_ids:
-        switchs_ports.append({'id': switch_id, 'port_names': port_names[switch_id]})
+        switchs_ports.append({'id': switch_id, 'ports': ports[switch_id]})
     print switchs_ports
-    ret = get_links_bandwidths(switchs_ports)
+    ret = get_slice_links_bandwidths(switchs_ports, maclist)
     print 9
     result = json.dumps({'bandwidth': ret})
     return HttpResponse(result, mimetype='text/plain')
