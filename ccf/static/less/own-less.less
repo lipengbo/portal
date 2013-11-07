@@ -930,10 +930,13 @@ filter: alpha(opacity=100);
                 margin-right:15px;
             }
         }
-        div {
+        div.tp_bar {
             height:3px;
             width:40px;
-            display:inline-block;            
+            display:inline-block;  
+            zoom:1;
+            *display:inline;  
+            *line-height:42px;
         }
     }
   }
@@ -1200,12 +1203,15 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
     }
 }
 
-.tp_title {
-    color:#ccc;
-    font-family:"Microsoft YaHei";
-    background:#666;
+.tp_title {    
+    background:#0a5da3;
     padding:10px;
     h4 {
         margin:0;
+        color:#fff;
+        font-family:"Microsoft YaHei";
+        small {
+            color:#fff;
+        }
     }
 }
