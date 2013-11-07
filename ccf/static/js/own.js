@@ -30,11 +30,11 @@ $(document).ready(function() {
             increaseArea: '20%' // optional
         });
 		$(".sec_block").last().find(".del").css("visibility","visible");
-		$(".sec_block:odd").css("background","#d9edf7");
+		$(".sec_block:odd").css("background","#f5f5f5");
 		$(".del").click(function(){
            $(this).parent(".operate_btn").parent(".span5").parent(".vm_well_wrap").parent(".sec_block").remove();
-           $(".sec_block").css("background","#ffe3e6");
-           $(".sec_block:odd").css("background","#d9edf7");
+           $(".sec_block").css("background","#ffffff");
+           $(".sec_block:odd").css("background","#f5f5f5");
         });
 	});
 

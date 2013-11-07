@@ -114,7 +114,13 @@
           
 {% endblock %}
 
-{% block footer_base %}{% endblock %}
+{% block footer_base %}
+    <footer>
+        {% block footer %}
+            {% include "_footer.html" %}
+        {% endblock %}
+    </footer>
+{% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript" charset="utf-8">

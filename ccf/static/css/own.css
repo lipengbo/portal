@@ -5701,7 +5701,7 @@ table {
   border: none;
 }
 .sec_block {
-  background: #ffe3e6;
+  background: #ffffff;
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
@@ -6058,10 +6058,6 @@ table {
   width: 300px;
   margin-left: -150px;
 }
-#slicealertModal {
-  width: 300px;
-  margin-left: -150px;
-}
 .modal.fade.in {
   top: 30%;
 }
@@ -6126,10 +6122,36 @@ table {
 .tp_block {
   height: 585px;
   overflow: hidden;
-  background: #fff;
+  background: #eee;
   -webkit-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
+}
+.tp_block ul {
+  background: #f5f5f5;
+  overflow: hidden;
+}
+.tp_block ul li {
+  float: left;
+  display: inline;
+  padding: 10px;
+  margin-right: 5px;
+  font-family: "Microsoft YaHei";
+}
+.tp_block ul li span,
+.tp_block ul li div {
+  vertical-align: middle;
+}
+.tp_block ul li span {
+  margin-right: 5px;
+}
+.tp_block ul li span b {
+  margin-right: 15px;
+}
+.tp_block ul li div {
+  height: 3px;
+  width: 40px;
+  display: inline-block;
 }
 .tp_block.tp_charts {
   height: 250px;
@@ -6285,7 +6307,7 @@ table {
   color: #555;
   font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 .base_device_tab img,
 .base_device_tab i {
@@ -6388,7 +6410,6 @@ a.button-royal:hover {
   height: 279px;
   border-left: 1px solid #ddd;
   padding: 5px 15px 0px 15px;
-  background: #f5f5f5;
 }
 .vm_well_wrap .vm_well table tr td {
   background: #fff;
@@ -6397,4 +6418,13 @@ a.button-royal:hover {
   margin-right: 10px;
   width: 20px;
   height: 20px;
+}
+.tp_title {
+  color: #ccc;
+  font-family: "Microsoft YaHei";
+  background: #666;
+  padding: 10px;
+}
+.tp_title h4 {
+  margin: 0;
 }
