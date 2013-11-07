@@ -4,7 +4,7 @@
 # Date:Sat Oct 05 00:10:59 CST 2013
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
-from plugins.vt.models import VirtualMachine, Image, Flavor
+from plugins.vt.models import VirtualMachine, Image, Flavor, DOMAIN_STATE_DIC
 from plugins.ipam.models import IPUsage
 from etc.config import default_flavor_id
 from plugins.common.vt_manager_client import VTClient
@@ -25,7 +25,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
     vm.flavor = Flavor.objects.get(id=default_flavor_id)
     if function_test:
         #hostlist = [switch.virtualswitch.server for switch in slice_obj.get_virtual_switches_server()]
-        hostlist = Server.objects.all()
+        hostlist = Server.objects.filter(island=island_obj)
         vm.server = hostlist[0]
     else:
         #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
@@ -70,3 +70,12 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
 
 def delete_vm_for_gateway(vm):
     vm.delete()
+
+
+def do_vm_action(vm, action):
+    if vm.do_action(action):
+        if action == "destroy":
+            vm.state = DOMAIN_STATE_DIC['shutoff']
+        else:
+            vm.state = DOMAIN_STATE_DIC['running']
+        vm.save()
