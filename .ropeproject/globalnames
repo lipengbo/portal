@@ -12,4 +12,4 @@ EMAIL_HOSTqmUDEFAULT_FROM_EMAILqnUTEMPLATE_DIRSqoUPROJECT_ROOTqpULOGGINGqqU
 STATIC_URLqtUXMLRPC_METHODSquUUSE_L10NqvUDEBUGqwUUSE_TZqxUFIXTURE_DIRSqyUINSTALLED_APPSqzU
 MEDIA_ROOTq{USTATICFILES_DIRSq|UACCOUNT_EMAIL_VERIFICATIONq}UADMINSq~UTEMPLATE_DEBUGqUTEMPLATE_CONTEXT_PROCESSORSq€UEMAIL_HOST_USERqU	MEDIA_URLq‚eUresources.models]qƒ(USliceSwitchq„UOVS_TYPEq…UServiceResourceq†UResourceq‡UServerqˆUvm_pre_saveq‰USwitchqŠUVirtualSwitchq‹USwitchResourceqŒU	SlicePortqU
 SwitchPortqUIslandResourceqUResourceBaseqeUplugins.openflow.models]q‘(UFlowSpaceRuleq’Uupdate_linksq“U	Flowvisorq”ULinkq•U
-Controllerq–UFlowvisorLinksMd5q—eUplugins.ipam.models]q˜(USubnetq™UIPUsageqšUNetworkq›Ucreate_base_subnetqœU	IPManagerqUsubnet_pre_saveqeUplugins.common.agent_client]qŸUAgentClientq au.
+Controllerq–UFlowvisorLinksMd5q—eUplugins.vt.vtmanager]q˜UFilterq™aUplugins.ipam.models]qš(USubnetq›UIPUsageqœUNetworkqUcreate_base_subnetqU	IPManagerqŸUsubnet_pre_saveq eUplugins.common.agent_client]q¡UAgentClientq¢au.
