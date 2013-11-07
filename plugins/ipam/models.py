@@ -178,7 +178,7 @@ class Network(models.Model):
 class Subnet(models.Model):
     supernet = models.ForeignKey(Network)
     netaddr = models.CharField(max_length=20, null=False, unique=True)
-    owner = models.CharField(max_length=20, null=True, unique=True)
+    owner = models.CharField(max_length=60, null=True, unique=True)
     is_owned = models.BooleanField(default=False)
     is_used = models.BooleanField(default=False)
     size = models.IntegerField()
