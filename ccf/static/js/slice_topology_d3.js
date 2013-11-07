@@ -827,7 +827,7 @@ function random_refresh () {
 var submit_data = {"info": bd_data, "maclist": maclist};
 function random_refresh2 () {
     if(bd_data == '' || maclist == ''){
-        alert("h");
+        //alert("h");
         return;
     }
     setTimeout(function  () {
