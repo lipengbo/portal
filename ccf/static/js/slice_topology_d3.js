@@ -826,6 +826,10 @@ function random_refresh () {
 
 var submit_data = {"info": bd_data, "maclist": maclist};
 function random_refresh2 () {
+    if(bd_data == '' || maclist == ''){
+        alert("h");
+        return;
+    }
     setTimeout(function  () {
         //alert('in');
         check_url = "http://" + window.location.host + "/slice/update_links_bandwidths/"+slice_id+"/";
@@ -840,7 +844,7 @@ function random_refresh2 () {
                     if (data.bandwidth){
                           var ph = path.selectAll('.link');
                           bandwidth = data.bandwidth;
-                          alert(data.bandwidth);
+                          //alert(data.bandwidth);
                           ph.style("stroke", function (d) { 
                             var color = 'black';
                             

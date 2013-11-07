@@ -325,8 +325,9 @@ def get_slice_topology(slice_obj):
             servers.append(virtual_switch.server)
         vms = slice_obj.get_vms()
         for vm in vms:
-            mac = ''.join(vm.mac.split(':')).upper()
-            maclist.append(mac)
+            if vm.mac:
+                mac = ''.join(vm.mac.split(':')).upper()
+                maclist.append(mac)
             virtual_switch = vm.server.get_link_vs()
             if virtual_switch:
                 if vm.type == 1:
