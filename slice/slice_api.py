@@ -407,8 +407,6 @@ def get_links_max_bandwidths(switchs_ports):
 
 def get_slice_links_bandwidths(switchs_ports, maclist):
     print 'get_slice_links_bandwidths'
-    print switchs_ports
-    print maclist
     ret = []
     for switch_ports in switchs_ports:
         try:
@@ -420,6 +418,11 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                 try:
                     print "b1"
                     dpid = ''.join(switch.dpid.split(':'))
+                    print '====================='
+                    print switch.ip
+                    print dpid
+                    print maclist
+                    print '====================='
                     band = get_sFlow_metric(switch.ip, dpid, int(port), maclist)
                     print "b2"
                 except Exception, ex:
@@ -431,7 +434,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                     print band
                     if band:
                         if band[0] and band[1]:
-                            ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1], 'total_bd': (band[0] * 8.0)})
+                            ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1] * 8.0, 'total_bd': band[0]})
                         else:
                             ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
                     else:

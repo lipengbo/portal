@@ -14,5 +14,5 @@ import models
 def init_image(sender, **kwargs):
     if not models.Image.objects.all():
         for uuid, name, url in glance.get_image_list():
-            image = models.Image(uuid=uuid, name=name, url=url)
+            image = models.Image(uuid=uuid, name=name, url=url, os='ubuntu')
             image.save()
