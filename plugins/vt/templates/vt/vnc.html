@@ -24,6 +24,9 @@
 {% block body %}
 默认登录用户名{{vm.image.username}}，密码{{vm.image.password}}，登录虚拟机后请修改密码！
 {% if vm.state == 1 %}
+<div class="alert alert-info">
+     <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
+</div>
   <div id="vncviewer">
     <applet archive="/site_media/static/java/vncviewer.jar" code="com.tightvnc.vncviewer.VncViewer" width="800" height="700">
       <param name="SOCKETFACTORY" value="com.tightvnc.vncviewer.SshTunneledSocketFactory">
