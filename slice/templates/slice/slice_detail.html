@@ -14,7 +14,10 @@ img {
 {% block breadcrumb %}
     {%if extent_html == "site_base.html" %}
 	   <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	{%endif%}
+	{%else%}
+	   <a href="/project/">项目</a><span class="divider">/</span>
+       <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
+    {%endif%}
 	Slice详情
 {% endblock %}
 

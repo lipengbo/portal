@@ -325,8 +325,9 @@ def get_slice_topology(slice_obj):
             servers.append(virtual_switch.server)
         vms = slice_obj.get_vms()
         for vm in vms:
-            mac = ''.join(vm.mac.split(':')).upper()
-            maclist.append(mac)
+            if vm.mac:
+                mac = ''.join(vm.mac.split(':')).upper()
+                maclist.append(mac)
             virtual_switch = vm.server.get_link_vs()
             if virtual_switch:
                 if vm.type == 1:
@@ -423,9 +424,11 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                 else:
                     print "b4"
                     print band
-                    band = [1000000, 0]
                     if band:
-                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1] * 8.0, 'total_bd': (band[0])})
+                        if band[0] and band[1]:
+                            ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1] * 8.0, 'total_bd': band[0]})
+                        else:
+                            ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
                     else:
                         ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
                     print "b5"
