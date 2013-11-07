@@ -181,7 +181,16 @@ def start_slice_api(slice_obj):
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
             try:
-                
+                all_vms = slice_obj.get_vms()
+                for vm in all_vms:
+                    if vm.state == 8:
+                        raise DbError("资源分配中，请稍后启动！")
+                controller = slice_obj.get_controller()
+                if controller.host and controller.host.state != 1:
+                    raise DbError("请确保控制器已启动！")
+                gw = slice_obj.get_gw()
+                if gw and gw.enable_dhcp and gw.state != 1:
+                    raise DbError("请确保dhcp已启动！")
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, True)
             except Exception:
@@ -410,7 +419,8 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
             for port in switch_ports['ports']:
                 try:
                     print "b1"
-                    band = get_sFlow_metric(switch.ip, switch.dpid, int(port), maclist)
+                    dpid = ''.join(switch.dpid.split(':'))
+                    band = get_sFlow_metric(switch.ip, dpid, int(port), maclist)
                     print "b2"
                 except Exception, ex:
                     print "b3"
