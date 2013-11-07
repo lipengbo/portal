@@ -181,7 +181,7 @@ def start_slice_api(slice_obj):
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
             try:
-                
+
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, True)
             except Exception:
@@ -409,6 +409,11 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
             for port in switch_ports['ports']:
                 try:
                     print "b1"
+                    print '====================='
+                    print switch.ip
+                    print switch.dpid
+                    print maclist
+                    print '====================='
                     band = get_sFlow_metric(switch.ip, switch.dpid, int(port), maclist)
                     print "b2"
                 except Exception, ex:
@@ -419,7 +424,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                     print "b4"
                     print band
                     if band:
-                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1], 'total_bd': (band[0] * 8.0)})
+                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1] * 8.0, 'total_bd': (band[0])})
                     else:
                         ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
                     print "b5"

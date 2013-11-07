@@ -169,7 +169,7 @@ class Allocate_ip_for_gateway(TestCase):
         print "------set up slice subnet test--------"
 
     @timefunc
-    def create_subnet(self, owner, ipcount=64):
+    def create_subnet(self, owner, ipcount=8):
         subnet = IPUsage.objects.create_subnet(owner=owner, timeout=5, ipcount=ipcount)
         self.assertTrue(subnet)
         IPUsage.objects.subnet_create_success(owner=owner)
@@ -178,8 +178,8 @@ class Allocate_ip_for_gateway(TestCase):
     @timefunc
     def allocate_ip(self, owner):
         ip = IPUsage.objects.allocate_ip(owner=owner)
-        self.assertTrue('255.255.255.192' == str(ip.supernet.get_network().netmask))
-        self.assertTrue(26 == ip.supernet.get_network().prefixlen)
+        self.assertTrue('255.255.255.248' == str(ip.supernet.get_network().netmask))
+        self.assertTrue(29 == ip.supernet.get_network().prefixlen)
         return ip
 
     @timefunc
