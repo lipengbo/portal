@@ -259,9 +259,11 @@ img {
                                     </div>
                                     {% elif dhcp.state == 9 %}
                                         <i class="icon-remove"></i>
-                                    {%else%}
+                                    {%elif dhcp.state == 1 %}
                                         <i class="icon-play"></i>
-                                    {%endif%}
+                                    {%else%}
+                                        <i class="icon-pause"></i>
+                                    {%endif%} 
                                 </td>
 				 			{%if extent_html == "site_base.html" %}
                                <td>
