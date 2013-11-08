@@ -8,7 +8,7 @@
         <title>{% block head_title_base %}CENI综合实验平台{% endblock %}</title>
        {% block style_base %}           
             <link href="{% static "css/square/blue.css" %}" rel="stylesheet">
-            <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
+            <!--<link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">-->
             <link href="{% static "css/own.css" %}" rel="stylesheet">
             <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
             <!--[if IE 7]>
@@ -100,7 +100,7 @@
 		{% block script_base %}
             <script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
             <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
-            <script src="{% static "pinax/js/theme.js" %}"></script>
+            <!--<script src="{% static "pinax/js/theme.js" %}"></script>-->
             <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
             <script>
                 $(document).ready(function(){
