@@ -164,6 +164,16 @@
     </div>           
  </div>
 
+<!--警告框-->
+<div id="alert_modal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-body">
+      <p class="text-center" id="alert_msg"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn-info" data-dismiss="modal"id="alert_close">确定</button>
+    </div>           
+ </div>
+
     {% analytics %}
     {% block extra_body %}
     	{% block footer_base %}

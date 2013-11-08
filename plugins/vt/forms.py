@@ -11,9 +11,12 @@ class VmForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VmForm, self).__init__(*args, **kwargs)
-        self.fields['image'].queryset = Image.objects.exclude(os__in=['gateway', 'floodlight'])
+        #self.fields['image'].queryset = Image.objects.exclude(name__in=['gateway', 'floodlight'])
+        self.fields['image'].choices = Image.objects.exclude(name__in=['gateway',
+                                        'floodlight']).values_list("id", "os")
 
     class Meta:
+        #print "---------------->",Image.objects.all().values_list("id", "os")
         model = VirtualMachine
         fields = ("name", "flavor", "image", "server", "enable_dhcp")
         widgets = {
