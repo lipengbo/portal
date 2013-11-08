@@ -87,7 +87,7 @@
             <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
             <th>{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
-                <th>{{ field.verbose_name }}</th>
+                <th>{{ field.verbose_name|upper }}</th>
             {% endfor %}
             <th>{% trans "Action" %}</th>
         </tr>
