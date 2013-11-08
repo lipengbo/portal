@@ -27,8 +27,8 @@ if (size == 'small') {
     width = 500;
     height = 300;
 } else if (size == 'big') {
-    width = 980;
-    height = 500;
+    width = 950;
+    height = 450;
 }
 
 var color = d3.scale.category20();
