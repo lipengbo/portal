@@ -6054,7 +6054,8 @@ table {
 .start_slice {
   width: 118px;
 }
-#alertModal {
+#alertModal,
+#alert_modal {
   width: 300px;
   margin-left: -150px;
 }
@@ -6213,6 +6214,9 @@ table {
 
   -o-transition: opacity 0.5s;
 }
+.nums_block .nums_top img {
+  width: 60px;
+}
 .nums_block .nums_top span.total_nums {
   color: #fff;
   font-size: 42px;
@@ -6220,6 +6224,7 @@ table {
   position: absolute;
   right: 20px;
   top: 20px;
+  zoom: 1;
 }
 .nums_block .nums_top span.total_name {
   position: absolute;
