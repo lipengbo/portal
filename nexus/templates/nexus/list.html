@@ -10,6 +10,7 @@
     .button-circle {
         line-height:normal;
     }
+    .table td .btn { margin-right:0;}
 </style>
 {% endblock %}
 
@@ -86,7 +87,7 @@
             <th class="checkall"><input type="checkbox" name="some_name" value=""></th>
             <th>{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
-                <th>{{ field.verbose_name }}</th>
+                <th>{{ field.verbose_name|upper }}</th>
             {% endfor %}
             <th>{% trans "Action" %}</th>
         </tr>
@@ -100,15 +101,24 @@
             <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
                 <td title="{{ object|get_value:field.name}}" class="field.name">
-                {% if  object|get_value:field.name|truncatewords:"100000"|length > 50 %}
-                    {{ object|get_value:field.name|slice:"50" }}...
-                {% else %}
-                    {{ object|get_value:field.name }}
-                {% endif %}
+                    {% if field.name == 'cpu' %} 
+                        {% if  object|get_value:field.name|truncatewords:"100000"|length > 15 %}
+                            {{ object|get_value:field.name|slice:"15" }}...
+                        {% else %}
+                            {{ object|get_value:field.name }}
+                        {% endif %}
+
+                    {% else %}
+                        {% if  object|get_value:field.name|truncatewords:"100000"|length > 50 %}
+                            {{ object|get_value:field.name|slice:"50" }}...
+                        {% else %}
+                            {{ object|get_value:field.name }}
+                        {% endif %}
+                    {% endif %}
                 </td>
             {% endfor %}
             <td>
-                <div class="btn-groups">
+                <div class="btn-group">
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
