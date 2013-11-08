@@ -29,7 +29,7 @@
 <div class="fill_form form-wizard">
     <fieldset>
         <legend>
-            <a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-info edit">返 回</a>
+            <!--a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-info edit">返 回</a-->
  			{%if extent_html == "site_base.html" and slice_obj.state == 0 %}
                    <a data-toggle="modal" href="/plugins/vt/create/vm/{{ sliceid }}/1/" class="btn btn-info edit">添 加</a>
             {%endif%}
@@ -131,7 +131,7 @@
 									
 						 			<td>
 										{% if extent_html == "site_base.html" %}
-						 				{% if slice_obj.state == 0 %}
+						 				{% if slice_obj.state == 1 %}
 						 					{%if vm.state == 1 %}
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn" disabled>停止</button>
 		                				    {%else%}
