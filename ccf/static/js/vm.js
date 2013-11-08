@@ -227,6 +227,7 @@ function insert_content_to_obj1(obj, content)
 //逐一提交vm的创建请求
 function submit_vms(sliceid)
 {
+		//var result;
         var objs = document.getElementsByName('name');
         name_value = get_value_from_obj('name');
         flavor_text = get_value_from_select('flavor');
@@ -235,13 +236,14 @@ function submit_vms(sliceid)
         enable_dhcp_value = get_checked_value_from_checkbox('enable_dhcp');
         for(var i=0; i < objs.length; i++)
         {
-                post_vminfo(sliceid, name_value[i], flavor_text[i], image_text[i], server_text[i], enable_dhcp_value[i])
+                 post_vminfo(sliceid, name_value[i], flavor_text[i], image_text[i], server_text[i], enable_dhcp_value[i])
         }
         
 }
 
 function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
 {
+		//var result = true;
         url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
         type: "POST",
@@ -257,10 +259,12 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 enable_dhcp: enable_dhcp
         },
         success: function(data) {
+			
             if(data.result==1)
             {
                 //alert('Failed to operator vm!')
                 //alert(data.error)
+				alert_close_result = false;
                 $("div#slice_alert_info").empty();
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
@@ -269,6 +273,7 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
 
         }
         });
+		//return alert_close_result;
 }
 
 //显示信息
@@ -316,8 +321,8 @@ function fetch_gw_ip(slice_name){
         contentType: "application/json; charset=utf-8",
         dataType : "json",
         error : function(e){
-			document.getElementById('alert_msg').innerHTML = "获取网关IP出错！";
-			$('#alertModal').modal('show');
+			document.getElementById('alert_info').innerHTML = "获取网关IP出错！";
+			$('#alert_modal').modal('show');
             //alert("获取网关IP出错！");
         },
         success : function(gw_ips){
@@ -378,12 +383,17 @@ function not_contains(a, obj) {
     return true;
 }
 
-function create_vms(sliceid)
+function create_vms(sliceid, flag)
 {
     if(check_vminfo())
     {
-        submit_vms(sliceid);
-        window.location.href='/plugins/vt/vm/list/' + sliceid + '/'
+		submit_vms(sliceid)
+		if(flag != 1){
+			window.location.href='/plugins/vt/vm/list/' + sliceid + '/';
+		}
+		
+		
+        
     }
 }
 
@@ -403,8 +413,9 @@ function do_vm_action(url)
         success: function(data) {
             if(data.result==1)
             {
-				document.getElementById('alert_msg').innerHTML = data.error;
-				$('#alertModal').modal('show');
+				//alert(data.error);
+				document.getElementById('alert_info').innerHTML = data.error;
+				$('#alert_modal').modal('show');
             }else{
                 window.location.reload();
 			}

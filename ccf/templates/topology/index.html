@@ -226,7 +226,8 @@ var direct_flowvisor_api = {% if not no_parent or direct %}true{% else %}false{%
 
     load_topology(function(){$(document).ready(function () {
             app = new AppRouter();
-            Backbone.history.start({pushState: true});
+            var pushState = !!(window.history && window.history.pushState);
+            Backbone.history.start({pushState: pushState});
             var redraw = function () {
                 for (var i = 0; i < islands.length; i++) {
                     var island = islands[i];

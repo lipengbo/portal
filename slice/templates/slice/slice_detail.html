@@ -22,15 +22,15 @@ img {
 {% endblock %}
 
 {% block body %}
-<!--警告框-->
-<div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<!--警告框 
+<div id="alert_modal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body">
       <p class="text-center" id="alert_msg"></p>
     </div>
     <div class="modal-footer">
       <button class="btn delete-confirm btn-info" data-dismiss="modal"id="alert_close">确定</button>
     </div>           
- </div>
+ </div>-->
 
     <div class="fill_form form-wizard">		    
         <fieldset class="base_info">
@@ -259,9 +259,11 @@ img {
                                     </div>
                                     {% elif dhcp.state == 9 %}
                                         <i class="icon-remove"></i>
-                                    {%else%}
+                                    {%elif dhcp.state == 1 %}
                                         <i class="icon-play"></i>
-                                    {%endif%}
+                                    {%else%}
+                                        <i class="icon-pause"></i>
+                                    {%endif%} 
                                 </td>
 				 			{%if extent_html == "site_base.html" %}
                                <td>
