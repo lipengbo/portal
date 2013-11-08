@@ -433,7 +433,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                     print "b4"
                     print band
                     if band:
-                        if band[0] and band[1]:
+                        if band[0] != None and band[1] != None:
                             ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1] * 8.0, 'total_bd': band[0]})
                         else:
                             ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
