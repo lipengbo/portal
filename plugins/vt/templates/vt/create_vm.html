@@ -11,7 +11,16 @@
         <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
-<div id="alert_msg"></div>
+<!--警告框-->
+<div id="slicealertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-body" id="slice_alert_info">
+      <p class="text-center"></p>
+    </div> 
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_close_sure">确定</button>
+    </div>          
+</div>
+
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
     <fieldset class="base_info vm_info_list tooltip-demo">
     <legend>虚拟机信息</legend>
@@ -34,7 +43,7 @@
             </td>   -->
             </tr>
             <tr>
-                <td>模板类型</td>
+                <td>虚拟机类型</td>
                 <td>
                     {{ vm_form.flavor }} <span name="flavorInfo"></span>
 		     <!--       <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a-->
@@ -44,7 +53,7 @@
             </td>   -->
             </tr>
             <tr>
-                <td>镜像类型</td>
+                <td>虚拟机镜像</td>
                 <td>
                     {{ vm_form.image }} <span name="imageInfo"></span>
                     <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a-->                    
@@ -125,7 +134,7 @@
           {% else %}
           <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
           {% endif %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }})">{% trans "Submit" %}</button></div>
+          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1)">{% trans "Submit" %}</button></div>
           <div class="span3"></div>
         </div>
     </div>
@@ -135,4 +144,9 @@
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
+<script>
+	$("#alert_close_sure").on("click", function(){
+		window.location.href='/plugins/vt/vm/list/' + {{sliceid}} + '/';
+	})
+</script>
 {% endblock %}

@@ -4,7 +4,11 @@
 {% load staticfiles %}
 
 {% block breadcrumb %}
-	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
+<!--
+	{%if extent_html == "admin_base.html" %}
+		<a href="/">首页</a>
+	{% endif %}
+	<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
 	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
 	<!--<a href="/slice/create/{{ slice_obj.project.id }}/">创建Slice</a><span class="divider">/</span>-->
 	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
@@ -12,8 +16,7 @@
 {% endblock %}
 
 {% block body %}
-<!--div id="alert_msg"></div-->
-<!--警告框-->
+<!--警告框
 <div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body">
       <p class="text-center" id="alert_msg"></p>
@@ -21,13 +24,16 @@
     <div class="modal-footer">
       <button class="btn delete-confirm btn-info" data-dismiss="modal"id="alert_close">确定</button>
     </div>           
- </div>
+ </div>-->
 
 <div class="fill_form form-wizard">
     <fieldset>
         <legend>
-            <a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-info edit">返 回</a>
-            <a data-toggle="modal" href="/plugins/vt/create/vm/{{ sliceid }}/1/" class="btn btn-info edit">添 加</a>
+            <!--a data-toggle="modal" href="{% url slice_detail sliceid %}" class="btn btn-info edit">返 回</a-->
+ 			{%if extent_html == "site_base.html" and slice_obj.state == 0 %}
+                   <a data-toggle="modal" href="/plugins/vt/create/vm/{{ sliceid }}/1/" class="btn btn-info edit">添 加</a>
+            {%endif%}
+            
                                         虚拟机
         </legend>
         <!--<table class="table">
@@ -125,7 +131,7 @@
 									
 						 			<td>
 										{% if extent_html == "site_base.html" %}
-						 				{% if slice_obj.state == 0 %}
+						 				{% if slice_obj.state == 1 %}
 						 					{%if vm.state == 1 %}
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn" disabled>停止</button>
 		                				    {%else%}
