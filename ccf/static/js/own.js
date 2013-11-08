@@ -228,6 +228,10 @@ $(document).ready(function() {
 
 //slice创建页面js
 function page_function0(){
+    $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">" + "创建slice异常！" + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
 	ret1 = check_slice_name('slice_name',2);
 	ret2 = check_slice_description('slice_description',2);
 	ret3 = check_island_id('island_id')
