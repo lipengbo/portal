@@ -1,22 +1,20 @@
 # coding:utf-8
 from slice.models import *
-from project.models import Project
 from slice.slice_exception import DbError, IslandError, NameExistError
 from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
     flowvisor_update_slice_status, flowvisor_add_slice
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
-    flowspace_nw_add, flowspace_nw_del, flowspace_gw_add, flowspace_dhcp_add,\
+    flowspace_nw_add, flowspace_gw_add, flowspace_dhcp_add,\
     flowspace_dhcp_del, flowspace_gw_del
 from plugins.openflow.controller_api import slice_change_controller,\
-    slice_add_controller, delete_controller, create_add_controller
-from plugins.vt.api import create_vm_for_gateway, delete_vm_for_gateway
+    delete_controller, create_add_controller
+from plugins.vt.api import create_vm_for_gateway
 from resources.ovs_api import slice_add_ovs_ports
 from plugins.ipam.models import IPUsage
 from plugins.common.ovs_client import get_switch_stat, get_sFlow_metric
 from resources.models import Switch
 from django.db import transaction
-import time
 import datetime
 import traceback
 
@@ -24,8 +22,8 @@ import logging
 LOG = logging.getLogger("ccf")
 
 
-def create_slice_step(project, name, description, island, user, ovs_ports,\
-    controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
+def create_slice_step(project, name, description, island, user, ovs_ports,
+                      controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
     slice_obj = None
     try:
         print 1
@@ -37,7 +35,8 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
         print 3
         create_add_controller(slice_obj, controller_info)
         print 4
-        flowvisor_add_slice(island.flowvisor_set.all()[0], name, slice_obj.get_controller(), user.email)
+        flowvisor_add_slice(island.flowvisor_set.all()[0], name,
+                            slice_obj.get_controller(), user.email)
         print 5
 #         创建并添加网段
         IPUsage.objects.subnet_create_success(slice_obj.name)
@@ -50,7 +49,9 @@ def create_slice_step(project, name, description, island, user, ovs_ports,\
         if gw_host_id and int(gw_host_id) > 0:
             print 8
             try:
-                gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id), image_name='gateway', enable_dhcp=enabled_dhcp)
+                gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id),
+                                           image_name='gateway',
+                                           enable_dhcp=enabled_dhcp)
             except Exception, ex:
                 LOG.debug(traceback.print_exc())
                 raise DbError("创建网关失败！")
@@ -89,11 +90,11 @@ def create_slice_api(project, name, description, island, user):
                 show_name = ('_').join(slice_names)
                 try:
                     slice_obj = Slice(owner=user,
-                        name=name,
-                        show_name=show_name,
-                        description=description,
-                        project=project,
-                        date_expired=expiration_date)
+                                      name=name,
+                                      show_name=show_name,
+                                      description=description,
+                                      project=project,
+                                      date_expired=expiration_date)
                     slice_obj.save()
                     slice_obj.add_island(island)
                     slice_obj.add_resource(flowvisors[0])
@@ -181,9 +182,19 @@ def start_slice_api(slice_obj):
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
             try:
-                
+                all_vms = slice_obj.get_vms()
+                for vm in all_vms:
+                    if vm.state == 8:
+                        raise DbError("资源分配中，请稍后启动！")
+                controller = slice_obj.get_controller()
+                if controller.host and controller.host.state != 1:
+                    raise DbError("请确保控制器已启动！")
+                gw = slice_obj.get_gw()
+                if gw and gw.enable_dhcp and gw.state != 1:
+                    raise DbError("请确保dhcp已启动！")
                 slice_obj.start()
-                flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, True)
+                flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+                                              slice_obj.name, True)
             except Exception:
                 transaction.rollback()
                 raise
@@ -207,7 +218,8 @@ def stop_slice_api(slice_obj):
         if slice_obj.state == SLICE_STATE_STARTED:
             try:
                 slice_obj.stop()
-                flowvisor_update_slice_status(slice_obj.get_flowvisor(), slice_obj.name, False)
+                flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+                                              slice_obj.name, False)
             except Exception:
                 transaction.rollback()
                 raise
@@ -249,9 +261,11 @@ def update_slice_virtual_network(slice_obj):
                 default_flowspace.nw_proto, default_flowspace.nw_tos,
                 default_flowspace.tp_src, default_flowspace.tp_dst)
             try:
-                flowvisor_add_flowspace(flowvisor, flowspace_name, slice_obj.name,
-                    default_flowspace.actions, 'cdn%nf', switch_port.switch.dpid,
-                    default_flowspace.priority, arg_match)
+                flowvisor_add_flowspace(flowvisor, flowspace_name,
+                                        slice_obj.name,
+                                        default_flowspace.actions, 'cdn%nf',
+                                        switch_port.switch.dpid,
+                                        default_flowspace.priority, arg_match)
             except:
                 raise
 
@@ -269,12 +283,13 @@ def get_slice_topology(slice_obj):
             ports = []
             one_switch_ports = slice_obj.get_one_switch_ports(switch_obj)
             for one_switch_port in one_switch_ports:
-                ports.append({'name': one_switch_port.name, 'port': one_switch_port.port})
+                ports.append({'name': one_switch_port.name,
+                              'port': one_switch_port.port})
             switch = {'dpid': switch_obj.dpid,
                       'name': switch_obj.name,
                       'type': switch_obj.type(),
                       'id': switch_obj.id,
-                      'ports':ports}
+                      'ports': ports}
             switches.append(switch)
             dpids.append(switch_obj.dpid)
 #         print switches
@@ -325,8 +340,9 @@ def get_slice_topology(slice_obj):
             servers.append(virtual_switch.server)
         vms = slice_obj.get_vms()
         for vm in vms:
-            mac = ''.join(vm.mac.split(':')).upper()
-            maclist.append(mac)
+            if vm.mac:
+                mac = ''.join(vm.mac.split(':')).upper()
+                maclist.append(mac)
             virtual_switch = vm.server.get_link_vs()
             if virtual_switch:
                 if vm.type == 1:
@@ -360,7 +376,7 @@ def get_links_bandwidths(switchs_ports):
     ret = []
     for switch_ports in switchs_ports:
         try:
-            switch = Switch.objects.get(id = switch_ports['id'])
+            switch = Switch.objects.get(id=switch_ports['id'])
         except:
             pass
         else:
@@ -372,7 +388,8 @@ def get_links_bandwidths(switchs_ports):
                     if port['name'] in switch_ports['port_names']:
                         recv_data = int(port['stats']['recv']['byte'])
                         send_data = int(port['stats']['send']['byte'])
-                        ret.append({'id': (str(switch.id) + '_' + port['name']), 'bd': (recv_data + send_data)})
+                        ret.append({'id': (str(switch.id) + '_' + port['name']),
+                                    'bd': (recv_data + send_data)})
                         switch_ports['port_names'].remove(port['name'])
             for port_name in switch_ports['port_names']:
                 ret.append({'id': (str(switch.id) + '_' + port_name), 'bd': 0})
@@ -384,45 +401,57 @@ def get_links_max_bandwidths(switchs_ports):
     ret = []
     for switch_ports in switchs_ports:
         try:
-            switch = Switch.objects.get(id = switch_ports['id'])
+            switch = Switch.objects.get(id=switch_ports['id'])
         except:
             pass
         else:
             for port in switch_ports['port_names']:
                 print 5
-                ret.append({'id': (str(switch.id) + '_' + port), 'bd': '1111000000'})
+                ret.append({'id': (str(switch.id) + '_' + port),
+                            'bd': '1111000000'})
                 print 6
     return ret
 
 
 def get_slice_links_bandwidths(switchs_ports, maclist):
     print 'get_slice_links_bandwidths'
-    print switchs_ports
-    print maclist
     ret = []
     for switch_ports in switchs_ports:
         try:
-            switch = Switch.objects.get(id = switch_ports['id'])
+            switch = Switch.objects.get(id=switch_ports['id'])
         except:
             pass
         else:
             for port in switch_ports['ports']:
                 try:
                     print "b1"
-                    band = get_sFlow_metric(switch.ip, switch.dpid, int(port), maclist)
+                    dpid = ''.join(switch.dpid.split(':'))
+                    print '====================='
+                    print switch.ip
+                    print dpid
+                    print maclist
+                    print '====================='
+                    band = get_sFlow_metric(switch.ip, dpid, int(port), maclist)
                     print "b2"
                 except Exception, ex:
                     print "b3"
                     print ex
-                    ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
+                    ret.append({'id': (str(switch.id) + '_' + str(port)),
+                                'cur_bd': 0, 'total_bd': 0})
                 else:
                     print "b4"
                     print band
-                    band = [1000000, 0]
                     if band:
-                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': band[1], 'total_bd': (band[0] * 8.0)})
+                        if band[0] is not None and band[1] is not None:
+                            ret.append({'id': (str(switch.id) + '_' + str(port)),
+                                        'cur_bd': band[1] * 8.0,
+                                        'total_bd': band[0]})
+                        else:
+                            ret.append({'id': (str(switch.id) + '_' + str(port)),
+                                        'cur_bd': 0, 'total_bd': 0})
                     else:
-                        ret.append({'id': (str(switch.id) + '_' + str(port)), 'cur_bd': 0, 'total_bd': 0})
+                        ret.append({'id': (str(switch.id) + '_' + str(port)),
+                                    'cur_bd': 0, 'total_bd': 0})
                     print "b5"
     print ret
     return ret

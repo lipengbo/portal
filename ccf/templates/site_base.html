@@ -100,10 +100,14 @@
 		{% block script_base %}
             <script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
             <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
-            <!--<script src="{% static "pinax/js/theme.js" %}"></script>-->
+            <script src="{% static "pinax/js/theme.js" %}"></script>
             <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
             <script>
                 $(document).ready(function(){
+                    $("#accounts_logout").click(function(e) {
+                        e.preventDefault();
+                        $("#logoutModal").modal();
+                    });
                     $('input').iCheck({
                         checkboxClass: 'icheckbox_square-blue',
                         radioClass: 'iradio_square-blue',
@@ -154,6 +158,15 @@
 		
 {% block extra_body_base %}
 
+<div id="logoutModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-body">
+      <p class="text-center">确定注销吗？</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-info delete-cancel" data-dismiss="modal">取消</button>
+      <a id="account_logout" class="btn btn-info" href="{% url "account_logout" %}">{% trans "Log out" %}</a>
+    </div>           
+ </div>
 <div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body">
       <p class="text-center">确定删除吗？</p>
@@ -161,6 +174,16 @@
     <div class="modal-footer">
       <button class="btn btn-info delete-cancel" data-dismiss="modal">取消</button>
       <button class="btn delete-confirm btn-info" data-dismiss="modal">确定</button>
+    </div>           
+ </div>
+
+<!--警告框-->
+<div id="alert_modal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-body">
+      <p class="text-center" id="alert_info"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn-info" data-dismiss="modal"id="alert_close">确定</button>
     </div>           
  </div>
 

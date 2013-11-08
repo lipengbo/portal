@@ -53,13 +53,14 @@ class Image(models.Model):
     name = models.CharField(max_length=36)
     url = models.CharField(max_length=256)
     type = models.IntegerField(null=True)
-    version = models.CharField(null=True, max_length=32)
-    username = models.CharField(null = True, max_length =36)
-    password = models.CharField(null = True, max_length = 36)
-    os = models.CharField(null = True, max_length = 256)
+    version = models.CharField(max_length=32, null=True)
+    username = models.CharField(max_length=36, null=True)
+    password = models.CharField(max_length=36, null=True)
+    os = models.CharField(max_length=256, null=True)
 
     def __unicode__(self):
-        return self.os and self.os or ""
+        #return self.os and self.os or ""
+        return self.name
 
     class Meta:
         verbose_name = _("Image")

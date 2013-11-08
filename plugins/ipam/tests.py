@@ -5,7 +5,7 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 from django.test import TestCase
-from plugins.ipam.models import IPUsage
+from plugins.ipam.models import IPUsage, Subnet
 from plugins.common.utils import timefunc
 import time
 import uuid
@@ -161,3 +161,47 @@ class Phy_subnet_test(TestCase):
 
     def tearDown(self):
         print "------tear down physic subnet test--------"
+
+
+class Allocate_ip_for_gateway(TestCase):
+
+    def setUp(self):
+        print "------set up slice subnet test--------"
+
+    @timefunc
+    def create_subnet(self, owner, ipcount=8):
+        subnet = IPUsage.objects.create_subnet(owner=owner, timeout=5, ipcount=ipcount)
+        self.assertTrue(subnet)
+        IPUsage.objects.subnet_create_success(owner=owner)
+        return subnet
+
+    @timefunc
+    def allocate_ip(self, owner):
+        ip = IPUsage.objects.allocate_ip(owner=owner)
+        self.assertTrue('255.255.255.248' == str(ip.supernet.get_network().netmask))
+        self.assertTrue(29 == ip.supernet.get_network().prefixlen)
+        return ip
+
+    @timefunc
+    def release_ip(self, ip):
+        result = IPUsage.objects.release_ip(ip=ip)
+        self.assertTrue(result)
+
+    @timefunc
+    def delete_subnet(self, owner):
+        result = IPUsage.objects.delete_subnet(owner=owner)
+        self.assertTrue(result)
+
+    def test_test(self):
+        for i in xrange(1, 200):
+            self.create_subnet(owner=i)
+            net = Subnet.objects.get(owner=i)
+            gateway_ip = net.get_gateway_ip()
+            print gateway_ip
+            allocate_ip = str(self.allocate_ip(owner=i))
+            self.assertTrue(allocate_ip == gateway_ip)
+
+    def tearDown(self):
+        print "------tear down slice subnet test--------"
+        for i in xrange(1, 200):
+            self.delete_subnet(owner=i)
