@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import transaction, IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect,Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
@@ -18,9 +18,6 @@ from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
     get_slice_links_bandwidths
 from plugins.openflow.controller_api import slice_change_controller
-from plugins.openflow.flowvisor_api import flowvisor_add_slice
-from plugins.openflow.models import Controller
-from resources.ovs_api import slice_add_ovs_ports
 from project.models import Project, Island
 from resources.models import SwitchPort
 from slice.slice_exception import *
@@ -29,7 +26,6 @@ from plugins.ipam.models import IPUsage, Subnet
 from slice.models import Slice
 
 from plugins.vt.forms import VmForm
-from resources.models import Server
 
 
 @login_required
@@ -47,7 +43,8 @@ def create(request, proj_id):
             switch_ports = switch.switchport_set.all()
             if switch_ports:
                 ovs_ports.append({'switch_type': switch.type(),
-                    'switch': switch, 'switch_ports': switch_ports})
+                                  'switch': switch,
+                                  'switch_ports': switch_ports})
     vm_form = VmForm()
     context = {}
     context['project'] = project
@@ -95,8 +92,9 @@ def create_first(request, proj_id):
             print gw_ip
             print dhcp_selected
             slice_obj = create_slice_step(project, slice_name,
-                slice_description, island, user, ovs_ports, controller_info,
-                slice_nw, gw_host_id, gw_ip, dhcp_selected)
+                                          slice_description, island, user,
+                                          ovs_ports, controller_info, slice_nw,
+                                          gw_host_id, gw_ip, dhcp_selected)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': str(ex)}
         else:
@@ -123,7 +121,7 @@ def list(request, proj_id):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
-            slice_objs = slice_objs.filter(Q(show_name__icontains=query)|Q(description__icontains=query))
+            slice_objs = slice_objs.filter(Q(show_name__icontains=query) | Q(description__icontains=query))
             context['query'] = query
     context['slices'] = slice_objs
     return render(request, 'slice/slice_list.html', context)

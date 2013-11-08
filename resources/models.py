@@ -108,12 +108,13 @@ class Server(IslandResource):
         options = {
             'exclude_fields': ('name', 'password', 'username', 'disk', 'mem', 'bandwidth'),
             'form_exclude_fields': ('cpu', 'disk', 'mem'),
-            'related_models': [{'app_label': 'resources', 'model':'virtualswitch'}],
+            'related_models': [{'app_label': 'resources', 'model': 'virtualswitch'}],
         }
         return options
 
     class Meta:
         verbose_name = _("Server")
+
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
@@ -169,6 +170,7 @@ class Switch(SwitchResource):
 
     class Meta:
         verbose_name = _("Switch")
+
 
 class SliceSwitch(models.Model):
     slice = models.ForeignKey(Slice)

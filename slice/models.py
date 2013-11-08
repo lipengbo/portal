@@ -9,10 +9,8 @@ from plugins.ipam.models import Subnet
 
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
-SLICE_STATES = (
-        (SLICE_STATE_STOPPED, 'stopped'),
-        (SLICE_STATE_STARTED, 'started'),
-)
+SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
+                (SLICE_STATE_STARTED, 'started'),)
 # Create your models here.
 
 
@@ -25,7 +23,7 @@ class Slice(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField()
     state = models.IntegerField(choices=SLICE_STATES,
-            default=SLICE_STATE_STOPPED)
+                                default=SLICE_STATE_STOPPED)
 #     expired = models.IntegerField(default=0)
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
@@ -199,7 +197,8 @@ class SliceIsland(models.Model):
 
     class Meta:
         unique_together = (("slice", "island"), )
-        
+
+
 @receiver(pre_delete, sender=Slice)
 def pre_delete_slice(sender, instance, **kwargs):
     from slice.slice_api import delete_slice_api
