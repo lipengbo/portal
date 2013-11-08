@@ -6054,7 +6054,9 @@ table {
 .start_slice {
   width: 118px;
 }
-#alertModal {
+#alertModal,
+#alert_modal,
+#slicealertModal {
   width: 300px;
   margin-left: -150px;
 }
@@ -6122,7 +6124,7 @@ table {
 .tp_block {
   height: 585px;
   overflow: hidden;
-  background: #eee;
+  background: #f5f5f5;
   -webkit-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0px 10px rgba(0, 0, 0, 0.5);
@@ -6213,6 +6215,9 @@ table {
 
   -o-transition: opacity 0.5s;
 }
+.nums_block .nums_top img {
+  width: 60px;
+}
 .nums_block .nums_top span.total_nums {
   color: #fff;
   font-size: 42px;
@@ -6220,6 +6225,7 @@ table {
   position: absolute;
   right: 20px;
   top: 20px;
+  zoom: 1;
 }
 .nums_block .nums_top span.total_name {
   position: absolute;
