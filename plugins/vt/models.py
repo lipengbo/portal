@@ -204,5 +204,8 @@ def vm_post_delete(sender, instance, **kwargs):
     IPUsage.objects.release_ip(instance.ip)
     if instance.gateway_public_ip:
         IPUsage.objects.release_ip(instance.gateway_public_ip)
-    if instance.switch_port:
-        instance.switch_port.delete()
+    try:
+        if instance.switch_port:
+            instance.switch_port.delete()
+    except:
+        pass
