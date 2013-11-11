@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
 from guardian.shortcuts import assign_perm
 
@@ -94,6 +95,9 @@ class Project(models.Model):
 
     def get_display_name(self):
         return self.name
+
+    def absolute_url(self):
+        return reverse('project_detail', args=(self.id, ))
 
     def accept(self, member):
         try:
