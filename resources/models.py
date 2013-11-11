@@ -32,7 +32,7 @@ class Resource(models.Model):
 
     __metaclass__ = ResourceBase
 
-    name = models.CharField(max_length=256, verbose_name=_("name"))
+    name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
 
     def on_create_slice(self):
         pass

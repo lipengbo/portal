@@ -16,7 +16,7 @@ from invite.models import Invitation
 from notifications import notify
 
 class City(models.Model):
-    name = models.CharField(max_length=256, verbose_name=_("name"))
+    name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
 
     def __unicode__(self):
@@ -33,7 +33,7 @@ class City(models.Model):
         verbose_name = _("City")
 
 class Island(models.Model):
-    name = models.CharField(max_length=256, verbose_name=_("name"))
+    name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
 
@@ -55,7 +55,7 @@ class Category(models.Model):
 
 class Project(models.Model):
     owner = models.ForeignKey(User)
-    name = models.CharField(max_length=256, verbose_name=_("Project Name"))
+    name = models.CharField(max_length=255, verbose_name=_("Project Name"), unique=True)
     description = models.CharField(max_length=1024, verbose_name=_("Project Description"))
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
