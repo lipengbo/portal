@@ -84,18 +84,6 @@ def invite(request, id):
     context = {}
     context['project'] = project
     target_type = ContentType.objects.get_for_model(project)
-    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
-            target_type=target_type).values_list("to_user__id", flat=True))
-    invited_user_ids.extend(project.member_ids())
-    users = User.objects.exclude(id__in=set(invited_user_ids))
-    if 'query' in request.GET:
-        query = request.GET.get('query')
-        if query:
-            if len(query) > 256:
-                query = query[:256]
-            users = users.filter(username__icontains=query)
-            context['query'] = query
-    context['users'] = users
 
     if request.method == 'POST':
         user_ids = request.POST.getlist('user')
@@ -111,6 +99,19 @@ def invite(request, id):
                     invitation.save()
         else:
             messages.add_message(request, messages.ERROR, _("Invitation message is required."))
+
+    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
+            target_type=target_type).values_list("to_user__id", flat=True))
+    invited_user_ids.extend(project.member_ids())
+    users = User.objects.exclude(id__in=set(invited_user_ids))
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            if len(query) > 256:
+                query = query[:256]
+            users = users.filter(username__icontains=query)
+            context['query'] = query
+    context['users'] = users
     return render(request, 'project/invite.html', context)
 
 @login_required
