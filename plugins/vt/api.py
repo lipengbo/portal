@@ -28,12 +28,16 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         hostlist = Server.objects.filter(island=island_obj)
         vm.server = hostlist[0]
     else:
-        #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
-        hostlist = [(server.id, server.ip) for server in Server.objects.all()]
-        serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
-        if not serverid:
-            raise Exception(_("resource not enough"))
-        vm.server = Server.objects.get(id=serverid)
+        try:
+            #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
+            hostlist = [(server.id, server.ip) for server in Server.objects.all()]
+            serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
+            if not serverid:
+                raise Exception(_("resource not enough"))
+            vm.server = Server.objects.get(id=serverid)
+        except:
+            IPUsage.objects.release_ip(ip_obj)
+            raise
     vm.type = 0
     vm.save()
     return vm, str(ip_obj)
@@ -58,11 +62,15 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         #hostlist = [switch.virtualswitch.server for switch in slice_obj.get_virtual_switches_server()]
         vm.server = host_server
     else:
-        hostlist = [(host_server.id, host_server.ip)]
-        serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
-        if not serverid:
-            raise Exception(_('resource not enough'))
-        vm.server = Server.objects.get(id=serverid)
+        try:
+            hostlist = [(host_server.id, host_server.ip)]
+            serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
+            if not serverid:
+                raise Exception(_('resource not enough'))
+            vm.server = Server.objects.get(id=serverid)
+        except:
+            IPUsage.objects.release_ip(ip_obj)
+            raise
     vm.type = 2
     vm.save()
     return vm
