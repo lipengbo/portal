@@ -25,6 +25,7 @@
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
+{% if class_name != 'User' %}
 <div class="row-fluid margin_rows">
     <div class="span1"></div>
     <div class="span2"><span class="button-wrap device_link {% if class_name == 'City' %}active{% endif %}"><a href="{% url nexus_list "project" "city" %}" class="button button-circle button-primary"><i class="cs"></i>城市</a></span></div>
@@ -34,6 +35,7 @@
     <div class="span2"><span class="button-wrap device_link {% if class_name == 'Flowvisor' %}active{% endif %}"><a href="{% url nexus_list "openflow" "flowvisor" %}" class="button button-circle button-royal"><i class="fv"></i>Flowvisor</a></span></div>
     <div class="span1"></div>
 </div>
+{% endif %}
 
 <!--
 <ul class="nav nav-tabs base_device_tab">
