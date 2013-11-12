@@ -8,6 +8,7 @@ from django.db.models.signals import post_save
 from django.db.models import F
 from django.dispatch import receiver
 from django.conf import settings
+from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
 from django.utils.translation import ugettext as _
 
 from resources.models import ServiceResource, Resource, SwitchPort, Switch
@@ -42,6 +43,17 @@ class Flowvisor(ServiceResource):
             'ct_model': ('resources', 'server')
         }
         return options
+
+    def validate_unique(self, exclude=None):
+        try:
+            Flowvisor.objects.get(name=self.name)
+            e = ValidationError(_("%(model_name)s with this %(field_label)s already exists.") % {"field_label": self._meta.get_field('name').verbose_name, "model_name": self._meta.verbose_name})
+            e.message_dict = {}
+            e.message_dict["name"] = e.messages
+            raise e
+        except Flowvisor.DoesNotExist:
+            return self.name
+        super(Flowvisor, self).validate_unique(exclude)
 
     class Meta:
         verbose_name = _("Flowvisor")
