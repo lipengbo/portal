@@ -197,6 +197,8 @@ def vm_post_save(sender, instance, **kwargs):
 @receiver(pre_delete, sender=VirtualMachine)
 def vm_pre_delete(sender, instance, **kwargs):
     instance.delete_vm()
+#     if instance.type == 0:
+#         instance.controller_set.all().delete()
 
 
 @receiver(post_delete, sender=VirtualMachine)
@@ -204,5 +206,8 @@ def vm_post_delete(sender, instance, **kwargs):
     IPUsage.objects.release_ip(instance.ip)
     if instance.gateway_public_ip:
         IPUsage.objects.release_ip(instance.gateway_public_ip)
-    if instance.switch_port:
-        instance.switch_port.delete()
+    try:
+        if instance.switch_port:
+            instance.switch_port.delete()
+    except:
+        pass

@@ -7,6 +7,8 @@
 import traceback
 import json
 import errno
+from socket import error as socket_error
+from plugins.common.exception import ResourceNotEnough
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
@@ -61,14 +63,19 @@ def create_vm(request, sliceid, from_link):
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
                     if not serverid:
-                        raise Exception(_('resource not enough'))
+                        raise ResourceNotEnough()
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
                 return HttpResponse(json.dumps({'result': 0}))
-            except Exception, e:
-                return HttpResponse(json.dumps({'result': 1, 'error': str(e[0].encode('utf8'))}))
-        return HttpResponse(json.dumps({'result': 1, 'error': 'vm invalide'}))
+            except socket_error as serr:
+                if serr.errno == errno.ECONNREFUSED:
+                    return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
+            except ResourceNotEnough, e:
+                return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+            except:
+                return HttpResponse(json.dumps({'result': 1, 'error': _('server error')}))
+        return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
         vm_form = VmForm()
         slice = get_object_or_404(Slice, id=sliceid)
@@ -90,12 +97,10 @@ def do_vm_action(request, vmid, action):
             vm = VirtualMachine.objects.get(id=vmid)
             api.do_vm_action(vm, action)
             return HttpResponse(json.dumps({'result': 0}))
-        except Exception, e:
-            errmsg = e[0]
-            if e[0] == errno.ECONNREFUSED:
-                errmsg = _("connection refused")
-            return HttpResponse(json.dumps({'result': 1, 'error': str(errmsg.encode('utf8'))}))
-    return HttpResponse(json.dumps({'result': 1, 'error': 'operator failed!'}))
+        except socket_error as serr:
+            if serr.errno == errno.ECONNREFUSED:
+                return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
+    return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed!')}))
 
 
 def vnc(request, vmid):
@@ -140,6 +145,7 @@ def get_slice_gateway_ip(request, slice_name):
 def set_domain_state(vname, state):
     try:
         vm_query = VirtualMachine.objects.filter(uuid=vname)
+        switch_port = None
         if state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
             host = vm_query[0].server
             slice = vm_query[0].slice
@@ -149,11 +155,10 @@ def set_domain_state(vname, state):
             switch_port = SwitchPort(switch=switch, port=port, name=name)
             switch_port.save()
             slice.add_resource(switch_port)
-            vm_query.update(state=state, switch_port=switch_port)
     except:
-        vm_query.update(state=state)
         LOG.debug(traceback.print_exc())
     finally:
+        vm_query.update(state=state, switch_port=switch_port)
         return True
 
 def get_flavor_msg(request):

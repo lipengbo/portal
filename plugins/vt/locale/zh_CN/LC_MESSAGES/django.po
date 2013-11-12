@@ -110,8 +110,17 @@ msgstr "虚拟机列表"
 msgid "resource not enough"
 msgstr "宿主机资源不足"
 
+msgid "vm invalide"
+msgstr "虚拟机信息校验不成功"
+
 msgid "connection refused"
 msgstr "远程连接失败"
+
+msgid "server error"
+msgstr "服务器出错"
+
+msgid "vm operation failed"
+msgstr "虚拟机操作失败"
 
 msgid "micro"
 msgstr "微型"

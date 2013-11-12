@@ -204,12 +204,12 @@ def do_addFlowSpace(args, passwd, flowvisor_url, flowvisor_ps):
         print "add-flowspace: <flowspace-name> <dpid> <priority> <match> <slice-perm>"
         return "error"
     match = makeMatch(args[3])
-    req = {"name": args[0], "dpid": args[1], "priority": int(args[2]), "match": match }
+    req = {"name": args[0], "dpid": args[1], "priority": int(args[2]), "match": match}
     actions = args[4].split(',')
     acts = []
     for action in actions:
         parts = action.split('=')
-        act = { 'slice-name': parts[0], "permission": int(parts[1]) }
+        act = {'slice-name': parts[0], "permission": int(parts[1])}
         acts.append(act)
     req['slice-action'] = acts
     ret = connect("add-flowspace", data=[req], flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
@@ -243,7 +243,7 @@ def do_updateFlowSpace(args, opts, flowvisor_url, flowvisor_ps):
         acts = []
         for action in actions:
             parts = action.split('=')
-            act = { 'slice-name' : parts[0], 'permission' : int(parts[1]) }
+            act = {'slice-name': parts[0], 'permission': int(parts[1])}
             acts.append(act)
         req['slice-action'] = acts
     if len(req.keys()) <= 1:
@@ -261,7 +261,7 @@ def do_removeFlowSpace(args, flowvisor_url, flowvisor_ps):
     if len(args) < 1:
         print "remove-flowpace : Must specify the name of the flowspace to remove."
         return "error"
-    ret = connect("remove-flowspace", data=args, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps) 
+    ret = connect("remove-flowspace", data=args, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     print ret
     if ret:
         print "Flowspace entries have been removed."
