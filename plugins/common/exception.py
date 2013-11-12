@@ -225,3 +225,6 @@ class ClassNotFound(NotFound):
 
 class FileNotFound(NotFound):
     message = _("File %(file_path)s could not be found.")
+
+class ResourceNotEnough(CCFException):
+    message = _("resource not enough")
