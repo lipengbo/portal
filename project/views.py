@@ -218,11 +218,16 @@ def delete_project(request, id):
 @login_required
 def applicant(request, id):
     project = get_object_or_404(Project, id=id)
+    context = {}
     if not (request.user == project.owner):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
-    context = {}
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            applications = applications.filter(from_user__username__icontains=query)
+            context['query'] = query
     context['applications'] = applications
     context['project'] = project
 
