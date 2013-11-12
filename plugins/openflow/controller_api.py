@@ -113,10 +113,11 @@ def delete_controller(controller):
         if controller.name == 'user_define' and (not controller.host):
             controller.delete()
         else:
+            pass
             #先删除虚拟机然后删除controller记录
-            if controller.host:
-                delete_vm_for_controller(controller.host)
-            controller.delete()
+#             if controller.host:
+#                 delete_vm_for_controller(controller.host)
+#             controller.delete()
 
 
 def slice_change_controller(slice_obj, controller_info):
