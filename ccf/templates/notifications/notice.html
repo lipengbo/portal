@@ -14,7 +14,7 @@
     {{ notice.actor }}
     {% trans notice.verb %}
     {% if notice.target %}
-        <a href="{{ notice.target.absolute_url }}" target="_blank">{{ notice.target }}</a>
+        <a href="{{ notice.target.absolute_url }}">{{ notice.target }}</a>
     {% endif %}
     {% if notice.unread %}</b>{% endif%}
     <small class="muted">{{ notice.timesince }}{% trans "ago" %}</small>

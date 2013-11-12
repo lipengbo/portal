@@ -16,7 +16,7 @@
             <div class="search">
                 <form class="form-search">
                   <div class="input-append">
-                      <input type="text" value="{{ query }}" class="span2 search-query">
+                      <input type="text" name="query" value="{{ query }}" class="span2 search-query">
                     <button type="submit" class="btn">搜索</button>
                   </div>
                 </form>
@@ -53,7 +53,7 @@
                     </tbody>
                  </table>
               </fieldset>
-              {% if not projects %}
+              {% if not applications %}
                     {% if query %}
                         <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
                     {% else %}

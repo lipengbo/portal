@@ -82,7 +82,7 @@ $(document).ready(function() {
     // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
-        $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        $('#topology-iframe').attr('src', '/topology/?size=big&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
         selected_ports = {};
         $('.switch-table tbody tr').hide();
         $('.switch-table tbody tr label').hide();

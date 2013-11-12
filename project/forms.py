@@ -18,6 +18,9 @@ class ProjectForm(forms.ModelForm):
         self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit('submit', '创建'))
 
+    def clean_name(self):
+        return self.cleaned_data['name'].strip()
+
     class Meta:
         model = Project
         fields = ("name", "description", "islands")
