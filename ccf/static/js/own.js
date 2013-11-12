@@ -344,7 +344,7 @@ function page_function3(){
            str = str + "<tr><td colspan=2>"
           // +"<label class=\"inline tab_checkbox\">"
            //   +"<input type=\"checkbox\" value=\"dhcp\" id=\"dhcp_show\" checked disabled> 是否配置DHCP服务器</label></td></tr>";
-           +"配置DHCP服务器</td></tr>";
+           +"已配置DHCP服务器</td></tr>";
            
         }else{
            str = str + "<tr><td colspan=2>"
