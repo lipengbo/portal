@@ -140,6 +140,7 @@ def get_slice_gateway_ip(request, slice_name):
 def set_domain_state(vname, state):
     try:
         vm_query = VirtualMachine.objects.filter(uuid=vname)
+        switch_port = None
         if state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
             host = vm_query[0].server
             slice = vm_query[0].slice
@@ -149,11 +150,10 @@ def set_domain_state(vname, state):
             switch_port = SwitchPort(switch=switch, port=port, name=name)
             switch_port.save()
             slice.add_resource(switch_port)
-            vm_query.update(state=state, switch_port=switch_port)
     except:
-        vm_query.update(state=state)
         LOG.debug(traceback.print_exc())
     finally:
+        vm_query.update(state=state, switch_port=switch_port)
         return True
 
 def get_flavor_msg(request):

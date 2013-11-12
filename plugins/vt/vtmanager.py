@@ -31,9 +31,10 @@ class Filter(object):
             mem_total = float(host_status['mem'][0])
             if config.max_mem < (mem_total - mem_free - (self.mem << 20)) * 100 / mem_total:
                 return False
-            disk_free = int(host_status['disk'].items()[0][1][2])
-            if config.max_disk > (disk_free >> 30) - self.disk:
-                return False
+            if config.max_disk != 0:
+                disk_free = int(host_status['disk'].items()[0][1][2])
+                if config.max_disk > (disk_free >> 30) - self.disk:
+                    return False
         return hostid
 
     def filter(self, host_list):
