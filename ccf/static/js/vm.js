@@ -179,9 +179,11 @@ function get_checked_from_checkbox(obj)
                 obj = objs[i];
                 if(obj.checked)
                 {
-                        results[i] = '是'
-                }
-                results[i] = '否'
+                        results[i] = '是';
+                }else{
+						 results[i] = '否';
+				}
+               
         }
         return results
 }
