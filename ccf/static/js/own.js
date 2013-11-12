@@ -82,7 +82,7 @@ $(document).ready(function() {
     // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
-        $('#topology-iframe').attr('src', '/topology/?no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        $('#topology-iframe').attr('src', '/topology/?size=big&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
         selected_ports = {};
         $('.switch-table tbody tr').hide();
         $('.switch-table tbody tr label').hide();
@@ -344,7 +344,7 @@ function page_function3(){
            str = str + "<tr><td colspan=2>"
           // +"<label class=\"inline tab_checkbox\">"
            //   +"<input type=\"checkbox\" value=\"dhcp\" id=\"dhcp_show\" checked disabled> 是否配置DHCP服务器</label></td></tr>";
-           +"配置DHCP服务器</td></tr>";
+           +"已配置DHCP服务器</td></tr>";
            
         }else{
            str = str + "<tr><td colspan=2>"

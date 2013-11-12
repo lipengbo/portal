@@ -131,5 +131,9 @@
             throw Error();
         }
     });
+    if($('.checkboxs input[type="checkbox"][checked]').length == $('.checkboxs input[type="checkbox"]').length) {
+        $('.checkall input').iCheck('check');
+        
+    }
 </script>
 {% endblock %}
