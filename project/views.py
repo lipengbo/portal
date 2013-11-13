@@ -1,4 +1,6 @@
 import json
+import logging
+logger = logging.getLogger("plugins")
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
