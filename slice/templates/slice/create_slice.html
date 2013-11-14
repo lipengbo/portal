@@ -513,7 +513,7 @@
       <p class="text-center">slice创建失败！</p>
     </div> 
     <div class="modal-footer">
-      <button class="btn delete-confirm btn-info" data-dismiss="modal">确定</button>
+      <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_closed">确定</button>
     </div>          
 </div>
 {% endblock %}
@@ -553,6 +553,9 @@
         $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
             delete selected_ports[$(this).val()];
         });
+		$('#alert_closed').on("click", function(){
+			window.location.href = window.location.href;
+		})
 
     });
 </script> 
