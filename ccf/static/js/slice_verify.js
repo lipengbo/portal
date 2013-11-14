@@ -203,7 +203,7 @@ function check_nw_num(){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
 		             	old_slice_nw_obj.value = data.value;
-		             	setTimeout("nw_timeout()",1750000);
+		             	setTimeout("nw_timeout()",3000);
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
@@ -233,8 +233,11 @@ function check_nw_num(){
 
 //网段过期
 function nw_timeout(){
-	alert("分配的网段已过期！");
-	window.location.href = window.location.href;
+	$("div#slice_alert_info").empty();
+    var str = "" + "<p class=\"text-center\">" + "分配的网段已过期！" + "</p>";
+    $("div#slice_alert_info").append(str);
+    $('#slicealertModal').modal('show');
+	//alert("分配的网段已过期！");
 	//window.top.location.reload();
 }
 
