@@ -16,6 +16,8 @@ class BaseForm(ModelForm):
             app_label, model_class = self._meta.model.admin_options()['ct_model']
             Model = get_model(app_label, model_class, False)
             queryset = Model.objects.all()
+            if self.instance.__class__.__name__ == 'Flowvisor':
+                queryset = []
             self.fields['object_id'] = forms.ChoiceField(choices=((m.id, m.__unicode__()) for m in queryset), label=Model._meta.verbose_name)
             ct = ContentType.objects.get_by_natural_key(app_label, model_class)
             self.fields['content_type'].widget = forms.HiddenInput()
