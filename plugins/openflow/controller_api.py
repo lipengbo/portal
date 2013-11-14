@@ -17,11 +17,11 @@ def create_add_controller(slice_obj, controller_info):
         try:
             if controller_info['controller_type'] == 'default_create':
                 controller = create_default_controller(slice_obj,
-                    controller_info['controller_sys'])
+                                                       controller_info['controller_sys'])
             else:
                 controller = create_user_defined_controller(slice_obj,
-                    controller_info['controller_ip'],
-                    controller_info['controller_port'])
+                                                            controller_info['controller_ip'],
+                                                            controller_info['controller_port'])
             slice_add_controller(slice_obj, controller)
             return controller
         except Exception, ex:
@@ -87,8 +87,12 @@ def create_default_controller(slice_obj, controller_sys):
                 #island=slice_obj.get_island())
             island = slice_obj.get_island()
             #先创建虚拟机然后再创建controller
-            vm, ip = create_vm_for_controller(island_obj=island, slice_obj=slice_obj, image_name=controller_sys)
-            controller = Controller(name=controller_sys, port=6633, http_port=0, state=1, island=island)
+            vm, ip = create_vm_for_controller(island_obj=island,
+                                              slice_obj=slice_obj,
+                                              image_name=controller_sys)
+            controller = Controller(name=controller_sys,
+                                    port=6633, http_port=0,
+                                    state=1, island=island)
             controller.ip = ip
             controller.host = vm
             controller.save()
@@ -128,14 +132,15 @@ def slice_change_controller(slice_obj, controller_info):
                         return
             else:
                 if haved_controller.name == 'user_define' and\
-                    haved_controller.ip == controller_info['controller_ip'] and\
-                    haved_controller.port == int(controller_info['controller_port']):
+                        haved_controller.ip == controller_info['controller_ip'] and\
+                        haved_controller.port == int(controller_info['controller_port']):
                     return
             slice_obj.remove_resource(haved_controller)
             controller = None
             controller = create_add_controller(slice_obj, controller_info)
             flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                slice_obj.name, controller.ip, controller.port)
+                                             slice_obj.name, controller.ip,
+                                             controller.port)
         except:
             print 'c5'
             try:
