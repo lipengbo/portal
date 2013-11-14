@@ -6229,8 +6229,9 @@ table {
   text-decoration: none;
   position: absolute;
   right: 20px;
-  top: 20px;
+  top: 12px;
   zoom: 1;
+  line-height: 33px;
 }
 .nums_block .nums_top span.total_name {
   position: absolute;
