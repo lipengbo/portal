@@ -7,6 +7,11 @@ class BaseForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(BaseForm, self).__init__(*args, **kwargs)
+        initial = kwargs.get('initial')
+        if initial:
+            #: set the field with default as hidden input to prevent user modify it
+            for k in initial.keys():
+                self.fields[k].widget = forms.HiddenInput()
         if 'content_type' in self.fields:
             app_label, model_class = self._meta.model.admin_options()['ct_model']
             Model = get_model(app_label, model_class, False)
