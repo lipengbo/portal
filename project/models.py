@@ -38,6 +38,13 @@ class Island(models.Model):
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
 
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', ),
+        }
+        return options
+
     def __unicode__(self):
         return self.name
 
