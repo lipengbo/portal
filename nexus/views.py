@@ -84,7 +84,13 @@ def add_or_edit(request, app_label, model_class, id=None):
     else:
         instance = None
     if request.method == 'GET':
-        context['formset'] = ModelForm(instance=instance)
+        defaults = {}
+        for k, v in request.GET.items():
+            if isinstance(v, list):
+                defaults[k] = v[0]
+            else:
+                defaults[k] = v
+        context['formset'] = ModelForm(instance=instance, initial=defaults)
     else:
         formset = ModelForm(request.POST, instance=instance)
         if formset.is_valid():
