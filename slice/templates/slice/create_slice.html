@@ -185,7 +185,7 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td width="150">网络地址</td>
+                            <td width="180">网络地址</td>
                             <td>
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -193,7 +193,10 @@
                             	<input type="text" value="" id="old_nw_owner" style="display:none"/>
                             	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
+							
                         </tr>
+						<tr>
+							<td><label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器</td><td></td></tr>
                     </tbody>
                 </table>
               </fieldset>
@@ -293,9 +296,7 @@
                     </tbody>
                 </table>
             </fieldset>-->
-              <label class="inline tab_checkbox">
-                  <input type="checkbox" id="dhcp_selected" value="dhcp"> 是否配置DHCP服务器 
-              </label>
+              
             </div>  
               <div class="form-actions">
                   <div class="row-fluid">
@@ -309,6 +310,22 @@
              <div class="tab_part">
                  <fieldset class="vm_info_list tooltip-demo">
                  <legend>虚拟机信息</legend>
+				<!-- 拓扑图 -->
+				<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+					<div class="modal-header">
+        				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        				<h4 class="modal-title">拓扑</h4>
+    				</div>
+    				<div class="modal-body" id="topology_info">
+					<div class="row-fluid">
+        				<div class="span2"></div>
+        				<div class="span8">
+        					<iframe scrolling="no" id="topologyiframe" width="450" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300&top=1" frameborder="0"></iframe>
+         				</div>
+            			<div class="span2"></div>
+         			</div>  
+				</div>                
+			</div>
                  <div class="sec_block"> 
                    <div class="row-fluid vm_well_wrap"> 
                      <div class="span5 base_info">        
@@ -318,39 +335,20 @@
                                 <td width="30%">名称</td>
                                 <td>
     				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />									<span name="nameInfo"></span>
-<!--
-    				                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left" name="icon_msg"></i></a> -->            			
                                 </td>                           
-                              <!--  <td>
-                                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span> 
-                                </td>     -->                      
                             </tr>
                             <tr>
                                 <td>虚拟机类型</td>
                                 <td>
                                     {{ vm_form.flavor }} <span name="flavorInfo"></span>                              
-                                    <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
-									{{vm_form.flavor.errors}} -->
                                     				
                                 </td>
-                          <!--      <td>
-                                    <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
-                            </td>  -->
-                                <!--
-                                <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
-                                -->
                             </tr>
                             <tr>
                                 <td>虚拟机镜像</td>
                                 <td>
                                     {{ vm_form.image }} <span name="imageInfo"></span>
-                                    <!--<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a> 
-									{{vm_form.image.errors}}-->
-                                                
                                 </td>
-                           <!--     <td>
-                                   <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span> 
-                            </td>   -->
                             </tr>
                             <tr>
                                 <td>宿主机</td>
@@ -358,12 +356,7 @@
                                     <select onblur="check_vminfo()" name="server" id="id_server">
                                     </select>
 									<span name="serverInfo"></span>
-                                   <!-- <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>-->
-													
                                 </td>
-                                
-                            <!--    <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span></td>
-                          -->      
                             </tr>
                         </tbody>
                      </table>                                
@@ -416,7 +409,10 @@
                  </div>                
                </div>          
               </fieldset>
-              <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>               
+              <p class="add_btn">
+				<button class="btn btn-info" type="button" id="show_topo">查看拓扑</button>
+				<button class="btn btn-info add" type="button">继续添加</button>
+			  </p>               
               <div class="form-actions">
                   <div class="row-fluid">
                     <div class="span3"></div>
@@ -513,7 +509,7 @@
       <p class="text-center">slice创建失败！</p>
     </div> 
     <div class="modal-footer">
-      <button class="btn delete-confirm btn-info" data-dismiss="modal">确定</button>
+      <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_closed">确定</button>
     </div>          
 </div>
 {% endblock %}
@@ -553,6 +549,9 @@
         $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
             delete selected_ports[$(this).val()];
         });
+		$('#alert_closed').on("click", function(){
+			window.location.href = window.location.href;
+		})
 
     });
 </script> 

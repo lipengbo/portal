@@ -233,8 +233,11 @@ function check_nw_num(){
 
 //网段过期
 function nw_timeout(){
-	alert("分配的网段已过期！");
-	window.location.href = window.location.href;
+	$("div#slice_alert_info").empty();
+    var str = "" + "<p class=\"text-center\">" + "分配的网段已过期！" + "</p>";
+    $("div#slice_alert_info").append(str);
+    $('#slicealertModal').modal('show');
+	//alert("分配的网段已过期！");
 	//window.top.location.reload();
 }
 
