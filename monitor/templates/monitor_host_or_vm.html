@@ -16,7 +16,6 @@
 {% endblock %}
 
 {% block body %}
-
 <div id="div_normal_data" style="display">
     <div class="row-fluid">
         <div class="span6">
@@ -107,9 +106,16 @@
                 var vm_id = {{ vm_id }}
                 if ({{ vm_id }} == 0){
                     init({{host_id}}, undefined);
+					$('#alert_close').on("click", function(){
+						window.location.href = "/nexus/resources/server/";
+					});
                 }else{
                     init({{ host_id }}, {{ vm_id }});
+					$('#alert_close').on("click", function(){
+						window.location.href = "/slice/detail/{{ slice_id }}/";
+					});
                 }
+		
             })
         </script>
 {% endblock %}

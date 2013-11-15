@@ -236,7 +236,7 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
-    print jsondatas
+#     print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
@@ -266,21 +266,17 @@ def create_nw(request, owner, nw_num):
           失败:value = 0
           成功：value = 网段（192.168.5.6/27）
     """
+    print "create_nw"
     try:
         nw_objs = Subnet.objects.filter(owner=owner)
         if nw_objs:
             IPUsage.objects.delete_subnet(owner)
-        print "net work 1"
         nw = IPUsage.objects.create_subnet(owner, int(nw_num), 1800)
-        print "net work 2"
         if nw:
-            print "net work 3"
             return HttpResponse(json.dumps({'value': nw}))
         else:
-            print "net work 4"
             return HttpResponse(json.dumps({'value': 0}))
     except Exception, ex:
-        print "net work 5"
         print ex
         return HttpResponse(json.dumps({'value': 0}))
 
@@ -346,7 +342,6 @@ def update_links_bandwidths(request, slice_id):
     maclist = request.POST.get("maclist")
     id_ports = info.split(',')
     maclist = maclist.split(',')
-    print 8
     for id_port in id_ports:
         idport = id_port.split('_')
         if len(idport) > 1:
@@ -358,8 +353,6 @@ def update_links_bandwidths(request, slice_id):
                 ports[int(idport[0])] = [idport[1]]
     for switch_id in switch_ids:
         switchs_ports.append({'id': switch_id, 'ports': ports[switch_id]})
-    print switchs_ports
     ret = get_slice_links_bandwidths(switchs_ports, maclist)
-    print 9
     result = json.dumps({'bandwidth': ret})
     return HttpResponse(result, mimetype='text/plain')

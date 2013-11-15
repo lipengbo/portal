@@ -51,7 +51,9 @@ function get_br_info(switch_id, flag){
         type : 'GET',
         dataType : 'json',
         error : function(){
-            alert("获取网桥信息失败， 请检查agent是否启动并设置了ovs服务！");
+            //alert("获取网桥信息失败， 请检查agent是否启动并设置了ovs服务！");
+			document.getElementById('alert_info').innerHTML = "获取网桥信息失败， 请检查agent是否启动并设置了ovs服务！";
+			$('#alert_modal').modal('show');
         },
         success : function(br_info){
             var context = '';
@@ -71,8 +73,10 @@ function get_br_info(switch_id, flag){
 			if(flag){
 				document.getElementById('br_info').innerHTML = context;
 			}
-            
-			get_port_info(switch_id, default_show_br, default_show_port, flag)
+			get_port_info(switch_id, default_show_br, default_show_port, flag);
+			
+			
+
         }
 		
     });
@@ -82,8 +86,9 @@ function get_br_info(switch_id, flag){
 
 var pre_recv_data = 0;
 var pre_send_data = 0;
+var return_data = true;
 function update_port_data(switch_id, br, port, flag){
-
+	return_data = false;
 	$.ajax({
 		url: '/monitor/port/',
 		type : 'POST',
@@ -92,14 +97,19 @@ function update_port_data(switch_id, br, port, flag){
 		dataType : 'json',
 		timeout : 1000,
 		success : function(port_data){
+			if(port_data.result == 1){
+				document.getElementById('alert_info').innerHTML = port_data.error;
+				$('#alert_modal').modal('show');
+			}else{
+			process_data = data_process_for_Y([port_data['recv_bps'], port_data['send_bps'], 'bit']);
 			port_options['scaleOverride'] = false;
 			port_recv_values.shift();
-			port_recv_values.push(port_data['recv_bps']/1024);
+			port_recv_values.push(process_data[0]);
 			port_chart_data["datasets"][0]["data"] = port_recv_values;
 			pre_recv_data = port_data['port_recv_data']
 
 			port_send_values.shift();
-			port_send_values.push(port_data['send_bps']/1024);
+			port_send_values.push(process_data[1]);
 			port_chart_data["datasets"][1]["data"] = port_send_values;
 			pre_send_data = port_data['port_send_data'];
 			if(count(port_recv_values) == 0 && count(port_send_values) == 0){
@@ -113,7 +123,11 @@ function update_port_data(switch_id, br, port, flag){
 			}
 			document.getElementById('id_port_send_bps').innerHTML = data_process(port_data['send_bps']) + data_process_unit(port_data['send_bps'], 'bit');
 			document.getElementById('id_port_recv_bps').innerHTML = data_process(port_data['recv_bps']) + data_process_unit(port_data['recv_bps'], 'bit');
+			}
+			return_data = true;
+			
 		}
+		
 	});
 }
 
@@ -121,7 +135,12 @@ var port_timer;
 function get_port_info(switch_id, br, port, flag){
 	document.getElementById('current_br').innerHTML = " > 网桥：" + br;
 	document.getElementById('current_port').innerHTML = " > 端口：" + port;
-	clearTimeout(port_timer);
-	update_port_data(switch_id, br, port, flag);
-    port_timer = setTimeout(function(){get_port_info(switch_id, br, port, flag)}, 1000);
+	if(return_data){
+		clearTimeout(port_timer);
+		update_port_data(switch_id, br, port, flag);
+    	port_timer = setTimeout(function(){get_port_info(switch_id, br, port, flag)}, 1000);
+	}
+	
 }
+
+

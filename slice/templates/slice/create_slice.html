@@ -141,7 +141,7 @@
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}"/>{{port.port}}
+						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{port.port}}
 					    {%else%}
 						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" switchtype="{{ovs_port.switch_type}}"/>{{port.port}}
 		                            {%endif%}
@@ -239,7 +239,7 @@
               </fieldset>
 			<div id="gw_setting" style="display:none">
               <fieldset class="base_info tooltip-demo">
-                 <legend>虚拟网关配置<small>(可选，只有在上一步中选择了网络出口节点才会出现配置SLICE虚拟网关部分)</small></legend>
+                 <legend>虚拟网关配置<small>(可选，只有在上一步中选择了虚拟机关联节点才会出现配置SLICE虚拟网关部分)</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -509,7 +509,7 @@
       <p class="text-center">slice创建失败！</p>
     </div> 
     <div class="modal-footer">
-      <button class="btn delete-confirm btn-info" data-dismiss="modal">确定</button>
+      <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_closed">确定</button>
     </div>          
 </div>
 {% endblock %}
@@ -549,6 +549,9 @@
         $('input[name="switch_port_ids"]').on("ifUnchecked", function(){
             delete selected_ports[$(this).val()];
         });
+		$('#alert_closed').on("click", function(){
+			window.location.href = window.location.href;
+		})
 
     });
 </script> 
