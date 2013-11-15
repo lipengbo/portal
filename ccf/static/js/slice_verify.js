@@ -203,7 +203,7 @@ function check_nw_num(){
 	            		//alert(3);
 	        			slice_nw_obj.innerHTML = data.value;
 		             	old_slice_nw_obj.value = data.value;
-		             	setTimeout("nw_timeout()",3000);
+		             	setTimeout("nw_timeout()",1750000);
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
