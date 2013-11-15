@@ -270,6 +270,7 @@ function page_function1(){
 }
 function page_function2(){
     fetch_serverinfo("id_server");
+	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=620&height=300&top=1&switch_port_ids=" + get_select_ports())
 	ret1 = check_slice_controller('controller_type');
 	if (ret1){
 		//
