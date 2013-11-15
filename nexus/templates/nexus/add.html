@@ -22,3 +22,18 @@
     </div>
 </form>
 {% endblock %}
+
+{% block extra_script %}
+{% with ModelClass|get_class_name as class_name  %}
+<script type="text/javascript" charset="utf-8">
+    {% if class_name == 'Flowvisor' %}
+        $('#id_island').change(function(){
+            var island_id = $(this).val();
+            $.get("{% url nexus_server_api %}", {island_id: island_id} ,function(html){
+                $('#id_object_id').html(html);
+            });
+        });
+    {% endif %}
+</script>
+{% endwith %}
+{% endblock %}
