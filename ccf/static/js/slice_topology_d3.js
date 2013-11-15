@@ -886,7 +886,7 @@ function random_refresh2 () {
                    // alert("更新失败！");
                 }
         });
-        refresh_time = Math.floor(Math.random() * 10000 + 2000 );
+        refresh_time = Math.floor(Math.random() * 10000 + 10000 );
         random_refresh2();
     }, refresh_time);
 }  

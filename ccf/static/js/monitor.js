@@ -161,6 +161,8 @@ function show_port(num){
 function change_port(option){
 	show_port_num = option;
 	$('#ports_info').val(option);
+	//$('#ports_info').change();
+	$('#ports_info option[value=' + option + ']').attr("selected", "true");
 	show_port(option);
 	
 }
@@ -181,10 +183,13 @@ function get_performace_data(host_id, vm_id){
         dataType: 'json',
 		//async: false,
         timeout: 1000,
-        error: function(){
-                //alert('Get performace data error!');
-            },
         success: function(performace_data){
+				if(performace_data.result == 1){
+					document.getElementById('alert_info').innerHTML = performace_data.error;
+					$('#alert_modal').modal('show');
+					//alert(performace_data.error)
+				}else{
+				
 				net_options['scaleOverride'] = false;
 				cpu_values.shift();
 				cpu_values.push(performace_data['cpu_use']);
@@ -237,8 +242,12 @@ function get_performace_data(host_id, vm_id){
 
                     pre_net_data.push(data[0]+':'+data[1]);
 				
-					
-                    port_info_content = port_info_content + "<option value="+num+">"+port+"</option>"
+					if(num == show_port_num){
+						port_info_content = port_info_content + "<option value="+num+" selected>"+port+"</option>";
+					}else{
+						port_info_content = port_info_content + "<option value="+num+">"+port+"</option>";
+					}
+		            
 					net_info_content[num] = [data[0], data[2], data[1], data[3]];
 
 					num++;
@@ -249,7 +258,7 @@ function get_performace_data(host_id, vm_id){
 				//alert(pre_net_data)
 				//show_port(show_port_num);
 				change_port(show_port_num);
-
+				}
 				
             }
      });

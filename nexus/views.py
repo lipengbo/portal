@@ -16,6 +16,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from nexus.templatetags.nexus_tags import get_fields
 from nexus.forms import BaseForm
 from project.models import City, Island
+from resources.models import Server
 import django_filters
 
 
@@ -84,7 +85,13 @@ def add_or_edit(request, app_label, model_class, id=None):
     else:
         instance = None
     if request.method == 'GET':
-        context['formset'] = ModelForm(instance=instance)
+        defaults = {}
+        for k, v in request.GET.items():
+            if isinstance(v, list):
+                defaults[k] = v[0]
+            else:
+                defaults[k] = v
+        context['formset'] = ModelForm(instance=instance, initial=defaults)
     else:
         formset = ModelForm(request.POST, instance=instance)
         if formset.is_valid():
@@ -108,3 +115,11 @@ def delete_action(request, app_label, model_class, id=None):
     if redirect_url:
         return redirect(redirect_url)
     return redirect('nexus_list', app_label=app_label, model_class=model_class)
+
+def get_servers(request):
+    island_id = request.GET.get('island_id')
+    servers = Server.objects.filter(island__id=island_id)
+    html = ''
+    for server in servers:
+        html += '<option value="' + str(server.id) + '">' + server.name + '</option>'
+    return HttpResponse(html)

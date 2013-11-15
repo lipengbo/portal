@@ -2,7 +2,6 @@
 from flowvisor_proxy import do_addSlice, do_updateSlice,\
     do_removeSlice, do_addFlowSpace, do_updateFlowSpace, do_removeFlowSpace
 from slice.slice_exception import FlowvisorError, DbError
-from django.contrib.auth.models import User as ceni_user
 
 import logging
 LOG = logging.getLogger("CENI")
@@ -78,7 +77,7 @@ def flowvisor_del_slice(flowvisor, slice_name):
 
 
 def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
-    pwd, dpid, priority, arg_match):
+                            pwd, dpid, priority, arg_match):
     """flowvisor上添加flowspace
     """
     LOG.debug('flowvisor_add_flowspace')
@@ -100,7 +99,7 @@ def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
 
 
 def flowvisor_update_flowspace(flowvisor, flowspace_name, priority_flag,
-    arg_match_flag, priority, arg_match):
+                               arg_match_flag, priority, arg_match):
     """flowvisor上更新flowspace
     """
     LOG.debug('flowvisor_update_flowspace')

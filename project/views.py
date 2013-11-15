@@ -1,4 +1,6 @@
 import json
+import logging
+logger = logging.getLogger("plugins")
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -35,6 +37,7 @@ def home(request):
     else:
         return redirect('account_login')
 
+
 @login_required
 def index(request):
     context = {}
@@ -44,16 +47,19 @@ def index(request):
         projects = Project.objects.all()
         context['extent_html'] = "admin_base.html"
     else:
-        project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+        project_ids = Membership.objects.filter(user=user).values_list(
+                "project__id", flat=True)
         projects = Project.objects.filter(id__in=project_ids)
         context['extent_html'] = "site_base.html"
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
-            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            projects = projects.filter(Q(name__icontains=query) |
+                    Q(description__icontains=query))
             context['query'] = query
     context['projects'] = projects
     return render(request, 'project/index.html', context)
+
 
 @login_required
 def detail(request, id):
@@ -67,14 +73,17 @@ def detail(request, id):
     context['project'] = project
     return render(request, 'project/detail.html', context)
 
+
 @login_required
 def manage(request):
     user = request.user
-    project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    project_ids = Membership.objects.filter(user=user).values_list(
+            "project__id", flat=True)
     projects = Project.objects.filter(id__in=project_ids)
     context = {}
     context['projects'] = projects[:4]
     return render(request, 'project/manage.html', context)
+
 
 @login_required
 def invite(request, id):
@@ -84,18 +93,6 @@ def invite(request, id):
     context = {}
     context['project'] = project
     target_type = ContentType.objects.get_for_model(project)
-    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
-            target_type=target_type).values_list("to_user__id", flat=True))
-    invited_user_ids.extend(project.member_ids())
-    users = User.objects.exclude(id__in=set(invited_user_ids))
-    if 'query' in request.GET:
-        query = request.GET.get('query')
-        if query:
-            if len(query) > 256:
-                query = query[:256]
-            users = users.filter(username__icontains=query)
-            context['query'] = query
-    context['users'] = users
 
     if request.method == 'POST':
         user_ids = request.POST.getlist('user')
@@ -110,8 +107,23 @@ def invite(request, id):
                     invitation.target = project
                     invitation.save()
         else:
-            messages.add_message(request, messages.ERROR, _("Invitation message is required."))
+            messages.add_message(request, messages.ERROR,
+                    _("Invitation message is required."))
+
+    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
+            target_type=target_type).values_list("to_user__id", flat=True))
+    invited_user_ids.extend(project.member_ids())
+    users = User.objects.exclude(id__in=set(invited_user_ids))
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            if len(query) > 256:
+                query = query[:256]
+            users = users.filter(username__icontains=query)
+            context['query'] = query
+    context['users'] = users
     return render(request, 'project/invite.html', context)
+
 
 @login_required
 def apply(request):
@@ -129,7 +141,8 @@ def apply(request):
         if query:
             if len(query) > 256:
                 query = query[:256]
-            projects = projects.filter(Q(name__icontains=query)|Q(description__icontains=query))
+            projects = projects.filter(Q(name__icontains=query) |
+                    Q(description__icontains=query))
             context['query'] = query
     categories = Category.objects.all()
     context['projects'] = projects
@@ -217,11 +230,16 @@ def delete_project(request, id):
 @login_required
 def applicant(request, id):
     project = get_object_or_404(Project, id=id)
+    context = {}
     if not (request.user == project.owner):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
-    context = {}
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            applications = applications.filter(from_user__username__icontains=query)
+            context['query'] = query
     context['applications'] = applications
     context['project'] = project
 
@@ -334,7 +352,8 @@ def switch_direct(request, host, port):
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    switch_ids_tuple = flowvisor.link_set.all().values_list('source__switch__id', 'target__switch__id')
+    switch_ids_tuple = flowvisor.link_set.all().values_list(
+            'source__switch__id', 'target__switch__id')
     switch_ids = set()
     for switch_id_tuple in switch_ids_tuple:
         switch_ids.add(switch_id_tuple[0])

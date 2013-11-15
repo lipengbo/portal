@@ -39,6 +39,9 @@
 	<script>
 		$(function(){
 			get_br_info({{ switch_id }}, true);
+			$('#alert_close').on("click", function(){
+				window.location.href = "/nexus/resources/switch/";
+			})
 		})
 	</script>
 {% endblock %}

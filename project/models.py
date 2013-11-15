@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
 
 from guardian.shortcuts import assign_perm
 
@@ -16,7 +17,7 @@ from invite.models import Invitation
 from notifications import notify
 
 class City(models.Model):
-    name = models.CharField(max_length=256, verbose_name=_("name"))
+    name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
 
     def __unicode__(self):
@@ -33,9 +34,16 @@ class City(models.Model):
         verbose_name = _("City")
 
 class Island(models.Model):
-    name = models.CharField(max_length=256, verbose_name=_("name"))
+    name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
+
+    @staticmethod
+    def admin_options():
+        options = {
+            'exclude_fields': ('name', ),
+        }
+        return options
 
     def __unicode__(self):
         return self.name
@@ -55,7 +63,7 @@ class Category(models.Model):
 
 class Project(models.Model):
     owner = models.ForeignKey(User)
-    name = models.CharField(max_length=256, verbose_name=_("Project Name"))
+    name = models.CharField(max_length=255, verbose_name=_("Project Name"), unique=True)
     description = models.CharField(max_length=1024, verbose_name=_("Project Description"))
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership", 
@@ -94,6 +102,9 @@ class Project(models.Model):
 
     def get_display_name(self):
         return self.name
+
+    def absolute_url(self):
+        return reverse('project_detail', args=(self.id, ))
 
     def accept(self, member):
         try:
