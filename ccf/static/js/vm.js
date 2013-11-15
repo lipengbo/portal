@@ -429,3 +429,7 @@ function show_uuid(objs){
     }
 }
 
+function show_topology(){
+	$('#topologyModal').modal('show');
+}
+
