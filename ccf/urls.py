@@ -69,6 +69,7 @@ urlpatterns = patterns("",
 
     url(r"^project/", include("project.urls")),
     url(r"^slice/", include("slice.urls")),
+    url(r"^resources/", include("resources.urls")),
     url(r"^plugins/vt/", include("plugins.vt.urls")),
     url(r"^invite/", include("invite.urls")),
     url(r"^admin/", include(admin.site.urls)),

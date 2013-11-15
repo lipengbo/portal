@@ -23,55 +23,58 @@ function initboard(){
     $("div#topology_top").append(str);
 }
 function initboard2(){
-    svg.append('svg:text')
-      .attr('x', 0)
-      .attr('y', 15)
-      .attr('style', "fill:black;font-size:8pt")
-      .text("链路负载(%)");
-    svg.append('svg:text')
-      .attr('x', 0)
-      .attr('y', 35)
-      .attr('style', "fill:black;font-size:8pt")
-      .text("0~30");
-    svg.append('svg:line')
-      .attr('x1', 40)
-      .attr('y1', 30)
-      .attr('x2', 60)
-      .attr('y2', 30)
-      .attr('style', "stroke:green;stroke-width:2")
-    svg.append('svg:text')
-      .attr('x', 70)
-      .attr('y', 35)
-      .attr('style', "fill:black;font-size:8pt")
-      .text("30~60");
-    svg.append('svg:line')
-      .attr('x1', 115)
-      .attr('y1', 30)
-      .attr('x2', 135)
-      .attr('y2', 30)
-      .attr('style', "stroke:yellow;stroke-width:2")
-    svg.append('svg:text')
-      .attr('x', 0)
-      .attr('y', 50)
-      .attr('style', "fill:black;font-size:8pt")
-      .text("60~90");
-    svg.append('svg:line')
-      .attr('x1', 40)
-      .attr('y1', 45)
-      .attr('x2', 60)
-      .attr('y2', 45)
-      .attr('style', "stroke:orange;stroke-width:2")
-    svg.append('svg:text')
-      .attr('x', 70)
-      .attr('y', 50)
-      .attr('style', "fill:black;font-size:8pt")
-      .text("90~100");
-    svg.append('svg:line')
-      .attr('x1', 115)
-      .attr('y1', 45)
-      .attr('x2', 135)
-      .attr('y2', 45)
-      .attr('style', "stroke:red;stroke-width:2")
+    var top = $("#top").text();
+    if(top == 1){
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 15)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("链路负载(%)");
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("0~30");
+        svg.append('svg:line')
+          .attr('x1', 40)
+          .attr('y1', 30)
+          .attr('x2', 60)
+          .attr('y2', 30)
+          .attr('style', "stroke:green;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 70)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("30~60");
+        svg.append('svg:line')
+          .attr('x1', 115)
+          .attr('y1', 30)
+          .attr('x2', 135)
+          .attr('y2', 30)
+          .attr('style', "stroke:yellow;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 50)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("60~90");
+        svg.append('svg:line')
+          .attr('x1', 40)
+          .attr('y1', 45)
+          .attr('x2', 60)
+          .attr('y2', 45)
+          .attr('style', "stroke:orange;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 70)
+          .attr('y', 50)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("90~100");
+        svg.append('svg:line')
+          .attr('x1', 115)
+          .attr('y1', 45)
+          .attr('x2', 135)
+          .attr('y2', 45)
+          .attr('style', "stroke:red;stroke-width:2")
+    }
 }
 //initboard()
 
@@ -314,23 +317,151 @@ function inittpdata(){
                         src_bandwidth = 0;
                         dst_capacity = 0;
                         dst_bandwidth = 0;
-                        src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port;
-                        dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port;
-                        for(var k=0; k< bandwidth.length; k++){
-                            count = 0;
-                            if(src_id == bandwidth[k].id){
-                                src_capacity = bandwidth[k].total_bd;
-                                src_bandwidth = bandwidth[k].cur_bd;
-                                count++;
-                            }else if(dst_id == bandwidth[k].id){
-                                dst_capacity = bandwidth[k].total_bd;
-                                dst_bandwidth = bandwidth[k].cur_bd;
-                                count++;
-                            }
-                            if(count == 2){
-                                break;
-                            }
-                        }
+                        //src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port;
+                        //dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port;
+                        //for(var k=0; k< bandwidth.length; k++){
+                        //    count = 0;
+                        //    if(src_id == bandwidth[k].id){
+                        //        src_capacity = bandwidth[k].total_bd;
+                        //        src_bandwidth = bandwidth[k].cur_bd;
+                        //        count++;
+                        //     }else if(dst_id == bandwidth[k].id){
+                        //        dst_capacity = bandwidth[k].total_bd;
+                        //        dst_bandwidth = bandwidth[k].cur_bd;
+                         //       count++;
+                         //   }
+                         //   if(count == 2){
+                         //       break;
+                        //    }
+                       // }
+                        link = {source: nodes_data[src_node_id-1], target: nodes_data[dst_node_id-1], src_port_name: srcLinks[i].src_port_name,
+                            src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
+                            dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
+                            src_capacity: src_capacity, src_bandwidth: src_bandwidth, dst_capacity: dst_capacity,
+                            dst_bandwidth: dst_bandwidth};
+                        links.push(link);
+                    }
+                 }
+            }
+            //获取数据库中该slice的主机信息
+            for(var i=0; i< normals.length; i++){
+               
+                src_node = create_node(icon_data[3]);
+                dst_node_id = get_node(normals[i].switchDPID);
+                if(src_node && dst_node_id){
+                    nodes_data[src_node.id - 1].key = normals[i].ip;
+                    nodes_data[src_node.id - 1].yid = normals[i].hostid;
+                    nodes_data[src_node.id - 1].type_id = normals[i].hostStatus;
+                    nodes_data[src_node.id - 1].name = normals[i].name;
+                    nodes_data[src_node.id - 1].mac = normals[i].mac;
+                   // nodes_data[src_node.id - 1].vnc_port = normals[i].vnc_port;
+                    if(normals[i].hostStatus == 1){
+                        nodes_data[src_node.id - 1].icon = 'img/host.png';
+                    }else{
+                        nodes_data[src_node.id - 1].icon = 'img/host_down.png';
+                    }
+                    link = {source: nodes_data[src_node.id - 1], target: nodes_data[dst_node_id-1], left: false,
+                        right: true, required: true, type: 'hostswitch'};
+                    links.push(link);
+                }
+            }     
+        }
+    });
+}
+function inittpdata2(){
+    //获取数据库中该slice的拓扑信息 
+    var topology_url = "http://" + window.location.host + "/resources/topology_select/";
+    var switch_port_ids = $("#switch_port_ids").text();
+    $.ajax({
+        type: "POST",
+        url: topology_url,
+        dataType: "json",
+        data: {"switch_port_ids": switch_port_ids},
+        async: false, 
+        success: function(data) {
+            switches = data.switches;
+            srcLinks = data.links;
+            normals = data.normals;
+            bandwidth = data.bandwidth;
+            macs = data.maclist;
+            //构造获取带宽的参数
+            for(var i=0; i< bandwidth.length; i++){
+                if(bd_data == ''){
+                    bd_data = bd_data + bandwidth[i].id;
+                }else{
+                    bd_data = bd_data + ',' + bandwidth[i].id;
+                }
+            }
+            //alert(bd_data);
+            //构造获取mac的参数
+            for(var i=0; i< macs.length; i++){
+                if(maclist == ''){
+                    maclist = maclist + macs[i];
+                }else{
+                    maclist = maclist + ',' + macs[i];
+                }
+            }
+            //获取数据库中该slice的交换机信息
+            for(var i=0; i< switches.length; i++){
+                icon_data[2].key = switches[i].dpid;
+                
+                node = create_node(icon_data[2]);
+                if(node){
+                    nodes_data[node.id-1].key = switches[i].dpid;
+                    nodes_data[node.id-1].yid = switches[i].id;
+                    nodes_data[node.id-1].name = switches[i].name;
+                    nodes_data[node.id-1].type_id = switches[i].type;
+                    nodes_data[node.id-1].ports = switches[i].ports;
+                    if(switches[i].type == 1){
+                        nodes_data[node.id-1].icon = 'img/ovs.png';
+                    }else if(switches[i].type == 2){
+                        nodes_data[node.id-1].icon = 'img/ovs-red.png';
+                    }else{
+                        nodes_data[node.id-1].icon = 'img/ovs-green.png';
+                    }
+                }
+            }
+            //获取数据库中该slice的交换机的连接信息
+            for (var i = 0; i < srcLinks.length; i++) {
+                gre_ovs_capacity.push(bandwidth_capacities[Math.floor(Math.random() * 4)]);
+            };
+            var flag = true;
+            for(var i=0; i< srcLinks.length; i++){
+                flag = true;
+                for(var j=0; j< i; j++){
+                    if((srcLinks[i].src_switch == srcLinks[j].src_switch && srcLinks[i].dst_switch == srcLinks[j].dst_switch)||
+                        (srcLinks[i].src_switch == srcLinks[j].dst_switch && srcLinks[i].dst_switch == srcLinks[j].src_switch)){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){
+                    src_node_id = get_node(srcLinks[i].src_switch);
+                    dst_node_id = get_node(srcLinks[i].dst_switch);
+                    //nodes_data[src_node_id-1].have_port = true;
+                    //nodes_data[dst_node_id-1].have_port = true;
+                    if(src_node_id && dst_node_id){
+                        src_capacity = 0;
+                        src_bandwidth = 0;
+                        dst_capacity = 0;
+                        dst_bandwidth = 0;
+                        //src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port;
+                        //dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port;
+                        //for(var k=0; k< bandwidth.length; k++){
+                        //    count = 0;
+                        //    if(src_id == bandwidth[k].id){
+                        //        src_capacity = bandwidth[k].total_bd;
+                        //        src_bandwidth = bandwidth[k].cur_bd;
+                        //        count++;
+                        //     }else if(dst_id == bandwidth[k].id){
+                        //        dst_capacity = bandwidth[k].total_bd;
+                        //        dst_bandwidth = bandwidth[k].cur_bd;
+                         //       count++;
+                         //   }
+                         //   if(count == 2){
+                         //       break;
+                        //    }
+                       // }
                         link = {source: nodes_data[src_node_id-1], target: nodes_data[dst_node_id-1], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
                             dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
@@ -366,10 +497,20 @@ function inittpdata(){
     });
 }
 
+
 var bd_data = '';
 var maclist = '';
 
-inittpdata();
+
+function startinit(){
+    if(slice_id == 0){
+        inittpdata2();
+    }else{
+        inittpdata();
+    }
+}
+
+startinit();
 
 // init D3 force layout
 var force = d3.layout.force()
@@ -521,13 +662,15 @@ function highlight( data, element ) {
         dst_capacity_show = bd_show(data.dst_capacity);
         content += "<h6>" + data.source.name + ":" + data.src_port_name + "(" + data.src_port+ ")";
         content += ' <-----> ' + data.target.name + ":" + data.dst_port_name + "(" + data.dst_port + ")" + "</h6>";
-       // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
-        
-        content += "<table class='table'>";
-        content += "<tr><td>总带宽利用率：" + rand + "%</td></tr>";
-        content += "<tr><td>" + data.source.name + "-->" + data.target.name + "：" + src_bandwidth_show + "/" + src_capacity_show + "</td></tr>";
-        content += "<tr><td>" + data.target.name + "-->" + data.source.name + "：" + dst_bandwidth_show + "/" + dst_capacity_show + "</td></tr>";
-        content += "</table>";
+        if(slice_id != 0){
+           // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
+            
+            content += "<table class='table'>";
+            content += "<tr><td>总带宽利用率：" + rand + "%</td></tr>";
+            content += "<tr><td>" + data.source.name + "-->" + data.target.name + "：" + src_bandwidth_show + "/" + src_capacity_show + "</td></tr>";
+            content += "<tr><td>" + data.target.name + "-->" + data.source.name + "：" + dst_bandwidth_show + "/" + dst_capacity_show + "</td></tr>";
+            content += "</table>";
+        }
         tooltip.showTooltip(content, d3.event);
         //} else if (data.bandwidth) {
         //    content += "带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity;
@@ -564,15 +707,17 @@ function restart() {
         var color = 'black';
         
         if (d.type == 'switchswitch') {
-            var rand_num = (d.src_bandwidth + d.dst_bandwidth) / (d.src_capacity + d.dst_capacity);
-            if (rand_num < 0.3) {
-                color = 'green';   
-            } else if (rand_num < 0.6) {
-                color = 'yellow';
-            } else if (rand_num < 0.9) {
-                color = 'orange';
-            } else {
-                color = 'red';
+            if(d.src_capacity + d.dst_capacity != 0){
+                var rand_num = (d.src_bandwidth + d.dst_bandwidth) / (d.src_capacity + d.dst_capacity);
+                if (rand_num < 0.3) {
+                    color = 'green';   
+                } else if (rand_num < 0.6) {
+                    color = 'yellow';
+                } else if (rand_num < 0.9) {
+                    color = 'orange';
+                } else {
+                    color = 'red';
+                }
             }
         }
         return color; 
@@ -867,15 +1012,17 @@ function random_refresh2 () {
                                         } 
                                     }
                                 //d.bandwidth = bandwidth.toFixed(2);
-                                var rand_num = (d.src_bandwidth + d.dst_bandwidth) / (d.src_capacity + d.dst_capacity);
-                                if (rand_num < 0.3) {
-                                    color = 'green';   
-                                } else if (rand_num < 0.6) {
-                                    color = 'yellow';
-                                } else if (rand_num < 0.9) {
-                                    color = 'orange';
-                                } else {
-                                    color = 'red';
+                                if(d.src_capacity + d.dst_capacity != 0){
+                                    var rand_num = (d.src_bandwidth + d.dst_bandwidth) / (d.src_capacity + d.dst_capacity);
+                                    if (rand_num < 0.3) {
+                                        color = 'green';   
+                                    } else if (rand_num < 0.6) {
+                                        color = 'yellow';
+                                    } else if (rand_num < 0.9) {
+                                        color = 'orange';
+                                    } else {
+                                        color = 'red';
+                                    }
                                 }
                             }
                             return color; 

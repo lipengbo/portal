@@ -325,6 +325,8 @@ def topology_d3(request):
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
+    if int(context['slice_id']) == 0:
+        context['switch_port_ids'] = request.GET.get('switch_port_ids')
     user = request.user
     if user and user.is_superuser:
         context['admin'] = 1
