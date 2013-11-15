@@ -354,10 +354,16 @@ def get_slice_topology(slice_obj):
                                'ip': vm.ip.ipaddr}
                     normals.append(vm_info)
 #     带宽
-        switchs_ports = []
+        bandwidth = []
         for switch_id in switch_ids:
-            switchs_ports.append({'id': switch_id, 'ports': ports[switch_id]})
-        bandwidth = get_slice_links_bandwidths(switchs_ports, maclist)
+            try:
+                switch = Switch.objects.get(id=switch_id)
+            except:
+                pass
+            else:
+                for port in ports[switch_id]:
+                    bandwidth.append({'id': (str(switch_id) + '_' + str(port)),
+                                'cur_bd': 0, 'total_bd': 0})
 
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials,

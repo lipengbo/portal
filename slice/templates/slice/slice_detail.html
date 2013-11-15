@@ -63,17 +63,17 @@ img {
                 <div class="span2">
                 </div>
                 <div class="span8">
-                    <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300&top=1" frameborder="0"></iframe>
+                    <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id=0&width=620&height=300&top=0&switch_port_ids=1,2,3" frameborder="0"></iframe>
                     <!--<div id="content" style="background-color:#FFFFFF; width:100%; height:300px"></div>-->
                 </div>
                 <div class="span2">
                 </div>
             </div>                  
-            <div class="clear" style="display: none" >
+           <!-- <div class="clear" style="display: none" >
                 <p id="slice_id">{{slice_obj.id}}</p>
                 <p id="topology_type">1</p>
                 <p id="STATIC_URL">{{STATIC_URL}}</p>
-            </div>
+            </div> -->
         </fieldset>
 		<fieldset>
 		<div id="alert_msg"></div>
@@ -480,7 +480,7 @@ img {
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
-<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>
+<!--<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>-->
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
