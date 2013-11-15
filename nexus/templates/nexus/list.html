@@ -78,7 +78,7 @@
     {% csrf_token %}
 <div class="well">
     <input type="hidden" name="action" id="action" value="">
-    <button type="submit" class="delete-action disabled action-btn btn-input btn-delete btn btn-danger">{% trans "Delete" %}{{ class_verbose_name }}</button>
+    <button type="submit" class="delete-action disabled action-btn btn-input btn-delete btn btn-danger pull-left">{% trans "Delete" %}{{ class_verbose_name }}</button>
     {% if class_name != 'User' %}
         <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{{ class_verbose_name }}</a>
     {% endif %}
