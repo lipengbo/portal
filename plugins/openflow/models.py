@@ -33,7 +33,7 @@ class Controller(ServiceResource):
 
 
 class Flowvisor(ServiceResource):
-    http_port = models.IntegerField()
+    http_port = models.IntegerField(verbose_name=_("Http Port"))
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
