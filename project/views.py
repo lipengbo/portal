@@ -168,7 +168,7 @@ def apply(request):
     return render(request, 'project/apply.html', context)
 
 @login_required
-@permission_required('project.add_project', login_url='/forbidden/')
+#@permission_required('project.add_project', login_url='/forbidden/')
 def create_or_edit(request, id=None):
     user = request.user
     context = {}
@@ -176,7 +176,8 @@ def create_or_edit(request, id=None):
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
-        print island_ids
+        if user != instance.owner:
+            return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
         form = ProjectForm(instance=instance)

@@ -93,21 +93,22 @@
 				      </div>
 				    </div>
 				    <div class="control-group">
-				      <label class="control-label" for="input01">所属单位</label>
+				      <label class="control-label" for="input01">研究方向</label>
 				      <div class="controls">
-				        <input type="text" class="input-xlarge" id="input01" name="organization" placeholde="请输入您所在单位"><span>*</span>
+                          <textarea type="text" rows="6" cols="40" class="input-xlarge" style="" id="input01" name="realm" placeholde="请输入您所在单位"></textarea><span>*</span>
 				      </div>
 				    </div>
 				    <div class="control-group">
 				      <label class="control-label" for="input01">固定电话</label>
 				      <div class="controls">
-                          <input type="text" class="input-xlarge" id="input01" name="phone" placeholde="请输入您的固定电话"><span>*</span>
+                          <input type="text" class="input-xlarge" id="input01" name="phone" placeholde="请输入您的固定电话"><span></span>
 				      </div>
 				    </div>
 				  </fieldset>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-info btn_register">注册</button>
+              <a href="/" type="" class="hide btn btn-info btn_ok">确定</a>
             </div>
 				</form>
           </div>
@@ -127,10 +128,13 @@
     $('.signup-form').submit(function(){
             $.post('/accounts/signup/', $(this).serialize(), function(data){
                 if(data.indexOf('DOCTYPE') < 0) {
+                    if(data.indexOf('input') < 0) {
+                        $('.btn_register').hide();
+                        $('.btn_ok').show();
+                    }
                     $('.signup-form fieldset').html(data);
                 } else {
                     window.location.href = '/';
-
                 }
             });
         return false;
