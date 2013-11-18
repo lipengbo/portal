@@ -71,7 +71,7 @@ var svg = svg_obj.append('g')
     .on("mousedown", mousedown);
     var rect_color = 'white';
     if (size == 'big') {
-        rect_color = '#f5f5f5';
+        rect_color = 'transparent';
     }
 svg.append('rect')
     .attr('width', "100%")
@@ -352,7 +352,7 @@ function init_svg () {
         mousedown_node = null;
     })
     .on('mouseover', function(d, i) {
-        highlight( d, i, this );
+        //highlight( d, i, this );
     })
     .on('mouseout', function(d, i) {
         tooltip.hideTooltip();
