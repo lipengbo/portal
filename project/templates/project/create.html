@@ -16,6 +16,7 @@
     </style>    
 {% endblock %}
 {% block breadcrumb %}
+<a href="/project/">我的项目</a><span class="divider">/</span>
 <li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
