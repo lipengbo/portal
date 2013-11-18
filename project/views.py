@@ -346,7 +346,18 @@ def links_direct(request, host, port):
 def switch_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
-    data = json.dumps(client.get_switches())
+    json_data = client.get_switches()
+    for i in range(len(json_data)):
+        entry = json_data[i]
+        dpid = entry['dpid']
+        try:
+            switch = Switch.objects.get(dpid=dpid)
+        except Switch.DoesNotExist:
+            pass
+        else:
+            json_data[i]['db_name'] = switch.name
+            json_data[i]['db_id'] = switch.id
+    data = json.dumps(json_data)
     return HttpResponse(data, content_type="application/json")
 
 #@cache_page(60 * 60 * 24 * 10)
@@ -367,7 +378,7 @@ def switch_proxy(request, host, port):
             if port.virtualmachine_set.all().count() > 0:
                 continue
             port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
-        switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data})
+        switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data, "db_id": switch.id})
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")

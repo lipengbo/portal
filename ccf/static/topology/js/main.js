@@ -469,6 +469,11 @@ function init_svg () {
                     $('.port-modal').modal();
                 }
             }
+        } else {
+            // physical topology
+            if (d.db_id) {
+                window.open('/monitor/Switch/' + d.db_id + '/');
+            }
         }
     });
     
