@@ -44,6 +44,19 @@
     </div>
     <div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
         <label>项目类型</label>
+        <select>
+            {% for cat in cats %}
+                <option data-id="{{ cat.id }}">{{ cat }}</option>
+            {% endfor %}         
+        </select>
+        {% if form.category_name.errors %}
+                {% for error in form.category_name.errors %}
+                    <span class="help-inline">{{ error }}</span>
+                {% endfor %}
+        {% endif %}
+    </div>
+    <!--<div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
+        <label>项目类型</label>
         <div class="input-append select_input">
             <input class="span2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text" />
             <div class="btn-group">
@@ -60,7 +73,7 @@
                     <span class="help-inline">{{ error }}</span>
                 {% endfor %}
         {% endif %}
-    </div>
+    </div> -->
   </fieldset>
   <fieldset>
     <legend>添加资源 </legend>
