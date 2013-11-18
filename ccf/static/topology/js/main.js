@@ -286,9 +286,14 @@ function init_svg () {
             real_nodes_map[node.id] = true;
         };
     })
+    var cloud_node = {id:"cloud", group:2}
+    g_nodes.push(cloud_node);
+    /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
         var dpid = recompose_dpid(gre_ovses[i]);
         
+        // connect gre node to cloud-icon node
+        g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
         for (var j = 0; j < gre_ovses.length; j++) {
             var dpid2 = recompose_dpid(gre_ovses[j]);
             

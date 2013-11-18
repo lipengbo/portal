@@ -157,6 +157,7 @@ INSTALLED_APPS = [
     "eventlog",
     "endless_pagination",
     "notifications",
+    "south",
 
     #xmlrpc
     'django_xmlrpc',
