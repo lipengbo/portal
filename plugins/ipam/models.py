@@ -196,6 +196,10 @@ class Subnet(models.Model):
             gateway_ip = str(new_ipaddr)
         return gateway_ip
 
+    def get_ip_range(self):
+        return [na.IPAddress(self.get_network().first+1).ipv4(),
+                na.IPAddress(self.get_network().last).ipv4()]
+
     def __unicode__(self):
         return self.netaddr
 
