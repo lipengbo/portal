@@ -221,6 +221,11 @@ $(document).ready(function() {
     $(".device_link").mouseup(function(){
         $(this).addClass("active");
     });
+	
+	//创建虚拟机时显示拓扑
+	$("#show_topo").on("click", function(){
+		show_topology();
+	})
 });
 
 
