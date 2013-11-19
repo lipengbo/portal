@@ -3922,3 +3922,6 @@ body.vjs-full-window {
 .pop_form .control-label {
   width: 140px;
 }
+textarea {
+  padding: 5px;
+}
