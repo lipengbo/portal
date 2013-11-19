@@ -60,12 +60,14 @@
                  <div class="form_inline">
                     <label>Slice名称</label>
                     <input type="text" maxlength=45 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <span class="muted">例：XXX实验</span>
                     <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
                     <label class="v_top">Slice描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <span class="muted pro_describe">XXX实验是目标是XXXX</span> 
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
                  <div class="form_inline">   
@@ -205,14 +207,14 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="150">
+                            <td width="200">
                                 <label class="tab_radio1" for="optionsRadios1">
                                     <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
                                                                                                                                创建控制器 
                                 </label>
                             </td>
-                            <td width="100">控制器类型</td>
-                            <td>
+                            <td width="80">控制器类型</td>
+                            <td colspan="3">
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
                                   <option value="pox">pox</option>
@@ -228,9 +230,17 @@
                                                                                                                            自定义控制器
                               </label>
                             </td>
-                            <td>控制器IP端口</td> 
-                            <td colspan="2">
+                            <td>控制器IP</td> 
+                            <td width="250">
+                                <div id="ipInput" class="uneditable-input"></div>
+                                <!--
                                 <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
+                                <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                                -->
+                            </td>
+                            <td width="40">端口</td>
+                            <td>
+                                <input type="text" maxlength="4" class="dk_pull" disabled />
                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
@@ -565,4 +575,10 @@
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
+<script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#ipInput").ipInput();
+    });
+</script>
 {% endblock %}

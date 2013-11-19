@@ -47,6 +47,7 @@ $(document).ready(function() {
     //创建slice第3步，选择控制器配置方式
     $(".tab_radio1, .tab_radio1 .iCheck-helper").click(function(){
         $(".tab_radio1").parent("td").siblings("td").children("select").removeAttr("disabled");
+        $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").attr("disabled","disabled");
         $(".tab_radio2").parent("td").siblings("td").children("input").attr("disabled","disabled");
     });
     $(".tab_radio2, .tab_radio2 .iCheck-helper").click(function(){
