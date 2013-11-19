@@ -286,7 +286,7 @@ function init_svg () {
             real_nodes_map[node.id] = true;
         };
     })
-    var cloud_node = {id:"cloud", group:2}
+    var cloud_node = {id:"cloud", group:3}
     g_nodes.push(cloud_node);
     /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
@@ -383,18 +383,18 @@ function init_svg () {
             if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
                 d.group = 2;
             }
-            var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
+            var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=5';
             if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
+                ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=5';
             }
             if (d.id.indexOf('00:ee:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
+                ovs_image = STATIC_URL + 'topology/img/ovs-red.png?v=1';
                 if (!show_logical) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway.png?v=4';
+                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway.png?v=5';
                 }
             }
             if (d.id.indexOf('00:ff:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
+                ovs_image = STATIC_URL + 'topology/img/ovs-green.png?v=4';
                 if (!show_logical) {
                     ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
                 }
@@ -407,7 +407,12 @@ function init_svg () {
                 }
             }
             */
-            return d.group==1 ? ovs_image : STATIC_URL + "topology/img/server-phy.png?v=5"
+            if (d.group == 3) {
+                ovs_image = STATIC_URL + "topology/img/cloud.png?v=5";
+            } else if(d.group == 2) { 
+                ovs_image = STATIC_URL + "topology/img/server-phy.png?v=5";
+            }
+            return ovs_image;
         })
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
