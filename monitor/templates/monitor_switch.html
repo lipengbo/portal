@@ -7,13 +7,15 @@
 
 {% endblock %}
 {% block body %}
-	<h4>交换机：{{ switch_name }} <span id="current_br"></span><span id="current_port"></span></h4>
+	<h4>当前监控：交换机 {{ switch_name }} /<span id="current_br"></span> /<span id="current_port"></span></h4>
     <ul class="nav nav-pills" id="br_info"></ul>
 
 				<div id="current_br_port">
 				</div>
+				(<span id="net_unit"></span>/s)
 				<div id="main_show">
-    			<canvas id="port_perf_chart" width="530" height="300"></canvas>
+				
+    			<canvas id="port_perf_chart" width="1000" height="300"></canvas>
 					<table class="table table-bordered" width="100%" style="margin-bottom:0;">
                         <tbody>
                             <tr>

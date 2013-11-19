@@ -2,14 +2,16 @@ var br_values = [];
 var port_recv_values = [];
 var port_send_values = [];
 
-for (var i=0; i<11; i++){
+for (var i=0; i<21; i++){
 	br_values[i] = "";
 	port_send_values[i] = 0;
 	port_recv_values[i] = 0;
 }
-br_values[10]="0s";
-br_values[5]="5s";
-br_values[0]="10s";
+br_values[20]="0s";
+br_values[15]="5s";
+br_values[10]="10s";
+br_values[5]="15s";
+br_values[0]="20s";
 
 
 var port_options = {
@@ -123,6 +125,7 @@ function update_port_data(switch_id, br, port, flag){
 			}
 			document.getElementById('id_port_send_bps').innerHTML = data_process(port_data['send_bps']) + data_process_unit(port_data['send_bps'], 'bit');
 			document.getElementById('id_port_recv_bps').innerHTML = data_process(port_data['recv_bps']) + data_process_unit(port_data['recv_bps'], 'bit');
+			document.getElementById('net_unit').innerHTML = process_data[2];
 			}
 			return_data = true;
 			
@@ -133,8 +136,8 @@ function update_port_data(switch_id, br, port, flag){
 
 var port_timer;
 function get_port_info(switch_id, br, port, flag){
-	document.getElementById('current_br').innerHTML = " > 网桥：" + br;
-	document.getElementById('current_port').innerHTML = " > 端口：" + port;
+	document.getElementById('current_br').innerHTML = " 网桥" + br;
+	document.getElementById('current_port').innerHTML = " 端口" + port;
 	if(return_data){
 		clearTimeout(port_timer);
 		update_port_data(switch_id, br, port, flag);
