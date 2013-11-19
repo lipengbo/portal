@@ -52,13 +52,13 @@ window.Topology = Backbone.Model.extend({
                 */
                 var nl = swl.pluck('id');
                 var db_names = swl.pluck('db_name');
+                var db_ids = swl.pluck('db_id');
 
                 self.nodes = _.map(nl, function (n) {return {name:n}});
                 for (var i = 0; i < self.nodes.length; i++) {
                     self.nodes[i].db_name = db_names[i];
+                    self.nodes[i].db_id= db_ids[i];
                 };
-                console.log(self.nodes, 'nodes', swl)
-                
                 // step 2: build array of links in format D3 expects
                 _.each(data, function (l) {
                     self.links.push({source:self.nodes[nl.indexOf(l['src-switch'])],

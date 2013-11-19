@@ -65,8 +65,6 @@ class IslandResource(Resource):
 
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
     username = models.CharField(max_length=20, verbose_name=_("username"))
     password = models.CharField(max_length=20, verbose_name=_("password"))
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
@@ -118,8 +116,6 @@ class Server(IslandResource):
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField(verbose_name=_("Port"))
-    http_port = models.IntegerField(verbose_name=_("Http Port"))
     username = models.CharField(max_length=20, verbose_name=_("username"))
     password = models.CharField(max_length=20, verbose_name=_("password"))
     dpid = models.CharField(max_length=256)

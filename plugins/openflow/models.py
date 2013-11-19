@@ -17,6 +17,7 @@ from slice.models import Slice
 
 class Controller(ServiceResource):
     is_root = models.BooleanField(default=False)
+    port = models.IntegerField()
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
@@ -32,6 +33,7 @@ class Controller(ServiceResource):
 
 
 class Flowvisor(ServiceResource):
+    http_port = models.IntegerField(verbose_name=_("Http Port"))
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
