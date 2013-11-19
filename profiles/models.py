@@ -11,7 +11,8 @@ from idios.models import ProfileBase
 
 
 class Profile(ProfileBase):
-    realm = models.CharField(max_length=64, null=True, verbose_name=_("realm"))
+    realm = models.CharField(max_length=1024, null=True, verbose_name=_("realm"))
+    organization = models.CharField(max_length=64, null=True, verbose_name=_("Organization"))
     phone = models.CharField(max_length=11, null=True, blank=True, verbose_name=_("Phone"))
     state = models.IntegerField(default=0)
 

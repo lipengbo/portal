@@ -6,7 +6,8 @@ import account.forms
 from profiles.models import Profile
 
 class SignupForm(account.forms.SignupForm):
-    realm = forms.CharField(max_length=64, label=_("Realm"), widget=forms.Textarea)
+    realm = forms.CharField(max_length=1024, label=_("Realm"), widget=forms.Textarea)
+    organization = forms.CharField(max_length=64, label=_("Organization"))
     phone = forms.CharField(max_length=11, label=_("Phone"), required=False)
 
 class RejectForm(forms.Form):
