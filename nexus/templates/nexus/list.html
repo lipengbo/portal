@@ -100,7 +100,7 @@
             <td>
                 <input type="checkbox" name="id" value="{{ object.id }}">
             </td>
-            <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</a></td>
+            <td><a href="{% if class_name != 'User'%} {% url nexus_edit app_label class_name|lower object.id %}{% else %}#{% endif%}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
                 <td title="{{ object|get_value:field.name}}" class="field.name">
                     {% if field.name == 'cpu' %} 
@@ -124,7 +124,9 @@
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
+                    {% if class_name != 'User'%}
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
+                    {% endif %}
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
                     {% for related in object|get_related_models %}
                     <a href="{% url nexus_add related.app_label related.model|lower %}?server={{ object.id }}&island={{ object.island.id }}" class="btn btn-small">{% trans "Add" %}{% trans related.name %}</a>
