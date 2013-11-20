@@ -23,15 +23,13 @@
 <div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 	<div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">拓扑</h4>
+        <h4 class="modal-title">当前已选节点资源</h4>
     </div>
     <div class="modal-body" id="topology_info">
 		<div class="row-fluid">
-        	<div class="span2"></div>
         	<div class="span8">
-        		<iframe scrolling="no" id="topologyiframe" width="450" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300&top=1" frameborder="0"></iframe>
+        		<iframe scrolling="no" id="topologyiframe" width="450" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=450&height=300&top=0" frameborder="0"></iframe>
          	</div>
-            <div class="span2"></div>
          </div>  
 	</div>                
 </div>

@@ -31,8 +31,12 @@
     <p id="slice_id">{{slice_id}}</p>
     <p id="width">{{width}}</p>
     <p id="height">{{height}}</p>
+    <p id="top">{{top}}</p>
     <p id="STATIC_URL">{{STATIC_URL}}</p>
     <p id="admin">{{admin}}</p>
+    {%if slice_id == '0' %}
+        <p id="switch_port_ids">{{switch_port_ids}}</p>
+    {%endif%}
 </div>
 {% endblock %}
 {% block extra_script %}

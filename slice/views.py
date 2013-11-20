@@ -182,6 +182,9 @@ def detail(request, slice_id):
     context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
     context['check_vm_status'] = 0
+    subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    context['start_ip'] = subnet.get_ip_range()[0]
+    context['end_ip'] = subnet.get_ip_range()[1]
 #     if slice_obj.state == 1:
     all_vms = slice_obj.get_vms()
     for vm in all_vms:
@@ -325,6 +328,8 @@ def topology_d3(request):
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
+    if int(context['slice_id']) == 0:
+        context['switch_port_ids'] = request.GET.get('switch_port_ids')
     user = request.user
     if user and user.is_superuser:
         context['admin'] = 1
