@@ -1,6 +1,10 @@
+import datetime
+
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
+from django.db.models import F
+from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
 
 from account.signals import password_changed
 from account.signals import user_sign_up_attempt, user_signed_up
@@ -8,7 +12,18 @@ from account.signals import user_login_attempt, user_logged_in
 
 from eventlog.models import log
 from notifications import notify
+from project.models import Project
+from common.models import DailyCounter
+#from slice.models import Slice
 
+
+@receiver(post_save, sender=Project)
+def increase_counter(sender, instance, created, **kwargs):
+    if created:
+        today = datetime.date.today()
+        counter, new = DailyCounter.objects.get_or_create(target=0, date=today)
+        counter.count = F("count") + 1
+        counter.save()
 
 @receiver(user_logged_in)
 def handle_user_logged_in(sender, **kwargs):

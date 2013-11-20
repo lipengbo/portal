@@ -164,6 +164,7 @@ INSTALLED_APPS = [
 
     # project
     "ccf",
+    "common",
     "slice",
     "project",
     "profiles",
