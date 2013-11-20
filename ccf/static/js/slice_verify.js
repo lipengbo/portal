@@ -75,28 +75,32 @@ function check_slice_controller(obj_name){
 				return true; 
 			}  
 			if(objs[i].value=="user_define"){
-				controller_ip_port_obj = document.getElementById("controller_ip_port");
-				controller_ip_port = controller_ip_port_obj.value.split(":")
+				cip0_obj = document.getElementById("cip0");
+				cip1_obj = document.getElementById("cip1");
+				cip2_obj = document.getElementById("cip2");
+				cip3_obj = document.getElementById("cip3");
+				controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+				//controller_ip_port = controller_ip_port_obj.value.split(":")
 				var info = document.getElementById("controller_ip_portInfo");
-				if(controller_ip_port.length != 2){
-					showInfo(info," * 格式错误(ip:port)","red");
+				//if(controller_ip_port.length != 2){
+				//	showInfo(info," * 格式错误(ip:port)","red");
+				//	return false;
+				//}
+				//else{
+				ret1 = check_ip(controller_ip,1);
+				if(!ret1){
 					return false;
 				}
 				else{
-					ret1 = check_ip(controller_ip_port[0],1);
-					if(!ret1){
-						return false;
+					ret2 = check_port('port',1);
+					if (ret2){
+						return true;
 					}
 					else{
-						ret2 = check_port(controller_ip_port[1],1);
-						if (ret2){
-							return true;
-						}
-						else{
-							return false;
-						}
+						return false;
 					}
 				}
+				//}
 	  		}  
 		}   
 	}
@@ -116,12 +120,12 @@ function check_ip(ip,flag){
 			}
 		}
 		
-		showInfo(info," * 格式错误(ip:port)","red");	
+		showInfo(info," * ip格式错误","red");	
 		return false;
 	}
 	else{
 		if(flag){
-			showInfo(info," * 格式错误(ip:port)","red");
+			showInfo(info," * ip格式错误","red");
 			return false;
 		}
 		else{
@@ -133,6 +137,10 @@ function check_ip(ip,flag){
 //校验端口值
 function check_port(port,flag){
 	var info = document.getElementById("controller_ip_portInfo");
+	if(port == 'port'){
+	   var controller_port = document.getElementById("controller_port");
+	   port = controller_port.value;
+	}
 	var reg = /^[0-9]*$/;
 	if(port.length > 0){
 		if(port >= 65535 || port < 0 || !reg.test(port)){
@@ -146,7 +154,7 @@ function check_port(port,flag){
 	}
 	else{
 		if(flag){
-			showInfo(info," * 格式错误(ip:port)","red");
+			showInfo(info," * 不能为空","red");
 			return false;
 		}
 		else{
@@ -676,7 +684,7 @@ function start_or_stop(slice_id, flag){
     if(ret){
         var controller_type_objs = document.getElementsByName("controller_type");
         var controller_sys_obj = document.getElementById("controller_sys");
-        var controller_ip_port_obj = document.getElementById("controller_ip_port");
+        //var controller_ip_port_obj = document.getElementById("controller_ip_port");
         var controller_type;
         for(var i=0;i<controller_type_objs.length;i++){  
             if(controller_type_objs[i].checked){  
@@ -688,11 +696,17 @@ function start_or_stop(slice_id, flag){
                 }  
             }   
         }
-        var controller_ip_port = controller_ip_port_obj.value.split(":");
+        cip0_obj = document.getElementById("cip0");
+        cip1_obj = document.getElementById("cip1");
+        cip2_obj = document.getElementById("cip2");
+        cip3_obj = document.getElementById("cip3");
+        controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+        controller_port_obj = document.getElementById("controller_port");
+        //var controller_ip_port = controller_ip_port_obj.value.split(":");
         var submit_data = {"controller_type": controller_type,
                         "controller_sys": controller_sys_obj.value,
-                        "controller_ip": controller_ip_port[0],
-                        "controller_port": controller_ip_port[1]};
+                        "controller_ip": controller_ip,
+                        "controller_port": controller_port_obj.value};
         check_url = "http://" + window.location.host + "/slice/edit_controller/"+slice_id+"/";
         $.ajax({
                 type: "POST",

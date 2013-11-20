@@ -64,13 +64,13 @@ img {
 <!--
                 <div class="span8">
 
-                    <!--<iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id=0&width=620&height=300&top=0&switch_port_ids=1,2,3" frameborder="0"></iframe>-->
+                    <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id=0&width=620&height=300&top=0&switch_port_ids=1,2,3" frameborder="0"></iframe>
 
                     <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300&top=1" frameborder="0"></iframe>
 
 -->
                 <div class="span10">
-                    <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300&top=1" frameborder="0"></iframe>
+                    <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=800&height=300&top=1" frameborder="0"></iframe>
                 </div>
                 <div class="span1">
                 </div>
@@ -401,6 +401,10 @@ img {
 			 	{%else%}
 			 	<p id="admin">1</p>
 			 	{%endif%}
+			 	{%if controller.name == "user_define"%}
+			 	    <p id="controller_ip_old">{{controller.ip}}</p>
+			 	    <p id="controller_port_old">{{controller.port}}</p>
+                {%endif%}
 			 </div>
 		  </fieldset>			  		 
 		</div>
@@ -443,15 +447,15 @@ img {
                   <table class="table">
                     <tbody>
                         <tr>
-                            <td width="130">
+                            <td width="100">
                                 <label class="radio tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
                                   默认创建
                                 </label>
                             </td>
-                            <td width="95">控制器类型</td>
-                            <td>
+                            <td width="70">控制器类型</td>
+                            <td colspan="3">
                                 {%if controller.name == "user_define" %}
                                     <select name="controller_sys" id="controller_sys" disabled>
                                       <option value="floodlight">floodlight</option>
@@ -475,15 +479,19 @@ img {
                                   {%if controller.name == "user_define"%}checked{%endif%}>
                                   自定义
                                 </label>
+                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
-                            <td>控制器IP端口</td> 
-                            <td>
-                            {%if controller.name == "user_define"%}
-                                <input type="text" name="controller_ip_port" id="controller_ip_port" value={{controller.ip}}:{{controller.port}} onblur="check_slice_controller('controller_type')">
-                            {%else%}
-                                <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
-                            {%endif%}
+                            <td>控制器IP</td> 
+                            <!--<td>
                             	<span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                            </td>-->
+                            <td width="230">
+                                <div id="ipInput" class="disabled"></div>
+                            </td>
+                            <td width="30">端口</td>
+                            <td>
+                                <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
+                                <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
                     </tbody>
@@ -515,5 +523,12 @@ img {
 		$(".aa").iCheck("destroy");
 		show_uuid($("[id='uuid']"));
 	})
+</script>
+<script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#ipInput").ipInput();
+        init_ipinput();
+    });
 </script>
 {% endblock %}
