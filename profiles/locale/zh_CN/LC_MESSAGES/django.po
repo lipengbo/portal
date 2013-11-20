@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-28 17:59+0800\n"
+"POT-Creation-Date: 2013-11-18 17:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,13 +18,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: forms.py:8 models.py:13 templates/profiles/_profile_info.html:3
-#: templates/profiles/_profile_item.html:11
-msgid "Organization"
-msgstr "所属单位"
+#: forms.py:9
+msgid "Realm"
+msgstr "研究领域"
 
-#: forms.py:9 models.py:14 templates/profiles/_profile_info.html:4
+#: forms.py:10 models.py:15 templates/profiles/_profile_info.html:4
 #: templates/profiles/_profile_item.html:12
 msgid "Phone"
 msgstr "固定电话"
 
+#: forms.py:13
+msgid "Reason"
+msgstr "原因"
+
+#: models.py:14
+msgid "realm"
+msgstr "研究领域"
+
+#: models.py:28
+msgid "Accept"
+msgstr ""
+
+#: models.py:33
+msgid "Reject"
+msgstr ""
+
+#: views.py:46
+msgid "Account Review Result"
+msgstr "帐号审核结果"
+
+#: views.py:46
+msgid ""
+"Sorry, we cannot let you pass the review according to your profile.If you "
+"have any question about the result, you can contact us by replying this "
+"email."
+msgstr ""
+"抱歉，根据您注册时提供的资料信息，您的帐号申请不能通过审核，如果您有任何疑"
+"问，你可以回复此邮件联系我们。"
+
+#: templates/profiles/_profile_info.html:3
+#: templates/profiles/_profile_item.html:11
+msgid "Organization"
+msgstr "所属单位"

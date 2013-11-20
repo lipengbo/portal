@@ -13,6 +13,10 @@ body {
   background:#fff;
 }
 
+label {
+    display:inline;
+}
+
 .main2 {
     padding-top:20px;
 }
@@ -510,7 +514,7 @@ filter: alpha(opacity=100);
 		}
 		.main_frame {
 			clear:both;
-			height:560px;
+			height:500px;
 			background:#fff;
 			margin-top:30px;
 			border-radius:4px;
@@ -1231,5 +1235,87 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
 
 #main_show {
     text-align:center;
+}
+
+.pro_describe {
+    display: inline-block;
+    width: 200px;
+    vertical-align: top;
+}
+
+.ipInput-border{
+    border-width:1;
+    border-color:#E3E9EF;
+    border-style:solid;
+    width:155px;
+    font-size:9pt;
+    background-color:white;
+} 
+.ipInput-cell{    
+    width:18%;
+    height:20px;
+    border-width:0px !important;
+    border-style:none;
+    text-align:center;
+}
+
+#ipInput {
+    height:30px;
+    line-height:30px;
+    width:220px;
+    display: inline-block;
+    font-size: 14px;
+    color: #555555;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    vertical-align: middle;
+    background-color: #eee;
+    border: 1px solid #cccccc;
+    input.ipInput-cell {
+        .box-shadow(none); 
+    }    
+}
+
+.dk_pull {
+    width: 60px;
+    height:20px;
+    text-align:center;
+}
+
+.frame_tuopu {
+    label {
+        display:block !important;
+    }
+}
+
+.qwtp_count {    
+    .qwtp {
+        height:70px;
+        background:#fff;
+        border:1px solid #ccc;        
+        .qwtp_tb {
+           height:50px;
+           padding:10px;
+           border-right:1px solid #ccc; 
+           width:30%;
+           text-align:center;
+           float:left;
+           line-height:50px;
+        }
+        .qwtp_nums {
+            padding-top:15px;
+            margin-left:30%;
+            text-align:center;         
+            font-size:28px;
+            font-weight:bold;
+            color:#666;
+            .qwtp_name {
+                margin-top:5px;
+                font-size:14px;
+                font-weight:normal;
+            }
+        }
+    }
 }
 
