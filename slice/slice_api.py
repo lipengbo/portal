@@ -466,7 +466,7 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_slice_count_show():
+def get_slice_count_show(target):
     from common.models import DailyCounter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
@@ -476,7 +476,11 @@ def get_slice_count_show():
     show_nums = []
     cur_date = date_now
     for i in range(0, 30):
-        sc = DailyCounter.objects.filter(date__year=cur_date.strftime('%Y'),
+        if target == 'project':
+            target_id = 0
+        else:
+            target_id = 1
+        sc = DailyCounter.objects.filter(target=target_id, date__year=cur_date.strftime('%Y'),
                                   date__month=cur_date.strftime('%m'),
                                   date__day=cur_date.strftime('%d'))
         if sc:
