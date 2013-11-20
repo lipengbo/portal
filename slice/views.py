@@ -114,7 +114,7 @@ def list(request, proj_id):
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
         slice_objs = Slice.objects.all()
-        slice_count_show = get_slice_count_show()
+#         slice_count_show = get_slice_count_show()
     else:
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
