@@ -57,8 +57,9 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
                 raise DbError("创建网关失败！")
             print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
-        print 10
 #         创建并添加虚拟机
+        slice_obj.be_count()
+        print 10
         return slice_obj
     except:
         print 11
@@ -463,3 +464,25 @@ def get_slice_resource(slice_obj):
     """获取slice资源，包括节点、flowvisor、控制器、交换机端口
     """
     LOG.debug('get_slice_resource')
+
+
+def get_slice_count_show():
+    date_now = datetime.datetime.now()
+    date_delta = datetime.timedelta(days=-1)
+    ret = {}
+    show_dates = []
+    show_nums = []
+    cur_date = date_now
+    for i in range(0, 30):
+        sc = SliceCount.objects.filter(date_created__year=cur_date.strftime('%Y'),
+                                  date_created__month=cur_date.strftime('%m'),
+                                  date_created__day=cur_date.strftime('%d'))
+        if sc:
+            num = sc[0].num
+        else:
+            num = 0
+        num = sc.num
+        show_dates.append(cur_date.strftime('%Y%m%d'))
+        show_dates.append(num)
+        cur_date = cur_date + date_delta
+    ret = {"show_dates": show_dates}

@@ -16,7 +16,7 @@ from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
-    get_slice_links_bandwidths
+    get_slice_links_bandwidths, get_slice_count_show
 from plugins.openflow.controller_api import slice_change_controller
 from project.models import Project, Island
 from resources.models import SwitchPort
@@ -114,6 +114,7 @@ def list(request, proj_id):
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
         slice_objs = Slice.objects.all()
+        slice_count_show = get_slice_count_show()
     else:
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
