@@ -27,9 +27,9 @@ default_flavor_id = 1
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = False
+function_test = True
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
-flowvisor_disable = False
+flowvisor_disable = True
 #本期可以不用部署vt_manager；当use_vt_manager_to_schedul = False不需部署vt_manager；当use_vt_manager_to_schedul = True需要部署vt_manager；
 use_vt_manager_to_schedul = False
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效

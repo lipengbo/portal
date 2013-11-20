@@ -60,12 +60,14 @@
                  <div class="form_inline">
                     <label>Slice名称</label>
                     <input type="text" maxlength=45 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <span class="muted">例：XXX实验</span>
                     <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
                     <label class="v_top">Slice描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
+                    <span class="muted pro_describe">XXX实验是目标是XXXX</span> 
                     <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
                  </div>
                  <div class="form_inline">   
@@ -98,7 +100,10 @@
              <fieldset>
                 <legend>Slice网络节点选择</legend>
                 <div class="alert alert-info">
-                  <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑
+                  <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑<br />
+                  <strong>网络出口节点：</strong> 网络出口节点说明<br />
+                  <strong>普通交换节点：</strong> 普通交换节点说明<br />
+                  <strong>虚拟机关联节点：</strong> 虚拟机关联节点说明<br />
                 </div>
                 <div class="show_frame">
                 <span id="switch_portInfo" style="display:inline;float:left;"></span>
@@ -159,7 +164,7 @@
                 </div>       
               </fieldset>
               <fieldset>
-                 <legend>Slice网络地址</legend>
+                 <legend>Slice网络地址<small>Slice网络地址说明</small></legend>
                 <div class="form_inline tooltip-demo"> 
                     <label>IP数量</label>
                     <select name="nw_num" id="nw_num">
@@ -188,7 +193,7 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td width="150">网络地址</td>
+                            <td width="180">网络地址</td>
                             <td>
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -196,7 +201,10 @@
                             	<input type="text" value="" id="old_nw_owner" style="display:none"/>
                             	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器" data-original-title="网络地址为用户提交IP数量后系统分配，可用于虚拟网关、虚拟机、DHCP服务器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
+							
                         </tr>
+						<tr>
+							<td><label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器</td><td></td></tr>
                     </tbody>
                 </table>
               </fieldset>
@@ -205,14 +213,14 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="150">
+                            <td width="200">
                                 <label class="tab_radio1" for="optionsRadios1">
                                     <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
                                                                                                                                创建控制器 
                                 </label>
                             </td>
-                            <td width="100">控制器类型</td>
-                            <td>
+                            <td width="80">控制器类型</td>
+                            <td colspan="3">
                                 <select name="controller_sys" id="controller_sys">
                                   <option value="floodlight">floodlight</option>
                                   <option value="pox">pox</option>
@@ -227,10 +235,19 @@
                                     <input type="radio" name="controller_type" id="optionsRadios2" value="user_define">
                                                                                                                            自定义控制器
                               </label>
+                              <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>                                                                                                                          
                             </td>
-                            <td>控制器IP端口</td> 
-                            <td colspan="2">
+                            <td>控制器IP</td> 
+                            <td width="250">
+                                <div id="ipInput" class="disabled"></div>
+                                <!--
                                 <input type="text" name="controller_ip_port" id="controller_ip_port" disabled onblur="check_slice_controller('controller_type')">
+                                <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                                -->
+                            </td>
+                            <td width="40">端口</td>
+                            <td>
+                                <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
@@ -296,9 +313,7 @@
                     </tbody>
                 </table>
             </fieldset>-->
-              <label class="inline tab_checkbox">
-                  <input type="checkbox" id="dhcp_selected" value="dhcp"> 是否配置DHCP服务器 
-              </label>
+              
             </div>  
               <div class="form-actions">
                   <div class="row-fluid">
@@ -312,6 +327,20 @@
              <div class="tab_part">
                  <fieldset class="vm_info_list tooltip-demo">
                  <legend>虚拟机信息</legend>
+				<!-- 拓扑图 -->
+				<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+					<div class="modal-header">
+        				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        				<h4 class="modal-title alert alert-info" >当前已选节点资源</h4>
+    				</div>
+    				<div class="modal-body" id="topology_info">
+					<div class="row-fluid">
+        				<div class="span8">
+        					<iframe scrolling="no" id="topologyiframe" width="450" height="300"  frameborder="0"></iframe>
+         				</div>
+         			</div>  
+				</div>                
+			</div>
                  <div class="sec_block"> 
                    <div class="row-fluid vm_well_wrap"> 
                      <div class="span5 base_info">        
@@ -321,39 +350,20 @@
                                 <td width="30%">名称</td>
                                 <td>
     				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />									<span name="nameInfo"></span>
-<!--
-    				                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left" name="icon_msg"></i></a> -->            			
                                 </td>                           
-                              <!--  <td>
-                                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;" ></span> 
-                                </td>     -->                      
                             </tr>
                             <tr>
                                 <td>虚拟机类型</td>
                                 <td>
                                     {{ vm_form.flavor }} <span name="flavorInfo"></span>                              
-                                    <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a>
-									{{vm_form.flavor.errors}} -->
                                     				
                                 </td>
-                          <!--      <td>
-                                    <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
-                            </td>  -->
-                                <!--
-                                <td width="45%"><span class="help-inline">用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置</span></td>
-                                -->
                             </tr>
                             <tr>
                                 <td>虚拟机镜像</td>
                                 <td>
                                     {{ vm_form.image }} <span name="imageInfo"></span>
-                                    <!--<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="错误提示" data-original-title="错误提示"><i class="error_icon icon-remove-sign icon-align-left"></i></a> 
-									{{vm_form.image.errors}}-->
-                                                
                                 </td>
-                           <!--     <td>
-                                   <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span> 
-                            </td>   -->
                             </tr>
                             <tr>
                                 <td>宿主机</td>
@@ -361,12 +371,7 @@
                                     <select onblur="check_vminfo()" name="server" id="id_server">
                                     </select>
 									<span name="serverInfo"></span>
-                                   <!-- <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a>-->
-													
                                 </td>
-                                
-                            <!--    <td><span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span></td>
-                          -->      
                             </tr>
                         </tbody>
                      </table>                                
@@ -419,7 +424,10 @@
                  </div>                
                </div>          
               </fieldset>
-              <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>               
+              <p class="add_btn">
+				<button class="btn btn-info" type="button" id="show_topo">查看拓扑</button>
+				<button class="btn btn-info add" type="button">继续添加</button>
+			  </p>               
               <div class="form-actions">
                   <div class="row-fluid">
                     <div class="span3"></div>
@@ -568,4 +576,10 @@
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
+<script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#ipInput").ipInput();
+    });
+</script>
 {% endblock %}

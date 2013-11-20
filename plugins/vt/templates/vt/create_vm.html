@@ -4,9 +4,7 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% block breadcrumb %}
-	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
 	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	<!--<a href="/slice/create/{{ slice_obj.project.id }}/">创建Slice</a><span class="divider">/</span>-->
 	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
         <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
@@ -19,6 +17,21 @@
     <div class="modal-footer">
       <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_close_sure">确定</button>
     </div>          
+</div>
+
+<!-- 拓扑图 -->
+<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">当前已选节点资源</h4>
+    </div>
+    <div class="modal-body" id="topology_info">
+		<div class="row-fluid">
+        	<div class="span8">
+        		<iframe scrolling="no" id="topologyiframe" width="450" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=450&height=300&top=0" frameborder="0"></iframe>
+         	</div>
+         </div>  
+	</div>                
 </div>
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
@@ -36,43 +49,24 @@
                     <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />
                     <span name="nameInfo"></span>                         
                 </td>
-
-           <!--     <td>
- <a id="id_nameInfo" name="nameInfo" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>           
-                    <span id="id_nameInfo" name="nameInfo" style="display:inline;float:none;"></span>
-            </td>   -->
             </tr>
             <tr>
                 <td>虚拟机类型</td>
                 <td>
                     {{ vm_form.flavor }} <span name="flavorInfo"></span>
-		     <!--       <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a-->
                 </td>
-            <!--    <td>{{vm_form.flavor.errors}}
-                    <span id="id_flavorInfo" name="flavorInfo" style="display:inline;float:none;"></span>
-            </td>   -->
             </tr>
             <tr>
                 <td>虚拟机镜像</td>
                 <td>
                     {{ vm_form.image }} <span name="imageInfo"></span>
-                    <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置" data-original-title="用户选择系统提供的虚拟机模板类型，如small等模板包括虚拟机CPU、内存配置"><i class="icon-question-sign icon-align-left"></i></a-->                    
                 </td>
-            <!--    <td>
-                    {{vm_form.image.errors}}
-                    <span id="id_imageInfo" name="imageInfo" style="display:inline;float:none;"></span>
-            </td>      -->
             </tr>
             <tr>
                 <td>宿主机</td>
                 <td>
                     {{ vm_form.server }} <span name="serverInfo"></span>
-		            <!--a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定" data-original-title="用户为新创建的虚拟机选择虚拟机关联节点，虚拟机关联节点由用户在第1步选定"><i class="icon-question-sign icon-align-left"></i></a-->
                 </td>
-            <!--    <td>
-                    {{vm_form.server.errors}}
-                    <span id="id_serverInfo" name="serverInfo" style="display:inline;float:none;"></span>
-            </td>   -->
             </tr>
         </tbody>
     </table>
@@ -125,7 +119,10 @@
    </div>                
    </div>   
     </fieldset>
-    <p class="add_btn"><button class="btn btn-info add" type="button">继续添加</button></p>
+    <p class="add_btn">
+		<button class="btn btn-info" type="button" id="show_topo">查看拓扑</button>
+		<button class="btn btn-info add" type="button">继续添加</button>
+	</p>
     <div class="form-actions">
         <div class="row-fluid">
             <div class="span3"></div>
@@ -148,5 +145,6 @@
 	$("#alert_close_sure").on("click", function(){
 		window.location.href='/plugins/vt/vm/list/' + {{sliceid}} + '/';
 	})
+	
 </script>
 {% endblock %}

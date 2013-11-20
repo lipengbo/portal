@@ -38,8 +38,13 @@ def vm_list(request, sliceid):
         context['extent_html'] = "site_base.html"
     context['vms'] = vms
     context['sliceid'] = sliceid
-    context['slice_obj'] = Slice.objects.get(id=sliceid)
+    slice_obj = Slice.objects.get(id=sliceid)
+    context['slice_obj'] = slice_obj
     context['check_vm_status'] = 0
+    subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    context['start_ip'] = subnet.get_ip_range()[0]
+    context['end_ip'] = subnet.get_ip_range()[1]
+
     for vm in vms:
         if vm.state == 8:
             context['check_vm_status'] = 1
@@ -122,9 +127,12 @@ def delete_vm(request, vmid, flag):
         if flag == '1':
             return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         else:
-            return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
+            return HttpResponse(json.dumps({'result': 0}))
+#             return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
     except Exception, ex:
         LOG.debug(traceback.print_exc())
+        if flag == '0':
+            return HttpResponse(json.dumps({'result': 1, 'error_info': str(ex)}))
     return render(request, 'slice/warning.html', {'info': str(ex)})
 
 
