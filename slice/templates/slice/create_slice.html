@@ -141,9 +141,9 @@
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{port.port}}
+                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{port.port}}
 					    {%else%}
-						<input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" switchtype="{{ovs_port.switch_type}}"/>{{port.port}}
+                        <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{port.port}}
 		                            {%endif%}
 	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
@@ -153,6 +153,9 @@
                     	{%endfor%}
                     </tbody>
                   </table>              
+                  <div class="hide no-virtual-switch alert alert-error">
+                      请至少选择一个虚拟机关联节点
+                  </div>
                 </div>       
               </fieldset>
               <fieldset>
@@ -173,7 +176,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-info prev_btn">上一步</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">下一步</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info btn-step2 next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -521,12 +524,14 @@
 <script>  
     $(document).ready(function() {
         window.selected_ports = {};
+        window.selected_dpids = {};
         window.add_port = function(port_id, is_delete) {
             var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
             if(port_id in selected_ports) {
                 if(is_delete) {
                     delete selected_ports[port_id];
-
+                    delete window.selected_dpids[checkbox.data('dpid')];
+                    
                     checkbox.attr('disabled', "");
                     checkbox.parents('label').hide();
                     if(checkbox.parents('.switch-data').find('input.port-checkbox:not([disabled])').length == 0) {
@@ -535,6 +540,7 @@
                 }
             } else {
                 if(!is_delete) {
+                    window.selected_dpids[checkbox.data('dpid')] = true;
                     selected_ports[port_id] = port_id;
                     checkbox.parents('label').show();
                     checkbox.removeAttr('disabled');
