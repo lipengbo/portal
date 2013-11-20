@@ -38,8 +38,13 @@ def vm_list(request, sliceid):
         context['extent_html'] = "site_base.html"
     context['vms'] = vms
     context['sliceid'] = sliceid
-    context['slice_obj'] = Slice.objects.get(id=sliceid)
+    slice_obj = Slice.objects.get(id=sliceid)
+    context['slice_obj'] = slice_obj
     context['check_vm_status'] = 0
+    subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    context['start_ip'] = subnet.get_ip_range()[0]
+    context['end_ip'] = subnet.get_ip_range()[1]
+
     for vm in vms:
         if vm.state == 8:
             context['check_vm_status'] = 1

@@ -335,6 +335,7 @@ var ovs_check_flag = false;
 function check_ovs_gw(){
 	return ovs_check_flag;
 }
+
 function get_select_server_name(){
     var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
     var results = new Array();
@@ -355,6 +356,20 @@ function get_select_server_name(){
         }
     }      
     return results
+}
+function get_select_ports(){
+	var port_ids = ""
+    var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
+    var results = new Array();
+    var j =0
+    for(var i=0;i<switch_port_ids_obj.length;i++){
+        obj = switch_port_ids_obj[i];
+        if(!obj.disabled){
+			port_ids = port_ids + obj.value + ",";
+        }
+    }
+	port_ids = port_ids.substr(0,port_ids.length-1);
+    return port_ids;
 }
 
 function get_select_server_id(){
@@ -428,6 +443,7 @@ function show_uuid(objs){
 }
 
 function show_topology(){
+	//alert(get_select_ports());
 	$('#topologyModal').modal('show');
 }
 

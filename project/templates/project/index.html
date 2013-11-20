@@ -36,10 +36,31 @@
                     {%if extent_html == "site_base.html" %}
                     <legend>我的项目</legend>
                     {%else%}
-                    <div class="well">
-                        <h3 class="list_title">项目（Project）</h3>
-                        <p class="list_lead">项目是CENI综合实验平台中用于进行实验研究的一个载体，它主要由实验人员以及他们创建的实验组成。一个项目可能包括多个实验和研究人员，每个研究人员也能参与不同的实验，项目创建者能够对项目参与人员进行授权操作，一般项目创建者多为高级研究人员或教授。</p>
+                    <legend>项目（Project）</legend>
+                    <div class="row-fluid countschart">
+                        <div class="span2 counts">
+                            <div class="counts_block">
+                                <p><img src="{% static "img/file-01.png" %}"  /></p>
+                                <p class="counts_block_title">新增项目</p>
+                                <p class="counts_block_nums">256</p>
+                            </div>
+                            <div class="counts_block">
+                                <p><img src="{% static "img/file-02.png" %}"  /></p>
+                                <p class="counts_block_title">全部项目</p>
+                                <p class="counts_block_nums">1256</p>
+                            </div>                                                 
+                        </div>                        
+                        <div class="span10">
+                            <div id="container" style="min-width: 400px; height: 282px; margin: 0 auto"></div>
+                        </div>
+                        <div class="clear"></div>      
                     </div>
+                    
+             <!--       <div class="well">
+                        <h3 class="list_title">项目（Project）</h3>
+                        
+                        <p class="list_lead">项目是CENI综合实验平台中用于进行实验研究的一个载体，它主要由实验人员以及他们创建的实验组成。一个项目可能包括多个实验和研究人员，每个研究人员也能参与不同的实验，项目创建者能够对项目参与人员进行授权操作，一般项目创建者多为高级研究人员或教授。</p>                     
+                </div>          -->
                     {%endif%}
                 {% if not projects %}
                     {% if query %}
@@ -71,4 +92,90 @@
             </ul>
         </div>
 {% endblock %}
- 
+{% block extra_script %}
+<script type="text/javascript">
+$(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column',
+                margin: [ 50, 50, 100, 80]
+            },
+            title: {
+                text: 'World\'s largest cities per 2008'
+            },
+            xAxis: {
+                categories: [
+                    'Tokyo',
+                    'Jakarta',
+                    'New York',
+                    'Seoul',
+                    'Manila',
+                    'Mumbai',
+                    'Sao Paulo',
+                    'Mexico City',
+                    'Dehli',
+                    'Osaka',
+                    'Cairo',
+                    'Kolkata',
+                    'Los Angeles',
+                    'Shanghai',
+                    'Moscow',
+                    'Beijing',
+                    'Buenos Aires',
+                    'Guangzhou',
+                    'Shenzhen',
+                    'Istanbul',
+                    '一月'
+                ],
+                labels: {
+                    rotation: -45,
+                    align: 'right',
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Population (millions)'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.x +'</b><br/>'+
+                        'Population in 2008: '+ Highcharts.numberFormat(this.y, 1) +
+                        ' millions';
+                }
+            },
+            series: [{
+                name: 'Population',
+                data: [34.4, 21.8, 20.1, 20, 19.6, 19.5, 19.1, 18.4, 18,
+                    17.3, 16.8, 15, 14.7, 14.5, 13.3, 12.8, 12.4, 11.8,
+                    11.7, 50, 25],
+                dataLabels: {
+                    enabled: true,
+                    rotation: -90,
+                    color: '#FFFFFF',
+                    align: 'right',
+                    x: 4,
+                    y: 10,
+                    style: {
+                        fontSize: '13px',
+                        fontFamily: 'Verdana, sans-serif'
+                    }
+                }
+            }]
+        });
+    });
+    
+
+        </script>
+<script src="{{ STATIC_URL}}js/highcharts/highcharts.js"></script>
+<script src="{{ STATIC_URL}}js/highcharts/modules/exporting.js"></script>
+
+{% endblock %}

@@ -61,14 +61,6 @@ img {
             <div class="row-fluid">
                 <div class="span1">
                 </div>
-<!--
-                <div class="span8">
-
-                    <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id=0&width=620&height=300&top=0&switch_port_ids=1,2,3" frameborder="0"></iframe>
-
-                    <iframe scrolling="no" id="topologyiframe" width="620" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=620&height=300&top=1" frameborder="0"></iframe>
-
--->
                 <div class="span10">
                     <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=800&height=300&top=1" frameborder="0"></iframe>
                 </div>
@@ -90,7 +82,7 @@ img {
                     <a data-toggle="modal" href="/plugins/vt/create/vm/{{ slice_obj.id }}/0/" class="btn btn-info edit disabled btn-slice-state">添加虚拟机</a>
                 {%endif%}
 
-                Slice资源
+                Slice资源【网段: {{ start_ip }}-{{ end_ip }}】
             </legend>
 		  	 <table class="table table-striped table-hover tooltip-demo">
 		  	    <thead>

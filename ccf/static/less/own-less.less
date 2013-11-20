@@ -13,6 +13,10 @@ body {
   background:#fff;
 }
 
+.clear {
+    clear:both;
+}
+
 label {
     display:inline;
 }
@@ -1291,6 +1295,7 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
 
 .qwtp_count {    
     .qwtp {
+        width:100%;
         height:70px;
         background:#fff;
         border:1px solid #ccc;        
@@ -1302,6 +1307,10 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
            text-align:center;
            float:left;
            line-height:50px;
+           img {
+               width:40px;
+               height:40px;
+           }
         }
         .qwtp_nums {
             padding-top:15px;
@@ -1319,3 +1328,37 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
     }
 }
 
+.countschart {
+    margin-bottom:20px;
+    .counts {
+        .counts_block {
+            padding:15px 10px 10px 10px;
+            width:126px;
+            text-align:center;
+            background:#ccc;
+            .counts_block_title {
+                font-size:16px;
+                font-weight:500;
+                font-family: "Microsoft YaHei";
+                margin-top:10px;
+            }
+            .counts_block_nums {
+                margin-top:5px;
+                font-family: "Microsoft YaHei";
+                font-weight: bold;
+                font-size:32px;
+                line-height:normal;
+            }
+        }
+        .counts_block:first-child {
+            margin-bottom:10px;           
+        }        
+    }
+}
+
+.vm_chose {
+    margin-bottom:10px;
+    select {
+        margin-bottom:0;
+    }
+}

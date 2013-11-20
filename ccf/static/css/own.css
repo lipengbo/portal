@@ -5293,6 +5293,9 @@ body {
 
   background: #fff;
 }
+.clear {
+  clear: both;
+}
 label {
   display: inline;
 }
@@ -6503,6 +6506,7 @@ a.button-royal:hover {
   display: block !important;
 }
 .qwtp_count .qwtp {
+  width: 100%;
   height: 70px;
   background: #fff;
   border: 1px solid #ccc;
@@ -6516,6 +6520,10 @@ a.button-royal:hover {
   float: left;
   line-height: 50px;
 }
+.qwtp_count .qwtp .qwtp_tb img {
+  width: 40px;
+  height: 40px;
+}
 .qwtp_count .qwtp .qwtp_nums {
   padding-top: 15px;
   margin-left: 30%;
@@ -6528,4 +6536,35 @@ a.button-royal:hover {
   margin-top: 5px;
   font-size: 14px;
   font-weight: normal;
+}
+.countschart {
+  margin-bottom: 20px;
+}
+.countschart .counts .counts_block {
+  padding: 15px 10px 10px 10px;
+  width: 126px;
+  text-align: center;
+  background: #ccc;
+}
+.countschart .counts .counts_block .counts_block_title {
+  font-size: 16px;
+  font-weight: 500;
+  font-family: "Microsoft YaHei";
+  margin-top: 10px;
+}
+.countschart .counts .counts_block .counts_block_nums {
+  margin-top: 5px;
+  font-family: "Microsoft YaHei";
+  font-weight: bold;
+  font-size: 32px;
+  line-height: normal;
+}
+.countschart .counts .counts_block:first-child {
+  margin-bottom: 10px;
+}
+.vm_chose {
+  margin-bottom: 10px;
+}
+.vm_chose select {
+  margin-bottom: 0;
 }
