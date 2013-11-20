@@ -32,7 +32,7 @@
                         <tr>
                             <th width="5%" class="checkall"><input type="checkbox"></th>
                             <th width="15%">成员名称</th>
-                            <th width="35%">所属单位</th>
+                            <th width="35%">研究领域</th>
                         </tr>
                     </thead>
                     <tbody class="checkboxs">
@@ -40,7 +40,7 @@
                         <tr>
                             <td><input type="checkbox" name="user" value="{{ user.id }}" ></td>
                             <td>{{ user }}</td>
-                            <td>{{ user.get_profile.organization|default:"未填写" }}</td>                         
+                            <td>{{ user.get_profile.realm|default:"未填写" }}</td>                         
                         </tr>
                         {% endfor %}
                     </tbody>
