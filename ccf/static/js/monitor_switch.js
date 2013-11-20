@@ -1,6 +1,9 @@
+
 var br_values = [];
 var port_recv_values = [];
 var port_send_values = [];
+var br_ports = [];
+var port_timer;
 
 for (var i=0; i<21; i++){
 	br_values[i] = "";
@@ -44,6 +47,21 @@ var port_chart_data = {
 var ctx_port = document.getElementById('port_perf_chart').getContext("2d");
 var port_chart = new Chart(ctx_port);
 
+function change_port(switch_id, flag){
+	//clearTimeout(port_timer);
+	get_port_info(switch_id, $('#brs_info').find("option:selected").text(), $('#ports_info').val(), flag);
+}
+function change_br(switch_id, val, flag){
+	$('#ports_info').empty()
+	for (var i=0; i<br_ports[val].length; i++){
+		$('#ports_info').append("<option value="+br_ports[val][i]+">"+br_ports[val][i]+"</option>");
+	}
+	//clearTimeout(port_timer);
+	get_port_info(switch_id, $('#brs_info').find("option:selected").text(), $('#ports_info').val(), flag);
+	
+}
+
+
 
 function get_br_info(switch_id, flag){
 	var default_show_br;
@@ -59,24 +77,38 @@ function get_br_info(switch_id, flag){
         },
         success : function(br_info){
             var context = '';
+			var brs='';
+			
             for(var i=0; i<br_info.length; i++){
                 var br = br_info[i]["br_name"];
-                context = context + "<li class='dropdown active'><a class='dropdown-toggle' data-toggle='dropdown' href='#'>"+ br +"</a><ul class='dropdown-menu'>";
+                //context = context + "<li class='dropdown active'><a class='dropdown-toggle' data-toggle='dropdown' href='#'>"+ br +"</a><ul class='dropdown-menu'>";
+
+				brs = brs + "<option value="+ i +">" + br +"</option>"
+				var ports = [];
                 for (var j=0; j<br_info[i]["ports"].length; j++){
                     var port = br_info[i]["ports"][j];
-					default_show_br = br;
-					default_show_port = port;
-					args = switch_id + ",\"" +br +"\",\"" + port +"\",\"" + flag + "\"";
-                    context = context + "<li><a href='#' onclick='get_port_info(" + args + ")'>"+ port + "</a></li>";
+					//default_show_br = br;
+					//default_show_port = port;
+					//args = switch_id + ",\"" +br +"\",\"" + port +"\",\"" + flag + "\"";
+                    //context = context + "<li><a href='#' onclick='get_port_info(" + args + ")'>"+ port + "</a></li>";
+			
+					ports.push(port);
 
                 }
-                context = context + "</ul></li>";
+				br_ports.push(ports);
+                //context = context + "</ul></li>";
             }
 			if(flag){
 				document.getElementById('br_info').innerHTML = context;
+				document.getElementById('brs_info').innerHTML = brs;
+				$('#brs_info').val(0);
+				for (var i=0; i<br_ports[0].length; i++){
+					$('#ports_info').append("<option value="+br_ports[0][i]+">"+br_ports[0][i]+"</option>");
+				}
 			}
-			get_port_info(switch_id, default_show_br, default_show_port, flag);
-			
+			//get_port_info(switch_id, default_show_br, default_show_port, flag);
+			//初始时设置默认网桥和端口
+			change_br(switch_id, 0, flag);
 			
 
         }
@@ -134,10 +166,11 @@ function update_port_data(switch_id, br, port, flag){
 	});
 }
 
-var port_timer;
+
 function get_port_info(switch_id, br, port, flag){
-	document.getElementById('current_br').innerHTML = " 网桥" + br;
-	document.getElementById('current_port').innerHTML = " 端口" + port;
+	//alert(br+"::"+port)
+	//document.getElementById('current_br').innerHTML = " 网桥" + br;
+	//document.getElementById('current_port').innerHTML = " 端口" + port;
 	if(return_data){
 		clearTimeout(port_timer);
 		update_port_data(switch_id, br, port, flag);
