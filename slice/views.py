@@ -114,7 +114,6 @@ def list(request, proj_id):
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
         slice_objs = Slice.objects.all()
-#         slice_count_show = get_slice_count_show()
     else:
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
@@ -126,6 +125,16 @@ def list(request, proj_id):
             context['query'] = query
     context['slices'] = slice_objs
     return render(request, 'slice/slice_list.html', context)
+
+
+def get_slice_show(request):
+    print "------------------------------------========================================="
+    try:
+        slice_count_show = get_slice_count_show()
+    except Exception, ex:
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
 
 
 @login_required

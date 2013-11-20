@@ -59,7 +59,6 @@ def create_user_defined_controller(slice_obj, controller_ip, controller_port):
                 name='user_define',
                 ip=controller_ip,
                 port=int(controller_port),
-                state=1,
                 island=slice_obj.get_island())
             controller.save()
             return controller
@@ -91,7 +90,7 @@ def create_default_controller(slice_obj, controller_sys):
                                               image_name=controller_sys)
             controller = Controller(name=controller_sys,
                                     port=6633,
-                                    state=1, island=island)
+                                    island=island)
             controller.ip = ip
             controller.host = vm
             controller.save()

@@ -91,7 +91,7 @@
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script type="text/javascript">
 $(function () {
-        check_url = "http://" + window.location.host + "/slice/get_slice_show/";
+        check_url = "/slice/get_slice_show/";
         //alert(check_url)
         var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
         var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
@@ -102,9 +102,9 @@ $(function () {
             cache: false,
             async: false,  
             success: function(data) {
-                if (data.value == 1)
+                if (data.result == 1)
                  {
-                    //alert("in true")
+                    alert("in true")
                     show_dates = data.show_dates;
                     show_nums = data.show_nums;
                  } 
@@ -115,6 +115,8 @@ $(function () {
                  }
             }
         });
+        console.log(show_dates);
+        console.log(show_nums);
         $('#container').highcharts({
             chart: {
                 type: 'column',
