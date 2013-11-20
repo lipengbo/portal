@@ -6502,3 +6502,30 @@ a.button-royal:hover {
 .frame_tuopu label {
   display: block !important;
 }
+.qwtp_count .qwtp {
+  height: 70px;
+  background: #fff;
+  border: 1px solid #ccc;
+}
+.qwtp_count .qwtp .qwtp_tb {
+  height: 50px;
+  padding: 10px;
+  border-right: 1px solid #ccc;
+  width: 30%;
+  text-align: center;
+  float: left;
+  line-height: 50px;
+}
+.qwtp_count .qwtp .qwtp_nums {
+  padding-top: 15px;
+  margin-left: 30%;
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #666;
+}
+.qwtp_count .qwtp .qwtp_nums .qwtp_name {
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: normal;
+}
