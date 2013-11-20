@@ -420,3 +420,365 @@ function trans(mask){
         return 255;
     }
 }
+
+function start_or_stop(slice_id, flag){
+    check_url = "http://" + window.location.host + "/slice/start_or_stop/"+slice_id+"/"+flag+"/";
+    //alert(check_url)
+    var ret = false;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+            if (data.value == 1)
+             {
+                //alert("ok");
+                ret = true;
+             } 
+             else
+             {
+                //alert("failed");
+                $("div#slice_alert_info").empty();
+                var str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+             }
+        }
+    });
+    return ret;
+}
+
+//slice启动停止按钮
+   $(".start_slice").click(function(){
+        var slice_id = $("#slice_id").text();
+        if($(this).hasClass("btn-success")){
+            ret = start_or_stop(slice_id, 1);
+            if(ret){
+                $(this).removeClass("btn-success").addClass("btn-danger");           
+                $(this).text("停止slice");
+                $(".label").removeClass("label-important").addClass("label-success");
+                $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
+                $(".btn-slice-state").addClass("disabled");
+                $(".slice_state_del").addClass("disabled");
+            }     
+        } else {
+            ret = start_or_stop(slice_id, 2);
+            if(ret){
+                $(this).removeClass("btn-danger").addClass("btn-success");
+                $(this).text("启动slice");
+                $(".label").removeClass("label-success").addClass("label-important");
+                $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
+                $(".btn-slice-state").removeClass("disabled");
+                $(".slice_state_del").removeClass("disabled");
+            }         
+        }
+    }); 
+
+     $(".btn-slice-state").click(function(){
+        if($(this).hasClass("disabled")){
+            return false;
+        } else {
+            return true;
+        }
+     }); 
+ 
+ function start_or_stop_vm(vm_id, flag){
+    check_url = "http://" + window.location.host + "/plugins/vt/do/vm/action/"+vm_id+"/"+flag+"/";
+    //alert(check_url)
+    var ret = false;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+            if (data.result==1)
+             {
+                //alert("failed");
+                $("div#slice_alert_info").empty();
+                var str = "" + "<p class=\"text-center\">" + data.error + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+             } 
+             else
+             {
+                //alert("ok");
+                ret = true;
+             }
+        }
+    });
+    return ret;
+}
+ 
+ 
+ //虚拟机启动停止按钮
+   $(".start_vm").live("click", function(){
+        if($(this).hasClass("disabled")){
+            return false;
+        }else{
+            //alert("he");
+            vm_id = $(this).attr('vm_id');
+            //alert(vm_id);
+            if($(this).hasClass("btn-success")){
+                ret = start_or_stop_vm(vm_id, "create");
+                if(ret){
+                    $(this).removeClass("btn-success").addClass("btn-danger");           
+                    $(this).text("停止");
+                    $("#btn_vnc"+vm_id).removeClass("disabled");
+                    $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
+                    document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
+                    
+                }     
+            } else {
+                ret = start_or_stop_vm(vm_id, "destroy");
+                if(ret){
+                    $(this).removeClass("btn-danger").addClass("btn-success");
+                    $(this).text("启动");
+                    $("#btn_vnc"+vm_id).addClass("disabled");
+                    //$(this).parent("td").prev("td").children(".icon_state").removeClass("icon-ok-sign").addClass("icon-minus-sign");
+                    $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
+                    document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+                }         
+            }
+        }
+    });
+  
+   $(".start_gw_dhcp").live("click", function(){
+        if($(this).hasClass("disabled")){
+            return false;
+        }else{
+            vm_id = $(this).attr('vm_id');
+            //alert(vm_id);
+            if($(this).hasClass("btn-success")){
+                ret = start_or_stop_vm(vm_id, "create");
+                if(ret){
+                    $(".start_gw_dhcp").removeClass("btn-success").addClass("btn-danger");           
+                    $(".start_gw_dhcp").text("停止");
+                    $(".gw_dhcp_vnc").removeClass("disabled");
+                    $(".gw_dhcp_icon").removeClass("icon-minus-sign").addClass("icon-ok-sign");
+                }     
+            } else {
+                ret = start_or_stop_vm(vm_id, "destroy");
+                if(ret){
+                    $(".start_gw_dhcp").removeClass("btn-danger").addClass("btn-success");
+                    $(".start_gw_dhcp").text("启动");
+                    $(".gw_dhcp_vnc").addClass("disabled");
+                    $(".gw_dhcp_icon").removeClass("icon-ok-sign").addClass("icon-minus-sign");
+                }         
+            }
+        }
+    });
+   
+   $(".btn_vnc").live("click", function(){
+        if($(this).hasClass("disabled")){
+            return false;
+        } else {
+            url = $(this).attr('url');
+            open_vnc(url);
+        }
+     }); 
+ 
+  function delete_vm(vm_id){
+    check_url = "http://" + window.location.host + "/plugins/vt/delete/vm/"+vm_id+"/"+0+"/";
+    //alert(check_url)
+    var ret = false;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+            if (data.result==1)
+             {
+                //alert("failed");
+                $("div#slice_alert_info").empty();
+                var str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+             } 
+             else
+             {
+                //alert("ok");
+                ret = true;
+             }
+        }
+    });
+    return ret;
+}
+
+    $(".slice_state_del").click(function(){
+        if($(this).hasClass("disabled")){
+            return false;
+        }else{
+            $('#alertModal').modal();
+            var self = $(this);
+            $('.delete-confirm').unbind('click');
+            $('.delete-confirm').click(function(){
+                vm_id = self.attr('vm_id');
+                //alert(vm_id);
+                ret = delete_vm(vm_id);
+                if(ret){
+                    $("#vm_tr"+vm_id).hide();
+                    document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
+                }
+            });
+            return false;
+        }
+    });
+ 
+ //编辑slice描述信息
+ function edit_description(slice_id){
+    var ret;
+    ret = check_slice_description('slice_description',1);
+    if(ret){
+        var obj = document.getElementById('slice_description');
+        check_url = "http://" + window.location.host + "/slice/edit_description/"+slice_id+"/";
+        $.ajax({
+                type: "POST",
+                url: check_url,
+                dataType: "json",
+                data: {"slice_description": obj.value},
+                async: false, 
+                success: function(data) {
+                    if (data.result == 1){
+                        //alert("ok");
+                        var description_old = document.getElementById('slice_description_old');
+                        description_old.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.value;
+                    }
+                    else{
+                        //alert(failed);
+                        $("div#slice_alert_info").empty();
+                        str = "" + "<p class=\"text-center\">编辑失败！</p>";
+                        $("div#slice_alert_info").append(str);
+                        $('#editSliceModal').modal('show');
+                    }
+                },
+                error: function(data) {
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">编辑失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }
+        });
+        $('#editInfoModal').modal('hide');
+    }
+ }
+ 
+  //编辑slice控制器
+ function edit_controller(slice_id){
+    var ret;
+    ret = check_slice_controller('controller_type');
+    var STATIC_URL = $("#STATIC_URL").text();
+    if(ret){
+        var controller_type_objs = document.getElementsByName("controller_type");
+        var controller_sys_obj = document.getElementById("controller_sys");
+        var controller_ip_port_obj = document.getElementById("controller_ip_port");
+        var controller_type;
+        for(var i=0;i<controller_type_objs.length;i++){  
+            if(controller_type_objs[i].checked){  
+                if(controller_type_objs[i].value=="default_create"){  
+                    controller_type = "default_create";
+                }  
+                if(controller_type_objs[i].value=="user_define"){
+                    controller_type = "user_define";
+                }  
+            }   
+        }
+        var controller_ip_port = controller_ip_port_obj.value.split(":");
+        var submit_data = {"controller_type": controller_type,
+                        "controller_sys": controller_sys_obj.value,
+                        "controller_ip": controller_ip_port[0],
+                        "controller_port": controller_ip_port[1]};
+        check_url = "http://" + window.location.host + "/slice/edit_controller/"+slice_id+"/";
+        $.ajax({
+                type: "POST",
+                url: check_url,
+                dataType: "json",
+                data: submit_data,
+                async: false, 
+                success: function(data) {
+                    if (data.result == 1 || data.result == 2){
+                        //alert("ok");
+                        controller = data.controller;
+                        //alert(controller);
+                        $("div#controller_nm").empty();
+                        if(controller.name == 'user_define'){
+                            str = "" + "自定义控制器";
+                        }else{
+                            str = "" + controller.name;
+                        }
+                        $("div#controller_nm").append(str);
+                        $("div#controller_pp").empty();
+                        str = "" + controller.ip + ":" + controller.port;
+                        $("div#controller_pp").append(str);
+
+                        if(data.result == 1){
+                            //alert(controller.host_uuid);
+                            $("div#controller_uuid").empty();
+                            str = "" + "<a id=\"uuid\" href=\"javascript:void(0);\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"\" data-original-title=\""+controller.host_uuid+"\">";
+                            str = str + controller.host_uuid.split("-")[0] + "..." + "</a>";
+                            $("div#controller_uuid").append(str);
+                            $("div#controller_sp").empty();
+                            str = "" + controller.server_ip;
+                            $("div#controller_sp").append(str);
+                            $("div#controller_st").empty();
+                            if(controller.host_state == 8){
+                                str = "" + "<img src=\""+STATIC_URL+"img/loader.gif\"/>";
+                            }else if(controller.host_state == 9){
+                                str = "" + "<i class=\"icon-remove\"></i>";
+                            }else if(controller.host_state == 1){
+                                str = "" + "<i class=\"icon-ok-sign icon_state\" id=\"icon_state"+controller.host_id+"\"></i>";
+                            }else{
+                                str = "" + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+controller.host_id+"\"></i>";
+                            }
+                            $("div#controller_st").append(str);
+                            $("span#controller_fc").empty();
+                            if(controller.host_state == 8){
+                                str = "" + "<input class=\"aa\" type=\"checkbox\" name=\"check_vm_ids\" value=\""+controller.host_id+"\" checked style=\"display:none\"/>"
+                                +"<button type=\"button\" class=\"btn btn-success disabled start_vm\">启动</button>"
+                                +"<button type=\"button\" class=\"btn  btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button> ";
+                            }else if(controller.host_state == 9){
+                                str = "" + "<button type=\"button\" class=\"btn btn-success disabled start_vm\">启动</button>"
+                                +"<button type=\"button\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                            }else if(controller.host_state == 1){
+                                str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-danger start_vm\">停止</button>"                                         
+                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host+id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                            }else{
+                                str = "" + "<button type=\"button\" vm_id=\""+controller.host.id+"\" class=\"btn btn-success start_vm\">启动</button>"
+                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host.id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                            }
+                            $("span#controller_fc").append(str);
+                            if(controller.host_state == 8){
+                                update_vm_status();
+                            }
+                        }else{
+                            $("div#controller_uuid").empty();
+                            $("div#controller_sp").empty();
+                            $("div#controller_st").empty();
+                            $("span#controller_fc").empty();
+                        }
+                        //var description_old = document.getElementById('slice_description_old');
+                        //description_old.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.value;
+                    }
+                    else{
+                        //alert(failed);
+                        $("div#slice_alert_info").empty();
+                        str = "" + "<p class=\"text-center\">"+data.error_info+"</p>";
+                        $("div#slice_alert_info").append(str);
+                        $('#slicealertModal').modal('show');
+                    }
+                },
+                error: function(data) {
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">编辑失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }
+        });
+        $('#editSliceModal').modal('hide');
+    }
+ }

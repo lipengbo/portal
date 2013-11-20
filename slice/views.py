@@ -131,37 +131,57 @@ def list(request, proj_id):
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    if request.method == 'POST':
-        slice_description = request.POST.get("slice_description")
-        try:
-            slice_change_description(slice_obj, slice_description)
-        except Exception, ex:
-            messages.add_message(request, messages.ERROR, ex)
-    return HttpResponseRedirect(
-        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+#     if request.method == 'POST':
+    slice_description = request.POST.get("slice_description")
+    try:
+        slice_change_description(slice_obj, slice_description)
+    except Exception, ex:
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1}))
+#             messages.add_message(request, messages.ERROR, ex)
+#     return HttpResponseRedirect(
+#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 @login_required
 def edit_controller(request, slice_id):
     """编辑slice控制器。"""
+    print "edit_controller"
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    if request.method == 'POST':
-        controller_type = request.POST.get("controller_type")
-        if controller_type == 'default_create':
-            controller_sys = request.POST.get("controller_sys")
-            controller_info = {'controller_type': controller_type,
-                               'controller_sys': controller_sys}
+    controller_type = request.POST.get("controller_type")
+    if controller_type == 'default_create':
+        controller_sys = request.POST.get("controller_sys")
+        controller_info = {'controller_type': controller_type,
+                           'controller_sys': controller_sys}
+    else:
+        controller_ip = request.POST.get("controller_ip")
+        controller_port = request.POST.get("controller_port")
+        controller_info = {'controller_type': controller_type,
+                           'controller_ip': controller_ip,
+                           'controller_port': controller_port}
+    print 1
+    try:
+        slice_change_controller(slice_obj, controller_info)
+    except Exception, ex:
+        print 2
+        return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
+    else:
+        print 3
+        controller = slice_obj.get_controller()
+        if controller.host:
+            return HttpResponse(json.dumps({'result': 1,
+                                            'controller': {'name': controller.name, 'ip': controller.ip,
+                                                          'port': controller.port, 'server_ip': controller.host.server.ip,
+                                                          'host_state': controller.host.state, 'host_id': controller.host.id,
+                                                          'host_uuid': controller.host.uuid}}))
         else:
-            controller_ip_port = request.POST.get("controller_ip_port").split(':')
-            controller_info = {'controller_type': controller_type,
-                               'controller_ip': controller_ip_port[0],
-                               'controller_port': controller_ip_port[1]}
-        try:
-            slice_change_controller(slice_obj, controller_info)
-        except Exception, ex:
-            messages.add_message(request, messages.ERROR, ex)
-    return HttpResponseRedirect(
-        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+            return HttpResponse(json.dumps({'result': 2,
+                                            'controller': {'name': controller.name, 'ip': controller.ip,
+                                                          'port': controller.port}}))
+#             messages.add_message(request, messages.ERROR, ex)
+#     return HttpResponseRedirect(
+#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 @login_required
@@ -181,13 +201,13 @@ def detail(request, slice_id):
     context['gw'] = slice_obj.get_gw()
     context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
-    context['check_vm_status'] = 0
+#     context['check_vm_status'] = 0
 #     if slice_obj.state == 1:
-    all_vms = slice_obj.get_vms()
-    for vm in all_vms:
-        if vm.state == 8:
-            context['check_vm_status'] = 1
-            break
+#     all_vms = slice_obj.get_vms()
+#     for vm in all_vms:
+#         if vm.state == 8:
+#             context['check_vm_status'] = 1
+#             break
 #     context['extent_html'] = "site_base.html"
     return render(request, 'slice/slice_detail.html', context)
 
@@ -227,9 +247,12 @@ def start_or_stop(request, slice_id, flag):
         else:
             stop_slice_api(slice_obj)
     except Exception, ex:
-        messages.add_message(request, messages.ERROR, ex)
-    return HttpResponseRedirect(
-        reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+        print ex
+        return HttpResponse(json.dumps({'value': 0, 'error_info': str(ex)}))
+#         messages.add_message(request, messages.ERROR, ex)
+    return HttpResponse(json.dumps({'value': 1}))
+#     return HttpResponseRedirect(
+#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def topology(request, slice_id):
