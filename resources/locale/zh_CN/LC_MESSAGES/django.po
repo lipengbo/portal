@@ -80,7 +80,7 @@ msgstr "端口"
 
 #: models.py:121
 msgid "Http Port"
-msgstr "Http端口"
+msgstr "Web端口"
 
 #: models.py:125
 msgid "Has GRE tunnel"

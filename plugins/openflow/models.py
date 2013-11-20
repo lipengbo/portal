@@ -1,3 +1,5 @@
+#coding: utf-8
+
 import hashlib
 import json
 
@@ -16,6 +18,7 @@ from slice.models import Slice
 
 
 class Controller(ServiceResource):
+    username = models.CharField(max_length=20, verbose_name=_("username"))
     is_root = models.BooleanField(default=False)
     port = models.IntegerField()
 
@@ -33,6 +36,11 @@ class Controller(ServiceResource):
 
 
 class Flowvisor(ServiceResource):
+    def __init__(self, *args, **kwargs):
+        password = self._meta.get_field('password')
+        password.help_text = '填写flowvisor密码'
+        super(Flowvisor, self).__init__(*args, **kwargs)
+
     http_port = models.IntegerField(verbose_name=_("Http Port"))
 
     def on_add_into_slice(self, slice_obj):
