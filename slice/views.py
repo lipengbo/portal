@@ -125,6 +125,7 @@ def list(request, proj_id):
         else:
             num = 0
         context['new_num'] = num
+        context['total_num'] = slice_objs.count()
     else:
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
