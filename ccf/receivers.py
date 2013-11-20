@@ -81,5 +81,6 @@ def handle_user_signed_up(sender, **kwargs):
     except User.DoesNotExist:
         pass
     else:
-        notify.send(user, recipient=admin, verb=_(' signed up '), action_object=user.get_profile(),
-                description=_("Please review this user"), target=user.get_profile())
+        profile = user.get_profile()
+        notify.send(user, recipient=admin, verb=_(' signed up '), action_object=profile,
+                description=_("Please review this user") + ":" + profile.realm)

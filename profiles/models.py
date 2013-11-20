@@ -16,8 +16,8 @@ class Profile(ProfileBase):
     phone = models.CharField(max_length=11, null=True, blank=True, verbose_name=_("Phone"))
     state = models.IntegerField(default=0)
 
-    def __unicode__(self):
-        return self.realm and (self.realm[:10] + "...") or ""
+    #def __unicode__(self):
+    #    return self.realm and (self.realm[:10] + "...") or ""
 
     def actions(self):
         if self.state != 0:
