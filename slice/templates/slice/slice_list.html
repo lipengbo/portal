@@ -34,12 +34,30 @@
         <fieldset>
              
                 {%if extent_html == "site_base.html" %}
-                <legend>我的Slice</legend>
-                {%else%}
                 <div class="well">
                     <h3 class="list_title">虚网（Slice）</h3>
-                    <p class="list_lead">slice是CENI综合实验平台中为项目创建者或参与人员提供实验研究的原子单元，项目中的每个实验都是以slice为载体，每个slice由它的创建者根据需求选择不同网络拓扑和计算资源组成。</p>
+                    <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
                 </div>
+                {%else%}
+                <legend>虚网（Slice）</legend>
+                    <div class="row-fluid countschart">
+                        <div class="span2 counts">
+                            <div class="counts_block">
+                                <p><img src="{% static "img/file-01.png" %}"  /></p>
+                                <p class="counts_block_title">新增虚网</p>
+                                <p class="counts_block_nums">256</p>
+                            </div>
+                            <div class="counts_block">
+                                <p><img src="{% static "img/file-02.png" %}"  /></p>
+                                <p class="counts_block_title">全部虚网</p>
+                                <p class="counts_block_nums">1256</p>
+                            </div>                                                 
+                        </div>                        
+                        <div class="span10">
+                            <div id="container" style="min-width: 400px; height: 282px; margin: 0 auto"></div>
+                        </div>
+                        <div class="clear"></div>      
+                    </div>
                 {%endif%}
              {% if not slices %}
                 {%if query %}
