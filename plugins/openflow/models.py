@@ -47,14 +47,15 @@ class Flowvisor(ServiceResource):
         return options
 
     def validate_unique(self, exclude=None):
-        try:
-            Flowvisor.objects.get(name=self.name)
-            e = ValidationError(_("%(model_name)s with this %(field_label)s already exists.") % {"field_label": self._meta.get_field('name').verbose_name, "model_name": self._meta.verbose_name})
-            e.message_dict = {}
-            e.message_dict["name"] = e.messages
-            raise e
-        except Flowvisor.DoesNotExist:
-            return self.name
+        if not self.id:
+            try:
+                Flowvisor.objects.get(name=self.name)
+                e = ValidationError(_("%(model_name)s with this %(field_label)s already exists.") % {"field_label": self._meta.get_field('name').verbose_name, "model_name": self._meta.verbose_name})
+                e.message_dict = {}
+                e.message_dict["name"] = e.messages
+                raise e
+            except Flowvisor.DoesNotExist:
+                return self.name
         super(Flowvisor, self).validate_unique(exclude)
 
     class Meta:

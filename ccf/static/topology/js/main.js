@@ -78,10 +78,80 @@ svg.append('rect')
     .attr('height', "100%")
     .attr('fill', rect_color);
 var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
+var status_levels = [10, 100, 400, 1000];
 var gre_ovs_capacity = [];
 for (var i = 0; i < gre_ovses.length; i++) {
     gre_ovs_capacity.push(bandwidth_capacities[Math.floor(Math.random() * 4)]);
 };
+
+function assign_node_icon(d) {
+    var show_logical = $('#show-logical').attr('checked');
+    if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
+        d.group = 2;
+    }
+    var ovs_image;
+
+    /*
+    if (parent.selected_switches) {
+        if (d.id in selected_switch_map) {
+            ovs_image = STATIC_URL + 'topology/img/ovs_green.png?v=3';
+        }
+    }
+    */
+    // group = 3: cloud node
+    // group = 2: virtual switch
+    // group = 1: switch or server
+    if (d.group == 3) {
+        ovs_image = STATIC_URL + "topology/img/cloud";
+    } else if(d.group == 2) { 
+        ovs_image = STATIC_URL + "topology/img/server-phy";
+    } else {
+        if (d.id.indexOf('00:ee:') == 0) {
+            // gre switch
+            ovs_image = STATIC_URL + 'topology/img/ovs-red';
+            if (!show_logical) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
+            }
+        } else if (d.id.indexOf('00:ff:') == 0) {
+            // virtual switch
+            ovs_image = STATIC_URL + 'topology/img/ovs-green';
+            if (!show_logical) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+            }
+        } else {
+            if (!show_logical) {
+                // physical
+                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+            } else {
+                ovs_image = STATIC_URL + 'topology/img/ovs';
+            }
+        }
+
+    }
+    console.log(d.group)
+    
+    if (d.group == 2 || d.group == 1) {
+        // set status level for image
+        if (!show_logical) {
+            console.log('!!!!!!!!!!!' + d.name)
+            
+            var level = Math.floor(Math.random() * 1000);
+            if (level < 10) {
+                ovs_image += '-error';
+            } else if (level < 100) {
+                ovs_image += '-danger';
+            } else if (level < 200) {
+                ovs_image += '-warning';
+            } else if (level < 400){
+                ovs_image += '-info';
+            } else {
+                ovs_image += '-normal';
+            }
+        }
+    }
+    ovs_image += '.png?v=5'
+    return ovs_image;
+}
 function rescale() {
     
   if(d3.event.ctrlKey || mousedown_node) return;
@@ -286,7 +356,7 @@ function init_svg () {
             real_nodes_map[node.id] = true;
         };
     })
-    var cloud_node = {id:"cloud", group:2}
+    var cloud_node = {id:"cloud", group:3}
     g_nodes.push(cloud_node);
     /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
@@ -322,7 +392,7 @@ function init_svg () {
         .style("stroke", function (d) { 
             var color = 'black';
             
-            if (d.type) {
+            if (d.capacity) {
                 var rand_num = Math.random();
                 var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                 d.bandwidth = bandwidth.toFixed(2);
@@ -378,37 +448,7 @@ function init_svg () {
     }
     */
     node.append("image")
-        .attr("xlink:href", function (d) {
-            var show_logical = $('#show-logical').attr('checked');
-            if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
-                d.group = 2;
-            }
-            var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
-            if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
-            }
-            if (d.id.indexOf('00:ee:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
-                if (!show_logical) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway.png?v=4';
-                }
-            }
-            if (d.id.indexOf('00:ff:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
-                if (!show_logical) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
-                }
-            }
-
-            /*
-            if (parent.selected_switches) {
-                if (d.id in selected_switch_map) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs_green.png?v=3';
-                }
-            }
-            */
-            return d.group==1 ? ovs_image : STATIC_URL + "topology/img/server-phy.png?v=5"
-        })
+        .attr("xlink:href", assign_node_icon)
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
     node.append("text").attr("dx", 40).attr("dy", ".35em")
@@ -564,7 +604,7 @@ function load_topology(callback) {
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
                 var color = 'black';
                 
-                if (d.type) {
+                if (d.capacity) {
                     var rand_num = Math.random();
                     var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                     d.bandwidth = bandwidth.toFixed(2);
@@ -580,6 +620,7 @@ function load_topology(callback) {
                 }
                 return color; 
             });
+            var node = svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
             random_refresh();
         }, refresh_time);
     }

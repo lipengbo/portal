@@ -91,7 +91,7 @@ $(document).ready(function() {
         $('.switch-table tbody tr').hide();
         $('.switch-table tbody tr label').hide();
     });
-    
+
     $('.btn-step4').click(function () {
         $('.switch-manifest tbody').html('');
         $.each($('.switch-table tbody tr'), function (index, tr) {
@@ -103,6 +103,22 @@ $(document).ready(function() {
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
+
+
+        $('.no-virtual-switch').hide();
+        if ($(this).hasClass('btn-step2')) {
+            var has_virtual_switch = false;
+            for(dpid in window.selected_dpids) {
+                if (dpid.indexOf('00:ff:') == 0) {
+                    has_virtual_switch = true;
+                }
+            }
+            if (!has_virtual_switch) {
+                $('.no-virtual-switch').show();
+                return false;
+            }
+        }
+
        $("html, body").scrollTop(0);
        var thisIndex = $(".next_btn").index(this);
        var nowIndex = thisIndex + 1;
