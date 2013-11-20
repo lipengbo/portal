@@ -14,14 +14,19 @@ from eventlog.models import log
 from notifications import notify
 from project.models import Project
 from common.models import DailyCounter
-#from slice.models import Slice
+from slice.models import Slice
 
 
+@receiver(post_save, sender=Slice)
 @receiver(post_save, sender=Project)
 def increase_counter(sender, instance, created, **kwargs):
     if created:
         today = datetime.date.today()
-        counter, new = DailyCounter.objects.get_or_create(target=0, date=today)
+        if sender == Slice:
+            target = 1
+        elif sender == Project:
+            target = 0
+        counter, new = DailyCounter.objects.get_or_create(target=target, date=today)
         counter.count = F("count") + 1
         counter.save()
 
