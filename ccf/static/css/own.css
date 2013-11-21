@@ -5878,6 +5878,7 @@ table {
   height: auto;
 }
 .example-sites li h5 {
+  height: 20px;
   color: #666;
   margin: 8px 10px;
   overflow: hidden;
@@ -5934,6 +5935,7 @@ table {
   margin-bottom: 7px;
 }
 .thumbnail .slice_left ul li {
+  height: 20px;
   padding: 5px 0 5px 5px;
   border-bottom: 1px solid #ccc;
   color: #333;
