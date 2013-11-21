@@ -6024,8 +6024,8 @@ table {
   text-align: center;
 }
 #editSliceModal {
-  width: 700px;
-  margin-left: -350px;
+  width: 800px;
+  margin-left: -400px;
 }
 .font_wait {
   color: #c09853;
@@ -6541,22 +6541,25 @@ a.button-royal:hover {
   margin-bottom: 20px;
 }
 .countschart .counts .counts_block {
-  padding: 15px 10px 10px 10px;
-  width: 126px;
+  padding: 10px;
+  width: 81px;
+  height: 81px;
   text-align: center;
   background: #ddd;
 }
+.countschart .counts .counts_block p img {
+  width: 25px;
+}
 .countschart .counts .counts_block .counts_block_title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   font-family: "Microsoft YaHei";
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .countschart .counts .counts_block .counts_block_nums {
-  margin-top: 5px;
   font-family: "Microsoft YaHei";
   font-weight: bold;
-  font-size: 32px;
+  font-size: 28px;
   line-height: normal;
 }
 .countschart .counts .counts_block:first-child {

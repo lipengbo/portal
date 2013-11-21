@@ -56,7 +56,7 @@
                             </div>                                                 
                         </div>                        
                         <div class="span10">
-                            <div id="container" style="min-width: 400px; height: 282px; margin: 0 auto"></div>
+                            <div id="container" style="min-width: 400px; height: 212px; margin: 0 auto"></div>
                         </div>
                         <div class="clear"></div>      
                     </div>
@@ -69,12 +69,6 @@
                     {% else %}
                         <p class="alert alert-info">暂无记录</p>
                     {% endif %}
-                {% else %}
-                    {%if extent_html == "site_base.html" %}
-                        <div class="alert alert-info">
-                             <strong>提示：</strong> 深色为参与的项目，白色为创建的项目
-                        </div>
-                    {%endif%}
                 {% endif %}
 
                 <div class="row-fluid">
@@ -122,7 +116,7 @@ $(function () {
         $('#container').highcharts({
             chart: {
                 type: 'column',
-                margin: [ 50, 50, 100, 80]
+                margin: [ 50, 50, 20, 50]
             },
             title: {
                 text: '每日新增项目数'

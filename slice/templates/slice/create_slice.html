@@ -98,9 +98,8 @@
              
              <div class="tab_part">
              <fieldset>
-                <legend>Slice网络节点选择</legend>
+                <legend>Slice网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
                 <div class="alert alert-info">
-                  <strong>提示：</strong> 点击拓扑图中网络节点选择需要的实验拓扑<br />
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
                 </div>
@@ -192,7 +191,7 @@
                 <table class="table">
                     <tbody>
                         <tr>
-                            <td width="180">网络地址</td>
+                            <td width="150">网络地址</td>
                             <td>
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -203,7 +202,7 @@
 							
                         </tr>
 						<tr>
-							<td><label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器</td><td></td></tr>
+							<td colspan="2"><label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器</td></tr>
                     </tbody>
                 </table>
               </fieldset>
@@ -212,7 +211,7 @@
                  <table class="table">
                     <tbody>
                         <tr>
-                            <td width="200">
+                            <td width="150">
                                 <label class="tab_radio1" for="optionsRadios1">
                                     <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
                                                                                                                                创建控制器 
@@ -233,8 +232,7 @@
                                 <label class="tab_radio2" for="optionsRadios2">
                                     <input type="radio" name="controller_type" id="optionsRadios2" value="user_define">
                                                                                                                            自定义控制器
-                              </label>
-                              <a href="javascript:void(0);" title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。" data-toggle="tooltip" data-placement="right" data-original-title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。"><i class="icon-question-sign icon-align-left"></i></a>                                                                                                                          
+                              </label>                                                                                                                                                        
                             </td>
                             <td>控制器IP</td> 
                             <td width="250">
@@ -247,6 +245,7 @@
                             <td width="40">端口</td>
                             <td>
                                 <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
+                                <a href="javascript:void(0);" title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。" data-toggle="tooltip" data-placement="right" data-original-title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。"><i class="icon-question-sign icon-align-left"></i></a>
                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
@@ -255,7 +254,7 @@
               </fieldset>
 			<div id="gw_setting" style="display:none">
               <fieldset class="base_info tooltip-demo">
-                 <legend>虚拟网关配置<small>(可选，只有在上一步中选择了虚拟机关联节点才会出现配置SLICE虚拟网关部分)</small></legend>
+                 <legend>虚拟网关配置<small>可选，只有在上一步中选择了虚拟机关联节点才会出现配置SLICE虚拟网关部分</small></legend>
                  <table class="table">
                     <tbody>
                         <tr>
