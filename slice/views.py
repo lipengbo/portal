@@ -119,7 +119,8 @@ def list(request, proj_id):
         date_now = datetime.datetime.now()
         sc = DailyCounter.objects.filter(date__year=date_now.strftime('%Y'),
                                   date__month=date_now.strftime('%m'),
-                                  date__day=date_now.strftime('%d'))
+                                  date__day=date_now.strftime('%d'),
+                                  target=1)
         if sc:
             num = sc[0].count
         else:
