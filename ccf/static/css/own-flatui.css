@@ -3913,7 +3913,9 @@ body.vjs-full-window {
   line-height: 26px;
 }
 .pop_form .controls {
+  padding-left: 0;
   margin-left: 160px;
+  *margin-left: 20px;
 }
 .pop_form .controls span {
   color: #E74C3C;
