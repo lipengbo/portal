@@ -109,7 +109,7 @@ $(function () {
             success: function(data) {
                 if (data.result == 1)
                  {
-                    show_dates = data.show_dates;
+//                    show_dates = data.show_dates;
                     show_nums = data.show_nums;
                  } 
                  else
@@ -130,7 +130,7 @@ $(function () {
             xAxis: {
                 categories: show_dates,
                 labels: {
-                    rotation: -45,
+                    rotation: 0,
                     align: 'right',
                     style: {
                         fontSize: '13px',
@@ -141,7 +141,7 @@ $(function () {
             yAxis: {
                 min: 0,
                 title: {
-                    text: ''
+                    text: '项目数(个)'
                 }
             },
             legend: {
