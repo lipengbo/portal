@@ -22,7 +22,7 @@
 		//初始化input元素			
 		
 		for(var i=0;i<4;i++){
-			var input = $("<input type='text' maxlength='3' disabled />")
+			var input = $("<input type='text' id='cip"+i+"' maxlength='3' disabled />")
 				.addClass("ipInput-cell")
 				.blur(function(event){
 					var $input = $(this);
@@ -67,7 +67,11 @@
 					}
 						if(text.length >= 3){
 							if(parseInt(text)>=256 || parseInt(text)<=0){ 
-								alert("请输入0~255之间的数");
+								//alert("请输入0~255之间的数");
+								//$("div#slice_alert_info").empty();
+                                //var str = "" + "<p class=\"text-center\">" + "请输入0~255之间的数" + "</p>";
+                                //$("div#slice_alert_info").append(str);
+                                //$('#slicealertModal').modal('show');
 								$input.val(0);
 								$input[0].focus(); 
 								return false; 
@@ -91,8 +95,31 @@
 		$div.children(":last").empty();
 		
 	  }); 
-    }; 
+    };  
 })(jQuery); 
 
-
+function init_ipinput(){
+    var slice_id = $("#slice_id").text();
+    if(slice_id>=0){
+        
+        controller_ip = $("#controller_ip_old").text();
+        controller_port = $("#controller_port_old").text();
+        if(controller_ip && controller_port){
+            ips = controller_ip.split(".");
+            cip0_obj = document.getElementById("cip0");
+            cip1_obj = document.getElementById("cip1");
+            cip2_obj = document.getElementById("cip2");
+            cip3_obj = document.getElementById("cip3");
+            controller_port_obj = document.getElementById("controller_port");
+            cip0_obj.value = ips[0];
+            cip1_obj.value = ips[1];
+            cip2_obj.value = ips[2];
+            cip3_obj.value = ips[3];
+            controller_port_obj.value = controller_port;
+            $(".tab_radio2").parent("td").siblings("td").children("#ipInput").css({"background":"#fff"}).removeClass("disabled");        
+            $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").removeAttr("disabled");
+            $(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
+        }   
+    }
+}
                

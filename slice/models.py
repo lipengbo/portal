@@ -187,6 +187,18 @@ class Slice(models.Model):
 #         return ('_').join(slice_names)
         return self.show_name
 
+    def be_count(self):
+        sc = SliceCount.objects.filter(date_created__year=self.date_created.strftime('%Y'),
+                                  date_created__month=self.date_created.strftime('%m'),
+                                  date_created__day=self.date_created.strftime('%d'))
+        if sc:
+            sc[0].num = sc[0].num + 1
+            sc[0].save()
+        else:
+            nsc = SliceCount(date_created=self.date_created,
+                             num=1)
+            nsc.save()
+
     def __unicode__(self):
         return self.name
 
@@ -197,6 +209,14 @@ class SliceIsland(models.Model):
 
     class Meta:
         unique_together = (("slice", "island"), )
+
+
+class SliceCount(models.Model):
+    date_created = models.DateTimeField(auto_now_add=True)
+    num = models.IntegerField(default=1)
+
+    class Meta:
+        verbose_name = ("slice count")
 
 
 @receiver(pre_delete, sender=Slice)

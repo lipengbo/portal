@@ -14,13 +14,15 @@
 {% endblock %}
 
 {% block body %}
-<form class="form-horizontal" method="post" action="">
-    {% csrf_token %}
-    {{ formset|crispy }}
-    <div class="form-actions">
-        <button type="submit" class="btn btn-info">{% trans "Save" %}</button>
-    </div>
-</form>
+{% with ModelClass|get_class_name as class_name  %}
+    <form class="form-horizontal" method="post" action="">
+        {% csrf_token %}
+        {{ formset|crispy }}
+        <div class="form-actions">
+            <button type="submit" class="btn btn-info">{% trans "Save" %}</button>
+        </div>
+    </form>
+{% endwith %}
 {% endblock %}
 
 {% block extra_script %}

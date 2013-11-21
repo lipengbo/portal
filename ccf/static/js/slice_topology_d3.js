@@ -234,10 +234,28 @@ var switches = new Array(),
 function get_node(key){
     for(var i=0; i< nodes_data.length; i++){
         if(nodes_data[i].key == key){
-            return nodes_data[i].id;
+            return i;
         }
     }
-    return;
+    return -1;
+}
+
+function get_node_by_yid(yid){
+    for(var i=0; i< nodes_data.length; i++){
+        if(nodes_data[i].yid == yid){
+            return i;
+        }
+    }
+    return -1;
+}
+
+function get_node_by_id(id){
+    for(var i=0; i< nodes_data.length; i++){
+        if(nodes_data[i].id == id){
+            return i;
+        }
+    }
+    return -1;
 }
 
 var slice_id = $("#slice_id").text();
@@ -276,20 +294,24 @@ function inittpdata(){
             //获取数据库中该slice的交换机信息
             for(var i=0; i< switches.length; i++){
                 icon_data[2].key = switches[i].dpid;
-                
                 node = create_node(icon_data[2]);
                 if(node){
-                    nodes_data[node.id-1].key = switches[i].dpid;
-                    nodes_data[node.id-1].yid = switches[i].id;
-                    nodes_data[node.id-1].name = switches[i].name;
-                    nodes_data[node.id-1].type_id = switches[i].type;
-                    nodes_data[node.id-1].ports = switches[i].ports;
+                node_id = get_node_by_id(node.id);
+                }else{
+                node_id = -1;
+                }
+                if(node_id>=0){
+                    nodes_data[node_id].key = switches[i].dpid;
+                    nodes_data[node_id].yid = switches[i].id;
+                    nodes_data[node_id].name = switches[i].name;
+                    nodes_data[node_id].type_id = switches[i].type;
+                    nodes_data[node_id].ports = switches[i].ports;
                     if(switches[i].type == 1){
-                        nodes_data[node.id-1].icon = 'img/ovs.png';
+                        nodes_data[node_id].icon = 'img/ovs.png';
                     }else if(switches[i].type == 2){
-                        nodes_data[node.id-1].icon = 'img/ovs-red.png';
+                        nodes_data[node_id].icon = 'img/ovs-red.png';
                     }else{
-                        nodes_data[node.id-1].icon = 'img/ovs-green.png';
+                        nodes_data[node_id].icon = 'img/ovs-green.png';
                     }
                 }
             }
@@ -312,13 +334,13 @@ function inittpdata(){
                     dst_node_id = get_node(srcLinks[i].dst_switch);
                     //nodes_data[src_node_id-1].have_port = true;
                     //nodes_data[dst_node_id-1].have_port = true;
-                    if(src_node_id && dst_node_id){
+                    if(src_node_id>=0 && dst_node_id>=0){
                         src_capacity = 0;
                         src_bandwidth = 0;
                         dst_capacity = 0;
                         dst_bandwidth = 0;
-                        //src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port;
-                        //dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port;
+                        //src_id = '' + nodes_data[src_node_id].yid + '_' + srcLinks[i].src_port;
+                        //dst_id = '' + nodes_data[dst_node_id].yid + '_' + srcLinks[i].dst_port;
                         //for(var k=0; k< bandwidth.length; k++){
                         //    count = 0;
                         //    if(src_id == bandwidth[k].id){
@@ -334,7 +356,7 @@ function inittpdata(){
                          //       break;
                         //    }
                        // }
-                        link = {source: nodes_data[src_node_id-1], target: nodes_data[dst_node_id-1], src_port_name: srcLinks[i].src_port_name,
+                        link = {source: nodes_data[src_node_id], target: nodes_data[dst_node_id], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
                             dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
                             src_capacity: src_capacity, src_bandwidth: src_bandwidth, dst_capacity: dst_capacity,
@@ -348,19 +370,24 @@ function inittpdata(){
                
                 src_node = create_node(icon_data[3]);
                 dst_node_id = get_node(normals[i].switchDPID);
-                if(src_node && dst_node_id){
-                    nodes_data[src_node.id - 1].key = normals[i].ip;
-                    nodes_data[src_node.id - 1].yid = normals[i].hostid;
-                    nodes_data[src_node.id - 1].type_id = normals[i].hostStatus;
-                    nodes_data[src_node.id - 1].name = normals[i].name;
-                    nodes_data[src_node.id - 1].mac = normals[i].mac;
-                   // nodes_data[src_node.id - 1].vnc_port = normals[i].vnc_port;
+                if(src_node){
+                src_node_id = get_node_by_id(src_node.id);
+                }else{
+                src_node_id = -1;
+                }
+                if(src_node_id>=0 && dst_node_id>=0){
+                    nodes_data[src_node_id].key = normals[i].ip;
+                    nodes_data[src_node_id].yid = normals[i].hostid;
+                    nodes_data[src_node_id].type_id = normals[i].hostStatus;
+                    nodes_data[src_node_id].name = normals[i].name;
+                    nodes_data[src_node_id].mac = normals[i].mac;
+                   // nodes_data[src_node_id].vnc_port = normals[i].vnc_port;
                     if(normals[i].hostStatus == 1){
-                        nodes_data[src_node.id - 1].icon = 'img/host.png';
+                        nodes_data[src_node_id].icon = 'img/host.png';
                     }else{
-                        nodes_data[src_node.id - 1].icon = 'img/host_down.png';
+                        nodes_data[src_node_id].icon = 'img/host_down.png';
                     }
-                    link = {source: nodes_data[src_node.id - 1], target: nodes_data[dst_node_id-1], left: false,
+                    link = {source: nodes_data[src_node_id], target: nodes_data[dst_node_id], left: false,
                         right: true, required: true, type: 'hostswitch'};
                     links.push(link);
                 }
@@ -407,17 +434,22 @@ function inittpdata2(){
                 
                 node = create_node(icon_data[2]);
                 if(node){
-                    nodes_data[node.id-1].key = switches[i].dpid;
-                    nodes_data[node.id-1].yid = switches[i].id;
-                    nodes_data[node.id-1].name = switches[i].name;
-                    nodes_data[node.id-1].type_id = switches[i].type;
-                    nodes_data[node.id-1].ports = switches[i].ports;
+                node_id = get_node_by_id(node.id);
+                }else{
+                node_id = -1;
+                }
+                if(node_id>=0){
+                    nodes_data[node_id].key = switches[i].dpid;
+                    nodes_data[node_id].yid = switches[i].id;
+                    nodes_data[node_id].name = switches[i].name;
+                    nodes_data[node_id].type_id = switches[i].type;
+                    nodes_data[node_id].ports = switches[i].ports;
                     if(switches[i].type == 1){
-                        nodes_data[node.id-1].icon = 'img/ovs.png';
+                        nodes_data[node_id].icon = 'img/ovs.png';
                     }else if(switches[i].type == 2){
-                        nodes_data[node.id-1].icon = 'img/ovs-red.png';
+                        nodes_data[node_id].icon = 'img/ovs-red.png';
                     }else{
-                        nodes_data[node.id-1].icon = 'img/ovs-green.png';
+                        nodes_data[node_id].icon = 'img/ovs-green.png';
                     }
                 }
             }
@@ -438,15 +470,15 @@ function inittpdata2(){
                 if(flag){
                     src_node_id = get_node(srcLinks[i].src_switch);
                     dst_node_id = get_node(srcLinks[i].dst_switch);
-                    //nodes_data[src_node_id-1].have_port = true;
-                    //nodes_data[dst_node_id-1].have_port = true;
-                    if(src_node_id && dst_node_id){
+                    //nodes_data[src_node_id].have_port = true;
+                    //nodes_data[dst_node_id].have_port = true;
+                    if(src_node_id>=0 && dst_node_id>=0){
                         src_capacity = 0;
                         src_bandwidth = 0;
                         dst_capacity = 0;
                         dst_bandwidth = 0;
-                        //src_id = '' + nodes_data[src_node_id-1].yid + '_' + srcLinks[i].src_port;
-                        //dst_id = '' + nodes_data[dst_node_id-1].yid + '_' + srcLinks[i].dst_port;
+                        //src_id = '' + nodes_data[src_node_id].yid + '_' + srcLinks[i].src_port;
+                        //dst_id = '' + nodes_data[dst_node_id].yid + '_' + srcLinks[i].dst_port;
                         //for(var k=0; k< bandwidth.length; k++){
                         //    count = 0;
                         //    if(src_id == bandwidth[k].id){
@@ -462,7 +494,7 @@ function inittpdata2(){
                          //       break;
                         //    }
                        // }
-                        link = {source: nodes_data[src_node_id-1], target: nodes_data[dst_node_id-1], src_port_name: srcLinks[i].src_port_name,
+                        link = {source: nodes_data[src_node_id], target: nodes_data[dst_node_id], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
                             dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
                             src_capacity: src_capacity, src_bandwidth: src_bandwidth, dst_capacity: dst_capacity,
@@ -476,19 +508,24 @@ function inittpdata2(){
                
                 src_node = create_node(icon_data[3]);
                 dst_node_id = get_node(normals[i].switchDPID);
-                if(src_node && dst_node_id){
-                    nodes_data[src_node.id - 1].key = normals[i].ip;
-                    nodes_data[src_node.id - 1].yid = normals[i].hostid;
-                    nodes_data[src_node.id - 1].type_id = normals[i].hostStatus;
-                    nodes_data[src_node.id - 1].name = normals[i].name;
-                    nodes_data[src_node.id - 1].mac = normals[i].mac;
-                   // nodes_data[src_node.id - 1].vnc_port = normals[i].vnc_port;
+                if(src_node){
+                src_node_id = get_node_by_id(src_node.id);
+                }else{
+                src_node_id = -1;
+                }
+                if(src_node_id>=0 && dst_node_id>=0){
+                    nodes_data[src_node_id].key = normals[i].ip;
+                    nodes_data[src_node_id].yid = normals[i].hostid;
+                    nodes_data[src_node_id].type_id = normals[i].hostStatus;
+                    nodes_data[src_node_id].name = normals[i].name;
+                    nodes_data[src_node_id].mac = normals[i].mac;
+                   // nodes_data[src_node_id].vnc_port = normals[i].vnc_port;
                     if(normals[i].hostStatus == 1){
-                        nodes_data[src_node.id - 1].icon = 'img/host.png';
+                        nodes_data[src_node_id].icon = 'img/host.png';
                     }else{
-                        nodes_data[src_node.id - 1].icon = 'img/host_down.png';
+                        nodes_data[src_node_id].icon = 'img/host_down.png';
                     }
-                    link = {source: nodes_data[src_node.id - 1], target: nodes_data[dst_node_id-1], left: false,
+                    link = {source: nodes_data[src_node_id], target: nodes_data[dst_node_id], left: false,
                         right: true, required: true, type: 'hostswitch'};
                     links.push(link);
                 }
@@ -1038,3 +1075,30 @@ function random_refresh2 () {
     }, refresh_time);
 }  
 random_refresh2();
+
+function topology_update_vm_state(vm_id, state){
+    var nid = get_node_by_yid(vm_id);
+    if(nid>=0){
+        if(state == 1){
+            nodes_data[nid].icon = 'img/host.png';
+        }else{
+            nodes_data[nid].icon = 'img/host_down.png';
+        }
+    }
+    var host = circle.selectAll('.host-node-icon');
+    host.attr("xlink:href", function(d){ return static_url + d.icon});
+}
+
+function topology_del_vm(vm_id){
+    var nid = get_node_by_yid(vm_id);
+    if(nid>=0){
+        for(var i=0; i< links.length; i++){
+            if(links[i].type == 'hostswitch' && links[i].source.yid == vm_id){
+                links.splice(i,1);
+                break;
+            }
+        }
+        nodes_data.splice(nid,1); 
+        restart(); 
+    }
+}

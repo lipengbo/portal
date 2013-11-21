@@ -91,7 +91,7 @@ $(document).ready(function() {
         $('.switch-table tbody tr').hide();
         $('.switch-table tbody tr label').hide();
     });
-    
+
     $('.btn-step4').click(function () {
         $('.switch-manifest tbody').html('');
         $.each($('.switch-table tbody tr'), function (index, tr) {
@@ -103,6 +103,22 @@ $(document).ready(function() {
     //slice步骤切换
     $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
+
+
+        $('.no-virtual-switch').hide();
+        if ($(this).hasClass('btn-step2')) {
+            var has_virtual_switch = false;
+            for(dpid in window.selected_dpids) {
+                if (dpid.indexOf('00:ff:') == 0) {
+                    has_virtual_switch = true;
+                }
+            }
+            if (!has_virtual_switch) {
+                $('.no-virtual-switch').show();
+                return false;
+            }
+        }
+
        $("html, body").scrollTop(0);
        var thisIndex = $(".next_btn").index(this);
        var nowIndex = thisIndex + 1;
@@ -312,8 +328,14 @@ function page_function3(){
 			        + "</table>";  
 			}  
 			if(controller_type_obj[i].value=="user_define"){
-				var controller_ip_port_obj = document.getElementById("controller_ip_port");
-				var controller_ip_port = controller_ip_port_obj.value;
+			    cip0_obj = document.getElementById("cip0");
+                cip1_obj = document.getElementById("cip1");
+                cip2_obj = document.getElementById("cip2");
+                cip3_obj = document.getElementById("cip3");
+                //controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+                controller_port_obj = document.getElementById("controller_port");
+				//var controller_ip_port_obj = document.getElementById("controller_ip_port");
+				var controller_ip_port = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value+':'+controller_port_obj.value;
 				var str = "";
 				str = str + "<table class=\"table\">"
 			        + "<tbody>"
@@ -401,7 +423,7 @@ function submit_slice_info(project_id){
 	var island_id_obj = document.getElementById("island_id");
 	var controller_type_objs = document.getElementsByName("controller_type");
 	var controller_sys_obj = document.getElementById("controller_sys");
-	var controller_ip_port_obj = document.getElementById("controller_ip_port");
+	//var controller_ip_port_obj = document.getElementById("controller_ip_port");
 	var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
 	var old_slice_nw_obj = document.getElementById("old_slice_nw");
 	var id_server_gw_obj = document.getElementById("id_server_gw");
@@ -411,6 +433,12 @@ function submit_slice_info(project_id){
 	var controller_type;
 	var dhcp_selected = 0;
 	var j = 0;
+	var cip0_obj = document.getElementById("cip0");
+    var cip1_obj = document.getElementById("cip1");
+    var cip2_obj = document.getElementById("cip2");
+    var cip3_obj = document.getElementById("cip3");
+    var controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+    var controller_port_obj = document.getElementById("controller_port");
     for(var i=0;i<switch_port_ids_obj.length;i++){
 		if(!switch_port_ids_obj[i].disabled){
 			//alert(switch_port_ids_obj[i].value);
@@ -437,7 +465,7 @@ function submit_slice_info(project_id){
        // alert(1); 
         dhcp_selected = 1; 
     }   
-	var controller_ip_port = controller_ip_port_obj.value.split(":");
+	//var controller_ip_port = controller_ip_port_obj.value.split(":");
     var user_id_obj = document.getElementById("user_id");
     var id_server_gw_obj_value = 0;
     var gateway_ip_obj_value = '';
@@ -450,8 +478,8 @@ function submit_slice_info(project_id){
 						"island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
 						"controller_type": controller_type,
 						"controller_sys": controller_sys_obj.value,
-						"controller_ip": controller_ip_port[0],
-						"controller_port": controller_ip_port[1],
+						"controller_ip": controller_ip,
+						"controller_port": controller_port.value,
 						"switch_port_ids": switch_port_ids,
 						"slice_nw": old_slice_nw_obj.value,
 						"gw_host_id": id_server_gw_obj_value,

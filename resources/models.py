@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from django.db import models
 from django.db.models.base import ModelBase
 from django.dispatch import receiver
@@ -65,14 +67,13 @@ class IslandResource(Resource):
 
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
-    username = models.CharField(max_length=20, verbose_name=_("username"))
     password = models.CharField(max_length=20, verbose_name=_("password"))
     content_type = models.ForeignKey(ContentType, null=True, blank=True)
     object_id = models.PositiveIntegerField(null=True, blank=True)
     #: served on a ComputeResource like Server or VirtualMachine
     host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
-    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
+    #state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
 
     def __unicode__(self):
         return self.name
@@ -116,9 +117,9 @@ class Server(IslandResource):
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
-    username = models.CharField(max_length=20, verbose_name=_("username"))
+    username = models.CharField(max_length=20, verbose_name=_("username"), help_text="用户名和密码是交换机所在服务器的系统用户名和密码")
     password = models.CharField(max_length=20, verbose_name=_("password"))
-    dpid = models.CharField(max_length=256)
+    dpid = models.CharField(max_length=256, help_text="dpid以冒号“:”分隔")
     has_gre_tunnel = models.BooleanField(default=False, verbose_name=_("Has GRE tunnel"))
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 

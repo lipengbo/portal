@@ -127,9 +127,12 @@ def delete_vm(request, vmid, flag):
         if flag == '1':
             return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         else:
-            return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
+            return HttpResponse(json.dumps({'result': 0}))
+#             return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
     except Exception, ex:
         LOG.debug(traceback.print_exc())
+        if flag == '0':
+            return HttpResponse(json.dumps({'result': 1, 'error_info': str(ex)}))
     return render(request, 'slice/warning.html', {'info': str(ex)})
 
 
