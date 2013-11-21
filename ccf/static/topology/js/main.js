@@ -62,6 +62,73 @@ force = d3.layout.force()
 svg_obj = d3.select("#topology-svg").append("svg")
             .attr("width", width)
             .attr("height", height);
+function initboard2(){
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 15)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("负载(%)");
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("0~10");
+        svg.append('svg:line')
+          .attr('x1', 40)
+          .attr('y1', 30)
+          .attr('x2', 60)
+          .attr('y2', 30)
+          .attr('class', 'caption')
+          .attr('style', "stroke:blue;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 70)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("0~30");
+        svg.append('svg:line')
+          .attr('x1', 115)
+          .attr('y1', 30)
+          .attr('x2', 135)
+          .attr('y2', 30)
+          .attr('class', 'caption')
+          .attr('style', "stroke:green;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 140)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("30~60");
+        svg.append('svg:line')
+          .attr('x1', 190)
+          .attr('y1', 30)
+          .attr('x2', 210)
+          .attr('y2', 30)
+          .attr('class', 'caption')
+          .attr('style', "stroke:yellow;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 50)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("60~90");
+        svg.append('svg:line')
+          .attr('x1', 40)
+          .attr('y1', 45)
+          .attr('x2', 60)
+          .attr('y2', 45)
+          .attr('class', 'caption')
+          .attr('style', "stroke:orange;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 70)
+          .attr('y', 50)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("90~100");
+        svg.append('svg:line')
+          .attr('x1', 115)
+          .attr('y1', 45)
+          .attr('x2', 135)
+          .attr('y2', 45)
+          .attr('class', 'caption')
+          .attr('style', "stroke:red;stroke-width:2")
+}
 var svg = svg_obj.append('g')
     .call(d3.behavior.zoom().on("zoom", rescale))
     .on("dblclick.zoom", null)
@@ -73,6 +140,7 @@ var svg = svg_obj.append('g')
     if (size == 'big') {
         rect_color = 'transparent';
     }
+initboard2();
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
@@ -346,7 +414,7 @@ function highlight( data, i, element ) {
 }
 function init_svg () {
     $('.wrap g').remove();
-    $('.wrap line').remove();
+    $('.wrap line[class!=caption]').remove();
     spinner.stop();    
 
     var real_nodes_map = {};
