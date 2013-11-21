@@ -580,7 +580,11 @@ function init_svg () {
         } else {
             // physical topology
             if (d.db_id) {
-                window.open('/monitor/Switch/' + d.db_id + '/');
+                if (d.name.indexOf('00:ff:')) {
+                    window.open('/monitor/Server/' + d.db_id + '/');
+                } else {
+                    window.open('/monitor/Switch/' + d.db_id + '/');
+                }
             }
         }
     });
