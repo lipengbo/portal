@@ -35,7 +35,11 @@
         <div class="fill_form">    
             <fieldset>
                     {%if extent_html == "site_base.html" %}
-                    <legend>我的项目</legend>
+                    <div class="well">
+                        <h3 class="list_title">项目（Project）</h3>
+                        
+                        <p class="list_lead">项目是CCF中用于组织和开展研究的载体，项目由若干实验和参与实验的研究人员组成。</p>                     
+                    </div>   
                     {%else%}
                     <legend>项目（Project）</legend>
                     <div class="row-fluid countschart">
@@ -57,11 +61,7 @@
                         <div class="clear"></div>      
                     </div>
                     
-             <!--       <div class="well">
-                        <h3 class="list_title">项目（Project）</h3>
                         
-                        <p class="list_lead">项目是CENI综合实验平台中用于进行实验研究的一个载体，它主要由实验人员以及他们创建的实验组成。一个项目可能包括多个实验和研究人员，每个研究人员也能参与不同的实验，项目创建者能够对项目参与人员进行授权操作，一般项目创建者多为高级研究人员或教授。</p>                     
-                </div>          -->
                     {%endif%}
                 {% if not projects %}
                     {% if query %}

@@ -28,7 +28,7 @@
     <div class="form_inline control-group {% if form.name.errors %}error{% endif %}">
         <label>项目名称</label>
         <input type="text" name="name" value="{{ form.instance.name }}">  
-        <span class="muted">例：北京邮电大学-网络通信实验室-SDN</span>     
+        <span class="muted"><i>如北京邮电大学-网络通信实验室-SDN</i></span>     
         {% if form.name.errors %}
                 {% for error in form.name.errors %}
                     <span class="help-inline">{{ error }}</span>
@@ -38,7 +38,11 @@
     <div class="form_inline control-group {% if form.description.errors %}error{% endif %}">
         <label class="v_top">项目描述</label>
         <textarea name="description" rows="5">{{ form.instance.description }}</textarea>
-        <span class="muted pro_describe">该项目是用来验证openflow协议的有效性以及flowvisor的虚网隔离功能XXXX</span>  
+        <span class="muted pro_describe"><i>
+                                    项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />
+                                     项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />
+                                    项目支持：国家自然科学基金或863、973项目支持；</i>
+        </span>  
         {% if form.description.errors %}
                 {% for error in form.description.errors %}
                     <span class="help-inline">{{ error }}</span>
@@ -47,9 +51,9 @@
     </div>
     <div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
         <label>项目类型</label>
-        <select>
+        <select name="category_name">
             {% for cat in cats %}
-                <option data-id="{{ cat.id }}">{{ cat }}</option>
+                <option data-id="{{ cat.id }}" value="{{ cat }}">{{ cat }}</option>
             {% endfor %}         
         </select>
         {% if form.category_name.errors %}
