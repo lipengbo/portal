@@ -39,6 +39,12 @@
                     <p class="list_lead">slice是CENI综合实验平台中为项目创建者或参与人员提供实验研究的原子单元，项目中的每个实验都是以slice为载体，每个slice由它的创建者根据需求选择不同网络拓扑和计算资源组成。</p>
                     </div> 
                 {%else%}
+                    {%if project%}
+                        <div class="well">
+                        <h3 class="list_title">我的Slice</h3>
+                        <p class="list_lead">slice是CENI综合实验平台中为项目创建者或参与人员提供实验研究的原子单元，项目中的每个实验都是以slice为载体，每个slice由它的创建者根据需求选择不同网络拓扑和计算资源组成。</p>
+                        </div> 
+                    {%else%}
                     <legend>虚网（Slice）</legend>
                     <div class="row-fluid countschart">
                         <div class="span2 counts">
@@ -58,7 +64,19 @@
                         </div>
                         <div class="clear"></div>      
                     </div>
+                    {%endif%}
                 {%endif%}
+                <div class="clear" style="display: none" >
+                    {%if extent_html == "site_base.html"%}
+                        <p id="slice_show">0</p>
+                    {%else%}
+                        {%if project %}
+                            <p id="slice_show">0</p>
+                        {%else%}
+                            <p id="slice_show">1</p>
+                        {%endif%}
+                    {%endif%}
+                </div>
              {% if not slices %}
                 {%if query %}
                 <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
@@ -91,84 +109,87 @@
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script type="text/javascript">
 $(function () {
-        check_url = "/slice/get_slice_show/";
-        //alert(check_url)
-        var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-        var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-        $.ajax({
-            type: "GET",
-            url: check_url,
-            dataType: "json",
-            cache: false,
-            async: false,  
-            success: function(data) {
-                if (data.result == 1)
-                 {
-                   // alert("in true")
-                    //show_dates = data.show_dates;
-                    show_nums = data.show_nums;
-                 } 
-                 else
-                 {
-                    //show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-                    //show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-                 }
-            }
-        });
-        console.log(show_dates);
-        console.log(show_nums);
-        $('#container').highcharts({
-            chart: {
-                type: 'column',
-                margin: [ 50, 50, 100, 80]
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: show_dates,
-                labels: {
-                    rotation: -45,
-                    align: 'right',
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
+        slice_show = $("#slice_show").text();
+        if(slice_show == '1'){
+            check_url = "/slice/get_slice_show/";
+            //alert(check_url)
+            var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+            var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+            $.ajax({
+                type: "GET",
+                url: check_url,
+                dataType: "json",
+                cache: false,
+                async: false,  
+                success: function(data) {
+                    if (data.result == 1)
+                     {
+                       // alert("in true")
+                        //show_dates = data.show_dates;
+                        show_nums = data.show_nums;
+                     } 
+                     else
+                     {
+                        //show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+                        //show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+                     }
                 }
-            },
-            yAxis: {
-                min: 0,
+            });
+            console.log(show_dates);
+            console.log(show_nums);
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    margin: [ 50, 50, 100, 80]
+                },
                 title: {
                     text: ''
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                formatter: function() {
-                    return '<b>'+ this.x +'</b><br/>'+
-                        'Population in 2008: '+ Highcharts.numberFormat(this.y, 1) +
-                        ' millions';
-                }
-            },
-            series: [{
-                name: 'Population',
-                data: show_nums,
-                dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    x: 4,
-                    y: 10,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                },
+                xAxis: {
+                    categories: show_dates,
+                    labels: {
+                        rotation: 0,
+                        align: 'right',
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
                     }
-                }
-            }]
-        });
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: ''
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                //tooltip: {
+                 //   formatter: function() {
+                       // return '<b>'+ this.x +'</b><br/>'+
+                  //          '创建的虚网个数: '+ Highcharts.numberFormat(this.y, 1) +
+                   //         ' 个';
+                   // }
+               // },
+                series: [{
+                    name: 'Slice',
+                    data: show_nums,
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        x: 4,
+                        y: 10,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+         }
     });
     
 
