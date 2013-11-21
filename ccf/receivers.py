@@ -30,6 +30,18 @@ def increase_counter(sender, instance, created, **kwargs):
         counter.count = F("count") + 1
         counter.save()
 
+@receiver(post_delete, sender=Slice)
+@receiver(post_delete, sender=Project)
+def decrease_counter(sender, instance, **kwargs):
+    if sender == Slice:
+        target = 1
+    elif sender == Project:
+        target = 0
+    today = datetime.date.today()
+    counter, new = DailyCounter.objects.get_or_create(target=target, date=today)
+    counter.count = F("count") - 1
+    counter.save()
+
 @receiver(user_logged_in)
 def handle_user_logged_in(sender, **kwargs):
     log(

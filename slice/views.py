@@ -141,8 +141,9 @@ def list(request, proj_id):
 
 def get_slice_show(request):
     print "------------------------------------========================================="
+    target = request.GET.get('target')
     try:
-        slice_count_show = get_slice_count_show()
+        slice_count_show = get_slice_count_show(target)
     except Exception, ex:
         return HttpResponse(json.dumps({'result': 0}))
     else:
