@@ -3,7 +3,6 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
-{% load endless %}
 {% load project_tags %}
 
 {% block head_title %}SLICE列表{% endblock %}
@@ -21,7 +20,7 @@
 {% endblock %}
 
 {% block body %}
-{% paginate 4 slices %}
+
     <div class="search">
         <form class="form-search">
           <div class="input-append">
@@ -90,27 +89,32 @@
              {% endif %}
              <div class="row-fluid">
              {%if slices %}
-             {% for group in slices|group_by:2 %}
-             <ul class="thumbnails example-sites">
-		         {% for slice in group %}
-		              {% include "slice/_slice.html" %}
-		         {% endfor %}
-		     </ul>
-		     {% endfor %}
+             <div id="slice_list_show">
+                 {% load endless %}
+                 {% paginate 4 slices %}
+                 {% for group in slices|group_by:2 %}
+                 <ul class="thumbnails example-sites">
+    		         {% for slice in group %}
+    		              {% include "slice/_slice.html" %}
+    		         {% endfor %}
+    		     </ul>
+    		     {% endfor %}
+    		     <div class="pagination">
+                    <ul>
+                        {% show_pages %}
+                    </ul>
+                </div>
+		     </div>
 		     {%endif%}
 		     </div>
          </fieldset>
-    </div>
-    <div class="pagination">
-        <ul>
-            {% show_pages %}
-        </ul>
     </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/slice_pagination.js"></script>
 <script type="text/javascript">
 $(function () {
         slice_show = $("#slice_show").text();

@@ -137,6 +137,9 @@ def list(request, proj_id):
             slice_objs = slice_objs.filter(Q(show_name__icontains=query) | Q(description__icontains=query))
             context['query'] = query
     context['slices'] = slice_objs
+    if request.is_ajax():
+        print '89'
+        return render(request, 'slice/list_page.html', context)
     return render(request, 'slice/slice_list.html', context)
 
 
