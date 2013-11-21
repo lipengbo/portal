@@ -493,14 +493,14 @@ function init_svg () {
         //highlight( d, i, this );
         var show_logical = $('#show-logical').attr('checked');
         if (!show_logical) {
-            $(this).css("cursor:pointer");
+            $(this).find('image').css("cursor", "pointer");
         }
     })
     .on('mouseout', function(d, i) {
         tooltip.hideTooltip();
         var show_logical = $('#show-logical').attr('checked');
         if (!show_logical) {
-            $(this).css("cursor:auto");
+            $(this).find('image').css("cursor", "auto");
         }
     })
     .on('mousedown', function(d) {
