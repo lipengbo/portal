@@ -1,4 +1,5 @@
 import json
+import datetime
 import logging
 logger = logging.getLogger("plugins")
 
@@ -26,6 +27,7 @@ from slice.models import Slice
 from resources.models import Switch, Server
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
+from common.models import DailyCounter
 
 
 def home(request):
@@ -58,6 +60,9 @@ def index(request):
                     Q(description__icontains=query))
             context['query'] = query
     context['projects'] = projects
+    today = datetime.date.today()
+    counter, created = DailyCounter.objects.get_or_create(target=0, date=today)
+    context['new_projects_num'] = counter.count
     return render(request, 'project/index.html', context)
 
 
