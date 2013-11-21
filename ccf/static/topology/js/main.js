@@ -491,9 +491,17 @@ function init_svg () {
     })
     .on('mouseover', function(d, i) {
         //highlight( d, i, this );
+        var show_logical = $('#show-logical').attr('checked');
+        if (!show_logical) {
+            $(this).css("cursor:pointer");
+        }
     })
     .on('mouseout', function(d, i) {
         tooltip.hideTooltip();
+        var show_logical = $('#show-logical').attr('checked');
+        if (!show_logical) {
+            $(this).css("cursor:auto");
+        }
     })
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
