@@ -18,3 +18,4 @@ django-xmlrpc==0.1.5
 git+https://github.com/eldarion/idios.git
 django-filter
 git+https://github.com/fay/django-notifications
+South==0.8.1
