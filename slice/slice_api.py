@@ -466,7 +466,9 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_slice_count_show():
+def get_slice_count_show(target):
+    from common.models import DailyCounter
+    print "get_slice_count_show"
     date_now = datetime.datetime.now()
     date_delta = datetime.timedelta(days=-1)
     ret = {}
@@ -474,15 +476,21 @@ def get_slice_count_show():
     show_nums = []
     cur_date = date_now
     for i in range(0, 30):
-        sc = SliceCount.objects.filter(date_created__year=cur_date.strftime('%Y'),
-                                  date_created__month=cur_date.strftime('%m'),
-                                  date_created__day=cur_date.strftime('%d'))
+        if target == 'project':
+            target_id = 0
+        else:
+            target_id = 1
+        sc = DailyCounter.objects.filter(target=target_id, date__year=cur_date.strftime('%Y'),
+                                  date__month=cur_date.strftime('%m'),
+                                  date__day=cur_date.strftime('%d'))
         if sc:
-            num = sc[0].num
+            num = sc[0].count
         else:
             num = 0
-        num = sc.num
         show_dates.append(cur_date.strftime('%Y%m%d'))
-        show_dates.append(num)
+        show_nums.append(num)
         cur_date = cur_date + date_delta
-    ret = {"show_dates": show_dates}
+    show_dates.reverse()
+    show_nums.reverse()
+    ret = {"show_dates": show_dates, "show_nums": show_nums}
+    return ret

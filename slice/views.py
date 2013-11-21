@@ -26,6 +26,7 @@ from plugins.ipam.models import IPUsage, Subnet
 from slice.models import Slice
 
 from plugins.vt.forms import VmForm
+import datetime
 
 
 @login_required
@@ -106,6 +107,7 @@ def create_first(request, proj_id):
 @login_required
 def list(request, proj_id):
     """显示所有slice。"""
+    from common.models import DailyCounter
     user = request.user
     context = {}
     if user.is_superuser:
@@ -114,7 +116,15 @@ def list(request, proj_id):
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
         slice_objs = Slice.objects.all()
-#         slice_count_show = get_slice_count_show()
+        date_now = datetime.datetime.now()
+        sc = DailyCounter.objects.filter(date__year=date_now.strftime('%Y'),
+                                  date__month=date_now.strftime('%m'),
+                                  date__day=date_now.strftime('%d'))
+        if sc:
+            num = sc[0].count
+        else:
+            num = 0
+        context['new_num'] = num
     else:
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
@@ -126,6 +136,17 @@ def list(request, proj_id):
             context['query'] = query
     context['slices'] = slice_objs
     return render(request, 'slice/slice_list.html', context)
+
+
+def get_slice_show(request):
+    print "------------------------------------========================================="
+    target = request.GET.get('target')
+    try:
+        slice_count_show = get_slice_count_show(target)
+    except Exception, ex:
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
 
 
 @login_required
