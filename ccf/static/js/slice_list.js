@@ -1,4 +1,4 @@
-$(function($) {
+$(function() {
 
     $(".knob").knob({
         change : function (value) {
@@ -96,27 +96,30 @@ $(function($) {
                                     }
                         });
 });
- 
-$(".circle_bar canvas").each(function(){
-    var canvasTitle = $(this).attr("data-text");
-    var canvasId = $(this).attr("id");       
-    var ctxCanvas = document.getElementById(canvasId);
-    var context = ctxCanvas.getContext("2d");  
-    context.strokeStyle = "#d3d3d3"; 
-    context.lineWidth = 2;  
-    context.beginPath();         
-    context.moveTo(0,10);  
-    context.lineTo(50,10);  
-    context.stroke();  
-    context.closePath();
-    
-    context.beginPath();   
-    context.fillStyle="#01b6ef";    
-    context.arc(50,10,2,Math.PI/2,false);
-    context.closePath();
-    context.fill();
-    
-    context.fillStyle="#000000";    
-    context.fillText(canvasTitle,55,13);        
-});
-  
+
+
+    $(".circle_canvas").each(function(){
+    alert("cbc");
+    alert($(this).attr("id"));
+        var canvasTitle = $(this).attr("data-text");
+        var canvasId = $(this).attr("id");       
+        var ctxCanvas = document.getElementById(canvasId);
+        var context = ctxCanvas.getContext("2d");  
+        context.strokeStyle = "#d3d3d3"; 
+        context.lineWidth = 2;  
+        context.beginPath();         
+        context.moveTo(0,10);  
+        context.lineTo(50,10);  
+        context.stroke();  
+        context.closePath();
+        
+        context.beginPath();   
+        context.fillStyle="#01b6ef";    
+        context.arc(50,10,2,Math.PI/2,false);
+        context.closePath();
+        context.fill();
+        
+        context.fillStyle="#000000";    
+        context.fillText(canvasTitle,55,13);        
+    });
+

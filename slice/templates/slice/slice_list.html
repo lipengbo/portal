@@ -90,20 +90,7 @@
              <div class="row-fluid">
              {%if slices %}
              <div id="slice_list_show">
-                 {% load endless %}
-                 {% paginate 4 slices %}
-                 {% for group in slices|group_by:2 %}
-                 <ul class="thumbnails example-sites">
-    		         {% for slice in group %}
-    		              {% include "slice/_slice.html" %}
-    		         {% endfor %}
-    		     </ul>
-    		     {% endfor %}
-    		     <div class="pagination">
-                    <ul>
-                        {% show_pages %}
-                    </ul>
-                </div>
+                 {% include "slice/list_page.html" %}
 		     </div>
 		     {%endif%}
 		     </div>
@@ -143,8 +130,8 @@ $(function () {
                      }
                 }
             });
-            console.log(show_dates);
-            console.log(show_nums);
+            //console.log(show_dates);
+            //console.log(show_nums);
             $('#container').highcharts({
                 chart: {
                     type: 'column',
