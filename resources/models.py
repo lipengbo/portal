@@ -236,8 +236,10 @@ class VirtualSwitch(Switch):
 @receiver(pre_save, sender=Server)
 def vm_pre_save(sender, instance, **kwargs):
     if not function_test:
+        print "------------server pre save--------"
         agent_client = AgentClient(instance.ip)
         info = agent_client.get_host_info()
         instance.cpu = info['cpu']
         instance.mem = info['mem']
         instance.disk = info['hdd']
+        instance.os = info['os']
