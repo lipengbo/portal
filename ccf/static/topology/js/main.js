@@ -491,9 +491,17 @@ function init_svg () {
     })
     .on('mouseover', function(d, i) {
         //highlight( d, i, this );
+        var show_logical = $('#show-logical').attr('checked');
+        if (!show_logical) {
+            $(this).find('image').css("cursor", "pointer");
+        }
     })
     .on('mouseout', function(d, i) {
         tooltip.hideTooltip();
+        var show_logical = $('#show-logical').attr('checked');
+        if (!show_logical) {
+            $(this).find('image').css("cursor", "auto");
+        }
     })
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
@@ -580,7 +588,11 @@ function init_svg () {
         } else {
             // physical topology
             if (d.db_id) {
-                window.open('/monitor/Switch/' + d.db_id + '/');
+                if (d.name.indexOf('00:ff:') == 0) {
+                    window.open('/monitor/Server/' + d.db_id + '/');
+                } else {
+                    window.open('/monitor/Switch/' + d.db_id + '/');
+                }
             }
         }
     });

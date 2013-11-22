@@ -278,6 +278,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 ANONYMOUS_USER_ID = -1
+THEME_ACCOUNT_CONTACT_EMAIL = 'ccf@fnic.cn'
+THEME_CONTACT_EMAIL = THEME_ACCOUNT_CONTACT_EMAIL
 
 try:
     from ccf.local_settings import *
