@@ -145,11 +145,11 @@ svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
     .attr('fill', rect_color);
-var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
+var bandwidth_capacities = ['10M', '20M', '30M', '40M', '50M'];
 var status_levels = [10, 100, 400, 1000];
 var gre_ovs_capacity = [];
 for (var i = 0; i < gre_ovses.length; i++) {
-    gre_ovs_capacity.push(bandwidth_capacities[Math.floor(Math.random() * 4)]);
+    gre_ovs_capacity.push(bandwidth_capacities[Math.floor(Math.random() * 5)]);
 };
 
 function assign_node_icon(d) {
@@ -201,14 +201,12 @@ function assign_node_icon(d) {
     if (d.group == 2 || d.group == 1) {
         // set status level for image
         if (!show_logical) {
-            console.log('!!!!!!!!!!!' + d.name)
-            
             var level = Math.floor(Math.random() * 1000);
-            if (level < 10) {
+            if (level < 0) {
                 ovs_image += '-error';
-            } else if (level < 100) {
+            } else if (level < 0) {
                 ovs_image += '-danger';
-            } else if (level < 200) {
+            } else if (level < 0) {
                 ovs_image += '-warning';
             } else if (level < 400){
                 ovs_image += '-info';
@@ -682,17 +680,19 @@ function load_topology(callback) {
                     var rand_num = Math.random();
                     var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                     d.bandwidth = bandwidth.toFixed(2);
-                    if (rand_num < 0.3) {
+                    if (rand_num < 0) {
                         color = 'red';
-                    } else if (rand_num < 0.6) {
+                    } else if (rand_num < 0) {
                         color = 'orange';
-                    } else if (rand_num < 0.9) {
+                    } else if (rand_num < 0) {
                         color = 'yellow';
-                    } else {
+                    } else if (rand_num < 0.7) {
                         color = 'green';
+                    } else {
+                        color = 'blue';
                     }
                 }
-                return color; 
+                return color;
             });
             var node = svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
             random_refresh();
