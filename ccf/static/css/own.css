@@ -5780,7 +5780,7 @@ table {
   visibility: hidden;
 }
 .index .banner {
-  padding-top: 110px;
+  padding-top: 120px;
   padding-bottom: 40px;
   text-align: center;
   background: #3da2f7 url(../img/banner.png) center top;
@@ -6507,28 +6507,34 @@ a.button-royal:hover {
 .frame_tuopu label {
   display: block !important;
 }
+.qwtp_count {
+  width: 80%;
+  margin: 15px auto 0;
+}
 .qwtp_count .qwtp {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
   width: 100%;
-  height: 70px;
+  height: 60px;
   background: #fff;
   border: 1px solid #ccc;
 }
 .qwtp_count .qwtp .qwtp_tb {
-  height: 50px;
+  height: 40px;
   padding: 10px;
   border-right: 1px solid #ccc;
-  width: 30%;
+  width: 40%;
   text-align: center;
   float: left;
-  line-height: 50px;
+  line-height: 40px;
 }
 .qwtp_count .qwtp .qwtp_tb img {
-  width: 40px;
-  height: 40px;
+  width: 90px;
 }
 .qwtp_count .qwtp .qwtp_nums {
-  padding-top: 15px;
-  margin-left: 30%;
+  padding-top: 10px;
+  margin-left: 40%;
   text-align: center;
   font-size: 28px;
   font-weight: bold;
