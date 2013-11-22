@@ -137,6 +137,12 @@
 
 {% block extra_script %}
 <script type="text/javascript" charset="utf-8">
+$(function(){
+    judgePosition();
+    $(window).resize(function(){
+        judgePosition();
+    });
+});
     $('.signup-form').submit(function(){
             $.post('/accounts/signup/', $(this).serialize(), function(data){
                 if(data.indexOf('DOCTYPE') < 0) {
@@ -151,5 +157,19 @@
             });
         return false;
     });
+    function judgePosition(){
+        var windowHeight = $(window).height();
+        if(windowHeight < 720){
+            $(".login_all").css({
+                "position":"static",
+                "margin-top":"0"
+            });
+        } else {
+            $(".login_all").css({
+                "position":"absolute",
+                "margin-top":"-291px"
+            });
+        }
+    };
 </script>
 {% endblock %}
