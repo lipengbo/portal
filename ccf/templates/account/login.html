@@ -14,9 +14,11 @@
 
 {% block body %}
 {% block blank_block %}{% endblock %}
+
     	<div class="login_logo">
     		<img src="{% static "img/logo.png" %}" />
     	</div>
+	<div class="login_all">
     	<div class="login_title">
     		<img src="{% static "img/title2.png" %}" />
     	</div>
@@ -63,6 +65,7 @@
     		    <div class="span4 offset4 text-right"><a href="{% url "account_password_reset" %}" class="forgetpwd">忘记密码？</a></div>
     		</div>
     	</form>
+	</div>
         <div id="registerModal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">×</a>
@@ -121,7 +124,7 @@
             </div>
 				</form>
           </div>
-          
+        
 {% endblock %}
 
 {% block footer_base %}
@@ -134,6 +137,12 @@
 
 {% block extra_script %}
 <script type="text/javascript" charset="utf-8">
+$(function(){
+    judgePosition();
+    $(window).resize(function(){
+        judgePosition();
+    });
+});
     $('.signup-form').submit(function(){
             $.post('/accounts/signup/', $(this).serialize(), function(data){
                 if(data.indexOf('DOCTYPE') < 0) {
@@ -148,5 +157,19 @@
             });
         return false;
     });
+    function judgePosition(){
+        var windowHeight = $(window).height();
+        if(windowHeight < 720){
+            $(".login_all").css({
+                "position":"static",
+                "margin-top":"0"
+            });
+        } else {
+            $(".login_all").css({
+                "position":"absolute",
+                "margin-top":"-291px"
+            });
+        }
+    };
 </script>
 {% endblock %}

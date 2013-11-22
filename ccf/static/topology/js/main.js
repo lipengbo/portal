@@ -491,9 +491,11 @@ function init_svg () {
     })
     .on('mouseover', function(d, i) {
         //highlight( d, i, this );
+        $(this).find('image').css("cursor", "pointer");
     })
     .on('mouseout', function(d, i) {
         tooltip.hideTooltip();
+        $(this).find('image').css("cursor", "auto");
     })
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
