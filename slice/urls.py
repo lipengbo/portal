@@ -17,5 +17,4 @@ urlpatterns = patterns('slice.views',
     url(r'^topology_test/(?P<slice_id>\d+)/$', "topology_test", name='topology_test'),
     url(r'^topology_d3/$', "topology_d3", name='topology_d3'),
     url(r'^update_links_bandwidths/(?P<slice_id>\d+)/$', "update_links_bandwidths", name='update_links_bandwidths'),
-    url(r'^get_slice_show/$', "get_slice_show", name='get_slice_show'),
 )

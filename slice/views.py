@@ -143,17 +143,6 @@ def list(request, proj_id):
     return render(request, 'slice/slice_list.html', context)
 
 
-def get_slice_show(request):
-    print "------------------------------------========================================="
-    target = request.GET.get('target')
-    try:
-        slice_count_show = get_slice_count_show(target)
-    except Exception, ex:
-        return HttpResponse(json.dumps({'result': 0}))
-    else:
-        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
-
-
 @login_required
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
