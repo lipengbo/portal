@@ -369,7 +369,7 @@ def switch_direct(request, host, port):
                 db_id = switch.virtualswitch.server.id
             except VirtualSwitch.DoesNotExist:
                 pass
-            json_data[i]['db_id'] = switch.id
+            json_data[i]['db_id'] = db_id
     data = json.dumps(json_data)
     return HttpResponse(data, content_type="application/json")
 
