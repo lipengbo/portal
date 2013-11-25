@@ -3866,6 +3866,7 @@ body.vjs-full-window {
   margin-left: 20px;
 }
 .login_bg {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: #fff;
   min-width: 980px;
 }

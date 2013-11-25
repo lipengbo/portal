@@ -288,6 +288,8 @@ def topology(request):
     flowvisors = get_island_flowvisors(island_id)
 
     all_gre_ovs = Switch.objects.filter(has_gre_tunnel=True)
+    if island_id:
+        all_gre_ovs = all_gre_ovs.filter(island__id=island_id)
 
     node_infos, total_server, total_switch, total_ctrl, total_nodes, total_island = get_all_cities()
     city_id = int(request.GET.get('city_id', 0))
