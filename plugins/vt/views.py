@@ -95,8 +95,9 @@ def do_vm_action(request, vmid, action):
     if action in operator:
         try:
             vm = VirtualMachine.objects.get(id=vmid)
-            api.do_vm_action(vm, action)
-            return HttpResponse(json.dumps({'result': 0}))
+            result = api.do_vm_action(vm, action)
+            if result:
+                return HttpResponse(json.dumps({'result': 0}))
         except socket_error as serr:
             if serr.errno == errno.ECONNREFUSED:
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
