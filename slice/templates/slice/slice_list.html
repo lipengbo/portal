@@ -89,7 +89,7 @@
              {% endif %}
              <div class="row-fluid">
              {%if slices %}
-             <div id="slice_list_show">
+             <div id="list_show">
                  {% include "slice/list_page.html" %}
 		     </div>
 		     {%endif%}
@@ -101,7 +101,7 @@
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
-<script src="{{ STATIC_URL}}js/slice_pagination.js"></script>
+<script src="{{ STATIC_URL}}js/list_pagination.js"></script>
 <script type="text/javascript">
 $(function () {
         slice_show = $("#slice_show").text();

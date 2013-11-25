@@ -22,7 +22,6 @@
 {% endblock %}
 
 {% block body %}
-{% paginate 12 projects  %}
         <div class="search">
             <form class="form-search">
               <div class="input-append">
@@ -70,25 +69,19 @@
                         <p class="alert alert-info">暂无记录</p>
                     {% endif %}
                 {% endif %}
-
+                
                 <div class="row-fluid">
-                    {% for group in projects|group_by:4 %}
-                    <ul class="thumbnails example-sites">
-                        {% for project in group %}
-                            {% include "project/_project.html" %}
-                        {% endfor %}
-                    </ul>
-                    {% endfor %}
+                {%if projects %}
+                 <div id="list_show">
+                     {% include "project/list_page.html" %}
+                 </div>
+                 {%endif%}
                 </div>
             </fieldset>        
         </div>
-        <div class="pagination">
-            <ul>
-                {% show_pages %}
-            </ul>
-        </div>
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/list_pagination.js"></script>
 <script type="text/javascript">
 $(function () {
         check_url = "/slice/get_slice_show/?target=project";

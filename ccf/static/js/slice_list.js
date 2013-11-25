@@ -99,8 +99,8 @@ $(function() {
 
 
     $(".circle_canvas").each(function(){
-    alert("cbc");
-    alert($(this).attr("id"));
+    //alert("cbc");
+    //alert($(this).attr("id"));
         var canvasTitle = $(this).attr("data-text");
         var canvasId = $(this).attr("id");       
         var ctxCanvas = document.getElementById(canvasId);
