@@ -91,8 +91,8 @@ class Server(IslandResource):
     bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
     disk = models.IntegerField(null=True, default=0, verbose_name=_("disk"))
     ip = models.IPAddressField(null=False, unique=True)
-    mac = models.CharField(max_length=256, null=True)
-    os = models.CharField(max_length=256, null=True, verbose_name=_("os"))
+    #mac = models.CharField(max_length=256, null=True)
+    os = models.CharField(max_length=256, blank=True, null=True, verbose_name=_("os"))
     update_time = models.DateTimeField(auto_now_add=True)
 
     def get_link_vs(self):
@@ -236,7 +236,6 @@ class VirtualSwitch(Switch):
 @receiver(pre_save, sender=Server)
 def vm_pre_save(sender, instance, **kwargs):
     if not function_test:
-        print "------------server pre save--------"
         agent_client = AgentClient(instance.ip)
         info = agent_client.get_host_info()
         instance.cpu = info['cpu']
