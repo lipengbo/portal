@@ -12,12 +12,8 @@ img {
 </style>
 {% endblock %}-->
 {% block breadcrumb %}
-    {%if extent_html == "site_base.html" %}
-	   <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	{%else%}
-	   <a href="/project/">项目</a><span class="divider">/</span>
-       <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-    {%endif%}
+   <a href="/project/">项目</a><span class="divider">/</span>
+   <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
 	Slice详情
 {% endblock %}
 
@@ -410,7 +406,7 @@ img {
                   <table class="table">
                       <tbody>
                           <tr>
-                              <td width="150" class="text_r">名称</td>
+                              <td width="70" class="text_r">名称</td>
                               <td>{{slice_obj.get_show_name}}</td>
                           </tr>
                           <tr>

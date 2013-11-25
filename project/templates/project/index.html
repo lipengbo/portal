@@ -7,22 +7,14 @@
 {% load endless %}
 
 {% block head_title %}
-    {%if extent_html == "site_base.html" %}
-        我的项目
-    {%else%}
         项目
-    {%endif%}
 {% endblock %}
 {% block breadcrumb %}
-    {%if extent_html == "site_base.html" %}
-        我的项目
-    {%else%}
         项目
-    {%endif%}
 {% endblock %}
 
 {% block body %}
-{% paginate 12 projects  %}
+{% paginate 8 projects  %}
         <div class="search">
             <form class="form-search">
               <div class="input-append">
@@ -120,6 +112,9 @@ $(function () {
             },
             title: {
                 text: '每日新增项目数'
+            },
+            exporting: {
+                enabled: false
             },
             xAxis: {
                 categories: show_dates,
