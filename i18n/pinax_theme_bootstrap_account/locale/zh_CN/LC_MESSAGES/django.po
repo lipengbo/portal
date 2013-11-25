@@ -204,7 +204,7 @@ msgstr "设置您的新密码"
 #: templates/account/password_reset_token_fail.html:7
 #: templates/account/password_reset_token_fail.html:10
 msgid "Bad token"
-msgstr "错误的token"
+msgstr " "
 
 #: templates/account/password_reset_token_fail.html:12
 #, python-format

@@ -19,7 +19,7 @@ def flowspace_nw_add(slice_obj, old_nws, new_nw):
         raise DbError(ex)
     if new_nw and (new_nw not in slice_obj.get_nws()):
         try:
-            name = str(slice_obj.name) + '_df'
+            name = str(slice_obj.id) + '_df'
             nw_num = len(old_nws)
             if nw_num > 0:
                 for i in range(nw_num):
@@ -57,7 +57,7 @@ def flowspace_nw_del(slice_obj, del_nw):
     except Slice.DoesNotExist:
         return False
     if del_nw and (del_nw in slice_obj.get_nws()):
-        name = str(slice_obj.name) + '_df'
+        name = str(slice_obj.id) + '_df'
         delete_default_flowspace(slice_obj, name, '', '', del_nw, '', '')
         delete_default_flowspace(slice_obj, name, '', '', '', del_nw, '')
     return True
@@ -72,7 +72,7 @@ def flowspace_gw_add(slice_obj, new_gateway):
     except Slice.DoesNotExist:
         return False
     if new_gateway and (new_gateway not in slice_obj.get_gws()):
-        name = str(slice_obj.name) + '_df'
+        name = str(slice_obj.id) + '_df'
         haved_nw = slice_obj.get_nw()
         if haved_nw:
             create_default_flowspace(slice_obj, name, '100', '', '', '', '',
@@ -99,7 +99,7 @@ def flowspace_gw_del(slice_obj, del_gateway):
     except Slice.DoesNotExist:
         return False
     if del_gateway and (del_gateway in slice_obj.get_gws()):
-        name = str(slice_obj.name) + '_df'
+        name = str(slice_obj.id) + '_df'
         delete_default_flowspace(slice_obj, name, del_gateway, '', '', '', '0x800')
         delete_default_flowspace(slice_obj, name, '', del_gateway, '', '', '0x800')
     return True
@@ -115,7 +115,7 @@ def flowspace_dhcp_add(slice_obj, new_dhcp):
         return False
     if new_dhcp:
         dhcp_vm_macs = slice_obj.get_dhcp_vm_macs()
-        name = str(slice_obj.name) + '_df'
+        name = str(slice_obj.id) + '_df'
         haved_vms = slice_obj.get_vms()
         for haved_vm in haved_vms:
             if haved_vm.mac and (haved_vm.mac not in dhcp_vm_macs):
@@ -135,7 +135,7 @@ def flowspace_dhcp_del(slice_obj, del_dhcp):
     except Slice.DoesNotExist:
         return False
     if del_dhcp:
-        name = str(slice_obj.name) + '_df'
+        name = str(slice_obj.id) + '_df'
         haved_dhcps = slice_obj.get_dhcp_vm_macs()
         for haved_dhcp in haved_dhcps:
             delete_default_flowspace(slice_obj, name, str(haved_dhcp), '', '', '', '')
@@ -153,7 +153,7 @@ def flowspace_vm_add(slice_obj, new_vm):
     if new_vm:
         gw = slice_obj.get_gw()
         if gw and gw.enable_dhcp:
-            name = str(slice_obj.name) + '_df'
+            name = str(slice_obj.id) + '_df'
             create_default_flowspace(slice_obj, name, '1', '', '', '',
                                      new_vm, '', '', '', '', '', '', '', '')
     return True
@@ -168,7 +168,7 @@ def flowspace_vm_del(slice_obj, del_vm):
     except Slice.DoesNotExist:
         return False
     if del_vm:
-        name = str(slice_obj.name) + '_df'
+        name = str(slice_obj.id) + '_df'
         delete_default_flowspace(slice_obj, name, del_vm, '', '', '', '')
     return True
 

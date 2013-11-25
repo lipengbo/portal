@@ -35,7 +35,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
         print 3
         create_add_controller(slice_obj, controller_info)
         print 4
-        flowvisor_add_slice(island.flowvisor_set.all()[0], name,
+        flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.id,
                             slice_obj.get_controller(), user.email)
         print 5
 #         创建并添加网段
@@ -159,7 +159,7 @@ def delete_slice_api(slice_obj):
                 pass
             print 4
 #             删除底层slice
-            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
+            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
             print 5
 #             删除控制器
             delete_controller(slice_obj.get_controller())
@@ -195,7 +195,7 @@ def start_slice_api(slice_obj):
                     raise DbError("请确保dhcp已启动！")
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                              slice_obj.name, True)
+                                              slice_obj.id, True)
             except Exception:
                 transaction.rollback()
                 raise
@@ -220,7 +220,7 @@ def stop_slice_api(slice_obj):
             try:
                 slice_obj.stop()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                              slice_obj.name, False)
+                                              slice_obj.id, False)
             except Exception:
                 transaction.rollback()
                 raise
@@ -235,7 +235,7 @@ def update_slice_virtual_network(slice_obj):
     except Exception, ex:
         return DbError(ex)
     flowvisor = slice_obj.get_flowvisor()
-    flowspace_name = str(slice_obj.name) + '_df'
+    flowspace_name = str(slice_obj.id) + '_df'
     try:
         flowvisor_del_flowspace(flowvisor, flowspace_name)
     except:
@@ -263,7 +263,7 @@ def update_slice_virtual_network(slice_obj):
                 default_flowspace.tp_src, default_flowspace.tp_dst)
             try:
                 flowvisor_add_flowspace(flowvisor, flowspace_name,
-                                        slice_obj.name,
+                                        slice_obj.id,
                                         default_flowspace.actions, 'cdn%nf',
                                         switch_port.switch.dpid,
                                         default_flowspace.priority, arg_match)
