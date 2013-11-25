@@ -24,7 +24,7 @@ from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
 from slice.models import Slice
 
-from resources.models import Switch, Server
+from resources.models import Switch, Server, VirtualSwitch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 from common.models import DailyCounter
@@ -364,6 +364,11 @@ def switch_direct(request, host, port):
             pass
         else:
             json_data[i]['db_name'] = switch.name
+            db_id = switch.id
+            try:
+                db_id = switch.virtualswitch.server.id
+            except VirtualSwitch.DoesNotExist:
+                pass
             json_data[i]['db_id'] = switch.id
     data = json.dumps(json_data)
     return HttpResponse(data, content_type="application/json")

@@ -429,10 +429,12 @@ function init_svg () {
         var dpid = recompose_dpid(gre_ovses[i]);
         
         // connect gre node to cloud-icon node
+        if (!(dpid in nodes_map)) {
+            alert('没有以' + dpid + '为dpid的gre出口交换机');
+        }
         g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
         for (var j = 0; j < gre_ovses.length; j++) {
             var dpid2 = recompose_dpid(gre_ovses[j]);
-            
             if (dpid in nodes_map && dpid2 in nodes_map) {
                 var capacity = gre_ovs_capacity[j];
                 if (dpid in real_nodes_map && dpid2 in real_nodes_map) {
