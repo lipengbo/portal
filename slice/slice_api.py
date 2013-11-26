@@ -475,7 +475,7 @@ def get_slice_count_show(target):
     show_dates = []
     show_nums = []
     cur_date = date_now
-    for i in range(0, 30):
+    for i in range(0, 15):
         if target == 'project':
             target_id = 0
         else:
@@ -487,7 +487,7 @@ def get_slice_count_show(target):
             num = sc[0].count
         else:
             num = 0
-        show_dates.append(cur_date.strftime('%Y%m%d'))
+        show_dates.append(cur_date.strftime('%Y.%m.%d'))
         show_nums.append(num)
         cur_date = cur_date + date_delta
     show_dates.reverse()
