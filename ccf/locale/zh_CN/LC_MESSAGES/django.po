@@ -126,4 +126,4 @@ msgid "Home"
 msgstr ""
 
 msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr "该%(field_label)s的%(model_name)s已存在。"
+msgstr "该%(field_label)s已存在。"
