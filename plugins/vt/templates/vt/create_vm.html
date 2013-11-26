@@ -70,10 +70,12 @@
             </tr>
         </tbody>
     </table>
-    <label class="">
-        {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+    {% if slice_obj.get_dhcp %}
+        <label class="">
+            {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                     是否启动DHCP
-    </label>
+        </label>
+    {%endif%}
     <div class="operate_btn">
         <button class="btn btn-inverse del" type="button">删 除</button>
     </div> 
