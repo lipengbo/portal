@@ -36,7 +36,7 @@ msgstr "节点"
 
 #: models.py:47 models.py:56 templates/project/detail.html:28
 msgid "Category"
-msgstr "类型"
+msgstr "项目类型"
 
 #: models.py:51 templates/project/detail.html:25
 msgid "Project Name"

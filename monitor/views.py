@@ -15,7 +15,6 @@ from plugins.vt.models import VirtualMachine
 
 def monitor_vm(request, vm_id):
     vm = get_object_or_404(VirtualMachine, id=vm_id)
-    print "------------", vm.slice.id
     return render(request, "monitor_host_or_vm.html",
                   {'host_id' : vm.server.id, "vm_id" : vm_id,
                    "slice_id": vm.slice.id, "project_id" : vm.slice.project.id})
@@ -52,13 +51,11 @@ def update_port_performace_data(request):
     try:
         switch = get_object_or_404(Switch, id = switch_id)
         switch_stat = get_switch_stat(switch.ip)
-        #recv_data = 0
-        #send_data = 0
         for br in switch_stat:
             if br['name'] == br_name:
                 for port in br['ports']:
                     if port['name'] == port_name:
-                        print "\n",port_name
+                        print port_name
                         print "----------------------------"
                         print "pre_recv_data = ", pre_recv_data
                         print "pre_send_data = ", pre_send_data
@@ -94,11 +91,6 @@ def update_vm_performace_data(request):
         agent_ip = vm.server.ip
         agent = AgentClient(ip = agent_ip)
         vm_perf_data = json.loads(agent.get_domain_status(vm.uuid))
-        # vm_perf_data = {"mem": {"total": 262144, "percent": 100, "free": 0, "used": 262144},
-        #               "net": {"4f6f91d4": [5522, 984, 7080755, 12, 0, 0, 0, 0],
-        #               "4f6f91d5": [123, 84, 0755, 12, 0, 0, 0, 0]},
-        #               "disk": {"total": 858993459200.0, "percent": 0.067138671875, "free": 8416742400.0, "used": 576716800.0},
-        #               "cpu": 0.0}
         net_data = {}
         if pre_net_data[0] == '':
             for (key, value) in vm_perf_data["net"].items():
@@ -151,9 +143,6 @@ def update_host_performace_data(request):
                 if bps_send < 0:
                     bps_send = 0
                 net_data[key] = [value[0], value[1], bps_recv, bps_send]
-            #net_data[key] = [value[0], value[1],
-             #              value[0] - int(bps_data.split(':')[0]),
-              #             value[1] - int(bps_data.split(':')[1])]
 
         for (key, value) in host_perf_data["disk"].items():
             host_disk_data = {"free" : int(value[2]), "used" : int(value[1])}

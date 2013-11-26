@@ -81,9 +81,13 @@ def delete_vm_for_gateway(vm):
 
 
 def do_vm_action(vm, action):
-    if vm.do_action(action):
+    result = vm.do_action(action)
+    if result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
         else:
             vm.state = DOMAIN_STATE_DIC['running']
         vm.save()
+        return result
+    else:
+        return False
