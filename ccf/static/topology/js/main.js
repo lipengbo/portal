@@ -542,7 +542,7 @@ function init_svg () {
                             content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
-                            d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                            d.db_name + ":" + port.name;
                         var port_pairs = {};
                         $.each(g_links_map[d.island_id], function(index, link) {
                             var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
@@ -551,7 +551,7 @@ function init_svg () {
                             }
                             if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'];
                             }
                             port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
                             if (port_pair_key in port_pairs) {
@@ -559,7 +559,7 @@ function init_svg () {
                             }
                             if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
                             }
                         });
                         content += "</label>";
