@@ -7,18 +7,10 @@
 {% load endless %}
 
 {% block head_title %}
-    {%if extent_html == "site_base.html" %}
-        我的项目
-    {%else%}
         项目
-    {%endif%}
 {% endblock %}
 {% block breadcrumb %}
-    {%if extent_html == "site_base.html" %}
-        我的项目
-    {%else%}
         项目
-    {%endif%}
 {% endblock %}
 
 {% block body %}
@@ -85,8 +77,8 @@
 <script type="text/javascript">
 $(function () {
         check_url = "/slice/get_slice_show/?target=project";
-        var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-        var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+        var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         $.ajax({
             type: "GET",
             url: check_url,
@@ -96,7 +88,7 @@ $(function () {
             success: function(data) {
                 if (data.result == 1)
                  {
-//                    show_dates = data.show_dates;
+                    show_dates = data.show_dates;
                     show_nums = data.show_nums;
                  } 
                  else
@@ -109,18 +101,21 @@ $(function () {
         $('#container').highcharts({
             chart: {
                 type: 'column',
-                margin: [ 50, 50, 20, 50]
+                margin: [ 50, 50, 60, 50]
             },
             title: {
                 text: '每日新增项目数'
             },
+            exporting: {
+                enabled: false
+            },
             xAxis: {
                 categories: show_dates,
                 labels: {
-                    rotation: 0,
+                    rotation: -30,
                     align: 'right',
                     style: {
-                        fontSize: '13px',
+                        fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif'
                     }
                 }

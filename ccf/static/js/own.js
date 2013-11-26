@@ -305,6 +305,14 @@ function page_function3(){
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
+	//DHCP
+	var dhcp_selected_obj = document.getElementById("dhcp_selected");
+	var list_slice_dhcp = document.getElementById("list_slice_dhcp");
+	if(dhcp_selected_obj.checked){
+       list_slice_dhcp.innerHTML = "已配置";
+    }else{
+       list_slice_dhcp.innerHTML = "未配置";
+    }
 	//控制器
 	var controller_type_obj = document.getElementsByName("controller_type");
 	$("div#list_controller").empty();
@@ -356,7 +364,6 @@ function page_function3(){
 	//网关
 	var id_server_gw_obj = document.getElementById("id_server_gw");
     var gateway_ip_obj = document.getElementById("gateway_ip");
-    var dhcp_selected_obj = document.getElementById("dhcp_selected");
     var id_server_gw_index;
     if(id_server_gw_obj){
         id_server_gw_index = id_server_gw_obj.selectedIndex;
@@ -372,18 +379,14 @@ function page_function3(){
                     +"<tr><td>网关IP地址：</td>"
                         +"<td>"+ gateway_ip_obj.value +"</td></tr>";
         
-        if(dhcp_selected_obj.checked){
-           str = str + "<tr><td colspan=2>"
-          // +"<label class=\"inline tab_checkbox\">"
-           //   +"<input type=\"checkbox\" value=\"dhcp\" id=\"dhcp_show\" checked disabled> 是否配置DHCP服务器</label></td></tr>";
-           +"已配置DHCP服务器</td></tr>";
+        //if(dhcp_selected_obj.checked){
+        //   str = str + "<tr><td colspan=2>"
+        //   +"已配置DHCP服务器</td></tr>";
            
-        }else{
-           str = str + "<tr><td colspan=2>"
-          // +"<label class=\"inline tab_checkbox\">"
-           //   +"<input type=\"checkbox\" value=\"dhcp\" id=\"dhcp_show\" disabled> 是否配置DHCP服务器</label></td></tr>";
-           +"未配置DHCP服务器</td></tr>";
-        }
+       // }else{
+       //    str = str + "<tr><td colspan=2>"
+       //    +"未配置DHCP服务器</td></tr>";
+       // }
         str = str + "</tbody></table>";  
     }else{
         str = str + "<table class=\"table\">"

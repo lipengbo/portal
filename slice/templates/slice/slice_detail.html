@@ -12,12 +12,8 @@ img {
 </style>
 {% endblock %}-->
 {% block breadcrumb %}
-    {%if extent_html == "site_base.html" %}
-	   <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	{%else%}
-	   <a href="/project/">项目</a><span class="divider">/</span>
-       <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-    {%endif%}
+   <a href="/project/">项目</a><span class="divider">/</span>
+   <a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
 	Slice详情
 {% endblock %}
 
@@ -53,12 +49,11 @@ img {
                     <span class="label label-important edit"><i class="icon-minus-sign icon-2x"></i></span>
                 {%else%}
                     <span class="label label-success edit"><i class="icon-ok-sign icon-2x"></i></span>
-                {%endif%}  		   	
+                {%endif%}  	
+                <i class="icon-caret-down show_describe" style="cursor:pointer;"></i>	   	
             </legend>		
-            <p class="muted" id="slice_description_old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{slice_obj.description}}</p>	  			  	     
-        </fieldset>
-        <fieldset>
-            <div class="row-fluid">
+            <p class="well word_detail hide" id="slice_description_old">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{slice_obj.description}}</p>	  			  	     
+             <div class="row-fluid">
                 <div class="span1">
                 </div>
                 <div class="span10">
@@ -73,6 +68,23 @@ img {
                 <p id="STATIC_URL">{{STATIC_URL}}</p>
             </div>
         </fieldset>
+   <!--     <fieldset>
+            <legend>Slice拓扑</legend>
+            <div class="row-fluid">
+                <div class="span1">
+                </div>
+                <div class="span10">
+                    <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=800&height=300&top=1" frameborder="0"></iframe>
+                </div>
+                <div class="span1">
+                </div>
+            </div>                  
+           <div class="clear" style="display: none" >
+                <p id="slice_id">{{slice_obj.id}}</p>
+                <p id="topology_type">1</p>
+                <p id="STATIC_URL">{{STATIC_URL}}</p>
+            </div>
+    </fieldset>   -->
 		<fieldset>
 		<div id="alert_msg"></div>
             <legend>
@@ -89,7 +101,7 @@ img {
                     <tr>
                         {%if extent_html == "site_base.html" %}
                             <th width="10%">名称</th>
-							<th width="15%">uuid</th>
+							<th width="15%">UUID</th>
                             <th width="15%">资源类型</th>
                             <th width="15%">IP地址</th>
 
@@ -410,7 +422,7 @@ img {
                   <table class="table">
                       <tbody>
                           <tr>
-                              <td width="150" class="text_r">名称</td>
+                              <td width="70" class="text_r">名称</td>
                               <td>{{slice_obj.get_show_name}}</td>
                           </tr>
                           <tr>
@@ -521,6 +533,16 @@ img {
     $(document).ready(function(){
         $("#ipInput").ipInput();
         init_ipinput();
+        
+        $(".show_describe").click(function(){
+            if($(".word_detail").is(":hidden")) {
+                $(".word_detail").slideDown(); 
+                $(this).removeClass("icon-caret-down").addClass("icon-caret-up");
+            } else {
+                $(".word_detail").slideUp();
+                $(this).removeClass("icon-caret-up").addClass("icon-caret-down");
+            }
+        });
     });
 </script>
 {% endblock %}

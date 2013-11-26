@@ -9,15 +9,15 @@ function check_slice_name(obj_id,flag){
 	var reg = /^[a-zA-Z_]\w*$/;
 	//alert(user_id_obj.value.length);
 	if(obj.value.length > 0){
-        if(!reg.test(obj.value)){
+        //if(!reg.test(obj.value)){
         	//alert("in 输入");
-        	showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
-        	return false;
-        }
-        else{
-            if(obj.value.length + user_id_obj.value.length + 1 > 45){
-                len = 44 - user_id_obj.value.length;
-                showInfo(info," * 名称长度过长（最长"+len+"）","red");
+        //	showInfo(info," * 请输入字母数字下划线的组合（不以数字开头）","red");
+        //	return false;
+        //}
+        //else{
+            if(obj.value.length > 45){
+                //len = 44 - user_id_obj.value.length;
+                showInfo(info," * 名称长度过长（最长30）","red");
                 return false;
             }
         	//alert("in green");
@@ -31,7 +31,7 @@ function check_slice_name(obj_id,flag){
         		showInfo(info,"√","green");
         		return true;
         	}
-        }
+        //}
 	}
 	else{
 		showInfo(info," * 必填","red");
