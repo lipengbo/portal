@@ -101,4 +101,4 @@ def handle_user_signed_up(sender, **kwargs):
     else:
         profile = user.get_profile()
         notify.send(user, recipient=admin, verb=_(' signed up '), action_object=profile,
-                description=_("Please review this user") + ":" + profile.realm)
+                description=_("Please review this user %s") % profile.realm)
