@@ -106,7 +106,7 @@ def do_vm_action(request, vmid, action):
         except socket_error as serr:
             if serr.errno == errno.ECONNREFUSED:
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
-    return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed!')}))
+    return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
 
 
 def vnc(request, vmid):
