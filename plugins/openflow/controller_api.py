@@ -137,7 +137,7 @@ def slice_change_controller(slice_obj, controller_info):
             controller = None
             controller = create_add_controller(slice_obj, controller_info)
             flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                                             slice_obj.name, controller.ip,
+                                             slice_obj.id, controller.ip,
                                              controller.port)
         except:
             print 'c5'

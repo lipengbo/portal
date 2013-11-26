@@ -16,7 +16,7 @@
     </style>    
 {% endblock %}
 {% block breadcrumb %}
-<a href="/project/">我的项目</a><span class="divider">/</span>
+<a href="/project/">项目</a><span class="divider">/</span>
 <li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
@@ -28,7 +28,7 @@
     <div class="form_inline control-group {% if form.name.errors %}error{% endif %}">
         <label>项目名称</label>
         <input type="text" name="name" value="{{ form.instance.name }}">  
-        <span class="muted"><i>如北京邮电大学-网络通信实验室-SDN</i></span>     
+        <span class="muted"><i>学校/单位名-实验室/部门名-项目名称，如北京邮电大学-网络通信实验室-SDN</i></span>     
         {% if form.name.errors %}
                 {% for error in form.name.errors %}
                     <span class="help-inline">{{ error }}</span>

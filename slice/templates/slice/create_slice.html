@@ -7,8 +7,7 @@
 
 {% block head_title %}创建Slice{% endblock %}
 {% block breadcrumb %}
-	<!--<a href="/project/create/">创建项目</a><span class="divider">/</span>-->
-	<a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
+	<a href="/project/">项目</a><span class="divider">/</span><a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
 	创建Slice
 {% endblock %}
 
@@ -59,7 +58,7 @@
                  <legend>基本信息</legend>
                  <div class="form_inline">
                     <label>Slice名称</label>
-                    <input type="text" maxlength=45 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
+                    <input type="text" maxlength=30 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
                     <span class="muted"><i>如openflow协议验证</i></span>
                     <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
@@ -67,8 +66,7 @@
                  <div class="form_inline">
                     <label class="v_top">Slice描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
-                    <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i></span> 
-                    <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                    <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i><span id="slice_descriptionInfo" style="display:inline;float:none;"></span> </span>             
                  </div>
                  <div class="form_inline">   
                     <label>选择节点</label>
@@ -459,6 +457,10 @@
                         <tr>
                             <td width="100">网络地址：</td>
                             <td><span id="list_slice_nw"></span></td>
+                        </tr>
+                        <tr>
+                            <td width="100">DHCP服务器：</td>
+                            <td><span id="list_slice_dhcp">未配置</span></td>
                         </tr>
                     </tbody>
                  </table>   

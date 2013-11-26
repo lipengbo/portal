@@ -7,7 +7,7 @@
 {% trans "Project Detail" %} [{{ project.name }}]
 {% endblock %}
 {% block breadcrumb %}
-<a href="/project/">我的项目</a><span class="divider">/</span>
+<a href="/project/">项目</a><span class="divider">/</span>
 <li class="active">{% trans "Project Detail" %}</li>
 {% endblock %}
 
@@ -34,7 +34,7 @@
                 <td>{{ project.name }}</td>
                 <td>{{ project.description }}</td>
                 <td>{{ project.owner }}</td>
-                <td><span class="label label-success">{{ project.category }}</span></td>
+                <td><span class="">{{ project.category }}</span></td>
            </tr> 
         </tbody>
     </table>

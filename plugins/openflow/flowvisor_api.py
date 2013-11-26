@@ -19,7 +19,7 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
         print "h3"
     if flowvisor and controller and user_email:
         controllerAdd = 'tcp:' + str(controller.ip) + ':' + str(controller.port) + ''
-        args = [slice_name, controllerAdd, user_email]
+        args = [str(slice_name), controllerAdd, user_email]
         pwd = "cdn%nf"
         flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
         flowvisor_ps = str(flowvisor.password)
