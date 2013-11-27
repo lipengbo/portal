@@ -5657,7 +5657,7 @@ table {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .fill_form fieldset textarea {
   width: 400px;
@@ -5876,6 +5876,8 @@ table {
 .example-sites li img {
   width: 100%;
   height: auto;
+  border-bottom: 1px solid #9c9c9c;
+  background: #c2d0df;
 }
 .example-sites li h5 {
   height: 20px;
@@ -6578,4 +6580,7 @@ a.button-royal:hover {
 }
 .vm_chose select {
   margin-bottom: 0;
+}
+.tooltip-inner {
+  max-width: 220px;
 }

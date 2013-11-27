@@ -68,10 +68,6 @@ class IslandResource(Resource):
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     password = models.CharField(max_length=20, verbose_name=_("password"))
-    content_type = models.ForeignKey(ContentType, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    #: served on a ComputeResource like Server or VirtualMachine
-    host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
     #state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
 
