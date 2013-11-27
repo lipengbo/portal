@@ -110,7 +110,6 @@ function check_vm_select(obj){
         return result
 }
 
-
 //获取vm form的内容并填入slice清单中
 function fetch_vminfo()
 {
@@ -445,5 +444,16 @@ function show_uuid(objs){
 function show_topology(){
 	//alert(get_select_ports());
 	$('#topologyModal').modal('show');
+}
+
+function check_gw_select(){
+	var info = document.getElementById('gwInfo');
+	if($('#id_server_gw').get(0).selectedIndex == 0){
+		showMsg(info,"该项为必填项","err");
+		return false;
+	}else{
+		info.innerHTML = '';
+		return true;
+	}
 }
 

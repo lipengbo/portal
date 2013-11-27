@@ -796,3 +796,20 @@ function start_or_stop(slice_id, flag){
         $('#editSliceModal').modal('hide');
     }
  }
+
+$('.start_dhcp').click(function(){
+        var slice_id = $("#slice_id").text();
+        if($(this).hasClass("btn-success")){
+            //ret = start_or_stop(slice_id, 1);
+            if(true){
+                $(this).removeClass("btn-success").addClass("btn-danger");           
+                $(this).text("停止DHCP服务");
+            }     
+        } else {
+            //ret = start_or_stop(slice_id, 2);
+            if(true){
+                $(this).removeClass("btn-danger").addClass("btn-success");
+                $(this).text("启动DHCP服务");
+            }         
+        }
+    }); 
