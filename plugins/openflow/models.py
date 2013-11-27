@@ -11,6 +11,8 @@ from django.db.models import F
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
 from resources.models import ServiceResource, Resource, SwitchPort, Switch
@@ -21,6 +23,10 @@ class Controller(ServiceResource):
     username = models.CharField(max_length=20, verbose_name=_("username"))
     is_root = models.BooleanField(default=False)
     port = models.IntegerField()
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    #: served on a ComputeResource like Server or VirtualMachine
+    host = generic.GenericForeignKey('content_type', 'object_id')
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
