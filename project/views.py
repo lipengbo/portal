@@ -63,6 +63,8 @@ def index(request):
     today = datetime.date.today()
     counter, created = DailyCounter.objects.get_or_create(target=0, date=today)
     context['new_projects_num'] = counter.count
+    context['target'] = "project"
+    context['type'] = "day"
     if request.is_ajax():
         print '89'
         return render(request, 'project/list_page.html', context)

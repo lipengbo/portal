@@ -466,7 +466,7 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_slice_count_show(target):
+def get_count_show_data(target, type, total_num):
     from common.models import DailyCounter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
@@ -475,7 +475,7 @@ def get_slice_count_show(target):
     show_dates = []
     show_nums = []
     cur_date = date_now
-    for i in range(0, 15):
+    for i in range(0, int(total_num)):
         if target == 'project':
             target_id = 0
         else:
