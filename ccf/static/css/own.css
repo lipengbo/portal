@@ -5657,7 +5657,7 @@ table {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 .fill_form fieldset textarea {
   width: 400px;
