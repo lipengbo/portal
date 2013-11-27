@@ -15,7 +15,7 @@ from forms import VmForm
 from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
 from django.core.urlresolvers import reverse
-from etc.config import vnctunnel, function_test
+from etc.config import function_test
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 from plugins.common.ovs_client import get_portid_by_name
@@ -108,12 +108,16 @@ def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
-    context = {}
-    context['host_ip'] = host_ip
-    context['vnc_port'] = vnc_port
-    context['tunnel_host'] = vnctunnel
-    context['vm'] = vm
-    return render(request, 'vt/vnc.html', context)
+    token = '%s_%s' % (host_ip, vnc_port)
+    novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' % (request.META.get('REMOTE_ADDR'), token)
+    #context = {}
+    #context['host_ip'] = host_ip
+    #context['vnc_port'] = vnc_port
+    #context['tunnel_host'] = '192.168.5.9'
+    #context['vm'] = vm
+    #return render(request, 'vt/vnc.html', context)
+    #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+    return HttpResponseRedirect(novnc_url)
 
 
 def delete_vm(request, vmid, flag):
