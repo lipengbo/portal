@@ -16,7 +16,9 @@
 <fieldset>
     <legend>
         {%if extent_html == "site_base.html" %}
+            {% if user.id == project.owner.id %}
             <a href="{% url project_edit project.id %}" class="btn btn-info edit">{% trans "Edit" %}</a>
+            {% endif %}
         {%endif%} 
         {% trans "Basic info" %}
     </legend>
@@ -42,8 +44,10 @@
 <fieldset id="name">   
     <legend>
         {%if extent_html == "site_base.html" %}
+            {% if user.id == project.owner.id %}
             <a href="{% url project_applicant project.id  %}" class="btn btn-info edit">{% trans "View pending members" %}</a>
             <a href="{% url project_invite project.id %}" class="btn btn-info edit">{% trans "Invite members" %}</a>
+            {% endif %}
         {%endif%}
         {% trans "Members" %}
     </legend>
