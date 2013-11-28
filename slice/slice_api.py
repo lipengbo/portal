@@ -467,7 +467,7 @@ def get_slice_resource(slice_obj):
 
 
 def get_count_show_data(target, type, total_num):
-    from common.models import DailyCounter
+    from common.models import Counter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
     date_delta = datetime.timedelta(days=-1)
@@ -475,21 +475,45 @@ def get_count_show_data(target, type, total_num):
     show_dates = []
     show_nums = []
     cur_date = date_now
+    year = int(cur_date.strftime('%Y'))
+    month = int(cur_date.strftime('%m'))
+    day = int(cur_date.strftime('%d'))
+    if target == 'project':
+        target_id = 0
+    else:
+        target_id = 1
     for i in range(0, int(total_num)):
-        if target == 'project':
-            target_id = 0
+        if type == "year":
+            sc = Counter.objects.filter(target=target_id,
+                                        date__year=str(year),
+                                        type=0)
+            show_dates.append(str(year)+"年")
+            year = year - 1
         else:
-            target_id = 1
-        sc = DailyCounter.objects.filter(target=target_id, date__year=cur_date.strftime('%Y'),
-                                  date__month=cur_date.strftime('%m'),
-                                  date__day=cur_date.strftime('%d'))
+            if type == "month":
+                sc = Counter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            date__month=str(month),
+                                            type=1)
+                show_dates.append(str(year)+"年"+str(month)+"月")
+                if month == 1:
+                    month = 12
+                    year = year - 1
+                else:
+                    month = month - 1
+            else:
+                sc = Counter.objects.filter(target=target_id,
+                                            date__year=cur_date.strftime('%Y'),
+                                            date__month=cur_date.strftime('%m'),
+                                            date__day=cur_date.strftime('%d'),
+                                            type=2)
+                show_dates.append(cur_date.strftime('%Y.%m.%d'))
+                cur_date = cur_date + date_delta
         if sc:
             num = sc[0].count
         else:
             num = 0
-        show_dates.append(cur_date.strftime('%Y.%m.%d'))
         show_nums.append(num)
-        cur_date = cur_date + date_delta
     show_dates.reverse()
     show_nums.reverse()
     ret = {"show_dates": show_dates, "show_nums": show_nums}

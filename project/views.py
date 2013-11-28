@@ -27,7 +27,7 @@ from slice.models import Slice
 from resources.models import Switch, Server, VirtualSwitch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
-from common.models import DailyCounter
+from common.models import  Counter
 
 
 def home(request):
@@ -42,6 +42,7 @@ def home(request):
 
 @login_required
 def index(request):
+    
     context = {}
     user = request.user
     context = {}
@@ -61,8 +62,15 @@ def index(request):
             context['query'] = query
     context['projects'] = projects
     today = datetime.date.today()
-    counter, created = DailyCounter.objects.get_or_create(target=0, date=today)
-    context['new_projects_num'] = counter.count
+    counCounter = Counter.objects.filter(date__year=today.strftime('%Y'),
+                                         date__month=today.strftime('%m'),
+                                         date__day=today.strftime('%d'),
+                                         target=0,
+                                         type=2)
+    if counCounter:
+        context['new_projects_num'] = counCounter[0].count
+    else:
+        context['new_projects_num'] = 0
     context['target'] = "project"
     context['type'] = "day"
     if request.is_ajax():
