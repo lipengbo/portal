@@ -133,7 +133,7 @@
           {% else %}
           <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
           {% endif %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1)">{% trans "Submit" %}</button></div>
+          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
           <div class="span3"></div>
         </div>
     </div>
