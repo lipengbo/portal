@@ -105,6 +105,22 @@ def invite(request, id):
         if message:
             for user_id in user_ids:
                 user = get_object_or_404(User, id=user_id)
+                try:
+                    Invitation.objects.get(to_user=user, target_id=project.id, target_type=target_type)
+                    messages.add_message(request, messages.INFO,
+                            _("The user has been invited of this project"))
+                    continue
+                except Invitation.DoesNotExist:
+                    pass
+
+                try:
+                    application = Application.objects.get(from_user=user, target_id=project.id, target_type=target_type, state__gt=0)
+                    messages.add_message(request, messages.INFO,
+                            _("The user has applied this project"))
+                    continue
+                except Application.DoesNotExist:
+                    pass
+
                 form = InvitationForm({'message': message, 'to_user': user_id})
                 if form.is_valid():
                     invitation = form.save(commit=False)
