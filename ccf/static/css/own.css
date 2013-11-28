@@ -6432,7 +6432,7 @@ a.button-royal:hover {
   padding-bottom: 10px;
 }
 .vm_well_wrap .vm_well {
-  height: 279px;
+  height: 260px;
   border-left: 1px solid #ddd;
   padding: 5px 15px 0px 15px;
 }
@@ -6580,4 +6580,7 @@ a.button-royal:hover {
 }
 .vm_chose select {
   margin-bottom: 0;
+}
+.tooltip-inner {
+  max-width: 250px;
 }
