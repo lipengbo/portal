@@ -27,6 +27,9 @@ class Slice(models.Model):
 #     expired = models.IntegerField(default=0)
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
+    def created_date(self):
+        return self.date_created
+
     def add_island(self, island):
         SliceIsland.objects.get_or_create(
             island=island, slice=self)

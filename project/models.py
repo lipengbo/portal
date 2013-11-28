@@ -72,6 +72,9 @@ class Project(models.Model):
     category = models.ForeignKey(Category, verbose_name=_("Category"))
     created_time = models.DateTimeField(auto_now_add=True)
 
+    def created_date(self):
+        return self.created_time
+
     def add_category(self, category):
         project_category, created = ProjectCategory.objects.get_or_create(category=category,
                 project=self)
