@@ -79,6 +79,38 @@ def update_port_performace_data(request):
             return HttpResponse(json.dumps({'result': 1, 'error': _("server error")}))
     return HttpResponse(json.dumps(performace_port_data))
 
+def get_switch_port_info(request, switch_id):
+    pre_port_data = None
+    if request.method == 'POST':
+        pre_port_data = json.loads(request.POST.get("pre_port_data"))
+        print "===>", pre_port_data['eth1']
+
+    try:
+        switch = get_object_or_404(Switch, id=switch_id)
+        switch_stat = get_switch_stat(switch.ip)
+        #ports_info = []
+        print "---------------------------"
+        port_info = {}
+        for br in switch_stat:
+            for port in br['ports']:
+                print port['name']
+                recv_data = int(port['stats']['recv']['byte'])
+                send_data = int(port['stats']['recv']['byte'])
+                if pre_port_data:
+                    print "minus===="
+                    recv_bps = recv_data - int(pre_port_data[port['name']][0])
+                    send_bps = send_data - int(pre_port_data[port['name']][1])
+                else:
+                    recv_bps = 0
+                    send_bps = 0
+                port_info[port['name']] = [recv_data, send_data, recv_bps, send_bps]
+            #ports_info.append(port_info)
+            break
+        print port_info
+        print "---------------------------"
+    except:
+        pass
+    return HttpResponse(json.dumps(port_info))
 
 def update_vm_performace_data(request):
     """

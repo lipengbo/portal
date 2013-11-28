@@ -8,6 +8,7 @@
 {% endblock %}
 {% block body %}
 	<h4>交换机 {{ switch_name }}</h4>
+<!--
 	<p class="vm_chose">网桥 <select id="brs_info" onChange="change_br({{switch_id}}, this.options[this.options.selectedIndex].value, true)"></select></p>
     <p class="vm_chose">端口 <select id="ports_info" onChange="change_port({{switch_id}}, true)"></select></p>
     <ul class="nav nav-pills" id="br_info"></ul>
@@ -34,18 +35,26 @@
                     </table>
 		
 	</div>
-	
+-->	
+
+ <div id="container" style="height: 400px"></div>
+
 {% endblock %}
 {% block extra_script %}
 	<script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
 	<script src="{{ STATIC_URL }}js/common.js?v=1" ></script>
-    <script src="{{ STATIC_URL }}js/monitor_switch.js?v=1" ></script>
+	<script src="{{ STATIC_URL }}js/highcharts/highcharts.js"></script>
+    
 	<script>
 		$(function(){
-			get_br_info({{ switch_id }}, true);
+			//get_br_info({{ switch_id }}, true);
+			Initdata({{switch_id}});
 			$('#alert_close').on("click", function(){
 				window.location.href = "/nexus/resources/switch/";
 			})
+
+			
 		})
 	</script>
+	<script src="{{ STATIC_URL }}js/monitor_switch_new.js?v=1" ></script>
 {% endblock %}
