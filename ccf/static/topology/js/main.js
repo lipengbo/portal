@@ -422,14 +422,16 @@ function init_svg () {
             real_nodes_map[node.id] = true;
         };
     })
+    var show_logical = $('#show-logical').attr('checked');
     var cloud_node = {id:"cloud", group:3}
-    g_nodes.push(cloud_node);
+    if (show_logical) {
+        g_nodes.push(cloud_node);
+    }
     /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
         var dpid = recompose_dpid(gre_ovses[i]);
         
         // connect gre node to cloud-icon node
-        var show_logical = $('#show-logical').attr('checked');
         if (show_logical) {
             if (!(dpid in nodes_map)) {
                 alert('没有以' + dpid + '为dpid的gre出口交换机');
@@ -677,7 +679,6 @@ function load_topology(callback) {
     function random_refresh () {
         setTimeout(function  () {
             refresh_time = Math.floor(Math.random() * 10000 + 2000 );
-            
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
                 var color = 'black';
                 
