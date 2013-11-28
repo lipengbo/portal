@@ -6581,3 +6581,6 @@ a.button-royal:hover {
 .vm_chose select {
   margin-bottom: 0;
 }
+.tooltip-inner {
+  max-width: 250px;
+}
