@@ -113,7 +113,7 @@ def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
-    token = '%s_%s' % (host_ip, vnc_port)
+    token = '%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip, vm.image.username, vm.image.password)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' % (request.META.get('REMOTE_ADDR'), token)
     #context = {}
     #context['host_ip'] = host_ip
