@@ -7,7 +7,6 @@
 #[plugin-vt]
 glance_host = '192.168.5.107'
 glance_port = 9292
-vnctunnel = '127.0.0.1'
 
 #[agent-service]
 compute_service_port = 8886
