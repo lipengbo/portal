@@ -29,7 +29,9 @@ class CCFWebSocketProxy(websockify.WebSocketProxy):
         print '----------------------------------'
         print token
         print '----------------------------------'
-        host, port = token.strip().split('_')
+        token_msg = token.strip().split('_')
+        host = token_msg[0]
+        port = token_msg[1]
 
         # Connect to the target
         self.msg("connecting to: %s:%s" % (
@@ -54,7 +56,7 @@ if __name__ == '__main__':
     # Create and start the NovaWebSockets proxy
     server = CCFWebSocketProxy(listen_host='0.0.0.0',
                                listen_port=6080,
-                               daemon=True,
+                               daemon=False,
                                web='./',
                                target_host='ignore',
                                target_port='ignore',
