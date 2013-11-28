@@ -399,13 +399,18 @@ function not_contains(a, obj) {
     return true;
 }
 
-function create_vms(sliceid, flag)
+function create_vms(sliceid, flag, from_link)
 {
     if(check_vminfo())
     {
 		submit_vms(sliceid)
 		if(flag != 1 || post_vm_result){
-			window.location.href='/plugins/vt/vm/list/' + sliceid + '/';
+			if(from_link == 0){
+				window.location.href='/slice/detail/' + sliceid + '/';
+			}else{
+				window.location.href='/plugins/vt/vm/list/' + sliceid + '/';
+			}
+			
 		}        
     }
 }
