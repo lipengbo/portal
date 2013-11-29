@@ -83,6 +83,8 @@ def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
     """flowvisor上添加flowspace
     """
     LOG.debug('flowvisor_add_flowspace')
+    print name
+    print slice_name
     if flowvisor:
         fsaction = '' + str(slice_name) + '=' + str(slice_action) + ''
         pwd = str(pwd)
@@ -124,6 +126,7 @@ def flowvisor_update_flowspace(flowvisor, flowspace_name, priority_flag,
 def flowvisor_del_flowspace(flowvisor, flowspace_name):
     """flowvisor上删除flowspace
     """
+    print flowspace_name
     LOG.debug('flowvisor_del_flowspace')
     if flowvisor:
         args = [flowspace_name]

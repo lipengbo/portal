@@ -39,6 +39,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
         flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.id,
                             slice_obj.get_controller(), user.email)
         print 5
+        print slice_obj.name
 #         创建并添加网段
         IPUsage.objects.subnet_create_success(slice_obj.name)
         print 6

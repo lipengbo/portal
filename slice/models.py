@@ -202,12 +202,10 @@ class Slice(models.Model):
 
     def delete(self, *args, **kwargs):
         print "d1"
-        slice_id = self.id
-        flowvisor = self.get_flowvisor()
+        flowvisor_del_slice(self.get_flowvisor(), self.id)
         print "d2"
         super(self.__class__, self).delete(*args, **kwargs)
         print "d3"
-        flowvisor_del_slice(flowvisor, slice_id)
 
     def __unicode__(self):
         return self.name

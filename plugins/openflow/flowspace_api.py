@@ -118,7 +118,7 @@ def flowspace_dhcp_add(slice_obj, new_dhcp):
         name = str(slice_obj.id) + '_df'
         haved_vms = slice_obj.get_vms()
         for haved_vm in haved_vms:
-            if haved_vm.mac and (haved_vm.mac not in dhcp_vm_macs):
+            if haved_vm.mac and haved_vm.enable_dhcp and (haved_vm.mac not in dhcp_vm_macs):
                 create_default_flowspace(slice_obj, name, '1', '', '', '',
                                          str(haved_vm.mac), '', '', '', '',
                                          '', '', '', '')
