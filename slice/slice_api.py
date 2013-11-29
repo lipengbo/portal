@@ -160,7 +160,7 @@ def delete_slice_api(slice_obj):
                 pass
             print 4
 #             删除底层slice
-            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
+#             flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
             print 5
 #             删除控制器
             delete_controller(slice_obj.get_controller())

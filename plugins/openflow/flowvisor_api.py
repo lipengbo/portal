@@ -66,14 +66,16 @@ def flowvisor_update_slice_status(flowvisor, slice_name, status):
 def flowvisor_del_slice(flowvisor, slice_name):
     """flowvisor上删除slice
     """
-    LOG.debug('flowvisor_del_slice')
+    print 'flowvisor_del_slice'
     if flowvisor and slice_name:
+        print "in delete"
         args = [str(slice_name)]
         flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
         flowvisor_ps = str(flowvisor.password)
         do_removeSlice(args, flowvisor_url, flowvisor_ps)
     else:
-        raise DbError("数据库异常!")
+        pass
+#         raise DbError("数据库异常!")
 
 
 def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,

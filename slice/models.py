@@ -1,8 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
+from plugins.openflow.flowvisor_api import flowvisor_del_slice
 
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
@@ -199,6 +200,15 @@ class Slice(models.Model):
                              num=1)
             nsc.save()
 
+    def delete(self, *args, **kwargs):
+        print "d1"
+        slice_id = self.id
+        flowvisor = self.get_flowvisor()
+        print "d2"
+        super(self.__class__, self).delete(*args, **kwargs)
+        print "d3"
+        flowvisor_del_slice(flowvisor, slice_id)
+
     def __unicode__(self):
         return self.name
 
@@ -221,5 +231,23 @@ class SliceCount(models.Model):
 
 @receiver(pre_delete, sender=Slice)
 def pre_delete_slice(sender, instance, **kwargs):
+    print "delete pre"
     from slice.slice_api import delete_slice_api
     delete_slice_api(instance)
+
+
+# @receiver(post_delete, sender=Slice)
+# def post_delete_slice(sender, instance, **kwargs):
+#     print "delete post"
+#     if instance.id:
+#         print "s1"
+#     else:
+#         print "s2"
+#     if instance.project:
+#         print "s3"
+#     else:
+#         print "s4"
+#     try:
+#         flowvisor_del_slice(instance.get_flowvisor(), instance.id)
+#     except:
+#         raise
