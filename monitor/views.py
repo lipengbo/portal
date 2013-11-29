@@ -91,6 +91,7 @@ def get_switch_port_info(request, switch_id):
         #ports_info = []
         print "---------------------------"
         port_info = {}
+        #i = 0
         for br in switch_stat:
             for port in br['ports']:
                 print port['name']
@@ -105,7 +106,9 @@ def get_switch_port_info(request, switch_id):
                     send_bps = 0
                 port_info[port['name']] = [recv_data, send_data, recv_bps, send_bps]
             #ports_info.append(port_info)
-            break
+            #i = i + 1
+            #if i > 2:
+            #    break
         print port_info
         print "---------------------------"
     except:
