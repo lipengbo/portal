@@ -1,4 +1,5 @@
 import json
+import datetime
 import logging
 logger = logging.getLogger("plugins")
 
@@ -17,15 +18,16 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db.models import Q
 
-from project.models import Project, Membership, Category, Island
+from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
 from slice.models import Slice
 
-from resources.models import Switch, Server
+from resources.models import Switch, Server, VirtualSwitch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
+from common.models import DailyCounter
 
 
 def home(request):
@@ -58,6 +60,10 @@ def index(request):
                     Q(description__icontains=query))
             context['query'] = query
     context['projects'] = projects
+    today = datetime.date.today()
+    counter, created = DailyCounter.objects.get_or_create(target=0, date=today)
+    context['new_projects_num'] = counter.count
+    context['total_projects'] = Project.objects.all().count()
     return render(request, 'project/index.html', context)
 
 
@@ -113,6 +119,7 @@ def invite(request, id):
     invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
             target_type=target_type).values_list("to_user__id", flat=True))
     invited_user_ids.extend(project.member_ids())
+    invited_user_ids.extend(User.objects.filter(is_superuser=True).values_list("id", flat=True))
     users = User.objects.exclude(id__in=set(invited_user_ids))
     if 'query' in request.GET:
         query = request.GET.get('query')
@@ -168,7 +175,7 @@ def apply(request):
     return render(request, 'project/apply.html', context)
 
 @login_required
-@permission_required('project.add_project', login_url='/forbidden/')
+#@permission_required('project.add_project', login_url='/forbidden/')
 def create_or_edit(request, id=None):
     user = request.user
     context = {}
@@ -176,7 +183,8 @@ def create_or_edit(request, id=None):
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
-        print island_ids
+        if user != instance.owner:
+            return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
@@ -282,6 +290,8 @@ def topology(request):
     flowvisors = get_island_flowvisors(island_id)
 
     all_gre_ovs = Switch.objects.filter(has_gre_tunnel=True)
+    if island_id:
+        all_gre_ovs = all_gre_ovs.filter(island__id=island_id)
 
     node_infos, total_server, total_switch, total_ctrl, total_nodes, total_island = get_all_cities()
     city_id = int(request.GET.get('city_id', 0))
@@ -346,7 +356,23 @@ def links_direct(request, host, port):
 def switch_direct(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
     client = FlowvisorClient(host, port, flowvisor.password)
-    data = json.dumps(client.get_switches())
+    json_data = client.get_switches()
+    for i in range(len(json_data)):
+        entry = json_data[i]
+        dpid = entry['dpid']
+        try:
+            switch = Switch.objects.get(dpid=dpid)
+        except Switch.DoesNotExist:
+            pass
+        else:
+            json_data[i]['db_name'] = switch.name
+            db_id = switch.id
+            try:
+                db_id = switch.virtualswitch.server.id
+            except VirtualSwitch.DoesNotExist:
+                pass
+            json_data[i]['db_id'] = db_id
+    data = json.dumps(json_data)
     return HttpResponse(data, content_type="application/json")
 
 #@cache_page(60 * 60 * 24 * 10)
@@ -367,7 +393,7 @@ def switch_proxy(request, host, port):
             if port.virtualmachine_set.all().count() > 0:
                 continue
             port_data.append({"name": port.name, "portNumber": str(port.port), "db_id": port.id})
-        switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data})
+        switch_data.append({"dpid": switch.dpid, "db_name": switch.name, "ports": port_data, "db_id": switch.id})
 
     data = json.dumps(switch_data)
     return HttpResponse(data, content_type="application/json")
@@ -396,6 +422,9 @@ def manage_index(request):
         context['total_islands'] = Island.objects.all().count()
         context['total_projects'] = Project.objects.all().count()
         context['total_users'] = User.objects.all().count()
+        context['total_cities'] = City.objects.all().count()
+        context['total_servers'] = Server.objects.all().count()
+        context['total_switches'] = Switch.objects.all().count()
         if Server.objects.all():
             context['host_id'] = Server.objects.all()[0].id
         else:

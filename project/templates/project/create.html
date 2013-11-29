@@ -16,6 +16,7 @@
     </style>    
 {% endblock %}
 {% block breadcrumb %}
+<a href="/project/">项目</a><span class="divider">/</span>
 <li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
@@ -26,7 +27,8 @@
     <legend>基本信息</legend>
     <div class="form_inline control-group {% if form.name.errors %}error{% endif %}">
         <label>项目名称</label>
-        <input type="text" name="name" value="{{ form.instance.name }}">
+        <input type="text" name="name" value="{{ form.instance.name }}">  
+        <span class="muted"><i>学校/单位名-实验室/部门名-项目名称，如北京邮电大学-网络通信实验室-SDN</i></span>     
         {% if form.name.errors %}
                 {% for error in form.name.errors %}
                     <span class="help-inline">{{ error }}</span>
@@ -36,6 +38,11 @@
     <div class="form_inline control-group {% if form.description.errors %}error{% endif %}">
         <label class="v_top">项目描述</label>
         <textarea name="description" rows="5">{{ form.instance.description }}</textarea>
+        <span class="muted pro_describe"><i>
+                                    如项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />
+                                     项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />
+                                    项目支持：国家自然科学基金或863、973项目支持；</i>
+        </span>  
         {% if form.description.errors %}
                 {% for error in form.description.errors %}
                     <span class="help-inline">{{ error }}</span>
@@ -43,6 +50,19 @@
         {% endif %}
     </div>
     <div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
+        <label>项目类型</label>
+        <select name="category_name">
+            {% for cat in cats %}
+                <option data-id="{{ cat.id }}" value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}         
+        </select>
+        {% if form.category_name.errors %}
+                {% for error in form.category_name.errors %}
+                    <span class="help-inline">{{ error }}</span>
+                {% endfor %}
+        {% endif %}
+    </div>
+    <!--<div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
         <label>项目类型</label>
         <div class="input-append select_input">
             <input class="span2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text" />
@@ -60,7 +80,7 @@
                     <span class="help-inline">{{ error }}</span>
                 {% endfor %}
         {% endif %}
-    </div>
+    </div> -->
   </fieldset>
   <fieldset>
     <legend>添加资源 </legend>

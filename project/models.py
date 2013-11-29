@@ -1,4 +1,5 @@
 #coding: utf-8
+import datetime
 
 from django.db import models
 from django.db import IntegrityError 
@@ -69,6 +70,10 @@ class Project(models.Model):
     memberships = models.ManyToManyField(User, through="Membership", 
             related_name="project_belongs", verbose_name=_("Memberships")) 
     category = models.ForeignKey(Category, verbose_name=_("Category"))
+    created_time = models.DateTimeField(auto_now_add=True)
+
+    def created_date(self):
+        return self.created_time
 
     def add_category(self, category):
         project_category, created = ProjectCategory.objects.get_or_create(category=category,
@@ -118,6 +123,8 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = _("Project")
+
+
 
 class Membership(models.Model):
     project = models.ForeignKey(Project)

@@ -1,0 +1,14 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% block body %}
+<div class="page-header">
+    <h2>填写审核不通过原因</h2>
+</div>
+<form action="" method="post" accept-charset="utf-8">
+    {{ form|crispy}}
+    <p><input type="submit" class="btn btn-info" value="发出"></p>
+</form>
+{% endblock %}
+
+

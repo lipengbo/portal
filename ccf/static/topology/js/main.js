@@ -62,6 +62,73 @@ force = d3.layout.force()
 svg_obj = d3.select("#topology-svg").append("svg")
             .attr("width", width)
             .attr("height", height);
+function initboard2(){
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 15)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("负载(%)");
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("0~10");
+        svg.append('svg:line')
+          .attr('x1', 40)
+          .attr('y1', 30)
+          .attr('x2', 60)
+          .attr('y2', 30)
+          .attr('class', 'caption')
+          .attr('style', "stroke:blue;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 70)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("0~30");
+        svg.append('svg:line')
+          .attr('x1', 115)
+          .attr('y1', 30)
+          .attr('x2', 135)
+          .attr('y2', 30)
+          .attr('class', 'caption')
+          .attr('style', "stroke:green;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 140)
+          .attr('y', 35)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("30~60");
+        svg.append('svg:line')
+          .attr('x1', 190)
+          .attr('y1', 30)
+          .attr('x2', 210)
+          .attr('y2', 30)
+          .attr('class', 'caption')
+          .attr('style', "stroke:yellow;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 0)
+          .attr('y', 50)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("60~90");
+        svg.append('svg:line')
+          .attr('x1', 40)
+          .attr('y1', 45)
+          .attr('x2', 60)
+          .attr('y2', 45)
+          .attr('class', 'caption')
+          .attr('style', "stroke:orange;stroke-width:2")
+        svg.append('svg:text')
+          .attr('x', 70)
+          .attr('y', 50)
+          .attr('style', "fill:black;font-size:8pt")
+          .text("90~100");
+        svg.append('svg:line')
+          .attr('x1', 115)
+          .attr('y1', 45)
+          .attr('x2', 135)
+          .attr('y2', 45)
+          .attr('class', 'caption')
+          .attr('style', "stroke:red;stroke-width:2")
+}
 var svg = svg_obj.append('g')
     .call(d3.behavior.zoom().on("zoom", rescale))
     .on("dblclick.zoom", null)
@@ -71,17 +138,86 @@ var svg = svg_obj.append('g')
     .on("mousedown", mousedown);
     var rect_color = 'white';
     if (size == 'big') {
-        rect_color = '#f5f5f5';
+        rect_color = 'transparent';
     }
+initboard2();
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
     .attr('fill', rect_color);
-var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
+var bandwidth_capacities = ['10M', '20M', '30M', '40M', '50M'];
+var status_levels = [10, 100, 400, 1000];
 var gre_ovs_capacity = [];
 for (var i = 0; i < gre_ovses.length; i++) {
-    gre_ovs_capacity.push(bandwidth_capacities[Math.floor(Math.random() * 4)]);
+    gre_ovs_capacity.push(bandwidth_capacities[Math.floor(Math.random() * 5)]);
 };
+
+function assign_node_icon(d) {
+    var show_logical = $('#show-logical').attr('checked');
+    if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
+        d.group = 2;
+    }
+    var ovs_image;
+
+    /*
+    if (parent.selected_switches) {
+        if (d.id in selected_switch_map) {
+            ovs_image = STATIC_URL + 'topology/img/ovs_green.png?v=3';
+        }
+    }
+    */
+    // group = 3: cloud node
+    // group = 2: virtual switch
+    // group = 1: switch or server
+    if (d.group == 3) {
+        ovs_image = STATIC_URL + "topology/img/cloud";
+    } else if(d.group == 2) { 
+        ovs_image = STATIC_URL + "topology/img/server-phy";
+    } else {
+        if (d.id.indexOf('00:ee:') == 0) {
+            // gre switch
+            ovs_image = STATIC_URL + 'topology/img/ovs-red';
+            if (!show_logical) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
+            }
+        } else if (d.id.indexOf('00:ff:') == 0) {
+            // virtual switch
+            ovs_image = STATIC_URL + 'topology/img/ovs-green';
+            if (!show_logical) {
+                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+            }
+        } else {
+            if (!show_logical) {
+                // physical
+                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+            } else {
+                ovs_image = STATIC_URL + 'topology/img/ovs';
+            }
+        }
+
+    }
+    console.log(d.group)
+    
+    if (d.group == 2 || d.group == 1) {
+        // set status level for image
+        if (!show_logical) {
+            var level = Math.floor(Math.random() * 1000);
+            if (level < 0) {
+                ovs_image += '-error';
+            } else if (level < 0) {
+                ovs_image += '-danger';
+            } else if (level < 0) {
+                ovs_image += '-warning';
+            } else if (level < 400){
+                ovs_image += '-info';
+            } else {
+                ovs_image += '-normal';
+            }
+        }
+    }
+    ovs_image += '.png?v=5'
+    return ovs_image;
+}
 function rescale() {
     
   if(d3.event.ctrlKey || mousedown_node) return;
@@ -276,7 +412,7 @@ function highlight( data, i, element ) {
 }
 function init_svg () {
     $('.wrap g').remove();
-    $('.wrap line').remove();
+    $('.wrap line[class!=caption]').remove();
     spinner.stop();    
 
     var real_nodes_map = {};
@@ -286,12 +422,24 @@ function init_svg () {
             real_nodes_map[node.id] = true;
         };
     })
+    var show_logical = $('#show-logical').attr('checked');
+    var cloud_node = {id:"cloud", group:3}
+    if (show_logical) {
+        g_nodes.push(cloud_node);
+    }
+    /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
         var dpid = recompose_dpid(gre_ovses[i]);
         
+        // connect gre node to cloud-icon node
+        if (show_logical) {
+            if (!(dpid in nodes_map)) {
+                alert('没有以' + dpid + '为dpid的gre出口交换机');
+            }
+            g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
+        }
         for (var j = 0; j < gre_ovses.length; j++) {
             var dpid2 = recompose_dpid(gre_ovses[j]);
-            
             if (dpid in nodes_map && dpid2 in nodes_map) {
                 var capacity = gre_ovs_capacity[j];
                 if (dpid in real_nodes_map && dpid2 in real_nodes_map) {
@@ -317,7 +465,7 @@ function init_svg () {
         .style("stroke", function (d) { 
             var color = 'black';
             
-            if (d.type) {
+            if (d.capacity) {
                 var rand_num = Math.random();
                 var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                 d.bandwidth = bandwidth.toFixed(2);
@@ -347,10 +495,12 @@ function init_svg () {
         mousedown_node = null;
     })
     .on('mouseover', function(d, i) {
-        highlight( d, i, this );
+        //highlight( d, i, this );
+        $(this).find('image').css("cursor", "pointer");
     })
     .on('mouseout', function(d, i) {
         tooltip.hideTooltip();
+        $(this).find('image').css("cursor", "auto");
     })
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
@@ -373,37 +523,7 @@ function init_svg () {
     }
     */
     node.append("image")
-        .attr("xlink:href", function (d) {
-            var show_logical = $('#show-logical').attr('checked');
-            if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
-                d.group = 2;
-            }
-            var ovs_image = STATIC_URL + 'topology/img/ovs.png?v=4';
-            if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
-            }
-            if (d.id.indexOf('00:ee:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-red.png';
-                if (!show_logical) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway.png?v=4';
-                }
-            }
-            if (d.id.indexOf('00:ff:') == 0) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-green.png';
-                if (!show_logical) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs-phy.png?v=4';
-                }
-            }
-
-            /*
-            if (parent.selected_switches) {
-                if (d.id in selected_switch_map) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs_green.png?v=3';
-                }
-            }
-            */
-            return d.group==1 ? ovs_image : STATIC_URL + "topology/img/server-phy.png?v=5"
-        })
+        .attr("xlink:href", assign_node_icon)
         .attr("x", -32).attr("y", -32)
         .attr("width", 64).attr("height", 64);
     node.append("text").attr("dx", 40).attr("dy", ".35em")
@@ -427,7 +547,7 @@ function init_svg () {
                             content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
-                            d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                            d.db_name + ":" + port.name;
                         var port_pairs = {};
                         $.each(g_links_map[d.island_id], function(index, link) {
                             var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
@@ -436,7 +556,7 @@ function init_svg () {
                             }
                             if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'];
                             }
                             port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
                             if (port_pair_key in port_pairs) {
@@ -444,7 +564,7 @@ function init_svg () {
                             }
                             if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
                             }
                         });
                         content += "</label>";
@@ -462,6 +582,15 @@ function init_svg () {
                     });
                     $('.port-modal .modal-body').html(content);
                     $('.port-modal').modal();
+                }
+            }
+        } else {
+            // physical topology
+            if (d.db_id) {
+                if (d.name.indexOf('00:ff:') == 0) {
+                    window.open('/monitor/Server/' + d.db_id + '/');
+                } else {
+                    window.open('/monitor/Switch/' + d.db_id + '/');
                 }
             }
         }
@@ -550,26 +679,28 @@ function load_topology(callback) {
     function random_refresh () {
         setTimeout(function  () {
             refresh_time = Math.floor(Math.random() * 10000 + 2000 );
-            
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
                 var color = 'black';
                 
-                if (d.type) {
+                if (d.capacity) {
                     var rand_num = Math.random();
                     var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                     d.bandwidth = bandwidth.toFixed(2);
-                    if (rand_num < 0.3) {
+                    if (rand_num < 0) {
                         color = 'red';
-                    } else if (rand_num < 0.6) {
+                    } else if (rand_num < 0) {
                         color = 'orange';
-                    } else if (rand_num < 0.9) {
+                    } else if (rand_num < 0) {
                         color = 'yellow';
-                    } else {
+                    } else if (rand_num < 0.7) {
                         color = 'green';
+                    } else {
+                        color = 'blue';
                     }
                 }
-                return color; 
+                return color;
             });
+            var node = svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
             random_refresh();
         }, refresh_time);
     }

@@ -14,9 +14,11 @@
 
 {% block body %}
 {% block blank_block %}{% endblock %}
+
     	<div class="login_logo">
     		<img src="{% static "img/logo.png" %}" />
     	</div>
+	<div class="login_all">
     	<div class="login_title">
     		<img src="{% static "img/title2.png" %}" />
     	</div>
@@ -51,15 +53,19 @@
                                 {% endfor %}
                         {% endif %}
     			    </div>
+    			</div>    			
+    			<div class="span2">
+    				<button class="btn btn-large btn-block btn-info" type="submit" style="*height:45px;">登 录</button>
     			</div>
     			<div class="span2">
-    				<button href="#" class="btn btn-large btn-block btn-info" type="submit">登 录</button>
-    			</div>
-    			<div class="span2">
-    				<a data-toggle="modal" href="#registerModal" class="btn btn-large btn-block btn-info" id="register">注册</a>
+    				<a data-toggle="modal" href="#registerModal" class="btn btn-large btn-block btn-info" id="register" style="*width:106px;">注册</a>
     			</div>
     		</div>
+    		<div class="row">
+    		    <div class="span4 offset4 text-right"><a href="{% url "account_password_reset" %}" class="forgetpwd">忘记密码？</a></div>
+    		</div>
     	</form>
+	</div>
         <div id="registerModal" class="modal hide fade">
             <div class="modal-header">
               <a class="close" data-dismiss="modal">×</a>
@@ -93,25 +99,26 @@
 				      </div>
 				    </div>
 				    <div class="control-group">
-				      <label class="control-label" for="input01">所属单位</label>
+				      <label class="control-label" for="input01">研究方向</label>
 				      <div class="controls">
-				        <input type="text" class="input-xlarge" id="input01" name="organization" placeholde="请输入您所在单位"><span>*</span>
+                          <textarea rows="3" cols="40" class="input-xlarge" style="" id="input01" name="realm" placeholde="请输入您的研究方向"></textarea><span>*</span>
 				      </div>
 				    </div>
 				    <div class="control-group">
-				      <label class="control-label" for="input01">固定电话</label>
+				      <label class="control-label" for="input01">所属单位</label>
 				      <div class="controls">
-                          <input type="text" class="input-xlarge" id="input01" name="phone" placeholde="请输入您的固定电话"><span>*</span>
+                          <input type="text" class="input-xlarge" style="" id="input01" name="organization" placeholde="请输入您所在单位"><span>*</span>
 				      </div>
-				    </div>
+				    </div>				
 				  </fieldset>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-info btn_register">注册</button>
+              <a href="/" type="" class="hide btn btn-info btn_ok">确定</a>
             </div>
 				</form>
           </div>
-          
+        
 {% endblock %}
 
 {% block footer_base %}
@@ -124,16 +131,39 @@
 
 {% block extra_script %}
 <script type="text/javascript" charset="utf-8">
+$(function(){
+    judgePosition();
+    $(window).resize(function(){
+        judgePosition();
+    });
+});
     $('.signup-form').submit(function(){
             $.post('/accounts/signup/', $(this).serialize(), function(data){
                 if(data.indexOf('DOCTYPE') < 0) {
+                    if(data.indexOf('input') < 0) {
+                        $('.btn_register').hide();
+                        $('.btn_ok').show();
+                    }
                     $('.signup-form fieldset').html(data);
                 } else {
                     window.location.href = '/';
-
                 }
             });
         return false;
     });
+    function judgePosition(){
+        var windowHeight = $(window).height();
+        if(windowHeight < 720){
+            $(".login_all").css({
+                "position":"static",
+                "margin-top":"0"
+            });
+        } else {
+            $(".login_all").css({
+                "position":"absolute",
+                "margin-top":"-291px"
+            });
+        }
+    };
 </script>
 {% endblock %}

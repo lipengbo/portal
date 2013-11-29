@@ -51,11 +51,12 @@
                 <div class="title">
                     <h4>
                         <span class="icon-bar-chart icon-large"></span>
-                        <span>网络流量(<span id="net_unit"></span>/s)</span>			        	
+                        <span>网络流量</span>			        	
                     </h4>
                 </div>
                 <div class="content"> 
-                    <span>(<span id="net_unit"></span>/s)</span>           
+                    <!--span>(<span id="net_unit"></span>/s)</span--> 
+					(<span id="net_unit"></span>/s)          
                     <select class="span4 pull-right" id="ports_info" onChange="change_port(this.options[this.options.selectedIndex].value)">                           
                     </select>                   
                     <canvas id="net_perf_chart" width="439" height="173"></canvas>
@@ -82,7 +83,7 @@
                 <div class="title">
                     <h4>
                         <span class="icon-bar-chart icon-large"></span>
-                        <span>磁盘使用情况(MB)</span>
+                        <span>磁盘使用情况</span>
                     </h4>
                 </div>
                 <div class="content" style="padding-bottom:0;">

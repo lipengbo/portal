@@ -24,6 +24,7 @@
 {% block body %}
 {% if vm.state == 1 %}
 <div class="alert alert-info">
+    您当前登录到{{vm.name}}，IP为{{vm.ip}}<br/>
     默认登录用户名{{vm.image.username}}，密码{{vm.image.password}}，登录虚拟机后请修改密码！
 </div>
   <div id="vncviewer">

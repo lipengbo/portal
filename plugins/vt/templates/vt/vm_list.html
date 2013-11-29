@@ -34,7 +34,7 @@
                    <a data-toggle="modal" href="/plugins/vt/create/vm/{{ sliceid }}/1/" class="btn btn-info edit">添 加</a>
             {%endif%}
             
-                                        虚拟机
+                                        虚拟机【网段:{{ start_ip }}-{{ end_ip }}】
         </legend>
         <!--<table class="table">
             <tbody>
@@ -85,7 +85,7 @@
         		    <thead>
         		        <tr>
         		            <th width="15%">名称</th>
-        		            <th width="11%">uuid</th>
+        		            <th width="11%">UUID</th>
         		            <th width="15%">资源类型</th>
         		            <th width="15%">IP地址</th>
         		            <th width="15%">所属节点</th>
@@ -125,7 +125,7 @@
                                     {%elif vm.state == 1 %}
                                         <i class="icon-play"></i>
                                     {%else%}
-                                        <i class="icon-pause"></i>
+                                        <i class="icon-minus-sign"></i>
                                     {%endif%}  
                                 </td>
 									
@@ -143,7 +143,7 @@
 		                				    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-inverse btn-delete" disabled>删除</button>
 						 				{%else%}
 		                                    {% if vm.state == 8 %}
-		                                    <span id="vm{{vm.id}}">        
+		                                    <span id="vm_fc{{vm.id}}">        
 		                                    	<input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-success start_btn" disabled>启动</button>
 		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn" disabled>登录</button>
@@ -179,7 +179,7 @@
                                     {% if slice_obj.state == 1 %}
                                         <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>删除</button>
                                     {%else%}
-                                        <a href="{% url 'delete_vm' vm.id 0 %}" class="btn btn-inverse btn-delete">删除</a>
+                                        <a href="{% url delete_vm vm.id 1 %}" class="btn btn-inverse btn-delete">删除</a>
                                     {%endif%}
                                
 									{%endif%}

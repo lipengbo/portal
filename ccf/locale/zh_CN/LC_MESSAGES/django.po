@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-21 09:58+0000\n"
+"POT-Creation-Date: 2013-11-26 17:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,19 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: templates/_account_bar.html:24
-msgid "Admin"
+#: receivers.py:103
+msgid " signed up "
+msgstr "注册了帐号"
+
+#: receivers.py:104
+msgid "Please review this user %s"
+msgstr "该用户的研究方向是：%s，请审核"
+
+#: templates/_account_bar.html:25 templates/account/base.html:11
+msgid "Change password"
 msgstr ""
 
 #: templates/_account_bar.html:28
+msgid "Admin"
+msgstr ""
+
+#: templates/_account_bar.html:32 templates/site_base.html:174
 msgid "Log out"
 msgstr ""
 
-#: templates/_account_bar.html:33
+#: templates/_account_bar.html:37
 msgid "Log in"
 msgstr ""
 
-#: templates/_account_bar.html:35
+#: templates/_account_bar.html:39
 msgid "Sign up"
 msgstr ""
 
@@ -48,31 +60,56 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: templates/login.html:7
+#: templates/homepage.html:27
+msgid "City"
+msgstr ""
+
+#: templates/homepage.html:28
+msgid "Island"
+msgstr ""
+
+#: templates/homepage.html:29
+msgid "Server"
+msgstr ""
+
+#: templates/homepage.html:30
+msgid "Switch"
+msgstr ""
+
+#: templates/homepage.html:31
+msgid "Virtual Switch"
+msgstr ""
+
+#: templates/homepage.html:32
+msgid "Flowvisor"
+msgstr ""
+
+#: templates/login.html:7 templates/account/login.html:7
 msgid "help"
 msgstr ""
 
-#: templates/site_base.html:62
-msgid "Project"
+#: templates/account/base.html:10
+msgid "Account"
 msgstr ""
 
-#: templates/notifications/list.html:3 templates/notifications/list.html:8
+#: templates/notifications/list.html:4 templates/notifications/list.html:7
+#: templates/notifications/list.html:14
 msgid "Notifications"
 msgstr "消息"
 
-#: templates/notifications/list.html:9
+#: templates/notifications/list.html:15
 msgid "All"
 msgstr "全部"
 
-#: templates/notifications/list.html:10
+#: templates/notifications/list.html:16
 msgid "Unread"
 msgstr "未读"
 
-#: templates/notifications/list.html:13
+#: templates/notifications/list.html:19
 msgid "Mark as all read "
 msgstr "标记全部已读"
 
-#: templates/notifications/list.html:22
+#: templates/notifications/list.html:29
 msgid "No notifications at the moment"
 msgstr "目前没有任何通知消息"
 
@@ -87,3 +124,14 @@ msgstr "前"
 #: templates/notifications/notice.txt:4
 msgid "Click link below to view the detail notification."
 msgstr ""
+
+#: templates/xadmin/base_site.html:18
+msgid "You don't have permission to edit anything."
+msgstr ""
+
+#: templates/xadmin/base_site.html:34
+msgid "Home"
+msgstr ""
+
+#~ msgid "%(model_name)s with this %(field_label)s already exists."
+#~ msgstr "该%(field_label)s已存在。"

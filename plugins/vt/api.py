@@ -30,7 +30,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
     else:
         try:
             #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
-            hostlist = [(server.id, server.ip) for server in Server.objects.all()]
+            hostlist = [(server.id, server.ip) for server in Server.objects.filter(island=island_obj)]
             serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
             if not serverid:
                 raise Exception(_("resource not enough"))
@@ -81,9 +81,13 @@ def delete_vm_for_gateway(vm):
 
 
 def do_vm_action(vm, action):
-    if vm.do_action(action):
+    result = vm.do_action(action)
+    if result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
         else:
             vm.state = DOMAIN_STATE_DIC['running']
         vm.save()
+        return result
+    else:
+        return False

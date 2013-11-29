@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from django.db import models
 from django.db.models.base import ModelBase
 from django.dispatch import receiver
@@ -65,16 +67,9 @@ class IslandResource(Resource):
 
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField()
-    http_port = models.IntegerField()
-    username = models.CharField(max_length=20, verbose_name=_("username"))
     password = models.CharField(max_length=20, verbose_name=_("password"))
-    content_type = models.ForeignKey(ContentType, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    #: served on a ComputeResource like Server or VirtualMachine
-    host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
-    state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
+    #state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
 
     def __unicode__(self):
         return self.name
@@ -92,8 +87,8 @@ class Server(IslandResource):
     bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
     disk = models.IntegerField(null=True, default=0, verbose_name=_("disk"))
     ip = models.IPAddressField(null=False, unique=True)
-    mac = models.CharField(max_length=256, null=True)
-    os = models.CharField(max_length=256, null=True, verbose_name=_("os"))
+    #mac = models.CharField(max_length=256, null=True)
+    os = models.CharField(max_length=256, blank=True, null=True, verbose_name=_("os"))
     update_time = models.DateTimeField(auto_now_add=True)
 
     def get_link_vs(self):
@@ -118,11 +113,9 @@ class Server(IslandResource):
 
 class SwitchResource(IslandResource):
     ip = models.IPAddressField()
-    port = models.IntegerField(verbose_name=_("Port"))
-    http_port = models.IntegerField(verbose_name=_("Http Port"))
-    username = models.CharField(max_length=20, verbose_name=_("username"))
+    username = models.CharField(max_length=20, verbose_name=_("username"), help_text="用户名和密码是交换机所在服务器的系统用户名和密码")
     password = models.CharField(max_length=20, verbose_name=_("password"))
-    dpid = models.CharField(max_length=256)
+    dpid = models.CharField(max_length=256, help_text="dpid以冒号“:”分隔")
     has_gre_tunnel = models.BooleanField(default=False, verbose_name=_("Has GRE tunnel"))
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 
@@ -244,3 +237,4 @@ def vm_pre_save(sender, instance, **kwargs):
         instance.cpu = info['cpu']
         instance.mem = info['mem']
         instance.disk = info['hdd']
+        instance.os = info['os']

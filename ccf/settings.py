@@ -157,12 +157,14 @@ INSTALLED_APPS = [
     "eventlog",
     "endless_pagination",
     "notifications",
+    "south",
 
     #xmlrpc
     'django_xmlrpc',
 
     # project
     "ccf",
+    "common",
     "slice",
     "project",
     "profiles",
@@ -257,11 +259,13 @@ ACCOUNT_LOGIN_REDIRECT_URL = "home"
 ACCOUNT_LOGOUT_REDIRECT_URL = "home"
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 2
 ACCOUNT_EMAIL_UNIQUE = True
+ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
+ACCOUNT_EMAIL_CONFIRMATION_EMAIL = False
 
 EMAIL_HOST = 'mail.fnic.cn'
 EMAIL_PORT = '25'
-EMAIL_HOST_USER = 'tengzhifei@fnic.cn'
-FROM_EMAIL = 'tengzhifei@fnic.cn'
+EMAIL_HOST_USER = 'ccf@fnic.cn'
+FROM_EMAIL = 'ccf@fnic.cn'
 DEFAULT_FROM_EMAIL = FROM_EMAIL
 EMAIL_HOST_PASSWORD = 'fnic123'
 
@@ -274,6 +278,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap'
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 
 ANONYMOUS_USER_ID = -1
+THEME_ACCOUNT_CONTACT_EMAIL = 'ccf@fnic.cn'
+THEME_CONTACT_EMAIL = THEME_ACCOUNT_CONTACT_EMAIL
 
 try:
     from ccf.local_settings import *

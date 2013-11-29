@@ -35,7 +35,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
         print 3
         create_add_controller(slice_obj, controller_info)
         print 4
-        flowvisor_add_slice(island.flowvisor_set.all()[0], name,
+        flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.id,
                             slice_obj.get_controller(), user.email)
         print 5
 #         创建并添加网段
@@ -57,8 +57,9 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
                 raise DbError(ex)
             print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
-        print 10
 #         创建并添加虚拟机
+        slice_obj.be_count()
+        print 10
         return slice_obj
     except:
         print 11
@@ -158,7 +159,7 @@ def delete_slice_api(slice_obj):
                 pass
             print 4
 #             删除底层slice
-            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
+            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
             print 5
 #             删除控制器
             delete_controller(slice_obj.get_controller())
@@ -194,7 +195,7 @@ def start_slice_api(slice_obj):
                     raise DbError("请确保dhcp已启动！")
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                              slice_obj.name, True)
+                                              slice_obj.id, True)
             except Exception:
                 transaction.rollback()
                 raise
@@ -219,7 +220,7 @@ def stop_slice_api(slice_obj):
             try:
                 slice_obj.stop()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                              slice_obj.name, False)
+                                              slice_obj.id, False)
             except Exception:
                 transaction.rollback()
                 raise
@@ -234,7 +235,7 @@ def update_slice_virtual_network(slice_obj):
     except Exception, ex:
         return DbError(ex)
     flowvisor = slice_obj.get_flowvisor()
-    flowspace_name = str(slice_obj.name) + '_df'
+    flowspace_name = str(slice_obj.id) + '_df'
     try:
         flowvisor_del_flowspace(flowvisor, flowspace_name)
     except:
@@ -262,7 +263,7 @@ def update_slice_virtual_network(slice_obj):
                 default_flowspace.tp_src, default_flowspace.tp_dst)
             try:
                 flowvisor_add_flowspace(flowvisor, flowspace_name,
-                                        slice_obj.name,
+                                        slice_obj.id,
                                         default_flowspace.actions, 'cdn%nf',
                                         switch_port.switch.dpid,
                                         default_flowspace.priority, arg_match)
@@ -354,10 +355,16 @@ def get_slice_topology(slice_obj):
                                'ip': vm.ip.ipaddr}
                     normals.append(vm_info)
 #     带宽
-        switchs_ports = []
+        bandwidth = []
         for switch_id in switch_ids:
-            switchs_ports.append({'id': switch_id, 'ports': ports[switch_id]})
-        bandwidth = get_slice_links_bandwidths(switchs_ports, maclist)
+            try:
+                switch = Switch.objects.get(id=switch_id)
+            except:
+                pass
+            else:
+                for port in ports[switch_id]:
+                    bandwidth.append({'id': (str(switch_id) + '_' + str(port)),
+                                'cur_bd': 0, 'total_bd': 0})
 
         topology = {'switches': switches, 'links': links,
                     'normals': normals, 'specials': specials,
@@ -431,6 +438,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
 #                     print maclist
 #                     print '====================='
                     band = get_sFlow_metric(switch.ip, dpid, int(port), maclist)
+#                     band = [0, 0]
                 except Exception, ex:
                     print ex
                     ret.append({'id': (str(switch.id) + '_' + str(port)),
@@ -456,3 +464,33 @@ def get_slice_resource(slice_obj):
     """获取slice资源，包括节点、flowvisor、控制器、交换机端口
     """
     LOG.debug('get_slice_resource')
+
+
+def get_slice_count_show(target):
+    from common.models import DailyCounter
+    print "get_slice_count_show"
+    date_now = datetime.datetime.now()
+    date_delta = datetime.timedelta(days=-1)
+    ret = {}
+    show_dates = []
+    show_nums = []
+    cur_date = date_now
+    for i in range(0, 15):
+        if target == 'project':
+            target_id = 0
+        else:
+            target_id = 1
+        sc = DailyCounter.objects.filter(target=target_id, date__year=cur_date.strftime('%Y'),
+                                  date__month=cur_date.strftime('%m'),
+                                  date__day=cur_date.strftime('%d'))
+        if sc:
+            num = sc[0].count
+        else:
+            num = 0
+        show_dates.append(cur_date.strftime('%Y.%m.%d'))
+        show_nums.append(num)
+        cur_date = cur_date + date_delta
+    show_dates.reverse()
+    show_nums.reverse()
+    ret = {"show_dates": show_dates, "show_nums": show_nums}
+    return ret

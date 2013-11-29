@@ -5,8 +5,10 @@
 {% load metron_tags %}
 {% load i18n %}
         
-        <title>{% block head_title_base %}CENI综合实验平台{% endblock %}</title>
-       {% block style_base %}           
+        <title>{% block head_title_base %}SDN创新实验平台{% endblock %}</title>   
+          
+       {% block style_base %}   
+         
             <link href="{% static "css/square/blue.css" %}" rel="stylesheet">
             <!--<link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">-->
             <link href="{% static "css/own.css" %}" rel="stylesheet">
@@ -78,7 +80,7 @@
                     {% if user.is_superuser %}
 		                <li><span class="icon-home"></span><a href="{% url "home" %}">首页</a><span class="divider">/</span>
                     {% else %}
-		                <li><span class="icon-home"></span><a href="{% url "project_manage" %}">{% trans "Project" %}</a><span class="divider">/</span>
+		                <li><span class="icon-home"></span><a href="{% url "project_manage" %}">首页</a><span class="divider">/</span>
                     {% endif %}
 		            {% block breadcrumb %}
 		            {% endblock %}
@@ -128,13 +130,17 @@
                         return false;
                     });
                     $('a.btn-delete').click(function(){
-                        $('#alertModal').modal();
-                        var self = $(this);
-                        $('.delete-confirm').unbind('click');
-                        $('.delete-confirm').click(function(){
-                            window.location.href = self.attr('href');
-                        });
-                        return false;
+                        if($(this).hasClass("disabled")){
+                            return false;
+                        }else{
+                            $('#alertModal').modal();
+                            var self = $(this);
+                            $('.delete-confirm').unbind('click');
+                            $('.delete-confirm').click(function(){
+                                window.location.href = self.attr('href');
+                            });
+                            return false;
+                        }
                     });
                     //列表框，指针放上去时显示删除图标                 
                     $(".example-sites li").mouseenter(function(){

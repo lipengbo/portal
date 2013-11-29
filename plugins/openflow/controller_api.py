@@ -59,8 +59,6 @@ def create_user_defined_controller(slice_obj, controller_ip, controller_port):
                 name='user_define',
                 ip=controller_ip,
                 port=int(controller_port),
-                http_port=0,
-                state=1,
                 island=slice_obj.get_island())
             controller.save()
             return controller
@@ -91,8 +89,8 @@ def create_default_controller(slice_obj, controller_sys):
                                               slice_obj=slice_obj,
                                               image_name=controller_sys)
             controller = Controller(name=controller_sys,
-                                    port=6633, http_port=0,
-                                    state=1, island=island)
+                                    port=6633,
+                                    island=island)
             controller.ip = ip
             controller.host = vm
             controller.save()
@@ -139,7 +137,7 @@ def slice_change_controller(slice_obj, controller_info):
             controller = None
             controller = create_add_controller(slice_obj, controller_info)
             flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
-                                             slice_obj.name, controller.ip,
+                                             slice_obj.id, controller.ip,
                                              controller.port)
         except:
             print 'c5'

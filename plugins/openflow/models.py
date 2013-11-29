@@ -1,3 +1,5 @@
+#coding: utf-8
+
 import hashlib
 import json
 
@@ -9,6 +11,8 @@ from django.db.models import F
 from django.dispatch import receiver
 from django.conf import settings
 from django.core.exceptions import ValidationError, NON_FIELD_ERRORS
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
 from resources.models import ServiceResource, Resource, SwitchPort, Switch
@@ -16,7 +20,13 @@ from slice.models import Slice
 
 
 class Controller(ServiceResource):
+    username = models.CharField(max_length=20, verbose_name=_("username"))
     is_root = models.BooleanField(default=False)
+    port = models.IntegerField()
+    content_type = models.ForeignKey(ContentType, null=True, blank=True)
+    object_id = models.PositiveIntegerField(null=True, blank=True)
+    #: served on a ComputeResource like Server or VirtualMachine
+    host = generic.GenericForeignKey('content_type', 'object_id')
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
@@ -32,6 +42,12 @@ class Controller(ServiceResource):
 
 
 class Flowvisor(ServiceResource):
+    def __init__(self, *args, **kwargs):
+        password = self._meta.get_field('password')
+        password.help_text = '填写flowvisor密码'
+        super(Flowvisor, self).__init__(*args, **kwargs)
+
+    http_port = models.IntegerField(verbose_name=_("Http Port"))
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
@@ -45,14 +61,15 @@ class Flowvisor(ServiceResource):
         return options
 
     def validate_unique(self, exclude=None):
-        try:
-            Flowvisor.objects.get(name=self.name)
-            e = ValidationError(_("%(model_name)s with this %(field_label)s already exists.") % {"field_label": self._meta.get_field('name').verbose_name, "model_name": self._meta.verbose_name})
-            e.message_dict = {}
-            e.message_dict["name"] = e.messages
-            raise e
-        except Flowvisor.DoesNotExist:
-            return self.name
+        if not self.id:
+            try:
+                Flowvisor.objects.get(name=self.name)
+                e = ValidationError(_("%(model_name)s with this %(field_label)s already exists.") % {"field_label": self._meta.get_field('name').verbose_name, "model_name": self._meta.verbose_name})
+                e.message_dict = {}
+                e.message_dict["name"] = e.messages
+                raise e
+            except Flowvisor.DoesNotExist:
+                return self.name
         super(Flowvisor, self).validate_unique(exclude)
 
     class Meta:

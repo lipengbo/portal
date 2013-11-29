@@ -34,13 +34,53 @@
         <fieldset>
              
                 {%if extent_html == "site_base.html" %}
-                <legend>我的Slice</legend>
+
+                    <div class="well">
+                    <h3 class="list_title">我的Slice</h3>
+                    <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
+                    </div> 
                 {%else%}
-                <div class="well">
-                    <h3 class="list_title">虚网（Slice）</h3>
-                    <p class="list_lead">slice是CENI综合实验平台中为项目创建者或参与人员提供实验研究的原子单元，项目中的每个实验都是以slice为载体，每个slice由它的创建者根据需求选择不同网络拓扑和计算资源组成。</p>
-                </div>
+                    {%if project%}
+                        <div class="well">
+                        <h3 class="list_title">我的Slice</h3>
+                        <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
+                        </div> 
+                    {%else%}
+                    <legend>虚网（Slice）</legend>
+                    <div class="row-fluid countschart">
+                        <div class="span2 counts">
+                            <div class="counts_block">
+                                <p><img src="{% static "img/file-01.png" %}"  /></p>
+                                <p class="counts_block_title">新增虚网</p>
+
+                                <p class="counts_block_nums">{{new_num}}</p>
+                            </div>
+                            <div class="counts_block">
+                                <p><img src="{% static "img/file-02.png" %}"  /></p>
+                                <p class="counts_block_title">全部虚网</p>
+
+                                <p class="counts_block_nums">{{total_num}}</p>
+                            </div>                                                 
+                        </div>                        
+                        <div class="span10">
+                            <div id="container" style="min-width: 400px; height: 212px; margin: 0 auto"></div>
+                        </div>
+                        <div class="clear"></div>      
+                    </div>
+
+                    {%endif%}
                 {%endif%}
+                <div class="clear" style="display: none" >
+                    {%if extent_html == "site_base.html"%}
+                        <p id="slice_show">0</p>
+                    {%else%}
+                        {%if project %}
+                            <p id="slice_show">0</p>
+                        {%else%}
+                            <p id="slice_show">1</p>
+                        {%endif%}
+                    {%endif%}
+                </div>
              {% if not slices %}
                 {%if query %}
                 <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
@@ -71,4 +111,96 @@
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script type="text/javascript">
+$(function () {
+        slice_show = $("#slice_show").text();
+        if(slice_show == '1'){
+            check_url = "/slice/get_slice_show/";
+            //alert(check_url)
+            var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
+            var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+            $.ajax({
+                type: "GET",
+                url: check_url,
+                dataType: "json",
+                cache: false,
+                async: false,  
+                success: function(data) {
+                    if (data.result == 1)
+                     {
+                       // alert("in true")
+                        show_dates = data.show_dates;
+                        show_nums = data.show_nums;
+                     } 
+                     else
+                     {
+                        //show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+                        //show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+                     }
+                }
+            });
+            console.log(show_dates);
+            console.log(show_nums);
+            $('#container').highcharts({
+                chart: {
+                    type: 'column',
+                    margin: [ 50, 50, 60, 50]
+                },
+                title: {
+                    text: '每日新增虚网数'
+                },
+                exporting: {
+                    enabled: false
+                },
+                xAxis: {
+                    categories: show_dates,
+                    labels: {
+                        rotation: -30,
+                        align: 'right',
+                        style: {
+                            fontSize: '11px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: '虚网数(个)'
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                //tooltip: {
+                 //   formatter: function() {
+                       // return '<b>'+ this.x +'</b><br/>'+
+                  //          '创建的虚网个数: '+ Highcharts.numberFormat(this.y, 1) +
+                   //         ' 个';
+                   // }
+               // },
+                series: [{
+                    name: 'Slice',
+                    data: show_nums,
+                    dataLabels: {
+                        enabled: true,
+                        rotation: -90,
+                        color: '#FFFFFF',
+                        align: 'right',
+                        x: 4,
+                        y: 10,
+                        style: {
+                            fontSize: '13px',
+                            fontFamily: 'Verdana, sans-serif'
+                        }
+                    }
+                }]
+            });
+         }
+    });
+    
+
+        </script>
+<script src="{{ STATIC_URL}}js/highcharts/highcharts.js"></script>
+<script src="{{ STATIC_URL}}js/highcharts/modules/exporting.js"></script>
 {% endblock %}
