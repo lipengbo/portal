@@ -66,7 +66,9 @@
                  <div class="form_inline">
                     <label class="v_top">Slice描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
-                    <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i><span id="slice_descriptionInfo" style="display:inline;float:none;"></span> </span>             
+                    <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i>
+                        <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                    </span>             
                  </div>
                  <div class="form_inline">   
                     <label>选择节点</label>
@@ -98,7 +100,7 @@
              <fieldset>
                 <legend>Slice网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
                 <div class="alert alert-info">
-                  <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能；<br />
+                  <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
                 </div>
                 <div class="show_frame">

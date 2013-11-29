@@ -63,6 +63,7 @@ def index(request):
     today = datetime.date.today()
     counter, created = DailyCounter.objects.get_or_create(target=0, date=today)
     context['new_projects_num'] = counter.count
+    context['total_projects'] = Project.objects.all().count()
     return render(request, 'project/index.html', context)
 
 

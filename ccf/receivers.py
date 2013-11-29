@@ -38,10 +38,11 @@ def decrease_counter(sender, instance, **kwargs):
     elif sender == Project:
         target = 0
     today = datetime.date.today()
-    counter, new = DailyCounter.objects.get_or_create(target=target, date=today)
-    if counter.count > 0:
-        counter.count = F("count") - 1
-        counter.save()
+    if today == instance.created_date().date():
+        counter, new = DailyCounter.objects.get_or_create(target=target, date=today)
+        if counter.count > 0:
+            counter.count = F("count") - 1
+            counter.save()
 
 @receiver(user_logged_in)
 def handle_user_logged_in(sender, **kwargs):
@@ -101,4 +102,4 @@ def handle_user_signed_up(sender, **kwargs):
     else:
         profile = user.get_profile()
         notify.send(user, recipient=admin, verb=_(' signed up '), action_object=profile,
-                description=_("Please review this user") + ":" + profile.realm)
+                description=_("Please review this user %s") % profile.realm)

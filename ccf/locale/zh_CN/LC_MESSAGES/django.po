@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-18 16:04+0800\n"
+"POT-Creation-Date: 2013-11-26 17:32+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: receivers.py:69
+#: receivers.py:103
 msgid " signed up "
 msgstr "注册了帐号"
 
-#: receivers.py:70
-msgid "Please review this user"
-msgstr "请审核这位用户"
+#: receivers.py:104
+msgid "Please review this user %s"
+msgstr "该用户的研究方向是：%s，请审核"
 
-#: templates/_account_bar.html:23
+#: templates/_account_bar.html:25 templates/account/base.html:11
+msgid "Change password"
+msgstr ""
+
+#: templates/_account_bar.html:28
 msgid "Admin"
 msgstr ""
 
-#: templates/_account_bar.html:27 templates/site_base.html:168
+#: templates/_account_bar.html:32 templates/site_base.html:174
 msgid "Log out"
 msgstr ""
 
-#: templates/_account_bar.html:32
+#: templates/_account_bar.html:37
 msgid "Log in"
 msgstr ""
 
-#: templates/_account_bar.html:34
+#: templates/_account_bar.html:39
 msgid "Sign up"
 msgstr ""
 
@@ -84,6 +88,10 @@ msgstr ""
 msgid "help"
 msgstr ""
 
+#: templates/account/base.html:10
+msgid "Account"
+msgstr ""
+
 #: templates/notifications/list.html:4 templates/notifications/list.html:7
 #: templates/notifications/list.html:14
 msgid "Notifications"
@@ -125,5 +133,5 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr "该%(field_label)s已存在。"
+#~ msgid "%(model_name)s with this %(field_label)s already exists."
+#~ msgstr "该%(field_label)s已存在。"

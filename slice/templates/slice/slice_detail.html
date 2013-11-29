@@ -463,7 +463,7 @@ img {
                     <tbody>
                         <tr>
                             <td width="100">
-                                <label class="radio tab_radio1">
+                                <label class="tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
                                   默认创建
@@ -489,12 +489,11 @@ img {
                         </tr>
                         <tr>
                             <td>
-                                <label class="radio tab_radio2">
+                                <label class="tab_radio2">
                                   <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
                                   {%if controller.name == "user_define"%}checked{%endif%}>
                                   自定义
                                 </label>
-                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                             <td>控制器IP</td> 
                             <!--<td>
@@ -506,6 +505,7 @@ img {
                             <td width="30">端口</td>
                             <td>
                                 <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
+                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>
                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>

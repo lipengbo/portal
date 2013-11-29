@@ -41,3 +41,8 @@ def project_selected(island, project):
     else:
         islands = []
     return islands
+
+@register.filter
+def is_membership(user, project):
+    memberships = project.memberships.filter(id=user.id)
+    return memberships
