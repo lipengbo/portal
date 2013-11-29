@@ -462,18 +462,18 @@ img {
                             <td colspan="3">
                                 {%if controller.name == "user_define" %}
                                     <select name="controller_sys" id="controller_sys" disabled>
-                                      <option value="floodlight">floodlight</option>
-                                      <option value="pox">pox</option>
-                                      <option value="nox">nox</option>
+                                      <option value="Floodlight">Floodlight</option>
+                                      <option value="POX">POX</option>
+                                      <option value="OpenDaylight">OpenDaylight</option>
                                     </select>
                                 {%else%}
                                     <select name="controller_sys" id="controller_sys">
-                                      <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
-                                      <option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
-                                      <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>
+                                      <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
+                                      <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
+                                      <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
                                     </select>
                                 {%endif%}
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>

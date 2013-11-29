@@ -29,7 +29,9 @@ class CCFWebSocketProxy(websockify.WebSocketProxy):
         print '----------------------------------'
         print token
         print '----------------------------------'
-        host, port = token.strip().split('_')
+        token_msg = token.strip().split('_')
+        host = token_msg[0]
+        port = token_msg[1]
 
         # Connect to the target
         self.msg("connecting to: %s:%s" % (
