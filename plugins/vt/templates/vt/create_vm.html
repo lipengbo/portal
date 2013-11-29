@@ -4,8 +4,9 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% block breadcrumb %}
+    <a href="/project/">项目</a><span class="divider">/</span>
 	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
+	<a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a><span class="divider">/</span>
         <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}

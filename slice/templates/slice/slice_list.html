@@ -5,11 +5,11 @@
 {% load staticfiles %}
 {% load project_tags %}
 
-{% block head_title %}SLICE列表{% endblock %}
+{% block head_title %}虚网列表{% endblock %}
 {% block breadcrumb %}
     {%if extent_html == "site_base.html" %}
         <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>  
-        Slice列表
+        虚网列表
     {%else%}
         {%if project%}
         <a href="/project/">项目</a><span class="divider">/</span>
@@ -35,13 +35,13 @@
                 {%if extent_html == "site_base.html" %}
 
                     <div class="well">
-                    <h3 class="list_title">我的Slice</h3>
+                    <h3 class="list_title">我的虚网</h3>
                     <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
                     </div> 
                 {%else%}
                     {%if project%}
                         <div class="well">
-                        <h3 class="list_title">我的Slice</h3>
+                        <h3 class="list_title">我的虚网</h3>
                         <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
                         </div> 
                     {%else%}
@@ -112,7 +112,7 @@
                 {%if query %}
                 <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
                 {%else%}
-                <p class="alert alert-info">当前没有SLICE</p>
+                <p class="alert alert-info">当前没有虚网</p>
                 {%endif%}
              {% endif %}
              <div class="row-fluid">

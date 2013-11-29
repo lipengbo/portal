@@ -69,14 +69,14 @@ $(document).ready(function() {
         if($(this).hasClass("btn-success")){
             $(this).removeClass("btn-success").addClass("btn-danger");
             if($(this).hasClass("btn-large")){            
-                $(this).text("停止Slice");
+                $(this).text("停止虚网");
             } else {              
                 $(this).text("停止");
             }           
         } else {
             $(this).removeClass("btn-danger").addClass("btn-success");
             if($(this).hasClass("btn-large")){
-                $(this).text("启动Slice");
+                $(this).text("启动虚网");
             } else {
                 $(this).text("启动");
             }           
@@ -514,9 +514,9 @@ function submit_slice_info(project_id){
 	            }
 	        },
 	        error: function(data) {
-	        	//alert("创建slice异常！");
+	        	//alert("创建虚网异常！");
 	        	$("div#slice_alert_info").empty();
-                str = "" + "<p class=\"text-center\">" + "创建slice异常！" + "</p>";
+                str = "" + "<p class=\"text-center\">" + "创建虚网异常！" + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
 	        }
