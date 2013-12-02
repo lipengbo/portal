@@ -23,6 +23,14 @@
 {% block body %}
 {% paginate 4 slices %}
     <div class="search">
+        <form class="form-inline" style="float:left;">
+            <label for="">虚网类型：</label>
+            <select name="" id="">
+                <option value="">---------</option>                
+                <option value="1">南京</option>           
+                <option value="2">北京</option>               
+            </select>
+        </form>
         <form class="form-search">
           <div class="input-append">
               <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
