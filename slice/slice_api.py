@@ -255,9 +255,27 @@ def update_slice_virtual_network(slice_obj):
     default_flowspaces = slice_obj.get_default_flowspaces()
     for switch_port in switch_ports:
         for default_flowspace in default_flowspaces:
-            in_port = str(switch_port.port)
+            if not (default_flowspace.dl_src and default_flowspace.dl_dst):
+                in_port = str(switch_port.port)
+                arg_match = matches_to_arg_match(
+                    in_port, default_flowspace.dl_vlan,
+                    default_flowspace.dl_vpcp, default_flowspace.dl_src,
+                    default_flowspace.dl_dst, default_flowspace.dl_type,
+                    default_flowspace.nw_src, default_flowspace.nw_dst,
+                    default_flowspace.nw_proto, default_flowspace.nw_tos,
+                    default_flowspace.tp_src, default_flowspace.tp_dst)
+                try:
+                    flowvisor_add_flowspace(flowvisor, flowspace_name,
+                                            slice_obj.id,
+                                            default_flowspace.actions, 'cdn%nf',
+                                            switch_port.switch.dpid,
+                                            default_flowspace.priority, arg_match)
+                except:
+                    raise
+    for default_flowspace in default_flowspaces:
+        if default_flowspace.dl_src and default_flowspace.dl_dst:
             arg_match = matches_to_arg_match(
-                in_port, default_flowspace.dl_vlan,
+                None, default_flowspace.dl_vlan,
                 default_flowspace.dl_vpcp, default_flowspace.dl_src,
                 default_flowspace.dl_dst, default_flowspace.dl_type,
                 default_flowspace.nw_src, default_flowspace.nw_dst,
