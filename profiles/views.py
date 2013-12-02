@@ -26,7 +26,7 @@ class SignupView(account.views.SignupView):
 
    def create_profile(self, form):
        profile = self.created_user.get_profile()
-       profile.phone = form.cleaned_data["phone"]
+       #profile.phone = form.cleaned_data["phone"]
        profile.realm = form.cleaned_data["realm"]
        profile.organization = form.cleaned_data["organization"]
        profile.save()

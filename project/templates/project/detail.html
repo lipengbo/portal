@@ -58,7 +58,7 @@
                 <tr>
                     <th width="20%">{% trans "No." %}</th>
                     <th width="30%">{% trans "Member name" %}</th>
-                    <th width="35%">{% trans "Company/Organization" %}</th>
+                    <th width="35%">研究方向</th>
                     <th width="15%">{% trans "Actions" %}</th>
                 </tr>
             </thead>
@@ -68,7 +68,7 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ membership.user }}</td>
-                    <td>{{ membership.user.get_profile.organization }}</td>
+                    <td>{{ membership.user.get_profile.realm|default:"未填写" }}</td>
                     <td>
                         {% if  membership.is_owner %}
                             {% if  membership.user.id != project.owner.id %}
