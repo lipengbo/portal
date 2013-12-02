@@ -253,7 +253,10 @@ def update_slice_virtual_network(slice_obj):
             flowspace_dhcp_add(slice_obj, True)
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
+    dpids = []
     for switch_port in switch_ports:
+        if switch_port.switch.dpid not in dpids:
+            dpids.append(switch_port.switch.dpid)
         for default_flowspace in default_flowspaces:
             if not (default_flowspace.dl_src and default_flowspace.dl_dst):
                 in_port = str(switch_port.port)
@@ -272,23 +275,24 @@ def update_slice_virtual_network(slice_obj):
                                             default_flowspace.priority, arg_match)
                 except:
                     raise
-    for default_flowspace in default_flowspaces:
-        if default_flowspace.dl_src and default_flowspace.dl_dst:
-            arg_match = matches_to_arg_match(
-                None, default_flowspace.dl_vlan,
-                default_flowspace.dl_vpcp, default_flowspace.dl_src,
-                default_flowspace.dl_dst, default_flowspace.dl_type,
-                default_flowspace.nw_src, default_flowspace.nw_dst,
-                default_flowspace.nw_proto, default_flowspace.nw_tos,
-                default_flowspace.tp_src, default_flowspace.tp_dst)
-            try:
-                flowvisor_add_flowspace(flowvisor, flowspace_name,
-                                        slice_obj.id,
-                                        default_flowspace.actions, 'cdn%nf',
-                                        switch_port.switch.dpid,
-                                        default_flowspace.priority, arg_match)
-            except:
-                raise
+    for dpid in dpids:
+        for default_flowspace in default_flowspaces:
+            if default_flowspace.dl_src and default_flowspace.dl_dst:
+                arg_match = matches_to_arg_match(
+                    None, default_flowspace.dl_vlan,
+                    default_flowspace.dl_vpcp, default_flowspace.dl_src,
+                    default_flowspace.dl_dst, default_flowspace.dl_type,
+                    default_flowspace.nw_src, default_flowspace.nw_dst,
+                    default_flowspace.nw_proto, default_flowspace.nw_tos,
+                    default_flowspace.tp_src, default_flowspace.tp_dst)
+                try:
+                    flowvisor_add_flowspace(flowvisor, flowspace_name,
+                                            slice_obj.id,
+                                            default_flowspace.actions, 'cdn%nf',
+                                            dpid,
+                                            default_flowspace.priority, arg_match)
+                except:
+                    raise
 
 
 def get_slice_topology(slice_obj):
