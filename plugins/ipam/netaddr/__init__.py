@@ -124,16 +124,22 @@ class Network(IPNetwork):
         ip_previous = self.previous(step)
         if self.get_supernet(superprefix) in ip_previous.supernet():
             return ip_previous
-        raise StopIteration
+        raise StopIteration("It's the start of the network")
 
     def get_next(self, superprefix, step=1):
         ip_next = self.next(step)
         if self.get_supernet(superprefix) in ip_next.supernet():
             return ip_next
-        raise StopIteration
+        raise StopIteration("It's the end of the network")
 
     def get_host(self, index):
         if 0 <= index <= self.last - self.first - 2:
             return IPAddress(self.first + 1 + index, self._module.version)
         else:
-            raise StopIteration
+            raise StopIteration('Do not have enough ip')
+
+
+def generate_mac_address(ip):
+    """Generate an Ethernet MAC address."""
+    base_bin = EUI('fa:16:00:00:00:00').value
+    return str(EUI(base_bin | IPAddress(ip).value)).replace('-', ':')
