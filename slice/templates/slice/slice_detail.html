@@ -404,7 +404,7 @@ img {
 			 		{%endfor%}
 			 	</tbody>
 			 </table>
-		    {% if vms %}
+		    {% if vms.count > 3 %}
                 <a class="edit view_more" href="{% url 'vm_list' slice_obj.id %}">More&nbsp;<i class="icon-play"></i></a>                                            
             {%endif%}
 			 <div class="clear" style="display: none" >
@@ -461,7 +461,7 @@ img {
                     <tbody>
                         <tr>
                             <td width="100">
-                                <label class="radio tab_radio1">
+                                <label class="tab_radio1">
                                   <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                                   {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
                                   默认创建
@@ -471,28 +471,27 @@ img {
                             <td colspan="3">
                                 {%if controller.name == "user_define" %}
                                     <select name="controller_sys" id="controller_sys" disabled>
-                                      <option value="floodlight">floodlight</option>
-                                      <option value="pox">pox</option>
-                                      <option value="nox">nox</option>
+                                      <option value="Floodlight">Floodlight</option>
+                                      <option value="POX">POX</option>
+                                      <option value="OpenDaylight">OpenDaylight</option>
                                     </select>
                                 {%else%}
                                     <select name="controller_sys" id="controller_sys">
-                                      <option value="floodlight" {%if controller.name == "floodlight" %}selected = "selected"{%endif%}>floodlight</option>
-                                      <option value="pox" {%if controller.name == "pox" %}selected = "selected"{%endif%}>pox</option>
-                                      <option value="nox" {%if controller.name == "nox" %}selected = "selected"{%endif%}>nox</option>
+                                      <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
+                                      <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
+                                      <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
                                     </select>
                                 {%endif%}
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label class="radio tab_radio2">
+                                <label class="tab_radio2">
                                   <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
                                   {%if controller.name == "user_define"%}checked{%endif%}>
                                   自定义
                                 </label>
-                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                             <td>控制器IP</td> 
                             <!--<td>
@@ -504,6 +503,7 @@ img {
                             <td width="30">端口</td>
                             <td>
                                 <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
+                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>
                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>

@@ -84,7 +84,7 @@ class VirtualMachine(IslandResource):
     ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
     gateway_public_ip = models.ForeignKey(IPUsage, null=True, related_name="gateway_set")
     mac = models.CharField(max_length=20, null=True)
-    enable_dhcp = models.BooleanField(default=True)
+    enable_dhcp = models.BooleanField(default=False)
     slice = models.ForeignKey(Slice)
     flavor = models.ForeignKey(Flavor)
     image = models.ForeignKey(Image)
@@ -95,6 +95,9 @@ class VirtualMachine(IslandResource):
 
     def get_ipaddr(self):
         return self.ip.ipaddr
+
+    def get_gw_mac(self):
+        return utils.generate_mac_address(self.gateway_public_ip.ipaddr)
 
     def get_netmask(self):
         return str(self.ip.supernet.get_network().netmask)

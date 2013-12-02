@@ -12,7 +12,7 @@ function check_slice_name(obj_id,flag){
 	if(obj.value.length > 0){
         if(!reg.test(obj.value)){
         	//alert("in 输入");
-        	showInfo(info," * 请输入中英文数字下划线组合","red");
+        	showInfo(info," * 请输入中英文数字下划线的组合","red");
         	return false;
         }
         else{

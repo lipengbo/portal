@@ -5,7 +5,7 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 from plugins.vt.models import VirtualMachine, Image, Flavor, DOMAIN_STATE_DIC
-from plugins.ipam.models import IPUsage
+from plugins.ipam.models import IPUsage, Subnet
 from etc.config import default_flavor_id
 from plugins.common.vt_manager_client import VTClient
 from resources.models import Server
@@ -30,7 +30,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
     else:
         try:
             #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
-            hostlist = [(server.id, server.ip) for server in Server.objects.all()]
+            hostlist = [(server.id, server.ip) for server in Server.objects.filter(island=island_obj)]
             serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
             if not serverid:
                 raise Exception(_("resource not enough"))
@@ -49,7 +49,7 @@ def delete_vm_for_controller(vm):
 
 def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway', enable_dhcp=True):
     ip_obj = IPUsage.objects.allocate_ip(slice_obj.name)
-    gateway_public_ip_obj = IPUsage.objects.allocate_ip_for_controller()
+    gateway_public_ip_obj = IPUsage.objects.allocate_ip_for_gw()
     vm = VirtualMachine(slice=slice_obj, island=island_obj, gateway_public_ip=gateway_public_ip_obj, ip=ip_obj)
     vm.name = image_name
     vm.enable_dhcp = enable_dhcp
@@ -81,9 +81,33 @@ def delete_vm_for_gateway(vm):
 
 
 def do_vm_action(vm, action):
-    if vm.do_action(action):
+    result = vm.do_action(action)
+    if result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
         else:
             vm.state = DOMAIN_STATE_DIC['running']
         vm.save()
+        return result
+    else:
+        return False
+
+
+def get_slice_gw_mac(slice):
+    gw_vm = VirtualMachine.objects.get(slice=slice, type=2)
+    return gw_vm.get_gw_mac()
+
+
+def get_slice_gw_ip(slice):
+    gw_vm = VirtualMachine.objects.get(slice=slice, type=2)
+    return gw_vm.gateway_public_ip
+
+
+def get_phydata_gw_mac():
+    net = Subnet.objects.get(owner=2)
+    return net.get_gateway_mac()
+
+
+def get_phydata_gw_ip():
+    net = Subnet.objects.get(owner=2)
+    return net.get_gateway_ip()

@@ -7,7 +7,6 @@
 #[plugin-vt]
 glance_host = '192.168.5.107'
 glance_port = 9292
-vnctunnel = '127.0.0.1'
 
 #[agent-service]
 compute_service_port = 8886
@@ -29,9 +28,9 @@ domain_count_infinity = 10000
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = True
+function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
-flowvisor_disable = True
+flowvisor_disable = False
 #本期可以不用部署vt_manager；当use_vt_manager_to_schedul = False不需部署vt_manager；当use_vt_manager_to_schedul = True需要部署vt_manager；
 use_vt_manager_to_schedul = False
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效

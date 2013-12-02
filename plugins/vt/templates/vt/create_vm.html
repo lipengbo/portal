@@ -36,7 +36,7 @@
 </div>
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
-    <fieldset class="base_info vm_info_list tooltip-demo">
+    <fieldset class="vm_info_list tooltip-demo">
     <legend>虚拟机信息</legend>
     <div class="sec_block">
     {% csrf_token %}
@@ -71,10 +71,12 @@
             </tr>
         </tbody>
     </table>
-    <label class="">
-        {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+    {% if slice_obj.get_dhcp %}
+        <label class="">
+            {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                     是否启动DHCP
-    </label>
+        </label>
+    {%endif%}
     <div class="operate_btn">
         <button class="btn btn-inverse del" type="button">删 除</button>
     </div> 
@@ -132,7 +134,7 @@
           {% else %}
           <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
           {% endif %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1)">{% trans "Submit" %}</button></div>
+          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
           <div class="span3"></div>
         </div>
     </div>

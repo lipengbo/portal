@@ -68,10 +68,6 @@ class IslandResource(Resource):
 class ServiceResource(IslandResource):
     ip = models.IPAddressField()
     password = models.CharField(max_length=20, verbose_name=_("password"))
-    content_type = models.ForeignKey(ContentType, null=True, blank=True)
-    object_id = models.PositiveIntegerField(null=True, blank=True)
-    #: served on a ComputeResource like Server or VirtualMachine
-    host = generic.GenericForeignKey('content_type', 'object_id')
     slices = models.ManyToManyField(Slice, blank=True)
     #state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
 
@@ -91,8 +87,8 @@ class Server(IslandResource):
     bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
     disk = models.IntegerField(null=True, default=0, verbose_name=_("disk"))
     ip = models.IPAddressField(null=False, unique=True)
-    mac = models.CharField(max_length=256, null=True)
-    os = models.CharField(max_length=256, null=True, verbose_name=_("os"))
+    #mac = models.CharField(max_length=256, null=True)
+    os = models.CharField(max_length=256, blank=True, null=True, verbose_name=_("os"))
     update_time = models.DateTimeField(auto_now_add=True)
 
     def get_link_vs(self):
@@ -241,3 +237,4 @@ def vm_pre_save(sender, instance, **kwargs):
         instance.cpu = info['cpu']
         instance.mem = info['mem']
         instance.disk = info['hdd']
+        instance.os = info['os']

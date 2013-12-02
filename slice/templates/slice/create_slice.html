@@ -66,7 +66,9 @@
                  <div class="form_inline">
                     <label class="v_top">虚网描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
-                    <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i><span id="slice_descriptionInfo" style="display:inline;float:none;"></span> </span>             
+                    <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i>
+                        <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
+                    </span>             
                  </div>
                  <div class="form_inline">   
                     <label>选择节点</label>
@@ -98,7 +100,7 @@
              <fieldset>
                 <legend>网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
                 <div class="alert alert-info">
-                  <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能；<br />
+                  <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
                 </div>
                 <div class="show_frame">
@@ -217,11 +219,11 @@
                             <td width="80">控制器类型</td>
                             <td colspan="3">
                                 <select name="controller_sys" id="controller_sys">
-                                  <option value="floodlight">floodlight</option>
-                                  <option value="pox">pox</option>
-                                  <option value="nox">nox</option>
+                                  <option value="Floodlight">Floodlight</option>
+                                  <option value="POX">POX</option>
+                                  <option value="OpenDaylight">OpenDaylight</option>
                                 </select>
-                                <a href="javascript:void(0);" title="此处默认创建floodlight控制器" data-toggle="tooltip" data-placement="right" title="此处默认创建floodlight控制器" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" title="此处默认创建Floodlight控制器" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -251,7 +253,7 @@
               </fieldset>
 			<div id="gw_setting" style="display:none">
               <fieldset class="base_info tooltip-demo">
-                 <legend>虚拟网关配置<small>可选，只有在上一步中选择了虚拟机关联节点才会出现配置虚网虚拟网关部分</small></legend>
+                 <legend>虚拟网关配置</legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -369,11 +371,13 @@
                                 </td>
                             </tr>
                         </tbody>
-                     </table>                                
+                     </table>
+					<div id="dhcp">                                
                      <label>
                                     {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                                          是否启动DHCP
                      </label>
+					</div>
                      <div class="operate_btn">
                         <button class="btn btn-inverse del" type="button">删 除</button>
                      </div>
@@ -468,7 +472,7 @@
                  <div id="list_controller"></div>
               </fieldset>
               <fieldset class="base_info">
-                 <legend>虚拟网关<small>(可选)</small></legend>
+                 <legend>虚拟网关</legend>
                  <div id="list_gw"></div>
               </fieldset>
               <fieldset>

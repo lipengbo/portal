@@ -115,7 +115,15 @@ def list(request, proj_id):
     else:
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
-        slice_objs = Slice.objects.all()
+        if 'type' in request.GET:
+            if int(type) == 0 or int(type) == 1:
+                slice_objs = Slice.objects.filter(type=int(type))
+            else:
+                slice_objs = SliceDeleted.objects.all()
+            context['type'] = int(type)
+        else:
+            slice_objs = slice_objs.filter(type=0)
+            context['type'] = 0
         date_now = datetime.datetime.now()
         sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
                                     date__month=date_now.strftime('%m'),
@@ -132,13 +140,6 @@ def list(request, proj_id):
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
         slice_objs = project.slice_set.all()
-    if 'type' in request.GET:
-        if int(type) == 0 or int(type) == 1:
-            slice_objs = slice_objs.filter(type=int(type))
-        else:
-            slice_objs = sli
-    else:
-        slice_objs = slice_objs.filter(type=0)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -260,7 +261,7 @@ def delete(request, slice_id, flag):
             slice_obj.delete()
         except Exception, ex:
             print ex
-            if not request.user.is_superuser:
+            if request.user.is_superuser:
                 messages.add_message(request, messages.ERROR, ex)
         else:
             slice_deleted.save()

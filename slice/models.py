@@ -40,6 +40,9 @@ class Slice(models.Model):
     failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
+    def created_date(self):
+        return self.date_created
+
     def add_island(self, island):
         SliceIsland.objects.get_or_create(
             island=island, slice=self)

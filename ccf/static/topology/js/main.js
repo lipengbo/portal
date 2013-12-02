@@ -422,17 +422,22 @@ function init_svg () {
             real_nodes_map[node.id] = true;
         };
     })
+    var show_logical = $('#show-logical').attr('checked');
     var cloud_node = {id:"cloud", group:3}
-    g_nodes.push(cloud_node);
+    if (show_logical) {
+        g_nodes.push(cloud_node);
+    }
     /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
         var dpid = recompose_dpid(gre_ovses[i]);
         
         // connect gre node to cloud-icon node
-        if (!(dpid in nodes_map)) {
-            alert('没有以' + dpid + '为dpid的gre出口交换机');
+        if (show_logical) {
+            if (!(dpid in nodes_map)) {
+                alert('没有以' + dpid + '为dpid的gre出口交换机');
+            }
+            g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
         }
-        g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
         for (var j = 0; j < gre_ovses.length; j++) {
             var dpid2 = recompose_dpid(gre_ovses[j]);
             if (dpid in nodes_map && dpid2 in nodes_map) {
@@ -542,7 +547,7 @@ function init_svg () {
                             content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
-                            d.db_name + ":" + port.name + "(" + port.portNumber+ ")";
+                            d.db_name + ":" + port.name;
                         var port_pairs = {};
                         $.each(g_links_map[d.island_id], function(index, link) {
                             var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
@@ -551,7 +556,7 @@ function init_svg () {
                             }
                             if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'] + "(" + link.info['dst-port'] + ")";
+                                content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'];
                             }
                             port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
                             if (port_pair_key in port_pairs) {
@@ -559,7 +564,7 @@ function init_svg () {
                             }
                             if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'] + "(" + link.info['src-port'] + ")";
+                                content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
                             }
                         });
                         content += "</label>";
@@ -674,7 +679,6 @@ function load_topology(callback) {
     function random_refresh () {
         setTimeout(function  () {
             refresh_time = Math.floor(Math.random() * 10000 + 2000 );
-            
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
                 var color = 'black';
                 

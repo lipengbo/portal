@@ -126,7 +126,7 @@
                                     {%elif vm.state == 1 %}
                                         <i class="icon-play"></i>
                                     {%else%}
-                                        <i class="icon-pause"></i>
+                                        <i class="icon-minus-sign"></i>
                                     {%endif%}  
                                 </td>
 									
@@ -144,7 +144,7 @@
 		                				    <button type="button" onclick="window.location.href='{% url delete_vm vm.id 1 %}'" class="btn btn-inverse btn-delete" disabled>删除</button>
 						 				{%else%}
 		                                    {% if vm.state == 8 %}
-		                                    <span id="vm{{vm.id}}">        
+		                                    <span id="vm_fc{{vm.id}}">        
 		                                    	<input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-success start_btn" disabled>启动</button>
 		                                        <button type="button" onclick="open_vnc('/plugins/vt/vm/vnc/{{ vm.id }}')" class="btn" disabled>登录</button>
@@ -160,7 +160,7 @@
 		                				        <button type="button" onclick="" class="btn" disabled>登录</button>
 		                				    {%endif%}
 		                				    {%if vm.type != 0 %}
-                                                <a href="{% url 'delete_vm' vm.id 1 %}" class="btn btn-inverse btn-delete">删除</a>
+                                                <a href="{% url delete_vm vm.id 1 %}" class="btn btn-inverse btn-delete">删除</a>
                                             {%else%}
                                                 <button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
                                             {%endif%}

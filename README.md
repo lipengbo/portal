@@ -85,10 +85,16 @@ plugins/network:
   [接口]
 
 =====================
-
 plugins/common:
+=====================
   [功能]
   1、提供基础的工具集，比如文件操作，进程，命令行，异常处理
   2、glance client：由于自有glanceclient安装问题比较多，所以重写了一个glance client（安装文档中可以吧所有有关glance client安装的步骤都去掉）
   3、vt_manager client：调用vt_manager实现虚拟机的管理
   4、undoManager：通用的事物管理工具，用于回滚（比如删除底层虚拟机时需要清除的资源比较多，为了保障整体的事务性需要提供一个类似RDB的事务管理工具）
+=====================
+noVNC:
+   新增noVNC功能用于远程桌面获取
+##启动
+   cd noVNC
+   ./run.sh
