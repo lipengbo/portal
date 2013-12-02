@@ -2,7 +2,7 @@
 from models import *
 from django.db import transaction
 from slice.slice_exception import DbError
-from plugins.vt.api.py import get_slice_gw_mac, get_phydata_gw_mac
+from plugins.vt.api import get_slice_gw_mac, get_phydata_gw_mac
 
 
 import logging
@@ -88,7 +88,7 @@ def flowspace_gw_add(slice_obj, new_gateway):
                                  phy_gw, slice_gw, '0x800', '', '', '',
                                  '', '', '')
         create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                 phy_gw, slice_gw, '0x800', '', '',
+                                 slice_gw, phy_gw, '0x800', '', '',
                                  '', '', '', '')
 #         haved_nws = slice_obj.get_nws()
 #         for haved_nw in haved_nws:
