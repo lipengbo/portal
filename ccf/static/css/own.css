@@ -6584,3 +6584,6 @@ a.button-royal:hover {
 .tooltip-inner {
   max-width: 250px;
 }
+#id_realm {
+  height: 48px;
+}
