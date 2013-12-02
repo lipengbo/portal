@@ -282,7 +282,7 @@ THEME_ACCOUNT_CONTACT_EMAIL = 'ccf@fnic.cn'
 THEME_CONTACT_EMAIL = THEME_ACCOUNT_CONTACT_EMAIL
 
 #ACCOUNT_PASSWORD_CHANGE_REDIRECT_URL = 'password_change_success'
-
+#ACCOUNT_SIGNUP_REDIRECT_URL
 try:
     from ccf.local_settings import *
 except ImportError:
