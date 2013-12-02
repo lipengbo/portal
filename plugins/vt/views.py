@@ -159,7 +159,7 @@ def set_domain_state(vname, state):
     try:
         vm_query = VirtualMachine.objects.filter(uuid=vname)
         switch_port = None
-        if state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
+        if vm_query[0].type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
             host = vm_query[0].server
             slice = vm_query[0].slice
             name = vm_query[0].name
