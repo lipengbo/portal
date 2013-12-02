@@ -304,11 +304,13 @@ class FlowvisorClient(object):
             for datapath in datapaths:
                 switch = {'dpid': datapath}
                 datapath_info = do_list_datapath_info(datapath, self.url, self.password)
-                switch['ports'] = self._parse_datapath_info(datapath_info)
+                switch['ports'] = self._parse_ports(datapath_info)
+                target_switch = self._parse_connection(datapath_info)
+                switch['target_switch'] = target_switch
                 switches.append(switch)
         return switches
 
-    def _parse_datapath_info(self, info):
+    def _parse_ports(self, info):
         if not info:
             return []
         ports = []
@@ -319,6 +321,11 @@ class FlowvisorClient(object):
             port_dict['name'] = port_info[1]
             ports.append(port_dict)
         return ports
+
+    def _parse_connection(self, info):
+        connection = info['connection']
+        result = re.search('/*-->/([0-9.]+):(\d+)', connection)
+        return result.groups()
 
     def get_links(self):
         links_info = do_list_links(self.url, self.password)
