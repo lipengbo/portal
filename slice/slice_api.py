@@ -196,14 +196,16 @@ def start_slice_api(slice_obj):
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                               slice_obj.id, True)
-            except Exception:
+                update_slice_virtual_network(slice_obj)
+            except Exception, ex:
                 transaction.rollback()
-                raise
-            else:
-                try:
-                    update_slice_virtual_network(slice_obj)
-                except:
-                    pass
+                print ex
+                raise DbError("虚网启动失败！")
+#             else:
+#                 try:
+#                     update_slice_virtual_network(slice_obj)
+#                 except:
+#                     pass
 
 
 @transaction.commit_on_success
