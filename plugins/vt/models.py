@@ -96,6 +96,9 @@ class VirtualMachine(IslandResource):
     def get_ipaddr(self):
         return self.ip.ipaddr
 
+    def get_gw_mac(self):
+        return utils.generate_mac_address(self.gateway_public_ip.ipaddr)
+
     def get_netmask(self):
         return str(self.ip.supernet.get_network().netmask)
 
