@@ -175,14 +175,15 @@ class Slice(models.Model):
         else:
             return None
 
-    def set_dhcp(self):
+    def set_dhcp(self, flag):
         gws = self.virtualmachine_set.filter(type=2)
         if gws:
-            if gws.enable_dhcp:
-                gws.enable_dhcp = False
+            print "------------", flag
+            if flag == '1':
+                gws[0].enable_dhcp = True
             else:
-                gws.enable_dhcp = True
-            gws.save()
+                gws[0].enable_dhcp = False
+            gws[0].save()
             return True
         else:
             return False

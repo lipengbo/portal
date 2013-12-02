@@ -471,6 +471,7 @@ function start_or_stop(slice_id, flag){
                 $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
                 $(".btn-slice-state").addClass("disabled");
                 $(".slice_state_del").addClass("disabled");
+				$(".start_dhcp").addClass("disabled");
             }     
         } else {
             ret = start_or_stop(slice_id, 2);
@@ -481,6 +482,7 @@ function start_or_stop(slice_id, flag){
                 $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                 $(".btn-slice-state").removeClass("disabled");
                 $(".slice_state_del").removeClass("disabled");
+				$(".start_dhcp").removeClass("disabled");
             }         
         }
     }); 
@@ -797,20 +799,36 @@ function start_or_stop(slice_id, flag){
         $('#editSliceModal').modal('hide');
     }
  }
+function set_dhcp(slice_id, flag){
+	$.ajax({
+			url: '/slice/dhcp_switch/'+slice_id+"/"+flag+"/",
+			type: 'GET',
+			dataType: "json",
+			success: function(data){
+				if(data.result == 0){
+					if(flag == 1){
+						$('.start_dhcp').removeClass("btn-success").addClass("btn-danger");           
+                		$('.start_dhcp').text("停止DHCP服务");
+					}else{
+						$('.start_dhcp').removeClass("btn-danger").addClass("btn-success");
+                		$('.start_dhcp').text("启动DHCP服务");
+					}
+					
+				}else{
+					$("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">设置网关服务失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+				}
+			}
+		});
+}
 
 $('.start_dhcp').click(function(){
         var slice_id = $("#slice_id").text();
         if($(this).hasClass("btn-success")){
-            //ret = start_or_stop(slice_id, 1);
-            if(true){
-                $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止DHCP服务");
-            }     
+            set_dhcp(slice_id, 1);
         } else {
-            //ret = start_or_stop(slice_id, 2);
-            if(true){
-                $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动DHCP服务");
-            }         
+            set_dhcp(slice_id, 0);
         }
     }); 
