@@ -12,6 +12,8 @@ class Migration(SchemaMigration):
         db.create_table('ipam_network', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('netaddr', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
+            ('gw_ip', self.gf('django.db.models.fields.IPAddressField')(null=True)),
+            ('gw_mac', self.gf('django.db.models.fields.CharField')(null=True, max_length=64)),
             ('type', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('ipam', ['Network'])
@@ -62,6 +64,8 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['id']", 'object_name': 'Network'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'netaddr': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
+            'gw_ip': ('django.db.models.fields.IPAddressField', [], {'null': 'True'}),
+            'gw_mac': ('django.db.models.fields.CharField', [], {'null': 'True', 'max_length': '64'}),
             'type': ('django.db.models.fields.IntegerField', [], {})
         },
         'ipam.subnet': {

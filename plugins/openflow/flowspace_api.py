@@ -2,6 +2,7 @@
 from models import *
 from django.db import transaction
 from slice.slice_exception import DbError
+from plugins.vt.api.py import get_slice_gw_mac, get_phydata_gw_mac
 
 
 import logging
@@ -81,6 +82,14 @@ def flowspace_gw_add(slice_obj, new_gateway):
             create_default_flowspace(slice_obj, name, '100', '', '', '',
                                      new_gateway, '', '0x800', '', haved_nw,
                                      '', '', '', '')
+        slice_gw = get_slice_gw_mac(slice_obj)
+        phy_gw = get_phydata_gw_mac()
+        create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                 phy_gw, slice_gw, '0x800', '', '', '',
+                                 '', '', '')
+        create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                 phy_gw, slice_gw, '0x800', '', '',
+                                 '', '', '', '')
 #         haved_nws = slice_obj.get_nws()
 #         for haved_nw in haved_nws:
 #             create_default_flowspace(slice_obj, name, '100', '', '',
@@ -102,6 +111,9 @@ def flowspace_gw_del(slice_obj, del_gateway):
         name = str(slice_obj.id) + '_df'
         delete_default_flowspace(slice_obj, name, del_gateway, '', '', '', '0x800')
         delete_default_flowspace(slice_obj, name, '', del_gateway, '', '', '0x800')
+        slice_gw = get_slice_gw_mac(slice_obj)
+        delete_default_flowspace(slice_obj, name, slice_gw, '', '', '', '0x800')
+        delete_default_flowspace(slice_obj, name, '', slice_gw, '', '', '0x800')
     return True
 
 
@@ -119,10 +131,17 @@ def flowspace_dhcp_add(slice_obj, new_dhcp):
         haved_vms = slice_obj.get_vms()
         for haved_vm in haved_vms:
             if haved_vm.mac and (haved_vm.mac not in dhcp_vm_macs):
-                create_default_flowspace(slice_obj, name, '1', '', '', '',
-                                         str(haved_vm.mac), '', '', '', '',
-                                         '', '', '', '')
-                dhcp_vm_macs.append(haved_vm.mac)
+                if haved_vm.enable_dhcp:
+                    create_default_flowspace(slice_obj, name, '1', '', '', '',
+                                             str(haved_vm.mac), '', '', '', '',
+                                             '', '', '', '')
+                    dhcp_vm_macs.append(haved_vm.mac)
+                else:
+                    if haved_vm.type == 2:
+                        create_default_flowspace(slice_obj, name, '1', '', '', '',
+                                                 str(haved_vm.mac), '', '', '', '',
+                                                 '', '', '', '')
+                        dhcp_vm_macs.append(haved_vm.mac)
     return True
 
 
