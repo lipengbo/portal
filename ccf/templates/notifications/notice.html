@@ -8,8 +8,10 @@
         </i>
         {% trans "Mark as read" %}
     </a>
-    {% endif %}
     <i class="icon-envelope"></i>&nbsp;
+    {% else %}
+    <i class="icon-envelope-open"></i>&nbsp;
+    {% endif %}
     {% if notice.unread %}<b>{% endif%}
     {{ notice.actor }}
     {% trans notice.verb %}
