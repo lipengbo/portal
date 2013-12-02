@@ -408,3 +408,10 @@ def update_links_bandwidths(request, slice_id):
     ret = get_slice_links_bandwidths(switchs_ports, maclist)
     result = json.dumps({'bandwidth': ret})
     return HttpResponse(result, mimetype='text/plain')
+
+def dhcp_switch(request, slice_id):
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if slice_obj.set_dhcp():
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1}))

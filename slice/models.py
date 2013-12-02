@@ -175,6 +175,18 @@ class Slice(models.Model):
         else:
             return None
 
+    def set_dhcp(self):
+        gws = self.virtualmachine_set.filter(type=2)
+        if gws:
+            if gws.enable_dhcp:
+                gws.enable_dhcp = False
+            else:
+                gws.enable_dhcp = True
+            gws.save()
+            return True
+        else:
+            return False
+
     def get_dhcp_vm_macs(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='')
         dhcp_vm_macs = []
