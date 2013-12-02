@@ -8,7 +8,7 @@ from django.core.mail import send_mail
 
 # This is a function I wrote to check a feedback email address and add it to our database. Replace with your own imports
 #from MyMailFunctions import check_feedback_mailbox
-from slice.models import Slice
+from slice.models import Slice, SliceDeleted
 from plugins.openflow.flowvisor_api import flowvisor_del_slice
 DEBUG = False
 
@@ -19,7 +19,7 @@ class Checkslice(Job):
     """
 
     # run every 300 seconds (5 minutes)
-    run_every = 86400
+    run_every = 120
 
     def job(self):
         # This will be executed every 5 minutes
@@ -36,14 +36,27 @@ class Checkslice(Job):
             date = datetime.datetime.now() - slice_obj.date_expired
             if (date > time_delta and slice_obj.expired == 0):
                 print "time manage 2"
-                email = '350603736@qq.com'
-                slice_obj.expired = 1
-                slice_obj.save()
+                try:
+                    slice_deleted = SliceDeleted(name = slice_obj.name,
+                        owner_name = slice_obj.owner.name,
+                        description = slice_obj.description,
+                        project_name = slice_obj.project.name,
+                        date_created = slice_obj.date_created,
+                        date_expired = slice_obj.date_expired,
+                        type = 2)
+                    slice_obj.delete()
+                except:
+                    pass
+                else:
+                    slice_deleted.save()
+#                 email = '350603736@qq.com'
+#                 slice_obj.expired = 1
+#                 slice_obj.save()
 #                     try:
 #                         flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
 #                     except:
 #                         pass
-                send_mail("slice 已过期 ", '该slice已过期！', 'chenjunxia@fnic.cn', [email], fail_silently=False)
+#                 send_mail("slice 已过期 ", '该slice已过期！', 'chenjunxia@fnic.cn', [email], fail_silently=False)
             else:
                 pass
 

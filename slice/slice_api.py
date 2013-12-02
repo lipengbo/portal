@@ -22,6 +22,8 @@ import calendar
 import logging
 LOG = logging.getLogger("ccf")
 
+from etc.config import slice_expiration_days
+
 
 def create_slice_step(project, name, description, island, user, ovs_ports,
                       controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
@@ -80,12 +82,20 @@ def create_slice_api(project, name, description, island, user):
     try:
         Slice.objects.get(name=name)
     except Slice.DoesNotExist:
+        try:
+            slice_expiration_days = int(slice_expiration_days)
+        except:
+            if slice_expiration_days <= 0:
+                slice_expiration_days = 30
+        else:
+            slice_expiration_days = 30
+        print "slice_expiration_days:"+slice_expiration_days
         if project and island and user:
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
                 date_now = datetime.datetime.now()
-#                 date_delta = datetime.timedelta(seconds=5)
-                date_delta = datetime.timedelta(days=30)
+                date_delta = datetime.timedelta(seconds=slice_expiration_days)
+#                 date_delta = datetime.timedelta(days=slice_expiration_days)
                 expiration_date = date_now + date_delta
                 slice_names = name.split('_')
                 if len(slice_names) > 1:
@@ -177,7 +187,7 @@ def delete_slice_api(slice_obj):
 def start_slice_api(slice_obj):
     """启动slice
     """
-    LOG.debug('start_slice_api')
+    print 'start_slice_api'
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -198,14 +208,16 @@ def start_slice_api(slice_obj):
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                               slice_obj.id, True)
-            except Exception:
+                update_slice_virtual_network(slice_obj)
+            except Exception, ex:
                 transaction.rollback()
-                raise
-            else:
-                try:
-                    update_slice_virtual_network(slice_obj)
-                except:
-                    pass
+                print ex
+                raise DbError("虚网启动失败！")
+#             else:
+#                 try:
+#                     update_slice_virtual_network(slice_obj)
+#                 except:
+#                     pass
 
 
 @transaction.commit_on_success

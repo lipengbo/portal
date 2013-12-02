@@ -10,8 +10,18 @@ from plugins.ipam.models import Subnet
 
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
+SLICE_TYPE_USABLE = 0
+SLICE_TYPE_DELETE = 1
+USER_DELETE = 0
+ADMINISTRATOR_DELETE = 1
+EXPIRED_DELETE = 2
 SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
                 (SLICE_STATE_STARTED, 'started'),)
+SLICE_TYPES = ((SLICE_TYPE_USABLE, 'usable'),
+                (SLICE_TYPE_DELETE, 'delete'),)
+SLICE_DELETE_TYPE = ((USER_DELETE, 'usable'),
+                     (ADMINISTRATOR_DELETE, 'administrator'),
+                     (EXPIRED_DELETE, 'expired'),)
 # Create your models here.
 
 
@@ -25,7 +35,9 @@ class Slice(models.Model):
     date_expired = models.DateTimeField()
     state = models.IntegerField(choices=SLICE_STATES,
                                 default=SLICE_STATE_STOPPED)
-#     expired = models.IntegerField(default=0)
+    type = models.IntegerField(choices=SLICE_TYPES,
+                               default=SLICE_TYPE_USABLE)
+    failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
     def add_island(self, island):
@@ -201,11 +213,31 @@ class Slice(models.Model):
             nsc.save()
 
     def delete(self, *args, **kwargs):
-        print "d1"
-        flowvisor_del_slice(self.get_flowvisor(), self.id)
-        print "d2"
-        super(self.__class__, self).delete(*args, **kwargs)
-        print "d3"
+        try:
+            print "d1"
+            flowvisor_del_slice(self.get_flowvisor(), self.id)
+            print "d2"
+            super(self.__class__, self).delete(*args, **kwargs)
+            print "d3"
+        except Exception, ex:
+            self.failure_reason = str(ex)
+            self.save()
+            raise
+
+    def __unicode__(self):
+        return self.name
+
+
+class SliceDeleted(models.Model):
+    name = models.CharField(max_length=256)
+    owner_name = models.CharField(max_length=256)
+    description = models.TextField()
+    project_name = models.CharField(max_length=256)
+    date_created = models.DateTimeField()
+    date_expired = models.DateTimeField()
+    date_deleted = models.DateTimeField(auto_now_add=True)
+    type = models.IntegerField(choices=SLICE_DELETE_TYPE,
+                               default=USER_DELETE)
 
     def __unicode__(self):
         return self.name

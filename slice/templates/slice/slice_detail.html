@@ -334,6 +334,7 @@ img {
 				 	{%endif%}
 
 			 		{%for vm in vms%}
+			 		{% if forloop.counter <= 3  %}
 				 		<tr id="vm_tr{{vm.id}}">
 				 			<td>{{vm.name}}</td>
 							<td><a id="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{vm.uuid}}">{{vm.uuid}}</a></td>
@@ -399,6 +400,7 @@ img {
                                </td>
                             {%endif%}
 					 	</tr>
+					{%endif%}
 			 		{%endfor%}
 			 	</tbody>
 			 </table>

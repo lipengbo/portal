@@ -23,7 +23,7 @@ from resources.models import SwitchPort
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 
-from slice.models import Slice
+from slice.models import Slice, SliceDeleted
 
 from plugins.vt.forms import VmForm
 import datetime
@@ -132,6 +132,13 @@ def list(request, proj_id):
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
         slice_objs = project.slice_set.all()
+    if 'type' in request.GET:
+        if int(type) == 0 or int(type) == 1:
+            slice_objs = slice_objs.filter(type=int(type))
+        else:
+            slice_objs = sli
+    else:
+        slice_objs = slice_objs.filter(type=0)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -240,9 +247,23 @@ def delete(request, slice_id, flag):
     project_id = slice_obj.project.id
     if request.user.is_superuser or request.user == slice_obj.owner:
         try:
+            slice_deleted = SliceDeleted(name = slice_obj.name,
+                owner_name = slice_obj.owner.name,
+                description = slice_obj.description,
+                project_name = slice_obj.project.name,
+                date_created = slice_obj.date_created,
+                date_expired = slice_obj.date_expired)
+            if request.user.is_superuser:
+                slice_deleted.type = 1
+            else:
+                slice_deleted.type = 0
             slice_obj.delete()
         except Exception, ex:
-            messages.add_message(request, messages.ERROR, ex)
+            print ex
+            if not request.user.is_superuser:
+                messages.add_message(request, messages.ERROR, ex)
+        else:
+            slice_deleted.save()
     else:
         return redirect("forbidden")
     if 'next' in request.GET:
