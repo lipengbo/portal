@@ -16,7 +16,7 @@ from django.utils.translation import ugettext as _
 
 
 def create_vm_for_controller(island_obj, slice_obj, image_name):
-    ip_obj = IPUsage.objects.allocate_ip_for_controller()
+    ip_obj = IPUsage.objects.allocate_ip_for_controller(island=island_obj)
     vm = VirtualMachine(slice=slice_obj, island=island_obj, ip=ip_obj)
     vm.name = image_name
     images = Image.objects.filter(name=image_name)
@@ -49,7 +49,7 @@ def delete_vm_for_controller(vm):
 
 def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway', enable_dhcp=True):
     ip_obj = IPUsage.objects.allocate_ip(slice_obj.name)
-    gateway_public_ip_obj = IPUsage.objects.allocate_ip_for_gw()
+    gateway_public_ip_obj = IPUsage.objects.allocate_ip_for_gw(island=island_obj)
     vm = VirtualMachine(slice=slice_obj, island=island_obj, gateway_public_ip=gateway_public_ip_obj, ip=ip_obj)
     vm.name = image_name
     vm.enable_dhcp = enable_dhcp
