@@ -5708,9 +5708,17 @@ table {
   border: none;
 }
 .sec_block {
+  position: relative;
   background: #ffffff;
   padding: 10px;
   border-bottom: 1px solid #ddd;
+}
+.sec_block a.close {
+  font-size: 35px;
+  position: absolute;
+  right: 0px;
+  top: 5px;
+  z-index: 10;
 }
 .v_top {
   vertical-align: top !important;
@@ -6429,12 +6437,11 @@ a.button-royal:hover {
 }
 .vm_well_wrap .span5 {
   padding-top: 10px;
-  padding-bottom: 10px;
 }
 .vm_well_wrap .vm_well {
-  height: 260px;
+  height: 240px;
   border-left: 1px solid #ddd;
-  padding: 5px 15px 0px 15px;
+  padding: 18px 15px 0px 15px;
 }
 .vm_well_wrap .vm_well table tr td {
   background: #fff;
@@ -6583,4 +6590,18 @@ a.button-royal:hover {
 }
 .tooltip-inner {
   max-width: 250px;
+}
+#id_realm {
+  height: 48px;
+}
+.vm_info_title {
+  overflow: hidden;
+}
+.vm_info_title .vm_info_title_left {
+  width: 42%;
+  float: left;
+}
+.vm_info_title .vm_info_title_right {
+  width: 56%;
+  float: right;
 }

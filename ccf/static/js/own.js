@@ -19,11 +19,11 @@ $(document).ready(function() {
         var spans_info = $(".sec_block").last().find("span");
         for (var i=0; i<spans_info.length; i++){
             spans_info[i].innerHTML = '';
-        }
+        } 
 		$(".sec_block").last().find("input[type='text']").val("");
 		$(".sec_block").last().find("input[type='checkbox']").next().remove();
 		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue');
-		$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
+		//$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
 		$(".sec_block").last().find("input[type='checkbox']").iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
@@ -35,7 +35,7 @@ $(document).ready(function() {
            $(this).parent(".operate_btn").parent(".span5").parent(".vm_well_wrap").parent(".sec_block").remove();
            $(".sec_block").css("background","#ffffff");
            $(".sec_block:odd").css("background","#f5f5f5");
-        });
+        });                          
 	});
 
 /*	$(".del").click(function(){

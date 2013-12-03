@@ -22,15 +22,13 @@
 {% block body %}
 
     <div class="search">
-        <form class="slice_type">
-          <div>
-            <label>选择虚网类型：</label>
+        <form class="form-inline" style="float:left;">
+            <label>虚网类型：</label>
             <select name="slice_type" id="slice_type">
                 <option value="0" selected>正常虚网</option>
                 <option value="1">删除失败虚网</option>
-                <option value="2">已删除虚网</option>
+                <option value="2">已删除虚网</option>             
             </select>
-          </div>
         </form>
         <form class="form-search">
           <div class="input-append">
