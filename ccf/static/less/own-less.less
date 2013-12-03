@@ -615,6 +615,7 @@ filter: alpha(opacity=100);
         overflow:hidden;
         position:relative;
         margin-bottom:0; 
+        max-width:229px;
         .close {
             display:none;
             font-size:40px;
@@ -1265,13 +1266,17 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
     width:155px;
     font-size:9pt;
     background-color:white;
+    span {
+        font-size:20px;
+    }
 } 
 .ipInput-cell{    
-    width:18%;
+    width:17.5%;
     height:20px;
     border-width:0px !important;
     border-style:none;
     text-align:center;
+    margin-bottom:6px !important;
 }
 
 #ipInput {
@@ -1397,4 +1402,38 @@ a.button-primary, a.button-action, a.button-highlight, a.button-caution, a.butto
         width:56%;
         float:right;
     }
+}
+
+.reset_form {
+    .control-label {
+        width:70px;
+        *width:80px;
+    }
+    .controls {
+        margin-left:90px;
+        *margin-left:0px;
+    }
+    .form-actions {
+        padding-left: 90px;
+        *padding-left: 100px;
+        button.btn_width {
+            width:220px;
+        }
+        button.btn_save {
+            width:105px;
+        }
+        a.btn_cancel {
+            width:85px;
+        }
+        p {
+            padding-top:10px;
+            padding-bottom:10px;
+        }
+    } 
+}
+
+.icon-envelope-open {
+    width:16px;
+    height:16px;
+    background:url(../img/envelope-open.png) no-repeat;
 }

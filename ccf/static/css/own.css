@@ -5855,6 +5855,7 @@ table {
   overflow: hidden;
   position: relative;
   margin-bottom: 0;
+  max-width: 229px;
 }
 .example-sites li .close {
   display: none;
@@ -6482,12 +6483,16 @@ a.button-royal:hover {
   font-size: 9pt;
   background-color: white;
 }
+.ipInput-border span {
+  font-size: 20px;
+}
 .ipInput-cell {
-  width: 18%;
+  width: 17.5%;
   height: 20px;
   border-width: 0px !important;
   border-style: none;
   text-align: center;
+  margin-bottom: 6px !important;
 }
 #ipInput {
   height: 30px;
@@ -6604,4 +6609,34 @@ a.button-royal:hover {
 .vm_info_title .vm_info_title_right {
   width: 56%;
   float: right;
+}
+.reset_form .control-label {
+  width: 70px;
+  *width: 80px;
+}
+.reset_form .controls {
+  margin-left: 90px;
+  *margin-left: 0px;
+}
+.reset_form .form-actions {
+  padding-left: 90px;
+  *padding-left: 100px;
+}
+.reset_form .form-actions button.btn_width {
+  width: 220px;
+}
+.reset_form .form-actions button.btn_save {
+  width: 105px;
+}
+.reset_form .form-actions a.btn_cancel {
+  width: 85px;
+}
+.reset_form .form-actions p {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.icon-envelope-open {
+  width: 16px;
+  height: 16px;
+  background: url(../img/envelope-open.png) no-repeat;
 }

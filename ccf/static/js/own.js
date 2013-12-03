@@ -50,6 +50,7 @@ $(document).ready(function() {
         $(".tab_radio1").parent("td").siblings("td").children("select").removeAttr("disabled");
         $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").attr("disabled","disabled");
         $(".tab_radio2").parent("td").siblings("td").children("input").attr("disabled","disabled");
+        $("#controller_ip_portInfo").html("");
     });
     $(".tab_radio2, .tab_radio2 .iCheck-helper").click(function(){
         $(".tab_radio2").parent("td").siblings("td").children("#ipInput").css({"background":"#fff"}).removeClass("disabled");        
