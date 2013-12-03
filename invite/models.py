@@ -37,6 +37,8 @@ class Connection(models.Model):
     target_id = models.PositiveIntegerField()
     target = generic.GenericForeignKey('target_type', 'target_id')
 
+    created_time = models.DateTimeField(auto_now_add=True)
+
 
     def get_target_name(self):
         display_name_func = getattr(self.target, 'get_display_name')

@@ -123,3 +123,19 @@ def get_servers(request):
     for server in servers:
         html += '<option value="' + str(server.id) + '">' + server.name + '</option>'
     return HttpResponse(html)
+
+
+def create_virtualswitch(sender, instance, created, **kwargs):
+    from communication.flowvisor_client import FlowvisorClient
+    from plugins.openflow.models import Flowvisor
+    if created:
+        server_ip = instance.ip
+
+        flowvisor = Flowvisor.objects.get(island=instance.island)
+        client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
+        port_name_dict = {}
+        try:
+            switches = client.get_switches()
+        except Exception, e:
+            print e
+            return
