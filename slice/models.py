@@ -29,7 +29,7 @@ class Slice(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
     show_name = models.CharField(max_length=256)
-    description = models.TextField()
+    description = models.CharField(max_length=1024)
     project = models.ForeignKey(Project)
     date_created = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField()

@@ -4,12 +4,29 @@
 <p>
     {% if notice.unread %}
     <a class="muted pull-right" href="{% url 'notifications:mark_as_read' notice.slug %}">
-        <i class="icon-ok-circle">
+        <i class="icon-exclamation-sign">
         </i>
         {% trans "Mark as read" %}
     </a>
-    {% endif %}
     <i class="icon-envelope"></i>&nbsp;
+    {% else %}
+        {% if notice.action_object.state %} 
+        <span class="pull-right">
+            {% if notice.actor.is_active and notice.verb == '注册了帐号' or notice.action_object.state == 1 %} 
+            <span class="text-success">
+            <i class="icon-ok-circle"></i>
+                已接受
+            </span>
+            {% else %}
+            <span class="text-error">
+            <i class="icon-remove-circle"></i>
+            已拒绝
+            </span>
+            {% endif %}
+        </span>
+        {% endif %}
+    <i class="icon-envelope-open"></i>&nbsp;
+    {% endif %}
     {% if notice.unread %}<b>{% endif%}
     {{ notice.actor }}
     {% trans notice.verb %}
@@ -22,9 +39,11 @@
 {% if notice.description or notice.action_object.actions %}
     <div class="well well-small">
         {% if notice.description %}{{ notice.description|linebreaksbr }}{% endif %}
-        {% for action in notice.action_object.actions %}
-        <a class="btn btn-{{ action.action_level }}" href="{{ action.action_url }}">{{ action.action_title }}</a>
-        {% endfor %}
+    </div>
+    <div class="text-center actions">
+    {% for action in notice.action_object.actions %}
+    <a class="btn btn-{{ action.action_level }}" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ action.action_url|urlencode }}">{{ action.action_title }}</a>
+    {% endfor %}
     </div>
 {% endif %}
 <div class="notice-actions">

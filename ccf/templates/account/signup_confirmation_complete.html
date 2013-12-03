@@ -1,0 +1,31 @@
+{% extends "site_base.html" %}
+
+{% load url from future %}
+{% load i18n %}
+{% block breadcrumb_base %}
+
+{% endblock %}
+
+{% block body %}
+<legend>注册成功</legend>
+<div class="well">
+    您已注册成功，欢迎使用SDN创新实验平台
+    <br>
+    <span class="count">3</span>秒后，页面将自动跳转到登录页面
+</div>
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript" charset="utf-8">
+var count = 3;
+setInterval(function(){
+    count --;
+    $('.count').html(count);
+    if (count == 0) {
+        window.location.href = '/';
+    }
+}, 1000);
+</script>
+{% endblock %}
+
