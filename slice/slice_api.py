@@ -17,6 +17,7 @@ from resources.models import Switch
 from django.db import transaction
 import datetime
 import traceback
+from plugins.vt.api.py import get_slice_gw_mac
 
 import logging
 LOG = logging.getLogger("ccf")
@@ -254,11 +255,12 @@ def update_slice_virtual_network(slice_obj):
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
     dpids = []
+    slice_gw = get_slice_gw_mac(slice_obj)
     for switch_port in switch_ports:
         if switch_port.switch.dpid not in dpids:
             dpids.append(switch_port.switch.dpid)
         for default_flowspace in default_flowspaces:
-            if not (default_flowspace.dl_src and default_flowspace.dl_dst):
+            if not (default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw):
                 in_port = str(switch_port.port)
                 arg_match = matches_to_arg_match(
                     in_port, default_flowspace.dl_vlan,
@@ -277,7 +279,15 @@ def update_slice_virtual_network(slice_obj):
                     raise
     for dpid in dpids:
         for default_flowspace in default_flowspaces:
-            if default_flowspace.dl_src and default_flowspace.dl_dst:
+            if (default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw) and default_flowspace.dl_type == '0x800':
+                arg_match = matches_to_arg_match(
+                    None, default_flowspace.dl_vlan,
+                    default_flowspace.dl_vpcp, default_flowspace.dl_src,
+                    default_flowspace.dl_dst, default_flowspace.dl_type,
+                    default_flowspace.nw_src, default_flowspace.nw_dst,
+                    default_flowspace.nw_proto, default_flowspace.nw_tos,
+                    default_flowspace.tp_src, default_flowspace.tp_dst)
+            if default_flowspace.dl_src == slice_gw and default_flowspace.dl_type == '0x806':
                 arg_match = matches_to_arg_match(
                     None, default_flowspace.dl_vlan,
                     default_flowspace.dl_vpcp, default_flowspace.dl_src,
