@@ -96,13 +96,25 @@ img {
                 {%endif%}
 				{%if extent_html == "site_base.html" %}
 					{% if slice_obj.get_dhcp == None %}
-						<button type="button" class="btn btn-success start_btn edit start_dhcp">
-                            启动DHCP服务
-                        </button>
+						{% if slice_obj.state == 0 %}
+							<button type="button" class="btn btn-success start_btn edit start_dhcp">
+                            	启动DHCP服务
+                        	</button>
+						{% else %}
+							<button type="button" class="btn btn-success start_btn edit start_dhcp" disabled>
+                            	启动DHCP服务
+                        	</button>
+						{%endif%}
 					{%else%}
+						{% if slice_obj.state == 0 %}
 						<button type="button" class="btn btn-danger start_btn edit start_dhcp">
                             停止DHCP服务
                         </button>
+						{% else %}
+						<button type="button" class="btn btn-danger start_btn edit start_dhcp" disabled>
+                            停止DHCP服务
+                        </button>
+						{%endif%}
 					{%endif%}
 				{%endif%}
                 Slice资源【网段: {{ start_ip }}-{{ end_ip }}】

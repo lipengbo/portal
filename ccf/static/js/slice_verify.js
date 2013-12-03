@@ -471,7 +471,7 @@ function start_or_stop(slice_id, flag){
                 $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
                 $(".btn-slice-state").addClass("disabled");
                 $(".slice_state_del").addClass("disabled");
-				$(".start_dhcp").addClass("disabled");
+				$(".start_dhcp").attr("disabled", "true");
             }     
         } else {
             ret = start_or_stop(slice_id, 2);
@@ -482,7 +482,7 @@ function start_or_stop(slice_id, flag){
                 $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                 $(".btn-slice-state").removeClass("disabled");
                 $(".slice_state_del").removeClass("disabled");
-				$(".start_dhcp").removeClass("disabled");
+				$(".start_dhcp").removeAttr("disabled");
             }         
         }
     }); 
