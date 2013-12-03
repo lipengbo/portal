@@ -56,9 +56,9 @@ function desc_msg(name, value, i){
 		dataType: 'json',
 		success:function(data){
 			if(name == 'flavor'){
-				$('[name="cpu"]')[i].innerHTML = data['cpu'];
-				$('[name="ram"]')[i].innerHTML = data['ram'];
-				$('[name="hdd"]')[i].innerHTML = data['hdd'];		
+				$('[name="cpu"]')[i].innerHTML = data['cpu'] + "核";
+				$('[name="ram"]')[i].innerHTML = data['ram'] + "MB";
+				$('[name="hdd"]')[i].innerHTML = data['hdd'] + "GB";		
 			}else if(name == 'image'){
 				$('[name="username"]')[i].innerHTML = data['username'];
 				$('[name="password"]')[i].innerHTML = data['password'];
@@ -109,7 +109,6 @@ function check_vm_select(obj){
         }
         return result
 }
-
 
 //获取vm form的内容并填入slice清单中
 function fetch_vminfo()
@@ -450,5 +449,16 @@ function show_uuid(objs){
 function show_topology(){
 	//alert(get_select_ports());
 	$('#topologyModal').modal('show');
+}
+
+function check_gw_select(){
+	var info = document.getElementById('gwInfo');
+	if($('#id_server_gw').get(0).selectedIndex == 0){
+		showMsg(info,"该项为必填项","err");
+		return false;
+	}else{
+		info.innerHTML = '';
+		return true;
+	}
 }
 

@@ -18,6 +18,7 @@ from django.db import transaction
 import datetime
 import traceback
 import calendar
+
 from plugins.vt.api import get_slice_gw_mac
 
 import logging
@@ -205,7 +206,7 @@ def start_slice_api(slice_obj):
                     raise DbError("请确保控制器已启动！")
                 gw = slice_obj.get_gw()
                 if gw and gw.enable_dhcp and gw.state != 1:
-                    raise DbError("请确保dhcp已启动！")
+                    raise DbError("请确保gateway已启动！")
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                               slice_obj.id, True)
@@ -245,7 +246,7 @@ def stop_slice_api(slice_obj):
 def update_slice_virtual_network(slice_obj):
     """更新slice的虚网，添加或删除交换机端口、网段、gateway、dhcp、vm后调用
     """
-    LOG.debug('update_slice_virtual_network')
+    print 'update_slice_virtual_network'
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -290,6 +291,7 @@ def update_slice_virtual_network(slice_obj):
                                             default_flowspace.priority, arg_match)
                 except:
                     raise
+    print dpids
     for dpid in dpids:
         for default_flowspace in default_flowspaces:
             if (default_flowspace.dl_src == slice_gw and default_flowspace.dl_type == '0x806') or\

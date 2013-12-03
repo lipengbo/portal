@@ -43,6 +43,7 @@ img {
                             停止虚网
                         </button>
                     {%endif%}
+						
                 {%endif%}			           
 			    {{slice_obj.get_show_name}}
 			    {%if slice_obj.state == 0%}
@@ -100,7 +101,29 @@ img {
                 {%else%}
                     <a data-toggle="modal" href="/plugins/vt/create/vm/{{ slice_obj.id }}/0/" class="btn btn-info edit disabled btn-slice-state">添加虚拟机</a>
                 {%endif%}
-
+				{%if extent_html == "site_base.html" %}
+					{% if slice_obj.get_dhcp == None %}
+						{% if slice_obj.state == 0 %}
+							<button type="button" class="btn btn-success start_btn edit start_dhcp">
+                            	启动DHCP服务
+                        	</button>
+						{% else %}
+							<button type="button" class="btn btn-success start_btn edit start_dhcp" disabled>
+                            	启动DHCP服务
+                        	</button>
+						{%endif%}
+					{%else%}
+						{% if slice_obj.state == 0 %}
+						<button type="button" class="btn btn-danger start_btn edit start_dhcp">
+                            停止DHCP服务
+                        </button>
+						{% else %}
+						<button type="button" class="btn btn-danger start_btn edit start_dhcp" disabled>
+                            停止DHCP服务
+                        </button>
+						{%endif%}
+					{%endif%}
+				{%endif%}
                 虚网资源【网段: {{ start_ip }}-{{ end_ip }}】
             </legend>
 		  	 <table class="table table-striped table-hover tooltip-demo">
@@ -278,6 +301,7 @@ img {
                             {%endif%}
 				 		</tr>
 			 		{%endif%}
+<!--
 			 		{%if dhcp%}
 				 		<tr>
 				 		    <td>dhcp</td>
@@ -332,7 +356,7 @@ img {
                             {%endif%}
 				 		</tr>
 				 	{%endif%}
-
+-->
 			 		{%for vm in vms%}
 			 		{% if forloop.counter <= 3  %}
 				 		<tr id="vm_tr{{vm.id}}">
@@ -542,7 +566,6 @@ img {
     $(document).ready(function(){
         $("#ipInput").ipInput();
         init_ipinput();
-        
         $(".show_describe").click(function(){
             if($(".word_detail").is(":hidden")) {
                 $(".word_detail").slideDown(); 

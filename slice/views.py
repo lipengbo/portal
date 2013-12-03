@@ -444,3 +444,11 @@ def get_count_show(request):
         return HttpResponse(json.dumps({'result': 0}))
     else:
         return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
+
+
+def dhcp_switch(request, slice_id, flag):
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if slice_obj.set_dhcp(flag):
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1}))

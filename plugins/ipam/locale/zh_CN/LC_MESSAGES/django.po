@@ -42,3 +42,12 @@ msgstr "子网"
 msgid "Ip usage"
 msgstr "IP使用"
 
+msgid "It's the start of the network"
+msgstr "这是网络的起始位置"
+
+msgid "It's the end of the network"
+msgstr "这是网络的结束位置"
+
+msgid "Do not have enough ip"
+msgstr "没有足够的IP"
+

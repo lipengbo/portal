@@ -35,6 +35,8 @@ from netaddr.strategy.ipv6 import valid_str as valid_ipv6, ipv6_compact, \
 from netaddr.strategy.eui48 import mac_eui48, mac_unix, mac_cisco, \
     mac_bare, mac_pgsql, valid_str as valid_mac
 
+from django.utils.translation import ugettext as _
+
 __all__ = [
     #   Constants.
     'ZEROFILL', 'Z', 'INET_PTON', 'P', 'NOHOST', 'N',
@@ -124,19 +126,19 @@ class Network(IPNetwork):
         ip_previous = self.previous(step)
         if self.get_supernet(superprefix) in ip_previous.supernet():
             return ip_previous
-        raise StopIteration("It's the start of the network")
+        raise StopIteration(_("It's the start of the network"))
 
     def get_next(self, superprefix, step=1):
         ip_next = self.next(step)
         if self.get_supernet(superprefix) in ip_next.supernet():
             return ip_next
-        raise StopIteration("It's the end of the network")
+        raise StopIteration(_("It's the end of the network"))
 
     def get_host(self, index):
         if 0 <= index <= self.last - self.first - 2:
             return IPAddress(self.first + 1 + index, self._module.version)
         else:
-            raise StopIteration('Do not have enough ip')
+            raise StopIteration(_('Do not have enough ip'))
 
 
 def generate_mac_address(ip):
