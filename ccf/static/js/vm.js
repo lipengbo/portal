@@ -56,9 +56,9 @@ function desc_msg(name, value, i){
 		dataType: 'json',
 		success:function(data){
 			if(name == 'flavor'){
-				$('[name="cpu"]')[i].innerHTML = data['cpu'];
-				$('[name="ram"]')[i].innerHTML = data['ram'];
-				$('[name="hdd"]')[i].innerHTML = data['hdd'];		
+				$('[name="cpu"]')[i].innerHTML = data['cpu'] + "核";
+				$('[name="ram"]')[i].innerHTML = data['ram'] + "MB";
+				$('[name="hdd"]')[i].innerHTML = data['hdd'] + "GB";		
 			}else if(name == 'image'){
 				$('[name="username"]')[i].innerHTML = data['username'];
 				$('[name="password"]')[i].innerHTML = data['password'];
