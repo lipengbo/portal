@@ -229,20 +229,20 @@ msgid "Sign up is closed to the general public."
 msgstr "注册已经向公众关闭"
 
 #: templates/account/email/email_confirmation_message.txt:1
-#, fuzzy, python-format
 msgid ""
 "User '%(user_name)s' at %(site_name)s has given this as an email address.\n"
 "\n"
 "To confirm this is correct, go to %(activate_url)s\n"
 msgstr ""
-"用户'%(user_name)s'在%(site_name)s上已经使用该电子邮件地址。\n"
-"\n"
-"要确认是否正确，请前往%(activate_url)s\n"
+"亲爱的用户，您好：\n"
+"    您在SDN创新实验平台的账号已经注册成功，请点击以下链接激活账号。%(activate_url)s"
+"    如果您没有进行注册，请忽略此邮件。\n"
+"SDN创新实验平台\n"
 
 #: templates/account/email/email_confirmation_subject.txt:1
 #, python-format
 msgid "Confirm email address for %(site_name)s"
-msgstr "确认在%(site_name)s上的邮件地址"
+msgstr "%(site_name)s账号激活通知"
 
 #: templates/account/email/password_reset.txt:1
 #, python-format
