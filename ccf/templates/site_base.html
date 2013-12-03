@@ -88,7 +88,9 @@
 		        </ul>
                 {% endif %}
 		        {% endblock %}
+                {% block messages %}
 		        {% include "_messages.html" %}
+                {% endblock %}
 		         <div class="">	
 		           <div class="main2">
     		        {% block body %}
