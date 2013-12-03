@@ -249,16 +249,17 @@ msgid ""
 "\n"
 "%(password_reset_url)s\n"
 msgstr ""
-"收到这封邮件是因为您本人或者其他人请求对%(site_name)s上的帐号进行密码重置。\n"
-"如果您没有请求密码重置，可以放心的忽略此邮件。点击下面的链接重置您的密码：\n"
-"\n"
-"%(password_reset_url)s\n"
+"亲爱的用户，您好："
+"    您正在进行密码重置，请点击以下链接进行密码重置。"
+"    %(password_reset_url)s\n"
+"    如果您未申请密码重置，请忽略本邮件！"
+"%(site_name)s\n"
 
 
 #: templates/account/email/password_reset_subject.txt:1
 #, python-format
 msgid "[%(site_name)s] Password reset"
-msgstr "[%(site_name)s] 密码重置"
+msgstr "%(site_name)s密码重置"
 
 #: templates/pagination/builtin_pagination.html:10
 #: templates/pagination/builtin_pagination.html:13
