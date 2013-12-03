@@ -325,7 +325,11 @@
              </div>     
              <div class="tab_part">
                  <fieldset class="vm_info_list tooltip-demo">
-                 <legend>虚拟机信息</legend>
+                     <div class="vm_info_title">
+                         <div class="vm_info_title_left"><legend>虚拟机信息</legend></div>
+                         <div class="vm_info_title_right"><legend>虚拟机配置</legend></div>
+                     </div>
+                 
 				<!-- 拓扑图 -->
 				<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 					<div class="modal-header">
@@ -341,6 +345,7 @@
 				</div>                
 			</div>
                  <div class="sec_block"> 
+                   <a href="#" class="btn-delete close hide">×</a>
                    <div class="row-fluid vm_well_wrap"> 
                      <div class="span5 base_info">        
     		          <table class="table">             
@@ -374,48 +379,51 @@
                             </tr>
                         </tbody>
                      </table>
-					<div id="dhcp">                                
+					<div name="dhcp">                                
                      <label>
                                     {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                                          是否启动DHCP
                      </label>
 					</div>
-                     <div class="operate_btn">
+                    <!-- <div class="operate_btn">
                         <button class="btn btn-inverse del" type="button">删 除</button>
-                     </div>
+                     </div>   -->
                    </div>
                    <div class="span7">
                        <div class="vm_well">
-                           <h4>虚拟机配置</h4>
-                           <table class="table table-bordered table-condensed">
+                           <table class="table table-bordered">
                                <tbody>
-                                   <tr>
+                               <!--    <tr>
                                       <td width="80">类型</td>
                                       <td colspan="5"><span name="flavor_msg"></span></td>
-                                   </tr>
+                                   </tr>    -->    
                                    <tr>
                                        <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
                                        <td><span name="cpu"></span></td>
+                                   </tr>
+                                   <tr>
                                        <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
                                        <td><span name="ram"></span></td>
+                                   </tr>
+                                   <tr>
                                        <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
                                        <td><span name="hdd"></span></td>
                                    </tr>
-									<tr>
+							    <!--   <tr>
                                       <td>宿主机</td>
                                       <td colspan="5"><span name="server_msg"></span></td>
-                                   </tr>
+                                   </tr>  
                                    <tr>
                                       <td>镜像</td>
                                       <td colspan="5"><span name="image_msg"></span></td>
-                                   </tr>
+                                   </tr>  -->      
                                  
                                    <tr>
-                                      <td>用户名</td>
+                                      <td><img src="{% static "img/vm_user.png" %}" width="20" />用户名</td>
                                       <td colspan="5"><span name="username"><span></td>
                                    </tr>
                                    <tr>
-                                      <td>密码</td>
+                                      <td><img src="{% static "img/vm_pw.png" %}" width="20" />密码</td>
                                       <td colspan="5"><span name="password"></span></td>
                                    </tr>
                                </tbody>
@@ -574,7 +582,7 @@
         });
 		$('#alert_closed').on("click", function(){
 			window.location.href = window.location.href;
-		})
+		});
 
     });
 </script> 
@@ -585,6 +593,13 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#ipInput").ipInput();
+        //列表框，指针放上去时显示删除图标                       
+        $(".sec_block:not(:first)").live("mouseenter",function(){
+           $(this).children(".close").stop(true,false).fadeIn();
+        });
+        $(".sec_block:not(:first)").live("mouseleave",function(){
+           $(this).children(".close").stop(false,true).hide();
+        });
     });
 </script>
 {% endblock %}

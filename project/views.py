@@ -106,6 +106,22 @@ def invite(request, id):
         if message:
             for user_id in user_ids:
                 user = get_object_or_404(User, id=user_id)
+                try:
+                    Invitation.objects.get(to_user=user, target_id=project.id, target_type=target_type)
+                    messages.add_message(request, messages.INFO,
+                            _("The user has been invited of this project"))
+                    continue
+                except Invitation.DoesNotExist:
+                    pass
+
+                try:
+                    application = Application.objects.get(from_user=user, target_id=project.id, target_type=target_type, state__gt=0)
+                    messages.add_message(request, messages.INFO,
+                            _("The user has applied this project"))
+                    continue
+                except Application.DoesNotExist:
+                    pass
+
                 form = InvitationForm({'message': message, 'to_user': user_id})
                 if form.is_valid():
                     invitation = form.save(commit=False)
@@ -116,9 +132,9 @@ def invite(request, id):
             messages.add_message(request, messages.ERROR,
                     _("Invitation message is required."))
 
-    invited_user_ids = list(Invitation.objects.filter(target_id=project.id,
-            target_type=target_type).values_list("to_user__id", flat=True))
-    invited_user_ids.extend(project.member_ids())
+    invited_user_ids = []#list(Invitation.objects.filter(target_id=project.id,
+            #target_type=target_type).values_list("to_user__id", flat=True))
+    #invited_user_ids.extend(project.member_ids())
     invited_user_ids.extend(User.objects.filter(is_superuser=True).values_list("id", flat=True))
     users = User.objects.exclude(id__in=set(invited_user_ids))
     if 'query' in request.GET:
@@ -158,8 +174,25 @@ def apply(request):
         project_ids = request.POST.getlist('project_id')
         message = request.POST.get('message')
         if message:
+            apply_count = 0
             for project_id in project_ids:
                 project = get_object_or_404(Project, id=project_id)
+                target_type = ContentType.objects.get_for_model(project)
+                try:
+                    Application.objects.get(from_user=user, target_id=project.id, target_type=target_type)
+                    messages.add_message(request, messages.INFO,
+                            _("You have applied for this project"))
+                    continue
+                except Application.DoesNotExist:
+                    pass
+
+                try:
+                    Invitation.objects.get(to_user=user, target_id=project.id, target_type=target_type, state__gt=0)
+                    messages.add_message(request, messages.INFO,
+                            _("The user has been invited for this project"))
+                    continue
+                except Invitation.DoesNotExist:
+                    pass
                 form = ApplicationForm({"to_user": project.owner.id, "message": message})
                 if form.is_valid():
                     application = form.save(commit=False)
@@ -167,9 +200,11 @@ def apply(request):
                     application.from_user = user
                     try:
                         application.save()
+                        apply_count += 1
                     except IntegrityError:
                         pass
-            messages.add_message(request, messages.INFO, _("Application is submitted, please wait to audit."))
+            if apply_count > 0:
+                messages.add_message(request, messages.INFO, _("Application is submitted, please wait to audit."))
         else:
             messages.add_message(request, messages.ERROR, _("Application message is required."))
     return render(request, 'project/apply.html', context)

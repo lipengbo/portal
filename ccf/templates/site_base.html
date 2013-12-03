@@ -1,7 +1,7 @@
 {% extends "theme_base.html" %}
 {% load url from future %}
 {% load staticfiles %}
-
+{% load notifications_tags %}
 {% load metron_tags %}
 {% load i18n %}
         
@@ -38,6 +38,7 @@
                                 <div class="nav-collapse collapse">
                                     {% block nav %}
                                     	<ul class="nav">
+                                            {% notifications_unread as unread_count %}
                                             {% if user.is_superuser %}
                                                 <li class="index_menu"><a href="{% url "manage_index" %}">首页</a></li>
                                                 <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>
@@ -47,13 +48,12 @@
                                                         基础设施
                                                     </a>
                                                 </li>
-                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志</a></li>
-                                                <li class="system_menu"><a href="#">系统配置</a></li>
+                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志 <span class="label label-success">{{ unread_count }}</span></a></li>
                                             {% else %}
 					                            <li class="index_menu"><a href="{% url "project_manage" %}">首页</a></li>
 					                            <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>        
-					                            <li class="news_menu"><a href="{% url "notifications:all" %}">消息</a></li>
-					                            <li><a href="#">权限</a></li>
+                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息 <span class="label label-success">{{ unread_count }}</span></a></li>
+
 					                            <li><a href="#" class="help_menu">帮助</a></li>
                                             {% endif %}
 					                    </ul>
@@ -106,10 +106,11 @@
             <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
             <script>
                 $(document).ready(function(){
+                    /*
                     $("#accounts_logout").click(function(e) {
                         e.preventDefault();
                         $("#logoutModal").modal();
-                    });
+                    });*/
                     $('input').iCheck({
                         checkboxClass: 'icheckbox_square-blue',
                         radioClass: 'iradio_square-blue',
