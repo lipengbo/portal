@@ -296,10 +296,22 @@ function page_function2(){
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
 
 	if(!document.getElementById('dhcp_selected').checked){
-		$('#dhcp').hide();
-		document.getElementById('id_enable_dhcp').checked = false;
+		//$('#dhcp').hide();
+		var objs = document.getElementsByName("dhcp");
+		var checkboxes = document.getElementsByName('enable_dhcp');
+		for(var i=0; i<objs.length; i++){
+			objs[i].style.display = "none";
+			checkboxes[i].checked = false;
+		}
+		//document.getElementById('id_enable_dhcp').checked = false;
 	}else{
-		$('#dhcp').show();
+		//$('#dhcp').show();
+		var objs = document.getElementsByName("dhcp");
+		var checkboxes = document.getElementsByName('enable_dhcp');
+		for(var i=0; i<objs.length; i++){
+			objs[i].style.display = "block";
+			checkboxes[i].checked = true;
+		}
 	}
 	if (ret1){
 		//

@@ -28,26 +28,35 @@ class Checkslice(Job):
             pdb.set_trace()
 #         print "timer ******"
 #         print "before time"
-        slices = Slice.objects.all()
+        slices = Slice.objects.filter(type=0)
         #user = request.user
         time_delta = datetime.timedelta(seconds=1)
         for slice_obj in slices:
-#             print "time manage 1"
+#             print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++time manage 1"
+#             print datetime.datetime.now()
+#             print slice_obj.date_expired
             date = datetime.datetime.now() - slice_obj.date_expired
-            if (date > time_delta and slice_obj.expired == 0):
-                print "time manage 2"
+            if date > time_delta:
+#                 print "_____________________________________________________________time manage 2"
                 try:
+                    print 1
                     slice_deleted = SliceDeleted(name = slice_obj.name,
-                        owner_name = slice_obj.owner.name,
+                        show_name = slice_obj.show_name,
+                        owner_name = slice_obj.owner.username,
                         description = slice_obj.description,
                         project_name = slice_obj.project.name,
                         date_created = slice_obj.date_created,
                         date_expired = slice_obj.date_expired,
                         type = 2)
+                    print 2
                     slice_obj.delete()
-                except:
+                    print 3
+                except Exception, ex:
+                    print 4
+                    print ex
                     pass
                 else:
+                    print 5
                     slice_deleted.save()
 #                 email = '350603736@qq.com'
 #                 slice_obj.expired = 1

@@ -22,14 +22,16 @@
 {% block body %}
 
     <div class="search">
+        {%if extent_html == "admin_base.html" %}
         <form class="form-inline" style="float:left;">
             <label>虚网类型：</label>
-            <select name="slice_type" id="slice_type">
-                <option value="0" selected>正常虚网</option>
-                <option value="1">删除失败虚网</option>
-                <option value="2">已删除虚网</option>             
+            <select name="slice_type" id="slice_type" onchange="slice_type_change()">
+                <option value="0" {%if type == 0 %}selected{%endif%}>正常运行</option>
+                <option value="1" {%if type == 1 %}selected{%endif%}>删除失败</option>
+                <option value="2" {%if type == 2 %}selected{%endif%}>已删除</option>          
             </select>
         </form>
+        {%endif%}
         <form class="form-search">
           <div class="input-append">
               <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
@@ -141,6 +143,10 @@
 <script type="text/javascript">
     function refreshcountiframe(target, type){
         document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type; 
+    }
+    function slice_type_change(){
+        var slice_type = document.getElementById("slice_type");
+        location.href = location.href+"?type="+slice_type.value;
     }
 </script>
 {% endblock %}

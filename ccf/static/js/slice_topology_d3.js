@@ -156,15 +156,15 @@ var color_map = {'switch': 2, 'host': 1, 'vm':3, 'fv':4, 'controller':5};
 var vm_state = {
     0: 'nostate',
     1: "running",
-    3: "blocked",
-    4: "paused",
-    5: "shutdown",
-    6: "shutoff",
-    7: "crashed",
-    8: "pmsuspended",
-    9: "building",
-    10: "failed",
-    11: "notexist",
+    2: "blocked",
+    3: "paused",
+    4: "shutdown",
+    5: "shutoff",
+    6: "crashed",
+    7: "pmsuspended",
+    8: "building",
+    9: "failed",
+    10: "notexist",
 }
 var server = '/';
 var static_url = $("#STATIC_URL").text();
@@ -380,7 +380,7 @@ function inittpdata(){
                     nodes_data[src_node_id].yid = normals[i].hostid;
                     nodes_data[src_node_id].type_id = normals[i].hostStatus;
                     nodes_data[src_node_id].name = normals[i].name;
-                    nodes_data[src_node_id].mac = normals[i].mac;
+                    nodes_data[src_node_id].mac = normals[i].macAddress;
                    // nodes_data[src_node_id].vnc_port = normals[i].vnc_port;
                     if(normals[i].hostStatus == 1){
                         nodes_data[src_node_id].icon = 'img/host.png';

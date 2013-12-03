@@ -24,7 +24,8 @@ from plugins.vt.api import get_slice_gw_mac
 import logging
 LOG = logging.getLogger("ccf")
 
-from etc.config import slice_expiration_days
+from etc import config
+# from etc.config import slice_expiration_days
 
 
 def create_slice_step(project, name, description, island, user, ovs_ports,
@@ -85,13 +86,17 @@ def create_slice_api(project, name, description, island, user):
         Slice.objects.get(name=name)
     except Slice.DoesNotExist:
         try:
-            slice_expiration_days = int(slice_expiration_days)
+            print 'sexp 1'
+            slice_expiration_days = int(config.slice_expiration_days)
+            print 'sexp 2'
         except:
+            print 'sexp 3'
             if slice_expiration_days <= 0:
                 slice_expiration_days = 30
         else:
+            print 'sexp 4'
             slice_expiration_days = 30
-        print "slice_expiration_days:"+slice_expiration_days
+        print "slice_expiration_days:"+str(slice_expiration_days)
         if project and island and user:
             flowvisors = island.flowvisor_set.all()
             if flowvisors:

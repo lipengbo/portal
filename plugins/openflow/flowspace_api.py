@@ -83,7 +83,7 @@ def flowspace_gw_add(slice_obj, new_gateway):
                                      new_gateway, '', '0x800', '', haved_nw,
                                      '', '', '', '')
         slice_gw = get_slice_gw_mac(slice_obj)
-        phy_gw = get_phydata_gw_mac()
+        phy_gw = get_phydata_gw_mac(slice_obj.get_island())
         create_default_flowspace(slice_obj, name, '100', '', '', '',
                                  phy_gw, slice_gw, '0x800', '', '', '',
                                  '', '', '')

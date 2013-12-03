@@ -25,7 +25,7 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
         flowvisor_ps = str(flowvisor.password)
         adslice = do_addSlice(args, pwd, False, flowvisor_url, flowvisor_ps)
         if adslice == 'error':
-            raise FlowvisorError("flowvisor上创建slice失败,flowvisor连接失败或控制器不可用!")
+            raise FlowvisorError("虚网创建失败!")
     else:
         raise DbError("数据库异常")
 
@@ -42,7 +42,7 @@ def flowvisor_update_sice_controller(flowvisor, slice_name, controller_ip, contr
             flowvisor_ps = str(flowvisor.password)
             upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
             if upslice == 'error':
-                raise FlowvisorError("flowvisor上更新控制器失败,flowvisor连接失败或控制器不可用!")
+                raise FlowvisorError("控制器更新失败!")
     else:
         raise DbError("数据库异常!")
 
@@ -58,7 +58,7 @@ def flowvisor_update_slice_status(flowvisor, slice_name, status):
         flowvisor_ps = str(flowvisor.password)
         upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
         if upslice == 'error':
-            raise FlowvisorError("flowvisor更新slice状态失败!")
+            raise FlowvisorError("虚网状态更新失败!")
     else:
         raise DbError("数据库异常！")
 

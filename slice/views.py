@@ -116,6 +116,7 @@ def list(request, proj_id):
         context['extent_html'] = "site_base.html"
     if int(proj_id) == 0:
         if 'type' in request.GET:
+            type = request.GET.get('type')
             if int(type) == 0 or int(type) == 1:
                 slice_objs = Slice.objects.filter(type=int(type))
             else:
@@ -149,7 +150,10 @@ def list(request, proj_id):
     if request.is_ajax():
         print '89'
         return render(request, 'slice/list_page.html', context)
-    return render(request, 'slice/slice_list.html', context)
+    if context['type'] == 0:
+        return render(request, 'slice/slice_list.html', context)
+    else:
+        return render(request, 'slice/delete_slice_list.html', context)
 
 
 @login_required
@@ -249,7 +253,8 @@ def delete(request, slice_id, flag):
     if request.user.is_superuser or request.user == slice_obj.owner:
         try:
             slice_deleted = SliceDeleted(name = slice_obj.name,
-                owner_name = slice_obj.owner.name,
+                show_name = slice_obj.show_name,
+                owner_name = slice_obj.owner.username,
                 description = slice_obj.description,
                 project_name = slice_obj.project.name,
                 date_created = slice_obj.date_created,

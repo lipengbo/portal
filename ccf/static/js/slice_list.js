@@ -122,4 +122,3 @@ $(function() {
         context.fillStyle="#000000";    
         context.fillText(canvasTitle,55,13);        
     });
-

@@ -8,6 +8,7 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 from django.utils.translation import ugettext as _
+from project.models import Island
 from plugins.ipam import netaddr as na
 import pytz
 import datetime
@@ -68,8 +69,9 @@ class IPManager(models.Manager):
             ip.save()
         return True
 
-    def allocate_ip_for_controller(self):
-        subnet = Subnet.objects.get(owner=0, is_used=True, is_owned=True)
+    def allocate_ip_for_controller(self, island):
+        owner = 'island_%s_0' % island.id
+        subnet = Subnet.objects.get(owner=owner, is_used=True, is_owned=True)
         ips = self.filter(supernet=subnet)
         unused_ips = ips.filter(is_used=False)
         if unused_ips:
@@ -87,8 +89,9 @@ class IPManager(models.Manager):
     def release_ip_for_controller(self, ip):
         return self.release_ip(ip)
 
-    def allocate_ip_for_gw(self):
-        subnet = Subnet.objects.get(owner=2, is_used=True, is_owned=True)
+    def allocate_ip_for_gw(self, island):
+        owner = 'island_%s_2' % island.id
+        subnet = Subnet.objects.get(owner=owner, is_used=True, is_owned=True)
         ips = self.filter(supernet=subnet)
         unused_ips = ips.filter(is_used=False)
         if unused_ips:
@@ -182,8 +185,9 @@ class Network(models.Model):
                   (1, _('subnet for slice')),
                   (2, _('subnet for gateway')),)
     netaddr = models.CharField(max_length=20, null=False, unique=True)
-    gw_ip = models.IPAddressField(null=True)
-    gw_mac = models.CharField(max_length=64, null=True)
+    gw_ip = models.IPAddressField(null=True, blank=True)
+    gw_mac = models.CharField(max_length=64, null=True, blank=True)
+    island = models.ForeignKey(Island, null=True, default=None, blank=True)
     type = models.IntegerField(null=False, choices=TYPE_CHOICE)
 
     def get_network(self):
@@ -193,6 +197,7 @@ class Network(models.Model):
         return self.netaddr
 
     class Meta:
+        unique_together = (("island", "type"), )
         ordering = ['id', ]
         verbose_name = _("Network")
 
@@ -254,7 +259,8 @@ def create_base_subnet(sender, instance, **kwargs):
     network = instance
     if kwargs.get('created'):
         if network.type != 1:
-            Subnet(supernet=network, netaddr=network.netaddr, owner=network.type, is_used=True, is_owned=True).save()
+            owner = 'island_%s_%s' % (network.island.id, network.type)
+            Subnet(supernet=network, netaddr=network.netaddr, owner=owner, is_used=True, is_owned=True).save()
 
 
 @receiver(pre_save, sender=Subnet)

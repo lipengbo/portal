@@ -379,7 +379,7 @@
                             </tr>
                         </tbody>
                      </table>
-					<div id="dhcp">                                
+					<div name="dhcp">                                
                      <label>
                                     {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                                          是否启动DHCP
@@ -400,8 +400,12 @@
                                    <tr>
                                        <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
                                        <td><span name="cpu"></span></td>
+                                   </tr>
+                                   <tr>
                                        <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
                                        <td><span name="ram"></span></td>
+                                   </tr>
+                                   <tr>
                                        <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
                                        <td><span name="hdd"></span></td>
                                    </tr>

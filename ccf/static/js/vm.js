@@ -89,17 +89,18 @@ function check_vm_select(obj){
                {
                        showMsg(info,"","ok");
                        results[i] = true
+					   
 					   if(field == 'flavor'){
-							$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
+							//$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
 							desc_msg('flavor', obj.value, i);
 							
 						}
 						else if(field == 'image'){
-							$('[name="image_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
+							//$('[name="image_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
 							desc_msg('image', obj.value, i);				
 						}
 						else if(field == 'server'){
-							$('[name="server_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
+							//$('[name="server_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
 						}
                }	
         }

@@ -246,6 +246,7 @@ class Slice(models.Model):
 
 class SliceDeleted(models.Model):
     name = models.CharField(max_length=256)
+    show_name = models.CharField(max_length=256)
     owner_name = models.CharField(max_length=256)
     description = models.TextField()
     project_name = models.CharField(max_length=256)
