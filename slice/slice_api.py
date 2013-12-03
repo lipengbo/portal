@@ -295,14 +295,14 @@ def update_slice_virtual_network(slice_obj):
                     default_flowspace.nw_src, default_flowspace.nw_dst,
                     default_flowspace.nw_proto, default_flowspace.nw_tos,
                     default_flowspace.tp_src, default_flowspace.tp_dst)
-                try:
-                    flowvisor_add_flowspace(flowvisor, flowspace_name,
-                                            slice_obj.id,
-                                            default_flowspace.actions, 'cdn%nf',
-                                            dpid,
-                                            default_flowspace.priority, arg_match)
-                except:
-                    raise
+            try:
+                flowvisor_add_flowspace(flowvisor, flowspace_name,
+                                        slice_obj.id,
+                                        default_flowspace.actions, 'cdn%nf',
+                                        dpid,
+                                        default_flowspace.priority, arg_match)
+            except:
+                raise
 
 
 def get_slice_topology(slice_obj):
