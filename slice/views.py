@@ -122,7 +122,7 @@ def list(request, proj_id):
                 slice_objs = SliceDeleted.objects.all()
             context['type'] = int(type)
         else:
-            slice_objs = slice_objs.filter(type=0)
+            slice_objs = Slice.objects.filter(type=0)
             context['type'] = 0
         date_now = datetime.datetime.now()
         sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
