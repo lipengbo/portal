@@ -2,7 +2,7 @@
 from models import *
 from django.db import transaction
 from slice.slice_exception import DbError
-from plugins.vt.api.py import get_slice_gw_mac, get_phydata_gw_mac
+from plugins.vt.api import get_slice_gw_mac, get_phydata_gw_mac
 
 
 import logging
