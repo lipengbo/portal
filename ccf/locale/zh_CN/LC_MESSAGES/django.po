@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-26 17:32+0800\n"
+"POT-Creation-Date: 2013-12-03 19:44+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: receivers.py:103
+#: receivers.py:104
 msgid " signed up "
 msgstr "注册了帐号"
 
-#: receivers.py:104
+#: receivers.py:105
+#, python-format
 msgid "Please review this user %s"
 msgstr "该用户的研究方向是：%s，请审核"
 
-#: templates/_account_bar.html:25 templates/account/base.html:11
+#: templates/_account_bar.html:25 templates/account/password_change.html:10
+#: templates/account/password_change.html:14
 msgid "Change password"
 msgstr ""
 
@@ -34,7 +36,7 @@ msgstr ""
 msgid "Admin"
 msgstr ""
 
-#: templates/_account_bar.html:32 templates/site_base.html:174
+#: templates/_account_bar.html:32 templates/site_base.html:177
 msgid "Log out"
 msgstr ""
 
@@ -88,9 +90,42 @@ msgstr ""
 msgid "help"
 msgstr ""
 
-#: templates/account/base.html:10
-msgid "Account"
+#: templates/account/password_change.html:19
+msgid "Save"
 msgstr ""
+
+#: templates/account/password_change.html:20
+msgid "Cancel"
+msgstr ""
+
+#: templates/account/password_reset.html:9
+#: templates/account/password_reset.html:15
+msgid "Password reset"
+msgstr ""
+
+#: templates/account/password_reset_sent.html:7
+msgid "Password reset sent"
+msgstr ""
+
+#: templates/account/password_reset_sent.html:18
+msgid "Resend"
+msgstr ""
+
+#: templates/account/email/password_change.txt:2
+#, python-format
+msgid ""
+"This is the email notification to confirm your password has been changed on "
+"%(time)s."
+msgstr ""
+"亲爱的用户，您好：\n"
+"    您在%(time)s已经成功修改了本平台登录密码。\n"
+"    如果您未修改过密码，请及时联系我们：ccf@fnic.cn。\n"
+"SDN创新实验平台"
+
+
+#: templates/account/email/password_change_subject.txt:2
+msgid "Change password email notification"
+msgstr "SDN创新实验平台修改密码成功"
 
 #: templates/notifications/list.html:4 templates/notifications/list.html:7
 #: templates/notifications/list.html:14
@@ -117,11 +152,11 @@ msgstr "目前没有任何通知消息"
 msgid "Mark as read"
 msgstr "标记为已读"
 
-#: templates/notifications/notice.html:20
+#: templates/notifications/notice.html:37
 msgid "ago"
 msgstr "前"
 
-#: templates/notifications/notice.txt:4
+#: templates/notifications/notice.txt:3
 msgid "Click link below to view the detail notification."
 msgstr ""
 
@@ -133,5 +168,5 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr "该%(field_label)s已存在。"
+#~ msgid "%(model_name)s with this %(field_label)s already exists."
+#~ msgstr "该%(field_label)s已存在。"

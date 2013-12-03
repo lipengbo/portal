@@ -265,14 +265,3 @@ msgstr ""
 msgid "[%(site_name)s] Password reset"
 msgstr "[%(site_name)s] 密码重置"
 
-
-msgid "Change password email notification"
-msgstr "%(site_name)s修改密码成功"
-
-msgid "This is the email notification to confirm your password has been changed on %s."
-msgstr ""
-"亲爱的用户，您好："
-"    您已经成功修改了本平台登录密码。"
-"    如果您未修改过密码，请及时联系我们：ccf@fnic.cn。"
-"SDN创新实验平台"
-
