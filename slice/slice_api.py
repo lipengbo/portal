@@ -232,7 +232,7 @@ def stop_slice_api(slice_obj):
 def update_slice_virtual_network(slice_obj):
     """更新slice的虚网，添加或删除交换机端口、网段、gateway、dhcp、vm后调用
     """
-    LOG.debug('update_slice_virtual_network')
+    print 'update_slice_virtual_network'
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -277,6 +277,7 @@ def update_slice_virtual_network(slice_obj):
                                             default_flowspace.priority, arg_match)
                 except:
                     raise
+    print dpids
     for dpid in dpids:
         for default_flowspace in default_flowspaces:
             if (default_flowspace.dl_src == slice_gw and default_flowspace.dl_type == '0x806') or\
