@@ -17,7 +17,7 @@ from resources.models import Switch
 from django.db import transaction
 import datetime
 import traceback
-from plugins.vt.api.py import get_slice_gw_mac
+from plugins.vt.api import get_slice_gw_mac
 
 import logging
 LOG = logging.getLogger("ccf")
