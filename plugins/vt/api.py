@@ -103,11 +103,13 @@ def get_slice_gw_ip(slice):
     return gw_vm.gateway_public_ip
 
 
-def get_phydata_gw_mac():
-    net = Subnet.objects.get(owner=2)
+def get_phydata_gw_mac(island):
+    owner = 'island_%s_2' % island.id
+    net = Subnet.objects.get(owner=owner)
     return net.get_gateway_mac()
 
 
-def get_phydata_gw_ip():
-    net = Subnet.objects.get(owner=2)
+def get_phydata_gw_ip(island):
+    owner = 'island_%s_2' % island.id
+    net = Subnet.objects.get(owner=owner)
     return net.get_gateway_ip()
