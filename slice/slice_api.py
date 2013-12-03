@@ -200,6 +200,7 @@ def start_slice_api(slice_obj):
                 update_slice_virtual_network(slice_obj)
             except Exception, ex:
                 transaction.rollback()
+                stop_slice_api(slice_obj)
                 print ex
                 raise DbError("虚网启动失败！")
 #             else:
