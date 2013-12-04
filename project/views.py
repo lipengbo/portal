@@ -137,7 +137,7 @@ def invite(request, id):
     #invited_user_ids.extend(project.member_ids())
     invited_user_ids.append(project.owner.id)
     invited_user_ids.extend(User.objects.filter(is_superuser=True).values_list("id", flat=True))
-    users = User.objects.exclude(id__in=set(invited_user_ids))
+    users = User.objects.exclude(id__in=set(invited_user_ids)).filter(is_active=True)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
