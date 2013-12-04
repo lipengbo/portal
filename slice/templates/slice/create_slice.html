@@ -144,9 +144,9 @@
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{port.port}}
+                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{ port.name }}
 					    {%else%}
-                        <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{port.port}}
+                        <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{ port.name }}
 		                            {%endif%}
 	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
