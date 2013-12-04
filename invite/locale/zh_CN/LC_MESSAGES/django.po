@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-28 15:28+0800\n"
+"POT-Creation-Date: 2013-12-03 19:01+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,15 +42,19 @@ msgstr "接受"
 msgid "Rejected"
 msgstr "拒绝"
 
-#: models.py:61
+#: models.py:63
 msgid "Accept"
 msgstr "接受"
 
-#: models.py:66
+#: models.py:68
 msgid "Reject"
 msgstr "拒绝"
 
-#: models.py:91
+#: models.py:82
+msgid "Project Invitation"
+msgstr "项目邀请"
+
+#: models.py:97
 #, python-format
 msgid ""
 "You're invited by %(inviter)s to join a project of %(project)s.\n"
@@ -65,19 +69,19 @@ msgstr ""
 "您可以点击下面的链接接受该邀请：\n"
 "%(accept_link)s"
 
-#: models.py:92
+#: models.py:98
 msgid "invited you to join in"
 msgstr "邀请你加入"
 
-#: models.py:94
-msgid "You have an invitation"
-msgstr "您有一个邀请"
-
-#: models.py:97
+#: models.py:102
 msgid "Invitation"
 msgstr "邀请"
 
-#: models.py:114
+#: models.py:116
+msgid "Project Application"
+msgstr "项目申请"
+
+#: models.py:123
 #, python-format
 msgid ""
 "%(applicant)s wants to join in %(project)s.\n"
@@ -92,19 +96,15 @@ msgstr ""
 "您可以点击下面的链接接受该邀请：\n"
 "%(accept_link)s"
 
-#: models.py:115
+#: models.py:124
 msgid "applied to join in"
 msgstr "申请加入"
 
-#: models.py:117
-msgid "You have an application"
-msgstr "您有一个加入申请"
-
-#: models.py:120
+#: models.py:128
 msgid "Application"
 msgstr "申请"
 
-#: models.py:144
+#: models.py:155
 #, python-format
 msgid "[%(site_name)s] You have new notification messages"
 msgstr "[%(site_name)s] 你有一个新的通知消息"
@@ -117,3 +117,9 @@ msgstr "邀请完成"
 #, python-format
 msgid "You have joined %s"
 msgstr "您加入了%s"
+
+#~ msgid "You have an invitation"
+#~ msgstr "您有一个邀请"
+
+#~ msgid "You have an application"
+#~ msgstr "您有一个加入申请"
