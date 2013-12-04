@@ -1078,8 +1078,10 @@ function random_refresh2 () {
 random_refresh2();
 
 function topology_update_vm_state(vm_id, state){
+    //alert('here2');
     var nid = get_node_by_yid(vm_id);
     if(nid>=0){
+        nodes_data[nid].type_id = state;
         if(state == 1){
             nodes_data[nid].icon = 'img/host.png';
         }else{
