@@ -78,14 +78,14 @@ $(document).ready(function() {
         if($(this).hasClass("btn-success")){
             $(this).removeClass("btn-success").addClass("btn-danger");
             if($(this).hasClass("btn-large")){            
-                $(this).text("停止Slice");
+                $(this).text("停止虚网");
             } else {              
                 $(this).text("停止");
             }           
         } else {
             $(this).removeClass("btn-danger").addClass("btn-success");
             if($(this).hasClass("btn-large")){
-                $(this).text("启动Slice");
+                $(this).text("启动虚网");
             } else {
                 $(this).text("启动");
             }           
@@ -286,11 +286,13 @@ function page_function1(){
     	fetch_serverinfo("id_server_gw");
     	fetch_gw_ip(slice_name);
 
-		if(check_ovs_gw()){
+        
+    /*if(check_ovs_gw()){
 			$('#gw_setting').show();
 		}else{
 			$('#gw_setting').hide();
 		}
+    */
 		return true;
 	}
 	else{
@@ -299,13 +301,26 @@ function page_function1(){
 }
 function page_function2(){
     fetch_serverinfo("id_server");
-	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=620&height=300&top=0&switch_port_ids=" + get_select_ports())
-	ret1 = check_slice_controller('controller_type');
+	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&switch_port_ids=" + get_select_ports())
+	ret1 = check_slice_controller('controller_type') && check_gw_select();
+
 	if(!document.getElementById('dhcp_selected').checked){
-		$('#dhcp').hide();
-		document.getElementById('id_enable_dhcp').checked = false;
+		//$('#dhcp').hide();
+		var objs = document.getElementsByName("dhcp");
+		var checkboxes = document.getElementsByName('enable_dhcp');
+		for(var i=0; i<objs.length; i++){
+			objs[i].style.display = "none";
+			checkboxes[i].checked = false;
+		}
+		//document.getElementById('id_enable_dhcp').checked = false;
 	}else{
-		$('#dhcp').show();
+		//$('#dhcp').show();
+		var objs = document.getElementsByName("dhcp");
+		var checkboxes = document.getElementsByName('enable_dhcp');
+		for(var i=0; i<objs.length; i++){
+			objs[i].style.display = "block";
+			checkboxes[i].checked = true;
+		}
 	}
 	if (ret1){
 		//
@@ -529,9 +544,9 @@ function submit_slice_info(project_id){
 	            }
 	        },
 	        error: function(data) {
-	        	//alert("创建slice异常！");
+	        	//alert("创建虚网异常！");
 	        	$("div#slice_alert_info").empty();
-                str = "" + "<p class=\"text-center\">" + "创建slice异常！" + "</p>";
+                str = "" + "<p class=\"text-center\">" + "创建虚网异常！" + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
 	        }

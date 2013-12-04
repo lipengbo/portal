@@ -228,3 +228,6 @@ class FileNotFound(NotFound):
 
 class ResourceNotEnough(CCFException):
     message = _("resource not enough")
+
+class ConnectionRefused(CCFException):
+    message = _("connection refused")

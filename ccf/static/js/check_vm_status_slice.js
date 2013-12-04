@@ -204,6 +204,7 @@ function check_vm_status(slice_id){
                             str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
+                        //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
                     }//endfor
 			        
 			    }else{

@@ -117,6 +117,8 @@ class Project(models.Model):
         except IntegrityError, e:
             pass
 
+    def get_slices(self):
+        return self.slice_set.filter(type=0)
 
     def __unicode__(self):
         return self.name

@@ -16,14 +16,14 @@ from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
-    get_slice_links_bandwidths, get_slice_count_show
+    get_slice_links_bandwidths, get_count_show_data
 from plugins.openflow.controller_api import slice_change_controller
 from project.models import Project, Island
 from resources.models import SwitchPort
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 
-from slice.models import Slice
+from slice.models import Slice, SliceDeleted
 
 from plugins.vt.forms import VmForm
 import datetime
@@ -107,48 +107,60 @@ def create_first(request, proj_id):
 @login_required
 def list(request, proj_id):
     """显示所有slice。"""
-    from common.models import DailyCounter
+    from common.models import Counter
     user = request.user
     context = {}
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
-    else:
-        context['extent_html'] = "site_base.html"
-    if int(proj_id) == 0:
-        slice_objs = Slice.objects.all()
-        date_now = datetime.datetime.now()
-        sc = DailyCounter.objects.filter(date__year=date_now.strftime('%Y'),
-                                  date__month=date_now.strftime('%m'),
-                                  date__day=date_now.strftime('%d'),
-                                  target=1)
-        if sc:
-            num = sc[0].count
+        if int(proj_id) == 0:
+            if 'type' in request.GET:
+                type = int(request.GET.get('type'))
+                if type == 0 or type == 1:
+                    slice_objs = Slice.objects.filter(type=int(type))
+                else:
+                    slice_objs = SliceDeleted.objects.all()
+                context['type'] = type
+            else:
+                slice_objs = Slice.objects.filter(type=0)
+                context['type'] = 0
+            if context['type'] == 0:
+                date_now = datetime.datetime.now()
+                sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
+                                            date__month=date_now.strftime('%m'),
+                                            date__day=date_now.strftime('%d'),
+                                            target=1,
+                                            type=2)
+                if sc:
+                    num = sc[0].count
+                else:
+                    num = 0
+                context['new_num'] = num
+                context['total_num'] = Slice.objects.all().count
         else:
-            num = 0
-        context['new_num'] = num
-        context['total_num'] = slice_objs.count()
+            context['type'] = 0
+            project = get_object_or_404(Project, id=proj_id)
+            context['project'] = project
+            slice_objs = project.slice_set.filter(type=0)
     else:
+        context['type'] = 0
+        context['extent_html'] = "site_base.html"
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
-        slice_objs = project.slice_set.all()
+        slice_objs = project.slice_set.filter(type=0)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
             slice_objs = slice_objs.filter(Q(show_name__icontains=query) | Q(description__icontains=query))
             context['query'] = query
     context['slices'] = slice_objs
-    return render(request, 'slice/slice_list.html', context)
-
-
-def get_slice_show(request):
-    print "------------------------------------========================================="
-    target = request.GET.get('target')
-    try:
-        slice_count_show = get_slice_count_show(target)
-    except Exception, ex:
-        return HttpResponse(json.dumps({'result': 0}))
+    if request.is_ajax():
+        print '89'
+        return render(request, 'slice/list_page.html', context)
+    print context
+    if context['type'] == 0:
+        return render(request, 'slice/slice_list.html', context)
     else:
-        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
+        return render(request, 'slice/delete_slice_list.html', context)
 
 
 @login_required
@@ -240,28 +252,50 @@ def detail(request, slice_id):
 
 
 @login_required
-def delete(request, slice_id, flag):
+def delete(request, slice_id):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     user = request.user
     project_id = slice_obj.project.id
     if request.user.is_superuser or request.user == slice_obj.owner:
         try:
+            slice_deleted = SliceDeleted(name = slice_obj.name,
+                show_name = slice_obj.show_name,
+                owner_name = slice_obj.owner.username,
+                description = slice_obj.description,
+                project_name = slice_obj.project.name,
+                date_created = slice_obj.date_created,
+                date_expired = slice_obj.date_expired)
+            if request.user.is_superuser:
+                slice_deleted.type = 1
+            else:
+                slice_deleted.type = 0
             slice_obj.delete()
         except Exception, ex:
-            messages.add_message(request, messages.ERROR, ex)
+            print ex
+#             if request.user.is_superuser:
+#                 messages.add_message(request, messages.ERROR, ex)
+        else:
+            slice_deleted.save()
     else:
         return redirect("forbidden")
     if 'next' in request.GET:
-        return redirect(request.GET.get('next'))
-    if int(flag) == 1:
-        return HttpResponseRedirect(
-            reverse("project_detail", kwargs={"id": project_id}))
-    else:
-        if user.is_superuser:
-            project_id = 0
-        return HttpResponseRedirect(
-            reverse("slice_list", kwargs={"proj_id": project_id}))
+        print request.GET.get('next')
+        if 'type' in request.GET:
+            print request.GET.get('type')
+            return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))
+        else:
+            return redirect(request.GET.get('next'))
+    return HttpResponseRedirect(
+        reverse("project_detail", kwargs={"id": project_id}))
+#     if int(flag) == 1:
+#         return HttpResponseRedirect(
+#             reverse("project_detail", kwargs={"id": project_id}))
+#     else:
+#         if user.is_superuser:
+#             project_id = 0
+#         return HttpResponseRedirect(
+#             reverse("slice_list", kwargs={"proj_id": project_id}))
 
 
 @login_required
@@ -286,7 +320,7 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
-#     print jsondatas
+    print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
@@ -408,3 +442,32 @@ def update_links_bandwidths(request, slice_id):
     ret = get_slice_links_bandwidths(switchs_ports, maclist)
     result = json.dumps({'bandwidth': ret})
     return HttpResponse(result, mimetype='text/plain')
+
+
+def countiframe(request):
+    print 'countiframe'
+    context = {}
+    context['target'] = request.GET.get('target')
+    context['type'] = request.GET.get('type')
+    return render(request, 'slice/countiframe.html', context)
+
+
+def get_count_show(request):
+    print "------------------------------------========================================="
+    target = request.GET.get('target')
+    type = request.GET.get('type')
+    total_num = request.GET.get('total_num')
+    try:
+        slice_count_show = get_count_show_data(target, type, total_num)
+    except Exception, ex:
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
+
+
+def dhcp_switch(request, slice_id, flag):
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if slice_obj.set_dhcp(flag):
+        return HttpResponse(json.dumps({'result': 0}))
+    else:
+        return HttpResponse(json.dumps({'result': 1}))

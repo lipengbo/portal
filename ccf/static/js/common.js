@@ -19,6 +19,7 @@ function data_process(data){
     return Math.round(data);
 }
 
+
 function data_process_unit(data, unit){
     if (data > 1024){
 		data = data/1024 //KB
@@ -32,7 +33,22 @@ function data_process_unit(data, unit){
 			}
 		}
 	}
-    return unit
+    return unit;
+}
+function data_process_chart(data, unit){
+    if (data > 1024){
+		data = data/1024 //KB
+        unit = 'KB'
+        if (data > 1024){
+			data = data/1024 //MB
+            unit = 'MB'
+            if (data >1024){
+				data = data/1024 //GB
+                unit = 'GB'
+			}
+		}
+	}
+    return [Math.round(data), unit];
 }
 
 

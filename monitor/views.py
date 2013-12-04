@@ -9,6 +9,7 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from resources.models import Server, Switch
 from plugins.vt.models import VirtualMachine
+from plugins.common.exception import ConnectionRefused
 
 
 
@@ -79,6 +80,48 @@ def update_port_performace_data(request):
             return HttpResponse(json.dumps({'result': 1, 'error': _("server error")}))
     return HttpResponse(json.dumps(performace_port_data))
 
+def get_switch_port_info(request, switch_id):
+    pre_port_data = None
+    if request.method == 'POST':
+        pre_port_data = json.loads(request.POST.get("pre_port_data"))
+        #print "===>", pre_port_data['eth1']
+
+    try:
+        switch = get_object_or_404(Switch, id=switch_id)
+        switch_stat = get_switch_stat(switch.ip)
+        if switch_stat == None:
+            raise ConnectionRefused()
+        #ports_info = []
+        print "---------------------------"
+        port_info = {}
+        #i = 0
+        for br in switch_stat:
+            for port in br['ports']:
+                if 'v' in port['name']:
+                    break
+                recv_data = int(port['stats']['recv']['byte'])
+                send_data = int(port['stats']['recv']['byte'])
+                if pre_port_data:
+                    recv_bps = recv_data - int(pre_port_data[port['name']][0])
+                    send_bps = send_data - int(pre_port_data[port['name']][1])
+                else:
+                    recv_bps = 0
+                    send_bps = 0
+                port_info[port['name']] = [recv_data, send_data, recv_bps, send_bps]
+            #ports_info.append(port_info)
+            #i = i + 1
+            #if i > 2:
+            #    break
+        print port_info
+        print "---------------------------"
+    except socket_error as serr:
+        if serr.errno == errno.ECONNREFUSED:
+            return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
+    except ConnectionRefused, e:
+        return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+    except:
+        return HttpResponse(json.dumps({'result': 1, 'error': _("server error")}))
+    return HttpResponse(json.dumps(port_info))
 
 def update_vm_performace_data(request):
     """

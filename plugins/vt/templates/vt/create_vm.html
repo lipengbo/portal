@@ -4,8 +4,9 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% block breadcrumb %}
+    <a href="/project/">项目</a><span class="divider">/</span>
 	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
+	<a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a><span class="divider">/</span>
         <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
@@ -28,7 +29,7 @@
     <div class="modal-body" id="topology_info">
 		<div class="row-fluid">
         	<div class="span8">
-        		<iframe scrolling="no" id="topologyiframe" width="450" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=450&height=300&top=0" frameborder="0"></iframe>
+        		<iframe scrolling="no" id="topologyiframe" width="530" height="305" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=560&height=305&top=0" frameborder="0"></iframe>
          	</div>
          </div>  
 	</div>                
@@ -92,11 +93,11 @@
                    </tr>
                    <tr>
                        <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
-                       <td><span name="cpu"></span>核</td>
+                       <td><span name="cpu"></span></td>
                        <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
-                       <td><span name="ram"></span>MB</td>
+                       <td><span name="ram"></span></td>
                        <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
-                       <td><span name="hdd"></span>GB</td>
+                       <td><span name="hdd"></span></td>
                    </tr>
                    <tr>
                       <td>宿主机</td>
