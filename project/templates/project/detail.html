@@ -98,14 +98,11 @@
     {%endif%}
   <fieldset>
       <legend>
-         <!-- {% if  project.slice_set.count > 4%}
-            <button type="button" class="btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button>
-          {% endif %}-->
           虚网
       </legend>        
         <div class="row-fluid">
              <ul class="thumbnails example-sites">
-		         {% for slice in project.slice_set.all %}
+		         {% for slice in project.get_slices %}
 		         {% if forloop.counter <= 2  %}
 		               {% include "slice/_slice.html" %}
 		         {%endif%}

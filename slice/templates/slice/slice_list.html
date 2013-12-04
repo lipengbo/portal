@@ -8,6 +8,7 @@
 {% block head_title %}虚网列表{% endblock %}
 {% block breadcrumb %}
     {%if extent_html == "site_base.html" %}
+        <a href="/project/">项目</a><span class="divider">/</span>
         <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>  
         虚网列表
     {%else%}
@@ -23,6 +24,7 @@
 
     <div class="search">
         {%if extent_html == "admin_base.html" %}
+        {%if not project%}
         <form class="form-inline" style="float:left;">
             <label>虚网类型：</label>
             <select name="slice_type" id="slice_type" onchange="slice_type_change()">
@@ -31,6 +33,7 @@
                 <option value="2" {%if type == 2 %}selected{%endif%}>已删除</option>          
             </select>
         </form>
+        {%endif%}
         {%endif%}
         <form class="form-search">
           <div class="input-append">
@@ -146,7 +149,9 @@
     }
     function slice_type_change(){
         var slice_type = document.getElementById("slice_type");
-        location.href = location.href+"?type="+slice_type.value;
+        var href = location.href;
+        var hrefs = href.split("?");
+        location.href = hrefs[0]+"?type="+slice_type.value;
     }
 </script>
 {% endblock %}

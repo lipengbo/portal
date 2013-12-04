@@ -8,6 +8,8 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
 
+import datetime
+
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
 SLICE_TYPE_USABLE = 0
@@ -236,7 +238,10 @@ class Slice(models.Model):
             super(self.__class__, self).delete(*args, **kwargs)
             print "d3"
         except Exception, ex:
+            print "d4"
             self.failure_reason = str(ex)
+            self.type = 1
+            self.date_expired = datetime.datetime.now()
             self.save()
             raise
 

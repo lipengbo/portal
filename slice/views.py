@@ -112,35 +112,41 @@ def list(request, proj_id):
     context = {}
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
-    else:
-        context['extent_html'] = "site_base.html"
-    if int(proj_id) == 0:
-        if 'type' in request.GET:
-            type = request.GET.get('type')
-            if int(type) == 0 or int(type) == 1:
-                slice_objs = Slice.objects.filter(type=int(type))
+        if int(proj_id) == 0:
+            if 'type' in request.GET:
+                type = int(request.GET.get('type'))
+                if type == 0 or type == 1:
+                    slice_objs = Slice.objects.filter(type=int(type))
+                else:
+                    slice_objs = SliceDeleted.objects.all()
+                context['type'] = type
             else:
-                slice_objs = SliceDeleted.objects.all()
-            context['type'] = int(type)
+                slice_objs = Slice.objects.filter(type=0)
+                context['type'] = 0
+            if context['type'] == 0:
+                date_now = datetime.datetime.now()
+                sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
+                                            date__month=date_now.strftime('%m'),
+                                            date__day=date_now.strftime('%d'),
+                                            target=1,
+                                            type=2)
+                if sc:
+                    num = sc[0].count
+                else:
+                    num = 0
+                context['new_num'] = num
+                context['total_num'] = Slice.objects.all().count
         else:
-            slice_objs = Slice.objects.filter(type=0)
             context['type'] = 0
-        date_now = datetime.datetime.now()
-        sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
-                                    date__month=date_now.strftime('%m'),
-                                    date__day=date_now.strftime('%d'),
-                                    target=1,
-                                    type=2)
-        if sc:
-            num = sc[0].count
-        else:
-            num = 0
-        context['new_num'] = num
-        context['total_num'] = slice_objs.count()
+            project = get_object_or_404(Project, id=proj_id)
+            context['project'] = project
+            slice_objs = project.slice_set.filter(type=0)
     else:
+        context['type'] = 0
+        context['extent_html'] = "site_base.html"
         project = get_object_or_404(Project, id=proj_id)
         context['project'] = project
-        slice_objs = project.slice_set.all()
+        slice_objs = project.slice_set.filter(type=0)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -150,6 +156,7 @@ def list(request, proj_id):
     if request.is_ajax():
         print '89'
         return render(request, 'slice/list_page.html', context)
+    print context
     if context['type'] == 0:
         return render(request, 'slice/slice_list.html', context)
     else:
@@ -245,7 +252,7 @@ def detail(request, slice_id):
 
 
 @login_required
-def delete(request, slice_id, flag):
+def delete(request, slice_id):
     """删除slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     user = request.user
@@ -266,22 +273,29 @@ def delete(request, slice_id, flag):
             slice_obj.delete()
         except Exception, ex:
             print ex
-            if request.user.is_superuser:
-                messages.add_message(request, messages.ERROR, ex)
+#             if request.user.is_superuser:
+#                 messages.add_message(request, messages.ERROR, ex)
         else:
             slice_deleted.save()
     else:
         return redirect("forbidden")
     if 'next' in request.GET:
-        return redirect(request.GET.get('next'))
-    if int(flag) == 1:
-        return HttpResponseRedirect(
-            reverse("project_detail", kwargs={"id": project_id}))
-    else:
-        if user.is_superuser:
-            project_id = 0
-        return HttpResponseRedirect(
-            reverse("slice_list", kwargs={"proj_id": project_id}))
+        print request.GET.get('next')
+        if 'type' in request.GET:
+            print request.GET.get('type')
+            return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))
+        else:
+            return redirect(request.GET.get('next'))
+    return HttpResponseRedirect(
+        reverse("project_detail", kwargs={"id": project_id}))
+#     if int(flag) == 1:
+#         return HttpResponseRedirect(
+#             reverse("project_detail", kwargs={"id": project_id}))
+#     else:
+#         if user.is_superuser:
+#             project_id = 0
+#         return HttpResponseRedirect(
+#             reverse("slice_list", kwargs={"proj_id": project_id}))
 
 
 @login_required

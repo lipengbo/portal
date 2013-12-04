@@ -647,15 +647,15 @@ function highlight( data, element ) {
                 for (var j = 0; j < links.length; j++) {
                     if(links[j].source.id == data.id && links[j].target.type == 'switch' && links[j].src_port_name == data.ports[i].name && links[j].src_port == data.ports[i].port){
                         content += "<tr><td>"; 
-                        content += links[j].source.name + ":" + links[j].src_port_name + "(" + links[j].src_port+ ")";
-                        content += ' <-----> ' + links[j].target.name + ":" + links[j].dst_port_name + "(" + links[j].dst_port + ")";
+                        content += links[j].source.name + ":" + links[j].src_port_name;
+                        content += ' <-----> ' + links[j].target.name + ":" + links[j].dst_port_name;
                         content += "</td></tr>";
                         flag = true;
                         break;
                     }else if(links[j].target.id == data.id && links[j].source.type == 'switch' && links[j].dst_port_name == data.ports[i].name && links[j].dst_port == data.ports[i].port){
                         content += "<tr><td>"; 
-                        content += links[j].target.name + ":" + links[j].dst_port_name + "(" + links[j].dst_port+ ")";
-                        content += ' <-----> ' + links[j].source.name + ":" + links[j].src_port_name + "(" + links[j].src_port + ")";
+                        content += links[j].target.name + ":" + links[j].dst_port_name;
+                        content += ' <-----> ' + links[j].source.name + ":" + links[j].src_port_name;
                         content += "</td></tr>";
                         flag = true;
                         break;
@@ -663,7 +663,7 @@ function highlight( data, element ) {
                 } 
                 if(!flag){
                     content += "<tr><td>"; 
-                    content += data.name + ":" + data.ports[i].name + "(" + data.ports[i].port+ ")";
+                    content += data.name + ":" + data.ports[i].name;
                     content += "</td></tr>";
                 }
             }
@@ -697,8 +697,8 @@ function highlight( data, element ) {
         src_capacity_show = bd_show(data.src_capacity);
         dst_bandwidth_show = bd_show(data.dst_bandwidth);
         dst_capacity_show = bd_show(data.dst_capacity);
-        content += "<h6>" + data.source.name + ":" + data.src_port_name + "(" + data.src_port+ ")";
-        content += ' <-----> ' + data.target.name + ":" + data.dst_port_name + "(" + data.dst_port + ")" + "</h6>";
+        content += "<h6>" + data.source.name + ":" + data.src_port_name;
+        content += ' <-----> ' + data.target.name + ":" + data.dst_port_name + "</h6>";
         if(slice_id != 0){
            // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
             
@@ -807,8 +807,9 @@ function restart() {
     .on('click', function(d) {
         if(admin == 1){
             if(d.type == 'switch'){
-                window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
-            }else{
+                //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
+            }
+            else{
                 window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
             }  
         }

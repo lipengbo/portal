@@ -19,7 +19,7 @@ class Checkslice(Job):
     """
 
     # run every 300 seconds (5 minutes)
-    run_every = 120
+    run_every = 86400
 
     def job(self):
         # This will be executed every 5 minutes
@@ -32,9 +32,9 @@ class Checkslice(Job):
         #user = request.user
         time_delta = datetime.timedelta(seconds=1)
         for slice_obj in slices:
-#             print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++time manage 1"
-#             print datetime.datetime.now()
-#             print slice_obj.date_expired
+            print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++time manage 1"
+            print datetime.datetime.now()
+            print slice_obj.date_expired
             date = datetime.datetime.now() - slice_obj.date_expired
             if date > time_delta:
 #                 print "_____________________________________________________________time manage 2"

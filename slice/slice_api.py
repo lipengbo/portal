@@ -91,18 +91,18 @@ def create_slice_api(project, name, description, island, user):
             print 'sexp 2'
         except:
             print 'sexp 3'
-            if slice_expiration_days <= 0:
-                slice_expiration_days = 30
+            slice_expiration_days = 30
         else:
             print 'sexp 4'
-            slice_expiration_days = 30
+            if slice_expiration_days <= 0:
+                slice_expiration_days = 30
         print "slice_expiration_days:"+str(slice_expiration_days)
         if project and island and user:
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
                 date_now = datetime.datetime.now()
-                date_delta = datetime.timedelta(seconds=slice_expiration_days)
-#                 date_delta = datetime.timedelta(days=slice_expiration_days)
+#                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
+                date_delta = datetime.timedelta(days=slice_expiration_days)
                 expiration_date = date_now + date_delta
                 slice_names = name.split('_')
                 if len(slice_names) > 1:
