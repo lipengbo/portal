@@ -5855,7 +5855,6 @@ table {
   overflow: hidden;
   position: relative;
   margin-bottom: 0;
-  max-width: 229px;
 }
 .example-sites li .close {
   display: none;
@@ -5921,6 +5920,12 @@ table {
   margin: 4px;
   border-top: 1px solid #e7e7e7;
   border-bottom: 1px solid #dddddd;
+}
+.example-sites li.project_list {
+  max-width: 229px;
+}
+.example-sites li.sile_list {
+  max-width: 480px;
 }
 .thumbnail {
   padding: 4px;

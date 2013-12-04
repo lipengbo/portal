@@ -31,12 +31,20 @@ $(document).ready(function() {
         });
 		$(".sec_block").last().find(".del").css("visibility","visible");
 		$(".sec_block:odd").css("background","#f5f5f5");
-		$(".del").click(function(){
-           $(this).parent(".operate_btn").parent(".span5").parent(".vm_well_wrap").parent(".sec_block").remove();
+		$(".vm_block_del").click(function(){
+           $(this).parent(".sec_block").remove();
            $(".sec_block").css("background","#ffffff");
            $(".sec_block:odd").css("background","#f5f5f5");
         });                          
 	});
+	
+	//创建虚拟机页面，指针放上去时显示删除图标                       
+    $(".sec_block:not(:first)").live("mouseenter",function(){
+       $(this).children(".close").stop(true,false).fadeIn();
+    });
+    $(".sec_block:not(:first)").live("mouseleave",function(){
+       $(this).children(".close").stop(false,true).hide();
+    });     	
 
 /*	$(".del").click(function(){
        $(this).parent(".operate_btn").parent(".sec_block").remove();
