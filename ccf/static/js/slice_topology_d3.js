@@ -139,7 +139,7 @@ var icon_data = [
         allows: {'host':true, 'switch': true, 'fv': true}
     },
     {
-        x: -15, y: -15, icon: 'img/host1.png', 
+        x: -15, y: -15, icon: 'img/host.png', 
         type: 'host', name: '主机', count:0,
         type_id: 4,
         width: 30, height:30,

@@ -299,8 +299,7 @@ def update_slice_virtual_network(slice_obj):
     print dpids
     for dpid in dpids:
         for default_flowspace in default_flowspaces:
-            if (default_flowspace.dl_src == slice_gw and default_flowspace.dl_type == '0x806') or\
-             ((default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw) and default_flowspace.dl_type == '0x800'):
+            if default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw:
                 arg_match = matches_to_arg_match(
                     None, default_flowspace.dl_vlan,
                     default_flowspace.dl_vpcp, default_flowspace.dl_src,
