@@ -77,6 +77,10 @@ class Invitation(Connection):
 
     objects = InvitationManager()
 
+    @property
+    def subject(self):
+        return _("Project Invitation")
+
     def get_kind(self):
         return "invite"
 
@@ -106,6 +110,10 @@ class Application(Connection):
         self.target.accept(self.from_user)
         self.state = 1
         self.save()
+
+    @property
+    def subject(self):
+        return _("Project Application")
 
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
@@ -141,5 +149,9 @@ def send_notification_email(sender, instance, created, **kwargs):
     content = render_to_string('notifications/notice.txt', {'notice': instance,
         'notification_link': "http://" + site.domain + reverse("notifications:all")})
     site_name = site.name
-    send_mail(_('[%(site_name)s] You have new notification messages') % {'site_name': site_name}, content,
+    if hasattr(instance.action_object, 'subject'):
+        subject = site_name + instance.action_object.subject
+    else:
+        subject = _('[%(site_name)s] You have new notification messages') % {'site_name': site_name}
+    send_mail(subject, content,
               settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)

@@ -2,7 +2,7 @@
     {
         "fields": {
             "domain": "localhost:8000", 
-            "name": "ccf"
+            "name": "SDN创新实验平台"
         }, 
         "model": "sites.site", 
         "pk": 1

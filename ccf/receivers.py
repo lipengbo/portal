@@ -2,6 +2,7 @@ import datetime
 
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.db.models import F
 from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
@@ -15,7 +16,9 @@ from notifications import notify
 from project.models import Project
 from common.models import DailyCounter
 from slice.models import Slice
-
+from notifications.models import Notification
+from profiles.models import Profile
+from invite.models import Invitation, Application
 
 @receiver(post_save, sender=Slice)
 @receiver(post_save, sender=Project)
@@ -43,6 +46,12 @@ def decrease_counter(sender, instance, **kwargs):
         if counter.count > 0:
             counter.count = F("count") - 1
             counter.save()
+
+@receiver(post_delete, sender=Invitation)
+@receiver(post_delete, sender=Application)
+def delete_notifications(sender, instance, **kwargs):
+    target_type = ContentType.objects.get_for_model(instance)
+    Notification.objects.filter(action_object_content_type=target_type, action_object_object_id=instance.id).delete()
 
 @receiver(user_logged_in)
 def handle_user_logged_in(sender, **kwargs):

@@ -70,7 +70,7 @@
                     <td>{{ membership.user }}</td>
                     <td>{{ membership.user.get_profile.realm|default:"未填写" }}</td>
                     <td>
-                        {% if  membership.is_owner %}
+                        {% if  project.owner == user %}
                             {% if  membership.user.id != project.owner.id %}
                             <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}</a>
                             {%else%}
