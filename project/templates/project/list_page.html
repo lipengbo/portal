@@ -1,0 +1,36 @@
+{% load endless %}
+{% paginate 8 projects  %}
+{% for group in projects|group_by:4 %}
+<ul class="thumbnails example-sites">
+    {% for project in group %}
+        {% include "project/_project.html" %}
+    {% endfor %}
+</ul>
+{% endfor %}
+<div class="pagination">
+    <ul>
+        {% show_pages %}
+    </ul>
+</div>
+<script>
+$('a.btn-delete').click(function(){
+    if($(this).hasClass("disabled")){
+        return false;
+    }else{
+        $('#alertModal').modal();
+        var self = $(this);
+        $('.delete-confirm').unbind('click');
+        $('.delete-confirm').click(function(){
+            window.location.href = self.attr('href');
+        });
+        return false;
+    }
+});
+//列表框，指针放上去时显示删除图标                 
+$(".example-sites li").mouseenter(function(){
+    $(this).children(".close").stop(true,false).fadeIn();
+});
+$(".example-sites li").mouseleave(function(){
+    $(this).children(".close").stop(false,true).hide();
+});
+</script>
