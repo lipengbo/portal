@@ -48,11 +48,11 @@
                                                         基础设施
                                                     </a>
                                                 </li>
-                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志 <span class="label label-success">{{ unread_count }}</span></a></li>
+                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志{% if unread_count > 0%} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
                                             {% else %}
 					                            <li class="index_menu"><a href="{% url "project_manage" %}">首页</a></li>
 					                            <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>        
-                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息 <span class="label label-success">{{ unread_count }}</span></a></li>
+                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息{% if unread_count > 0 %} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
 
 					                            <li><a href="#" class="help_menu">帮助</a></li>
                                             {% endif %}
