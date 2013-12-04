@@ -32,11 +32,11 @@
                     <thead>
                         <tr>
                             <th width="5%" class="checkall"><input type="checkbox"></th>
-                            <th width="">成员名称</th>
-                            <th width="">研究方向</th>
-                            <th width="">邮箱</th>
-                            <th width="">最后登录时间</th>
-                            <th width="">邀请状态</th>
+                            <th width="15%">成员名称</th>
+                            <th width="35%">研究方向</th>
+                            <th width="20%">参与项目</th>
+                            <th width="15%">最后登录时间</th>
+                            <th width="10%">邀请状态</th>
                         </tr>
                     </thead>
                     <tbody class="checkboxs">
@@ -46,7 +46,7 @@
                             <td><input type="checkbox" {% if status.is_invited %}disabled{% endif %} name="user" value="{{ invited_user.id }}" ></td>
                             <td>{{ invited_user }}</td>
                             <td>{{ invited_user.get_profile.realm|default:"未填写" }}</td>                         
-                            <td>{{ invited_user.email }}</td>
+                            <td>{% with invited_user.project_set.all|first as user_project %}{% if user_project %}{{ user_project }}等{% else %}暂无{% endif %}{% endwith %}</td>
                             <td>{{ invited_user.last_login|date:"Y.m.d H:i" }}</td>
                             <td>
                                 {% if status.is_invited %}

@@ -2,6 +2,9 @@
 
 import hashlib
 import json
+import logging
+
+logger = logging.getLogger("plugins")
 
 from django.db import models
 from django.db import transaction
@@ -15,7 +18,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
-from resources.models import ServiceResource, Resource, SwitchPort, Switch
+from resources.models import ServiceResource, Resource, \
+        SwitchPort, Switch, Server, VirtualSwitch
 from slice.models import Slice
 
 
@@ -131,6 +135,7 @@ def update_links(sender, instance, created, **kwargs):
             port_name_dict[dpid] = {}
             for port in switch['ports']:
                 port_name_dict[dpid][port['portNumber']] = port['name']
+        create_virtualswitch(instance.island, switches)
     try:
         links = client.get_links()
     except Exception, e:
@@ -156,12 +161,12 @@ def update_links(sender, instance, created, **kwargs):
         try:
             source_switch = Switch.objects.get(dpid=link['src-switch'])
         except Switch.DoesNotExist, e:
-            print '========== FETCHING ' + link['src-switch'] + " =========="
+            logger.error('========== FETCHING ' + link['src-switch'] + " ==========")
             raise e
         try:
             target_switch = Switch.objects.get(dpid=link['dst-switch'])
         except Switch.DoesNotExist, e:
-            print '========== FETCHING ' + link['dst-switch'] + " =========="
+            logger.error('========== FETCHING ' + link['dst-switch'] + " ==========")
             raise e
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
@@ -184,3 +189,18 @@ def update_links(sender, instance, created, **kwargs):
                 source=source_port,
                 target=target_port)
         link_obj.save()
+        
+def create_virtualswitch(island, datapaths):
+    for datapath in datapaths:
+        dpid = datapath['dpid']
+        if dpid.startswith('00:ff:'):# only virtual switch
+            target_switch = datapath['target_switch']
+            ip = target_switch[0]
+            try:
+                server = Server.objects.get(ip=ip)
+            except Server.DoesNotExist, e:
+                logger.error('============= IP: ' + ip + '=============')
+                raise e
+            virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
+                    ip=ip, defaults={'name': dpid, 'island': island, 'password': '123', 'username': 'admin', 'server': server})
+

@@ -67,3 +67,6 @@ def send_confirmation(request, id):
     return redirect('notifications:all')
     return render(request, 'profiles/email_confirmation_sent.html', context)
 
+class ConfirmEmailView(account.views.ConfirmEmailView):
+    def get(self, *args, **kwargs):
+        return self.post(*args, **kwargs)
