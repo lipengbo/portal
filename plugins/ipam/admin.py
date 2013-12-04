@@ -13,6 +13,7 @@ class NetworkAdmin(admin.ModelAdmin):
 
     model = Network
     form = NetworkForm
+    list_display = ("netaddr", "island", "gw_ip", "gw_mac", "type")
 
 
 class SubnetAdmin(admin.ModelAdmin):

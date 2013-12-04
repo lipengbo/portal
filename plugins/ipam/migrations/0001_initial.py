@@ -12,9 +12,15 @@ class Migration(SchemaMigration):
         db.create_table('ipam_network', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('netaddr', self.gf('django.db.models.fields.CharField')(unique=True, max_length=20)),
+            ('gw_ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
+            ('gw_mac', self.gf('django.db.models.fields.CharField')(max_length=64, null=True, blank=True)),
+            ('island', self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['project.Island'], null=True, blank=True)),
             ('type', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('ipam', ['Network'])
+
+        # Adding unique constraint on 'Network', fields ['island', 'type']
+        db.create_unique('ipam_network', ['island_id', 'type'])
 
         # Adding model 'Subnet'
         db.create_table('ipam_subnet', (
@@ -40,6 +46,9 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'Network', fields ['island', 'type']
+        db.delete_unique('ipam_network', ['island_id', 'type'])
+
         # Deleting model 'Network'
         db.delete_table('ipam_network')
 
@@ -59,8 +68,11 @@ class Migration(SchemaMigration):
             'supernet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['ipam.Subnet']"})
         },
         'ipam.network': {
-            'Meta': {'ordering': "['id']", 'object_name': 'Network'},
+            'Meta': {'ordering': "['id']", 'unique_together': "(('island', 'type'),)", 'object_name': 'Network'},
+            'gw_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'gw_mac': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'island': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['project.Island']", 'null': 'True', 'blank': 'True'}),
             'netaddr': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
             'type': ('django.db.models.fields.IntegerField', [], {})
         },
@@ -74,6 +86,19 @@ class Migration(SchemaMigration):
             'size': ('django.db.models.fields.IntegerField', [], {}),
             'supernet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['ipam.Network']"}),
             'update_time': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+        },
+        'project.city': {
+            'Meta': {'object_name': 'City'},
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
+        },
+        'project.island': {
+            'Meta': {'object_name': 'Island'},
+            'city': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.City']"}),
+            'description': ('django.db.models.fields.TextField', [], {}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         }
     }
 

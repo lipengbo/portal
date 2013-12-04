@@ -8,6 +8,7 @@ from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save
 from django.utils.translation import ugettext as _
+from project.models import Island
 from plugins.ipam import netaddr as na
 import pytz
 import datetime
@@ -68,8 +69,9 @@ class IPManager(models.Manager):
             ip.save()
         return True
 
-    def allocate_ip_for_controller(self):
-        subnet = Subnet.objects.get(owner=0, is_used=True, is_owned=True)
+    def allocate_ip_for_controller(self, island):
+        owner = 'island_%s_0' % island.id
+        subnet = Subnet.objects.get(owner=owner, is_used=True, is_owned=True)
         ips = self.filter(supernet=subnet)
         unused_ips = ips.filter(is_used=False)
         if unused_ips:
@@ -85,6 +87,26 @@ class IPManager(models.Manager):
         return ip
 
     def release_ip_for_controller(self, ip):
+        return self.release_ip(ip)
+
+    def allocate_ip_for_gw(self, island):
+        owner = 'island_%s_2' % island.id
+        subnet = Subnet.objects.get(owner=owner, is_used=True, is_owned=True)
+        ips = self.filter(supernet=subnet)
+        unused_ips = ips.filter(is_used=False)
+        if unused_ips:
+            ip = unused_ips[0]
+        else:
+            subnet_network = subnet.get_network()
+            subnet_start = na.IPAddress(subnet.netaddr.partition('/')[0]).value - subnet_network.first
+            ip_count = ips.count() + subnet_start
+            new_ipaddr = subnet_network.get_host(ip_count)
+            ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
+        ip.is_used = True
+        ip.save()
+        return ip
+
+    def release_ip_for_gw(self, ip):
         return self.release_ip(ip)
 
     def get_unowned_subnet(self, subnets, timeout):
@@ -159,9 +181,13 @@ class IPManager(models.Manager):
 
 
 class Network(models.Model):
-    TYPE_CHOICE = ((0, _('subnet for phy')),
-                  (1, _('subnet for slice')),)
+    TYPE_CHOICE = ((0, _('subnet for controller')),
+                  (1, _('subnet for slice')),
+                  (2, _('subnet for gateway')),)
     netaddr = models.CharField(max_length=20, null=False, unique=True)
+    gw_ip = models.IPAddressField(null=True, blank=True)
+    gw_mac = models.CharField(max_length=64, null=True, blank=True)
+    island = models.ForeignKey(Island, null=True, default=None, blank=True)
     type = models.IntegerField(null=False, choices=TYPE_CHOICE)
 
     def get_network(self):
@@ -171,6 +197,7 @@ class Network(models.Model):
         return self.netaddr
 
     class Meta:
+        unique_together = (("island", "type"), )
         ordering = ['id', ]
         verbose_name = _("Network")
 
@@ -188,16 +215,21 @@ class Subnet(models.Model):
         return na.Network(self.netaddr)
 
     def get_gateway_ip(self):
-        if self.supernet.type == 0:
-            gateway_ip = self.netaddr.partition('/')[0]
-        else:
+        gateway_ip = self.supernet.gw_ip
+        if not gateway_ip:
             subnet_network = self.get_network()
             new_ipaddr = subnet_network.get_host(0)
             gateway_ip = str(new_ipaddr)
         return gateway_ip
 
+    def get_gateway_mac(self):
+        gateway_mac = self.supernet.gw_mac
+        if not gateway_mac:
+            gateway_mac = na.generate_mac_address(self.get_gateway_ip())
+        return gateway_mac
+
     def get_ip_range(self):
-        return [na.IPAddress(self.get_network().first+1).ipv4(),
+        return [na.IPAddress(self.get_network().first + 1).ipv4(),
                 na.IPAddress(self.get_network().last).ipv4()]
 
     def __unicode__(self):
@@ -226,8 +258,9 @@ class IPUsage(models.Model):
 def create_base_subnet(sender, instance, **kwargs):
     network = instance
     if kwargs.get('created'):
-        if network.type == 0:
-            Subnet(supernet=network, netaddr=network.netaddr, owner=0, is_used=True, is_owned=True).save()
+        if network.type != 1:
+            owner = 'island_%s_%s' % (network.island.id, network.type)
+            Subnet(supernet=network, netaddr=network.netaddr, owner=owner, is_used=True, is_owned=True).save()
 
 
 @receiver(pre_save, sender=Subnet)

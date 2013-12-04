@@ -17,22 +17,6 @@
     }, 
     {
         "fields": {
-            "netaddr": "10.0.0.0/8", 
-            "type": 1
-        }, 
-        "model": "ipam.network", 
-        "pk": 1
-    }, 
-    {
-        "fields": {
-            "netaddr": "192.168.5.200/24", 
-            "type": 0
-        }, 
-        "model": "ipam.network", 
-        "pk": 2
-    }, 
-    {
-        "fields": {
             "cpu": 1, 
             "hdd": 10, 
             "name": "micro", 
