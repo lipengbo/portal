@@ -80,8 +80,9 @@ class Invitation(Connection):
     @property
     def subject(self):
         return _("Project Invitation")
+
     @property
-    def subject(self):
+    def content(self):
         body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         return body
 
