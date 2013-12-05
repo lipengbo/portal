@@ -18,6 +18,7 @@ from django.db import transaction
 import datetime
 import traceback
 import calendar
+from etc.config import gw_controller
 
 from plugins.vt.api import get_slice_gw_mac
 
@@ -296,25 +297,26 @@ def update_slice_virtual_network(slice_obj):
                                             default_flowspace.priority, arg_match)
                 except:
                     raise
-    print dpids
-    for dpid in dpids:
-        for default_flowspace in default_flowspaces:
-            if default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw:
-                arg_match = matches_to_arg_match(
-                    None, default_flowspace.dl_vlan,
-                    default_flowspace.dl_vpcp, default_flowspace.dl_src,
-                    default_flowspace.dl_dst, default_flowspace.dl_type,
-                    default_flowspace.nw_src, default_flowspace.nw_dst,
-                    default_flowspace.nw_proto, default_flowspace.nw_tos,
-                    default_flowspace.tp_src, default_flowspace.tp_dst)
-                try:
-                    flowvisor_add_flowspace(flowvisor, flowspace_name,
-                                            slice_obj.id,
-                                            default_flowspace.actions, 'cdn%nf',
-                                            dpid,
-                                            default_flowspace.priority, arg_match)
-                except:
-                    raise
+    if gw_controller:
+        print dpids
+        for dpid in dpids:
+            for default_flowspace in default_flowspaces:
+                if default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw:
+                    arg_match = matches_to_arg_match(
+                        None, default_flowspace.dl_vlan,
+                        default_flowspace.dl_vpcp, default_flowspace.dl_src,
+                        default_flowspace.dl_dst, default_flowspace.dl_type,
+                        default_flowspace.nw_src, default_flowspace.nw_dst,
+                        default_flowspace.nw_proto, default_flowspace.nw_tos,
+                        default_flowspace.tp_src, default_flowspace.tp_dst)
+                    try:
+                        flowvisor_add_flowspace(flowvisor, flowspace_name,
+                                                slice_obj.id,
+                                                default_flowspace.actions, 'cdn%nf',
+                                                dpid,
+                                                default_flowspace.priority, arg_match)
+                    except:
+                        raise
 
 
 def get_slice_topology(slice_obj):

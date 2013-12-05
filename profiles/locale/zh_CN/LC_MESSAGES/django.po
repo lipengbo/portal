@@ -20,7 +20,7 @@ msgstr ""
 
 #: forms.py:9
 msgid "Realm"
-msgstr "研究领域"
+msgstr "研究方向"
 
 #: forms.py:10 models.py:15 templates/profiles/_profile_info.html:4
 #: templates/profiles/_profile_item.html:12
@@ -33,7 +33,7 @@ msgstr "原因"
 
 #: models.py:14
 msgid "realm"
-msgstr "研究领域"
+msgstr "研究方向"
 
 #: models.py:28
 msgid "Accept"
