@@ -244,24 +244,4 @@ msgstr ""
 msgid "Confirm email address for %(site_name)s"
 msgstr "%(site_name)s账号激活通知"
 
-#: templates/account/email/password_reset.txt:1
-#, python-format
-msgid ""
-"You're receiving this email because you or someone else has requested a "
-"password for your user account at %(site_name)s.\n"
-"It can be safely ignored if you did not request a password reset. Click the "
-"link below to reset your password.\n"
-"\n"
-"%(password_reset_url)s\n"
-msgstr ""
-"您接收到这封邮件是因为您或者其他人，请求了对%(site_name)s上的帐号进行密码重"
-"置。\n"
-"如果您没有请求密码重置，可以安全地忽略此邮件。点击下面的链接进行密码重置：\n"
-"\n"
-"%(password_reset_url)s\n"
-
-#: templates/account/email/password_reset_subject.txt:1
-#, python-format
-msgid "[%(site_name)s] Password reset"
-msgstr "[%(site_name)s] 密码重置"
 
