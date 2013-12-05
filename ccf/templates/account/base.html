@@ -4,7 +4,9 @@
 {% load i18n %}
 
 {% block messages %}
-
+<div class="hide">
+    {% include "_messages.html" %}
+</div>
 {% endblock %}
 
 {% block body_class %}account{% endblock %}
