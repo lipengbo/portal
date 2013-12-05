@@ -165,7 +165,8 @@ def invite(request, id):
 def apply(request):
     context = {}
     user = request.user
-    projects = Project.objects.all().exclude(owner=user)
+    joined_project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    projects = Project.objects.all().exclude(id__in=joined_project_ids)
     if 'category' in request.GET:
         cat_id = request.GET.get('category')
         if cat_id and cat_id != u'-1':
