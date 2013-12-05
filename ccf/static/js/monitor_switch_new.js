@@ -118,11 +118,11 @@ function Initdata(id){
 					$.each(ports_data, function(port, data){
 						pre_port_data = JSON.stringify(ports_data);
 						ports_series_data.push({
-							name: port+'-recv',
+							name: port+'-接收',
 							data: init_data
 						});
 						ports_series_data.push({
-							name: port+'-send',
+							name: port+'-发送',
 							data: init_data
 						});
 					});
