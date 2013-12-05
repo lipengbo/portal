@@ -54,7 +54,7 @@
 					                            <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>        
                                                 <li class="news_menu"><a href="{% url "notifications:all" %}">消息{% if unread_count > 0 %} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
 
-					                            <li><a href="#" class="help_menu">帮助</a></li>
+					                            <li><a href="/help/" class="help_menu">帮助</a></li>
                                             {% endif %}
 					                    </ul>
                                         {% comment %}
