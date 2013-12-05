@@ -26,6 +26,8 @@ def _get_fields(obj, only_name=False, for_display=True):
                 excludes.append('password')
                 excludes.append('username')
                 excludes.append('date_joined')
+                excludes.append('first_name')
+                excludes.append('last_name')
         else:
             try:
                 excludes = list(clazz.admin_options()['form_exclude_fields'])
