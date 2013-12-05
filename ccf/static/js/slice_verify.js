@@ -25,7 +25,7 @@ function check_slice_name(obj_id,flag){
         	//alert(slice_exist);
         	isslice_exist(obj.value +"_"+user_id_obj.value);
         	if(slice_exist){
-        		showInfo(info," * 该slice已经存在","red");
+        		showInfo(info," * 该虚网已经存在","red");
         		return false;
         	}
         	else{
@@ -204,7 +204,7 @@ function check_nw_num(){
 	        	//alert(data.value);
 	        	if (data.value == 0){
 	        		//alert(1);
-	        		showInfo(info," * 分配网段失败！(改slice名称)","red");
+	        		showInfo(info," * 分配网段失败！(改虚网名称)","red");
 	        		ajax_ret = false;
 	            }
 	            else{
@@ -222,7 +222,7 @@ function check_nw_num(){
 	            }
 	        },
 	        error: function(data) {
-	        	showInfo(info," * 分配网段失败！(改slice名称)","red");
+	        	showInfo(info," * 分配网段失败！(改虚网名称)","red");
 	    		ajax_ret = false;
 	        }
 	    });
@@ -466,7 +466,7 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 1);
             if(ret){
                 $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止slice");
+                $(this).text("停止虚网");
                 $(".label").removeClass("label-important").addClass("label-success");
                 $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
                 $(".btn-slice-state").addClass("disabled");
@@ -477,7 +477,7 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 2);
             if(ret){
                 $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动slice");
+                $(this).text("启动虚网");
                 $(".label").removeClass("label-success").addClass("label-important");
                 $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                 $(".btn-slice-state").removeClass("disabled");
@@ -658,7 +658,7 @@ function start_or_stop(slice_id, flag){
                     if (data.result == 1){
                         //alert("ok");
                         var description_old = document.getElementById('slice_description_old');
-                        description_old.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.value;
+                        description_old.innerHTML = "描述："+obj.value;
                     }
                     else{
                         //alert(failed);

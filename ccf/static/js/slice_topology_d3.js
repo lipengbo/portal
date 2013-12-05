@@ -139,7 +139,7 @@ var icon_data = [
         allows: {'host':true, 'switch': true, 'fv': true}
     },
     {
-        x: -15, y: -15, icon: 'img/host1.png', 
+        x: -15, y: -15, icon: 'img/host.png', 
         type: 'host', name: '主机', count:0,
         type_id: 4,
         width: 30, height:30,
@@ -156,15 +156,15 @@ var color_map = {'switch': 2, 'host': 1, 'vm':3, 'fv':4, 'controller':5};
 var vm_state = {
     0: 'nostate',
     1: "running",
-    3: "blocked",
-    4: "paused",
-    5: "shutdown",
-    6: "shutoff",
-    7: "crashed",
-    8: "pmsuspended",
-    9: "building",
-    10: "failed",
-    11: "notexist",
+    2: "blocked",
+    3: "paused",
+    4: "shutdown",
+    5: "shutoff",
+    6: "crashed",
+    7: "pmsuspended",
+    8: "building",
+    9: "failed",
+    10: "notexist",
 }
 var server = '/';
 var static_url = $("#STATIC_URL").text();
@@ -380,7 +380,7 @@ function inittpdata(){
                     nodes_data[src_node_id].yid = normals[i].hostid;
                     nodes_data[src_node_id].type_id = normals[i].hostStatus;
                     nodes_data[src_node_id].name = normals[i].name;
-                    nodes_data[src_node_id].mac = normals[i].mac;
+                    nodes_data[src_node_id].mac = normals[i].macAddress;
                    // nodes_data[src_node_id].vnc_port = normals[i].vnc_port;
                     if(normals[i].hostStatus == 1){
                         nodes_data[src_node_id].icon = 'img/host.png';
@@ -647,15 +647,15 @@ function highlight( data, element ) {
                 for (var j = 0; j < links.length; j++) {
                     if(links[j].source.id == data.id && links[j].target.type == 'switch' && links[j].src_port_name == data.ports[i].name && links[j].src_port == data.ports[i].port){
                         content += "<tr><td>"; 
-                        content += links[j].source.name + ":" + links[j].src_port_name + "(" + links[j].src_port+ ")";
-                        content += ' <-----> ' + links[j].target.name + ":" + links[j].dst_port_name + "(" + links[j].dst_port + ")";
+                        content += links[j].source.name + ":" + links[j].src_port_name;
+                        content += ' <-----> ' + links[j].target.name + ":" + links[j].dst_port_name;
                         content += "</td></tr>";
                         flag = true;
                         break;
                     }else if(links[j].target.id == data.id && links[j].source.type == 'switch' && links[j].dst_port_name == data.ports[i].name && links[j].dst_port == data.ports[i].port){
                         content += "<tr><td>"; 
-                        content += links[j].target.name + ":" + links[j].dst_port_name + "(" + links[j].dst_port+ ")";
-                        content += ' <-----> ' + links[j].source.name + ":" + links[j].src_port_name + "(" + links[j].src_port + ")";
+                        content += links[j].target.name + ":" + links[j].dst_port_name;
+                        content += ' <-----> ' + links[j].source.name + ":" + links[j].src_port_name;
                         content += "</td></tr>";
                         flag = true;
                         break;
@@ -663,7 +663,7 @@ function highlight( data, element ) {
                 } 
                 if(!flag){
                     content += "<tr><td>"; 
-                    content += data.name + ":" + data.ports[i].name + "(" + data.ports[i].port+ ")";
+                    content += data.name + ":" + data.ports[i].name;
                     content += "</td></tr>";
                 }
             }
@@ -697,8 +697,8 @@ function highlight( data, element ) {
         src_capacity_show = bd_show(data.src_capacity);
         dst_bandwidth_show = bd_show(data.dst_bandwidth);
         dst_capacity_show = bd_show(data.dst_capacity);
-        content += "<h6>" + data.source.name + ":" + data.src_port_name + "(" + data.src_port+ ")";
-        content += ' <-----> ' + data.target.name + ":" + data.dst_port_name + "(" + data.dst_port + ")" + "</h6>";
+        content += "<h6>" + data.source.name + ":" + data.src_port_name;
+        content += ' <-----> ' + data.target.name + ":" + data.dst_port_name + "</h6>";
         if(slice_id != 0){
            // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
             
@@ -807,8 +807,9 @@ function restart() {
     .on('click', function(d) {
         if(admin == 1){
             if(d.type == 'switch'){
-                window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
-            }else{
+                //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
+            }
+            else{
                 window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
             }  
         }
@@ -1077,8 +1078,10 @@ function random_refresh2 () {
 random_refresh2();
 
 function topology_update_vm_state(vm_id, state){
+    //alert('here2');
     var nid = get_node_by_yid(vm_id);
     if(nid>=0){
+        nodes_data[nid].type_id = state;
         if(state == 1){
             nodes_data[nid].icon = 'img/host.png';
         }else{

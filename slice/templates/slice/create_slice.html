@@ -5,10 +5,10 @@
 {% load url from future %}
 {% load staticfiles %}
 
-{% block head_title %}创建Slice{% endblock %}
+{% block head_title %}创建虚网{% endblock %}
 {% block breadcrumb %}
 	<a href="/project/">项目</a><span class="divider">/</span><a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
-	创建Slice
+	创建虚网
 {% endblock %}
 
 {% block body %}
@@ -44,7 +44,7 @@
                 <li class="span2">
                     <a href="#tab4" class="step">
                     <span class="number">5</span>
-                    <span class="desc">Slice清单</span>   
+                    <span class="desc">虚网清单</span>   
                     </a> 
                 </li>
                 <li class="span1"></li>
@@ -57,14 +57,14 @@
               <fieldset>
                  <legend>基本信息</legend>
                  <div class="form_inline">
-                    <label>Slice名称</label>
+                    <label>虚网名称</label>
                     <input type="text" maxlength=30 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
                     <span class="muted"><i>如openflow协议验证</i></span>
                     <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
-                    <label class="v_top">Slice描述</label>
+                    <label class="v_top">虚网描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i>
                         <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
@@ -98,7 +98,7 @@
              
              <div class="tab_part">
              <fieldset>
-                <legend>Slice网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
+                <legend>网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
                 <div class="alert alert-info">
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
@@ -162,7 +162,7 @@
                 </div>       
               </fieldset>
               <fieldset>
-                 <legend>Slice网络地址<small>分配网段供slice中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small></legend>
+                 <legend>网络地址<small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small></legend>
                 <div class="form_inline tooltip-demo"> 
                     <label>IP数量</label>
                     <select name="nw_num" id="nw_num">
@@ -187,7 +187,7 @@
              
              <div class="tab_part">
               <fieldset class="base_info tooltip-demo">
-                <legend>Slice网络地址</legend>
+                <legend>网络地址</legend>
                 <table class="table">
                     <tbody>
                         <tr>
@@ -196,7 +196,7 @@
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
-                            	<input type="text" value="" id="old_nw_owner" style="display:none"/>                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="分配网段供slice中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供slice中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="icon-question-sign icon-align-left"></i></a>
+                            	<input type="text" value="" id="old_nw_owner" style="display:none"/>                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
 							
                         </tr>
@@ -206,7 +206,7 @@
                 </table>
               </fieldset>
               <fieldset class="base_info tooltip-demo">
-                 <legend>Slice控制器配置</legend>
+                 <legend>控制器配置</legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -448,7 +448,7 @@
              </div>
              <div class="tab_part">
                  <fieldset>
-                 <legend>Slice网络节点</legend>
+                 <legend>网络节点</legend>
                  <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
@@ -463,7 +463,7 @@
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice网络地址</legend>
+                 <legend>网络地址</legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -478,15 +478,15 @@
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice控制器</legend>
+                 <legend>控制器</legend>
                  <div id="list_controller"></div>
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice虚拟网关</legend>
+                 <legend>虚拟网关</legend>
                  <div id="list_gw"></div>
               </fieldset>
               <fieldset>
-                 <legend>Slice虚拟机列表</legend>
+                 <legend>虚拟机列表</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -520,7 +520,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-info prev_btn">上一步</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">生成Slice</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">生成虚网</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -534,7 +534,7 @@
         
 <div id="slicealertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body" id="slice_alert_info">
-      <p class="text-center">slice创建失败！</p>
+      <p class="text-center">虚网创建失败！</p>
     </div> 
     <div class="modal-footer">
       <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_closed">确定</button>

@@ -1,4 +1,5 @@
 {% load url from future %}
+{% load common_tags %}
 {% load i18n %}
 <hr>
 <p>
@@ -12,7 +13,7 @@
     {% else %}
         {% if notice.action_object.state %} 
         <span class="pull-right">
-            {% if notice.actor.is_active and notice.verb == '注册了帐号' or notice.action_object.state == 1 %} 
+            {% if notice.actor|confirmation_email_sent and notice.verb == '注册了帐号' or notice.action_object.state == 1 %} 
             <span class="text-success">
             <i class="icon-ok-circle"></i>
                 已接受

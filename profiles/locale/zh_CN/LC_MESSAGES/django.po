@@ -53,8 +53,10 @@ msgid ""
 "have any question about the result, you can contact us by replying this "
 "email."
 msgstr ""
-"抱歉，根据您注册时提供的资料信息，您的帐号申请不能通过审核，如果您有任何疑"
-"问，你可以回复此邮件联系我们。"
+"亲爱的用户，您好：\n"
+"    非常抱歉，根据您注册时提供的资料信息，您的帐号申请未能通过审核，如果您有任何疑问，请及时联系我们ccf@fnic.cn。\n"
+"    如果您没有进行注册，请忽略此邮件。\n"
+"SDN创新实验平台"
 
 #: templates/profiles/_profile_info.html:3
 #: templates/profiles/_profile_item.html:11

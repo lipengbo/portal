@@ -2,6 +2,7 @@ import datetime
 
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
+from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.db.models import F
 from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
@@ -13,9 +14,11 @@ from account.signals import user_login_attempt, user_logged_in
 from eventlog.models import log
 from notifications import notify
 from project.models import Project
-from common.models import DailyCounter
+from common.models import Counter
 from slice.models import Slice
-
+from notifications.models import Notification
+from profiles.models import Profile
+from invite.models import Invitation, Application
 
 @receiver(post_save, sender=Slice)
 @receiver(post_save, sender=Project)
@@ -26,23 +29,67 @@ def increase_counter(sender, instance, created, **kwargs):
             target = 1
         elif sender == Project:
             target = 0
-        counter, new = DailyCounter.objects.get_or_create(target=target, date=today)
+        counter_year = Counter.objects.filter(target=target,
+                                              date__year=today.strftime('%Y'),
+                                              type=0)
+        if counter_year:
+            counter_year[0].count = counter_year[0].count + 1
+            counter_year[0].save()
+        else:
+            counter_year = Counter(target=target, date=today, count=1, type=0)
+            counter_year.save()
+        counter_month = Counter.objects.filter(target=target,
+                                                    date__year=today.strftime('%Y'),
+                                                    date__month=today.strftime('%m'),
+                                                    type=1)
+        if counter_month:
+            counter_month[0].count = counter_month[0].count + 1
+            counter_month[0].save()
+        else:
+            counter_month = Counter(target=target, date=today, count=1, type=1)
+            counter_month.save()
+        counter, new = Counter.objects.get_or_create(target=target, date=today, type=2)
         counter.count = F("count") + 1
         counter.save()
+
 
 @receiver(post_delete, sender=Slice)
 @receiver(post_delete, sender=Project)
 def decrease_counter(sender, instance, **kwargs):
     if sender == Slice:
         target = 1
+        obj_time = instance.date_created
     elif sender == Project:
         target = 0
+        obj_time = instance.created_time
     today = datetime.date.today()
-    if today == instance.created_date().date():
-        counter, new = DailyCounter.objects.get_or_create(target=target, date=today)
+    if obj_time.strftime('%Y%m%d') == today.strftime('%Y%m%d'):
+        counter, new = Counter.objects.get_or_create(target=target, date=today, type=2)
         if counter.count > 0:
             counter.count = F("count") - 1
             counter.save()
+    if obj_time.strftime('%Y%m') == today.strftime('%Y%m'):
+        counter_month = Counter.objects.filter(target=target,
+                                                    date__year=today.strftime('%Y'),
+                                                    date__month=today.strftime('%m'),
+                                                    type=1)
+        if counter_month and counter_month[0].count > 0:
+            counter_month[0].count = counter_month[0].count - 1
+            counter_month[0].save()
+    if obj_time.strftime('%Y') == today.strftime('%Y'):
+        counter_year = Counter.objects.filter(target=target,
+                                                    date__year=today.strftime('%Y'),
+                                                    type=0)
+        if counter_year and counter_year[0].count > 0:
+            counter_year[0].count = counter_year[0].count - 1
+            counter_year[0].save()
+
+
+@receiver(post_delete, sender=Invitation)
+@receiver(post_delete, sender=Application)
+def delete_notifications(sender, instance, **kwargs):
+    target_type = ContentType.objects.get_for_model(instance)
+    Notification.objects.filter(action_object_content_type=target_type, action_object_object_id=instance.id).delete()
 
 @receiver(user_logged_in)
 def handle_user_logged_in(sender, **kwargs):

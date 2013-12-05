@@ -93,6 +93,9 @@ def flowspace_gw_add(slice_obj, new_gateway):
         create_default_flowspace(slice_obj, name, '100', '', '', '',
                                  slice_gw, '', '0x806', '', '',
                                  '', '', '', '')
+        create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                 phy_gw, slice_gw, '0x806', '', '',
+                                 '', '', '', '')
 #         haved_nws = slice_obj.get_nws()
 #         for haved_nw in haved_nws:
 #             create_default_flowspace(slice_obj, name, '100', '', '',
@@ -118,6 +121,7 @@ def flowspace_gw_del(slice_obj, del_gateway):
         delete_default_flowspace(slice_obj, name, slice_gw, '', '', '', '0x800')
         delete_default_flowspace(slice_obj, name, '', slice_gw, '', '', '0x800')
         delete_default_flowspace(slice_obj, name, slice_gw, '', '', '', '0x806')
+        delete_default_flowspace(slice_obj, name, '', slice_gw, '', '', '0x806')
     return True
 
 

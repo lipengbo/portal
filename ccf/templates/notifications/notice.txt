@@ -1,5 +1,4 @@
 {% load url from future %}
 {% load i18n %}
-{{ notice.actor }}{% trans notice.verb %}{% if notice.target %}"{{ notice.target }}"{% endif %}
-{% trans "Click link below to view the detail notification." %}
+{{ notice.actor }}{% trans notice.verb %}{% if notice.target %}"{{ notice.target }}"{% endif %}, {% trans "Click link below to view the detail notification." %}
 {{ notification_link }}
