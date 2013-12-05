@@ -20,7 +20,7 @@ msgstr ""
 
 #: forms.py:9
 msgid "Realm"
-msgstr "研究领域"
+msgstr "研究方向"
 
 #: forms.py:10 models.py:15 templates/profiles/_profile_info.html:4
 #: templates/profiles/_profile_item.html:12
@@ -33,7 +33,7 @@ msgstr "原因"
 
 #: models.py:14
 msgid "realm"
-msgstr "研究领域"
+msgstr "研究方向"
 
 #: models.py:28
 msgid "Accept"
@@ -56,6 +56,7 @@ msgstr ""
 "亲爱的用户，您好：\n"
 "    非常抱歉，根据您注册时提供的资料信息，您的帐号申请未能通过审核，如果您有任何疑问，请及时联系我们ccf@fnic.cn。\n"
 "    如果您没有进行注册，请忽略此邮件。\n"
+"\n"
 "SDN创新实验平台"
 
 #: templates/profiles/_profile_info.html:3

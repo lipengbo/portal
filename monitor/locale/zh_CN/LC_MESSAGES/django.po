@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-26 17:32+0800\n"
+"POT-Creation-Date: 2013-11-12 16:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,8 +18,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-msgid "%(model_name)s with this %(field_label)s already exists."
-msgstr "该%(field_label)s已存在。"
+#: views.py:80 views.py:122 views.py:163
+msgid "connection refused"
+msgstr "远程连接失败"
 
-msgid "e-mail address"
-msgstr "Email地址"
+#: views.py:82 views.py:124 views.py:165
+msgid "server error"
+msgstr "服务器出错"
