@@ -21,3 +21,5 @@ msgstr ""
 msgid "%(model_name)s with this %(field_label)s already exists."
 msgstr "该%(field_label)s已存在。"
 
+msgid "e-mail address"
+msgstr "Email地址"
