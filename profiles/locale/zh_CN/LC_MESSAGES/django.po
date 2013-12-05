@@ -45,7 +45,7 @@ msgstr ""
 
 #: views.py:46
 msgid "Account Review Result"
-msgstr "帐号审核结果"
+msgstr "SDN实验创新平台账号审核未通过"
 
 #: views.py:46
 msgid ""

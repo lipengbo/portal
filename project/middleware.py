@@ -1,3 +1,5 @@
+from django.contrib import messages
+
 class CurrentViewApplicationName(object):
 
     def process_view(self, request, view_func, view_args, view_kwargs):
@@ -14,3 +16,11 @@ class CurrentViewApplicationName(object):
             else:
                 # default app name if no app name is available
                 request.current_app = 'project'
+
+class ExceptionAsMessageForAdmin(object):
+
+    def process_exception(self, request, exception):
+        if request.user.is_authenticated() and request.user.is_superuser:
+            messages.error(request, exception)
+
+

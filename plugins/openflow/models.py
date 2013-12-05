@@ -115,10 +115,9 @@ class FlowvisorLinksMd5(models.Model):
     class Meta:
         verbose_name = _("Flowvisor link md5")
 
-@transaction.commit_on_success
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
-    if settings.DEBUG:
+    if settings.DEBUG and not getattr(settings, "CAN_FETCH_FLOWVISOR"):
         return
     from communication.flowvisor_client import FlowvisorClient
 
@@ -162,12 +161,12 @@ def update_links(sender, instance, created, **kwargs):
             source_switch = Switch.objects.get(dpid=link['src-switch'])
         except Switch.DoesNotExist, e:
             logger.error('========== FETCHING ' + link['src-switch'] + " ==========")
-            raise e
+            raise Exception(u"DPID为" + link['src-switch'] + u"的交换机没有录入")
         try:
             target_switch = Switch.objects.get(dpid=link['dst-switch'])
         except Switch.DoesNotExist, e:
             logger.error('========== FETCHING ' + link['dst-switch'] + " ==========")
-            raise e
+            raise Exception(u"DPID为" + link['dst-switch'] + u"的交换机没有录入")
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
         except KeyError:
@@ -200,7 +199,7 @@ def create_virtualswitch(island, datapaths):
                 server = Server.objects.get(ip=ip)
             except Server.DoesNotExist, e:
                 logger.error('============= IP: ' + ip + '=============')
-                raise e
+                raise Exception(u"IP为" + ip + u"的服务器没有录入")
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
                     ip=ip, defaults={'name': dpid, 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
