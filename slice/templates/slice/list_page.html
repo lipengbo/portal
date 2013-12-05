@@ -32,8 +32,8 @@
                  <tr>
                       <td><a href="/slice/detail/{{ slice.id }}/">{{slice.show_name}}</a></td>
                       <td>{{slice.owner}}</td>
-                      <td>{{slice.date_created|date:"Y年m月d日"}}</td>
-                      <td>{{slice.date_expired|date:"Y年m月d日"}}</td>
+                      <td>{{slice.date_created|date:"Y-m-d H:i:s"}}</td>
+                      <td>{{slice.date_expired|date:"Y-m-d H:i:s"}}</td>
                       <td>{{slice.failure_reason}}</td>
                       <td>
                       <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}?type=1" class="btn btn-inverse btn-delete">删除</a>
@@ -64,8 +64,8 @@
                  <tr>
                       <td>{{slice.show_name}}</td>
                       <td>{{slice.owner_name}}</td>
-                      <td>{{slice.date_created|date:"Y年m月d日"}}</td>
-                      <td>{{slice.date_deleted|date:"Y年m月d日"}}</td>
+                      <td>{{slice.date_created|date:"Y-m-d H:i:s"}}</td>
+                      <td>{{slice.date_deleted|date:"Y-m-d H:i:s"}}</td>
                       <td>
                       {%if slice.type == 0%}
                       用户删除

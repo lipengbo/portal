@@ -19,7 +19,7 @@ class Checkslice(Job):
     """
 
     # run every 300 seconds (5 minutes)
-    run_every = 86400
+    run_every = 43200
 
     def job(self):
         # This will be executed every 5 minutes
