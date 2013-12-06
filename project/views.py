@@ -474,7 +474,7 @@ def manage_index(request):
         context['total_users'] = User.objects.all().count()
         context['total_cities'] = City.objects.all().count()
         context['total_servers'] = Server.objects.all().count()
-        context['total_switches'] = Switch.objects.all().count()
+        context['total_switches'] = Switch.objects.all().count() - VirtualSwitch.objects.count()
         if Server.objects.all():
             context['host_id'] = Server.objects.all()[0].id
         else:
