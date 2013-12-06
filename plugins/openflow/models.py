@@ -201,5 +201,5 @@ def create_virtualswitch(island, datapaths):
                 logger.error('============= IP: ' + ip + '=============')
                 raise Exception(u"IP为" + ip + u"的服务器没有录入")
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
-                    ip=ip, defaults={'name': dpid, 'island': island, 'password': '123', 'username': 'admin', 'server': server})
+                    ip=ip, defaults={'name': "ovs" + str(VirtualSwitch.objects.count() + 1), 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
