@@ -46,7 +46,9 @@ def list_objects(request, app_label, model_class):
             else:
                 fields = ['island__city', 'island']
     objects = ModelClass.objects.order_by('-id')
-    objects = NexusFilter(request.GET, queryset=ModelClass.objects.order_by('-id'))
+    if model_class == 'switch':
+        objects = objects.exclude(dpid__istartswith='00:ff')
+    objects = NexusFilter(request.GET, queryset=objects.order_by('-id'))
     cities = City.objects.all()
     islands = Island.objects.all()
     context['cities'] = cities
