@@ -168,11 +168,15 @@ def set_domain_state(vname, state):
             switch_port = SwitchPort(switch=switch, port=port, name=name)
             switch_port.save()
             slice.add_resource(switch_port)
+            result = True
+    except IndexError:
+        result = False
     except:
         LOG.debug(traceback.print_exc())
+        result = True
     finally:
         vm_query.update(state=state, switch_port=switch_port)
-        return True
+        return result
 
 def get_flavor_msg(request):
     name = request.POST.get("name")
