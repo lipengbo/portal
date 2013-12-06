@@ -71,6 +71,7 @@ def index(request):
         context['new_projects_num'] = counCounter[0].count
     else:
         context['new_projects_num'] = 0
+    context['total_projects'] = Project.objects.all().count()
     context['target'] = "project"
     context['type'] = "day"
     if request.is_ajax():
