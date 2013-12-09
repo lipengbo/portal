@@ -95,7 +95,7 @@ class Invitation(Connection):
         self.save()
 
     def accept_link(self):
-        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("invite", self.key, ))})
+        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("notifications:all")})
         return link
 
     def send(self):
@@ -125,7 +125,7 @@ class Application(Connection):
         return body
 
     def accept_link(self):
-        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
+        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("notifications:all")})
         return link
 
     def send(self):
