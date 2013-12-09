@@ -213,7 +213,7 @@ msgid ""
 "used.  Please request a <a href=\"%(url)s\">new password reset</a>."
 msgstr ""
 "密码重置链接已经失效，可能因为已经被使用过，请再请求 <a href=\"%(url)s\">新的"
-"密码重置</a>."
+"密码重置</a>。"
 
 #: templates/account/signup_closed.html:7
 #: templates/account/signup_closed.html:10

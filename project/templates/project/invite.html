@@ -46,7 +46,7 @@
                             <td><input type="checkbox" {% if status.is_invited %}disabled{% endif %} name="user" value="{{ invited_user.id }}" ></td>
                             <td>{{ invited_user }}</td>
                             <td>{{ invited_user.get_profile.realm|default:"未填写" }}</td>                         
-                            <td>{% with invited_user.project_set.all|first as user_project %}{% if user_project %}{{ user_project }}等{% else %}暂无{% endif %}{% endwith %}</td>
+                            <td>{% with invited_user.membership_set.all|first as user_project %}{% if user_project %}{{ user_project.project }}等{% else %}暂无{% endif %}{% endwith %}</td>
                             <td>{{ invited_user.last_login|date:"Y.m.d H:i" }}</td>
                             <td>
                                 {% if status.is_invited %}
