@@ -28,6 +28,7 @@ function update_port_info(pre_port_data){
 				var content = '';
 				$.each(ports_data, function(port, data){
 					content = content + '<tr>';
+					pre_port_data = JSON.stringify(ports_data);
 					var recv_total = data_process_chart(data[0], 'bit');
 					var send_total = data_process_chart(data[1], 'bit');
 					var recv_bps = data_process_chart(data[2], 'bit');
