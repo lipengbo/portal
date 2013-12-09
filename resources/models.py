@@ -66,7 +66,7 @@ class IslandResource(Resource):
 
 
 class ServiceResource(IslandResource):
-    ip = models.IPAddressField()
+    ip = models.IPAddressField(verbose_name="IP")
     password = models.CharField(max_length=20, verbose_name=_("password"))
     slices = models.ManyToManyField(Slice, blank=True)
     #state = models.IntegerField(choices=((0, _("Stopped")), (1, _("Started"))), default=1, verbose_name=_("state"))
@@ -82,11 +82,11 @@ class Server(IslandResource):
     username = models.CharField(max_length=20, verbose_name=_("username"))
     password = models.CharField(max_length=20, verbose_name=_("password"))
     state = models.IntegerField(null=True, verbose_name=_("state"), choices=((0, _("Not available")), (1, _("Available"))))
-    cpu = models.CharField(max_length=256, null=True, default=0)
+    cpu = models.CharField(max_length=256, null=True, default=0, verbose_name="CPU")
     mem = models.IntegerField(null=True, default=0, verbose_name=_("memory"))
     bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
     disk = models.IntegerField(null=True, default=0, verbose_name=_("disk"))
-    ip = models.IPAddressField(null=False, unique=True)
+    ip = models.IPAddressField(null=False, unique=True, verbose_name="IP")
     #mac = models.CharField(max_length=256, null=True)
     os = models.CharField(max_length=256, blank=True, null=True, verbose_name=_("os"))
     update_time = models.DateTimeField(auto_now_add=True)
@@ -112,10 +112,10 @@ class Server(IslandResource):
 
 
 class SwitchResource(IslandResource):
-    ip = models.IPAddressField()
+    ip = models.IPAddressField(verbose_name="IP")
     username = models.CharField(max_length=20, verbose_name=_("username"), help_text="用户名和密码是交换机所在服务器的系统用户名和密码")
     password = models.CharField(max_length=20, verbose_name=_("password"))
-    dpid = models.CharField(max_length=256, help_text="dpid以冒号“:”分隔")
+    dpid = models.CharField(max_length=256, help_text="dpid以冒号“:”分隔", verbose_name="DPID")
     has_gre_tunnel = models.BooleanField(default=False, verbose_name=_("Has GRE tunnel"))
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
 
