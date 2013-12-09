@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<li class="span6 slice_topology sile_list" {% if extent_html == "site_base.html" and user != project.owner %}{% endif %}>
+<li class="span6 slice_topology slice_list" {% if extent_html == "site_base.html" and user != project.owner %}{% endif %}>
     <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
         <div class="row-fluid slice_list">

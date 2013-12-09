@@ -103,7 +103,7 @@ class Server(IslandResource):
         options = {
             'exclude_fields': ('name', 'password', 'username', 'disk', 'mem', 'bandwidth'),
             'form_exclude_fields': ('cpu', 'disk', 'mem'),
-            'related_models': [{'app_label': 'resources', 'model': 'virtualswitch'}],
+            #'related_models': [{'app_label': 'resources', 'model': 'virtualswitch'}],
         }
         return options
 

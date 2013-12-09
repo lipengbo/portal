@@ -11,6 +11,7 @@ from django.utils.translation import ugettext, ugettext as _
 from django.db.models import get_model
 from django.forms.models import modelform_factory
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
 
 
 from nexus.templatetags.nexus_tags import get_fields
@@ -72,6 +73,7 @@ def get_islands(request):
     return HttpResponse(html)
 
 @login_required
+@transaction.commit_on_success
 @staff_member_required
 def add_or_edit(request, app_label, model_class, id=None):
     context = {}

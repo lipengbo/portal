@@ -81,6 +81,11 @@ class Invitation(Connection):
     def subject(self):
         return _("Project Invitation")
 
+    @property
+    def content(self):
+        body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        return body
+
     def get_kind(self):
         return "invite"
 
@@ -94,7 +99,6 @@ class Invitation(Connection):
         return link
 
     def send(self):
-        body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         notify.send(self.from_user, recipient=self.to_user, verb=_('invited you to join in'), action_object=self,
                 description=self.message, target=self.target)
 
@@ -115,12 +119,16 @@ class Application(Connection):
     def subject(self):
         return _("Project Application")
 
+    @property
+    def content(self):
+        body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        return body
+
     def accept_link(self):
         link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
         return link
 
     def send(self):
-        body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         notify.send(self.from_user, recipient=self.to_user, verb=_('applied to join in'), action_object=self,
                 description=self.message, target=self.target)
 
@@ -151,6 +159,7 @@ def send_notification_email(sender, instance, created, **kwargs):
     site_name = site.name
     if hasattr(instance.action_object, 'subject'):
         subject = site_name + instance.action_object.subject
+        content = instance.action_object.content
     else:
         subject = _('[%(site_name)s] You have new notification messages') % {'site_name': site_name}
     send_mail(subject, content,

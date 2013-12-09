@@ -48,6 +48,7 @@
         var date=new Date;
         var year=date.getFullYear().toString();
         var month=(date.getMonth()+1).toString();
+        var titshow = '<small>{point.key}</small><br>'
         if(type == "year"){
             total_num = 5;
             coler = ['#8bbc21', '#0d233a', '#2f7ed8'];
@@ -65,12 +66,13 @@
                 title = year + "年每月新增虚网数";
             }
         }else{
+            titshow = '<small>{point.key}日</small><br>'
             total_num = 15;
             coler = ['#2f7ed8', '#0d233a', '#8bbc21'];
             if(target == "project"){
-                title = year + "月" + month + "月每日新增项目数";
+                title = year + "年" + month + "月每日新增项目数";
             }else{
-                title = year + "月" + month + "月每日新增虚网数";
+                title = year + "年" + month + "月每日新增虚网数";
             }
         }
         $('#container').highcharts({
@@ -101,6 +103,15 @@
                 title: {
                     text: name + '数(个)'
                 }
+            },
+            tooltip: {
+                shared: true,
+                useHTML: true,
+                headerFormat: titshow,
+            //    pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
+            //    '<td style="text-align: right"><b>{point.y}个</b></td></tr>',
+            //    footerFormat: '</table>',
+            //    valueDecimals: 2
             },
             legend: {
                 enabled: false

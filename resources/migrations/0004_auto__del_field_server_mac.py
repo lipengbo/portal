@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
-from south.utils import datetime_utils as datetime
-=======
 import datetime
->>>>>>> 22e8db77d38f2c836e24cbfcc95116e141dbbd8e
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -12,41 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'SliceDeleted'
-        db.create_table('slice_slicedeleted', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('show_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('owner_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('description', self.gf('django.db.models.fields.TextField')()),
-            ('project_name', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('date_created', self.gf('django.db.models.fields.DateTimeField')()),
-            ('date_expired', self.gf('django.db.models.fields.DateTimeField')()),
-            ('date_deleted', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
-            ('type', self.gf('django.db.models.fields.IntegerField')(default=0)),
-        ))
-        db.send_create_signal('slice', ['SliceDeleted'])
-
-        # Adding field 'Slice.type'
-        db.add_column('slice_slice', 'type',
-                      self.gf('django.db.models.fields.IntegerField')(default=0),
-                      keep_default=False)
-
-        # Adding field 'Slice.failure_reason'
-        db.add_column('slice_slice', 'failure_reason',
-                      self.gf('django.db.models.fields.TextField')(default=''),
-                      keep_default=False)
+        # Deleting field 'Server.mac'
+        db.delete_column('resources_server', 'mac')
 
 
     def backwards(self, orm):
-        # Deleting model 'SliceDeleted'
-        db.delete_table('slice_slicedeleted')
-
-        # Deleting field 'Slice.type'
-        db.delete_column('slice_slice', 'type')
-
-        # Deleting field 'Slice.failure_reason'
-        db.delete_column('slice_slice', 'failure_reason')
+        # Adding field 'Server.mac'
+        db.add_column('resources_server', 'mac',
+                      self.gf('django.db.models.fields.CharField')(max_length=256, null=True),
+                      keep_default=False)
 
 
     models = {
@@ -124,39 +94,71 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
+        'resources.server': {
+            'Meta': {'object_name': 'Server'},
+            'bandwidth': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
+            'cpu': ('django.db.models.fields.CharField', [], {'default': '0', 'max_length': '256', 'null': 'True'}),
+            'disk': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'unique': 'True', 'max_length': '15'}),
+            'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
+            'mem': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'os': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'state': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
+            'update_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+        },
+        'resources.sliceport': {
+            'Meta': {'unique_together': "(('slice', 'switch_port'),)", 'object_name': 'SlicePort'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"}),
+            'switch_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.SwitchPort']"})
+        },
+        'resources.sliceswitch': {
+            'Meta': {'unique_together': "(('slice', 'switch'),)", 'object_name': 'SliceSwitch'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"}),
+            'switch': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.Switch']"})
+        },
+        'resources.switch': {
+            'Meta': {'object_name': 'Switch'},
+            'dpid': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'has_gre_tunnel': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
+            'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'password': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
+            'slices': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['slice.Slice']", 'through': "orm['resources.SliceSwitch']", 'symmetrical': 'False'}),
+            'username': ('django.db.models.fields.CharField', [], {'max_length': '20'})
+        },
+        'resources.switchport': {
+            'Meta': {'unique_together': "(('switch', 'port'),)", 'object_name': 'SwitchPort'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'port': ('django.db.models.fields.IntegerField', [], {}),
+            'slices': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['slice.Slice']", 'symmetrical': 'False', 'through': "orm['resources.SlicePort']", 'blank': 'True'}),
+            'switch': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.Switch']"})
+        },
+        'resources.virtualswitch': {
+            'Meta': {'object_name': 'VirtualSwitch', '_ormbases': ['resources.Switch']},
+            'server': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.Server']"}),
+            'switch_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['resources.Switch']", 'unique': 'True', 'primary_key': 'True'})
+        },
         'slice.slice': {
             'Meta': {'object_name': 'Slice'},
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_expired': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
-            'failure_reason': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'islands': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Island']", 'through': "orm['slice.SliceIsland']", 'symmetrical': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Project']"}),
             'show_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'state': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'type': ('django.db.models.fields.IntegerField', [], {'default': '0'})
-        },
-        'slice.slicecount': {
-            'Meta': {'object_name': 'SliceCount'},
-            'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'num': ('django.db.models.fields.IntegerField', [], {'default': '1'})
-        },
-        'slice.slicedeleted': {
-            'Meta': {'object_name': 'SliceDeleted'},
-            'date_created': ('django.db.models.fields.DateTimeField', [], {}),
-            'date_deleted': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'date_expired': ('django.db.models.fields.DateTimeField', [], {}),
-            'description': ('django.db.models.fields.TextField', [], {}),
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'owner_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'project_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'show_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'type': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+            'state': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         'slice.sliceisland': {
             'Meta': {'unique_together': "(('slice', 'island'),)", 'object_name': 'SliceIsland'},
@@ -166,4 +168,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['slice']
+    complete_apps = ['resources']

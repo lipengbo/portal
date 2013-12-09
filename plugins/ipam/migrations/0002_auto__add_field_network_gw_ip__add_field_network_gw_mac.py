@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
+import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -8,14 +8,24 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding field 'Network.gw_ip'
+        db.add_column('ipam_network', 'gw_ip',
+                      self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True),
+                      keep_default=False)
 
-        # Changing field 'Network.gw_ip'
-        db.alter_column('ipam_network', 'gw_ip', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True))
+        # Adding field 'Network.gw_mac'
+        db.add_column('ipam_network', 'gw_mac',
+                      self.gf('django.db.models.fields.CharField')(max_length=64, null=True),
+                      keep_default=False)
+
 
     def backwards(self, orm):
+        # Deleting field 'Network.gw_ip'
+        db.delete_column('ipam_network', 'gw_ip')
 
-        # Changing field 'Network.gw_ip'
-        db.alter_column('ipam_network', 'gw_ip', self.gf('django.db.models.fields.IPAddressField')(null=True))
+        # Deleting field 'Network.gw_mac'
+        db.delete_column('ipam_network', 'gw_mac')
+
 
     models = {
         'ipam.ipusage': {

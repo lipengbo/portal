@@ -110,7 +110,9 @@ window.TopologyView = Backbone.View.extend({
             
             var all_links_copy = [];
             $.each(all_links, function (index, link) {
-                all_links_copy.push(link);
+                if (link.source && link.target) {
+                    all_links_copy.push(link);
+                }
             })
             var deleted_link_indexes = [];
             $.each(all_links_copy, function (index, link) {

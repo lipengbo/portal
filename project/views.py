@@ -71,6 +71,7 @@ def index(request):
         context['new_projects_num'] = counCounter[0].count
     else:
         context['new_projects_num'] = 0
+    context['total_projects'] = Project.objects.all().count()
     context['target'] = "project"
     context['type'] = "day"
     if request.is_ajax():
@@ -149,7 +150,7 @@ def invite(request, id):
     #invited_user_ids.extend(project.member_ids())
     invited_user_ids.append(project.owner.id)
     invited_user_ids.extend(User.objects.filter(is_superuser=True).values_list("id", flat=True))
-    users = User.objects.exclude(id__in=set(invited_user_ids))
+    users = User.objects.exclude(id__in=set(invited_user_ids)).filter(is_active=True)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -165,7 +166,8 @@ def invite(request, id):
 def apply(request):
     context = {}
     user = request.user
-    projects = Project.objects.all().exclude(owner=user)
+    joined_project_ids = Membership.objects.filter(user=user).values_list("project__id", flat=True)
+    projects = Project.objects.all().exclude(id__in=joined_project_ids)
     if 'category' in request.GET:
         cat_id = request.GET.get('category')
         if cat_id and cat_id != u'-1':
