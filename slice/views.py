@@ -223,7 +223,10 @@ def edit_controller(request, slice_id):
 @login_required
 def detail(request, slice_id):
     """编辑slice。"""
+    print "slice_detail"
+    print 1
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    print 2
     user = request.user
     context = {}
     if user.is_superuser:
@@ -238,7 +241,9 @@ def detail(request, slice_id):
     context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
 #     context['check_vm_status'] = 0
+    print 3
     subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    print 4
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
 #     if slice_obj.state == 1:
