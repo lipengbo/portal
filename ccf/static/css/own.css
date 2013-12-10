@@ -6639,10 +6639,12 @@ a.button-royal:hover {
   padding-bottom: 10px;
 }
 .icon-envelope-open {
-  width: 16px;
-  height: 16px;
-  background: url(../img/envelope-open.png) no-repeat;
-  background-size: 100%;
+  display: inline-block !important;
+  width: 14px !important;
+  height: 14px !important;
+  background-image: url(../img/envelope-open.png) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% !important;
 }
 .nexus-body .help-block {
   font-style: italic;
