@@ -1,6 +1,6 @@
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
-        name = check_vm_name('name');
+        var name = check_vm_name('name');
         flavor = check_vm_select('flavor');
         image = check_vm_select('image');
         server = check_vm_select('server');
