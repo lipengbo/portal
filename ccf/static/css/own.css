@@ -5926,7 +5926,7 @@ table {
 .example-sites li.project_list {
   max-width: 229px;
 }
-.example-sites li.sile_list {
+.example-sites li.slice_list {
   max-width: 480px;
 }
 .thumbnail {
@@ -6642,6 +6642,7 @@ a.button-royal:hover {
   width: 16px;
   height: 16px;
   background: url(../img/envelope-open.png) no-repeat;
+  background-size: 100%;
 }
 .nexus-body .help-block {
   font-style: italic;
