@@ -40,8 +40,13 @@ class IPManager(models.Manager):
         subnet.save()
         return True
 
+    def _release_subnet_ip(self, subnet):
+        ips = self.filter(supernet=subnet)
+        ips.update(is_used=False)
+
     def delete_subnet(self, owner):
         subnet = Subnet.objects.get(owner=owner)
+        self._release_subnet_ip(subnet=subnet)
         subnet.is_owned = False
         subnet.is_used = False
         subnet.owner = None
