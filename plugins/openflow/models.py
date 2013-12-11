@@ -117,7 +117,7 @@ class FlowvisorLinksMd5(models.Model):
 
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
-    if settings.DEBUG and not getattr(settings, "CAN_FETCH_FLOWVISOR"):
+    if settings.DEBUG and not hasattr(settings, "CAN_FETCH_FLOWVISOR"):
         return
     from communication.flowvisor_client import FlowvisorClient
 
