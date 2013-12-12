@@ -80,7 +80,7 @@ msgstr "重复新密码"
 
 #: forms.py:136
 msgid "Please type your current password."
-msgstr "请输入您当前的密码"
+msgstr "密码不正确"
 
 #: forms.py:153
 msgid "Email address can not be found."

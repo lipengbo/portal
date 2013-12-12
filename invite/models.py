@@ -153,6 +153,8 @@ def send_invite(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Notification)
 def send_notification_email(sender, instance, created, **kwargs):
+    if not created:
+        return
     site = Site.objects.get_current()
     content = render_to_string('notifications/notice.txt', {'notice': instance,
         'notification_link': "http://" + site.domain + reverse("notifications:all")})

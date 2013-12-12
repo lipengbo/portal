@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 
 from guardian.shortcuts import assign_perm
 
-from invite.models import Invitation
+from invite.models import Invitation, Application
 from notifications import notify
 
 class City(models.Model):
@@ -150,12 +150,17 @@ def create_owner_membership(sender, instance, created, **kwargs):
 def delete_invitation(sender, instance, **kwargs):
     to_user = instance.user
     project = instance.project
-    from_user = project.owner
-    try:
-        target_type = ContentType.objects.get_for_model(project)
-        Invitation.objects.get(to_user=to_user, from_user=from_user, target_id=project.id, target_type=target_type).delete()
-    except Invitation.DoesNotExist, e:
-        pass
+    owner = project.owner
+    target_type = ContentType.objects.get_for_model(project)
+    Invitation.objects.filter(to_user=to_user, from_user=owner, target_id=project.id, target_type=target_type).delete()
+    Application.objects.filter(to_user=owner, from_user=to_user, target_id=project.id, target_type=target_type).delete()
+
+@receiver(pre_delete, sender=Project)
+def delete_invitation_application(sender, instance, **kwargs):
+    project = instance
+    target_type = ContentType.objects.get_for_model(project)
+    Invitation.objects.filter(target_id=project.id, target_type=target_type).delete()
+    Application.objects.filter(target_id=project.id, target_type=target_type).delete()
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
