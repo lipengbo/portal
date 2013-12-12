@@ -11,6 +11,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
+from django.conf import settings
+from django.core.mail import send_mail
 
 from guardian.shortcuts import assign_perm
 
@@ -91,8 +94,14 @@ class Project(models.Model):
             pass
         else:
             project_membership.delete()
-            notify.send(user, recipient=self.owner,
+            notification = notify.send(user, recipient=self.owner,
                     verb=_(' quit from'), action_object=self, target=self)
+            site = Site.objects.get_current()
+            notification_link =  "http://" + site.domain + reverse("notifications:all")
+            subject = _("User quit from project")
+            content = _("Dear user:\n User %(user)s has quit from your project %(project)s. You can click the link below to see the details.\n%(notification_link)s\n") % ({'notification_link': notification_link, 'user': user, 'project': self})
+            send_mail(subject, content,
+                    settings.DEFAULT_FROM_EMAIL, [self.owner.email], fail_silently=False)
 
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
@@ -119,6 +128,14 @@ class Project(models.Model):
 
     def get_slices(self):
         return self.slice_set.filter(type=0)
+
+    @property
+    def subject(self):
+        return ""
+
+    @property
+    def content(self):
+        return ""
 
     def __unicode__(self):
         return self.name

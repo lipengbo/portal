@@ -164,5 +164,6 @@ def send_notification_email(sender, instance, created, **kwargs):
         content = instance.action_object.content
     else:
         subject = _('[%(site_name)s] You have new notification messages') % {'site_name': site_name}
-    send_mail(subject, content,
-              settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)
+    if content:
+        send_mail(subject, content,
+                  settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)

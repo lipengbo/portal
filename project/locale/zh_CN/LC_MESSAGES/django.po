@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-28 14:05+0800\n"
+"POT-Creation-Date: 2013-12-12 13:57+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,75 +18,92 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:21 models.py:38
+#: models.py:24 models.py:41
 msgid "name"
 msgstr "名称"
 
-#: models.py:22 models.py:39
+#: models.py:25 models.py:42
 msgid "description"
 msgstr "描述"
 
-#: models.py:35 models.py:40
+#: models.py:38 models.py:43
 msgid "City"
 msgstr "城市"
 
-#: models.py:53 models.py:69
+#: models.py:56 models.py:72
 msgid "Island"
 msgstr "节点"
 
-#: models.py:63 models.py:72 templates/project/detail.html:31
+#: models.py:66 models.py:75 templates/project/detail.html:31
 msgid "Category"
 msgstr "项目类型"
 
-#: models.py:67 templates/project/detail.html:28
+#: models.py:70 templates/project/detail.html:28
 msgid "Project Name"
 msgstr "项目名称"
 
-#: models.py:68 templates/project/detail.html:29
+#: models.py:71 templates/project/detail.html:29
 msgid "Project Description"
 msgstr "项目描述"
 
-#: models.py:71
+#: models.py:74
 msgid "Memberships"
 msgstr "成员"
 
-#: models.py:95
+#: models.py:98
 msgid " quit from"
 msgstr "退出了项目："
 
-#: models.py:125
+#: models.py:101
+msgid "User quit from project"
+msgstr "SDN创新实验平台用户退出项目通知"
+
+#: models.py:102
+msgid ""
+"Dear user:\n"
+" User %(user)s has quit from your project %(project)s. You can click the "
+"link below to see the details.\n"
+"%(notification_link)s\n"
+msgstr ""
+"亲爱的用户，您好：\n"
+"    用户“%(user)s”退出了您的项目“%(project)s”，您可以单击以下链接查看申请详情。\n"
+"    %(notification_link)s\n"
+"\n"
+"SDN创新实验平台\n"
+
+#: models.py:144
 msgid "Project"
 msgstr "项目"
 
-#: models.py:140
+#: models.py:159
 msgid "Membership"
 msgstr "成员"
 
-#: views.py:112
+#: views.py:125
 msgid "The user has been invited of this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:120
+#: views.py:133
 msgid "The user has applied this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:133
+#: views.py:146
 msgid "Invitation message is required."
 msgstr "邀请消息是必填项"
 
-#: views.py:183
+#: views.py:198
 msgid "You have applied for this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:191
+#: views.py:206
 msgid "The user has been invited for this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:204
+#: views.py:221
 msgid "Application is submitted, please wait to audit."
 msgstr "申请已经提交，请等待审批"
 
-#: views.py:206
+#: views.py:223
 msgid "Application message is required."
 msgstr "申请理由是必填项"
 
@@ -135,10 +152,6 @@ msgstr "序号"
 msgid "Member name"
 msgstr "成员"
 
-#: templates/project/detail.html:61 templates/project/member.html:32
-msgid "Company/Organization"
-msgstr "所在单位"
-
 #: templates/project/detail.html:62 templates/project/member.html:33
 msgid "Actions"
 msgstr "操作"
@@ -147,6 +160,10 @@ msgstr "操作"
 #: templates/project/member.html:44 templates/project/member.html.py:46
 msgid "Remove"
 msgstr "删除"
+
+#: templates/project/member.html:32
+msgid "Company/Organization"
+msgstr "所在单位"
 
 #~ msgid "Selected Islands"
 #~ msgstr "选择节点"
