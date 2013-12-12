@@ -61,8 +61,9 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
                                            image_name='gateway',
                                            enable_dhcp=enabled_dhcp)
             except Exception, ex:
+                print ex.message
                 LOG.debug(traceback.print_exc())
-                raise DbError(ex)
+                raise DbError(ex.message)
             print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
 #         创建并添加虚拟机
