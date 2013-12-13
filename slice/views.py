@@ -89,9 +89,6 @@ def create_first(request, proj_id):
             gw_host_id = request.POST.get("gw_host_id")
             gw_ip = request.POST.get("gw_ip")
             dhcp_selected = request.POST.get("dhcp_selected")
-            print gw_host_id
-            print gw_ip
-            print dhcp_selected
             slice_obj = create_slice_step(project, slice_name,
                                           slice_description, island, user,
                                           ovs_ports, controller_info, slice_nw,
@@ -154,9 +151,7 @@ def list(request, proj_id):
             context['query'] = query
     context['slices'] = slice_objs
     if request.is_ajax():
-        print '89'
         return render(request, 'slice/list_page.html', context)
-    print context
     if context['type'] == 0:
         return render(request, 'slice/slice_list.html', context)
     else:
@@ -277,7 +272,7 @@ def delete(request, slice_id):
                 slice_deleted.type = 0
             slice_obj.delete()
         except Exception, ex:
-            print ex
+            pass
 #             if request.user.is_superuser:
 #                 messages.add_message(request, messages.ERROR, ex)
         else:
@@ -285,22 +280,12 @@ def delete(request, slice_id):
     else:
         return redirect("forbidden")
     if 'next' in request.GET:
-        print request.GET.get('next')
         if 'type' in request.GET:
-            print request.GET.get('type')
             return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))
         else:
             return redirect(request.GET.get('next'))
     return HttpResponseRedirect(
         reverse("project_detail", kwargs={"id": project_id}))
-#     if int(flag) == 1:
-#         return HttpResponseRedirect(
-#             reverse("project_detail", kwargs={"id": project_id}))
-#     else:
-#         if user.is_superuser:
-#             project_id = 0
-#         return HttpResponseRedirect(
-#             reverse("slice_list", kwargs={"proj_id": project_id}))
 
 
 @login_required
@@ -313,7 +298,6 @@ def start_or_stop(request, slice_id, flag):
         else:
             stop_slice_api(slice_obj)
     except Exception, ex:
-        print ex
         return HttpResponse(json.dumps({'value': 0, 'error_info': str(ex)}))
 #         messages.add_message(request, messages.ERROR, ex)
     return HttpResponse(json.dumps({'value': 1}))
@@ -325,7 +309,6 @@ def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
     jsondatas = get_slice_topology(slice_obj)
-    print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')
 
@@ -366,7 +349,6 @@ def create_nw(request, owner, nw_num):
         else:
             return HttpResponse(json.dumps({'value': 0}))
     except Exception, ex:
-        print ex
         return HttpResponse(json.dumps({'value': 0}))
 
 

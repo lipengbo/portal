@@ -35,14 +35,14 @@ def flowvisor_update_sice_controller(flowvisor, slice_name, controller_ip, contr
     """
     LOG.debug('flowvisor_update_sice_controller')
     if flowvisor and slice_name and controller_ip and controller_port:
-            args = [str(slice_name)]
-            opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
-            print opts
-            flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
-            flowvisor_ps = str(flowvisor.password)
-            upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
-            if upslice == 'error':
-                raise FlowvisorError("控制器更新失败!")
+        args = [str(slice_name)]
+        opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
+        print opts
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
+        upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
+        if upslice == 'error':
+            raise FlowvisorError("控制器更新失败!")
     else:
         raise DbError("数据库异常!")
 
@@ -72,7 +72,9 @@ def flowvisor_del_slice(flowvisor, slice_name):
         args = [str(slice_name)]
         flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
         flowvisor_ps = str(flowvisor.password)
-        do_removeSlice(args, flowvisor_url, flowvisor_ps)
+        rm_slice = do_removeSlice(args, flowvisor_url, flowvisor_ps)
+        if rm_slice == 'error':
+            raise FlowvisorError("虚网删除失败!")
     else:
         pass
 #         raise DbError("数据库异常!")

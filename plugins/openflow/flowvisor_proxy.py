@@ -70,7 +70,10 @@ def parseResponse(data):
     j = json.loads(data)
     if 'error' in j:
         print "%s -> %s" % (getError(j['error']['code']), j['error']['message'])
-        return ""
+        if getError(j['error']['code']) == "Invalid Params":
+            return "Invalid Params remove"
+        else:
+            return ""
     return j['result']
 
 
@@ -112,9 +115,16 @@ def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
 
         req = buildRequest(data, url, cmd)
         ph = opener.open(req)
-        return parseResponse(ph.read())
+        ret = parseResponse(ph.read())
+        if ret == "Invalid Params remove":
+            if cmd == "remove-slice" or cmd == "remove-flowspace":
+                return ret
+            else:
+                return ""
+        else:
+            return ret
     except Exception, e:
-        print 1
+        print 11
         print e
         if str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
             return connect(cmd, data, flowvisor_url, flowvisor_ps)
@@ -129,8 +139,7 @@ def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
 #         else:
 #             print e
     except RuntimeError, e:
-        print 2
-        print e
+        print 22
         return ""
 
 
@@ -182,7 +191,6 @@ def do_removeSlice(args, flowvisor_url, flowvisor_ps):
         return "error"
     req = {"slice-name": args[0]}
     ret = connect("remove-slice", data=req, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
-    print ret
     if ret:
         print "Slice %s has been deleted" % args[0]
         return "success"
@@ -262,7 +270,6 @@ def do_removeFlowSpace(args, flowvisor_url, flowvisor_ps):
         print "remove-flowpace : Must specify the name of the flowspace to remove."
         return "error"
     ret = connect("remove-flowspace", data=args, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
-    print ret
     if ret:
         print "Flowspace entries have been removed."
         return "success"

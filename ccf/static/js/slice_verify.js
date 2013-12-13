@@ -635,6 +635,8 @@ function start_or_stop(slice_id, flag){
                 if(ret){
                     $("#vm_tr"+vm_id).hide();
                     document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
+                    slice_id = $("#slice_id").text();
+                    //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
                 }
             });
             return false;

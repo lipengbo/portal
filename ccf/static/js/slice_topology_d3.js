@@ -570,7 +570,7 @@ var drag_line = board.append('svg:path')
   .attr('d', 'M0,0L0,0');
 
 // handles to link and node element groups
-var path = board.append('svg:g').selectAll('g'),
+var path = board.append('svg:g').selectAll('path'),
     circle = board.append('svg:g').selectAll('g');
 
 // mouse event vars
@@ -589,8 +589,8 @@ function resetMouseVars() {
 // update force layout (called automatically each iteration)
 function tick() {
   // draw directed edges with proper padding from node centers
-  var ph = path.selectAll('.link');
-  ph.attr('d', function(d) {
+  //var ph = path.selectAll('.link');
+  path.attr('d', function(d) {
     var deltaX = d.target.x - d.source.x,
         deltaY = d.target.y - d.source.y,
         dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY),
@@ -720,18 +720,19 @@ function highlight( data, element ) {
 // update graph (called when needed)
 function restart() {
   // path (link) group
+  //$('.link').remove();
+
   path = path.data(links);
 
   // update existing links
-  path.selectAll('.link')
-     .classed('selected', function(d) { return d === selected_link; })
+  //path.selectAll('.link')
+   //  .classed('selected', function(d) { return d === selected_link; })
   //  .style('marker-start', function(d) { return d.left ? 'url(#start-arrow)' : ''; })
   //  .style('marker-end', function(d) { return d.right ? 'url(#end-arrow)' : ''; });
 
 
   // add new links
-  var g = path.enter().append('svg:g');
-  g.append('svg:path')
+  var g = path.enter().append('svg:path')
     .attr("class", "link")
     .style("stroke-width", function (d) { 
         var width = 1;
@@ -831,10 +832,10 @@ function restart() {
       selected_link = null;
 
       // reposition drag line
-      drag_line
-        .style('marker-end', 'url(#end-arrow)')
-        .classed('hidden', false)
-        .attr('d', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + mousedown_node.x + ',' + mousedown_node.y);
+      //drag_line
+       // .style('marker-end', 'url(#end-arrow)')
+      //  .classed('hidden', false)
+      //  .attr('d', 'M' + mousedown_node.x + ',' + mousedown_node.y + 'L' + mousedown_node.x + ',' + mousedown_node.y);
 
       restart();
     })
@@ -843,9 +844,9 @@ function restart() {
         board.call(d3.behavior.zoom().on("zoom", rescale))
 
       // needed by FF
-      drag_line
-        .classed('hidden', true)
-        .style('marker-end', '');
+      //drag_line
+      //  .classed('hidden', true)
+      //  .style('marker-end', '');
 
       // check for drag-to-self
       mouseup_node = d;
@@ -854,61 +855,7 @@ function restart() {
       // unenlarge target node
       d3.select(this).attr('transform', '');
 
-      // add link to graph (update if exists)
-      // NB: links are strictly source < target; arrows separately specified by booleans
-      var source, target, direction;
-      if(mousedown_node.id < mouseup_node.id) {
-        source = mousedown_node;
-        target = mouseup_node;
-        direction = 'right';
-      } else {
-        source = mouseup_node;
-        target = mousedown_node;
-        direction = 'left';
-      }
 
-      var pair = source.type + target.type;
-      if (pair == 'hostvm' || pair == 'vmhost') {
-          for (var i = 0; i < [source, target].length; i++) {
-              var current_node = [source, target][i];
-              if (current_node.max) {
-                if (current_node.max <= 1) {
-                    return;
-                } else {
-                    current_node.max --;
-                }
-              }
-          };
-      }
-      /* only accept allowed node */
-      
-      if (!(target.type in source.allows)) {
-         return;
-      }
-      if (source.limit <= 0) {
-          return;
-      }
-      source.limit --;
-      if (target.limit <= 0) {
-          return;
-      }
-      target.limit --;
-      var link;
-      link = links.filter(function(l) {
-        return (l.source === source && l.target === target);
-      })[0];
-
-      if(link) {
-        link[direction] = true;
-      } else {
-        link = {source: source, target: target, left: false, right: false};
-        link[direction] = true;
-        links.push(link);
-      }
-
-      // select new link
-      selected_link = link;
-      selected_node = null;
       restart();
     });
 
@@ -983,8 +930,8 @@ function random_refresh () {
     setTimeout(function  () {
         //alert('in');
         refresh_time = Math.floor(Math.random() * 10000 + 10000 );
-        var ph = path.selectAll('.link');
-          ph.style("stroke", function (d) { 
+        //var ph = path.selectAll('.link');
+          path.style("stroke", function (d) { 
             var color = 'black';
             
             if (d.type == 'switchswitch') {
@@ -1025,7 +972,7 @@ function random_refresh2 () {
                 async: false, 
                 success: function(data) {
                     if (data.bandwidth){
-                          var ph = path.selectAll('.link');
+                          var ph = path;//.selectAll('.link');
                           bandwidth = data.bandwidth;
                           //alert(data.bandwidth);
                           ph.style("stroke", function (d) { 
@@ -1095,13 +1042,13 @@ function topology_update_vm_state(vm_id, state){
 function topology_del_vm(vm_id){
     var nid = get_node_by_yid(vm_id);
     if(nid>=0){
+        nodes_data.splice(nid,1); 
         for(var i=0; i< links.length; i++){
             if(links[i].type == 'hostswitch' && links[i].source.yid == vm_id){
                 links.splice(i,1);
                 break;
             }
         }
-        nodes_data.splice(nid,1); 
         restart(); 
     }
 }
