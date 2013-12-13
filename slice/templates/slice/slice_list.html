@@ -3,14 +3,14 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
-{% load endless %}
 {% load project_tags %}
 
-{% block head_title %}SLICE列表{% endblock %}
+{% block head_title %}虚网列表{% endblock %}
 {% block breadcrumb %}
     {%if extent_html == "site_base.html" %}
+        <a href="/project/">项目</a><span class="divider">/</span>
         <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>  
-        Slice列表
+        虚网列表
     {%else%}
         {%if project%}
         <a href="/project/">项目</a><span class="divider">/</span>
@@ -21,8 +21,20 @@
 {% endblock %}
 
 {% block body %}
-{% paginate 4 slices %}
+
     <div class="search">
+        {%if extent_html == "admin_base.html" %}
+        {%if not project%}
+        <form class="form-inline" style="float:left;">
+            <label>虚网类型：</label>
+            <select name="slice_type" id="slice_type" onchange="slice_type_change()">
+                <option value="0" {%if type == 0 %}selected{%endif%}>正常运行</option>
+                <option value="1" {%if type == 1 %}selected{%endif%}>删除失败</option>
+                <option value="2" {%if type == 2 %}selected{%endif%}>已删除</option>          
+            </select>
+        </form>
+        {%endif%}
+        {%endif%}
         <form class="form-search">
           <div class="input-append">
               <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
@@ -36,17 +48,17 @@
                 {%if extent_html == "site_base.html" %}
 
                     <div class="well">
-                    <h3 class="list_title">我的Slice</h3>
+                    <h3 class="list_title">我的虚网</h3>
                     <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
                     </div> 
                 {%else%}
                     {%if project%}
                         <div class="well">
-                        <h3 class="list_title">我的Slice</h3>
+                        <h3 class="list_title">我的虚网</h3>
                         <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
                         </div> 
                     {%else%}
-                    <legend>虚网（Slice）</legend>
+                    <legend>正常运行的虚网</legend>
                     <div class="row-fluid countschart">
                         <div class="span2 counts">
                             <div class="counts_block">
@@ -63,9 +75,37 @@
                             </div>                                                 
                         </div>                        
                         <div class="span10">
-                            <div id="container" style="min-width: 400px; height: 212px; margin: 0 auto"></div>
-                        </div>
-                        <div class="clear"></div>      
+                            <iframe scrolling="no" id="countiframe" width="100%" height="182" src="/slice/countiframe/?target=slice&type=day" frameborder="0"></iframe>
+                            <div id="countbutton">
+                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="30">
+                            <g class="highcharts-legend" zIndex="7" transform="translate(325,0)">
+                            <rect rx="5" ry="5" fill="white" x="0.5" y="0.5" width="168" height="24" stroke="#CCC" stroke-width="1" visibility="visible"></rect>
+                            <g zIndex="1">
+                            <g>
+                            <g class="highcharts-legend-item" zIndex="1" transform="translate(8,3)">
+                                <text x="30" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;cursor:pointer;color:#274b6d;fill:#274b6d;" text-anchor="start" zIndex="2">
+                                <tspan x="30" onclick="refreshcountiframe('slice', 'year');"> 年</tspan>
+                                </text>
+                                <rect rx="2" ry="2" fill="#8bbc21" x="0" y="4" width="25" height="12" zIndex="3" onclick="refreshcountiframe('slice', 'year');"></rect>
+                            </g>
+                            <g class="highcharts-legend-item" zIndex="1" transform="translate(64.28125,3)">
+                                <text x="30" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;cursor:pointer;color:#274b6d;fill:#274b6d;" text-anchor="start" zIndex="2">
+                                <tspan x="30" onclick="refreshcountiframe('slice', 'month');"> 月</tspan>
+                                </text>
+                                <rect rx="2" ry="2" fill="#0d233a" x="0" y="4" width="25" height="12" zIndex="3" onclick="refreshcountiframe('slice', 'month');"></rect>
+                            </g>
+                            <g class="highcharts-legend-item" zIndex="1" transform="translate(120.5625,3)">
+                                <text x="30" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;cursor:pointer;color:#274b6d;fill:#274b6d;" text-anchor="start" zIndex="2">
+                                <tspan x="30" onclick="refreshcountiframe('slice', 'day');"> 日</tspan>
+                                </text>
+                                <rect rx="2" ry="2" fill="#2f7ed8" x="0" y="4" width="25" height="12" zIndex="3" onclick="refreshcountiframe('slice', 'day');"></rect>
+                            </g>
+                            </g>
+                            </g>
+                            </g>
+                            </svg>
+                            </div>
+                        </div>     
                     </div>
 
                     {%endif%}
@@ -85,122 +125,33 @@
                 {%if query %}
                 <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
                 {%else%}
-                <p class="alert alert-info">当前没有SLICE</p>
+                <p class="alert alert-info">当前没有虚网</p>
                 {%endif%}
              {% endif %}
              <div class="row-fluid">
              {%if slices %}
-             {% for group in slices|group_by:2 %}
-             <ul class="thumbnails example-sites">
-		         {% for slice in group %}
-		              {% include "slice/_slice.html" %}
-		         {% endfor %}
-		     </ul>
-		     {% endfor %}
+             <div id="list_show">
+                 {% include "slice/list_page.html" %}
+		     </div>
 		     {%endif%}
 		     </div>
          </fieldset>
-    </div>
-    <div class="pagination">
-        <ul>
-            {% show_pages %}
-        </ul>
     </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/list_pagination.js"></script>
 <script type="text/javascript">
-$(function () {
-        slice_show = $("#slice_show").text();
-        if(slice_show == '1'){
-            check_url = "/slice/get_slice_show/";
-            //alert(check_url)
-            var show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
-            var show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-            $.ajax({
-                type: "GET",
-                url: check_url,
-                dataType: "json",
-                cache: false,
-                async: false,  
-                success: function(data) {
-                    if (data.result == 1)
-                     {
-                       // alert("in true")
-                        show_dates = data.show_dates;
-                        show_nums = data.show_nums;
-                     } 
-                     else
-                     {
-                        //show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
-                        //show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-                     }
-                }
-            });
-            console.log(show_dates);
-            console.log(show_nums);
-            $('#container').highcharts({
-                chart: {
-                    type: 'column',
-                    margin: [ 50, 50, 60, 50]
-                },
-                title: {
-                    text: '每日新增虚网数'
-                },
-                exporting: {
-                    enabled: false
-                },
-                xAxis: {
-                    categories: show_dates,
-                    labels: {
-                        rotation: -30,
-                        align: 'right',
-                        style: {
-                            fontSize: '11px',
-                            fontFamily: 'Verdana, sans-serif'
-                        }
-                    }
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: '虚网数(个)'
-                    }
-                },
-                legend: {
-                    enabled: false
-                },
-                //tooltip: {
-                 //   formatter: function() {
-                       // return '<b>'+ this.x +'</b><br/>'+
-                  //          '创建的虚网个数: '+ Highcharts.numberFormat(this.y, 1) +
-                   //         ' 个';
-                   // }
-               // },
-                series: [{
-                    name: 'Slice',
-                    data: show_nums,
-                    dataLabels: {
-                        enabled: true,
-                        rotation: -90,
-                        color: '#FFFFFF',
-                        align: 'right',
-                        x: 4,
-                        y: 10,
-                        style: {
-                            fontSize: '13px',
-                            fontFamily: 'Verdana, sans-serif'
-                        }
-                    }
-                }]
-            });
-         }
-    });
-    
-
-        </script>
-<script src="{{ STATIC_URL}}js/highcharts/highcharts.js"></script>
-<script src="{{ STATIC_URL}}js/highcharts/modules/exporting.js"></script>
+    function refreshcountiframe(target, type){
+        document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type; 
+    }
+    function slice_type_change(){
+        var slice_type = document.getElementById("slice_type");
+        var href = location.href;
+        var hrefs = href.split("?");
+        location.href = hrefs[0]+"?type="+slice_type.value;
+    }
+</script>
 {% endblock %}

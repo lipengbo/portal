@@ -26,6 +26,8 @@ def _get_fields(obj, only_name=False, for_display=True):
                 excludes.append('password')
                 excludes.append('username')
                 excludes.append('date_joined')
+                excludes.append('first_name')
+                excludes.append('last_name')
         else:
             try:
                 excludes = list(clazz.admin_options()['form_exclude_fields'])
@@ -50,6 +52,13 @@ def get_value(obj, key):
     else:
         return getattr(obj, key)
 
+@register.filter
+def get_attr(obj, key):
+    return getattr(obj, key)
+
+@register.filter
+def concat(str1, str2):
+    return str1 + str2
 
 @register.filter
 def get_class_name(obj):
@@ -63,7 +72,10 @@ def get_class_verbose_name(obj):
 
 @register.filter
 def get_related_models(obj):
-    clazz = obj.__class__
+    if isinstance(obj, type):
+        clazz = obj
+    else:
+        clazz = obj.__class__
     try:
         related_models = clazz.admin_options()['related_models']
         for model in related_models:

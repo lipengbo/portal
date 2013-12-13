@@ -14,38 +14,70 @@
 {% block body %}
 	<div class="row-fluid help_all">
        <div class="span9">
-       	 <div class="help_main_wrap">
        	 	<div class="help_main">
-       	 	  <section id="ceni">
-       	 		<h4>What is GENI?</h4>
-       	 		<p>GENI (Global Environment for Network Innovations) provides a virtual laboratory for networking and distributed systems research and education. It is well suited for exploring networks at scale, thereby promoting innovations in network science, security, services and applications. GENI allows experimenters to:</p>
+       	 	  <section id="help_sdn">
+       	 		<h4><i class="icon-laptop"></i>什么是SDN创新实验平台？</h4>
+       	 		<p>SDN创新实验平台为高校等科研机构用于验证网络实验提供服务，用户可以通过平台获取实验所需要的网络、计算、存储资源进行SDN、云计算、移动网络、信息中心网络等未来网络相关的不同方向研究实验。</p>
+                <p> 平台提供用户灵活的环境配置，如自定义SDN控制器、网关、DHCP服务器，以及网络实验所需要的拓扑的自由选择，帮助用户降低实验过程中环境搭建以及运维的成本，提高用户进行科研实验的效率。</p>                        	 	              
+                <img src="{% static "img/help_sdn.png" %}" />
+              </section>
+              <section id="help_project">
+                <h4><i class="icon-folder-close-alt"></i>什么是项目？</h4>
+                <p>项目是SDN创新实验平台中用于组织和进行创新研究试验的载体，它具有如下特点：</p>
+                <ul>
+                    <li>项目由项目leader创建，项目leader一般为教授或高级研究人员、资深爱好者等，项目leader可以创建多个项目；</li>
+                    <li>项目由多个实验以及研究人员组成，参与项目的研究人员可以是普通研究人员、学生、一般爱好者等，同时一个研究人员可以参与多个项目；</li>                    
+                </ul>                 
+              </section>
+              <section id="help_slice">
+                <h4> <i class="icon-globe"></i>什么是虚网？</h4>
+                <p>虚网是SDN创新实验平台的项目中实验的最小独立载体，它具有如下特点：</p>
+                <ul>
+                    <li>虚网由项目成员创建，项目成员创建虚网的权限由项目leader授予；</li>
+                    <li>每个虚网对应着一个独立的实验；</li>  
+                    <li>虚网由实验所需要的网络和计算资源组成；</li> 
+                    <li>虚网之间的隔离，每个虚网创建者只能使用自己虚网内部的资源；</li>                   
+                </ul> 
+                <p>下图简单说明两个不同的虚网所包含成员以及资源之间不同的关系：</p>
+                <img src="{% static "img/help_slice.png" %}" />
+              </section>
+              <section id="help_process">
+                <h4><i class="icon-random"></i>使用SDN创新平台进行实验的流程？</h4>
                 <ol>
-                	<li>Obtain compute resources from locations around the United States;</li>
-                	<li>Obtain compute resources from locations around the United States;</li>
-                	<li>Obtain compute resources from locations around the United States;</li>
-                </ol>         	 	
-                <img src="{% static "img/001.png" %}" />
-              </section>
-              <section id="project">
-                <h4>About project</h4>
-                <p>A project organizes research in GENI, containing both people and their experiments. A project is created and led by a single responsible individual: the Project Lead. A project may have many experimenters as its members and an experimenter may be a member of many projects. The Project Lead is ultimately accountable for all actions by project members in the context of the project. GENI experimenters must have Project Lead privileges to create projects. Only faculty and senior members of an organization can be project leads (e.g. students cannot be project leads).</p>
-                <img src="{% static "img/ProjectGraphic-2.png" %}" />
-              </section>
-              <section id="slice">
-                <h4>What is slice?</h4>
-                <p>A project organizes research in GENI, containing both people and their experiments. A project is created and led by a single responsible individual: the Project Lead. A project may have many experimenters as its members and an experimenter may be a member of many projects. The Project Lead is ultimately accountable for all actions by project members in the context of the project. GENI experimenters must have Project Lead privileges to create projects. Only faculty and senior members of an organization can be project leads (e.g. students cannot be project leads).</p>
-                <img src="{% static "img/hactar_slices.png" %}" />
+                    <li>创建实验
+                        <ul>
+                            <li>申请账号 → 等待审批 → 账号激活 → 登录SDN创新实验平台</li>
+                            <li>创建项目 → 选择资源、邀请成员或审批申请成员/申请加入项目</li>  
+                            <li>创建虚网 → 选择虚网拓扑 → 选择IP数量 → 服务配置（选择是否配置DHCP服务、控制器类型等） → 虚拟机创建（选择虚拟机类型和镜像以及宿主机）</li> 
+                            <li>虚网之间的隔离，每个虚网创建者只能使用自己虚网内部的资源；</li>                   
+                        </ul> 
+                    </li>
+                    <li>运行实验
+                        <ul>
+                            <li>启动虚网中的控制器、网关 → 启动虚网 → 启动虚拟机</li>
+                            <li>登陆虚拟机 → 部署实验</li>                                           
+                        </ul> 
+                    </li>
+                    <li>结束实验
+                        <ul>
+                            <li>删除虚网</li>
+                            <li>删除项目（目前只能由项目创建者进行操作，删除后项目中的虚网、成员、资源等全部会被释放）</li>
+                            <li>虚网过期（过期时间由管理员配置，默认过期时间为1个自然月，过期后虚网以及相关资源会自动释放）</li>                                               
+                        </ul> 
+                    </li>
+                </ol>                               
+                <img src="{% static "img/help_process.png" %}" />
               </section>
        	 	</div>
-       	 </div>
        </div>	
 
        <div class="span3 help_chose">
        	 <div class="help_main_wrap">
           <ul class="nav nav-list bs-docs-sidenav">
-	          <li><a href="#ceni"><i class="icon-chevron-left"></i> What is GENI?</a></li>
-	          <li><a href="#project"><i class="icon-chevron-left"></i> About project</a></li>
-	          <li><a href="#slice"><i class="icon-chevron-left"></i> What is slice?</a></li>
+	          <li><a href="#help_sdn"><i class="icon-chevron-left"></i> 什么是SDN创新实验平台？</a></li>
+	          <li><a href="#help_project"><i class="icon-chevron-left"></i> 什么是项目？</a></li>
+	          <li><a href="#help_slice"><i class="icon-chevron-left"></i> 什么是虚网？</a></li>
+	          <li><a href="#help_process"><i class="icon-chevron-left"></i> 使用SDN创新平台进行实验的流程？</a></li>
 	       </ul>	
 	     </div>
        </div>

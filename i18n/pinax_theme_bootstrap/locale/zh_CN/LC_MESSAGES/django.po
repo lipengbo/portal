@@ -229,9 +229,10 @@ msgid ""
 "\n"
 "If you did not sign up for this site, you can ignore this message.\n"
 msgstr ""
-"您刚在%(site_name)s上创建了一个帐号确认当前电子邮件地址请前往：%(activate_url)s\n"
-"\n"
-"如果您没有在网站上进行注册，请忽略此邮件。\n"
+"亲爱的用户，您好：\n"
+"    您在SDN创新实验平台的账号已经注册成功，请点击以下链接激活账号。%(activate_url)s\n"
+"    如果您没有进行注册，请忽略此邮件。\n\n"
+"SDN创新实验平台\n"
 
 #: templates/account/email/email_confirmation_subject.txt:1
 #, python-format
@@ -248,16 +249,18 @@ msgid ""
 "\n"
 "%(password_reset_url)s\n"
 msgstr ""
-"收到这封邮件是因为您本人或者其他人请求对%(site_name)s上的帐号进行密码重置。\n"
-"如果您没有请求密码重置，可以放心的忽略此邮件。点击下面的链接重置您的密码：\n"
+"亲爱的用户，您好：\n"
+"    您正在进行密码重置，请点击以下链接进行密码重置。\n"
+"    %(password_reset_url)s\n"
+"    如果您未申请密码重置，请忽略本邮件！\n"
 "\n"
-"%(password_reset_url)s\n"
+"%(site_name)s\n"
 
 
 #: templates/account/email/password_reset_subject.txt:1
 #, python-format
 msgid "[%(site_name)s] Password reset"
-msgstr "[%(site_name)s] 密码重置"
+msgstr "%(site_name)s密码重置"
 
 #: templates/pagination/builtin_pagination.html:10
 #: templates/pagination/builtin_pagination.html:13

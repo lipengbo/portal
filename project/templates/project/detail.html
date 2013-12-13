@@ -26,8 +26,8 @@
        <thead>
             <tr>
                 <th width="25%">{% trans "Project Name" %}</th>
-                <th width="35%">{% trans "Project Description" %}</th>
-                <th width="25%">{% trans "Creator" %}</th>
+                <th width="40%">{% trans "Project Description" %}</th>
+                <th width="20%">{% trans "Creator" %}</th>
                 <th width="15%">{% trans "Category" %}</th>
             </tr>
         </thead>  
@@ -70,7 +70,7 @@
                     <td>{{ membership.user }}</td>
                     <td>{{ membership.user.get_profile.realm|default:"未填写" }}</td>
                     <td>
-                        {% if  membership.is_owner %}
+                        {% if  project.owner == user %}
                             {% if  membership.user.id != project.owner.id %}
                             <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}</a>
                             {%else%}
@@ -92,20 +92,17 @@
     {%if extent_html == "site_base.html" %}
     {% if user|is_membership:project %}
       <div class="row-fluid sep_div">
-        <div class="span12"><a href="{% url create_slice project.id %}" class="btn btn-large btn-block btn-info">创建Slice</a></div>
+        <div class="span12"><a href="{% url create_slice project.id %}" class="btn btn-large btn-block btn-info">创建虚网</a></div>
       </div>
     {% endif %}
     {%endif%}
   <fieldset>
       <legend>
-         <!-- {% if  project.slice_set.count > 4%}
-            <button type="button" class="btn btn-link edit" onclick="document.location='/slice/list/{{ project.id }}/'">更多>></button>
-          {% endif %}-->
-          Slice
+          虚网
       </legend>        
         <div class="row-fluid">
              <ul class="thumbnails example-sites">
-		         {% for slice in project.slice_set.all %}
+		         {% for slice in project.get_slices %}
 		         {% if forloop.counter <= 2  %}
 		               {% include "slice/_slice.html" %}
 		         {%endif%}

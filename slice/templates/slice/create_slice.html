@@ -5,10 +5,10 @@
 {% load url from future %}
 {% load staticfiles %}
 
-{% block head_title %}创建Slice{% endblock %}
+{% block head_title %}创建虚网{% endblock %}
 {% block breadcrumb %}
 	<a href="/project/">项目</a><span class="divider">/</span><a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
-	创建Slice
+	创建虚网
 {% endblock %}
 
 {% block body %}
@@ -44,7 +44,7 @@
                 <li class="span2">
                     <a href="#tab4" class="step">
                     <span class="number">5</span>
-                    <span class="desc">Slice清单</span>   
+                    <span class="desc">虚网清单</span>   
                     </a> 
                 </li>
                 <li class="span1"></li>
@@ -57,14 +57,14 @@
               <fieldset>
                  <legend>基本信息</legend>
                  <div class="form_inline">
-                    <label>Slice名称</label>
+                    <label>虚网名称</label>
                     <input type="text" maxlength=30 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
                     <span class="muted"><i>如openflow协议验证</i></span>
                     <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
                  <div class="form_inline">
-                    <label class="v_top">Slice描述</label>
+                    <label class="v_top">虚网描述</label>
                     <textarea rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)"></textarea>
                     <span class="muted pro_describe"><i>如验证openflow1.3协议的有效性</i>
                         <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
@@ -98,7 +98,7 @@
              
              <div class="tab_part">
              <fieldset>
-                <legend>Slice网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
+                <legend>网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
                 <div class="alert alert-info">
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
@@ -144,9 +144,9 @@
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{port.port}}
+                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{ port.name }}
 					    {%else%}
-                        <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{port.port}}
+                        <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{ port.name }}
 		                            {%endif%}
 	                                    <input type="text" value="{{ovs_port.switch_type}}" id="switchtype{{port.id}}" style="display:none"/>
                                     </label>
@@ -162,7 +162,7 @@
                 </div>       
               </fieldset>
               <fieldset>
-                 <legend>Slice网络地址<small>分配网段供slice中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small></legend>
+                 <legend>网络地址<small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small></legend>
                 <div class="form_inline tooltip-demo"> 
                     <label>IP数量</label>
                     <select name="nw_num" id="nw_num">
@@ -187,7 +187,7 @@
              
              <div class="tab_part">
               <fieldset class="base_info tooltip-demo">
-                <legend>Slice网络地址</legend>
+                <legend>网络地址</legend>
                 <table class="table">
                     <tbody>
                         <tr>
@@ -196,7 +196,7 @@
                             	<span id="slice_nw"></span>
                             	<input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
-                            	<input type="text" value="" id="old_nw_owner" style="display:none"/>                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="分配网段供slice中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供slice中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="icon-question-sign icon-align-left"></i></a>
+                            	<input type="text" value="" id="old_nw_owner" style="display:none"/>                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
 							
                         </tr>
@@ -206,7 +206,7 @@
                 </table>
               </fieldset>
               <fieldset class="base_info tooltip-demo">
-                 <legend>Slice控制器配置</legend>
+                 <legend>控制器配置</legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -251,7 +251,7 @@
                     </tbody>
                 </table>
               </fieldset>
-			<div id="gw_setting" style="display:none">
+			<!--div id="gw_setting" style="display:none"-->
               <fieldset class="base_info tooltip-demo">
                  <legend>虚拟网关配置</legend>
                  <table class="table">
@@ -259,15 +259,17 @@
                         <tr>
                             <td width="150">网关宿主机</td>
                             <td>
-                                <select id="id_server_gw">
+                                <select id="id_server_gw" onblur="check_gw_select()">
                               
                                 </select>
+								
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="icon-question-sign icon-align-left"></i></a>
+								<span id="gwInfo"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
-                            <td><input type="text" id="gateway_ip"/>
+                            <td><input type="text" id="gateway_ip" disabled/>
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
                                 <span id="gw_ipInfo" style="display:inline;float:none;"></span>
                             </td>
@@ -311,7 +313,7 @@
                 </table>
             </fieldset>-->
               
-            </div>  
+            <!--/div-->  
               <div class="form-actions">
                   <div class="row-fluid">
                     <div class="span3"></div>
@@ -323,22 +325,27 @@
              </div>     
              <div class="tab_part">
                  <fieldset class="vm_info_list tooltip-demo">
-                 <legend>虚拟机信息</legend>
+                     <div class="vm_info_title">
+                         <div class="vm_info_title_left"><legend>虚拟机信息</legend></div>
+                         <div class="vm_info_title_right"><legend>虚拟机配置</legend></div>
+                     </div>
+                 
 				<!-- 拓扑图 -->
 				<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 					<div class="modal-header">
         				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        				<h4 class="modal-title alert alert-info" >当前已选节点资源</h4>
+        				<h4 class="modal-title" >当前已选节点资源</h4>
     				</div>
     				<div class="modal-body" id="topology_info">
 					<div class="row-fluid">
         				<div class="span8">
-        					<iframe scrolling="no" id="topologyiframe" width="450" height="300"  frameborder="0"></iframe>
+        					<iframe scrolling="no" id="topologyiframe" width="530" height="305"  frameborder="0"></iframe>
          				</div>
          			</div>  
 				</div>                
 			</div>
                  <div class="sec_block"> 
+                   <a href="javascript:void(0);" class="btn-delete close hide vm_block_del">×</a>
                    <div class="row-fluid vm_well_wrap"> 
                      <div class="span5 base_info">        
     		          <table class="table">             
@@ -372,48 +379,50 @@
                             </tr>
                         </tbody>
                      </table>
-					<div id="dhcp">                                
-                     <label>
+					<div name="dhcp">                                
+                     <label class="inline tab_checkbox">
                                     {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                                                                         是否启动DHCP
-                     </label>
+                     </label>是否启动DHCP
 					</div>
-                     <div class="operate_btn">
+                    <!-- <div class="operate_btn">
                         <button class="btn btn-inverse del" type="button">删 除</button>
-                     </div>
+                     </div>   -->
                    </div>
                    <div class="span7">
                        <div class="vm_well">
-                           <h4>虚拟机配置</h4>
-                           <table class="table table-bordered table-condensed">
+                           <table class="table table-bordered">
                                <tbody>
-                                   <tr>
+                               <!--    <tr>
                                       <td width="80">类型</td>
                                       <td colspan="5"><span name="flavor_msg"></span></td>
-                                   </tr>
+                                   </tr>    -->    
                                    <tr>
                                        <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
-                                       <td><span name="cpu"></span>核</td>
-                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
-                                       <td><span name="ram"></span>MB</td>
-                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
-                                       <td><span name="hdd"></span>GB</td>
+                                       <td><span name="cpu"></span></td>
                                    </tr>
-									<tr>
+                                   <tr>
+                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
+                                       <td><span name="ram"></span></td>
+                                   </tr>
+                                   <tr>
+                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
+                                       <td><span name="hdd"></span></td>
+                                   </tr>
+							    <!--   <tr>
                                       <td>宿主机</td>
                                       <td colspan="5"><span name="server_msg"></span></td>
-                                   </tr>
+                                   </tr>  
                                    <tr>
                                       <td>镜像</td>
                                       <td colspan="5"><span name="image_msg"></span></td>
-                                   </tr>
+                                   </tr>  -->      
                                  
                                    <tr>
-                                      <td>用户名</td>
+                                      <td><img src="{% static "img/vm_user.png" %}" width="20" />用户名</td>
                                       <td colspan="5"><span name="username"><span></td>
                                    </tr>
                                    <tr>
-                                      <td>密码</td>
+                                      <td><img src="{% static "img/vm_pw.png" %}" width="20" />密码</td>
                                       <td colspan="5"><span name="password"></span></td>
                                    </tr>
                                </tbody>
@@ -438,7 +447,7 @@
              </div>
              <div class="tab_part">
                  <fieldset>
-                 <legend>Slice网络节点</legend>
+                 <legend>网络节点</legend>
                  <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
@@ -453,7 +462,7 @@
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice网络地址</legend>
+                 <legend>网络地址</legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -468,15 +477,15 @@
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice控制器</legend>
+                 <legend>控制器</legend>
                  <div id="list_controller"></div>
               </fieldset>
               <fieldset class="base_info">
-                 <legend>Slice虚拟网关</legend>
+                 <legend>虚拟网关</legend>
                  <div id="list_gw"></div>
               </fieldset>
               <fieldset>
-                 <legend>Slice虚拟机列表</legend>
+                 <legend>虚拟机列表</legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -510,7 +519,7 @@
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-info prev_btn">上一步</button></div>
-                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">生成Slice</button></div>
+                    <div class="span3"><button type="button" class="btn btn-large btn-block btn-info next_btn">生成虚网</button></div>
                     <div class="span3"></div>
                   </div>
               </div>
@@ -524,7 +533,7 @@
         
 <div id="slicealertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body" id="slice_alert_info">
-      <p class="text-center">slice创建失败！</p>
+      <p class="text-center">虚网创建失败！</p>
     </div> 
     <div class="modal-footer">
       <button class="btn delete-confirm btn-info" data-dismiss="modal" id="alert_closed">确定</button>
@@ -572,7 +581,7 @@
         });
 		$('#alert_closed').on("click", function(){
 			window.location.href = window.location.href;
-		})
+		});
 
     });
 </script> 
@@ -582,7 +591,7 @@
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#ipInput").ipInput();
+        $("#ipInput").ipInput();                
     });
 </script>
 {% endblock %}

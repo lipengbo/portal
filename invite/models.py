@@ -37,6 +37,8 @@ class Connection(models.Model):
     target_id = models.PositiveIntegerField()
     target = generic.GenericForeignKey('target_type', 'target_id')
 
+    created_time = models.DateTimeField(auto_now_add=True)
+
 
     def get_target_name(self):
         display_name_func = getattr(self.target, 'get_display_name')
@@ -75,6 +77,15 @@ class Invitation(Connection):
 
     objects = InvitationManager()
 
+    @property
+    def subject(self):
+        return _("Project Invitation")
+
+    @property
+    def content(self):
+        body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        return body
+
     def get_kind(self):
         return "invite"
 
@@ -84,11 +95,10 @@ class Invitation(Connection):
         self.save()
 
     def accept_link(self):
-        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("invite", self.key, ))})
+        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("notifications:all")})
         return link
 
     def send(self):
-        body = _("You're invited by %(inviter)s to join a project of %(project)s.\nHere is a message from %(inviter)s:\n%(message)s\nYou can click the link below to accept the invitation:\n%(accept_link)s") % ({"inviter": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         notify.send(self.from_user, recipient=self.to_user, verb=_('invited you to join in'), action_object=self,
                 description=self.message, target=self.target)
 
@@ -105,12 +115,20 @@ class Application(Connection):
         self.state = 1
         self.save()
 
+    @property
+    def subject(self):
+        return _("Project Application")
+
+    @property
+    def content(self):
+        body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
+        return body
+
     def accept_link(self):
-        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("invite_accept", args=("apply", self.key, ))})
+        link = "http://%(domain)s%(relative_link)s" % ({"domain": Site.objects.get_current(), "relative_link": reverse("notifications:all")})
         return link
 
     def send(self):
-        body = _("%(applicant)s wants to join in %(project)s.\nHere is a message from %(applicant)s:\n%(message)s\nYou can click the link below to accept the application:\n%(accept_link)s") % ({"applicant": self.from_user, "project": self.get_target_name(), "message": self.message, "accept_link": self.accept_link()})
         notify.send(self.from_user, recipient=self.to_user, verb=_('applied to join in'), action_object=self,
                 description=self.message, target=self.target)
 
@@ -135,9 +153,17 @@ def send_invite(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Notification)
 def send_notification_email(sender, instance, created, **kwargs):
+    if not created:
+        return
     site = Site.objects.get_current()
     content = render_to_string('notifications/notice.txt', {'notice': instance,
         'notification_link': "http://" + site.domain + reverse("notifications:all")})
     site_name = site.name
-    send_mail(_('[%(site_name)s] You have new notification messages') % {'site_name': site_name}, content,
-              settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)
+    if hasattr(instance.action_object, 'subject'):
+        subject = site_name + instance.action_object.subject
+        content = instance.action_object.content
+    else:
+        subject = _('[%(site_name)s] You have new notification messages') % {'site_name': site_name}
+    if content:
+        send_mail(subject, content,
+                  settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)

@@ -213,7 +213,7 @@ msgid ""
 "used.  Please request a <a href=\"%(url)s\">new password reset</a>."
 msgstr ""
 "密码重置链接已经失效，可能因为已经被使用过，请再请求 <a href=\"%(url)s\">新的"
-"密码重置</a>."
+"密码重置</a>。"
 
 #: templates/account/signup_closed.html:7
 #: templates/account/signup_closed.html:10
@@ -229,38 +229,19 @@ msgid "Sign up is closed to the general public."
 msgstr "注册已经向公众关闭"
 
 #: templates/account/email/email_confirmation_message.txt:1
-#, fuzzy, python-format
 msgid ""
 "User '%(user_name)s' at %(site_name)s has given this as an email address.\n"
 "\n"
 "To confirm this is correct, go to %(activate_url)s\n"
 msgstr ""
-"用户'%(user_name)s'在%(site_name)s上已经使用该电子邮件地址。\n"
-"\n"
-"要确认是否正确，请前往%(activate_url)s\n"
+"亲爱的用户，您好：\n"
+"    您在SDN创新实验平台的账号已经注册成功，请点击以下链接激活账号。%(activate_url)s"
+"    如果您没有进行注册，请忽略此邮件。\n"
+"SDN创新实验平台\n"
 
 #: templates/account/email/email_confirmation_subject.txt:1
 #, python-format
 msgid "Confirm email address for %(site_name)s"
-msgstr "确认在%(site_name)s上的邮件地址"
+msgstr "%(site_name)s账号激活通知"
 
-#: templates/account/email/password_reset.txt:1
-#, python-format
-msgid ""
-"You're receiving this email because you or someone else has requested a "
-"password for your user account at %(site_name)s.\n"
-"It can be safely ignored if you did not request a password reset. Click the "
-"link below to reset your password.\n"
-"\n"
-"%(password_reset_url)s\n"
-msgstr ""
-"您接收到这封邮件是因为您或者其他人，请求了对%(site_name)s上的帐号进行密码重"
-"置。\n"
-"如果您没有请求密码重置，可以安全地忽略此邮件。点击下面的链接进行密码重置：\n"
-"\n"
-"%(password_reset_url)s\n"
 
-#: templates/account/email/password_reset_subject.txt:1
-#, python-format
-msgid "[%(site_name)s] Password reset"
-msgstr "[%(site_name)s] 密码重置"

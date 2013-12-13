@@ -25,7 +25,7 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
         flowvisor_ps = str(flowvisor.password)
         adslice = do_addSlice(args, pwd, False, flowvisor_url, flowvisor_ps)
         if adslice == 'error':
-            raise FlowvisorError("flowvisor上创建slice失败,flowvisor连接失败或控制器不可用!")
+            raise FlowvisorError("虚网创建失败!")
     else:
         raise DbError("数据库异常")
 
@@ -35,14 +35,14 @@ def flowvisor_update_sice_controller(flowvisor, slice_name, controller_ip, contr
     """
     LOG.debug('flowvisor_update_sice_controller')
     if flowvisor and slice_name and controller_ip and controller_port:
-            args = [str(slice_name)]
-            opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
-            print opts
-            flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
-            flowvisor_ps = str(flowvisor.password)
-            upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
-            if upslice == 'error':
-                raise FlowvisorError("flowvisor上更新控制器失败,flowvisor连接失败或控制器不可用!")
+        args = [str(slice_name)]
+        opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
+        print opts
+        flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+        flowvisor_ps = str(flowvisor.password)
+        upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
+        if upslice == 'error':
+            raise FlowvisorError("控制器更新失败!")
     else:
         raise DbError("数据库异常!")
 
@@ -58,7 +58,7 @@ def flowvisor_update_slice_status(flowvisor, slice_name, status):
         flowvisor_ps = str(flowvisor.password)
         upslice = do_updateSlice(args, opts, flowvisor_url, flowvisor_ps)
         if upslice == 'error':
-            raise FlowvisorError("flowvisor更新slice状态失败!")
+            raise FlowvisorError("虚网状态更新失败!")
     else:
         raise DbError("数据库异常！")
 
@@ -66,14 +66,18 @@ def flowvisor_update_slice_status(flowvisor, slice_name, status):
 def flowvisor_del_slice(flowvisor, slice_name):
     """flowvisor上删除slice
     """
-    LOG.debug('flowvisor_del_slice')
+    print 'flowvisor_del_slice'
     if flowvisor and slice_name:
+#         print "in delete"
         args = [str(slice_name)]
         flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
         flowvisor_ps = str(flowvisor.password)
-        do_removeSlice(args, flowvisor_url, flowvisor_ps)
+        rm_slice = do_removeSlice(args, flowvisor_url, flowvisor_ps)
+        if rm_slice == 'error':
+            raise FlowvisorError("虚网删除失败!")
     else:
-        raise DbError("数据库异常!")
+        pass
+#         raise DbError("数据库异常!")
 
 
 def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
@@ -81,6 +85,8 @@ def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
     """flowvisor上添加flowspace
     """
     LOG.debug('flowvisor_add_flowspace')
+    print name
+    print slice_name
     if flowvisor:
         fsaction = '' + str(slice_name) + '=' + str(slice_action) + ''
         pwd = str(pwd)
@@ -122,6 +128,7 @@ def flowvisor_update_flowspace(flowvisor, flowspace_name, priority_flag,
 def flowvisor_del_flowspace(flowvisor, flowspace_name):
     """flowvisor上删除flowspace
     """
+    print flowspace_name
     LOG.debug('flowvisor_del_flowspace')
     if flowvisor:
         args = [flowspace_name]

@@ -1,13 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.db.models import F
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 from idios.models import ProfileBase
+from notifications.models import Notification
 
 
 class Profile(ProfileBase):
@@ -34,3 +36,9 @@ class Profile(ProfileBase):
                     'action_title': _('Reject')
                 },
         ]
+
+
+@receiver(post_delete, sender=Profile)
+def delete_notifications(sender, instance, **kwargs):
+    target_type = ContentType.objects.get_for_model(instance)
+    Notification.objects.filter(action_object_content_type=target_type, action_object_object_id=instance.id).delete()

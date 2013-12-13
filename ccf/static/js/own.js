@@ -19,11 +19,11 @@ $(document).ready(function() {
         var spans_info = $(".sec_block").last().find("span");
         for (var i=0; i<spans_info.length; i++){
             spans_info[i].innerHTML = '';
-        }
+        } 
 		$(".sec_block").last().find("input[type='text']").val("");
 		$(".sec_block").last().find("input[type='checkbox']").next().remove();
 		$(".sec_block").last().find("input[type='checkbox']").unwrap('icheckbox_square-blue');
-		$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
+		//$(".sec_block").last().find("input[type='checkbox']").attr("checked","true");
 		$(".sec_block").last().find("input[type='checkbox']").iCheck({
             checkboxClass: 'icheckbox_square-blue',
             radioClass: 'iradio_square-blue',
@@ -31,12 +31,20 @@ $(document).ready(function() {
         });
 		$(".sec_block").last().find(".del").css("visibility","visible");
 		$(".sec_block:odd").css("background","#f5f5f5");
-		$(".del").click(function(){
-           $(this).parent(".operate_btn").parent(".span5").parent(".vm_well_wrap").parent(".sec_block").remove();
+		$(".vm_block_del").click(function(){
+           $(this).parent(".sec_block").remove();
            $(".sec_block").css("background","#ffffff");
            $(".sec_block:odd").css("background","#f5f5f5");
-        });
+        });                          
 	});
+	
+	//创建虚拟机页面，指针放上去时显示删除图标                       
+    $(".sec_block:not(:first)").live("mouseenter",function(){
+       $(this).children(".close").stop(true,false).fadeIn();
+    });
+    $(".sec_block:not(:first)").live("mouseleave",function(){
+       $(this).children(".close").stop(false,true).hide();
+    });     	
 
 /*	$(".del").click(function(){
        $(this).parent(".operate_btn").parent(".sec_block").remove();
@@ -50,6 +58,7 @@ $(document).ready(function() {
         $(".tab_radio1").parent("td").siblings("td").children("select").removeAttr("disabled");
         $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").attr("disabled","disabled");
         $(".tab_radio2").parent("td").siblings("td").children("input").attr("disabled","disabled");
+        $("#controller_ip_portInfo").html("");
     });
     $(".tab_radio2, .tab_radio2 .iCheck-helper").click(function(){
         $(".tab_radio2").parent("td").siblings("td").children("#ipInput").css({"background":"#fff"}).removeClass("disabled");        
@@ -69,14 +78,14 @@ $(document).ready(function() {
         if($(this).hasClass("btn-success")){
             $(this).removeClass("btn-success").addClass("btn-danger");
             if($(this).hasClass("btn-large")){            
-                $(this).text("停止Slice");
+                $(this).text("停止虚网");
             } else {              
                 $(this).text("停止");
             }           
         } else {
             $(this).removeClass("btn-danger").addClass("btn-success");
             if($(this).hasClass("btn-large")){
-                $(this).text("启动Slice");
+                $(this).text("启动虚网");
             } else {
                 $(this).text("启动");
             }           
@@ -277,11 +286,13 @@ function page_function1(){
     	fetch_serverinfo("id_server_gw");
     	fetch_gw_ip(slice_name);
 
-		if(check_ovs_gw()){
+        
+    /*if(check_ovs_gw()){
 			$('#gw_setting').show();
 		}else{
 			$('#gw_setting').hide();
 		}
+    */
 		return true;
 	}
 	else{
@@ -290,13 +301,21 @@ function page_function1(){
 }
 function page_function2(){
     fetch_serverinfo("id_server");
-	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=620&height=300&top=0&switch_port_ids=" + get_select_ports())
-	ret1 = check_slice_controller('controller_type');
+	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&switch_port_ids=" + get_select_ports())
+	ret1 = check_slice_controller('controller_type') && check_gw_select();
+
 	if(!document.getElementById('dhcp_selected').checked){
-		$('#dhcp').hide();
-		document.getElementById('id_enable_dhcp').checked = false;
+		var objs = document.getElementsByName("dhcp");
+		$('[name="enable_dhcp"]').iCheck('uncheck');
+		for(var i=0; i<objs.length; i++){
+			objs[i].style.display = "none";
+		}
 	}else{
-		$('#dhcp').show();
+		var objs = document.getElementsByName("dhcp");
+		$('[name="enable_dhcp"]').iCheck('check');		
+		for(var i=0; i<objs.length; i++){
+			objs[i].style.display = "block";
+		}
 	}
 	if (ret1){
 		//
@@ -520,9 +539,9 @@ function submit_slice_info(project_id){
 	            }
 	        },
 	        error: function(data) {
-	        	//alert("创建slice异常！");
+	        	//alert("创建虚网异常！");
 	        	$("div#slice_alert_info").empty();
-                str = "" + "<p class=\"text-center\">" + "创建slice异常！" + "</p>";
+                str = "" + "<p class=\"text-center\">" + "创建虚网异常！" + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
 	        }

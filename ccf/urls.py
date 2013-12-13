@@ -7,12 +7,13 @@ import notifications
 
 from profiles.views import SignupView
 from profiles.forms import SignupForm
+from profiles.views import ConfirmEmailView
 from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
-# import django_cron
-# django_cron.autodiscover()
+import django_cron
+django_cron.autodiscover()
 #import xadmin
 #xadmin.autodiscover()
 
@@ -46,10 +47,14 @@ urlpatterns = patterns("",
     url(r"^manage_index/", 'project.views.manage_index', name="manage_index"),
 
     url(r"^map/$", TemplateView.as_view(template_name="index.html"), name="map"),
+    url(r"^password_change_success/$", TemplateView.as_view(template_name="account/password_change_success.html"), name="password_change_success"),
+    url(r"^signup_confirmation_complete/$", TemplateView.as_view(template_name="account/signup_confirmation_complete.html"), name="signup_confirmation_complete"),
+    url(r"^password_reset_success/$", TemplateView.as_view(template_name="account/password_reset_success.html"), name="password_reset_success"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
 
 
     url(r"^accounts/signup/$", SignupView.as_view(form_class=SignupForm), name="account_signup"),
+    url(r"^accounts/confirm_email/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="account_confirm_email"),
     url('^notifications/', include(notifications.urls)),
 
     url(r'^topology/$', 'project.views.topology', name="topology_view"),

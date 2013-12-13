@@ -3,7 +3,7 @@ from models import *
 from django.db import transaction
 from slice.slice_exception import DbError
 from plugins.vt.api import get_slice_gw_mac, get_phydata_gw_mac
-
+from etc.config import gw_controller
 
 import logging
 LOG = logging.getLogger("CENI")
@@ -82,17 +82,21 @@ def flowspace_gw_add(slice_obj, new_gateway):
             create_default_flowspace(slice_obj, name, '100', '', '', '',
                                      new_gateway, '', '0x800', '', haved_nw,
                                      '', '', '', '')
-        slice_gw = get_slice_gw_mac(slice_obj)
-        phy_gw = get_phydata_gw_mac(slice_obj.get_island())
-        create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                 slice_gw, phy_gw, '0x800', '', '', '',
-                                 '', '', '')
-        create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                 phy_gw, slice_gw, '0x800', '', '',
-                                 '', '', '', '')
-        create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                 slice_gw, '', '0x806', '', '',
-                                 '', '', '', '')
+        if gw_controller:
+            slice_gw = get_slice_gw_mac(slice_obj)
+            phy_gw = get_phydata_gw_mac(slice_obj.get_island())
+            create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                     phy_gw, slice_gw, '0x800', '', '', '',
+                                     '', '', '')
+            create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                     slice_gw, phy_gw, '0x800', '', '',
+                                     '', '', '', '')
+            create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                     slice_gw, '', '0x806', '', '',
+                                     '', '', '', '')
+            create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                     phy_gw, slice_gw, '0x806', '', '',
+                                     '', '', '', '')
 #         haved_nws = slice_obj.get_nws()
 #         for haved_nw in haved_nws:
 #             create_default_flowspace(slice_obj, name, '100', '', '',
@@ -118,6 +122,7 @@ def flowspace_gw_del(slice_obj, del_gateway):
         delete_default_flowspace(slice_obj, name, slice_gw, '', '', '', '0x800')
         delete_default_flowspace(slice_obj, name, '', slice_gw, '', '', '0x800')
         delete_default_flowspace(slice_obj, name, slice_gw, '', '', '', '0x806')
+        delete_default_flowspace(slice_obj, name, '', slice_gw, '', '', '0x806')
     return True
 
 

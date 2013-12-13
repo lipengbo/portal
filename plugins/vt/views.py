@@ -78,8 +78,8 @@ def create_vm(request, sliceid, from_link):
                     return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
-            except:
-                return HttpResponse(json.dumps({'result': 1, 'error': _('server error')}))
+            except StopIteration, e:
+                return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
         return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
         vm_form = VmForm()

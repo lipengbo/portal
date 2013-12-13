@@ -22,9 +22,13 @@ def generate_glance_url():
 #[plugin-advance]
 #高级配置项，用于配置文件锁的位置
 lock_path = '/var/run/'
-default_flavor_id = 1
+default_flavor_id = 4
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
+#配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。
+gw_controller = True
+#slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
+slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
 function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
@@ -38,7 +42,7 @@ unique_hosts_per_alloc = 100
 max_cpu = 100
 max_mem = 100
 #可以创建虚拟机的主机，至少要有10G的磁盘剩余
-max_disk = 10
+max_disk = 0
 #[vt_manager]只有在use_vt_manager_to_schedul = True时才生效
 vt_manager_ip = '127.0.0.1'
 vt_manager_port = 8891

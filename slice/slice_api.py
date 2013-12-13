@@ -17,10 +17,16 @@ from resources.models import Switch
 from django.db import transaction
 import datetime
 import traceback
+import calendar
+from etc.config import gw_controller
+
 from plugins.vt.api import get_slice_gw_mac
 
 import logging
 LOG = logging.getLogger("ccf")
+
+from etc import config
+# from etc.config import slice_expiration_days
 
 
 def create_slice_step(project, name, description, island, user, ovs_ports,
@@ -39,6 +45,7 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
         flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.id,
                             slice_obj.get_controller(), user.email)
         print 5
+#         print slice_obj.name
 #         创建并添加网段
         IPUsage.objects.subnet_create_success(slice_obj.name)
         print 6
@@ -54,21 +61,25 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
                                            image_name='gateway',
                                            enable_dhcp=enabled_dhcp)
             except Exception, ex:
+                print ex.message
                 LOG.debug(traceback.print_exc())
-                raise DbError(ex)
+                raise DbError(ex.message)
             print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
 #         创建并添加虚拟机
         slice_obj.be_count()
         print 10
         return slice_obj
-    except:
+    except Exception, ex:
         print 11
         if slice_obj:
             print 12
-            slice_obj.delete()
+            try:
+                slice_obj.delete()
+            except:
+                pass
         print 13
-        raise
+        raise DbError(ex)
 
 
 @transaction.commit_on_success
@@ -79,12 +90,24 @@ def create_slice_api(project, name, description, island, user):
     try:
         Slice.objects.get(name=name)
     except Slice.DoesNotExist:
+        try:
+            print 'sexp 1'
+            slice_expiration_days = int(config.slice_expiration_days)
+            print 'sexp 2'
+        except:
+            print 'sexp 3'
+            slice_expiration_days = 30
+        else:
+            print 'sexp 4'
+            if slice_expiration_days <= 0:
+                slice_expiration_days = 30
+        print "slice_expiration_days:"+str(slice_expiration_days)
         if project and island and user:
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
                 date_now = datetime.datetime.now()
-#                 date_delta = datetime.timedelta(seconds=5)
-                date_delta = datetime.timedelta(days=30)
+#                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
+                date_delta = datetime.timedelta(days=slice_expiration_days)
                 expiration_date = date_now + date_delta
                 slice_names = name.split('_')
                 if len(slice_names) > 1:
@@ -160,7 +183,7 @@ def delete_slice_api(slice_obj):
                 pass
             print 4
 #             删除底层slice
-            flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
+#             flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
             print 5
 #             删除控制器
             delete_controller(slice_obj.get_controller())
@@ -176,24 +199,24 @@ def delete_slice_api(slice_obj):
 def start_slice_api(slice_obj):
     """启动slice
     """
-    LOG.debug('start_slice_api')
+    print 'start_slice_api'
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex)
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
+            all_vms = slice_obj.get_vms()
+            for vm in all_vms:
+                if vm.state == 8:
+                    raise DbError("资源分配中，请稍后启动！")
+            controller = slice_obj.get_controller()
+            if controller.host and controller.host.state != 1:
+                raise DbError("请确保控制器已启动！")
+            gw = slice_obj.get_gw()
+            if gw and gw.enable_dhcp and gw.state != 1:
+                raise DbError("请确保gateway已启动！")
             try:
-                all_vms = slice_obj.get_vms()
-                for vm in all_vms:
-                    if vm.state == 8:
-                        raise DbError("资源分配中，请稍后启动！")
-                controller = slice_obj.get_controller()
-                if controller.host and controller.host.state != 1:
-                    raise DbError("请确保控制器已启动！")
-                gw = slice_obj.get_gw()
-                if gw and gw.enable_dhcp and gw.state != 1:
-                    raise DbError("请确保dhcp已启动！")
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                               slice_obj.id, True)
@@ -201,7 +224,6 @@ def start_slice_api(slice_obj):
             except Exception, ex:
                 transaction.rollback()
                 stop_slice_api(slice_obj)
-                print ex
                 raise DbError("虚网启动失败！")
 #             else:
 #                 try:
@@ -233,7 +255,7 @@ def stop_slice_api(slice_obj):
 def update_slice_virtual_network(slice_obj):
     """更新slice的虚网，添加或删除交换机端口、网段、gateway、dhcp、vm后调用
     """
-    LOG.debug('update_slice_virtual_network')
+    print 'update_slice_virtual_network'
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -278,25 +300,26 @@ def update_slice_virtual_network(slice_obj):
                                             default_flowspace.priority, arg_match)
                 except:
                     raise
-    for dpid in dpids:
-        for default_flowspace in default_flowspaces:
-            if (default_flowspace.dl_src == slice_gw and default_flowspace.dl_type == '0x806') or\
-             ((default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw) and default_flowspace.dl_type == '0x800'):
-                arg_match = matches_to_arg_match(
-                    None, default_flowspace.dl_vlan,
-                    default_flowspace.dl_vpcp, default_flowspace.dl_src,
-                    default_flowspace.dl_dst, default_flowspace.dl_type,
-                    default_flowspace.nw_src, default_flowspace.nw_dst,
-                    default_flowspace.nw_proto, default_flowspace.nw_tos,
-                    default_flowspace.tp_src, default_flowspace.tp_dst)
-                try:
-                    flowvisor_add_flowspace(flowvisor, flowspace_name,
-                                            slice_obj.id,
-                                            default_flowspace.actions, 'cdn%nf',
-                                            dpid,
-                                            default_flowspace.priority, arg_match)
-                except:
-                    raise
+    if gw_controller:
+        print dpids
+        for dpid in dpids:
+            for default_flowspace in default_flowspaces:
+                if default_flowspace.dl_src == slice_gw or default_flowspace.dl_dst == slice_gw:
+                    arg_match = matches_to_arg_match(
+                        None, default_flowspace.dl_vlan,
+                        default_flowspace.dl_vpcp, default_flowspace.dl_src,
+                        default_flowspace.dl_dst, default_flowspace.dl_type,
+                        default_flowspace.nw_src, default_flowspace.nw_dst,
+                        default_flowspace.nw_proto, default_flowspace.nw_tos,
+                        default_flowspace.tp_src, default_flowspace.tp_dst)
+                    try:
+                        flowvisor_add_flowspace(flowvisor, flowspace_name,
+                                                slice_obj.id,
+                                                default_flowspace.actions, 'cdn%nf',
+                                                dpid,
+                                                default_flowspace.priority, arg_match)
+                    except:
+                        raise
 
 
 def get_slice_topology(slice_obj):
@@ -399,7 +422,6 @@ def get_slice_topology(slice_obj):
                     'bandwidth': bandwidth, 'maclist': maclist}
     except Exception, ex:
         print 1
-        print ex
         return []
     else:
         print 2
@@ -468,7 +490,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                     band = get_sFlow_metric(switch.ip, dpid, int(port), maclist)
 #                     band = [0, 0]
                 except Exception, ex:
-                    print ex
+                    #print ex
                     ret.append({'id': (str(switch.id) + '_' + str(port)),
                                 'cur_bd': 0, 'total_bd': 0})
                 else:
@@ -494,31 +516,65 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_slice_count_show(target):
-    from common.models import DailyCounter
+def get_count_show_data(target, type, total_num):
+    from common.models import Counter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
-    date_delta = datetime.timedelta(days=-1)
-    ret = {}
     show_dates = []
     show_nums = []
-    cur_date = date_now
-    for i in range(0, 15):
-        if target == 'project':
-            target_id = 0
+    if target == 'project':
+        target_id = 0
+    else:
+        target_id = 1
+    if type == "year":
+        year = 2013
+        if int(date_now.strftime('%Y')) - 10 >= year:
+            year = int(date_now.strftime('%Y')) - 10 + 1
+        for i in range(0, 10):
+            sc = Counter.objects.filter(target=target_id,
+                                        date__year=str(year),
+                                        type=0)
+            show_dates.append(str(year) + "年")
+            year = year + 1
+            if sc:
+                num = sc[0].count
+            else:
+                num = 0
+            show_nums.append(num)
+    else:
+        if type == "month":
+            year = int(date_now.strftime('%Y'))
+            for i in range(0, 12):
+                sc = Counter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            date__month=str(i + 1),
+                                            type=1)
+                show_dates.append(str(i + 1) + "月")
+#                 if month == 1:
+#                     month = 12
+#                     year = year - 1
+#                 else:
+#                     month = month - 1
+                if sc:
+                    num = sc[0].count
+                else:
+                    num = 0
+                show_nums.append(num)
         else:
-            target_id = 1
-        sc = DailyCounter.objects.filter(target=target_id, date__year=cur_date.strftime('%Y'),
-                                  date__month=cur_date.strftime('%m'),
-                                  date__day=cur_date.strftime('%d'))
-        if sc:
-            num = sc[0].count
-        else:
-            num = 0
-        show_dates.append(cur_date.strftime('%Y.%m.%d'))
-        show_nums.append(num)
-        cur_date = cur_date + date_delta
-    show_dates.reverse()
-    show_nums.reverse()
+            month_days = calendar.monthrange(int(date_now.strftime('%Y')), int(date_now.strftime('%m')))[1]
+            for i in range(0, month_days):
+                sc = Counter.objects.filter(target=target_id,
+                                            date__year=date_now.strftime('%Y'),
+                                            date__month=date_now.strftime('%m'),
+                                            date__day=str(i + 1),
+                                            type=2)
+                show_dates.append(str(i + 1))
+                if sc:
+                    num = sc[0].count
+                else:
+                    num = 0
+                show_nums.append(num)
+#     show_dates.reverse()
+#     show_nums.reverse()
     ret = {"show_dates": show_dates, "show_nums": show_nums}
     return ret

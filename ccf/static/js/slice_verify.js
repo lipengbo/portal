@@ -25,7 +25,7 @@ function check_slice_name(obj_id,flag){
         	//alert(slice_exist);
         	isslice_exist(obj.value +"_"+user_id_obj.value);
         	if(slice_exist){
-        		showInfo(info," * 该slice已经存在","red");
+        		showInfo(info," * 该虚网已经存在","red");
         		return false;
         	}
         	else{
@@ -204,7 +204,7 @@ function check_nw_num(){
 	        	//alert(data.value);
 	        	if (data.value == 0){
 	        		//alert(1);
-	        		showInfo(info," * 分配网段失败！(改slice名称)","red");
+	        		showInfo(info," * 分配网段失败！(改虚网名称)","red");
 	        		ajax_ret = false;
 	            }
 	            else{
@@ -222,7 +222,7 @@ function check_nw_num(){
 	            }
 	        },
 	        error: function(data) {
-	        	showInfo(info," * 分配网段失败！(改slice名称)","red");
+	        	showInfo(info," * 分配网段失败！(改虚网名称)","red");
 	    		ajax_ret = false;
 	        }
 	    });
@@ -466,21 +466,23 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 1);
             if(ret){
                 $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止slice");
+                $(this).text("停止虚网");
                 $(".label").removeClass("label-important").addClass("label-success");
                 $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
                 $(".btn-slice-state").addClass("disabled");
                 $(".slice_state_del").addClass("disabled");
+				$(".start_dhcp").attr("disabled", "true");
             }     
         } else {
             ret = start_or_stop(slice_id, 2);
             if(ret){
                 $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动slice");
+                $(this).text("启动虚网");
                 $(".label").removeClass("label-success").addClass("label-important");
                 $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                 $(".btn-slice-state").removeClass("disabled");
                 $(".slice_state_del").removeClass("disabled");
+				$(".start_dhcp").removeAttr("disabled");
             }         
         }
     }); 
@@ -633,6 +635,8 @@ function start_or_stop(slice_id, flag){
                 if(ret){
                     $("#vm_tr"+vm_id).hide();
                     document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
+                    slice_id = $("#slice_id").text();
+                    //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
                 }
             });
             return false;
@@ -656,7 +660,7 @@ function start_or_stop(slice_id, flag){
                     if (data.result == 1){
                         //alert("ok");
                         var description_old = document.getElementById('slice_description_old');
-                        description_old.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.value;
+                        description_old.innerHTML = "描述："+obj.value;
                     }
                     else{
                         //alert(failed);
@@ -797,3 +801,36 @@ function start_or_stop(slice_id, flag){
         $('#editSliceModal').modal('hide');
     }
  }
+function set_dhcp(slice_id, flag){
+	$.ajax({
+			url: '/slice/dhcp_switch/'+slice_id+"/"+flag+"/",
+			type: 'GET',
+			dataType: "json",
+			success: function(data){
+				if(data.result == 0){
+					if(flag == 1){
+						$('.start_dhcp').removeClass("btn-success").addClass("btn-danger");           
+                		$('.start_dhcp').text("停止DHCP服务");
+					}else{
+						$('.start_dhcp').removeClass("btn-danger").addClass("btn-success");
+                		$('.start_dhcp').text("启动DHCP服务");
+					}
+					
+				}else{
+					$("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">设置网关服务失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+				}
+			}
+		});
+}
+
+$('.start_dhcp').click(function(){
+        var slice_id = $("#slice_id").text();
+        if($(this).hasClass("btn-success")){
+            set_dhcp(slice_id, 1);
+        } else {
+            set_dhcp(slice_id, 0);
+        }
+    }); 

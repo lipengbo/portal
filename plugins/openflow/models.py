@@ -2,6 +2,9 @@
 
 import hashlib
 import json
+import logging
+
+logger = logging.getLogger("plugins")
 
 from django.db import models
 from django.db import transaction
@@ -15,7 +18,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 
-from resources.models import ServiceResource, Resource, SwitchPort, Switch
+from resources.models import ServiceResource, Resource, \
+        SwitchPort, Switch, Server, VirtualSwitch
 from slice.models import Slice
 
 
@@ -111,10 +115,9 @@ class FlowvisorLinksMd5(models.Model):
     class Meta:
         verbose_name = _("Flowvisor link md5")
 
-@transaction.commit_on_success
 @receiver(post_save, sender=Flowvisor)
 def update_links(sender, instance, created, **kwargs):
-    if settings.DEBUG:
+    if settings.DEBUG and not hasattr(settings, "CAN_FETCH_FLOWVISOR"):
         return
     from communication.flowvisor_client import FlowvisorClient
 
@@ -131,6 +134,7 @@ def update_links(sender, instance, created, **kwargs):
             port_name_dict[dpid] = {}
             for port in switch['ports']:
                 port_name_dict[dpid][port['portNumber']] = port['name']
+        create_virtualswitch(instance.island, switches)
     try:
         links = client.get_links()
     except Exception, e:
@@ -156,13 +160,13 @@ def update_links(sender, instance, created, **kwargs):
         try:
             source_switch = Switch.objects.get(dpid=link['src-switch'])
         except Switch.DoesNotExist, e:
-            print '========== FETCHING ' + link['src-switch'] + " =========="
-            raise e
+            logger.error('========== FETCHING ' + link['src-switch'] + " ==========")
+            raise Exception(u"DPID为" + link['src-switch'] + u"的交换机没有录入")
         try:
             target_switch = Switch.objects.get(dpid=link['dst-switch'])
         except Switch.DoesNotExist, e:
-            print '========== FETCHING ' + link['dst-switch'] + " =========="
-            raise e
+            logger.error('========== FETCHING ' + link['dst-switch'] + " ==========")
+            raise Exception(u"DPID为" + link['dst-switch'] + u"的交换机没有录入")
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
         except KeyError:
@@ -184,3 +188,18 @@ def update_links(sender, instance, created, **kwargs):
                 source=source_port,
                 target=target_port)
         link_obj.save()
+        
+def create_virtualswitch(island, datapaths):
+    for datapath in datapaths:
+        dpid = datapath['dpid']
+        if dpid.startswith('00:ff:'):# only virtual switch
+            target_switch = datapath['target_switch']
+            ip = target_switch[0]
+            try:
+                server = Server.objects.get(ip=ip)
+            except Server.DoesNotExist, e:
+                logger.error('============= IP: ' + ip + '=============')
+                raise Exception(u"IP为" + ip + u"的服务器没有录入")
+            virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
+                    ip=ip, defaults={'name': "ovs" + str(VirtualSwitch.objects.count() + 1), 'island': island, 'password': '123', 'username': 'admin', 'server': server})
+

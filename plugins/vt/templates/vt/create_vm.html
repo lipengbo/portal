@@ -4,8 +4,9 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% block breadcrumb %}
+    <a href="/project/">项目</a><span class="divider">/</span>
 	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	<a href="/slice/detail/{{ slice_obj.id }}/">Slice详情</a><span class="divider">/</span>
+	<a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a><span class="divider">/</span>
         <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
@@ -28,7 +29,7 @@
     <div class="modal-body" id="topology_info">
 		<div class="row-fluid">
         	<div class="span8">
-        		<iframe scrolling="no" id="topologyiframe" width="450" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=450&height=300&top=0" frameborder="0"></iframe>
+        		<iframe scrolling="no" id="topologyiframe" width="530" height="305" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=560&height=305&top=0" frameborder="0"></iframe>
          	</div>
          </div>  
 	</div>                
@@ -38,6 +39,7 @@
     <fieldset class="vm_info_list tooltip-demo">
     <legend>虚拟机信息</legend>
     <div class="sec_block">
+	<a href="#" class="btn-delete close hide vm_block_del">×</a>
     {% csrf_token %}
   <div class="row-fluid vm_well_wrap"> 
     <div class="span5 base_info">       
@@ -76,48 +78,52 @@
                                                     是否启动DHCP
         </label>
     {%endif%}
-    <div class="operate_btn">
+    <!--div class="operate_btn">
         <button class="btn btn-inverse del" type="button">删 除</button>
-    </div> 
+    </div--> 
     </div>     
     
     <div class="span7">
-       <div class="vm_well">
-           <h4>虚拟机配置</h4>
-           <table class="table table-bordered table-condensed">
-               <tbody>
-                   <tr>
-                      <td width="80">类型</td>
-                      <td colspan="5"><span name="flavor_msg"></span></td>
-                   </tr>
-                   <tr>
-                       <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
-                       <td><span name="cpu"></span>核</td>
-                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
-                       <td><span name="ram"></span>MB</td>
-                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
-                       <td><span name="hdd"></span>GB</td>
-                   </tr>
-                   <tr>
-                      <td>宿主机</td>
-                      <td colspan="5"><span name="server_msg"></span></td>
-                   </tr>
-                   <tr>
-                      <td>镜像</td>
-                      <td colspan="5"><span name="image_msg"></span></td>
-                   </tr>
-                   <tr>
-                      <td>用户名</td>
-                      <td colspan="5"><span name="username"><span></td>
-                   </tr>
-                   <tr>
-                      <td>密码</td>
-                      <td colspan="5"><span name="password"></span></td>
-                   </tr>
-               </tbody>
-           </table>
-       </div>
-   </div>   
+    	<div class="vm_well">
+        	<table class="table table-bordered">
+            	<tbody>
+                	<!--    <tr>
+                     			<td width="80">类型</td>
+                                <td colspan="5"><span name="flavor_msg"></span></td>
+                            </tr>    -->    
+                 	<tr>
+                    	<td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
+                     	<td><span name="cpu"></span></td>
+               		</tr>
+                    <tr>
+                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
+                                       <td><span name="ram"></span></td>
+                                   </tr>
+                                   <tr>
+                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
+                                       <td><span name="hdd"></span></td>
+                                   </tr>
+							    <!--   <tr>
+                                      <td>宿主机</td>
+                                      <td colspan="5"><span name="server_msg"></span></td>
+                                   </tr>  
+                                   <tr>
+                                      <td>镜像</td>
+                                      <td colspan="5"><span name="image_msg"></span></td>
+                                   </tr>  -->      
+                                 
+                                   <tr>
+                                      <td><img src="{% static "img/vm_user.png" %}" width="20" />用户名</td>
+                                      <td colspan="5"><span name="username"><span></td>
+                                   </tr>
+                                   <tr>
+                                      <td><img src="{% static "img/vm_pw.png" %}" width="20" />密码</td>
+                                      <td colspan="5"><span name="password"></span></td>
+                                   </tr>
+                               </tbody>
+                           </table>
+                       </div>
+                   </div> 
    </div>                
    </div>   
     </fieldset>

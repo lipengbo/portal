@@ -11,6 +11,7 @@ from django.utils.translation import ugettext, ugettext as _
 from django.db.models import get_model
 from django.forms.models import modelform_factory
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
 
 
 from nexus.templatetags.nexus_tags import get_fields
@@ -45,7 +46,9 @@ def list_objects(request, app_label, model_class):
             else:
                 fields = ['island__city', 'island']
     objects = ModelClass.objects.order_by('-id')
-    objects = NexusFilter(request.GET, queryset=ModelClass.objects.order_by('-id'))
+    if model_class == 'switch':
+        objects = objects.exclude(dpid__istartswith='00:ff')
+    objects = NexusFilter(request.GET, queryset=objects.order_by('-id'))
     cities = City.objects.all()
     islands = Island.objects.all()
     context['cities'] = cities
@@ -72,6 +75,7 @@ def get_islands(request):
     return HttpResponse(html)
 
 @login_required
+@transaction.commit_on_success
 @staff_member_required
 def add_or_edit(request, app_label, model_class, id=None):
     context = {}
@@ -123,3 +127,19 @@ def get_servers(request):
     for server in servers:
         html += '<option value="' + str(server.id) + '">' + server.name + '</option>'
     return HttpResponse(html)
+
+
+def create_virtualswitch(sender, instance, created, **kwargs):
+    from communication.flowvisor_client import FlowvisorClient
+    from plugins.openflow.models import Flowvisor
+    if created:
+        server_ip = instance.ip
+
+        flowvisor = Flowvisor.objects.get(island=instance.island)
+        client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
+        port_name_dict = {}
+        try:
+            switches = client.get_switches()
+        except Exception, e:
+            print e
+            return

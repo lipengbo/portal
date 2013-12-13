@@ -89,8 +89,15 @@
             <th class="checkall" width="28"><input type="checkbox" name="some_name" value=""></th>
             <th>{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
-                <th>{{ field.verbose_name|upper }}</th>
+                <th>{{ field.verbose_name }}</th>
             {% endfor %}
+            {% if ModelClass.admin_options.related_models  %}
+                {% for related_model in ModelClass|get_related_models %}
+                    <th>
+                    {{ related_model.name }}
+                    </th>
+                {% endfor %}
+            {% endif %}
             <th>{% trans "Action" %}</th>
         </tr>
     </thead>
@@ -119,6 +126,19 @@
                     {% endif %}
                 </td>
             {% endfor %}
+            {% if ModelClass.admin_options.related_models  %}
+                {% for related in object|get_related_models %}
+                    <td>
+                        {% with related_attr=related.model|concat:"_set"%}
+                        {% with object|get_attr:related_attr as related_objects %}
+                        {% for related_model in related_objects.all %}
+                        <a href="{% url nexus_edit related.app_label related.model|lower related_model.id %}" class="">{{ related_model }}</a>
+                        {% endfor %}
+                        {% endwith %}
+                        {% endwith %}
+                    </td>
+                {% endfor %}
+            {% endif %}
             <td>
                 <div class="btn-group">
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
@@ -128,9 +148,6 @@
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
                     {% endif %}
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
-                    {% for related in object|get_related_models %}
-                    <a href="{% url nexus_add related.app_label related.model|lower %}?server={{ object.id }}&island={{ object.island.id }}" class="btn btn-small">{% trans "Add" %}{% trans related.name %}</a>
-                    {% endfor %}
                 </div>
             </td>
         </tr>

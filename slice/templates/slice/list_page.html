@@ -1,0 +1,113 @@
+{% load endless %}
+{% if type == 0 %}
+     {% paginate 4 slices %}
+     {% for group in slices|group_by:2 %}
+     <ul class="thumbnails example-sites">
+         {% for slice in group %}
+              {% include "slice/_slice.html" %}
+         {% endfor %}
+     </ul>
+     {% endfor %}
+     <div class="pagination">
+        <ul>
+            {% show_pages %}
+        </ul>
+    </div>
+{%else%}
+    {%if type == 1 %}
+        {% paginate 10 slices %}
+         <table class="table table-striped table-hover tooltip-demo">
+                <thead>
+                    <tr>
+                        <th width="15%">名称</th>
+                        <th width="15%">创建者</th>
+                        <th width="20%">创建时间</th>
+                        <th width="20%">删除时间</th>
+                        <th width="20%">删除失败原因</th>
+                        <th width="10%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 {% for slice in slices %}
+                 <tr>
+                      <td><a href="/slice/detail/{{ slice.id }}/">{{slice.show_name}}</a></td>
+                      <td>{{slice.owner}}</td>
+                      <td>{{slice.date_created|date:"Y-m-d H:i:s"}}</td>
+                      <td>{{slice.date_expired|date:"Y-m-d H:i:s"}}</td>
+                      <td>{{slice.failure_reason}}</td>
+                      <td>
+                      <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}?type=1" class="btn btn-inverse btn-delete">删除</a>
+                      </td>
+                 </tr>
+                 {% endfor %}
+                 </tbody>
+         </table>
+         <div class="pagination">
+            <ul>
+                {% show_pages %}
+            </ul>
+        </div>
+    {%else%}
+        {% paginate 10 slices %}
+         <table class="table table-striped table-hover tooltip-demo">
+                <thead>
+                    <tr>
+                        <th width="20%">名称</th>
+                        <th width="20%">创建者</th>
+                        <th width="20%">创建日期</th>
+                        <th width="20%">删除日期</th>
+                        <th width="20%">删除方式</th>
+                    </tr>
+                </thead>
+                <tbody>
+                 {% for slice in slices %}
+                 <tr>
+                      <td>{{slice.show_name}}</td>
+                      <td>{{slice.owner_name}}</td>
+                      <td>{{slice.date_created|date:"Y-m-d H:i:s"}}</td>
+                      <td>{{slice.date_deleted|date:"Y-m-d H:i:s"}}</td>
+                      <td>
+                      {%if slice.type == 0%}
+                      用户删除
+                      {%endif%}
+                      {%if slice.type == 1%}
+                      管理员删除
+                      {%endif%}
+                      {%if slice.type == 2%}
+                      过期删除
+                      {%endif%}
+                      </td>
+                 </tr>
+                 {% endfor %}
+                 </tbody>
+         </table>
+         <div class="pagination">
+            <ul>
+                {% show_pages %}
+            </ul>
+        </div>
+    {%endif%}
+{%endif%}
+<script src="{{ STATIC_URL}}js/slice_list.js"></script>
+<script>
+$('a.btn-delete').click(function(){
+    if($(this).hasClass("disabled")){
+        return false;
+    }else{
+        $('#alertModal').modal();
+        var self = $(this);
+        $('.delete-confirm').unbind('click');
+        $('.delete-confirm').click(function(){
+            window.location.href = self.attr('href');
+        });
+        return false;
+    }
+});
+//列表框，指针放上去时显示删除图标                 
+$(".example-sites li").mouseenter(function(){
+    $(this).children(".close").stop(true,false).fadeIn();
+});
+$(".example-sites li").mouseleave(function(){
+    $(this).children(".close").stop(false,true).hide();
+});
+</script>

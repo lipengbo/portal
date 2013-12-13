@@ -11,10 +11,13 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from django.contrib.sites.models import Site
+from django.conf import settings
+from django.core.mail import send_mail
 
 from guardian.shortcuts import assign_perm
 
-from invite.models import Invitation
+from invite.models import Invitation, Application
 from notifications import notify
 
 class City(models.Model):
@@ -91,8 +94,14 @@ class Project(models.Model):
             pass
         else:
             project_membership.delete()
-            notify.send(user, recipient=self.owner,
+            notification = notify.send(user, recipient=self.owner,
                     verb=_(' quit from'), action_object=self, target=self)
+            site = Site.objects.get_current()
+            notification_link =  "http://" + site.domain + reverse("notifications:all")
+            subject = _("User quit from project")
+            content = _("Dear user:\n User %(user)s has quit from your project %(project)s. You can click the link below to see the details.\n%(notification_link)s\n") % ({'notification_link': notification_link, 'user': user, 'project': self})
+            send_mail(subject, content,
+                    settings.DEFAULT_FROM_EMAIL, [self.owner.email], fail_silently=False)
 
     def invite(self, invitee, message):
         Invitation.objects.invite(self.owner, invitee, message, self)
@@ -117,6 +126,16 @@ class Project(models.Model):
         except IntegrityError, e:
             pass
 
+    def get_slices(self):
+        return self.slice_set.filter(type=0)
+
+    @property
+    def subject(self):
+        return ""
+
+    @property
+    def content(self):
+        return ""
 
     def __unicode__(self):
         return self.name
@@ -148,12 +167,17 @@ def create_owner_membership(sender, instance, created, **kwargs):
 def delete_invitation(sender, instance, **kwargs):
     to_user = instance.user
     project = instance.project
-    from_user = project.owner
-    try:
-        target_type = ContentType.objects.get_for_model(project)
-        Invitation.objects.get(to_user=to_user, from_user=from_user, target_id=project.id, target_type=target_type).delete()
-    except Invitation.DoesNotExist, e:
-        pass
+    owner = project.owner
+    target_type = ContentType.objects.get_for_model(project)
+    Invitation.objects.filter(to_user=to_user, from_user=owner, target_id=project.id, target_type=target_type).delete()
+    Application.objects.filter(to_user=owner, from_user=to_user, target_id=project.id, target_type=target_type).delete()
+
+@receiver(pre_delete, sender=Project)
+def delete_invitation_application(sender, instance, **kwargs):
+    project = instance
+    target_type = ContentType.objects.get_for_model(project)
+    Invitation.objects.filter(target_id=project.id, target_type=target_type).delete()
+    Application.objects.filter(target_id=project.id, target_type=target_type).delete()
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):

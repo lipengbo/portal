@@ -1,16 +1,29 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save, pre_delete
+from django.db.models.signals import post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
+from plugins.openflow.flowvisor_api import flowvisor_del_slice
 
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
 
+import datetime
+
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
+SLICE_TYPE_USABLE = 0
+SLICE_TYPE_DELETE = 1
+USER_DELETE = 0
+ADMINISTRATOR_DELETE = 1
+EXPIRED_DELETE = 2
 SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
                 (SLICE_STATE_STARTED, 'started'),)
+SLICE_TYPES = ((SLICE_TYPE_USABLE, 'usable'),
+                (SLICE_TYPE_DELETE, 'delete'),)
+SLICE_DELETE_TYPE = ((USER_DELETE, 'usable'),
+                     (ADMINISTRATOR_DELETE, 'administrator'),
+                     (EXPIRED_DELETE, 'expired'),)
 # Create your models here.
 
 
@@ -18,13 +31,15 @@ class Slice(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=256)
     show_name = models.CharField(max_length=256)
-    description = models.TextField()
+    description = models.CharField(max_length=1024)
     project = models.ForeignKey(Project)
     date_created = models.DateTimeField(auto_now_add=True)
     date_expired = models.DateTimeField()
     state = models.IntegerField(choices=SLICE_STATES,
                                 default=SLICE_STATE_STOPPED)
-#     expired = models.IntegerField(default=0)
+    type = models.IntegerField(choices=SLICE_TYPES,
+                               default=SLICE_TYPE_USABLE)
+    failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
 
     def created_date(self):
@@ -175,6 +190,19 @@ class Slice(models.Model):
         else:
             return None
 
+    def set_dhcp(self, flag):
+        gws = self.virtualmachine_set.filter(type=2)
+        if gws:
+            print "------------", flag
+            if flag == '1':
+                gws[0].enable_dhcp = True
+            else:
+                gws[0].enable_dhcp = False
+            gws[0].save()
+            return True
+        else:
+            return False
+
     def get_dhcp_vm_macs(self):
         default_flowspaces = self.flowspacerule_set.filter(is_default=1, dl_type='')
         dhcp_vm_macs = []
@@ -202,6 +230,37 @@ class Slice(models.Model):
                              num=1)
             nsc.save()
 
+    def delete(self, *args, **kwargs):
+        try:
+            print "d1"
+            flowvisor_del_slice(self.get_flowvisor(), self.id)
+            print "d2"
+            super(self.__class__, self).delete(*args, **kwargs)
+            print "d3"
+        except Exception, ex:
+            print "d4"
+            self.failure_reason = str(ex)
+            self.type = 1
+            self.date_expired = datetime.datetime.now()
+            self.save()
+            raise
+
+    def __unicode__(self):
+        return self.name
+
+
+class SliceDeleted(models.Model):
+    name = models.CharField(max_length=256)
+    show_name = models.CharField(max_length=256)
+    owner_name = models.CharField(max_length=256)
+    description = models.TextField()
+    project_name = models.CharField(max_length=256)
+    date_created = models.DateTimeField()
+    date_expired = models.DateTimeField()
+    date_deleted = models.DateTimeField(auto_now_add=True)
+    type = models.IntegerField(choices=SLICE_DELETE_TYPE,
+                               default=USER_DELETE)
+
     def __unicode__(self):
         return self.name
 
@@ -224,5 +283,23 @@ class SliceCount(models.Model):
 
 @receiver(pre_delete, sender=Slice)
 def pre_delete_slice(sender, instance, **kwargs):
+    print "delete pre"
     from slice.slice_api import delete_slice_api
     delete_slice_api(instance)
+
+
+# @receiver(post_delete, sender=Slice)
+# def post_delete_slice(sender, instance, **kwargs):
+#     print "delete post"
+#     if instance.id:
+#         print "s1"
+#     else:
+#         print "s2"
+#     if instance.project:
+#         print "s3"
+#     else:
+#         print "s4"
+#     try:
+#         flowvisor_del_slice(instance.get_flowvisor(), instance.id)
+#     except:
+#         raise

@@ -204,6 +204,7 @@ function check_vm_status(slice_id){
                             str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
                     }//endfor
 			        
 			    }else{
@@ -353,6 +354,8 @@ function check_vm_status(slice_id){
                                 + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+cur_vm_id+"\">登录</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
+                        //alert('here');
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
                     }//endfor
                 }//endif
                     
