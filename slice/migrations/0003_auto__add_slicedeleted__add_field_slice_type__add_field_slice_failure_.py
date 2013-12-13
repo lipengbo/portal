@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-<<<<<<< HEAD
 from south.utils import datetime_utils as datetime
-=======
-import datetime
->>>>>>> 22e8db77d38f2c836e24cbfcc95116e141dbbd8e
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models

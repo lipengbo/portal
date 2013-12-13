@@ -69,13 +69,16 @@ def create_slice_step(project, name, description, island, user, ovs_ports,
         slice_obj.be_count()
         print 10
         return slice_obj
-    except:
+    except Exception, ex:
         print 11
         if slice_obj:
             print 12
-            slice_obj.delete()
+            try:
+                slice_obj.delete()
+            except:
+                pass
         print 13
-        raise
+        raise DbError(ex)
 
 
 @transaction.commit_on_success
@@ -202,17 +205,17 @@ def start_slice_api(slice_obj):
         raise DbError(ex)
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
+            all_vms = slice_obj.get_vms()
+            for vm in all_vms:
+                if vm.state == 8:
+                    raise DbError("资源分配中，请稍后启动！")
+            controller = slice_obj.get_controller()
+            if controller.host and controller.host.state != 1:
+                raise DbError("请确保控制器已启动！")
+            gw = slice_obj.get_gw()
+            if gw and gw.enable_dhcp and gw.state != 1:
+                raise DbError("请确保gateway已启动！")
             try:
-                all_vms = slice_obj.get_vms()
-                for vm in all_vms:
-                    if vm.state == 8:
-                        raise DbError("资源分配中，请稍后启动！")
-                controller = slice_obj.get_controller()
-                if controller.host and controller.host.state != 1:
-                    raise DbError("请确保控制器已启动！")
-                gw = slice_obj.get_gw()
-                if gw and gw.enable_dhcp and gw.state != 1:
-                    raise DbError("请确保gateway已启动！")
                 slice_obj.start()
                 flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                               slice_obj.id, True)
@@ -220,7 +223,6 @@ def start_slice_api(slice_obj):
             except Exception, ex:
                 transaction.rollback()
                 stop_slice_api(slice_obj)
-                print ex
                 raise DbError("虚网启动失败！")
 #             else:
 #                 try:
@@ -419,7 +421,6 @@ def get_slice_topology(slice_obj):
                     'bandwidth': bandwidth, 'maclist': maclist}
     except Exception, ex:
         print 1
-        print ex
         return []
     else:
         print 2
@@ -488,7 +489,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
                     band = get_sFlow_metric(switch.ip, dpid, int(port), maclist)
 #                     band = [0, 0]
                 except Exception, ex:
-                    print ex
+                    #print ex
                     ret.append({'id': (str(switch.id) + '_' + str(port)),
                                 'cur_bd': 0, 'total_bd': 0})
                 else:
