@@ -18,6 +18,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db.models import Q
 
+from guardian.decorators import permission_required
 from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
@@ -84,6 +85,8 @@ def index(request):
 def detail(request, id):
     user = request.user
     project = get_object_or_404(Project, id=id)
+    if not user.has_perm('project.view_project', project):
+        return redirect('forbidden')
     context = {}
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"

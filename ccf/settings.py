@@ -176,7 +176,8 @@ INSTALLED_APPS = [
     "invite",
     "django_cron",
     "nexus",
-    "monitor"
+    "monitor",
+    "guardian"
 ]
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
@@ -271,6 +272,7 @@ EMAIL_HOST_PASSWORD = 'fnic123'
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
+    'guardian.backends.ObjectPermissionBackend',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'

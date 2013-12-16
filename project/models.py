@@ -3,7 +3,7 @@ import datetime
 
 from django.db import models
 from django.db import IntegrityError 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
@@ -142,6 +142,13 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = _("Project")
+        permissions = (
+            ('view_project', _('View Project')),
+            ('manage_project_member', _('View Project')),
+            ('invite_project_member', _('View Project')),
+            ('dismiss_project_member', _('View Project')),
+            ('review_project_member', _('View Project')),
+        )
 
 
 
@@ -158,10 +165,22 @@ class Membership(models.Model):
         unique_together = (("project", "user"), )
         verbose_name = _("Membership")
 
+
 @receiver(post_save, sender=Project)
 def create_owner_membership(sender, instance, created, **kwargs):
     if created:
+        group, group_created = Group.objects.get_or_create(name='project_admin')
+        assign_perm('project.change_project', group, instance)
+        assign_perm('project.edit_project', group, instance)
+        assign_perm('project.delete_project', group, instance)
+        assign_perm('project.view_project', group, instance)
+        assign_perm('project.manage_project_member', group, instance)
+        assign_perm('project.invite_project_member', group, instance)
+        assign_perm('project.dismiss_project_member', group, instance)
+        assign_perm('project.review_project_member', group, instance)
+        instance.owner.groups.add(group)
         instance.add_member(instance.owner, True)
+
 
 @receiver(pre_delete, sender=Membership)
 def delete_invitation(sender, instance, **kwargs):

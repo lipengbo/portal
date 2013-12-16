@@ -248,6 +248,10 @@ class Slice(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        permissions = (
+            ('view_slice', _('View Project')),
+        )
 
 class SliceDeleted(models.Model):
     name = models.CharField(max_length=256)
