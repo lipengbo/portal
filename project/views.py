@@ -17,6 +17,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db.models import Q
+from django.conf import settings
 
 from guardian.decorators import permission_required
 from project.models import Project, Membership, Category, Island, City
@@ -153,6 +154,7 @@ def invite(request, id):
             #target_type=target_type).values_list("to_user__id", flat=True))
     #invited_user_ids.extend(project.member_ids())
     invited_user_ids.append(project.owner.id)
+    invited_user_ids.append(settings.ANONYMOUS_USER_ID)
     invited_user_ids.extend(User.objects.filter(is_superuser=True).values_list("id", flat=True))
     users = User.objects.exclude(id__in=set(invited_user_ids)).filter(is_active=True)
     if 'query' in request.GET:
