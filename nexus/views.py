@@ -99,8 +99,12 @@ def add_or_edit(request, app_label, model_class, id=None):
     else:
         formset = ModelForm(request.POST, instance=instance)
         if formset.is_valid():
-            instances = formset.save()
-            return redirect('nexus_list', app_label=app_label, model_class=model_class)
+            try:
+                instances = formset.save()
+                return redirect('nexus_list', app_label=app_label, model_class=model_class)
+            except Exception, e:
+                transaction.rollback()
+                messages.error(request, e)
         context['formset'] = formset
     return render(request, 'nexus/add.html', context)
 
