@@ -81,16 +81,21 @@ def delete_vm_for_gateway(vm):
 
 
 def do_vm_action(vm, action):
-    result = vm.do_action(action)
-    if result:
+    action_result = vm.do_action(action)
+    if action_result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
         else:
             vm.state = DOMAIN_STATE_DIC['running']
-        vm.save()
-        return result
+        result = True
     else:
-        return False
+        if action == "destroy":
+            vm.state = DOMAIN_STATE_DIC['shutoff']
+            result = True
+        else:
+            result = False
+    vm.save()
+    return result
 
 
 def get_slice_gw_mac(slice):
