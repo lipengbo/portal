@@ -149,6 +149,7 @@ class VirtualMachine(IslandResource):
             agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
+        print 'in----------------------delete a vm-------------------------'
         if function_test:
             print '----------------------delete a vm=%s -------------------------' % self.name
         else:
