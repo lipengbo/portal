@@ -19,6 +19,7 @@ from slice.models import Slice
 from notifications.models import Notification
 from profiles.models import Profile
 from invite.models import Invitation, Application
+from project.models import Project
 
 @receiver(post_save, sender=Slice)
 @receiver(post_save, sender=Project)
@@ -87,6 +88,7 @@ def decrease_counter(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Invitation)
 @receiver(post_delete, sender=Application)
+@receiver(post_delete, sender=Project)
 def delete_notifications(sender, instance, **kwargs):
     target_type = ContentType.objects.get_for_model(instance)
     Notification.objects.filter(action_object_content_type=target_type, action_object_object_id=instance.id).delete()
