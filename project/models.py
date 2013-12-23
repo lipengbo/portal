@@ -171,7 +171,6 @@ def create_owner_membership(sender, instance, created, **kwargs):
     if created:
         group, group_created = Group.objects.get_or_create(name='project_admin')
         assign_perm('project.change_project', group, instance)
-        assign_perm('project.edit_project', group, instance)
         assign_perm('project.delete_project', group, instance)
         assign_perm('project.view_project', group, instance)
         assign_perm('project.manage_project_member', group, instance)

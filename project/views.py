@@ -112,7 +112,7 @@ def manage(request):
 @login_required
 def invite(request, id):
     project = get_object_or_404(Project, id=id)
-    if not (request.user == project.owner):
+    if not user.has_perm('project.invite_project_member', project):
         return redirect('forbidden')
     context = {}
     context['project'] = project
@@ -238,7 +238,7 @@ def create_or_edit(request, id=None):
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
-        if user != instance.owner:
+        if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
     if request.method == 'GET':
@@ -270,7 +270,8 @@ def delete_member(request, id):
     user = request.user
     membership = get_object_or_404(Membership, id=int(id))
     project = membership.project
-    if project.owner == user and not membership.is_owner:
+    if user.has_perm('project.dismiss_project_member', instance) \
+            and not membership.is_owner and not (membership.user == user):
         membership.delete()
     else:
         return redirect("forbidden")
@@ -279,7 +280,7 @@ def delete_member(request, id):
 @login_required
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
-    if request.user.is_superuser or request.user == project.owner:
+    if user.has_perm('project.delete_project', project):
         try:
             project.delete()
         except Exception, e:
@@ -294,7 +295,8 @@ def delete_project(request, id):
 def applicant(request, id):
     project = get_object_or_404(Project, id=id)
     context = {}
-    if not (request.user == project.owner):
+    user = request.user
+    if not user.has_perm('project.review_project_member', project):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
