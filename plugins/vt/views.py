@@ -164,8 +164,10 @@ def set_domain_state(vname, state):
             slice = vm_query[0].slice
             name = vm_query[0].name
             switch = host.virtualswitch_set.all()[0]
-            port = get_portid_by_name(host.ip, vname)
-            switch_port = SwitchPort(switch=switch, port=port, name=name)
+            used_ofport_list = [port for port in SwitchPort.objects.filter(switch=switch)]
+            free_ofport = list(set(range(100, 65200)) - set(used_ofport_list))[0]
+            #port = get_portid_by_name(host.ip, vname)
+            switch_port = SwitchPort(switch=switch, port=free_ofport, name=name)
             switch_port.save()
             slice.add_resource(switch_port)
             result = True
