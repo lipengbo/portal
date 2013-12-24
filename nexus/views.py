@@ -17,6 +17,7 @@ from django.contrib import messages
 from nexus.templatetags.nexus_tags import get_fields
 from nexus.forms import BaseForm
 from project.models import City, Island
+from profiles.forms import UserForm
 from resources.models import Server
 import django_filters
 
@@ -83,7 +84,12 @@ def add_or_edit(request, app_label, model_class, id=None):
     context['ModelClass'] = Model
     context['app_label'] = app_label
     fields = get_fields(Model, True)
-    ModelForm = modelform_factory(Model, fields=tuple(fields), form=BaseForm)
+    BaseModelForm = BaseForm
+    if model_class == 'user':
+        BaseModelForm = UserForm
+        ModelForm = modelform_factory(Model, form=BaseModelForm)
+    else:
+        ModelForm = modelform_factory(Model, fields=tuple(fields), form=BaseModelForm)
     if id:
         instance = get_object_or_404(Model, id=id)
     else:

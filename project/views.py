@@ -86,9 +86,16 @@ def index(request):
 def detail(request, id):
     user = request.user
     project = get_object_or_404(Project, id=id)
-    if not user.has_perm('project.view_project', project):
-        return redirect('forbidden')
+    #if not user.has_perm('project.view_project', project):
+    #    return redirect('forbidden')
     context = {}
+    target_type = ContentType.objects.get_for_model(project)
+    try:
+        invitation = Invitation.objects.get(to_user=user, target_id=project.id, target_type=target_type)
+    except Invitation.DoesNotExist, e:
+        pass
+    else:
+        context['invitation'] = invitation
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
     else:
@@ -112,7 +119,7 @@ def manage(request):
 @login_required
 def invite(request, id):
     project = get_object_or_404(Project, id=id)
-    if not user.has_perm('project.invite_project_member', project):
+    if not request.user.has_perm('project.invite_project_member', project):
         return redirect('forbidden')
     context = {}
     context['project'] = project
@@ -241,6 +248,10 @@ def create_or_edit(request, id=None):
         if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
+    else:
+        if not user.has_perm('project.add_project'):
+            return redirect('forbidden')
+
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
     else:
@@ -280,7 +291,7 @@ def delete_member(request, id):
 @login_required
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
-    if user.has_perm('project.delete_project', project):
+    if request.user.has_perm('project.delete_project', project):
         try:
             project.delete()
         except Exception, e:
@@ -292,7 +303,7 @@ def delete_project(request, id):
     return redirect("project_index")
 
 @login_required
-def applicant(request, id):
+def applicant(request, id, user_id=None):
     project = get_object_or_404(Project, id=id)
     context = {}
     user = request.user
@@ -300,6 +311,8 @@ def applicant(request, id):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
+    if user_id:
+        applications = applications.filter(from_user__id=user_id)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:

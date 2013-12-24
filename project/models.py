@@ -87,6 +87,8 @@ class Project(models.Model):
                 user=user, defaults={'is_owner': is_owner})
 
     def dismiss(self, user):
+        if user == self.owner:
+            return
         try:
             project_membership = Membership.objects.get(project=self,
                 user=user)

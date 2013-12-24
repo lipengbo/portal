@@ -12,6 +12,14 @@
 {% endblock %}
 
 {% block body %}
+{% if invitation.actions %}
+    <div class="alert alert-success">
+        您已经被邀请加入该项目，请选择“拒绝”或者“接受”：
+        {% for action in invitation.actions %}
+        <a class="btn btn-{{ action.action_level }}" href="{{ action.action_url }}?next={{ request.path|urlencode }}">{{ action.action_title }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
 <div class="fill_form">
 <fieldset>
     <legend>
@@ -82,7 +90,7 @@
                 {%endif%}
                 {% endfor %}
             </tbody>
-        </table>    
+        </table>
     </div>
 </div>
 {%if  project.membership_set.count > 4 %}

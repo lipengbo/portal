@@ -34,10 +34,11 @@
                     <thead>
                         <tr>
                             <th width="5%" class="checkall"><input type="checkbox"></th>
-                            <th width="20%">成员名称</th>
-                            <th width="30%">申请理由</th>
-                            <th width="30%">研究方向</th>
-                            <th width="15%">申请时间</th>
+                            <th width="15%">成员名称</th>
+                            <th width="25%">申请理由</th>
+                            <th width="25%">研究方向</th>
+                            <th width="14%">申请时间</th>
+                            <th width="16%">操作类型</th>
                         </tr>
                     </thead>
                     <tbody class="checkboxs">
@@ -48,6 +49,10 @@
                             <td>{{ application.message }}</td>
                             <td>{{ application.from_user.get_profile|default:"未填写"}}</td>
                             <td>{{ application.created_time|date:"Y.m.d H:i" }}</td>
+                            <td>
+                                <a class="btn btn-danger reject-btn" >拒绝</a>
+                                <a class="btn btn-success approve-btn" >批准</a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -84,6 +89,14 @@
         if($(this).hasClass('disabled')) {
             return false;
         }
+    });
+    $('.approve-btn').click(function(){
+        $(this).parents('tr').find('input').iCheck('check');
+        $('.action-btn[name="approve"]').trigger('click');
+    });
+    $('.reject-btn').click(function(){
+        $(this).parents('tr').find('input').iCheck('check');
+        $('.action-btn[name="deny"]').trigger('click');
     });
 </script>
 {% endblock %}
