@@ -9,18 +9,13 @@ function check_slice_name(obj_id,flag){
 	//var reg = /^[a-zA-Z_]\w*$/;
 	var reg = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
 	//alert(user_id_obj.value.length);
-	if(obj.value.length > 0){
-        if(!reg.test(obj.value)){
+	if(obj.value.replace(/(^\s*)|(\s*$)/g, "").length > 0){
+        //if(!reg.test(obj.value)){
         	//alert("in 输入");
-        	showInfo(info," * 请输入中英文数字下划线的组合","red");
-        	return false;
-        }
-        else{
-            if(obj.value.length > 45){
-                //len = 44 - user_id_obj.value.length;
-                showInfo(info," * 名称长度过长（最长30）","red");
-                return false;
-            }
+        	//showInfo(info," * 请输入中英文数字下划线的组合","red");
+        	//return false;
+        //}
+       // else{
         	//alert("in green");
         	//alert(slice_exist);
         	isslice_exist(obj.value +"_"+user_id_obj.value);
@@ -32,7 +27,7 @@ function check_slice_name(obj_id,flag){
         		showInfo(info,"√","green");
         		return true;
         	}
-        }
+       // }
 	}
 	else{
 		showInfo(info," * 必填","red");
@@ -166,6 +161,84 @@ function check_port(port,flag){
 
 //校验网段分配
 function check_nw_num(){
+    var nw_num_obj = document.getElementById("nw_num");
+    var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
+    var old_nw_num_obj = document.getElementById("old_nw_num");
+    var old_nw_num = old_nw_num_obj.value;
+    var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    var old_slice_nw = old_slice_nw_obj.value;
+    var slice_uuid_obj = document.getElementById("slice_uuid");
+    var slice_uuid = slice_uuid_obj.value;
+    
+
+    var slice_name_obj = document.getElementById("slice_name");
+    var old_nw_owner_obj = document.getElementById("old_nw_owner");
+    var slice_nw_obj = document.getElementById("slice_nw");
+    
+    var user_id_obj = document.getElementById("user_id");
+    var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
+    var old_nw_owner = old_nw_owner_obj.value;
+    
+    
+    var info = document.getElementById("nw_numInfo");
+    
+    var ajax_ret = false;
+    
+    if(nw_num!=old_nw_num){
+        if(old_slice_nw==''){
+            check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_uuid+"/"+nw_num+"/";
+        }
+        else{
+            check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_uuid+"/"+nw_num+"/";
+        }
+        $.ajax({
+            type: "GET",
+            url: check_url,
+            dataType: "json",
+            cache: false,
+            async: false,  
+            success: function(data) {
+                //alert(data.value);
+                if (data.value == 0 || data.value == 1){
+                    //alert(1);
+                    showInfo(info," * 分配网段失败！","red");
+                    ajax_ret = false;
+                }
+                else{
+                    //alert(3);
+                    slice_nw_obj.innerHTML = data.value;
+                    old_slice_nw_obj.value = data.value;
+                    setTimeout("nw_timeout()",1750000);
+                    
+                    slice_uuid_obj.value = data.owner
+                    old_nw_owner_obj.value = slice_name;
+                    old_nw_num_obj.value = nw_num;
+                    showInfo(info,"√","green");
+                    //alert(5);
+                    ajax_ret = true;
+                }
+            },
+            error: function(data) {
+                showInfo(info," * 分配网段失败！","red");
+                ajax_ret = false;
+            }
+        });
+        if(ajax_ret){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    else{
+        //alert(4);
+        showInfo(info,"√","green");
+        return true;
+    }
+}
+
+
+function check_nw_num1(){
 	var slice_name_obj = document.getElementById("slice_name");
 	var old_nw_owner_obj = document.getElementById("old_nw_owner");
 	var nw_num_obj = document.getElementById("nw_num");
@@ -273,7 +346,7 @@ var slice_exist;
 //校验所填的slice是否存在
 function isslice_exist(slicename){
 	//alert (slicename)
-	check_url = "http://" + window.location.host + "/slice/check_slice_name/"+slicename+"/";
+	check_url = "http://" + window.location.host + "/slice/check_slice_name/?slice_name="+slicename;
 	//alert(check_url)
     $.ajax({
         type: "GET",
