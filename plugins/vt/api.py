@@ -118,3 +118,11 @@ def get_phydata_gw_ip(island):
     owner = 'island_%s_2' % island.id
     net = Subnet.objects.get(owner=owner)
     return net.get_gateway_ip()
+
+
+def try_start_gw_and_ctr(vm):
+    if vm.type != 1:
+        try:
+            return do_vm_action(vm, 'create')
+        except:
+            return False
