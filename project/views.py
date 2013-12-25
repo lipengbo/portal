@@ -5,7 +5,7 @@ logger = logging.getLogger("plugins")
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import transaction, IntegrityError
@@ -20,6 +20,7 @@ from django.db.models import Q
 from django.conf import settings
 
 from guardian.decorators import permission_required
+from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
@@ -83,6 +84,27 @@ def index(request):
 
 
 @login_required
+def perm_admin(request, id, user_id):
+    project = get_object_or_404(Project, id=id)
+    user = request.user
+    if not (user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    content_type = ContentType.objects.get_for_model(project)
+    perms = Permission.objects.filter(content_type=content_type).exclude(codename="add_project")
+    context['perms'] = perms
+
+    if request.method == 'POST':
+        perms = request.POST.getlist('perm')
+        user_perms = get_perms(user, project)
+        for user_perm in user_perms:
+            remove_perm(user_perm, user, project)
+        for perm in perms:
+            assign_perm(perm, user, project)
+    return render(request, 'project/perm.html', context)
+
+@login_required
 def detail(request, id):
     user = request.user
     project = get_object_or_404(Project, id=id)
@@ -119,7 +141,8 @@ def manage(request):
 @login_required
 def invite(request, id):
     project = get_object_or_404(Project, id=id)
-    if not request.user.has_perm('project.invite_project_member', project):
+    #if not request.user.has_perm('project.invite_project_member', project):
+    if not (request.user == project.owner):
         return redirect('forbidden')
     context = {}
     context['project'] = project
@@ -281,8 +304,7 @@ def delete_member(request, id):
     user = request.user
     membership = get_object_or_404(Membership, id=int(id))
     project = membership.project
-    if user.has_perm('project.dismiss_project_member', instance) \
-            and not membership.is_owner and not (membership.user == user):
+    if project.owner == user and not membership.is_owner:
         membership.delete()
     else:
         return redirect("forbidden")
@@ -307,7 +329,7 @@ def applicant(request, id, user_id=None):
     project = get_object_or_404(Project, id=id)
     context = {}
     user = request.user
-    if not user.has_perm('project.review_project_member', project):
+    if not (request.user == project.owner):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)

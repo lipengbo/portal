@@ -145,11 +145,13 @@ class Project(models.Model):
     class Meta:
         verbose_name = _("Project")
         permissions = (
-            ('view_project', _('View Project')),
-            ('manage_project_member', _('View Project')),
-            ('invite_project_member', _('View Project')),
-            ('dismiss_project_member', _('View Project')),
-            ('review_project_member', _('View Project')),
+                ('create_slice', _("Can add Slice")),
+                ('delete_slice', _("Can delete Slice")),
+                ('edit_slice', _("Can edit Slice")),
+                #('manage_project_member', _('Manage Project Member')),
+                #('invite_project_member', _('Invite Project Member')),
+                #('dismiss_project_member', _('Dismiss Project Member')),
+                #('review_project_member', _('Riew Project')),
         )
 
 

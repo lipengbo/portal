@@ -1,0 +1,41 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load common_tags %}
+{% load staticfiles %}
+{% load endless %}
+{% block breadcrumb %}
+<a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>
+项目权限
+{% endblock %}
+{% block body %}
+        <form class="fill_form" action="" method="post" accept-charset="utf-8">
+            {% csrf_token %}
+            <fieldset>
+                <legend>
+                    项目权限
+                </legend>
+                 <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th width="5%" class="checkall"><input type="checkbox"></th>
+                            <th width="95%">权限描述</th>
+                        </tr>
+                    </thead>
+                    <tbody class="checkboxs">
+                        {% for perm  in perms  %}
+                        <tr>
+                            <td><input type="checkbox" {% has_perm user perm project %}{% if has_perm %}checked{% endif %} name="perm" value="{{ perm.content_type.app_label|lower }}.{{ perm.codename}}"></td>
+                            <td>{% trans perm.name %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </fieldset>
+            <div class="text-center form-actions">
+                <button class="btn btn-success" type="submit">保存</button>
+                <a class="btn" href="{% url "project_detail" project.id  %}">取消</a>
+            </div>
+        </form>
+{% endblock %}

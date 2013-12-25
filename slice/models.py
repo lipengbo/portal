@@ -252,7 +252,6 @@ class Slice(models.Model):
 
     class Meta:
         permissions = (
-            ('view_slice', _('View Project')),
         )
 
 class SliceDeleted(models.Model):
