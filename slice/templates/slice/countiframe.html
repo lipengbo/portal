@@ -1,11 +1,13 @@
 {% load i18n %}
 {% load staticfiles %}
-
+<body style="margin: 0">
 <div id="container" style="min-width: 400px; height: 182px; margin: 0 auto"></div>
 <div class="clear" style="display: none" >
     <p id="target">{{target}}</p>
     <p id="type">{{type}}</p>
+    <p id="stype">{{stype}}</p>
 </div>
+</body>
 <script src="{{ STATIC_URL}}topology/lib/jquery.min.js"></script>
 <script src="{{ STATIC_URL}}js/highcharts/highcharts.js"></script>
 <script src="{{ STATIC_URL}}js/highcharts/modules/exporting.js"></script>
@@ -14,13 +16,14 @@
         //alert("in");
         var target = $("#target").text();
         var type = $("#type").text();
+        var stype = $("#stype").text();
         var total_num = 0;
         var show_dates = [];
         var show_nums = [];
         var title = "";
         var name = "";
         var coler = ['#2f7ed8', '#0d233a', '#8bbc21'];
-        var check_url = "/slice/get_count_show/?target="+target+"&type="+type+"&total_num="+total_num;
+        var check_url = "/slice/get_count_show/?target="+target+"&type="+type+"&total_num="+total_num+"&stype="+stype;
         $.ajax({
             type: "GET",
             url: check_url,
@@ -78,7 +81,7 @@
         $('#container').highcharts({
             chart: {
                 type: 'column',
-                margin: [ 40, 50, 30, 50]
+                margin: [ 40, 30, 20, 40]
             },
             colors: coler,
             title: {

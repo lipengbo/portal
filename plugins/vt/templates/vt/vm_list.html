@@ -100,7 +100,7 @@
 						 		<tr>
 						 			<td>{{vm.name}}</td>
 									<td><a id="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{vm.uuid}}">{{vm.uuid}}</a></td>
-									<td>虚拟机</td>
+									<td>虚拟机{%if vm.enable_dhcp%}(DHCP){%endif%}</td>
 						 			<td>{{vm.ip}}</td>
 						 			<td>{{vm.server.ip}}</td>
 						 			<!--td>

@@ -238,10 +238,10 @@ img {
                                             <input class="aa" type="checkbox" name="check_vm_ids" value="{{controller.host.id}}" checked style="display:none"/>
                                             <button type="button" onclick="" class="btn" disabled>监控</button>
                                         </span>
-                                        {%elif controller.host.state == 9 %} 
-                                            <button type="button" onclick="" class="btn" disabled>监控</button>  
+                                        {%elif controller.host.state == 1 %} 
+                                            <button type="button" onclick="document.location='/monitor/vm/{{ controller.host.id }}/'" class="btn">监控</button> 
                                         {%else%}
-                                            <button type="button" onclick="document.location='/monitor/vm/{{ controller.host.id }}/'" class="btn">监控</button>
+                                            <button type="button" onclick="" class="btn" disabled>监控</button>
                                         {%endif%}
     					 		    {%endif%}
 					 		    </td>
@@ -295,10 +295,10 @@ img {
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{gw.id}}" checked style="display:none"/>
                                         <button type="button" onclick="" class="btn" disabled>监控</button>
                                     </span>
-                                    {%elif gw.state == 9 %} 
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>  
-                                    {%else%}
+                                    {%elif gw.state == 1 %} 
                                         <button type="button" onclick="document.location='/monitor/vm/{{ gw.id }}/'" class="btn">监控</button>
+                                    {%else%}
+                                        <button type="button" onclick="" class="btn" disabled>监控</button> 
                                     {%endif%}
                                 </td>
                             {%endif%}
@@ -350,10 +350,10 @@ img {
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{dhcp.id}}" checked style="display:none"/>
                                         <button type="button" onclick="" class="btn" disabled>监控</button>
                                     </span>
-                                    {%elif dhcp.state == 9 %} 
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>  
-                                    {%else%}
+                                    {%elif dhcp.state == 1 %} 
                                         <button type="button" onclick="document.location='/monitor/vm/{{ dhcp.id }}/'" class="btn">监控</button>
+                                    {%else%}
+                                        <button type="button" onclick="" class="btn" disabled>监控</button>
                                     {%endif%}
                                 </td>
                             {%endif%}
@@ -414,10 +414,10 @@ img {
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
                                         <button type="button" onclick="" class="btn" disabled>监控</button>
                                     </span>
-                                    {%elif vm.state == 9 %} 
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>  
-                                    {%else%}
+                                    {%elif vm.state == 1 %} 
                                         <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
+                                    {%else%}
+                                        <button type="button" onclick="" class="btn" disabled>监控</button>
                                     {%endif%}
                                     {% if slice_obj.state == 1 %}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse disabled slice_state_del">删除</a>

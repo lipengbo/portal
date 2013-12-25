@@ -170,7 +170,7 @@ function check_vm_status(slice_id){
                                 
                                 $("span#controller_fc").empty();
                                 str = "";
-                                str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                                str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                                 $("span#controller_fc").append(str);
                             }
                             
@@ -181,7 +181,7 @@ function check_vm_status(slice_id){
                             
                             $("span#gw_fc"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#gw_fc"+cur_vm_id).append(str);
                             
                             $("div#dhcp_st"+cur_vm_id).empty();
@@ -191,7 +191,7 @@ function check_vm_status(slice_id){
                             
                             $("span#dhcp_fc"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#dhcp_fc"+cur_vm_id).append(str);
                             
                             $("div#vm_st"+cur_vm_id).empty();
@@ -201,7 +201,7 @@ function check_vm_status(slice_id){
                             
                             $("span#vm_fc"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
                         document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);

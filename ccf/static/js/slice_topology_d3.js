@@ -799,19 +799,13 @@ function restart() {
     .attr('width', function(d){ return d.width; })
     .attr('height', function(d){ return d.height; })
     .attr('class', function(d) {return 'node node-icon ' + d.type + '-node-icon'})
-   // .attr('class', 'node bootstro bootstro-highlight')
-   // .attr('data-bootstro-title', 'asdasdasasdas')
-   // .attr('r', 25)
-   // .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(color_map[d.type])).brighter().toString() : colors(color_map[d.type]); })
-   // .style('stroke', function(d) { return d3.rgb(colors(color_map[d.type])).darker().toString(); })
-    //.classed('reflexive', function(d) { return d.reflexive; })
     .on('click', function(d) {
         if(admin == 1){
-            if(d.type == 'switch'){
-                //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
+            if(d.type == 'host' && d.type_id == 1){
+                window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
             }
             else{
-                window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
+                //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
         }
     })

@@ -106,37 +106,47 @@ def create_first(request, proj_id):
 
 
 @login_required
-def list(request, proj_id):
+def list(request, proj_id, stype):
     """显示所有slice。"""
-    from common.models import Counter
+    from common.models import Counter, FailedCounter, DeletedCounter
     user = request.user
     context = {}
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
         if int(proj_id) == 0:
-            if 'type' in request.GET:
-                type = int(request.GET.get('type'))
-                if type == 0 or type == 1:
-                    slice_objs = Slice.objects.filter(type=int(type))
-                else:
-                    slice_objs = SliceDeleted.objects.all()
-                context['type'] = type
+            type = int(stype)
+            if type == 0 or type == 1:
+                slice_objs = Slice.objects.filter(type=type)
             else:
-                slice_objs = Slice.objects.filter(type=0)
-                context['type'] = 0
+                slice_objs = SliceDeleted.objects.all()
+            context['type'] = type
+            date_now = datetime.datetime.now()
             if context['type'] == 0:
-                date_now = datetime.datetime.now()
                 sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
                                             date__month=date_now.strftime('%m'),
                                             date__day=date_now.strftime('%d'),
                                             target=1,
                                             type=2)
-                if sc:
-                    num = sc[0].count
-                else:
-                    num = 0
-                context['new_num'] = num
-                context['total_num'] = Slice.objects.all().count
+                context['total_num'] = Slice.objects.filter(type=0).count
+            if context['type'] == 1:
+                sc = FailedCounter.objects.filter(date__year=date_now.strftime('%Y'),
+                                            date__month=date_now.strftime('%m'),
+                                            date__day=date_now.strftime('%d'),
+                                            target=1,
+                                            type=2)
+                context['total_num'] = Slice.objects.filter(type=1).count
+            if context['type'] == 2:
+                sc = DeletedCounter.objects.filter(date__year=date_now.strftime('%Y'),
+                                            date__month=date_now.strftime('%m'),
+                                            date__day=date_now.strftime('%d'),
+                                            target=1,
+                                            type=2)
+                context['total_num'] = SliceDeleted.objects.all().count
+            if sc:
+                num = sc[0].count
+            else:
+                num = 0
+            context['new_num'] = num
         else:
             context['type'] = 0
             project = get_object_or_404(Project, id=proj_id)
@@ -156,10 +166,7 @@ def list(request, proj_id):
     context['slices'] = slice_objs
     if request.is_ajax():
         return render(request, 'slice/list_page.html', context)
-    if context['type'] == 0:
-        return render(request, 'slice/slice_list.html', context)
-    else:
-        return render(request, 'slice/delete_slice_list.html', context)
+    return render(request, 'slice/slice_list.html', context)
 
 
 @login_required
@@ -437,6 +444,7 @@ def countiframe(request):
     context = {}
     context['target'] = request.GET.get('target')
     context['type'] = request.GET.get('type')
+    context['stype'] = request.GET.get('stype')
     return render(request, 'slice/countiframe.html', context)
 
 
@@ -445,8 +453,9 @@ def get_count_show(request):
     target = request.GET.get('target')
     type = request.GET.get('type')
     total_num = request.GET.get('total_num')
+    stype = request.GET.get('stype')
     try:
-        slice_count_show = get_count_show_data(target, type, total_num)
+        slice_count_show = get_count_show_data(target, type, total_num, stype)
     except Exception, ex:
         return HttpResponse(json.dumps({'result': 0}))
     else:

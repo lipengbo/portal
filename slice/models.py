@@ -7,6 +7,7 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice
 
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
+from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
 
 import datetime
 
@@ -236,7 +237,13 @@ class Slice(models.Model):
         except Exception, ex:
             print "4:delete slice failed and change slice record"
             self.failure_reason = str(ex)
-            self.type = 1
+            if self.type == 0:
+                self.type = 1
+                increase_failed_counter("slice")
+                decrease_counter_api("slice", self)
+            else:
+                decrease_failed_counter("slice", self)
+                increase_failed_counter("slice")
             self.date_expired = datetime.datetime.now()
             self.save()
             print "5:raise exception"

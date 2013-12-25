@@ -14,11 +14,12 @@ from account.signals import user_login_attempt, user_logged_in
 from eventlog.models import log
 from notifications import notify
 from project.models import Project
-from common.models import Counter
-from slice.models import Slice
+from common.models import Counter, DeletedCounter
+from slice.models import Slice, SliceDeleted
 from notifications.models import Notification
 from profiles.models import Profile
 from invite.models import Invitation, Application
+from common.views import decrease_failed_counter, decrease_counter_api
 
 @receiver(post_save, sender=Slice)
 @receiver(post_save, sender=Project)
@@ -57,32 +58,46 @@ def increase_counter(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Project)
 def decrease_counter(sender, instance, **kwargs):
     if sender == Slice:
-        target = 1
-        obj_time = instance.date_created
+        tg = "slice"
     elif sender == Project:
-        target = 0
-        obj_time = instance.created_time
-    today = datetime.date.today()
-    if obj_time.strftime('%Y%m%d') == today.strftime('%Y%m%d'):
-        counter, new = Counter.objects.get_or_create(target=target, date=today, type=2)
-        if counter.count > 0:
-            counter.count = F("count") - 1
-            counter.save()
-    if obj_time.strftime('%Y%m') == today.strftime('%Y%m'):
-        counter_month = Counter.objects.filter(target=target,
+        tg = "project"
+    if instance.type == 1:
+        decrease_failed_counter(tg, instance)
+    else:
+        decrease_counter_api(tg, instance)
+
+
+@receiver(post_save, sender=SliceDeleted)
+def increase_deleted_counter(sender, instance, created, **kwargs):
+    print "------------------increase_deleted_counter"
+    if created:
+        today = datetime.date.today()
+        if sender == SliceDeleted:
+            target = 1
+        elif sender == Project:
+            target = 0
+        counter_year = DeletedCounter.objects.filter(target=target,
+                                              date__year=today.strftime('%Y'),
+                                              type=0)
+        if counter_year:
+            counter_year[0].count = counter_year[0].count + 1
+            counter_year[0].save()
+        else:
+            counter_year = DeletedCounter(target=target, date=today, count=1, type=0)
+            counter_year.save()
+        counter_month = DeletedCounter.objects.filter(target=target,
                                                     date__year=today.strftime('%Y'),
                                                     date__month=today.strftime('%m'),
                                                     type=1)
-        if counter_month and counter_month[0].count > 0:
-            counter_month[0].count = counter_month[0].count - 1
+        if counter_month:
+            counter_month[0].count = counter_month[0].count + 1
             counter_month[0].save()
-    if obj_time.strftime('%Y') == today.strftime('%Y'):
-        counter_year = Counter.objects.filter(target=target,
-                                                    date__year=today.strftime('%Y'),
-                                                    type=0)
-        if counter_year and counter_year[0].count > 0:
-            counter_year[0].count = counter_year[0].count - 1
-            counter_year[0].save()
+        else:
+            counter_month = DeletedCounter(target=target, date=today, count=1, type=1)
+            counter_month.save()
+        counter, new = DeletedCounter.objects.get_or_create(target=target, date=today, type=2)
+        counter.count = F("count") + 1
+        counter.save()
 
 
 @receiver(post_delete, sender=Invitation)

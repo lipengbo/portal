@@ -489,8 +489,8 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_count_show_data(target, type, total_num):
-    from common.models import Counter
+def get_count_show_data(target, type, total_num, stype):
+    from common.models import Counter, FailedCounter, DeletedCounter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
     show_dates = []
@@ -504,9 +504,18 @@ def get_count_show_data(target, type, total_num):
         if int(date_now.strftime('%Y')) - 10 >= year:
             year = int(date_now.strftime('%Y')) - 10 + 1
         for i in range(0, 10):
-            sc = Counter.objects.filter(target=target_id,
-                                        date__year=str(year),
-                                        type=0)
+            if int(stype) == 0:
+                sc = Counter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            type=0)
+            if int(stype) == 1:
+                sc = FailedCounter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            type=0)
+            if int(stype) == 2:
+                sc = DeletedCounter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            type=0)
             show_dates.append(str(year) + "年")
             year = year + 1
             if sc:
@@ -518,10 +527,21 @@ def get_count_show_data(target, type, total_num):
         if type == "month":
             year = int(date_now.strftime('%Y'))
             for i in range(0, 12):
-                sc = Counter.objects.filter(target=target_id,
-                                            date__year=str(year),
-                                            date__month=str(i + 1),
-                                            type=1)
+                if int(stype) == 0:
+                    sc = Counter.objects.filter(target=target_id,
+                                                date__year=str(year),
+                                                date__month=str(i + 1),
+                                                type=1)
+                if int(stype) == 1:
+                    sc = FailedCounter.objects.filter(target=target_id,
+                                                date__year=str(year),
+                                                date__month=str(i + 1),
+                                                type=1)
+                if int(stype) == 2:
+                    sc = DeletedCounter.objects.filter(target=target_id,
+                                                date__year=str(year),
+                                                date__month=str(i + 1),
+                                                type=1)
                 show_dates.append(str(i + 1) + "月")
 #                 if month == 1:
 #                     month = 12
@@ -536,11 +556,24 @@ def get_count_show_data(target, type, total_num):
         else:
             month_days = calendar.monthrange(int(date_now.strftime('%Y')), int(date_now.strftime('%m')))[1]
             for i in range(0, month_days):
-                sc = Counter.objects.filter(target=target_id,
-                                            date__year=date_now.strftime('%Y'),
-                                            date__month=date_now.strftime('%m'),
-                                            date__day=str(i + 1),
-                                            type=2)
+                if int(stype) == 0:
+                    sc = Counter.objects.filter(target=target_id,
+                                                date__year=date_now.strftime('%Y'),
+                                                date__month=date_now.strftime('%m'),
+                                                date__day=str(i + 1),
+                                                type=2)
+                if int(stype) == 1:
+                    sc = FailedCounter.objects.filter(target=target_id,
+                                                date__year=date_now.strftime('%Y'),
+                                                date__month=date_now.strftime('%m'),
+                                                date__day=str(i + 1),
+                                                type=2)
+                if int(stype) == 2:
+                    sc = DeletedCounter.objects.filter(target=target_id,
+                                                date__year=date_now.strftime('%Y'),
+                                                date__month=date_now.strftime('%m'),
+                                                date__day=str(i + 1),
+                                                type=2)
                 show_dates.append(str(i + 1))
                 if sc:
                     num = sc[0].count
