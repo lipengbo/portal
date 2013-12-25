@@ -26,7 +26,7 @@
                     <tbody class="checkboxs">
                         {% for perm  in perms  %}
                         <tr>
-                            <td><input type="checkbox" {% has_perm user perm project %}{% if has_perm %}checked{% endif %} name="perm" value="{{ perm.content_type.app_label|lower }}.{{ perm.codename}}"></td>
+                            <td><input type="checkbox" {% has_perm member_user perm project %}{% if has_perm %}checked{% endif %} name="perm" value="{{ perm.content_type.app_label|lower }}.{{ perm.codename}}"></td>
                             <td>{% trans perm.name %}</td>
                         </tr>
                         {% endfor %}

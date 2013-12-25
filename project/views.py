@@ -86,15 +86,15 @@ def index(request):
 @login_required
 def perm_admin(request, id, user_id):
     project = get_object_or_404(Project, id=id)
-    user = request.user
-    if not (user == project.owner):
+    current_user = request.user
+    if not (current_user == project.owner):
         return redirect('forbidden')
     context = {}
     context['project'] = project
     content_type = ContentType.objects.get_for_model(project)
     perms = Permission.objects.filter(content_type=content_type).exclude(codename="add_project")
     context['perms'] = perms
-
+    user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
         perms = request.POST.getlist('perm')
         user_perms = get_perms(user, project)
@@ -102,6 +102,7 @@ def perm_admin(request, id, user_id):
             remove_perm(user_perm, user, project)
         for perm in perms:
             assign_perm(perm, user, project)
+    context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
 @login_required
