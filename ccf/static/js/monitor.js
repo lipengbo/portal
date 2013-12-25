@@ -121,7 +121,24 @@ var disk_chart_data = [
  	var ctx_cpu = document.getElementById('cpu_perf_chart').getContext("2d");
 	var ctx_mem = document.getElementById('mem_perf_chart').getContext("2d");
 	var ctx_net = document.getElementById('net_perf_chart').getContext("2d");
-	var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
+	//var ctx_disk = document.getElementById('disk_perf_chart').getContext("2d");
+	var disk_plot = jQuery.jqplot ('disk_perf_chart', [[['已使用', 0], ['未使用', 1]]], 
+					{
+						seriesColors: ['#0099FF', '#EEEE00'],
+		  				seriesDefaults: {
+							renderer: jQuery.jqplot.PieRenderer, 
+							rendererOptions: {
+			  					showDataLabels: true
+							}
+		  				}, 
+		  				legend: { show: false, placement: 'insideGrid', location: 'e' },
+						grid: {
+							borderWidth: 0,
+							gridLineColor: '#cdcdcd',
+							background: 'rgba(255,255,255,0)',
+							shadow: false		
+						}			
+					});
 
 
 
@@ -205,12 +222,16 @@ function get_performace_data(host_id, vm_id){
 
                 disk_chart_data[0]["value"] = performace_data['disk_use']['free'];
                 disk_chart_data[1]["value"] = performace_data['disk_use']['used'];
-                new Chart(ctx_disk).Doughnut(disk_chart_data, disk_options)
+                //new Chart(ctx_disk).Pie(disk_chart_data, disk_options)
 
-                document.getElementById("disk_use").innerHTML = '<span style="background:#ff3366;"></span>已使用 : ' 
+                document.getElementById("disk_use").innerHTML = '<span style="background:#0099FF;"></span>已使用 : ' 
 								+ data_process(performace_data['disk_use']['used']) + data_process_unit(performace_data['disk_use']['used'], 'byte');
-                document.getElementById("disk_free").innerHTML ='<span style="background:#99cc66;"></span>未使用 : '
+                document.getElementById("disk_free").innerHTML ='<span style="background:#EEEE00;"></span>未使用 : '
 								+ data_process(performace_data['disk_use']['free']) + data_process_unit(performace_data['disk_use']['free'], 'byte');
+
+				disk_plot.series[0].data = [['已使用', data_process(performace_data['disk_use']['used'])],
+											['未使用', data_process(performace_data['disk_use']['free'])]];
+				disk_plot.replot();
 
                 var port_info_content = "";
                 pre_net_data = [];
