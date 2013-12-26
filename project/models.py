@@ -145,6 +145,7 @@ class Project(models.Model):
     class Meta:
         verbose_name = _("Project")
         permissions = (
+                ('create_slice', _("Can add Slice")),
                 #('manage_project_member', _('Manage Project Member')),
                 #('invite_project_member', _('Invite Project Member')),
                 #('dismiss_project_member', _('Dismiss Project Member')),
