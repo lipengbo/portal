@@ -200,8 +200,8 @@ def delete_invitation_application(sender, instance, **kwargs):
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
     if created:
-        if instance.is_owner:
-            assign_perm('project.add_project', instance.user)
+        if not instance.is_owner:
+            assign_perm('project.create_slice', instance.user, instance.project)
 
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)
