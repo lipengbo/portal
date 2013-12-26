@@ -103,6 +103,7 @@ def create_first(request, proj_id):
         else:
             assign_perm("slice.change_slice", user, slice_obj)
             assign_perm("slice.view_slice", user, slice_obj)
+            assign_perm("slice.delete_slice", user, slice_obj)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -264,28 +265,28 @@ def delete(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     user = request.user
     project_id = slice_obj.project.id
-    if request.user.is_superuser or request.user == slice_obj.owner:
-        try:
-            slice_deleted = SliceDeleted(name = slice_obj.name,
-                show_name = slice_obj.show_name,
-                owner_name = slice_obj.owner.username,
-                description = slice_obj.description,
-                project_name = slice_obj.project.name,
-                date_created = slice_obj.date_created,
-                date_expired = slice_obj.date_expired)
-            if request.user.is_superuser:
-                slice_deleted.type = 1
-            else:
-                slice_deleted.type = 0
-            slice_obj.delete()
-        except Exception, ex:
-            pass
+    if not request.user.is_superuser:
+        if not user.has_perm('slice.delete_slice', slice_obj):
+            return redirect('forbidden')
+    try:
+        slice_deleted = SliceDeleted(name = slice_obj.name,
+            show_name = slice_obj.show_name,
+            owner_name = slice_obj.owner.username,
+            description = slice_obj.description,
+            project_name = slice_obj.project.name,
+            date_created = slice_obj.date_created,
+            date_expired = slice_obj.date_expired)
+        if request.user.is_superuser:
+            slice_deleted.type = 1
+        else:
+            slice_deleted.type = 0
+        slice_obj.delete()
+    except Exception, ex:
+        pass
 #             if request.user.is_superuser:
 #                 messages.add_message(request, messages.ERROR, ex)
-        else:
-            slice_deleted.save()
     else:
-        return redirect("forbidden")
+        slice_deleted.save()
     if 'next' in request.GET:
         if 'type' in request.GET:
             return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))
