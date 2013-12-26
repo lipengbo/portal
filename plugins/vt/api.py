@@ -11,6 +11,8 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.exception import ResourceNotEnough, ConnectionRefused, FailedToAllocateResources
 from resources.models import Server
 from etc.config import function_test
+import errno
+from socket import error as socket_error
 
 
 from django.utils.translation import ugettext as _
@@ -37,9 +39,10 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
                 if not serverid:
                     raise ResourceNotEnough()
                 vm.server = Server.objects.get(id=serverid)
-            except ConnectionRefused:
+            except socket_error as serr:
                 IPUsage.objects.release_ip(ip_obj)
-                raise ConnectionRefused()
+                if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+                    raise ConnectionRefused()
         vm.type = 0
         vm.save()
     except:
@@ -74,9 +77,10 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
                 if not serverid:
                     raise ResourceNotEnough()
                 vm.server = Server.objects.get(id=serverid)
-            except ConnectionRefused:
+            except socket_error as serr:
                 IPUsage.objects.release_ip(ip_obj)
-                raise ConnectionRefused()
+                if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+                    raise ConnectionRefused()
         vm.type = 2
         vm.save()
     except:
