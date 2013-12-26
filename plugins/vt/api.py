@@ -28,26 +28,25 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
             vm.image = images[0]
         vm.flavor = Flavor.objects.get(id=default_flavor_id)
         if function_test:
-            #hostlist = [switch.virtualswitch.server for switch in slice_obj.get_virtual_switches_server()]
             hostlist = Server.objects.filter(island=island_obj)
             vm.server = hostlist[0]
         else:
-            try:
-                #hostlist = [(switch.virtualswitch.server.id, switch.virtualswitch.server.ip) for switch in slice_obj.get_virtual_switches_server()]
-                hostlist = [(server.id, server.ip) for server in Server.objects.filter(island=island_obj)]
-                serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
-                if not serverid:
-                    raise ResourceNotEnough()
-                vm.server = Server.objects.get(id=serverid)
-            except socket_error as serr:
-                IPUsage.objects.release_ip(ip_obj)
-                if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
-                    raise ConnectionRefused()
+            hostlist = [(server.id, server.ip) for server in Server.objects.filter(island=island_obj)]
+            serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
+            if not serverid:
+                raise ResourceNotEnough()
+            vm.server = Server.objects.get(id=serverid)
         vm.type = 0
         vm.save()
+    except socket_error as serr:
+        if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+            raise ConnectionRefused()
+    except ResourceNotEnough:
+        raise ResourceNotEnough()
     except:
-        IPUsage.objects.release_ip(ip_obj)
         raise FailedToAllocateResources()
+    finally:
+        IPUsage.objects.release_ip(ip_obj)
     return vm, str(ip_obj)
 
 
@@ -68,24 +67,24 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         vm.flavor = Flavor.objects.get(id=default_flavor_id)
         host_server = Server.objects.get(id=server_id)
         if function_test:
-            #hostlist = [switch.virtualswitch.server for switch in slice_obj.get_virtual_switches_server()]
             vm.server = host_server
         else:
-            try:
-                hostlist = [(host_server.id, host_server.ip)]
-                serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
-                if not serverid:
-                    raise ResourceNotEnough()
-                vm.server = Server.objects.get(id=serverid)
-            except socket_error as serr:
-                IPUsage.objects.release_ip(ip_obj)
-                if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
-                    raise ConnectionRefused()
+            hostlist = [(host_server.id, host_server.ip)]
+            serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
+            if not serverid:
+                raise ResourceNotEnough()
+            vm.server = Server.objects.get(id=serverid)
         vm.type = 2
         vm.save()
+    except socket_error as serr:
+        if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+            raise ConnectionRefused()
+    except ResourceNotEnough:
+        raise ResourceNotEnough()
     except:
-        IPUsage.objects.release_ip(ip_obj)
         raise FailedToAllocateResources()
+    finally:
+        IPUsage.objects.release_ip(ip_obj)
     return vm
 
 
