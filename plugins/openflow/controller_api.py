@@ -99,7 +99,7 @@ def create_default_controller(slice_obj, controller_sys):
             #transaction.rollback()
             import traceback
             print traceback.print_exc()
-            raise DbError("创建控制器失败！")
+            raise DbError(ex.message)
     else:
         raise DbError("数据库异常！")
 

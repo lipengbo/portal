@@ -93,7 +93,7 @@ var board = svg.append('svg:g')
 
 initboard2();
    
-var tooltip = CustomTooltip( "posts_tooltip", 220 );
+var tooltip = CustomTooltip( "posts_tooltip", 210 );
 
 var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
 var gre_ovs_capacity = [];
