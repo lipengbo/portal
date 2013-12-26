@@ -69,7 +69,7 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
             except:
                 pass
         print "10:delete slice success and raise exception"
-        raise DbError(ex)
+        raise DbError(ex.message)
 
 
 @transaction.commit_on_success
@@ -90,15 +90,15 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
         if project and island and user:
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
-                date_now = datetime.datetime.now()
-#                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
-                date_delta = datetime.timedelta(days=slice_expiration_days)
-                expiration_date = date_now + date_delta
-                slice_names = name.split('_')
-                if len(slice_names) > 1:
-                    del slice_names[-1]
-                show_name = ('_').join(slice_names)
                 try:
+                    date_now = datetime.datetime.now()
+    #                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
+                    date_delta = datetime.timedelta(days=slice_expiration_days)
+                    expiration_date = date_now + date_delta
+                    slice_names = name.split('_')
+                    if len(slice_names) > 1:
+                        del slice_names[-1]
+                    show_name = ('_').join(slice_names)
                     slice_obj = Slice(owner=user,
                                       name=name,
                                       show_name=show_name,
@@ -112,7 +112,7 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
                     return slice_obj
                 except Exception, ex:
                     transaction.rollback()
-                    raise DbError(ex)
+                    raise DbError("虚网创建失败!")
             else:
                 raise IslandError("所选节点无可用flowvisor！")
         else:
@@ -144,7 +144,7 @@ def slice_change_description(slice_obj, new_description):
                 slice_obj.change_description(new_description)
             except Exception, ex:
                 transaction.rollback()
-                raise DbError(ex)
+                raise DbError("编辑失败！")
 
 
 @transaction.commit_on_success
@@ -165,7 +165,7 @@ def delete_slice_api(slice_obj):
         except Exception, ex:
             print "p4:pre delete slice failed and raise exception"
             transaction.rollback()
-            raise DbError(ex)
+            raise DbError(ex.message)
 
 
 @transaction.commit_on_success
@@ -176,7 +176,7 @@ def start_slice_api(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
-        raise DbError(ex)
+        raise DbError(ex.message)
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
             all_vms = slice_obj.get_vms()
@@ -213,7 +213,7 @@ def stop_slice_api(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
-        raise DbError(ex)
+        raise DbError(ex.message)
     else:
         if slice_obj.state == SLICE_STATE_STARTED:
             try:
@@ -232,7 +232,7 @@ def update_slice_virtual_network(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
-        return DbError(ex)
+        return DbError(ex.message)
     flowvisor = slice_obj.get_flowvisor()
     flowspace_name = str(slice_obj.id) + '_df'
     try:

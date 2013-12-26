@@ -98,7 +98,7 @@ def create_first(request, proj_id):
                                           ovs_ports, controller_info, slice_nw,
                                           gw_host_id, gw_ip, dhcp_selected)
         except Exception, ex:
-            jsondatas = {'result': 0, 'error_info': str(ex)}
+            jsondatas = {'result': 0, 'error_info': ex.message}
         else:
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
@@ -205,7 +205,7 @@ def edit_controller(request, slice_id):
     try:
         slice_change_controller(slice_obj, controller_info)
     except Exception, ex:
-        return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
+        return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         controller = slice_obj.get_controller()
         if controller.host:

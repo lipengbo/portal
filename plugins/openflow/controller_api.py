@@ -97,8 +97,8 @@ def create_default_controller(slice_obj, controller_sys):
             return controller
         except Exception, ex:
             #transaction.rollback()
-            import traceback
-            print traceback.print_exc()
+#             import traceback
+#             print traceback.print_exc()
             raise DbError(ex.message)
     else:
         raise DbError("数据库异常！")
@@ -141,7 +141,7 @@ def slice_change_controller(slice_obj, controller_info):
             flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
                                              slice_obj.id, controller.ip,
                                              controller.port)
-        except:
+        except Exception, ex:
             print 'c5'
             try:
                 print 'c7'
@@ -153,7 +153,7 @@ def slice_change_controller(slice_obj, controller_info):
             except:
                 print 'c10'
                 pass
-            raise
+            raise DbError(ex.message)
         else:
             try:
                 delete_controller(haved_controller, True)
