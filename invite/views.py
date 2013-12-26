@@ -51,7 +51,9 @@ def accept(request, kind="invite", key=""):
 
     user = request.user
 
-    redirect_url = "notifications:all"
+    redirect_url = request.GET.get('next')
+    if not redirect_url:
+        redirect_url = "notifications:all"
     return redirect(redirect_url)
 
 def reject(request, kind="invite", key=""):
@@ -64,5 +66,7 @@ def reject(request, kind="invite", key=""):
 
     user = request.user
 
-    redirect_url = "notifications:all"
+    redirect_url = request.GET.get('next')
+    if not redirect_url:
+        redirect_url = "notifications:all"
     return redirect(redirect_url)

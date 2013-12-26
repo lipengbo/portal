@@ -245,6 +245,7 @@ def detail(request, slice_id):
     subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
+    context['permition'] = "view"
     return render(request, 'slice/slice_detail.html', context)
 
 

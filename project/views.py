@@ -5,7 +5,7 @@ logger = logging.getLogger("plugins")
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 from django.contrib.sites.models import Site
 from django.core.urlresolvers import reverse
 from django.db import transaction, IntegrityError
@@ -17,7 +17,10 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.contenttypes.models import ContentType
 from django.contrib import messages
 from django.db.models import Q
+from django.conf import settings
 
+from guardian.decorators import permission_required
+from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
@@ -81,10 +84,41 @@ def index(request):
 
 
 @login_required
+def perm_admin(request, id, user_id):
+    project = get_object_or_404(Project, id=id)
+    current_user = request.user
+    if not (current_user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    content_type = ContentType.objects.get_for_model(project)
+    perms = Permission.objects.filter(content_type=content_type).exclude(codename="add_project")
+    context['perms'] = perms
+    user = get_object_or_404(User, id=user_id)
+    if request.method == 'POST':
+        select_perms = request.POST.getlist('perm')
+        user_perms = get_perms(user, project)
+        for perm in perms:
+            remove_perm("{}.{}".format(perm.content_type.app_label, perm.codename), user, project)
+        for perm in select_perms:
+            assign_perm(perm, user, project)
+    context['member_user'] = user
+    return render(request, 'project/perm.html', context)
+
+@login_required
 def detail(request, id):
     user = request.user
     project = get_object_or_404(Project, id=id)
+    #if not user.has_perm('project.view_project', project):
+    #    return redirect('forbidden')
     context = {}
+    target_type = ContentType.objects.get_for_model(project)
+    try:
+        invitation = Invitation.objects.get(to_user=user, target_id=project.id, target_type=target_type)
+    except Invitation.DoesNotExist, e:
+        pass
+    else:
+        context['invitation'] = invitation
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
     else:
@@ -108,6 +142,7 @@ def manage(request):
 @login_required
 def invite(request, id):
     project = get_object_or_404(Project, id=id)
+    #if not request.user.has_perm('project.invite_project_member', project):
     if not (request.user == project.owner):
         return redirect('forbidden')
     context = {}
@@ -150,6 +185,7 @@ def invite(request, id):
             #target_type=target_type).values_list("to_user__id", flat=True))
     #invited_user_ids.extend(project.member_ids())
     invited_user_ids.append(project.owner.id)
+    invited_user_ids.append(settings.ANONYMOUS_USER_ID)
     invited_user_ids.extend(User.objects.filter(is_superuser=True).values_list("id", flat=True))
     users = User.objects.exclude(id__in=set(invited_user_ids)).filter(is_active=True)
     if 'query' in request.GET:
@@ -233,9 +269,13 @@ def create_or_edit(request, id=None):
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
-        if user != instance.owner:
+        if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
+    else:
+        if not user.has_perm('project.add_project'):
+            return redirect('forbidden')
+
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
     else:
@@ -274,7 +314,7 @@ def delete_member(request, id):
 @login_required
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
-    if request.user.is_superuser or request.user == project.owner:
+    if request.user.has_perm('project.delete_project', project):
         try:
             project.delete()
         except Exception, e:
@@ -286,13 +326,16 @@ def delete_project(request, id):
     return redirect("project_index")
 
 @login_required
-def applicant(request, id):
+def applicant(request, id, user_id=None):
     project = get_object_or_404(Project, id=id)
     context = {}
+    user = request.user
     if not (request.user == project.owner):
         return redirect('forbidden')
     target_type = ContentType.objects.get_for_model(project)
     applications = Application.objects.filter(target_id=project.id, target_type=target_type, state=0)
+    if user_id:
+        applications = applications.filter(from_user__id=user_id)
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:

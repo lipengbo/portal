@@ -3,7 +3,7 @@ import datetime
 
 from django.db import models
 from django.db import IntegrityError 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
@@ -87,6 +87,8 @@ class Project(models.Model):
                 user=user, defaults={'is_owner': is_owner})
 
     def dismiss(self, user):
+        if user == self.owner:
+            return
         try:
             project_membership = Membership.objects.get(project=self,
                 user=user)
@@ -142,6 +144,15 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = _("Project")
+        permissions = (
+                ('create_slice', _("Can add Slice")),
+                ('delete_slice', _("Can delete Slice")),
+                ('edit_slice', _("Can edit Slice")),
+                #('manage_project_member', _('Manage Project Member')),
+                #('invite_project_member', _('Invite Project Member')),
+                #('dismiss_project_member', _('Dismiss Project Member')),
+                #('review_project_member', _('Riew Project')),
+        )
 
 
 
@@ -158,10 +169,19 @@ class Membership(models.Model):
         unique_together = (("project", "user"), )
         verbose_name = _("Membership")
 
+
 @receiver(post_save, sender=Project)
 def create_owner_membership(sender, instance, created, **kwargs):
     if created:
+        group, group_created = Group.objects.get_or_create(name='project_admin')
+        assign_perm('project.change_project', group, instance)
+        assign_perm('project.delete_project', group, instance)
+        assign_perm('project.create_slice', group, instance)
+        assign_perm('project.delete_slice', group, instance)
+        assign_perm('project.edit_slice', group, instance)
+        instance.owner.groups.add(group)
         instance.add_member(instance.owner, True)
+
 
 @receiver(pre_delete, sender=Membership)
 def delete_invitation(sender, instance, **kwargs):

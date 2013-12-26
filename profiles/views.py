@@ -42,7 +42,7 @@ def reject(request, id=None):
         context['success_url'] = '/'
         #: send mail
         profile = user.get_profile()
-        profile.state = 2
+        profile.state = 1
         profile.save()
         send_mail(_("Account Review Result"), _("Sorry, we cannot let you pass the review according to your profile.If you have any question about the result, you can contact us by replying this email."), settings.DEFAULT_FROM_EMAIL, [user.email])
         return redirect('notifications:all')

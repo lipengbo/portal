@@ -13,7 +13,7 @@ from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
 import django_cron
-django_cron.autodiscover()
+#django_cron.autodiscover()
 #import xadmin
 #xadmin.autodiscover()
 

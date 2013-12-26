@@ -4,28 +4,14 @@
 <hr>
 <p>
     {% if notice.unread %}
-    <a class="muted pull-right" href="{% url 'notifications:mark_as_read' notice.slug %}">
-        <i class="icon-exclamation-sign">
+    <a class="muted pull-right text-success" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ notice.action_object.action_url }}">
+        <i class="icon-chevron-right">
         </i>
-        {% trans "Mark as read" %}
+         去处理
     </a>
     <i class="icon-envelope"></i>&nbsp;
     {% else %}
-        {% if notice.action_object.state %} 
-        <span class="pull-right">
-            {% if notice.actor|confirmation_email_sent and notice.verb == '注册了帐号' or notice.action_object.state == 1 %} 
-            <span class="text-success">
-            <i class="icon-ok-circle"></i>
-                已接受
-            </span>
-            {% else %}
-            <span class="text-error">
-            <i class="icon-remove-circle"></i>
-            已拒绝
-            </span>
-            {% endif %}
-        </span>
-        {% endif %}
+    <span class="text-success pull-right">已处理</span>
     <i class="icon-envelope-open"></i>&nbsp;
     {% endif %}
     {% if notice.unread %}<b>{% endif%}
@@ -37,15 +23,17 @@
     {% if notice.unread %}</b>{% endif%}
     <small class="muted">{{ notice.timesince }}{% trans "ago" %}</small>
 </p>
-{% if notice.description or notice.action_object.actions %}
+{% if notice.description %}
     <div class="well well-small">
         {% if notice.description %}{{ notice.description|linebreaksbr }}{% endif %}
     </div>
-    <div class="text-center actions">
-    {% for action in notice.action_object.actions %}
-    <a class="btn btn-{{ action.action_level }}" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ action.action_url|urlencode }}">{{ action.action_title }}</a>
-    {% endfor %}
-    </div>
+    {% comment %}
+        <div class="text-center actions">
+        {% for action in notice.action_object.actions %}
+        <a class="btn btn-{{ action.action_level }}" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ action.action_url|urlencode }}">{{ action.action_title }}</a>
+        {% endfor %}
+        </div>
+    {% endcomment %}
 {% endif %}
 <div class="notice-actions">
     {% for action in notice.data.actions %}
