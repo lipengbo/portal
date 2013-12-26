@@ -129,16 +129,15 @@ def delete_vm(request, vmid, flag):
     vm = VirtualMachine.objects.get(id=vmid)
     try:
         vm.delete()
-        if flag == '1':
-            return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
-        else:
-            return HttpResponse(json.dumps({'result': 0}))
-#             return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
-    except Exception, ex:
+        #if flag == '1':
+            #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+        #else:
+        return HttpResponse(json.dumps({'result': 0}))
+    except Exception:
         LOG.debug(traceback.print_exc())
-        if flag == '0':
-            return HttpResponse(json.dumps({'result': 1, 'error_info': str(ex)}))
-    return render(request, 'slice/warning.html', {'info': str(ex)})
+        #if flag == '0':
+        return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
+    #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
 
 
 def get_vms_state_by_sliceid(request, sliceid):

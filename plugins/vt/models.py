@@ -7,6 +7,7 @@ from django.contrib.contenttypes import generic
 from resources.models import IslandResource, Server, SwitchPort
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
+from plugins.openflow.models import Controller
 from plugins.common import utils
 from plugins.common.agent_client import AgentClient
 from django.utils.translation import ugettext as _
@@ -187,7 +188,7 @@ class HostMac(models.Model):
 @receiver(pre_save, sender=VirtualMachine)
 def vm_pre_save(sender, instance, **kwargs):
     if not instance.ip:
-        instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
     if not instance.mac:
@@ -205,8 +206,9 @@ def vm_post_save(sender, instance, **kwargs):
 @receiver(pre_delete, sender=VirtualMachine)
 def vm_pre_delete(sender, instance, **kwargs):
     instance.delete_vm()
-#     if instance.type == 0:
-#         instance.controller_set.all().delete()
+    if instance.type == 0:
+        controllers = Controller.objects.filter(object_id=instance.id)
+        controllers.delete()
 
 
 @receiver(post_delete, sender=VirtualMachine)

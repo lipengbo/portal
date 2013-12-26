@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('slice.views',
-    url(r'^list/(?P<proj_id>\d+)/$', "list", name='slice_list'),
+    url(r'^list/(?P<proj_id>\d+)/(?P<stype>\d+)/$', "list", name='slice_list'),
     url(r'^create/(?P<proj_id>\d+)/$', "create", name='create_slice'),
     url(r'^create_first/(?P<proj_id>\d+)/$', "create_first", name='create_first_slice'),
     url(r'^delete/(?P<slice_id>\d+)/$', "delete", name='delete_slice'),
@@ -10,7 +10,7 @@ urlpatterns = patterns('slice.views',
     url(r'^topology/(?P<slice_id>\d+)/$', "topology", name='slice_topology'),
     url(r'^edit_description/(?P<slice_id>\d+)/$', "edit_description", name='edit_slice_description'),
     url(r'^edit_controller/(?P<slice_id>\d+)/$', "edit_controller", name='edit_slice_controller'),
-    url(r'^check_slice_name/(?P<slice_name>\w+)/$', "check_slice_name", name='check_slice_name'),
+    url(r'^check_slice_name/$', "check_slice_name", name='check_slice_name'),
     url(r'^create_nw/(?P<owner>\w+)/(?P<nw_num>\w+)/$', "create_nw", name='create_nw'),
     url(r'^delete_nw/(?P<owner>\w+)/$', "delete_nw", name='delete_nw'),
     url(r'^get_show_slices/$', "get_show_slices", name='get_show_slices'),

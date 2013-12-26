@@ -175,8 +175,8 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.change_project', group, instance)
         assign_perm('project.delete_project', group, instance)
         assign_perm('project.create_slice', group, instance)
-        assign_perm('project.delete_slice', group, instance)
-        assign_perm('project.edit_slice', group, instance)
+        #assign_perm('project.delete_slice', group, instance)
+        #assign_perm('project.edit_slice', group, instance)
         instance.owner.groups.add(group)
         instance.add_member(instance.owner, True)
 

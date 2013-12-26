@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
+from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
 from plugins.openflow.flowvisor_api import flowvisor_del_slice
 
 import datetime
@@ -43,6 +44,7 @@ class Slice(models.Model):
                                default=SLICE_TYPE_USABLE)
     failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
+    uuid = models.CharField(max_length=36, null=True, unique=True)
 
     def created_date(self):
         return self.date_created
@@ -106,7 +108,6 @@ class Slice(models.Model):
         for switch in switches:
             if switch.is_virtual():
                 virtual_switches.append(switch.virtualswitch)
-        print virtual_switches
         return virtual_switches
 
     def get_virtual_switches_gre(self):
@@ -214,10 +215,6 @@ class Slice(models.Model):
         return dhcp_vm_macs
 
     def get_show_name(self):
-#         slice_names = self.name.split('_')
-#         if len(slice_names) > 1:
-#             del slice_names[-1]
-#         return ('_').join(slice_names)
         return self.show_name
 
     def be_count(self):
@@ -234,17 +231,24 @@ class Slice(models.Model):
 
     def delete(self, *args, **kwargs):
         try:
-            print "d1"
+            print "1:delete slice on flowvisor"
             flowvisor_del_slice(self.get_flowvisor(), self.id)
-            print "d2"
+            print "2:delete slice record"
             super(self.__class__, self).delete(*args, **kwargs)
-            print "d3"
+            print "3:delete slice record success"
         except Exception, ex:
-            print "d4"
+            print "4:delete slice failed and change slice record"
             self.failure_reason = str(ex)
-            self.type = 1
+            if self.type == 0:
+                self.type = 1
+                increase_failed_counter("slice")
+                decrease_counter_api("slice", self)
+            else:
+                decrease_failed_counter("slice", self)
+                increase_failed_counter("slice")
             self.date_expired = datetime.datetime.now()
             self.save()
+            print "5:raise exception"
             raise
 
     def __unicode__(self):
@@ -289,7 +293,7 @@ class SliceCount(models.Model):
 
 @receiver(pre_delete, sender=Slice)
 def pre_delete_slice(sender, instance, **kwargs):
-    print "delete pre"
+    print "pre delete slice"
     from slice.slice_api import delete_slice_api
     delete_slice_api(instance)
 

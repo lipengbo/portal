@@ -231,3 +231,6 @@ class ResourceNotEnough(CCFException):
 
 class ConnectionRefused(CCFException):
     message = _("connection refused")
+
+class FailedToAllocateResources(CCFException):
+    message = _("failed to allocate resources")
