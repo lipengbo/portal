@@ -171,13 +171,10 @@ class Membership(models.Model):
 @receiver(post_save, sender=Project)
 def create_owner_membership(sender, instance, created, **kwargs):
     if created:
-        group, group_created = Group.objects.get_or_create(name='project_admin')
-        assign_perm('project.change_project', group, instance)
-        assign_perm('project.delete_project', group, instance)
-        assign_perm('project.create_slice', group, instance)
-        #assign_perm('project.delete_slice', group, instance)
-        #assign_perm('project.edit_slice', group, instance)
-        instance.owner.groups.add(group)
+        owner = instance.owner
+        assign_perm('project.change_project', owner, instance)
+        assign_perm('project.delete_project', owner, instance)
+        assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
 
 
@@ -200,8 +197,8 @@ def delete_invitation_application(sender, instance, **kwargs):
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
     if created:
-        if instance.is_owner:
-            assign_perm('project.add_project', instance.user)
+        if not instance.is_owner:
+            assign_perm('project.create_slice', instance.user, instance.project)
 
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)
