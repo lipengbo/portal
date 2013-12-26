@@ -15,5 +15,7 @@ def confirmation_email_sent(user):
 
 @register.simple_tag(takes_context=True)
 def has_perm(context, user, perm, obj):
-    context['has_perm'] = user.has_perm("{}.{}".format(perm.content_type.app_label, perm.codename), obj)
+    if not isinstance(perm, unicode):
+        perm = "{}.{}".format(perm.content_type.app_label, perm.codename)
+    context['has_perm'] = user.has_perm(perm, obj)
     return ""

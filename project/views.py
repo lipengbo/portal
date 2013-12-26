@@ -96,11 +96,11 @@ def perm_admin(request, id, user_id):
     context['perms'] = perms
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
-        perms = request.POST.getlist('perm')
+        select_perms = request.POST.getlist('perm')
         user_perms = get_perms(user, project)
-        for user_perm in user_perms:
-            remove_perm(user_perm, user, project)
         for perm in perms:
+            remove_perm("{}.{}".format(perm.content_type.app_label, perm.codename), user, project)
+        for perm in select_perms:
             assign_perm(perm, user, project)
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
