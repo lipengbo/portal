@@ -26,11 +26,11 @@ default_flavor_id = 4
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
 #配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。
-gw_controller = True
+gw_controller = False
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = False
+function_test = True
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
 flowvisor_disable = True
 #本期可以不用部署vt_manager；当use_vt_manager_to_schedul = False不需部署vt_manager；当use_vt_manager_to_schedul = True需要部署vt_manager；

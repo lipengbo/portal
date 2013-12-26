@@ -146,8 +146,6 @@ class Project(models.Model):
         verbose_name = _("Project")
         permissions = (
                 ('create_slice', _("Can add Slice")),
-                ('delete_slice', _("Can delete Slice")),
-                ('edit_slice', _("Can edit Slice")),
                 #('manage_project_member', _('Manage Project Member')),
                 #('invite_project_member', _('Invite Project Member')),
                 #('dismiss_project_member', _('Dismiss Project Member')),
@@ -177,8 +175,8 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.change_project', group, instance)
         assign_perm('project.delete_project', group, instance)
         assign_perm('project.create_slice', group, instance)
-        assign_perm('project.delete_slice', group, instance)
-        assign_perm('project.edit_slice', group, instance)
+        #assign_perm('project.delete_slice', group, instance)
+        #assign_perm('project.edit_slice', group, instance)
         instance.owner.groups.add(group)
         instance.add_member(instance.owner, True)
 

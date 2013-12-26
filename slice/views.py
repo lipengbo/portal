@@ -23,6 +23,7 @@ from resources.models import SwitchPort
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
+from guardian.shortcuts import assign_perm, remove_perm, get_perms
 
 from slice.models import Slice, SliceDeleted
 
@@ -100,6 +101,8 @@ def create_first(request, proj_id):
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
+            assign_perm("slice.change_slice", user, slice_obj)
+            assign_perm("slice.view_slice", user, slice_obj)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -234,6 +237,13 @@ def detail(request, slice_id):
         context['extent_html'] = "admin_base.html"
     else:
         context['extent_html'] = "site_base.html"
+        if user.has_perm('slice.change_slice', slice_obj):
+            context['permission'] = "edit"
+        else:
+            if user.has_perm('slice.view_slice', slice_obj):
+                context['permission'] = "view"
+            else:
+                return redirect('forbidden')
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
@@ -245,7 +255,6 @@ def detail(request, slice_id):
     subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
-    context['permition'] = "view"
     return render(request, 'slice/slice_detail.html', context)
 
 
