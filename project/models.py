@@ -15,7 +15,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from django.core.mail import send_mail
 
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, remove_perm
 
 from invite.models import Invitation, Application
 from notifications import notify
@@ -177,6 +177,10 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
 
+
+@receiver(pre_delete, sender=Membership)
+def delete_permission(sender, instance, **kwargs):
+    remove_perm('project.create_slice', instance.user, instance.project)
 
 @receiver(pre_delete, sender=Membership)
 def delete_invitation(sender, instance, **kwargs):
