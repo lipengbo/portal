@@ -176,7 +176,10 @@ def list(request, proj_id, stype):
 @login_required
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
+    print "edit_description"
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.edit_slice', slice_obj):
+        return redirect('forbidden')
 #     if request.method == 'POST':
     slice_description = request.POST.get("slice_description")
     try:
@@ -195,6 +198,8 @@ def edit_controller(request, slice_id):
     """编辑slice控制器。"""
     print "edit_controller"
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.edit_slice', slice_obj):
+        return redirect('forbidden')
     controller_type = request.POST.get("controller_type")
     if controller_type == 'default_create':
         controller_sys = request.POST.get("controller_sys")
@@ -300,6 +305,8 @@ def delete(request, slice_id):
 def start_or_stop(request, slice_id, flag):
     """启动或停止slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.edit_slice', slice_obj):
+        return redirect('forbidden')
     try:
         if int(flag) == 1:
             start_slice_api(slice_obj)
