@@ -236,7 +236,7 @@ class Slice(models.Model):
             print "3:delete slice record success"
         except Exception, ex:
             print "4:delete slice failed and change slice record"
-            self.failure_reason = str(ex)
+            self.failure_reason = ex.message
             if self.type == 0:
                 self.type = 1
                 increase_failed_counter("slice")

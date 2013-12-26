@@ -10,7 +10,10 @@ from plugins.ipam.models import IPUsage
 from plugins.openflow.models import Controller
 from plugins.common import utils
 from plugins.common.agent_client import AgentClient
+from plugins.common.exception import ConnectionRefused
 from django.utils.translation import ugettext as _
+import errno
+from socket import error as socket_error
 from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
@@ -150,11 +153,15 @@ class VirtualMachine(IslandResource):
             agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
-        if function_test:
-            print '----------------------delete a vm=%s -------------------------' % self.name
-        else:
-            agent_client = AgentClient(self.server.ip)
-            agent_client.delete_vm(self.uuid)
+        try:
+            if function_test:
+                print '----------------------delete a vm=%s -------------------------' % self.name
+            else:
+                agent_client = AgentClient(self.server.ip)
+                agent_client.delete_vm(self.uuid)
+        except socket_error as serr:
+            if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+                raise ConnectionRefused()
 
     def do_action(self, action):
         if function_test:

@@ -14,10 +14,6 @@ from etc.config import function_test
 import errno
 from socket import error as socket_error
 
-
-from django.utils.translation import ugettext as _
-
-
 def create_vm_for_controller(island_obj, slice_obj, image_name):
     try:
         ip_obj = IPUsage.objects.allocate_ip_for_controller(island=island_obj)
