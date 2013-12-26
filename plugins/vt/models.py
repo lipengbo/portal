@@ -149,7 +149,6 @@ class VirtualMachine(IslandResource):
             agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
-        print 'in----------------------delete a vm-------------------------'
         if function_test:
             print '----------------------delete a vm=%s -------------------------' % self.name
         else:
@@ -162,7 +161,12 @@ class VirtualMachine(IslandResource):
             result = True
         else:
             agent_client = AgentClient(self.server.ip)
-            result = agent_client.do_domain_action(self.uuid, action)
+            switch_port = self.switch_port
+            if switch_port:
+                ofport = switch_port.port
+            else:
+                ofport = None
+            result = agent_client.do_domain_action(self.uuid, action, ofport)
         return result
 
     class Meta:
