@@ -158,10 +158,10 @@ function show_net_content(num){
 													 + data_process_unit(net_info_content[num][0], 'bit');
 	//alert(data_y[0]+" "+data_y[1]+" "+data_y[2]);
 
-	document.getElementById("id_net_send_bps").innerHTML = math_round(data_y[num][0]) + data_y[num][2];//net_info_content[num][1];
+	document.getElementById("id_net_send_bps").innerHTML = math_round(data_y[num][0]/3) + data_y[num][2];//net_info_content[num][1];
 	document.getElementById("id_net_recv").innerHTML = data_process(net_info_content[num][2])
 												 + data_process_unit(net_info_content[num][2], 'bit');
-	document.getElementById("id_net_recv_bps").innerHTML = math_round(data_y[num][1]) + data_y[num][2];//net_info_content[num][3];
+	document.getElementById("id_net_recv_bps").innerHTML = math_round(data_y[num][1]/3) + data_y[num][2];//net_info_content[num][3];
 	document.getElementById("net_unit").innerHTML = data_y[num][2];
 }
 

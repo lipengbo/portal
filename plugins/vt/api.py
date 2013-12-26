@@ -11,7 +11,7 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.exception import ResourceNotEnough, ConnectionRefused, FailedToAllocateResources
 from resources.models import Server
 from etc.config import function_test
-import errno
+import errno, traceback
 from socket import error as socket_error
 
 def create_vm_for_controller(island_obj, slice_obj, image_name):
@@ -42,13 +42,14 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
     except:
         raise FailedToAllocateResources()
     finally:
-        IPUsage.objects.release_ip(ip_obj)
+        traceback.print_exc()
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
     return vm, str(ip_obj)
 
 
 def delete_vm_for_controller(vm):
     vm.delete()
-
 
 def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway', enable_dhcp=True):
     try:
@@ -80,7 +81,9 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
     except:
         raise FailedToAllocateResources()
     finally:
-        IPUsage.objects.release_ip(ip_obj)
+        traceback.print_exc()
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
     return vm
 
 
