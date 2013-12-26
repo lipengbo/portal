@@ -287,7 +287,7 @@ function get_performace_data(host_id, vm_id){
 
 function init(host_id, vm_id){
 	get_performace_data(host_id, vm_id);
-	setTimeout(function(){init(host_id, vm_id)}, 1000);
+	setTimeout(function(){init(host_id, vm_id)}, 3000);
 }
 
 

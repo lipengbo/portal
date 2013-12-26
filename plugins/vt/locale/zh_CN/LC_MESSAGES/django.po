@@ -142,3 +142,6 @@ msgstr "大型"
 
 msgid "xlarge"
 msgstr "超大型"
+
+msgid "failed to allocate resources"
+msgstr "资源分配失败"
