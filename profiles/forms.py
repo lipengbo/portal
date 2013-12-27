@@ -18,7 +18,7 @@ class RejectForm(forms.Form):
 
 class UserForm(forms.ModelForm):
     
-    can_create_project = forms.BooleanField(initial=False, required=False)
+    can_create_project = forms.BooleanField(initial=False, required=False, label=_("Can add Project"))
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
