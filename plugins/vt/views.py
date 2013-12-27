@@ -18,7 +18,7 @@ from django.core.urlresolvers import reverse
 from etc.config import function_test
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
-from plugins.common.ovs_client import get_portid_by_name
+#from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
 from models import Image, Flavor
 from resources.models import Server, SwitchPort
@@ -41,7 +41,7 @@ def vm_list(request, sliceid):
     slice_obj = Slice.objects.get(id=sliceid)
     context['slice_obj'] = slice_obj
     context['check_vm_status'] = 0
-    subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
 
@@ -156,28 +156,31 @@ def get_slice_gateway_ip(request, slice_name):
 
 def set_domain_state(vname, state):
     try:
+        result = 1
         vm_query = VirtualMachine.objects.filter(uuid=vname)
         switch_port = None
-        if vm_query[0].type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
-            host = vm_query[0].server
-            slice = vm_query[0].slice
-            name = vm_query[0].name
+        vm = vm_query[0]
+        if vm.type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
+            host = vm.server
+            slice = vm.slice
+            name = vm.name
             switch = host.virtualswitch_set.all()[0]
-            used_ofport_list = [port for port in SwitchPort.objects.filter(switch=switch)]
-            free_ofport = list(set(range(60000, 65000)) - set(used_ofport_list))[0]
+            used_ofport_list = [port.port for port in SwitchPort.objects.filter(switch=switch)]
+            free_ofport = list(set(range(64500, 65000)) - set(used_ofport_list))[0]
             #port = get_portid_by_name(host.ip, vname)
             switch_port = SwitchPort(switch=switch, port=free_ofport, name=name)
             switch_port.save()
             slice.add_resource(switch_port)
-            result = True
     except IndexError:
-        result = False
+        result = 0
     except:
         LOG.debug(traceback.print_exc())
-        result = True
     finally:
         vm_query.update(state=state, switch_port=switch_port)
+        #if not api.try_start_gw_and_ctr(vm):
+            #LOG.error('try to start gw and controller failed')
         return result
+
 
 def get_flavor_msg(request):
     name = request.POST.get("name")

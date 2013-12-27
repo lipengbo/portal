@@ -169,7 +169,12 @@ class VirtualMachine(IslandResource):
             result = True
         else:
             agent_client = AgentClient(self.server.ip)
-            result = agent_client.do_domain_action(self.uuid, action, self.switch_port.port)
+            switch_port = self.switch_port
+            if switch_port:
+                ofport = switch_port.port
+            else:
+                ofport = None
+            result = agent_client.do_domain_action(self.uuid, action, ofport)
         return result
 
     class Meta:
