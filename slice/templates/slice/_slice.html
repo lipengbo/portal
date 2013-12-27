@@ -12,7 +12,7 @@
     href="/slice/detail/{{ slice.id }}/"{%else%}
     {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
     href="/slice/detail/{{ slice.id }}/"{%else%}
-    href="#"{%endif%}{%endif%}>
+    href="javascript:void(0)" disabled='true'{%endif%}{%endif%}>
         <div class="row-fluid slice_list">
             <div class="span5">
                 <div class="slice_left">
