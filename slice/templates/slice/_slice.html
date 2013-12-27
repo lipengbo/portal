@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load project_tags %}
 {% load common_tags %}
-<li class="span6 slice_topology slice_list" {% if extent_html == "site_base.html" and user != project.owner %}{% endif %}>
+<li class="span6 slice_topology slice_list" {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}>
     {% has_perm user 'slice.delete_slice' slice %}
     {% if has_perm %}
     <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
@@ -18,9 +18,9 @@
                 <div class="slice_left">
                     <img src="{% static slice.project.category.image %}" />
                     <ul>
-                        <li><i class="icon-file-alt icon-large"></i><b>{{ slice.get_show_name }}</b></li>
-                        <li><i class="icon-user icon-large"></i>{{ slice.owner }}</li>
-                        <li><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
+                        <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="icon-file-alt icon-large"></i><b>{{ slice.get_show_name }}</b></li>
+                        <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="icon-user icon-large"></i>{{ slice.owner }}</li>
+                        <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
                     </ul>
                     <div class="circle_bar">
                         <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
@@ -45,7 +45,7 @@
             <div class="span7">
                 <div class="slice_right">
                     <div>
-                    <iframe scrolling="no" id="topologyiframe" width="250" height="320" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=320&top=0" frameborder="0"></iframe>
+                    <iframe scrolling="no" id="topologyiframe" width="270" height="325" src="/slice/topology_d3/?slice_id={{slice.id}}&width=230&height=325&top=0" frameborder="0"></iframe>
                     </div>
                  <!--   <div class="slice_text">
                         {{slice.description}}
