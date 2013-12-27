@@ -26,6 +26,7 @@ import logging
 LOG = logging.getLogger("ccf")
 
 from etc import config
+# import time
 # from etc.config import slice_expiration_days
 
 
@@ -445,6 +446,7 @@ def get_links_max_bandwidths(switchs_ports):
 
 def get_slice_links_bandwidths(switchs_ports, maclist):
     print 'get_slice_links_bandwidths'
+#     time.sleep(15)
     ret = []
     for switch_ports in switchs_ports:
         try:
