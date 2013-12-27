@@ -121,7 +121,7 @@
 		         {% endfor %}
 		     </ul>
 		</div>
-		{%if  project.slice_set.count > 2 %}
+		{%if  project.get_slices.count > 2 %}
 		<a class="edit view_more" href="/slice/list/{{ project.id }}/0/">More&nbsp;<i class="icon-caret-right"></i></a>
         {%endif%}
   </fieldset>

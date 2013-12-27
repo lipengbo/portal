@@ -8,7 +8,7 @@
     <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
     {%endif%}
     <a class="thumbnail" 
-    {% has_perm user 'slice.view_slice' slice %}{% if has_perm %}
+    {% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
     href="/slice/detail/{{ slice.id }}/"{%else%}
     {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
     href="/slice/detail/{{ slice.id }}/"{%else%}
