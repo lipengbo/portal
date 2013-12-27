@@ -1,9 +1,18 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
+{% load common_tags %}
 <li class="span6 slice_topology slice_list" {% if extent_html == "site_base.html" and user != project.owner %}{% endif %}>
+    {% has_perm user 'slice.delete_slice' slice %}
+    {% if has_perm %}
     <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
-    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
+    {%endif%}
+    <a class="thumbnail" 
+    {% has_perm user 'slice.view_slice' slice %}{% if has_perm %}
+    href="/slice/detail/{{ slice.id }}/"{%else%}
+    {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
+    href="/slice/detail/{{ slice.id }}/"{%else%}
+    href="#"{%endif%}{%endif%}>
         <div class="row-fluid slice_list">
             <div class="span5">
                 <div class="slice_left">
