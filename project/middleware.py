@@ -22,5 +22,3 @@ class ExceptionAsMessageForAdmin(object):
     def process_exception(self, request, exception):
         if request.user.is_authenticated() and request.user.is_superuser:
             messages.error(request, exception)
-
-

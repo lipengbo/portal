@@ -23,3 +23,10 @@ msgstr "该%(field_label)s已存在。"
 
 msgid "e-mail address"
 msgstr "Email地址"
+
+
+msgid "Can change Project"
+msgstr "可以编辑项目"
+
+msgid "Can delete Project"
+msgstr "可以删除项目"

@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
-from plugins.openflow.flowvisor_api import flowvisor_del_slice
+from django.utils.translation import ugettext as _
+
 
 from project.models import Project, Island
 from plugins.ipam.models import Subnet
 from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
+from plugins.openflow.flowvisor_api import flowvisor_del_slice
 
 import datetime
 
@@ -252,6 +254,10 @@ class Slice(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        permissions = (
+            ('view_slice', _('View Slice')),
+        )
 
 class SliceDeleted(models.Model):
     name = models.CharField(max_length=256)

@@ -23,6 +23,7 @@ from resources.models import SwitchPort
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
+from guardian.shortcuts import assign_perm, remove_perm, get_perms
 
 from slice.models import Slice, SliceDeleted
 
@@ -34,6 +35,8 @@ import datetime
 def create(request, proj_id):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
+    if not request.user.has_perm('project.create_slice', project):
+        return redirect('forbidden')
     error_info = None
     islands = project.islands.all()
     if not islands:
@@ -100,6 +103,9 @@ def create_first(request, proj_id):
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
+            assign_perm("slice.change_slice", user, slice_obj)
+            assign_perm("slice.view_slice", user, slice_obj)
+            assign_perm("slice.delete_slice", user, slice_obj)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -172,7 +178,10 @@ def list(request, proj_id, stype):
 @login_required
 def edit_description(request, slice_id):
     """编辑slice描述信息。"""
+    print "edit_description"
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
 #     if request.method == 'POST':
     slice_description = request.POST.get("slice_description")
     try:
@@ -191,6 +200,8 @@ def edit_controller(request, slice_id):
     """编辑slice控制器。"""
     print "edit_controller"
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
     controller_type = request.POST.get("controller_type")
     if controller_type == 'default_create':
         controller_sys = request.POST.get("controller_sys")
@@ -234,6 +245,13 @@ def detail(request, slice_id):
         context['extent_html'] = "admin_base.html"
     else:
         context['extent_html'] = "site_base.html"
+        if user.has_perm('slice.change_slice', slice_obj):
+            context['permission'] = "edit"
+        else:
+            if user.has_perm('slice.view_slice', slice_obj):
+                context['permission'] = "view"
+            else:
+                return redirect('forbidden')
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
     context['controller'] = slice_obj.get_controller()
@@ -254,28 +272,28 @@ def delete(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     user = request.user
     project_id = slice_obj.project.id
-    if request.user.is_superuser or request.user == slice_obj.owner:
-        try:
-            slice_deleted = SliceDeleted(name = slice_obj.name,
-                show_name = slice_obj.show_name,
-                owner_name = slice_obj.owner.username,
-                description = slice_obj.description,
-                project_name = slice_obj.project.name,
-                date_created = slice_obj.date_created,
-                date_expired = slice_obj.date_expired)
-            if request.user.is_superuser:
-                slice_deleted.type = 1
-            else:
-                slice_deleted.type = 0
-            slice_obj.delete()
-        except Exception, ex:
-            pass
+    if not request.user.is_superuser:
+        if not user.has_perm('slice.delete_slice', slice_obj):
+            return redirect('forbidden')
+    try:
+        slice_deleted = SliceDeleted(name = slice_obj.name,
+            show_name = slice_obj.show_name,
+            owner_name = slice_obj.owner.username,
+            description = slice_obj.description,
+            project_name = slice_obj.project.name,
+            date_created = slice_obj.date_created,
+            date_expired = slice_obj.date_expired)
+        if request.user.is_superuser:
+            slice_deleted.type = 1
+        else:
+            slice_deleted.type = 0
+        slice_obj.delete()
+    except Exception, ex:
+        pass
 #             if request.user.is_superuser:
 #                 messages.add_message(request, messages.ERROR, ex)
-        else:
-            slice_deleted.save()
     else:
-        return redirect("forbidden")
+        slice_deleted.save()
     if 'next' in request.GET:
         if 'type' in request.GET:
             return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))
@@ -289,6 +307,8 @@ def delete(request, slice_id):
 def start_or_stop(request, slice_id, flag):
     """启动或停止slice。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
     try:
         if int(flag) == 1:
             start_slice_api(slice_obj)

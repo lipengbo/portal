@@ -102,6 +102,10 @@ class Invitation(Connection):
         notify.send(self.from_user, recipient=self.to_user, verb=_('invited you to join in'), action_object=self,
                 description=self.message, target=self.target)
 
+    @property
+    def action_url(self):
+        return reverse('project_detail', args=(self.target.id, ))
+
     class Meta:
         verbose_name = _("Invitation")
 
@@ -131,6 +135,10 @@ class Application(Connection):
     def send(self):
         notify.send(self.from_user, recipient=self.to_user, verb=_('applied to join in'), action_object=self,
                 description=self.message, target=self.target)
+
+    @property
+    def action_url(self):
+        return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
 
     class Meta:
         verbose_name = _("Application")
