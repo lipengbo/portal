@@ -9,7 +9,7 @@ import json
 import errno
 from socket import error as socket_error
 from plugins.common.exception import ResourceNotEnough
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
 from slice.models import Slice
@@ -30,12 +30,20 @@ LOG = logging.getLogger('plugins')
 
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
+    slice_obj = get_object_or_404(Slice, id=sliceid)
     context = {}
     user = request.user
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
     else:
         context['extent_html'] = "site_base.html"
+        if user.has_perm('slice.change_slice', slice_obj):
+            context['permission'] = "edit"
+        else:
+            if user.has_perm('slice.view_slice', slice_obj):
+                context['permission'] = "view"
+            else:
+                return redirect('forbidden')
     context['vms'] = vms
     context['sliceid'] = sliceid
     slice_obj = Slice.objects.get(id=sliceid)

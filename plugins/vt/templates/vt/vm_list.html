@@ -134,7 +134,11 @@
                                 </td>
 									
 						 			<td>
+										<!-- *normal user(start)* -->
 										{% if extent_html == "site_base.html" %}
+										<!-- *permission(start)* -->
+										{%if permission == "edit" %}
+										<!-- *slice state(start)* -->
 						 				{% if slice_obj.state == 1 %}
 						 					{%if vm.state == 1 %}
 		                                        <button type="button" onclick="do_vm_action('/plugins/vt/do/vm/action/{{ vm.id }}/destroy')" class="btn btn-danger stop_btn" >停止</button>
@@ -168,7 +172,19 @@
                                             {%else%}
                                                 <button type="button" disabled class="btn btn-delete btn-inverse">删除</button>
                                             {%endif%}
+										{%endif%}
+										<!-- *slice state (end)* -->
+										{%else%}
+    				 		         	<td>
+                                    		{% if vm.state == 8 %}
+                                    		<span id="vm_fc{{vm.id}}">
+                                        		<input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
+                                    		</span>
+                                    		{%endif%}
+                               			</td>
 		                				{%endif%}
+									<!-- *permission(end)* -->
+									<!-- *admin user* -->
 									{%else%}
 					 		   
 					 		        {% if vm.state == 8 %}
@@ -176,10 +192,11 @@
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
                                         <button type="button" onclick="" class="btn" disabled>监控</button>
                                     </span>
-                                    {%elif vm.state == 9 %} 
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>  
-                                    {%else%}
+									{%elif vm.state == 1%}
                                         <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
+                                    {%else %} 
+                                        <button type="button" onclick="" class="btn" disabled>监控</button>  
+                                    
                                     {%endif%}
                                     {% if slice_obj.state == 1 %}
                                         <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>删除</button>

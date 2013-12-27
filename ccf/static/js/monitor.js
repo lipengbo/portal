@@ -228,9 +228,8 @@ function get_performace_data(host_id, vm_id){
 								+ data_process(performace_data['disk_use']['used']) + data_process_unit(performace_data['disk_use']['used'], 'byte');
                 document.getElementById("disk_free").innerHTML ='<span style="background:#EEEE00;"></span>未使用 : '
 								+ data_process(performace_data['disk_use']['free']) + data_process_unit(performace_data['disk_use']['free'], 'byte');
-
-				disk_plot.series[0].data = [['已使用', data_process(performace_data['disk_use']['used'])],
-											['未使用', data_process(performace_data['disk_use']['free'])]];
+				disk_plot.series[0].data = [['已使用', performace_data['disk_use']['used']],
+											['未使用', performace_data['disk_use']['free']]];
 				disk_plot.replot();
 
                 var port_info_content = "";
