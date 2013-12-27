@@ -124,7 +124,7 @@ def list(request, proj_id, stype):
             if type == 0 or type == 1:
                 slice_objs = Slice.objects.filter(type=type)
             else:
-                slice_objs = SliceDeleted.objects.all()
+                slice_objs = SliceDeleted.objects.order_by('-id')
             context['type'] = type
             date_now = datetime.datetime.now()
             if context['type'] == 0:
