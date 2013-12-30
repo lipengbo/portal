@@ -40,7 +40,7 @@ def vm_list(request, sliceid):
         if user.has_perm('slice.change_slice', slice_obj):
             context['permission'] = "edit"
         else:
-            if user.has_perm('slice.view_slice', slice_obj):
+            if user.has_perm('project.create_slice', slice_obj.project):
                 context['permission'] = "view"
             else:
                 return redirect('forbidden')
