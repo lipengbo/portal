@@ -7,4 +7,3 @@ if [[ $IS_CREATE =~ ^[Yy](es)*$ ]]; then
 fi
 ./manage.py reset_domain
 ./manage.py collectstatic --noinput
-
