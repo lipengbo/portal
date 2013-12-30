@@ -7,7 +7,7 @@
                                 <img src="{% static project.category.image %}" />  
                                 <h5>名称：{{ project.name }}</h5>
                                 <h5>创建者：<small>{{ project.owner }}</small></h5>
-                                <h5>创建时间：<small>{{ project.created_time|date:"Y:m:d" }}</small></h5>
+                                <h5>创建时间：<small>{{ project.created_time|date:"Y.m.d" }}</small></h5>
                                 <h5>成员个数：<small>{{ project.membership_set.count }}</small></h5>
                                 <h5>Slice个数：<small>{{ project.get_slices.count }}</small></h5>
                                 <hr />

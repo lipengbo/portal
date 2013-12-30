@@ -85,7 +85,7 @@ function initboard2(){
           .attr('x', x_offset + 70)
           .attr('y', 35)
           .attr('style', "fill:black;font-size:8pt")
-          .text("0~30");
+          .text("10~30");
         svg_obj.append('svg:line')
           .attr('x1', x_offset + 115)
           .attr('y1', 30)
