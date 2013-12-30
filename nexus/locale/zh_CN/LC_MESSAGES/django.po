@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-04 09:57+0000\n"
+"POT-Creation-Date: 2013-12-27 15:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,31 +18,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: templates/nexus/add.html:9 templates/nexus/list.html:9
+#: templates/nexus/add.html:10 templates/nexus/list.html:20
 msgid "Admin"
 msgstr ""
 
-#: templates/nexus/add.html:11 templates/nexus/list.html:49
-#: templates/nexus/list.html.py:87
+#: templates/nexus/add.html:12 templates/nexus/list.html:171
+#: templates/nexus/list.html.py:175 templates/nexus/list.html:182
+msgid "Edit"
+msgstr "编辑"
+
+#: templates/nexus/add.html:12 templates/nexus/list.html:83
 msgid "Add"
 msgstr ""
 
-#: templates/nexus/add.html:21
+#: templates/nexus/add.html:24
+msgid "Accept"
+msgstr ""
+
+#: templates/nexus/add.html:25
+msgid "Reject"
+msgstr ""
+
+#: templates/nexus/add.html:27
 msgid "Save"
 msgstr "保存"
 
-#: templates/nexus/list.html:47 templates/nexus/list.html.py:85
+#: templates/nexus/list.html:81 templates/nexus/list.html.py:185
 msgid "Delete"
 msgstr "删除"
 
-#: templates/nexus/list.html:60
+#: templates/nexus/list.html:104
 msgid "Action"
 msgstr "操作"
 
-#: templates/nexus/list.html:82
+#: templates/nexus/list.html:161
 msgid "Monitor"
 msgstr "监控"
-
-#: templates/nexus/list.html:84
-msgid "Edit"
-msgstr "编辑"

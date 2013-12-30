@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-18 17:26+0800\n"
+"POT-Creation-Date: 2013-12-27 15:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,48 +18,53 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: forms.py:9
+#: forms.py:11
 msgid "Realm"
 msgstr "研究方向"
 
-#: forms.py:10 models.py:15 templates/profiles/_profile_info.html:4
+#: forms.py:12 models.py:17 templates/profiles/_profile_info.html:3
+#: templates/profiles/_profile_item.html:11
+msgid "Organization"
+msgstr "所属单位"
+
+#: forms.py:16
+msgid "Reason"
+msgstr "原因"
+
+#: forms.py:21
+msgid "Can add Project"
+msgstr "可以创建项目"
+
+#: models.py:16
+msgid "realm"
+msgstr "研究方向"
+
+#: models.py:18 templates/profiles/_profile_info.html:4
 #: templates/profiles/_profile_item.html:12
 msgid "Phone"
 msgstr "固定电话"
 
-#: forms.py:13
-msgid "Reason"
-msgstr "原因"
-
-#: models.py:14
-msgid "realm"
-msgstr "研究方向"
-
-#: models.py:28
+#: models.py:34
 msgid "Accept"
 msgstr ""
 
-#: models.py:33
+#: models.py:39
 msgid "Reject"
 msgstr ""
 
-#: views.py:46
+#: views.py:47
 msgid "Account Review Result"
 msgstr "SDN实验创新平台账号审核未通过"
 
-#: views.py:46
+#: views.py:47
 msgid ""
 "Sorry, we cannot let you pass the review according to your profile.If you "
 "have any question about the result, you can contact us by replying this "
 "email."
 msgstr ""
 "亲爱的用户，您好：\n"
-"    非常抱歉，根据您注册时提供的资料信息，您的帐号申请未能通过审核，如果您有任何疑问，请及时联系我们ccf@fnic.cn。\n"
+"    非常抱歉，根据您注册时提供的资料信息，您的帐号申请未能通过审核，如果您有"
+"任何疑问，请及时联系我们ccf@fnic.cn。\n"
 "    如果您没有进行注册，请忽略此邮件。\n"
 "\n"
 "SDN创新实验平台"
-
-#: templates/profiles/_profile_info.html:3
-#: templates/profiles/_profile_item.html:11
-msgid "Organization"
-msgstr "所属单位"
