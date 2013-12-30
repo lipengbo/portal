@@ -11,14 +11,11 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.exception import ResourceNotEnough, ConnectionRefused, FailedToAllocateResources
 from resources.models import Server
 from etc.config import function_test
-import errno
+import errno, traceback
 from socket import error as socket_error
 
-
-from django.utils.translation import ugettext as _
-
-
 def create_vm_for_controller(island_obj, slice_obj, image_name):
+    ip_obj = None
     try:
         ip_obj = IPUsage.objects.allocate_ip_for_controller(island=island_obj)
         vm = VirtualMachine(slice=slice_obj, island=island_obj, ip=ip_obj)
@@ -46,15 +43,17 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
     except:
         raise FailedToAllocateResources()
     finally:
-        IPUsage.objects.release_ip(ip_obj)
+        traceback.print_exc()
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
     return vm, str(ip_obj)
 
 
 def delete_vm_for_controller(vm):
     vm.delete()
 
-
 def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway', enable_dhcp=True):
+    ip_obj = None
     try:
         ip_obj = IPUsage.objects.allocate_ip(slice_obj.uuid)
         gateway_public_ip_obj = IPUsage.objects.allocate_ip_for_gw(island=island_obj)
@@ -84,7 +83,9 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
     except:
         raise FailedToAllocateResources()
     finally:
-        IPUsage.objects.release_ip(ip_obj)
+        traceback.print_exc()
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
     return vm
 
 

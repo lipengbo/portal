@@ -53,7 +53,6 @@ class Checkslice(Job):
                     print 3
                 except Exception, ex:
                     print 4
-                    print ex
                     pass
                 else:
                     print 5
