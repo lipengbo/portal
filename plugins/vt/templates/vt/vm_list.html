@@ -87,15 +87,25 @@
         </table>-->
         		<table class="table tooltip-demo">
         		    <thead>
-        		        <tr>
-        		            <th width="15%">名称</th>
-        		            <th width="11%">UUID</th>
-        		            <th width="15%">资源类型</th>
-        		            <th width="15%">IP地址</th>
-        		            <th width="15%">所属节点</th>
-							<th width="5%">状态</th>
-        		            <th width="25%">操作</th>
-        		        </tr>
+        		      <tr>
+                        {%if extent_html == "site_base.html" and permission == "edit" %}
+                            <th width="11%">名称</th>
+							<th width="15%">UUID</th>
+                            <th width="15%">资源类型</th>
+                            <th width="15%">IP地址</th>
+                            <th width="15%">宿主机</th>
+                            <th width="5%">状态</th>
+                            <th width="25%">操作</th>
+                        {%else%}
+                            <th width="11%">名称</th>
+							<th width="15%">UUID</th>
+                            <th width="20%">资源类型</th>
+                            <th width="15%">IP地址</th>
+                            <th width="15%">宿主机</th>
+                            <th width="5%">状态</th>
+                            <th width="20%">{%if extent_html == "admin_base.html" %}操作{%endif%}</th>
+                        {%endif%}
+                    </tr>
         		    </thead>
 				 	<tbody>
 				 		{%for vm in vms%}
