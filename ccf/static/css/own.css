@@ -6310,7 +6310,8 @@ table {
 .nexus-body .navbar-inverse .nav .device_menu > a,
 .notifications-body .navbar-inverse .nav .news_menu > a,
 .home-body .navbar-inverse .nav .index_menu > a,
-.django-body .navbar-inverse .nav .create_menu > a {
+.django-body .navbar-inverse .nav .create_menu > a,
+.nexus-body .navbar-inverse .nav .user_menu > a {
   color: #f89406;
   background-color: #000;
 }
@@ -6319,7 +6320,8 @@ table {
 .nexus-body .navbar-inverse .nav .device_menu > a:focus,
 .notifications-body .navbar-inverse .nav .news_menu > a:focus,
 .home-body .navbar-inverse .nav .index_menu > a:focus,
-.django-body .navbar-inverse .nav .create_menu > a:focus {
+.django-body .navbar-inverse .nav .create_menu > a:focus,
+.nexus-body .navbar-inverse .nav .user_menu > a:focus {
   color: #f89406;
   background-color: #000;
 }
@@ -6328,7 +6330,8 @@ table {
 .nexus-body .navbar-inverse .nav .device_menu > a .caret,
 .notifications-body .navbar-inverse .nav .news_menu > a .caret,
 .home-body .navbar-inverse .nav .index_menu > a .caret,
-.django-body .navbar-inverse .nav .create_menu > a .caret {
+.django-body .navbar-inverse .nav .create_menu > a .caret,
+.nexus-body .navbar-inverse .nav .user_menu > a .caret {
   border-top-color: #f89406;
   border-bottom-color: #f89406;
 }
