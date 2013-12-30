@@ -69,12 +69,20 @@
                             <div class="span2 counts">
                                 <div class="counts_block">
                                     <p><img src="{% static "img/file-01.png" %}"  /></p>
-                                    <p class="counts_block_title">新增虚网</p>
+                                    <p class="counts_block_title">
+                                    {%if type == 0 %}新增虚网数
+                                    {%else%}{% if type == 1 %}新删除失败虚网数
+                                    {%else%}新删除虚网数{%endif%}{%endif%}
+                                    </p>
                                     <p class="counts_block_nums">{{new_num}}</p>
                                 </div>
                                 <div class="counts_block">
                                     <p><img src="{% static "img/file-02.png" %}"  /></p>
-                                    <p class="counts_block_title">全部虚网</p>
+                                    <p class="counts_block_title">
+                                    {%if type == 0 %}虚网总数
+                                    {%else%}{% if type == 1 %}删除失败虚网总数
+                                    {%else%}已删除虚网总数{%endif%}{%endif%}
+                                    </p>
                                     <p class="counts_block_nums">{{total_num}}</p>
                                 </div>                                                 
                             </div>                        
