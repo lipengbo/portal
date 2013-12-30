@@ -7,12 +7,12 @@
     {% if has_perm %}
     <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
     {%endif%}
-    <a class="thumbnail" 
+    
     {% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
-    href="/slice/detail/{{ slice.id }}/"{%else%}
+    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">{%else%}
     {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
-    href="/slice/detail/{{ slice.id }}/"{%else%}
-    href="javascript:void(0)" disabled='true'{%endif%}{%endif%}>
+    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">{%else%}
+    <div class="thumbnail">{%endif%}{%endif%}
         <div class="row-fluid slice_list">
             <div class="span5">
                 <div class="slice_left">
@@ -53,5 +53,10 @@
                 </div>
             </div>
         </div>
-    </a>
+    
+    {% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
+    </a>{%else%}
+    {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
+    </a>{%else%}
+    </div>{%endif%}{%endif%}
 </li>
