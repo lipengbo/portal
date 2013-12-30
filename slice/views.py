@@ -124,7 +124,7 @@ def list(request, proj_id, stype):
             if type == 0 or type == 1:
                 slice_objs = Slice.objects.filter(type=type)
             else:
-                slice_objs = SliceDeleted.objects.all()
+                slice_objs = SliceDeleted.objects.order_by('-id')
             context['type'] = type
             date_now = datetime.datetime.now()
             if context['type'] == 0:
@@ -248,7 +248,7 @@ def detail(request, slice_id):
         if user.has_perm('slice.change_slice', slice_obj):
             context['permission'] = "edit"
         else:
-            if user.has_perm('slice.view_slice', slice_obj):
+            if user.has_perm('project.create_slice', slice_obj.project):
                 context['permission'] = "view"
             else:
                 return redirect('forbidden')
