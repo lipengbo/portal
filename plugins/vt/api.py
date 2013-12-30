@@ -35,14 +35,17 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         vm.type = 0
         vm.save()
     except socket_error as serr:
-        IPUsage.objects.release_ip(ip_obj)
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
             raise ConnectionRefused()
     except ResourceNotEnough:
-        IPUsage.objects.release_ip(ip_obj)
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise ResourceNotEnough()
     except:
-        IPUsage.objects.release_ip(ip_obj)
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise FailedToAllocateResources()
     finally:
         traceback.print_exc()
@@ -75,14 +78,17 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         vm.type = 2
         vm.save()
     except socket_error as serr:
-        IPUsage.objects.release_ip(ip_obj)
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
             raise ConnectionRefused()
     except ResourceNotEnough:
-        IPUsage.objects.release_ip(ip_obj)
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise ResourceNotEnough()
     except:
-        IPUsage.objects.release_ip(ip_obj)
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise FailedToAllocateResources()
     finally:
         traceback.print_exc()
