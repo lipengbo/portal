@@ -50,6 +50,14 @@
         }else{
             name = "虚网";
         }
+        var showtype = "新增";
+        if(stype == 0){
+            showtype = "新增";
+        }else if(stype == 1){
+            showtype = "删除失败";
+        }else{
+            showtype = "删除";
+        }
         var date=new Date;
         var year=date.getFullYear().toString();
         var month=(date.getMonth()+1).toString();
@@ -60,7 +68,7 @@
             if(target == "project"){
                 title = show_dates[0]+"-"+show_dates[9]+"每年新增项目数";
             }else{
-                title = show_dates[0]+"-"+show_dates[9]+"每年新增虚网数";
+                title = show_dates[0]+"-"+show_dates[9]+"每年"+showtype+"虚网数";
             }
         }else if(type == "month"){
             total_num = 12;
@@ -68,7 +76,7 @@
             if(target == "project"){
                 title = year + "年每月新增项目数";
             }else{
-                title = year + "年每月新增虚网数";
+                title = year + "年每月"+showtype+"虚网数";
             }
         }else{
             titshow = '<small>{point.key}日</small><br>'
@@ -77,7 +85,7 @@
             if(target == "project"){
                 title = year + "年" + month + "月每日新增项目数";
             }else{
-                title = year + "年" + month + "月每日新增虚网数";
+                title = year + "年" + month + "月每日"+showtype+"虚网数";
             }
         }
         $('#container').highcharts({
