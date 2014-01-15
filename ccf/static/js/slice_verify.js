@@ -186,7 +186,7 @@ function check_nw_num(){
     
     if(nw_num!=old_nw_num){
         if(old_slice_nw==''){
-            check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_uuid+"/"+nw_num+"/";
+            check_url = "http://" + window.location.host + "/slice/create_nw/0/"+nw_num+"/";
         }
         else{
             check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_uuid+"/"+nw_num+"/";

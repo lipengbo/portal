@@ -119,12 +119,11 @@ class FlowvisorLinksMd5(models.Model):
 def update_links(sender, instance, created, **kwargs):
     if settings.DEBUG and not hasattr(settings, "CAN_FETCH_FLOWVISOR"):
         return
-    from communication.flowvisor_client import FlowvisorClient
-
-    client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
+    from plugins.openflow.flowvisor_api import flowvisor_get_switches, flowvisor_get_links
+#     import pdb;pdb.set_trace()
     port_name_dict = {}
     try:
-        switches = client.get_switches()
+        switches = flowvisor_get_switches(instance)
     except Exception, e:
         print e
         return
@@ -136,7 +135,7 @@ def update_links(sender, instance, created, **kwargs):
                 port_name_dict[dpid][port['portNumber']] = port['name']
         create_virtualswitch(instance.island, switches)
     try:
-        links = client.get_links()
+        links = flowvisor_get_links(instance)
     except Exception, e:
         print e
         return
@@ -154,6 +153,7 @@ def update_links(sender, instance, created, **kwargs):
 
     #: delete all existing links and ports
     instance.link_set.all().delete()
+    
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
@@ -188,6 +188,14 @@ def update_links(sender, instance, created, **kwargs):
                 source=source_port,
                 target=target_port)
         link_obj.save()
+        
+    for dpid, port_entry in port_name_dict.items():
+        source_switch = Switch.objects.get(dpid=dpid)
+        for port_num, port_name in port_entry.items():
+            source_port, created = SwitchPort.objects.get_or_create(
+            switch=source_switch,
+            port=port_num,
+            defaults={'name': src_port_name})
         
 def create_virtualswitch(island, datapaths):
     for datapath in datapaths:

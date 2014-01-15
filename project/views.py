@@ -28,7 +28,6 @@ from invite.models import Invitation, Application
 from slice.models import Slice
 
 from resources.models import Switch, Server, VirtualSwitch
-from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 from common.models import  Counter
 
@@ -45,7 +44,6 @@ def home(request):
 
 @login_required
 def index(request):
-    
     context = {}
     user = request.user
     context = {}
@@ -441,15 +439,21 @@ def links_proxy(request, host, port):
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
 def links_direct(request, host, port):
+    from plugins.openflow.flowvisor_api import flowvisor_get_links
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    data = client.get_links()
+    try:
+        data = flowvisor_get_links(flowvisor)
+    except:
+        data = []
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def switch_direct(request, host, port):
+    from plugins.openflow.flowvisor_api import flowvisor_get_switches
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    json_data = client.get_switches()
+    try:
+        json_data = flowvisor_get_switches(flowvisor)
+    except:
+        json_data = []
     for i in range(len(json_data)):
         entry = json_data[i]
         dpid = entry['dpid']
@@ -471,6 +475,7 @@ def switch_direct(request, host, port):
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    """
     switch_ids_tuple = flowvisor.link_set.all().values_list(
             'source__switch__id', 'target__switch__id')
     switch_ids = set()
@@ -478,6 +483,8 @@ def switch_proxy(request, host, port):
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
     switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
+    """
+    switches = Switch.objects.filter(island=flowvisor.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()
