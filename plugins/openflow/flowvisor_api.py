@@ -1,7 +1,7 @@
 # coding:utf-8
 from communication.flowvisor_client import do_addSlice, do_updateSlice,\
     do_removeSlice, do_addFlowSpace, do_updateFlowSpace, do_removeFlowSpace,\
-    FlowvisorClient
+    do_listSlices, FlowvisorClient
 from slice.slice_exception import FlowvisorError, DbError
 from etc.config import flowvisor_or_cnvp
 from communication.cnvp_client import CnvpClient
@@ -18,9 +18,7 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
     if flowvisor_or_cnvp == "cnvp":
         print "cnvp"
         if flowvisor and controller:
-            print 1
             client = CnvpClient(flowvisor.ip, flowvisor.http_port)
-            print 2
             try:
                 client.add_slice(slice_name, controller.ip, controller.port)
             except:
@@ -37,6 +35,34 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
             adslice = do_addSlice(args, pwd, False, flowvisor_url, flowvisor_ps)
             if adslice == 'error':
                 raise FlowvisorError("虚网创建失败!")
+        else:
+            raise DbError("数据库异常")
+
+
+def flowvisor_show_slice(flowvisor, slice_name):
+    """获取flowvisor上添加信息
+    """
+    LOG.debug('flowvisor_show_slice')
+    slice_name = "slice" + str(slice_name)
+    if flowvisor_or_cnvp == "cnvp":
+        print "cnvp"
+        if flowvisor:
+            print 1
+            client = CnvpClient(flowvisor.ip, flowvisor.http_port)
+            print 2
+            try:
+                return client.show_slice(slice_name)
+            except:
+                raise
+        else:
+            raise DbError("数据库异常")
+    else:
+        if flowvisor:
+            flowvisor_url = "https://" + str(flowvisor.ip) + ":" + str(flowvisor.http_port) + ""
+            flowvisor_ps = str(flowvisor.password)
+            lislice = do_listSlices(flowvisor_url, flowvisor_ps)
+            if lislice == 'error':
+                raise FlowvisorError("获取虚网信息失败!")
         else:
             raise DbError("数据库异常")
 

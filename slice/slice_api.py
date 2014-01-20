@@ -194,6 +194,8 @@ def start_slice_api(slice_obj):
             try:
                 slice_obj.start()
                 if flowvisor_or_cnvp == "cnvp":
+                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+                                                  slice_obj.id, False)
                     update_slice_virtual_network(slice_obj)
                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                                   slice_obj.id, True)
@@ -248,7 +250,7 @@ def update_slice_virtual_network_cnvp_dn(slice_obj):
         raise
     switch_ports = slice_obj.get_switch_ports()
     dpids = []
-    macs = []
+    dhcp_macs = []
     for switch_port in switch_ports:
         flowvisor_add_port(flowvisor, slice_obj.id, switch_port.switch.dpid, switch_port.port)
         if switch_port.switch.type() == 3:
@@ -256,12 +258,12 @@ def update_slice_virtual_network_cnvp_dn(slice_obj):
                 dpids.append(switch_port.switch.dpid)
             vms = switch_port.virtualmachine_set.all()
             for vm in vms:
-                if (vm.type == 1 and vm.enable_dhcp and vm.mac) or vm.type == 2:
-                    macs.append(vm.mac)
+                if (vm.type == 1 and vm.enable_dhcp and vm.mac):
+                    dhcp_macs.append({'dpid': switch_port.switch.dpid, 'mac': vm.mac})
     slice_nw = slice_obj.get_nw()
     dhcp_tag = slice_obj.get_dhcp()
-    for dpid in dpids:
-        try:
+    try:
+        for dpid in dpids:
             arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
                              slice_nw, slice_nw, "", "", "", "")
             flowvisor_add_flowspace(flowvisor, None,
@@ -290,24 +292,24 @@ def update_slice_virtual_network_cnvp_dn(slice_obj):
                                     4, 'cdn%nf',
                                     dpid,
                                     100, arg_match)
-            if dhcp_tag:
-                for mac in macs:
-                    arg_match = matches_to_arg_match("", "", "", mac, "", "0x800",
-                                     "0.0.0.0", "255.255.255.255", "", "", "", "")
-                    flowvisor_add_flowspace(flowvisor, None,
-                                            slice_obj.id,
-                                            4, 'cdn%nf',
-                                            dpid,
-                                            100, arg_match)
-                arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                                 slice_nw, "255.255.255.255", "", "", "", "")
+        if dhcp_tag:
+            for dhcp_mac in dhcp_macs:
+                arg_match = matches_to_arg_match("", "", "", dhcp_mac['mac'], "", "0x800",
+                                 "0.0.0.0", "255.255.255.255", "", "", "", "")
                 flowvisor_add_flowspace(flowvisor, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
-                                        dpid,
+                                        dhcp_mac['dpid'],
                                         100, arg_match)
-        except:
-            raise
+#                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
+#                                  slice_nw, "255.255.255.255", "", "", "", "")
+#                 flowvisor_add_flowspace(flowvisor, None,
+#                                         slice_obj.id,
+#                                         4, 'cdn%nf',
+#                                         dpid,
+#                                         100, arg_match)
+    except:
+        raise
 
 
 def update_slice_virtual_network_cnvp_d(slice_obj):

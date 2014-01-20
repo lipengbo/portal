@@ -64,6 +64,29 @@ class CnvpClient(object):
             print "a6"
             raise FlowvisorError("虚网创建失败!")
 
+    def show_slice(self, slice_name):
+        try:
+            if slice_name:
+                cmd = "show slice -s " + str(slice_name)
+            else:
+                cmd = "show slice"
+            ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
+            if ret[0]["resultcode"] != 0:
+                raise FlowvisorError("虚网信息获取失败!")
+            else:
+                slices = []
+                if len(ret) > 1:
+                    for slice_ret in ret[1:]:
+                        slice = {'slice_name': slice_ret["slice_name"]}
+                        slice['controller_ip'] = slice_ret["controller_ip"]
+                        slice['controller_port'] = slice_ret["controller_port"]
+                        slice['state'] = slice_ret["slice_state_value"]
+                        slices.append(slice)
+                print slices
+                return slices
+        except:
+            raise FlowvisorError("虚网信息获取失败!")
+
     def change_slice_controller(self, slice_name, controller_ip, controller_port):
         try:
             cmd = "update slice -s " + str(slice_name) + " -t tcp -i " + \

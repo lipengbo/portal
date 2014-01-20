@@ -191,8 +191,12 @@ def do_removeSlice(args, flowvisor_url, flowvisor_ps):
 def do_listSlices(flowvisor_url, flowvisor_ps):
     data = connect("list-slices", flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     print 'Configured slices:'
-    for name in data:
-        print '{0:15} --> {1:8}'.format(name['slice-name'], 'enabled' if name['admin-status'] else 'disabled')
+    if data == "":
+        return "error"
+    else:
+        for name in data:
+            print '{0:15} --> {1:8}'.format(name['slice-name'], 'enabled' if name['admin-status'] else 'disabled')
+        return data
 
 
 def do_addFlowSpace(args, passwd, flowvisor_url, flowvisor_ps):
