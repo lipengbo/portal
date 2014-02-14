@@ -36,101 +36,61 @@
 </div>
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
-    <fieldset class="vm_info_list tooltip-demo">
+<fieldset class="">
     <legend>虚拟机信息</legend>
-    <div class="sec_block">
-	<a href="#" class="btn-delete close hide vm_block_del">×</a>
-    {% csrf_token %}
-  <div class="row-fluid vm_well_wrap"> 
-    <div class="span5 base_info">       
-    <table class="table">
-        <tbody>
-            <tr>
-                <td width="30%">名称</td>
-                <td>
-                    <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />
-                    <span name="nameInfo"></span>                         
-                </td>
-            </tr>
-            <tr>
-                <td>虚拟机类型</td>
-                <td>
-                    {{ vm_form.flavor }} <span name="flavorInfo"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>虚拟机镜像</td>
-                <td>
-                    {{ vm_form.image }} <span name="imageInfo"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>宿主机</td>
-                <td>
-                    {{ vm_form.server }} <span name="serverInfo"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    {% if slice_obj.get_dhcp %}
+    <table border="0">
+	<tr>
+		<td width="15%">类型：</td>
+		{%for flavor in flavors%}
+			<td width="15%">{% trans flavor.name %}</td>
+		{%endfor%}
+		<!--td width="25%">微型</td><td width="25%">中型</td><td width="25%">大型</td-->
+	</tr>
+	<tr>
+	<td>CPU：</td><td>1核</td><td>2核</td><td>4核</td><td>8核</td>
+	</tr>
+	<tr>
+	<td>内存：</td><td><input type="text" id="vm_mem"/></td>
+	</tr>
+	<tr>
+	<td>磁盘：</td><td></td>
+	</tr>
+	<tr>
+	<td>镜像：</td><td>{{ vm_form.image }} <span name="imageInfo"></span></td>
+	</tr>
+	<tr>
+	<td>宿主机：</td><td>{{ vm_form.server }} <span name="serverInfo"></span></td>
+	</tr>
+	</table>
+	
+	{% if slice_obj.get_dhcp %}
         <label class="">
             {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                                                     是否启动DHCP
         </label>
     {%endif%}
-    <!--div class="operate_btn">
-        <button class="btn btn-inverse del" type="button">删 除</button>
-    </div--> 
-    </div>     
-    
-    <div class="span7">
-    	<div class="vm_well">
-        	<table class="table table-bordered">
-            	<tbody>
-                	<!--    <tr>
-                     			<td width="80">类型</td>
-                                <td colspan="5"><span name="flavor_msg"></span></td>
-                            </tr>    -->    
-                 	<tr>
-                    	<td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
-                     	<td><span name="cpu"></span></td>
-               		</tr>
-                    <tr>
-                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
-                                       <td><span name="ram"></span></td>
-                                   </tr>
-                                   <tr>
-                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
-                                       <td><span name="hdd"></span></td>
-                                   </tr>
-							    <!--   <tr>
-                                      <td>宿主机</td>
-                                      <td colspan="5"><span name="server_msg"></span></td>
-                                   </tr>  
-                                   <tr>
-                                      <td>镜像</td>
-                                      <td colspan="5"><span name="image_msg"></span></td>
-                                   </tr>  -->      
-                                 
-                                   <tr>
-                                      <td><img src="{% static "img/vm_user.png" %}" width="20" />用户名</td>
-                                      <td colspan="5"><span name="username"><span></td>
-                                   </tr>
-                                   <tr>
-                                      <td><img src="{% static "img/vm_pw.png" %}" width="20" />密码</td>
-                                      <td colspan="5"><span name="password"></span></td>
-                                   </tr>
-                               </tbody>
-                           </table>
-                       </div>
-                   </div> 
-   </div>                
-   </div>   
-    </fieldset>
-    <p class="add_btn">
-		<button class="btn btn-info" type="button" id="show_topo">查看拓扑</button>
-		<button class="btn btn-info add" type="button">继续添加</button>
-	</p>
+	<a href="javascript:update_vms_info()">保存</a>
+	<hr/>
+</fieldset>
+
+<!-- 显示参数的表格 -->
+<table id="vms_info_table">
+<thead>
+	<tr>
+		<td width="10%">名称<td>
+		<td width="10%">类型<td>
+		<td width="10%">CPU<td>
+		<td width="10%">内存</td>
+		<td width="10%">磁盘</td>
+		<td width="20%">镜像</td>
+		<td width="10%">宿主机</td>
+		<td width="20%">操作</td>
+	</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+<hr>
     <div class="form-actions">
         <div class="row-fluid">
             <div class="span3"></div>
@@ -147,6 +107,7 @@
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script>

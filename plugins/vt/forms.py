@@ -19,9 +19,11 @@ class VmForm(forms.ModelForm):
 
     class Meta:
         model = VirtualMachine
-        fields = ("name", "flavor", "image", "server", "enable_dhcp")
+        #fields = ("name", "flavor", "image", "server", "enable_dhcp")
+        #fields = ("ram", "cpu", "hdd", "image", "server", "enable_dhcp")
+        fields = ("image", "server", "enable_dhcp")
         widgets = {
-            "flavor": forms.Select(attrs={'onblur': "check_vm_select('flavor')"}),
+            #"flavor": forms.Select(attrs={'onblur': "check_vm_select('flavor')"}),
             "image": forms.Select(attrs={'onblur': "check_vm_select('image')"}),
             "server": forms.Select(attrs={'onblur': "check_vm_select('server')"}),
         }

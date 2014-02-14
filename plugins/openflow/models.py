@@ -153,7 +153,7 @@ def update_links(sender, instance, created, **kwargs):
 
     #: delete all existing links and ports
     instance.link_set.all().delete()
-    
+
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
@@ -188,15 +188,15 @@ def update_links(sender, instance, created, **kwargs):
                 source=source_port,
                 target=target_port)
         link_obj.save()
-        
+
     for dpid, port_entry in port_name_dict.items():
         source_switch = Switch.objects.get(dpid=dpid)
         for port_num, port_name in port_entry.items():
             source_port, created = SwitchPort.objects.get_or_create(
             switch=source_switch,
             port=port_num,
-            defaults={'name': src_port_name})
-        
+            defaults={'name': port_name})
+
 def create_virtualswitch(island, datapaths):
     for datapath in datapaths:
         dpid = datapath['dpid']

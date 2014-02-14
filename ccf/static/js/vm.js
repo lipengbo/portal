@@ -479,3 +479,48 @@ function check_gw_select(){
 	}
 }
 
+
+
+var vms_info = TAFFY();
+var vm_id = 0;
+var vm_info_flag = "save";
+var update_vm = null;
+function update_vms_info(){
+	if (vm_info_flag == "save"){
+		var vm_info = {id:vm_id, name:$("#vm_mem").val()};
+		vms_info.insert(vm_info)
+		vm_id++;
+		
+	}else if (vm_info_flag == "update"){
+		if(update_vm != null){
+			update_vm.update({"name": $("#vm_mem").val()});
+			document.getElementById("vm_name_show_"+update_vm.first().id).innerHTML = $("#vm_mem").val();
+			vm_info_flag = "save";
+		}
+	}
+	show_vm_info_table();
+}
+
+
+function edit_vm(vm_id){
+	var vm = vms_info({id:vm_id}).first();
+	vm_info_flag = "update";
+	//替换上面的数据
+	$("#vm_mem").val(vm.name);
+	update_vm = vms_info({id:vm_id});
+}
+
+function delete_vm(vm_id){
+	vms_info({id:vm_id}).remove();
+	show_vm_info_table();
+}
+
+function show_vm_info_table(){
+	$("#vms_info_table").find("tbody").empty();
+	vms_info().each(function(vm){
+		$("#vms_info_table").find("tbody").append("<tr><td id='vm_name_show_"+vm.id+"'>"+vm.name+"</td><td><td/><td><td/><td><td/><td><td/><td><td/>"
+								+"<td><a href='javascript:edit_vm("+vm.id+")'>编辑</a><td/>"
+								+"<td><a href='javascript:delete_vm("+vm.id+")'>删除</a><td/></tr>");
+	});
+}
+
