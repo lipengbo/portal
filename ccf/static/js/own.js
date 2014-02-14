@@ -2,6 +2,7 @@ $(document).ready(function() {
 	//help页面滑动到顶部效果
 	$(".bs-docs-sidenav li a").click(function() {
 		var navHeight = $(".navbar").height();
+		aa = $($(this).attr("href")).offset().top - navHeight + "px";
 		$("html, body").animate({
 			scrollTop: $($(this).attr("href")).offset().top - navHeight + "px"
 			}, {
@@ -110,10 +111,7 @@ $(document).ready(function() {
         $('.switch-manifest tbody input').attr('disabled', '');
     });
     //slice步骤切换
-    $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
-
-
         $('.no-virtual-switch').hide();
         if ($(this).hasClass('btn-step2')) {
             var has_virtual_switch = false;

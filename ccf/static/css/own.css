@@ -5799,20 +5799,12 @@ table {
   border-bottom: 1px solid #ccc;
   margin-bottom: 0;
 }
-.index .banner .masthead h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: 5px;
-  font-family: "Microsoft YaHei";
-  margin-bottom: 40px;
-  font-weight: normal;
-}
-.index .banner .masthead p {
+.index .banner .inner p {
   font-size: 35px;
   line-height: 1.25;
   margin-bottom: 55px;
 }
-.index .banner .masthead .enter_btn a {
+.index .banner .inner .enter_btn a {
   line-height: normal;
   padding: 10px 45px;
   font-size: 20px;
@@ -6650,4 +6642,13 @@ a.button-royal:hover {
 }
 .nexus-body .help-block {
   font-style: italic;
+}
+.tooltip .tooltip-inner {
+  text-align: left;
+}
+.tab_part {
+  display: none;
+}
+.tab_part.tab_1 {
+  display: block;
 }
