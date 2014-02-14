@@ -195,7 +195,7 @@ def update_links(sender, instance, created, **kwargs):
             source_port, created = SwitchPort.objects.get_or_create(
             switch=source_switch,
             port=port_num,
-            defaults={'name': src_port_name})
+            defaults={'name': port_name})
         
 def create_virtualswitch(island, datapaths):
     for datapath in datapaths:

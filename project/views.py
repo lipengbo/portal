@@ -25,7 +25,7 @@ from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
-from slice.models import Slice
+from slice.models import Slice, SliceDeleted
 
 from resources.models import Switch, Server, VirtualSwitch
 from plugins.openflow.models import Flowvisor
@@ -314,6 +314,25 @@ def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.user.has_perm('project.delete_project', project):
         try:
+            slice_objs = project.slice_set.all()
+            for slice_obj in slice_objs:
+                try:
+                    slice_deleted = SliceDeleted(name = slice_obj.name,
+                        show_name = slice_obj.show_name,
+                        owner_name = slice_obj.owner.username,
+                        description = slice_obj.description,
+                        project_name = slice_obj.project.name,
+                        date_created = slice_obj.date_created,
+                        date_expired = slice_obj.date_expired)
+                    if request.user.is_superuser:
+                        slice_deleted.type = 1
+                    else:
+                        slice_deleted.type = 0
+                    slice_obj.delete()
+                except Exception, ex:
+                    pass
+                else:
+                    slice_deleted.save()
             project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)

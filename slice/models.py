@@ -300,7 +300,7 @@ def pre_delete_slice(sender, instance, **kwargs):
 
 # @receiver(post_delete, sender=Slice)
 # def post_delete_slice(sender, instance, **kwargs):
-#     print "delete post"
+#     print "post delete slice"
 #     if instance.id:
 #         print "s1"
 #     else:

@@ -24,7 +24,7 @@ THE SOFTWARE.
 from django.dispatch import dispatcher
 from django.conf import settings
 from threading import Timer
-from datetime import datetime
+import datetime
 from signals import cron_done
 import models
 import cPickle
@@ -44,6 +44,7 @@ class Job(object):
     run_every = 86400
 
     def run(self, *args, **kwargs):
+#         print "++++++++++++++++++++++++run"
         self.job()
         cron_done.send(sender=self, *args, **kwargs)
 
@@ -59,7 +60,7 @@ class CronScheduler(object):
         """
         Register the given Job with the scheduler class
         """
-
+        print "register"
         job_instance = job_class()
 
         if not isinstance(job_instance, Job):
@@ -72,6 +73,7 @@ class CronScheduler(object):
         job.args = cPickle.dumps(args)
         job.kwargs = cPickle.dumps(kwargs)
         job.run_frequency = job_instance.run_every
+        job.last_run = datetime.datetime.now() + datetime.timedelta(seconds=1)
         job.save()
         status, created = models.Cron.objects.get_or_create(pk=1)
         if status.executing:
@@ -95,31 +97,35 @@ class CronScheduler(object):
         if DEBUG == True:
             pdb.set_trace()
         if status.executing:
+#             print "++++++++++1"
             return
 
         status.executing = True
         try:
             status.save()
         except:
+#             print "save error +++++++++++"
             # this will fail if you're debugging, so we want it
             # to fail silently and start the timer again so we
             # can pick up where we left off once debugging is done
             Timer(polling_frequency, self.execute).start()
             return
-
+#         print "+++++++++++++++++++++++++2"
         jobs = models.Job.objects.all()
         for job in jobs:
+#             print "+++++++++++++++++++++++++3"
             job.queued = True
             job.save()
             if job.queued:
-                time_delta = datetime.now() - job.last_run
+#                 print "+++++++++++++++++++++++++4"
+                time_delta = datetime.datetime.now() - job.last_run
                 if time_delta.seconds > job.run_frequency:
                     inst = cPickle.loads(str(job.instance))
                     args = cPickle.loads(str(job.args))
                     kwargs = cPickle.loads(str(job.kwargs))
                     try:
                         inst.run(*args, **kwargs)
-                        job.last_run = datetime.now()
+                        job.last_run = datetime.datetime.now()
                         job.save()
                     except Exception:
                         # if the job throws an error, just remove it from

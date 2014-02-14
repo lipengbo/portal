@@ -26,7 +26,7 @@ class Checkslice(Job):
         #check_feedback_mailbox()
         if DEBUG == True:
             pdb.set_trace()
-#         print "timer ******"
+#         print "+++++++++++++++++++++job"
 #         print "before time"
         slices = Slice.objects.filter(type=0)
         #user = request.user

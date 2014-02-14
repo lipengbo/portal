@@ -246,6 +246,8 @@ def detail(request, slice_id):
         context['extent_html'] = "admin_base.html"
     else:
         context['extent_html'] = "site_base.html"
+        if slice_obj.type == 1:
+            raise Http404('Slice has been deleted.')
         if user.has_perm('slice.change_slice', slice_obj):
             context['permission'] = "edit"
         else:
