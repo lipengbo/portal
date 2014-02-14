@@ -24,7 +24,7 @@ function check_slice_name(obj_id,flag){
         		return false;
         	}
         	else{
-        		showInfo(info,"√","green");
+        		showInfo(info," ","green");
         		return true;
         	}
        // }
@@ -44,7 +44,7 @@ function check_slice_description(obj_id,flag){
         return false;
 	}
 	else{
-		showInfo(info,"√","green");
+		showInfo(info," ","green");
         return true;
 	}
 }
@@ -58,7 +58,7 @@ function check_island_id(obj_id){
 		return false;
 	}
 	else{
-		showInfo(info,"√","green");
+		showInfo(info," ","green");
 		return true;
 	}
 }
@@ -111,7 +111,7 @@ function check_ip(ip,flag){
 		//alert(ip);
 		if(reg.test(ip)){
 			if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
-				showInfo(info,"√","green")
+				showInfo(info," ","green")
 				return true;
 			}
 		}
@@ -144,7 +144,7 @@ function check_port(port,flag){
 			return false;
 		}
 		else{
-			showInfo(info,"√","green");
+			showInfo(info," ","green");
 			return true;
 		}	
 	}
@@ -174,6 +174,7 @@ function check_nw_num(){
     var slice_name_obj = document.getElementById("slice_name");
     var old_nw_owner_obj = document.getElementById("old_nw_owner");
     var slice_nw_obj = document.getElementById("slice_nw");
+    var slice_nw_input_obj = document.getElementById("slice_nw_input");
     
     var user_id_obj = document.getElementById("user_id");
     var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
@@ -207,13 +208,14 @@ function check_nw_num(){
                 else{
                     //alert(3);
                     slice_nw_obj.innerHTML = data.value;
+                    slice_nw_input_obj.value = data.value;
                     old_slice_nw_obj.value = data.value;
                     setTimeout("nw_timeout()",1750000);
                     
                     slice_uuid_obj.value = data.owner
                     old_nw_owner_obj.value = slice_name;
                     old_nw_num_obj.value = nw_num;
-                    showInfo(info,"√","green");
+                    showInfo(info," ","green");
                     //alert(5);
                     ajax_ret = true;
                 }
@@ -232,7 +234,7 @@ function check_nw_num(){
     }
     else{
         //alert(4);
-        showInfo(info,"√","green");
+        showInfo(info," ","green");
         return true;
     }
 }
@@ -289,7 +291,7 @@ function check_nw_num1(){
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
-	    			showInfo(info,"√","green");
+	    			showInfo(info," ","green");
 	    			//alert(5);
 	    			ajax_ret = true;
 	            }
@@ -308,7 +310,7 @@ function check_nw_num1(){
 	}
 	else{
 		//alert(4);
-		showInfo(info,"√","green");
+		showInfo(info," ","green");
 		return true;
 	}
 }
@@ -398,7 +400,7 @@ function check_gw_ip(flag){
             masks = maskint_to_maskstr(mask);
             cur_ips = nw_ip.split(".");
             if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
-                showInfo(info,"√","green");
+                showInfo(info," ","green");
                 return true;
             }
         }
@@ -437,7 +439,7 @@ function check_dhcp_ip(flag){
                 des_ip = des_obj.value; 
                 cur_ips = des_ip.split(".");
                 if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
-                    showInfo(info,"√","green");
+                    showInfo(info," ","green");
                     return true;
                 }
             }
