@@ -14,4 +14,5 @@ urlpatterns = patterns('project.views',
     url(r'^invite/(?P<id>\d+)/$', "invite", name='project_invite'),
     url(r'^member/(?P<id>\d+)/$', "member", name='project_member'),
     url(r'^perm/(?P<id>\d+)/(?P<user_id>\d+)/$', "perm_admin", name='project_perm'),
+    url(r'^delete-notifications/$', "delete_notifications", name='delete_notifications'),
 )

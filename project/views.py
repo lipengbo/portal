@@ -31,6 +31,7 @@ from resources.models import Switch, Server, VirtualSwitch
 from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 from common.models import  Counter
+from notifications.models import Notification
 
 
 def home(request):
@@ -529,3 +530,13 @@ def manage_index(request):
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")
+
+@login_required
+def delete_notifications(request):
+    user = request.user
+    notifications = Notification.objects.filter(recipient=user)
+    if request.method == 'POST':
+        notice_ids = request.POST.getlist('notification_id')
+        notifications = notifications.filter(id__in=notice_ids)
+    notifications.delete()
+    return redirect('notifications:all')
