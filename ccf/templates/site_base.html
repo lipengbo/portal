@@ -102,8 +102,13 @@
 		    <div class="push"></div>
 		{% endblock %}
 		
-		{% block script_base %}
+		{% block script_base %}		    
             <script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
+            <!--[if IE]>
+                <script type="text/javascript" src="{{ STATIC_URL}}js/html5.js"></script>
+                <script type="text/javascript" src="{{ STATIC_URL}}js/excanvas.js"></script>
+            <![endif]-->
+            <script src="{{ STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js"></script>
             <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
             <script src="{% static "pinax/js/theme.js" %}"></script>
             <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>

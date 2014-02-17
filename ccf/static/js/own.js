@@ -2,6 +2,7 @@ $(document).ready(function() {
 	//help页面滑动到顶部效果
 	$(".bs-docs-sidenav li a").click(function() {
 		var navHeight = $(".navbar").height();
+		aa = $($(this).attr("href")).offset().top - navHeight + "px";
 		$("html, body").animate({
 			scrollTop: $($(this).attr("href")).offset().top - navHeight + "px"
 			}, {
@@ -110,10 +111,7 @@ $(document).ready(function() {
         $('.switch-manifest tbody input').attr('disabled', '');
     });
     //slice步骤切换
-    $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
-
-
         $('.no-virtual-switch').hide();
         if ($(this).hasClass('btn-step2')) {
             var has_virtual_switch = false;
@@ -250,7 +248,17 @@ $(document).ready(function() {
 	//创建虚拟机时显示拓扑
 	$("#show_topo").on("click", function(){
 		show_topology();
-	})
+	});
+	
+	//创建虚拟机页面类型、cpu选择
+	$(".type_chose a").click(function(){
+	    $(".type_chose a").removeClass("vm_active");
+	    $(this).addClass("vm_active");
+	});
+	$(".cpu_chose a").click(function(){
+        $(".cpu_chose a").removeClass("vm_active");
+        $(this).addClass("vm_active");
+    });
 });
 
 
