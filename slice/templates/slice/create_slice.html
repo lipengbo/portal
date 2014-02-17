@@ -188,7 +188,7 @@
              
              <div class="tab_part">
               <fieldset class="base_info tooltip-demo">
-                <legend>网络地址</legend>
+                <legend>网络地址配置</legend>
                 <table class="table">
                     <tbody>
                         <tr>
@@ -224,7 +224,7 @@
                                   <option value="POX">POX</option>
                                   <option value="OpenDaylight">OpenDaylight</option>
                                 </select>
-                                <a href="javascript:void(0);" title="此处默认创建Floodlight控制器" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -264,14 +264,14 @@
                               
                                 </select>
 								
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="icon-question-sign icon-align-left"></i></a>
 								<span id="gwInfo"></span>
                             </td>
                         </tr>
                         <tr>
                             <td>网关IP地址</td>
                             <td><input type="text" id="gateway_ip" disabled/>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="icon-question-sign icon-align-left"></i></a>
                                 <span id="gw_ipInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
@@ -326,11 +326,7 @@
              </div>     
              <div class="tab_part">
                  <fieldset class="vm_info_list tooltip-demo">
-                     <div class="vm_info_title">
-                         <div class="vm_info_title_left"><legend>虚拟机信息</legend></div>
-                         <div class="vm_info_title_right"><legend>虚拟机配置</legend></div>
-                     </div>
-                 
+                     <legend>虚拟机配置</legend>                 
 				<!-- 拓扑图 -->
 				<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 					<div class="modal-header">
@@ -338,113 +334,137 @@
         				<h4 class="modal-title" >当前已选节点资源</h4>
     				</div>
     				<div class="modal-body" id="topology_info">
-					<div class="row-fluid">
-        				<div class="span8">
-        					<iframe scrolling="no" id="topologyiframe" width="530" height="305"  frameborder="0"></iframe>
-         				</div>
-         			</div>  
-				</div>                
-			</div>
-                 <div class="sec_block"> 
-                   <a href="javascript:void(0);" class="btn-delete close hide vm_block_del">×</a>
-                   <div class="row-fluid vm_well_wrap"> 
-                     <div class="span5 base_info">        
-    		          <table class="table">             
-                        <tbody>
-                            <tr>
-                                <td width="30%">名称</td>
-                                <td>
-    				                <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />									<span name="nameInfo"></span>
-                                </td>                           
-                            </tr>
-                            <tr>
-                                <td>虚拟机类型</td>
-                                <td>
-                                    {{ vm_form.flavor }} <span name="flavorInfo"></span>                              
-                                    				
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>虚拟机镜像</td>
-                                <td>
-                                    {{ vm_form.image }} <span name="imageInfo"></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>宿主机</td>
-                                <td>
-                                    <select onblur="check_vminfo()" name="server" id="id_server">
-                                    </select>
-									<span name="serverInfo"></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                     </table>
-					<div name="dhcp">                                
-                     <label class="inline tab_checkbox">
-                                    {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                     </label>是否启动DHCP
-					</div>
-                    <!-- <div class="operate_btn">
-                        <button class="btn btn-inverse del" type="button">删 除</button>
-                     </div>   -->
-                   </div>
-                   <div class="span7">
-                       <div class="vm_well">
-                           <table class="table table-bordered">
-                               <tbody>
-                               <!--    <tr>
-                                      <td width="80">类型</td>
-                                      <td colspan="5"><span name="flavor_msg"></span></td>
-                                   </tr>    -->    
-                                   <tr>
-                                       <td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
-                                       <td><span name="cpu"></span></td>
-                                   </tr>
-                                   <tr>
-                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
-                                       <td><span name="ram"></span></td>
-                                   </tr>
-                                   <tr>
-                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
-                                       <td><span name="hdd"></span></td>
-                                   </tr>
-							    <!--   <tr>
-                                      <td>宿主机</td>
-                                      <td colspan="5"><span name="server_msg"></span></td>
-                                   </tr>  
-                                   <tr>
-                                      <td>镜像</td>
-                                      <td colspan="5"><span name="image_msg"></span></td>
-                                   </tr>  -->      
-                                 
-                                   <tr>
-                                      <td><img src="{% static "img/vm_user.png" %}" width="20" />用户名</td>
-                                      <td colspan="5"><span name="username"><span></td>
-                                   </tr>
-                                   <tr>
-                                      <td><img src="{% static "img/vm_pw.png" %}" width="20" />密码</td>
-                                      <td colspan="5"><span name="password"></span></td>
-                                   </tr>
-                               </tbody>
-                           </table>
-                       </div>
-                   </div> 
-                 </div>                
-               </div>          
-              </fieldset>
-              <p class="add_btn">
-				<button class="btn btn-info" type="button" id="show_topo">查看拓扑</button>
-				<button class="btn btn-info add" type="button">继续添加</button>
-			  </p>               
-              <div class="form-actions">
+    					<div class="row-fluid">
+            				<div class="span8">
+            					<iframe scrolling="no" id="topologyiframe" width="530" height="305"  frameborder="0"></iframe>
+             				</div>
+             			</div>  
+				    </div>                
+			     </div>
+			     <table cellpadding="0" cellspacing="0" class="create_vm_form">
+			         <tbody>
+			             <tr>
+			                 <td width="86"><img src="/site_media/static/img/icon_type.png" width="24">类型</td>
+			                 <td class="type_chose">
+			                     <a href="javascript:void(0);" class="vm_active">微型</a>
+			                     <a href="javascript:void(0);">迷你型</a>
+			                     <a href="javascript:void(0);">小型</a>
+			                     <a href="javascript:void(0);">中型</a>
+			                     <a href="javascript:void(0);">大型</a>	
+			                     <button type="button" class="btn btn-info" style="float:right;">保存</button>                     
+			                 </td>
+			             </tr>
+			             <tr>
+                             <td><img src="/site_media/static/img/icon_cpu.png" width="24">CPU</td>
+                             <td class="cpu_chose">
+                                 <a href="javascript:void(0);" class="vm_active">1 核</a>
+                                 <a href="javascript:void(0);" >2 核</a>
+                                 <a href="javascript:void(0);" >4 核</a>
+                                 <a href="javascript:void(0);" >8 核</a>    
+                             </td>
+                         </tr>
+                         <tr>
+                             <td><img src="/site_media/static/img/icon_nc.png" width="24">内存</td>
+                             <td class="slider_td">
+                                 <div id="cpu_slider" class="ui-slider">                                                                      
+                                 </div>
+                                 <div class="cpu_value">
+                                       <span>128MB</span>
+                                       <span style="margin-left:65px;">256MB</span>
+                                       <span style="margin-left:60px;">512MB</span>
+                                       <span style="margin-left:69px;">1G</span>
+                                       <span style="margin-left:86px;">2G</span>
+                                       <span style="margin-left:85px;">3G</span>
+                                       <span style="margin-left:85px;">4G</span>
+                                 </div>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td><img src="/site_media/static/img/icon_cp.png" width="24">磁盘</td>
+                             <td class="slider_td">
+                                 <div id="disk_slider" class="ui-slider ui_defined">                                                                      
+                                 </div>
+                                 <div class="disk_value">
+                                       <span>10G</span>
+                                       <span style="margin-left:135px;">20G</span>
+                                       <span style="margin-left:130px;">30G</span>
+                                       <span style="margin-left:130px;">40G</span>
+                                       <span style="margin-left:132px;">50G</span>
+                                 </div>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td><img src="/site_media/static/img/icon_iso.png" width="24">镜像</td>
+                             <td>
+                                  <select onblur="check_vm_select('image')" name="image" id="id_image">
+                                    <option value="" selected="selected">---------</option>
+                                    <option value="51">1</option>
+                                  </select> <span name="imageInfo"></span>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td><img src="/site_media/static/img/icon_host.png" width="24">宿主机</td>
+                             <td>
+                                 <select onblur="check_vminfo()" name="server" id="id_server">
+                                     <option value="" selected="selected">---------</option>
+                                     <option value="1">server1</option>
+                                 </select>
+                                 <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
+                             </td>
+                         </tr>
+                         <tr>
+                             <td colspan="2">
+                                 <div name="dhcp">                                
+                                     <label class="inline tab_checkbox">
+                                                    {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+                                     </label>是否启动DHCP
+                                 </div>
+                             </td>
+                         </tr>
+			         </tbody>
+			     </table>
+			     
+			     <div class="form-actions">
                   <div class="row-fluid">
                     <div class="span3"></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-info prev_btn">上一步</button></div>
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-step4 btn-info next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
-              </div>
+                 </div>
+			     
+			     <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                            <th>名称</th>
+                            <th>类型</th>
+                            <th>CPU</th>
+                            <th>内存</th>
+                            <th>磁盘</th>
+                            <th>镜像</th>
+                            <th>宿主机</th>
+                            <th>操作</th>
+                          </tr>  
+                      </thead>
+                      <tbody>
+                          <tr>
+                            <td>VM1</td>
+                            <td>微型</td>
+                            <td>1核</td>
+                            <td>256MB</td>
+                            <td>30G</td>
+                            <td>ubuntu</td>
+                            <td>wxg</td>
+                            <td>
+                                <div class="btn-group">
+                                  <button class="btn">编辑</button>
+                                  <button class="btn">删除</button>
+                                </div>
+                            </td>
+                          </tr>  
+                      </tbody>
+                 </table>                                
+              </fieldset>           
              </div>
              <div class="tab_part">
                  <fieldset>
@@ -590,6 +610,7 @@
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
         $("#ipInput").ipInput();                

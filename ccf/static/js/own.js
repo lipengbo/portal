@@ -248,7 +248,17 @@ $(document).ready(function() {
 	//创建虚拟机时显示拓扑
 	$("#show_topo").on("click", function(){
 		show_topology();
-	})
+	});
+	
+	//创建虚拟机页面类型、cpu选择
+	$(".type_chose a").click(function(){
+	    $(".type_chose a").removeClass("vm_active");
+	    $(this).addClass("vm_active");
+	});
+	$(".cpu_chose a").click(function(){
+        $(".cpu_chose a").removeClass("vm_active");
+        $(this).addClass("vm_active");
+    });
 });
 
 
