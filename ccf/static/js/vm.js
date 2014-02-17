@@ -1,10 +1,12 @@
+var vms_info = TAFFY();
+
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
-        var name = check_vm_name('name');
-        flavor = check_vm_select('flavor');
+        //var name = check_vm_name('name');
+       // flavor = check_vm_select('flavor');
         image = check_vm_select('image');
         server = check_vm_select('server');
-        return name && flavor && image && server
+        return image && server
 }
 
 function check_vm_name(obj){
@@ -230,22 +232,29 @@ function insert_content_to_obj1(obj, content)
 var post_vm_result = true;
 function submit_vms(sliceid)
 {
-		//var result;
+		/*var result;
         var objs = document.getElementsByName('name');
         name_value = get_value_from_obj('name');
         flavor_text = get_value_from_select('flavor');
         image_text = get_value_from_select('image');
         server_text = get_value_from_select('server');
         enable_dhcp_value = get_checked_value_from_checkbox('enable_dhcp');
-        for(var i=0; i < objs.length; i++)
-        {
-                 post_vminfo(sliceid, name_value[i], flavor_text[i], image_text[i], server_text[i], enable_dhcp_value[i])
-        }
+		//var vm_record = vms_info.get();
+        //for(var i=0; i < objs.length; i++)
+       // {
+                 post_vminfo(sliceid, name_value[0], flavor_text[0], image_text[0], server_text[0], enable_dhcp_value[0]);
+       // }*/
+		vms_info().each(function(vm){
+			post_vminfo(sliceid, vm);
+		});
         
 }
 
-function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
+
+//function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp, vm_info_record)
+function post_vminfo(sliceid, vm)
 {
+		//alert(vm_info_record["cpu"]);
         url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
         type: "POST",
@@ -254,11 +263,12 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
         cache: false,
         async: false,  
         data: {
-                name: name,
-                flavor: flavor,
-                image: image,
-                server: server,
-                enable_dhcp: enable_dhcp
+				cpu: vm.cpu,
+				ram: vm.ram,
+				hdd: vm.hdd,
+                image: vm.image,
+                server: vm.server,
+                enable_dhcp: vm.enable_dhcp
         },
         success: function(data) {
 			
@@ -480,15 +490,15 @@ function check_gw_select(){
 }
 
 
-
-var vms_info = TAFFY();
 var vm_id = 0;
 var vm_info_flag = "save";
 var update_vm = null;
+
+
 function update_vms_info(){
 	if (vm_info_flag == "save"){
 		var vm_info = {id:vm_id, name:$("#vm_mem").val()};
-		vms_info.insert(vm_info)
+		vms_info.insert({id:vm_id, cpu:"1", ram:"512", hdd:"10", image:1, server:1, enable_dhcp:false})
 		vm_id++;
 		
 	}else if (vm_info_flag == "update"){

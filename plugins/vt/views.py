@@ -72,9 +72,9 @@ def create_vm(request, sliceid, from_link):
                 slice = get_object_or_404(Slice, id=sliceid)
                 vm.slice = slice
                 vm.island = vm.server.island
-                vm.ram = 256
-                vm.cpu = 1
-                vm.hdd = 10
+                vm.ram = request.POST.get("ram")
+                vm.cpu = request.POST.get("cpu")
+                vm.hdd = request.POST.get("hdd")
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)

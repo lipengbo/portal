@@ -134,7 +134,6 @@ class VirtualMachine(IslandResource):
         if function_test:
             print '----------------------create a vm=%s -------------------------' % self.name
         else:
-            print  '**--------------------create a vm=%s -------------------------' % self.name
             vmInfo = {}
             if self.flavor == None:
                 vmInfo['mem'] = self.ram
