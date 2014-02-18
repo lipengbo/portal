@@ -2,15 +2,10 @@
 {% load staticfiles %}
 {% load project_tags %}
 <li class="span3 project_list" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
-                            <a href="{% url project_delete project.id %}?next={{ request.path }}" class="btn-delete close">×</a>
-                            <div class="thumbnail">
-                                <img src="{% static project.category.image %}" />  
-                                <h5>名称：{{ project.name }}</h5>
-                                <h5>创建者：<small>{{ project.owner }}</small></h5>
-                                <h5>创建时间：<small>{{ project.created_time|date:"Y.m.d" }}</small></h5>
-                                <h5>成员个数：<small>{{ project.membership_set.count }}</small></h5>
-                                <h5>Slice个数：<small>{{ project.get_slices.count }}</small></h5>
-                                <hr />
-                                <a href="{% url project_detail project.id %}">查看</a>
-                            </div>
-                        </li>
+        <a href="{% url project_delete project.id %}?next={{ request.path }}" class="btn-delete close">×</a>
+        <div class="thumbnail">
+            <div class="logo_img"><img src="{% static project.category.image %}" /></div>
+            <h5>名称：{{ project.name }}<a href="{% url project_detail project.id %}" class="view_more_icon"><i class="icon-double-angle-right" title="点击查看"></i></a></h5>                              
+        </div>
+
+</li>

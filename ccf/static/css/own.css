@@ -5875,13 +5875,19 @@ table {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
 }
-.example-sites li img {
-  width: 100%;
-  height: auto;
+.example-sites li .logo_img {
   border-bottom: 1px solid #9c9c9c;
   background: #c2d0df;
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+.example-sites li .logo_img img {
+  width: 100%;
+  height: auto;
 }
 .example-sites li h5 {
+  padding-right: 20px;
+  position: relative;
   height: 20px;
   color: #666;
   margin: 8px 10px;
@@ -5889,6 +5895,12 @@ table {
   white-space: nowrap;
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
+}
+.example-sites li h5 .view_more_icon {
+  font-size: 20px;
+  position: absolute;
+  right: 0;
+  text-decoration: none;
 }
 .example-sites li p {
   margin-left: 10px;
@@ -5940,6 +5952,9 @@ table {
 .thumbnail .slice_left {
   height: 100%;
   border-right: 1px solid #9c9c9c;
+}
+.thumbnail .slice_left img {
+  background: #c2d0df;
 }
 .thumbnail .slice_left ul {
   margin-bottom: 7px;
@@ -6731,6 +6746,22 @@ a.button-royal:hover {
 .slider_td {
   position: relative;
 }
+.slider_td .value_s {
+  position: absolute;
+  top: 5px;
+  left: -16px;
+  display: block;
+  width: 60px;
+  text-align: center;
+}
+.slider_td .value_e {
+  position: absolute;
+  top: 5px;
+  left: 630px;
+  display: block;
+  width: 60px;
+  text-align: center;
+}
 .slider_td .cpu_value {
   position: absolute;
   top: 5px;
@@ -6748,6 +6779,15 @@ a.button-royal:hover {
   height: 6px;
   margin: 3px -6px 0 0;
   width: 6px;
+  position: relative;
+}
+.ui-slider-segment span {
+  display: block;
+  width: 60px;
+  text-align: center;
+  position: absolute;
+  top: -28px;
+  left: -28px;
 }
 .ui-slider-range {
   background-color: #1abc9c;
@@ -6794,4 +6834,58 @@ a.button-royal:hover {
 }
 .btn-group .btn {
   margin-right: 0 !important;
+}
+.table_list .city {
+  width: 30%;
+}
+.table_list .description {
+  width: 40%;
+}
+.table_list .actions-city {
+  width: 25%;
+}
+.table_list .island {
+  width: 15%;
+}
+.table_list .city {
+  width: 20%;
+}
+.table_list .actions-island {
+  width: 20%;
+}
+.table_list .server {
+  width: 15%;
+}
+.table_list .state {
+  width: 5%;
+}
+.table_list .cpu {
+  width: 5%;
+}
+.table_list .ip {
+  width: 15%;
+}
+.table_list .os {
+  width: 10%;
+}
+.table_list .virtualswitch {
+  width: 15%;
+}
+.table_list .actions-server {
+  width: 15%;
+}
+.table_list .switch {
+  width: 15px;
+}
+.table_list .dpid {
+  width: 25%;
+}
+.table_list .actions-switch {
+  width: 25%;
+}
+.table_list .flowvisor {
+  width: 35%;
+}
+.table_list .actions-flowvisor {
+  width: 30%;
 }

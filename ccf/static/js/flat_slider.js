@@ -10,14 +10,14 @@ String.prototype.repeat = function(num) {
   $.fn.addSliderSegments = function (amount) {
     return this.each(function () {             
       var segmentGap = 100 / (amount - 1) + "%"
-        , segment = "<div class='ui-slider-segment' style='margin-left: " + segmentGap + ";'></div>";
+        , segment = "<div class='ui-slider-segment' style='margin-left: " + segmentGap + ";'><span></span></div>";
       $(this).prepend(segment.repeat(amount - 2));
     });
   };
 
   $(function() {
     // jQuery UI Sliders
-    var $slider = $("#cpu_slider");
+    var $slider = $("#ram_slider");
     if ($slider.length) {
       $slider.slider({
         min: 1,
@@ -38,6 +38,8 @@ String.prototype.repeat = function(num) {
         range: "min"
       }).addSliderSegments($slider2.slider("option").max);
     }    
+    
+    
   });
   
 })(jQuery);
