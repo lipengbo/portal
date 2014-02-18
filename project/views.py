@@ -540,3 +540,13 @@ def delete_notifications(request):
         notifications = notifications.filter(id__in=notice_ids)
     notifications.delete()
     return redirect('notifications:all')
+
+@login_required
+def member_manage(request, id):
+    project = get_object_or_404(Project, id=id)
+    #if not request.user.has_perm('project.invite_project_member', project):
+    if not (request.user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    return render(request, 'project/member_manage.html', context)
