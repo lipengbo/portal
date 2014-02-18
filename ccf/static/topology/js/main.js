@@ -197,7 +197,6 @@ function assign_node_icon(d) {
         }
 
     }
-    console.log(d.group)
     
     if (d.group == 2 || d.group == 1) {
         // set status level for image
