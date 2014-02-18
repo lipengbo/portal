@@ -1,4 +1,15 @@
 var vms_info = TAFFY();
+var vm_id;
+var flavor_selected;
+var flavor_text = ['定制', '微型', '迷你型', '小型', '中型', '大型', '超大型'];
+var cpu_selected;
+var ram_selected;
+var hdd_selected;
+var vm_info_flag;
+var dhcp_checked;
+var update_vm;
+var ram_flavor = {"256":2, "512":3, "1024":4, "2048":5, "4096":6, "8192":7}
+var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6}
 
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
@@ -57,14 +68,14 @@ function desc_msg(name, value, i){
 		data: data,
 		dataType: 'json',
 		success:function(data){
-			if(name == 'flavor'){
+			/*if(name == 'flavor'){
 				$('[name="cpu"]')[i].innerHTML = data['cpu'] + "核";
 				$('[name="ram"]')[i].innerHTML = data['ram'] + "MB";
 				$('[name="hdd"]')[i].innerHTML = data['hdd'] + "GB";		
 			}else if(name == 'image'){
 				$('[name="username"]')[i].innerHTML = data['username'];
 				$('[name="password"]')[i].innerHTML = data['password'];
-			}
+			}*/
 		}
 	});
 	
@@ -116,10 +127,10 @@ function check_vm_select(obj){
 //获取vm form的内容并填入slice清单中
 function fetch_vminfo()
 {
-        var objs = document.getElementsByName('name');
-        name_value = get_value_from_obj('name');
+       // var objs = document.getElementsByName('name');
+        //name_value = get_value_from_obj('name');
         //alert('name_value')
-        flavor_text = get_text_from_select('flavor');
+        //flavor_text = get_text_from_select('flavor');
         //alert(flavor_text)
         image_text = get_text_from_select('image');
         //alert(image_text)
@@ -128,18 +139,20 @@ function fetch_vminfo()
         enable_dhcp_value = get_checked_from_checkbox('enable_dhcp');
         //alert(enable_dhcp_value)
         content = ''
-        for(var i=0; i < objs.length; i++)
-        {
-                content = content + "<tr>"
-                content = content + "<td>" + name_value[i] + "</td>"
-                content = content + "<td>" + flavor_text[i] + "</td>"
-                content = content + "<td>" + image_text[i] + "</td>"
-                content = content + "<td>" + server_text[i] + "</td>"
-                content = content + "<td>" + enable_dhcp_value[i] + "</td>"
-                content = content + "</tr>"
-        }
+        //for(var i=0; i < objs.length; i++)
+		vms_info().each(function(vm){
+			content = content + "<tr>"
+            //content = content + "<td>" + name_value[i] + "</td>"
+            content = content + "<td>" + flavor_text[vm.flavor] + "</td>"
+            content = content + "<td>" + vm.image_text + "</td>"
+            content = content + "<td>" + vm.server_text + "</td>"
+            content = content + "<td>" + vm.show_dhcp + "</td>"
+            content = content + "</tr>"
+		});
+       
         //alert(content)
         insert_content_to_obj('id_vm_tbody',content)
+		
 }
 
 function get_text_from_select(obj)
@@ -266,12 +279,11 @@ function post_vminfo(sliceid, vm)
 				cpu: vm.cpu,
 				ram: vm.ram,
 				hdd: vm.hdd,
-                image: vm.image,
-                server: vm.server,
+                image: vm.image_id,
+                server: vm.server_id,
                 enable_dhcp: vm.enable_dhcp
         },
         success: function(data) {
-			
             if(data.result==1)
             {
                 //alert('Failed to operator vm!')
@@ -282,7 +294,6 @@ function post_vminfo(sliceid, vm)
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
             }
-
         }
         });
 }
@@ -490,21 +501,47 @@ function check_gw_select(){
 }
 
 
-var vm_id = 0;
-var vm_info_flag = "save";
-var update_vm = null;
+
+
+function flavor_init(){
+	vm_id = 0;
+	flavor_selected = 1;
+	cpu_selected = 1;
+	ram_selected = 256;
+	hdd_selected = 10;
+	vm_info_flag = "save";
+	update_vm = null;
+	$(".micro").addClass("vm_active");
+}
 
 
 function update_vms_info(){
+	if(!check_vminfo()){
+		return
+	}
+	if(document.getElementById("id_enable_dhcp").checked){
+		dhcp_checked = "是";
+	}else{
+		dhcp_checked = "否";
+	}
 	if (vm_info_flag == "save"){
-		var vm_info = {id:vm_id, name:$("#vm_mem").val()};
-		vms_info.insert({id:vm_id, cpu:"1", ram:"512", hdd:"10", image:1, server:1, enable_dhcp:false})
+		//var vm_info = {id:vm_id, flavor:flavor_selected,};
+		vms_info.insert({id:vm_id, flavor:flavor_selected, cpu:cpu_selected, 
+						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
+						 image_text:$("#id_image").find("option:selected").text(),
+						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
+						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 show_dhcp:dhcp_checked})
 		vm_id++;
 		
 	}else if (vm_info_flag == "update"){
 		if(update_vm != null){
-			update_vm.update({"name": $("#vm_mem").val()});
-			document.getElementById("vm_name_show_"+update_vm.first().id).innerHTML = $("#vm_mem").val();
+			update_vm.update({flavor:flavor_selected, cpu:cpu_selected, 
+						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
+						 image_text:$("#id_image").find("option:selected").text(),
+						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
+						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 show_dhcp:dhcp_checked});
 			vm_info_flag = "save";
 		}
 	}
@@ -516,8 +553,13 @@ function edit_vm(vm_id){
 	var vm = vms_info({id:vm_id}).first();
 	vm_info_flag = "update";
 	//替换上面的数据
-	$("#vm_mem").val(vm.name);
 	update_vm = vms_info({id:vm_id});
+	$(".type_chose a").removeClass("vm_active");
+	$("a[value="+vm.flavor+"]").addClass("vm_active");
+	$(".cpu_chose a").removeClass("vm_active");
+	$("#cpu_"+vm.cpu).addClass("vm_active");
+	$("#cpu_slider").slider("value", ram_flavor[vm.ram]);
+	$("#disk_slider").slider("value", disk_flavor[vm.hdd]);
 }
 
 function delete_vm(vm_id){
@@ -528,9 +570,57 @@ function delete_vm(vm_id){
 function show_vm_info_table(){
 	$("#vms_info_table").find("tbody").empty();
 	vms_info().each(function(vm){
-		$("#vms_info_table").find("tbody").append("<tr><td id='vm_name_show_"+vm.id+"'>"+vm.name+"</td><td><td/><td><td/><td><td/><td><td/><td><td/>"
-								+"<td><a href='javascript:edit_vm("+vm.id+")'>编辑</a><td/>"
-								+"<td><a href='javascript:delete_vm("+vm.id+")'>删除</a><td/></tr>");
+		$("#vms_info_table").find("tbody").append("<tr>"
+                            +"<td>"+flavor_text[vm.flavor]+"</td>"
+                            +"<td>"+vm.cpu+"核</td>"
+                            +"<td>"+vm.ram+"MB</td>"
+                            +"<td>"+vm.hdd+"GB</td>"
+                            +"<td>"+vm.image_text+"</td>"
+                            +"<td>"+vm.server_text+"</td>"
+							+"<td>"+vm.show_dhcp+"</td>"
+                            +"<td>"
+                            +"   <div>"
+                            +"    <a href='javascript:edit_vm("+vm.id+")'>编辑</a>"
+                            +"    <a href='javascript:delete_vm("+vm.id+")'>删除</a>"
+                            +"    </div>"
+                            +"</td>"
+                          +"</tr> ");
 	});
+}
+
+function select_flavor(flavor_id){
+	var data = "name=flavor" + "&obj_id="+flavor_id;
+
+	$.ajax({
+		url : '/plugins/vt/get_flavor_msg/',
+		type : 'POST',
+		data: data,
+		dataType: 'json',
+		success:function(data){
+			$("#cpu_"+data['cpu']).addClass("vm_active");
+			$("#cpu_slider").slider("value", ram_flavor[data['ram']]);
+			$("#disk_slider").slider("value", disk_flavor[data['hdd']]);
+			cpu_selected = data['cpu'];
+			ram_selected = data['ram'];
+			hdd_selected = data['hdd'];
+		}
+	});
+}
+
+function set_value(obj, value){
+	var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
+	var disks = [10, 20, 40, 80, 160, 320];
+	if(obj == "flavor"){
+		flavor_selected = value;
+	}else if(obj == "ram"){
+		flavor_selected = 0;
+		ram_selected = rams[value-1];
+	}else if(obj == "hdd"){
+		flavor_seleted = 0;
+		hdd_selected = disks[value-1];
+	}else if(obj == "cpu"){
+		flavor_selected = 0;
+		cpu_selected = value;
+	}
 }
 

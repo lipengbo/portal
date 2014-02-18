@@ -32,7 +32,7 @@ String.prototype.repeat = function(num) {
     if ($slider2.length) {
       $slider2.slider({
         min: 1,
-        max: 5,
+        max: 6,
         value: 1,
         orientation: "horizontal",
         range: "min"

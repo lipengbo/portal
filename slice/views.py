@@ -28,6 +28,7 @@ from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from slice.models import Slice, SliceDeleted
 
 from plugins.vt.forms import VmForm
+from plugins.vt.models import Flavor
 import datetime
 
 
@@ -57,6 +58,7 @@ def create(request, proj_id):
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
     context['vm_form'] = vm_form
+    context['flavors'] = Flavor.objects.all()
 #     uuid = utils.gen_uuid()
 #     context['uuid'] = ''.join(uuid.split('-'))
     return render(request, 'slice/create_slice.html', context)

@@ -254,11 +254,31 @@ $(document).ready(function() {
 	$(".type_chose a").click(function(){
 	    $(".type_chose a").removeClass("vm_active");
 	    $(this).addClass("vm_active");
+		var flavor_id = $(this).attr("value");
+		set_value("flavor", flavor_id);
+		$(".cpu_chose a").removeClass("vm_active");
+		select_flavor(flavor_id);
+		
 	});
 	$(".cpu_chose a").click(function(){
         $(".cpu_chose a").removeClass("vm_active");
+		$(".type_chose a").removeClass("vm_active");
         $(this).addClass("vm_active");
+		set_value("cpu", $(this).attr("value"));
     });
+	$( "#cpu_slider" ).slider({
+		stop:function(event, ui){
+			$(".type_chose a").removeClass("vm_active");
+			set_value("ram", ui.value);
+		}
+	});
+	$( "#disk_slider" ).slider({
+		stop:function(event, ui){
+			$(".type_chose a").removeClass("vm_active");
+			set_value("hdd", ui.value);
+		}
+	})
+	
 });
 
 
@@ -334,6 +354,11 @@ function page_function2(){
 	}
 }
 function page_function3(){
+	//判断是否选择虚拟机信息
+	if(vms_info().count() == 0){
+		alert("请设置虚拟机信息！")
+		return;
+	}
 	//网段
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
