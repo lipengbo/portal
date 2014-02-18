@@ -1,6 +1,7 @@
 {% extends "admin_base.html" %}
 {% load nexus_tags %}
 {% load i18n %}
+{% load common_tags %}
 {% load crispy_forms_tags %}
 
 {% block breadcrumb %}
@@ -19,7 +20,12 @@
         {% csrf_token %}
         {{ formset|crispy }}
         <div class="form-actions">
+            {% if class_name == 'User' and formset.instance.get_profile.state == 0 %}
+            <button type="submit" class="btn btn-info">{% trans "Accept" %}</button>
+            <a href="{% url profiles_reject formset.instance.id %}" class="btn">{% trans "Reject" %}</a>
+            {% else %}
             <button type="submit" class="btn btn-info">{% trans "Save" %}</button>
+            {% endif %}
         </div>
     </form>
 {% endwith %}

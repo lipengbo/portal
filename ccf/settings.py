@@ -176,7 +176,8 @@ INSTALLED_APPS = [
     "invite",
     "django_cron",
     "nexus",
-    "monitor"
+    "monitor",
+    "guardian"
 ]
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
@@ -271,13 +272,14 @@ EMAIL_HOST_PASSWORD = 'fnic123'
 
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
+    'guardian.backends.ObjectPermissionBackend',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 
-ANONYMOUS_USER_ID = -1
+ANONYMOUS_USER_ID = 1000
 THEME_ACCOUNT_CONTACT_EMAIL = 'ccf@fnic.cn'
 THEME_CONTACT_EMAIL = THEME_ACCOUNT_CONTACT_EMAIL
 

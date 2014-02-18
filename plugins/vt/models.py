@@ -7,9 +7,13 @@ from django.contrib.contenttypes import generic
 from resources.models import IslandResource, Server, SwitchPort
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
+from plugins.openflow.models import Controller
 from plugins.common import utils
 from plugins.common.agent_client import AgentClient
+from plugins.common.exception import ConnectionRefused
 from django.utils.translation import ugettext as _
+import errno
+from socket import error as socket_error
 from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
@@ -149,11 +153,15 @@ class VirtualMachine(IslandResource):
             agent_client.create_vm(vmInfo)
 
     def delete_vm(self):
-        if function_test:
-            print '----------------------delete a vm=%s -------------------------' % self.name
-        else:
-            agent_client = AgentClient(self.server.ip)
-            agent_client.delete_vm(self.uuid)
+        try:
+            if function_test:
+                print '----------------------delete a vm=%s -------------------------' % self.name
+            else:
+                agent_client = AgentClient(self.server.ip)
+                agent_client.delete_vm(self.uuid)
+        except socket_error as serr:
+            if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+                raise ConnectionRefused()
 
     def do_action(self, action):
         if function_test:
@@ -187,7 +195,7 @@ class HostMac(models.Model):
 @receiver(pre_save, sender=VirtualMachine)
 def vm_pre_save(sender, instance, **kwargs):
     if not instance.ip:
-        instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
     if not instance.mac:
@@ -205,8 +213,9 @@ def vm_post_save(sender, instance, **kwargs):
 @receiver(pre_delete, sender=VirtualMachine)
 def vm_pre_delete(sender, instance, **kwargs):
     instance.delete_vm()
-#     if instance.type == 0:
-#         instance.controller_set.all().delete()
+    if instance.type == 0:
+        controllers = Controller.objects.filter(object_id=instance.id)
+        controllers.delete()
 
 
 @receiver(post_delete, sender=VirtualMachine)

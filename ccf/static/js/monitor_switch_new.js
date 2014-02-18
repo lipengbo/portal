@@ -31,23 +31,23 @@ function update_port_info(pre_port_data){
 					pre_port_data = JSON.stringify(ports_data);
 					var recv_total = data_process_chart(data[0], 'bit');
 					var send_total = data_process_chart(data[1], 'bit');
-					var recv_bps = data_process_chart(data[2], 'bit');
-					var send_bps = data_process_chart(data[3], 'bit');
+					var recv_bps = data_process_chart(data[2]/3, 'bit');
+					var send_bps = data_process_chart(data[3]/3, 'bit');
 					content = content + '<td>' + port + '</td>'
 									  + '<td>' + recv_total[0] + recv_total[1] +'</td>' 
 									  + '<td>' + send_total[0] + send_total[1] +'</td>'
 									  + '<td>' + recv_bps[0] + recv_bps[1] +'/s</td>'
 									  + '<td>' + send_bps[0] + send_bps[1] +'/s</td></tr>';
 					var x = (new Date()).getTime();
-					chart.series[i].addPoint([x, data[2]], true, true);
-					chart.series[++i].addPoint([x, data[3]], true, true); 
+					chart.series[i].addPoint([x, data[2]/3], true, true);
+					chart.series[++i].addPoint([x, data[3]/3], true, true); 
 					i++;
 				});
 				$("#switch_port_info").find('tbody').empty();
 				$("#switch_port_info").find('tbody').append(content);
 			}
 		});
-    }, 1000);
+    }, 3000);
 }
 
 function draw_highchart(){

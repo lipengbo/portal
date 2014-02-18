@@ -97,24 +97,26 @@ def create_default_controller(slice_obj, controller_sys):
             return controller
         except Exception, ex:
             #transaction.rollback()
-            import traceback
-            print traceback.print_exc()
-            raise DbError("创建控制器失败！")
+#             import traceback
+#             print traceback.print_exc()
+            raise DbError(ex.message)
     else:
         raise DbError("数据库异常！")
 
 
-def delete_controller(controller):
+def delete_controller(controller, flag):
     """删除控制器
     """
     if controller:
-        if controller.name == 'user_define' and (not controller.host):
+        if controller.name == 'user_define':
             controller.delete()
         else:
             #先删除虚拟机然后删除controller记录
-#             if controller.host:
-#                 delete_vm_for_controller(controller.host)
-            controller.delete()
+            if flag:
+                if controller.host:
+                    delete_vm_for_controller(controller.host)
+                else:
+                    controller.delete()
 
 
 def slice_change_controller(slice_obj, controller_info):
@@ -139,22 +141,22 @@ def slice_change_controller(slice_obj, controller_info):
             flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
                                              slice_obj.id, controller.ip,
                                              controller.port)
-        except:
+        except Exception, ex:
             print 'c5'
             try:
                 print 'c7'
                 if controller:
-                    delete_controller(controller)
+                    delete_controller(controller, True)
                 print 'c8'
                 slice_obj.add_resource(haved_controller)
                 print 'c9'
             except:
                 print 'c10'
                 pass
-            raise
+            raise DbError(ex.message)
         else:
             try:
-                delete_controller(haved_controller)
+                delete_controller(haved_controller, True)
             except:
                 pass
     else:

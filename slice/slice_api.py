@@ -26,107 +26,94 @@ import logging
 LOG = logging.getLogger("ccf")
 
 from etc import config
+# import time
 # from etc.config import slice_expiration_days
 
 
-def create_slice_step(project, name, description, island, user, ovs_ports,
+def create_slice_step(project, slice_uuid, name, description, island, user, ovs_ports,
                       controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
+    print "create_slice_step"
     slice_obj = None
     try:
-        print 1
-        slice_obj = create_slice_api(project, name, description, island, user)
-        print 2
-#         print ovs_ports
+        print "1:create slice record"
+        slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
+        print "2:add ovs ports"
         slice_add_ovs_ports(slice_obj, ovs_ports)
-#         print slice_obj.get_switches()
-        print 3
+        print "3:create and add controller"
         create_add_controller(slice_obj, controller_info)
-        print 4
+        print "4:create slice on flowvisor"
         flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.id,
                             slice_obj.get_controller(), user.email)
-        print 5
-#         print slice_obj.name
-#         创建并添加网段
-        IPUsage.objects.subnet_create_success(slice_obj.name)
-        print 6
+        print "5:create subnet"
+        IPUsage.objects.subnet_create_success(slice_obj.uuid)
+        print "6:add nw flowspace in database"
         flowspace_nw_add(slice_obj, [], slice_nw)
-#         创建并添加网关
-#         创建并添加dhcp
+        print "7:create gateway"
         enabled_dhcp = (int(dhcp_selected) == 1)
-        print 7
         if gw_host_id and int(gw_host_id) > 0:
-            print 8
             try:
                 gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id),
                                            image_name='gateway',
                                            enable_dhcp=enabled_dhcp)
             except Exception, ex:
-                print ex.message
                 LOG.debug(traceback.print_exc())
                 raise DbError(ex.message)
-            print 9
 #             flowspace_gw_add(slice_obj, gw.mac)
 #         创建并添加虚拟机
-        slice_obj.be_count()
-        print 10
+        print "8:create slice success and return"
         return slice_obj
     except Exception, ex:
-        print 11
+        print "9:create slice failed and delete slice"
         if slice_obj:
-            print 12
             try:
                 slice_obj.delete()
             except:
                 pass
-        print 13
-        raise DbError(ex)
+        print "10:delete slice success and raise exception"
+        raise DbError(ex.message)
 
 
 @transaction.commit_on_success
-def create_slice_api(project, name, description, island, user):
-    """slice添加交换端口
+def create_slice_api(project, slice_uuid, name, description, island, user):
+    """slice创建
     """
     print 'create_slice_api'
     try:
         Slice.objects.get(name=name)
     except Slice.DoesNotExist:
         try:
-            print 'sexp 1'
             slice_expiration_days = int(config.slice_expiration_days)
-            print 'sexp 2'
         except:
-            print 'sexp 3'
             slice_expiration_days = 30
         else:
-            print 'sexp 4'
             if slice_expiration_days <= 0:
                 slice_expiration_days = 30
-        print "slice_expiration_days:"+str(slice_expiration_days)
         if project and island and user:
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
-                date_now = datetime.datetime.now()
-#                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
-                date_delta = datetime.timedelta(days=slice_expiration_days)
-                expiration_date = date_now + date_delta
-                slice_names = name.split('_')
-                if len(slice_names) > 1:
-                    del slice_names[-1]
-                show_name = ('_').join(slice_names)
                 try:
+                    date_now = datetime.datetime.now()
+    #                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
+                    date_delta = datetime.timedelta(days=slice_expiration_days)
+                    expiration_date = date_now + date_delta
+                    slice_names = name.split('_')
+                    if len(slice_names) > 1:
+                        del slice_names[-1]
+                    show_name = ('_').join(slice_names)
                     slice_obj = Slice(owner=user,
                                       name=name,
                                       show_name=show_name,
                                       description=description,
                                       project=project,
-                                      date_expired=expiration_date)
+                                      date_expired=expiration_date,
+                                      uuid=slice_uuid)
                     slice_obj.save()
                     slice_obj.add_island(island)
                     slice_obj.add_resource(flowvisors[0])
                     return slice_obj
                 except Exception, ex:
                     transaction.rollback()
-                    raise DbError(ex)
+                    raise DbError("虚网创建失败!")
             else:
                 raise IslandError("所选节点无可用flowvisor！")
         else:
@@ -158,7 +145,7 @@ def slice_change_description(slice_obj, new_description):
                 slice_obj.change_description(new_description)
             except Exception, ex:
                 transaction.rollback()
-                raise DbError(ex)
+                raise DbError("编辑失败！")
 
 
 @transaction.commit_on_success
@@ -168,31 +155,18 @@ def delete_slice_api(slice_obj):
     print 'delete_slice_api'
     if slice_obj:
         try:
-#             删除虚拟机
-#             删除dhcp
-#             删除网关
-#             删除slice网络地址
-#             print 1
-#             del_nw = slice_obj.get_nw()
-#             print 2
-#             flowspace_nw_del(slice_obj, del_nw)
-            print 3
+            print "p1:delete subnet"
             try:
-                IPUsage.objects.delete_subnet(slice_obj.name)
+                IPUsage.objects.delete_subnet(slice_obj.uuid)
             except:
                 pass
-            print 4
-#             删除底层slice
-#             flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
-            print 5
-#             删除控制器
-            delete_controller(slice_obj.get_controller())
-            print 6
-#             删除交换机端口
-#             删除slice记录
+            print "p2:delete controller"
+            delete_controller(slice_obj.get_controller(), False)
+            print "p3:pre delete slice success"
         except Exception, ex:
+            print "p4:pre delete slice failed and raise exception"
             transaction.rollback()
-            raise DbError(ex)
+            raise DbError(ex.message)
 
 
 @transaction.commit_on_success
@@ -203,7 +177,7 @@ def start_slice_api(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
-        raise DbError(ex)
+        raise DbError(ex.message)
     else:
         if slice_obj.state == SLICE_STATE_STOPPED:
             all_vms = slice_obj.get_vms()
@@ -240,7 +214,7 @@ def stop_slice_api(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
-        raise DbError(ex)
+        raise DbError(ex.message)
     else:
         if slice_obj.state == SLICE_STATE_STARTED:
             try:
@@ -259,7 +233,7 @@ def update_slice_virtual_network(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
-        return DbError(ex)
+        return DbError(ex.message)
     flowvisor = slice_obj.get_flowvisor()
     flowspace_name = str(slice_obj.id) + '_df'
     try:
@@ -421,10 +395,10 @@ def get_slice_topology(slice_obj):
                     'normals': normals, 'specials': specials,
                     'bandwidth': bandwidth, 'maclist': maclist}
     except Exception, ex:
-        print 1
+        print "get topology failed"
         return []
     else:
-        print 2
+        print "get topology success"
         return topology
 
 
@@ -472,6 +446,7 @@ def get_links_max_bandwidths(switchs_ports):
 
 def get_slice_links_bandwidths(switchs_ports, maclist):
     print 'get_slice_links_bandwidths'
+#     time.sleep(15)
     ret = []
     for switch_ports in switchs_ports:
         try:
@@ -516,8 +491,8 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_count_show_data(target, type, total_num):
-    from common.models import Counter
+def get_count_show_data(target, type, total_num, stype):
+    from common.models import Counter, FailedCounter, DeletedCounter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
     show_dates = []
@@ -531,9 +506,18 @@ def get_count_show_data(target, type, total_num):
         if int(date_now.strftime('%Y')) - 10 >= year:
             year = int(date_now.strftime('%Y')) - 10 + 1
         for i in range(0, 10):
-            sc = Counter.objects.filter(target=target_id,
-                                        date__year=str(year),
-                                        type=0)
+            if int(stype) == 0:
+                sc = Counter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            type=0)
+            if int(stype) == 1:
+                sc = FailedCounter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            type=0)
+            if int(stype) == 2:
+                sc = DeletedCounter.objects.filter(target=target_id,
+                                            date__year=str(year),
+                                            type=0)
             show_dates.append(str(year) + "年")
             year = year + 1
             if sc:
@@ -545,10 +529,21 @@ def get_count_show_data(target, type, total_num):
         if type == "month":
             year = int(date_now.strftime('%Y'))
             for i in range(0, 12):
-                sc = Counter.objects.filter(target=target_id,
-                                            date__year=str(year),
-                                            date__month=str(i + 1),
-                                            type=1)
+                if int(stype) == 0:
+                    sc = Counter.objects.filter(target=target_id,
+                                                date__year=str(year),
+                                                date__month=str(i + 1),
+                                                type=1)
+                if int(stype) == 1:
+                    sc = FailedCounter.objects.filter(target=target_id,
+                                                date__year=str(year),
+                                                date__month=str(i + 1),
+                                                type=1)
+                if int(stype) == 2:
+                    sc = DeletedCounter.objects.filter(target=target_id,
+                                                date__year=str(year),
+                                                date__month=str(i + 1),
+                                                type=1)
                 show_dates.append(str(i + 1) + "月")
 #                 if month == 1:
 #                     month = 12
@@ -563,11 +558,24 @@ def get_count_show_data(target, type, total_num):
         else:
             month_days = calendar.monthrange(int(date_now.strftime('%Y')), int(date_now.strftime('%m')))[1]
             for i in range(0, month_days):
-                sc = Counter.objects.filter(target=target_id,
-                                            date__year=date_now.strftime('%Y'),
-                                            date__month=date_now.strftime('%m'),
-                                            date__day=str(i + 1),
-                                            type=2)
+                if int(stype) == 0:
+                    sc = Counter.objects.filter(target=target_id,
+                                                date__year=date_now.strftime('%Y'),
+                                                date__month=date_now.strftime('%m'),
+                                                date__day=str(i + 1),
+                                                type=2)
+                if int(stype) == 1:
+                    sc = FailedCounter.objects.filter(target=target_id,
+                                                date__year=date_now.strftime('%Y'),
+                                                date__month=date_now.strftime('%m'),
+                                                date__day=str(i + 1),
+                                                type=2)
+                if int(stype) == 2:
+                    sc = DeletedCounter.objects.filter(target=target_id,
+                                                date__year=date_now.strftime('%Y'),
+                                                date__month=date_now.strftime('%m'),
+                                                date__day=str(i + 1),
+                                                type=2)
                 show_dates.append(str(i + 1))
                 if sc:
                     num = sc[0].count

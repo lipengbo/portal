@@ -24,7 +24,7 @@
                 </form>
             </div>
         </div>
-        <form action="" method="post" accept-charset="utf-8">
+        <form class="invite-form" action="" method="post" accept-charset="utf-8">
             {% csrf_token %}
             <fieldset>
                  <legend><a  href="javascript:;" id="invite-button" class="btn disabled btn-info edit">邀请</a>邀请成员</legend>
@@ -87,18 +87,21 @@
               <h3 id="myModalLabel">邀请</h3>      
             </div>
             <div class="modal-body base_info">
+                <div class="alert hide blank-message alert-error">
+                    请填写邀请消息
+                </div>
                   <table class="table">
                       <tbody>
                           <tr>
                               <td width="150" class="v_top text_r">捎句话</td>
-                              <td><textarea name="message" rows="3"></textarea></td>
+                              <td><textarea class="message" name="message" rows="3"></textarea></td>
                           </tr>
                       </tbody>
                   </table>
             </div>
             <div class="modal-footer">
               <button class="btn btn-info" data-dismiss="modal">取消</button>
-              <button class="btn btn-info">提交邀请</button>
+              <button class="btn btn-info submit-invite">提交邀请</button>
             </div>
          </div>
         </form>
@@ -121,6 +124,13 @@
             return;
         }
         $("#inviteModal").modal();
+    });
+    $('.invite-form').submit(function(){
+        $('.blank-message').hide();
+        if(!$('.message').val().trim()) {
+            $('.blank-message').show();
+            return false;
+        }
     });
 </script>
 {% endblock %}

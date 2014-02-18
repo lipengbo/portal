@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-12 13:57+0800\n"
+"POT-Creation-Date: 2013-12-25 11:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,15 +34,15 @@ msgstr "城市"
 msgid "Island"
 msgstr "节点"
 
-#: models.py:66 models.py:75 templates/project/detail.html:31
+#: models.py:66 models.py:75 templates/project/detail.html:39
 msgid "Category"
 msgstr "项目类型"
 
-#: models.py:70 templates/project/detail.html:28
+#: models.py:70 templates/project/detail.html:36
 msgid "Project Name"
 msgstr "项目名称"
 
-#: models.py:71 templates/project/detail.html:29
+#: models.py:71 templates/project/detail.html:37
 msgid "Project Description"
 msgstr "项目描述"
 
@@ -50,15 +50,16 @@ msgstr "项目描述"
 msgid "Memberships"
 msgstr "成员"
 
-#: models.py:98
+#: models.py:100
 msgid " quit from"
 msgstr "退出了项目："
 
-#: models.py:101
+#: models.py:103
 msgid "User quit from project"
 msgstr "SDN创新实验平台用户退出项目通知"
 
-#: models.py:102
+#: models.py:104
+#, python-format
 msgid ""
 "Dear user:\n"
 " User %(user)s has quit from your project %(project)s. You can click the "
@@ -66,44 +67,57 @@ msgid ""
 "%(notification_link)s\n"
 msgstr ""
 "亲爱的用户，您好：\n"
-"    用户“%(user)s”退出了您的项目“%(project)s”，您可以单击以下链接查看申请详情。\n"
+"    用户“%(user)s”退出了您的项目“%(project)s”，您可以单击以下链接查看申请详"
+"情。\n"
 "    %(notification_link)s\n"
 "\n"
 "SDN创新实验平台\n"
 
-#: models.py:144
+#: models.py:146
 msgid "Project"
 msgstr "项目"
 
-#: models.py:159
+#: models.py:148
+msgid "Can add Slice"
+msgstr "可以创建虚网"
+
+#: models.py:149
+msgid "Can delete Slice"
+msgstr "可以删除虚网"
+
+#: models.py:150
+msgid "Can edit Slice"
+msgstr "可以编辑虚网"
+
+#: models.py:170
 msgid "Membership"
 msgstr "成员"
 
-#: views.py:125
+#: views.py:151
 msgid "The user has been invited of this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:133
+#: views.py:159
 msgid "The user has applied this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:146
+#: views.py:172
 msgid "Invitation message is required."
 msgstr "邀请消息是必填项"
 
-#: views.py:198
+#: views.py:225
 msgid "You have applied for this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:206
+#: views.py:233
 msgid "The user has been invited for this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:221
+#: views.py:248
 msgid "Application is submitted, please wait to audit."
 msgstr "申请已经提交，请等待审批"
 
-#: views.py:223
+#: views.py:250
 msgid "Application message is required."
 msgstr "申请理由是必填项"
 
@@ -120,43 +134,43 @@ msgstr "创建项目"
 msgid "Project Detail"
 msgstr "项目详情"
 
-#: templates/project/detail.html:20
+#: templates/project/detail.html:28
 msgid "Edit"
 msgstr "编辑"
 
-#: templates/project/detail.html:23
+#: templates/project/detail.html:31
 msgid "Basic info"
 msgstr "基本信息"
 
-#: templates/project/detail.html:30
+#: templates/project/detail.html:38
 msgid "Creator"
 msgstr "创建者"
 
-#: templates/project/detail.html:48 templates/project/member.html:20
+#: templates/project/detail.html:56 templates/project/member.html:20
 msgid "View pending members"
 msgstr "查看待审批成员"
 
-#: templates/project/detail.html:49 templates/project/member.html:21
+#: templates/project/detail.html:57 templates/project/member.html:21
 msgid "Invite members"
 msgstr "邀请成员"
 
-#: templates/project/detail.html:52 templates/project/member.html:23
+#: templates/project/detail.html:60 templates/project/member.html:23
 msgid "Members"
 msgstr "成员"
 
-#: templates/project/detail.html:59 templates/project/member.html:30
+#: templates/project/detail.html:67 templates/project/member.html:30
 msgid "No."
 msgstr "序号"
 
-#: templates/project/detail.html:60 templates/project/member.html:31
+#: templates/project/detail.html:68 templates/project/member.html:31
 msgid "Member name"
 msgstr "成员"
 
-#: templates/project/detail.html:62 templates/project/member.html:33
+#: templates/project/detail.html:70 templates/project/member.html:33
 msgid "Actions"
 msgstr "操作"
 
-#: templates/project/detail.html:75 templates/project/detail.html.py:77
+#: templates/project/detail.html:83 templates/project/detail.html.py:85
 #: templates/project/member.html:44 templates/project/member.html.py:46
 msgid "Remove"
 msgstr "删除"

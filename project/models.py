@@ -3,7 +3,7 @@ import datetime
 
 from django.db import models
 from django.db import IntegrityError 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
@@ -15,7 +15,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from django.core.mail import send_mail
 
-from guardian.shortcuts import assign_perm
+from guardian.shortcuts import assign_perm, remove_perm, get_perms
 
 from invite.models import Invitation, Application
 from notifications import notify
@@ -87,6 +87,8 @@ class Project(models.Model):
                 user=user, defaults={'is_owner': is_owner})
 
     def dismiss(self, user):
+        if user == self.owner:
+            return
         try:
             project_membership = Membership.objects.get(project=self,
                 user=user)
@@ -142,6 +144,13 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = _("Project")
+        permissions = (
+                ('create_slice', _("Can add Slice")),
+                #('manage_project_member', _('Manage Project Member')),
+                #('invite_project_member', _('Invite Project Member')),
+                #('dismiss_project_member', _('Dismiss Project Member')),
+                #('review_project_member', _('Riew Project')),
+        )
 
 
 
@@ -158,10 +167,23 @@ class Membership(models.Model):
         unique_together = (("project", "user"), )
         verbose_name = _("Membership")
 
+
 @receiver(post_save, sender=Project)
 def create_owner_membership(sender, instance, created, **kwargs):
     if created:
+        owner = instance.owner
+        assign_perm('project.change_project', owner, instance)
+        assign_perm('project.delete_project', owner, instance)
+        assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
+
+
+@receiver(pre_delete, sender=Membership)
+def delete_permission(sender, instance, **kwargs):
+    user_perms = get_perms(instance.user, instance.project)
+    for perm in user_perms:
+        if perm != 'project.add_proejct':
+            remove_perm(perm, instance.user, instance.project)
 
 @receiver(pre_delete, sender=Membership)
 def delete_invitation(sender, instance, **kwargs):
@@ -182,8 +204,8 @@ def delete_invitation_application(sender, instance, **kwargs):
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
     if created:
-        if instance.is_owner:
-            assign_perm('project.add_project', instance.user)
+        if not instance.is_owner:
+            assign_perm('project.create_slice', instance.user, instance.project)
 
 
 #@receiver(m2m_changed, sender=Flowvisor.slices.through)

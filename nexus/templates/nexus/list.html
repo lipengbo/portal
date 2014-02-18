@@ -98,6 +98,9 @@
                     </th>
                 {% endfor %}
             {% endif %}
+            {% if class_name == 'User' %}
+                <th>状态</th>
+            {% endif %}
             <th>{% trans "Action" %}</th>
         </tr>
     </thead>
@@ -139,13 +142,45 @@
                     </td>
                 {% endfor %}
             {% endif %}
+            {% if class_name == 'User' %}
+            <td>
+                {% if object.get_profile.state == 0 %}
+                未审批
+                {% else %}
+                    {% if object.get_profile.state == 1 %}
+                    <span class="text-error">已拒绝</span>
+                    {% else %}
+                    <span class="text-success">已接受</span>
+                    {% endif %}
+                {% endif %}
+            </td>
+            {% endif %}
             <td>
                 <div class="btn-group">
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
-                    {% if class_name != 'User'%}
-                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">{% trans "Edit" %}</a>
+                    {% if class_name == 'User'  %}
+                        {% if object.get_profile.state == 0 %}
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">
+                                审批
+                            </a>
+                        {% else %}
+                            {% if object.get_profile.state == 1 %}
+                            <a href="#" class="btn btn-small disabled">
+                            {% trans "Edit" %}
+                            </a>
+                            {% else %}
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">
+                            {% trans "Edit" %}
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                    {% else %}
+                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">
+                        {% trans "Edit" %}
+                    </a>
                     {% endif %}
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
                 </div>

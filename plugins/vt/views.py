@@ -9,7 +9,7 @@ import json
 import errno
 from socket import error as socket_error
 from plugins.common.exception import ResourceNotEnough
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
 from slice.models import Slice
@@ -30,18 +30,26 @@ LOG = logging.getLogger('plugins')
 
 def vm_list(request, sliceid):
     vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
+    slice_obj = get_object_or_404(Slice, id=sliceid)
     context = {}
     user = request.user
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
     else:
         context['extent_html'] = "site_base.html"
+        if user.has_perm('slice.change_slice', slice_obj):
+            context['permission'] = "edit"
+        else:
+            if user.has_perm('project.create_slice', slice_obj.project):
+                context['permission'] = "view"
+            else:
+                return redirect('forbidden')
     context['vms'] = vms
     context['sliceid'] = sliceid
     slice_obj = Slice.objects.get(id=sliceid)
     context['slice_obj'] = slice_obj
     context['check_vm_status'] = 0
-    subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
 
@@ -129,16 +137,15 @@ def delete_vm(request, vmid, flag):
     vm = VirtualMachine.objects.get(id=vmid)
     try:
         vm.delete()
-        if flag == '1':
-            return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
-        else:
-            return HttpResponse(json.dumps({'result': 0}))
-#             return HttpResponseRedirect(reverse("slice_detail", kwargs={"slice_id": vm.slice.id}))
-    except Exception, ex:
+        #if flag == '1':
+            #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+        #else:
+        return HttpResponse(json.dumps({'result': 0}))
+    except Exception:
         LOG.debug(traceback.print_exc())
-        if flag == '0':
-            return HttpResponse(json.dumps({'result': 1, 'error_info': str(ex)}))
-    return render(request, 'slice/warning.html', {'info': str(ex)})
+        #if flag == '0':
+        return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
+    #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
 
 
 def get_vms_state_by_sliceid(request, sliceid):

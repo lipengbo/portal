@@ -1,11 +1,13 @@
 {% load i18n %}
 {% load staticfiles %}
-
+<body style="margin: 0">
 <div id="container" style="min-width: 400px; height: 182px; margin: 0 auto"></div>
 <div class="clear" style="display: none" >
     <p id="target">{{target}}</p>
     <p id="type">{{type}}</p>
+    <p id="stype">{{stype}}</p>
 </div>
+</body>
 <script src="{{ STATIC_URL}}topology/lib/jquery.min.js"></script>
 <script src="{{ STATIC_URL}}js/highcharts/highcharts.js"></script>
 <script src="{{ STATIC_URL}}js/highcharts/modules/exporting.js"></script>
@@ -14,13 +16,14 @@
         //alert("in");
         var target = $("#target").text();
         var type = $("#type").text();
+        var stype = $("#stype").text();
         var total_num = 0;
         var show_dates = [];
         var show_nums = [];
         var title = "";
         var name = "";
         var coler = ['#2f7ed8', '#0d233a', '#8bbc21'];
-        var check_url = "/slice/get_count_show/?target="+target+"&type="+type+"&total_num="+total_num;
+        var check_url = "/slice/get_count_show/?target="+target+"&type="+type+"&total_num="+total_num+"&stype="+stype;
         $.ajax({
             type: "GET",
             url: check_url,
@@ -40,10 +43,20 @@
                  }
             }
         });
+        //show_dates = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30];
+        //show_nums = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,100000,101555];
         if(target == "project"){
             name = "项目";
         }else{
             name = "虚网";
+        }
+        var showtype = "新增";
+        if(stype == 0){
+            showtype = "新增";
+        }else if(stype == 1){
+            showtype = "删除失败";
+        }else{
+            showtype = "删除";
         }
         var date=new Date;
         var year=date.getFullYear().toString();
@@ -55,7 +68,7 @@
             if(target == "project"){
                 title = show_dates[0]+"-"+show_dates[9]+"每年新增项目数";
             }else{
-                title = show_dates[0]+"-"+show_dates[9]+"每年新增虚网数";
+                title = show_dates[0]+"-"+show_dates[9]+"每年"+showtype+"虚网数";
             }
         }else if(type == "month"){
             total_num = 12;
@@ -63,7 +76,7 @@
             if(target == "project"){
                 title = year + "年每月新增项目数";
             }else{
-                title = year + "年每月新增虚网数";
+                title = year + "年每月"+showtype+"虚网数";
             }
         }else{
             titshow = '<small>{point.key}日</small><br>'
@@ -72,17 +85,18 @@
             if(target == "project"){
                 title = year + "年" + month + "月每日新增项目数";
             }else{
-                title = year + "年" + month + "月每日新增虚网数";
+                title = year + "年" + month + "月每日"+showtype+"虚网数";
             }
         }
         $('#container').highcharts({
             chart: {
                 type: 'column',
-                margin: [ 40, 50, 30, 50]
+                margin: [ 50, 50, 20, 50]
             },
             colors: coler,
             title: {
-                text: title
+                text: title,
+                y: 5
             },
             exporting: {
                 enabled: false

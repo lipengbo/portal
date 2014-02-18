@@ -93,7 +93,7 @@ var board = svg.append('svg:g')
 
 initboard2();
    
-var tooltip = CustomTooltip( "posts_tooltip", 240 );
+var tooltip = CustomTooltip( "posts_tooltip", 210 );
 
 var bandwidth_capacities = ['10M', '100M', '1G', '10G'];
 var gre_ovs_capacity = [];
@@ -638,9 +638,9 @@ function highlight( data, element ) {
     if (data.type == 'switch') {
         content += "<h6>dpid：" + data.key + "</h6>";
         if(data.ports){
-            content += "<table class='table'>" + 
-            "<tr><th>端口</th>" + 
-            "</tr>";
+            content += "<div style='overflow-x: auto; overflow-y: auto; height: 70px;'><table class='table' width=250>";
+            //"<tr><th>端口</th>" + 
+            //"</tr>";
             //alert(data.ports[0].name);
             for (var i = 0; i < data.ports.length; i++) {
                 flag = false;
@@ -667,7 +667,7 @@ function highlight( data, element ) {
                     content += "</td></tr>";
                 }
             }
-            content += "</table>";
+            content += "</table></div>";
         }
         tooltip.showTooltip(content, d3.event);
    }else if(data.type == 'host'){
@@ -799,27 +799,22 @@ function restart() {
     .attr('width', function(d){ return d.width; })
     .attr('height', function(d){ return d.height; })
     .attr('class', function(d) {return 'node node-icon ' + d.type + '-node-icon'})
-   // .attr('class', 'node bootstro bootstro-highlight')
-   // .attr('data-bootstro-title', 'asdasdasasdas')
-   // .attr('r', 25)
-   // .style('fill', function(d) { return (d === selected_node) ? d3.rgb(colors(color_map[d.type])).brighter().toString() : colors(color_map[d.type]); })
-   // .style('stroke', function(d) { return d3.rgb(colors(color_map[d.type])).darker().toString(); })
-    //.classed('reflexive', function(d) { return d.reflexive; })
     .on('click', function(d) {
         if(admin == 1){
-            if(d.type == 'switch'){
-                //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
+            if(d.type == 'host' && d.type_id == 1){
+                window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
             }
             else{
-                window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
+                //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
         }
     })
     .on('mouseover', function(d) {
         highlight( d, this );
     })
-     .on('mouseout', function(d, i) {
-        tooltip.hideTooltip();
+    .on('mouseout', function(d, i) {
+        if(d.type == 'host'){
+        tooltip.hideTooltip();}
     })
     .on('mousedown', function(d) {
       if(d3.event.ctrlKey) return;
@@ -969,7 +964,7 @@ function random_refresh2 () {
                 url: check_url,
                 dataType: "json",
                 data: submit_data,
-                async: false, 
+                async: true, 
                 success: function(data) {
                     if (data.bandwidth){
                           var ph = path;//.selectAll('.link');
@@ -1013,13 +1008,14 @@ function random_refresh2 () {
                             return color; 
                         });
                     }
+                    refresh_time = Math.floor(Math.random() * 10000 + 10000 );
+                    random_refresh2();
                 },
                 error: function(data) {
-                   // alert("更新失败！");
+                    refresh_time = Math.floor(Math.random() * 10000 + 10000 );
+                    random_refresh2();
                 }
         });
-        refresh_time = Math.floor(Math.random() * 10000 + 10000 );
-        random_refresh2();
     }, refresh_time);
 }  
 random_refresh2();

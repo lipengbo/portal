@@ -60,6 +60,7 @@
                     <label>虚网名称</label>
                     <input type="text" maxlength=30 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
                     <span class="muted"><i>如openflow协议验证</i></span>
+                    <input type="text" value="0" id="slice_uuid" style="display:none"/>
                     <input type="text" value="{{request.user.id}}" id="user_id" style="display:none"/>
                     <span id="slice_nameInfo" style="display:inline;float:none;"></span>
                  </div>
