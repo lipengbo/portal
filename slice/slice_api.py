@@ -114,6 +114,11 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
                     return slice_obj
                 except Exception, ex:
                     transaction.rollback()
+                    if slice_obj:
+                        try:
+                            slice_obj.delete()
+                        except:
+                            pass
                     raise DbError("虚网创建失败!")
             else:
                 raise IslandError("所选节点无可用flowvisor！")
