@@ -266,7 +266,7 @@ $(document).ready(function() {
         $(this).addClass("vm_active");
 		set_value("cpu", $(this).attr("value"));
     });
-	$( "#cpu_slider" ).slider({
+	$( "#ram_slider" ).slider({
 		stop:function(event, ui){
 			$(".type_chose a").removeClass("vm_active");
 			set_value("ram", ui.value);
@@ -356,7 +356,8 @@ function page_function2(){
 function page_function3(){
 	//判断是否选择虚拟机信息
 	if(vms_info().count() == 0){
-		alert("请设置虚拟机信息！")
+		document.getElementById('alert_info').innerHTML = '请先保存虚拟机配置信息！';
+		$('#alert_modal').modal('show');
 		return;
 	}
 	//网段

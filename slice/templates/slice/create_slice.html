@@ -349,11 +349,6 @@
 								{%for flavor in flavors%}
 									<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
 								{%endfor%}
-			                     <!--
-			                     <a href="javascript:void(0);">迷你型</a>
-			                     <a href="javascript:void(0);">小型</a>
-			                     <a href="javascript:void(0);">中型</a>
-			                     <a href="javascript:void(0);">大型</a>	-->
 			                     <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">保存</button>                      
 			                 </td>
 			             </tr>
@@ -369,17 +364,11 @@
                          <tr>
                              <td><img src="/site_media/static/img/icon_nc.png" width="24">内存</td>
                              <td class="slider_td">
-                                 <div id="cpu_slider" class="ui-slider">                                                                      
+
+                                 <div id="ram_slider" class="ui-slider">                 
                                  </div>
-                                 <div class="cpu_value">
-                                       <span>128MB</span>
-                                       <span style="margin-left:65px;">256MB</span>
-                                       <span style="margin-left:60px;">512MB</span>
-                                       <span style="margin-left:69px;">1GB</span>
-                                       <span style="margin-left:86px;">2GB</span>
-                                       <span style="margin-left:85px;">4GB</span>
-                                       <span style="margin-left:85px;">8GB</span>
-                                 </div>
+                                 <span class="value_s">128 MB</span>
+                                 <span class="value_e">8 GB</span>
                              </td>
                          </tr>
                          <tr>
@@ -387,14 +376,9 @@
                              <td class="slider_td">
                                  <div id="disk_slider" class="ui-slider ui_defined">                                                                      
                                  </div>
-                                 <div class="disk_value">
-                                       <span>10GB</span>
-                                       <span style="margin-left:135px;">20GB</span>
-                                       <span style="margin-left:130px;">40GB</span>
-                                       <span style="margin-left:130px;">80GB</span>
-                                       <span style="margin-left:132px;">160GB</span>
-									   <span style="margin-left:132px;">320GB</span>
-                                 </div>
+
+                                 <span class="value_s">10 GB</span>
+                                 <span class="value_e">320 GB</span>
                              </td>
                          </tr>
                          <tr>
@@ -416,7 +400,7 @@
                                      <option value="" selected="selected">---------</option>
                                      <option value="1">server1</option>
                                  </select-->
-							 	{{ vm_form.server }} <span name="serverInfo"></span></td>
+							 	{{ vm_form.server }} <span name="serverInfo"></span>
                                  <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
                              </td>
                          </tr>

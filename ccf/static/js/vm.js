@@ -8,8 +8,10 @@ var hdd_selected;
 var vm_info_flag;
 var dhcp_checked;
 var update_vm;
-var ram_flavor = {"256":2, "512":3, "1024":4, "2048":5, "4096":6, "8192":7}
-var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6}
+var ram_flavor = {"256":2, "512":3, "1024":4, "2048":5, "4096":6, "8192":7};
+var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6};
+var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
+var disks = [10, 20, 40, 80, 160, 320];
 
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
@@ -267,7 +269,6 @@ function submit_vms(sliceid)
 //function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp, vm_info_record)
 function post_vminfo(sliceid, vm)
 {
-		//alert(vm_info_record["cpu"]);
         url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
         type: "POST",
@@ -276,6 +277,7 @@ function post_vminfo(sliceid, vm)
         cache: false,
         async: false,  
         data: {
+				flavor: vm.flavor,
 				cpu: vm.cpu,
 				ram: vm.ram,
 				hdd: vm.hdd,
@@ -309,8 +311,8 @@ function showMsg(_info, msg, state){
 	var info=_info;
 	if(state == 'ok'){
 		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title=""><i class="icon-ok"></i></a>';
-		info.innerHTML = "√";
-		info.style.color = "green";
+		info.innerHTML = "";
+		//info.style.color = "green";
 	}else{
 		info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
 		
@@ -422,6 +424,11 @@ function not_contains(a, obj) {
 
 function create_vms(sliceid, flag, from_link)
 {
+	if(vms_info().count() == 0){
+		document.getElementById('alert_info').innerHTML = "请先保存虚拟机配置置信息！";
+		$('#alert_modal').modal('show');
+		return;
+	}
     if(check_vminfo())
     {
 		submit_vms(sliceid)
@@ -558,7 +565,7 @@ function edit_vm(vm_id){
 	$("a[value="+vm.flavor+"]").addClass("vm_active");
 	$(".cpu_chose a").removeClass("vm_active");
 	$("#cpu_"+vm.cpu).addClass("vm_active");
-	$("#cpu_slider").slider("value", ram_flavor[vm.ram]);
+	$("#ram_slider").slider("value", ram_flavor[vm.ram]);
 	$("#disk_slider").slider("value", disk_flavor[vm.hdd]);
 }
 
@@ -570,18 +577,22 @@ function delete_vm(vm_id){
 function show_vm_info_table(){
 	$("#vms_info_table").find("tbody").empty();
 	vms_info().each(function(vm){
+		var ram = vm.ram, unit = 'MB';
+		if(ram >= 1024){
+			ram = ram/1024;
+			unit = 'GB';
+		}
 		$("#vms_info_table").find("tbody").append("<tr>"
                             +"<td>"+flavor_text[vm.flavor]+"</td>"
-                            +"<td>"+vm.cpu+"核</td>"
-                            +"<td>"+vm.ram+"MB</td>"
-                            +"<td>"+vm.hdd+"GB</td>"
+                            +"<td>"+vm.cpu+" 核</td>"
+                            +"<td>"+ram+" "+unit+"</td>"
+                            +"<td>"+vm.hdd+" GB</td>"
                             +"<td>"+vm.image_text+"</td>"
                             +"<td>"+vm.server_text+"</td>"
 							+"<td>"+vm.show_dhcp+"</td>"
                             +"<td>"
                             +"   <div>"
-                            +"    <a href='javascript:edit_vm("+vm.id+")'>编辑</a>"
-                            +"    <a href='javascript:delete_vm("+vm.id+")'>删除</a>"
+                            +"    <button class='btn' onclick='javascript:delete_vm("+vm.id+")'>删除</button>"
                             +"    </div>"
                             +"</td>"
                           +"</tr> ");
@@ -598,7 +609,7 @@ function select_flavor(flavor_id){
 		dataType: 'json',
 		success:function(data){
 			$("#cpu_"+data['cpu']).addClass("vm_active");
-			$("#cpu_slider").slider("value", ram_flavor[data['ram']]);
+			$("#ram_slider").slider("value", ram_flavor[data['ram']]);
 			$("#disk_slider").slider("value", disk_flavor[data['hdd']]);
 			cpu_selected = data['cpu'];
 			ram_selected = data['ram'];
@@ -608,8 +619,6 @@ function select_flavor(flavor_id){
 }
 
 function set_value(obj, value){
-	var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
-	var disks = [10, 20, 40, 80, 160, 320];
 	if(obj == "flavor"){
 		flavor_selected = value;
 	}else if(obj == "ram"){

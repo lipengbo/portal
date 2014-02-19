@@ -75,6 +75,12 @@ def create_vm(request, sliceid, from_link):
                 vm.ram = request.POST.get("ram")
                 vm.cpu = request.POST.get("cpu")
                 vm.hdd = request.POST.get("hdd")
+                flavor = Flavor.objects.filter(id=request.POST.get("flavor"))
+                if flavor.count() == 0:
+                    vm.flavor = None
+                else:
+                    vm.flavor = flavor[0]
+
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)

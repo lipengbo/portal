@@ -4,20 +4,38 @@ String.prototype.repeat = function(num) {
     return new Array(num + 1).join(this);
 };
 
-(function($) {
 
+(function($) {
+	function set_segment(obj, amount, arr, unit){
+		return obj.each(function () { 
+			var segmentGap = 100 / (amount - 1) + "%";
+			var segment = '';
+			var temp;
+			for(var i=1; i<arr.length - 1; i++){
+				temp = arr[i];
+				if(temp >= 1024){
+					temp = temp/1024;
+					unit = 'GB';
+				}
+				segment += "<div class='ui-slider-segment' style='margin-left: " + segmentGap
+							+ ";'><span>" + temp +" "+ unit + "</span></div>";
+			}	
+			$(this).prepend(segment);
+    	});
+	}
   // Add segments to a slider
-  $.fn.addSliderSegments = function (amount) {
-    return this.each(function () {             
-      var segmentGap = 100 / (amount - 1) + "%"
-        , segment = "<div class='ui-slider-segment' style='margin-left: " + segmentGap + ";'></div>";
-      $(this).prepend(segment.repeat(amount - 2));
-    });
+  $.fn.addSliderSegments = function (slider_name, amount) {
+	if(slider_name == 'ram_slider'){
+		return set_segment(this, amount, rams, 'MB');
+    }else if(slider_name == 'disk_slider'){
+		return set_segment(this, amount, disks, 'GB');
+	}
+   
   };
 
   $(function() {
     // jQuery UI Sliders
-    var $slider = $("#cpu_slider");
+    var $slider = $("#ram_slider");
     if ($slider.length) {
       $slider.slider({
         min: 1,
@@ -25,7 +43,7 @@ String.prototype.repeat = function(num) {
         value: 1,
         orientation: "horizontal",
         range: "min"
-      }).addSliderSegments($slider.slider("option").max);
+      }).addSliderSegments("ram_slider", $slider.slider("option").max);
     }    
     
     var $slider2 = $("#disk_slider");
@@ -36,8 +54,10 @@ String.prototype.repeat = function(num) {
         value: 1,
         orientation: "horizontal",
         range: "min"
-      }).addSliderSegments($slider2.slider("option").max);
+      }).addSliderSegments("disk_slider", $slider2.slider("option").max);
     }    
+    
+    
   });
   
 })(jQuery);

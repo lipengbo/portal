@@ -36,73 +36,99 @@
 </div>
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
-<fieldset class="">
-    <legend>虚拟机信息</legend>
-    <table border="0">
-	<tr>
-		<td width="15%">类型：</td>
-		{%for flavor in flavors%}
-			<td width="15%">{% trans flavor.name %}</td>
-		{%endfor%}
-		<!--td width="25%">微型</td><td width="25%">中型</td><td width="25%">大型</td-->
-	</tr>
-	<tr>
-	<td>CPU：</td><td>1核</td><td>2核</td><td>4核</td><td>8核</td>
-	</tr>
-	<tr>
-	<td>内存：</td><td><input type="text" id="vm_mem"/></td>
-	</tr>
-	<tr>
-	<td>磁盘：</td><td></td>
-	</tr>
-	<tr>
-	<td>镜像：</td><td>{{ vm_form.image }} <span name="imageInfo"></span></td>
-	</tr>
-	<tr>
-	<td>宿主机：</td><td>{{ vm_form.server }} <span name="serverInfo"></span></td>
-	</tr>
-	</table>
-	
-	{% if slice_obj.get_dhcp %}
-        <label class="">
-            {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                                                    是否启动DHCP
-        </label>
-    {%endif%}
-	<a href="javascript:update_vms_info()">保存</a>
-	<hr/>
-</fieldset>
-
-<!-- 显示参数的表格 -->
-<table id="vms_info_table">
-<thead>
-	<tr>
-		<td width="10%">名称<td>
-		<td width="10%">类型<td>
-		<td width="10%">CPU<td>
-		<td width="10%">内存</td>
-		<td width="10%">磁盘</td>
-		<td width="20%">镜像</td>
-		<td width="10%">宿主机</td>
-		<td width="20%">操作</td>
-	</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-<hr>
-    <div class="form-actions">
-        <div class="row-fluid">
-            <div class="span3"></div>
-          {% if from_link == '0' %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
-          {% else %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
-          {% endif %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
-          <div class="span3"></div>
-        </div>
-    </div>
+	<fieldset class="">
+    	<legend>虚拟机信息</legend>
+    	<table cellpadding="0" cellspacing="0" class="create_vm_form">
+			<tbody>
+				<tr>
+			    	<td width="86"><img src="/site_media/static/img/icon_type.png" width="24">类型</td>
+			    	<td class="type_chose">
+						{%for flavor in flavors%}
+							<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
+						{%endfor%}
+			            <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">保存</button>                      
+			     	</td>
+				</tr>
+				<tr>
+            		<td><img src="/site_media/static/img/icon_cpu.png" width="24">CPU</td>
+                	<td class="cpu_chose">
+                    	<a href="javascript:void(0);" class="vm_active" id="cpu_1" value="1">1 核</a>
+                        <a href="javascript:void(0);" id="cpu_2" value="2">2 核</a>
+                        <a href="javascript:void(0);" id="cpu_4" value="4">4 核</a>
+						<a href="javascript:void(0);" id="cpu_6" value="6">6 核</a>
+                  	</td>
+                </tr>
+                <tr>
+                	<td><img src="/site_media/static/img/icon_nc.png" width="24">内存</td>
+                	<td class="slider_td">
+                    	<div id="ram_slider" class="ui-slider"></div>
+                    	<span class="value_s">128 MB</span>
+                    	<span class="value_e">8 GB</span>
+                 	</td>
+            	</tr>
+            	<tr>
+                	<td><img src="/site_media/static/img/icon_cp.png" width="24">磁盘</td>
+                	<td class="slider_td">
+                    	<div id="disk_slider" class="ui-slider ui_defined"></div>
+						<span class="value_s">10 GB</span>
+                        <span class="value_e">320 GB</span>
+                    </td>
+                </tr>
+                <tr>
+                	<td><img src="/site_media/static/img/icon_iso.png" width="24">镜像</td>
+                    <td>
+						{{ vm_form.image }} <span name="imageInfo"></span>
+                    </td>
+                </tr>
+                <tr>
+                	<td><img src="/site_media/static/img/icon_host.png" width="24">宿主机</td>
+                 	<td>
+						{{ vm_form.server }} <span name="serverInfo"></span>
+                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
+                	</td>
+       			</tr>
+               	<tr>
+                	<td colspan="2">
+                    	<div name="dhcp">                                
+                    		<label class="inline tab_checkbox">
+                        		{{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+                       		</label>是否启动DHCP
+                    	</div>
+                 	</td>
+             	</tr>
+			</tbody>
+		</table>
+			     
+		<div class="form-actions">
+        	<div class="row-fluid">
+            	<div class="span3"></div>
+          			{% if from_link == '0' %}
+          				<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+          			{% else %}
+          				<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          			{% endif %}
+          		<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
+          		<div class="span3"></div>
+        	</div>
+    	</div>
+			     
+			     <table class="table table-bordered" id="vms_info_table">
+                      <thead>
+                          <tr>
+                            <th>类型</th>
+                            <th>CPU</th>
+                            <th>内存</th>
+                            <th>磁盘</th>
+                            <th>镜像</th>
+                            <th>宿主机</th>
+							<th>是否启动DHCP</th>
+                            <th>操作</th>
+                          </tr>  
+                      </thead>
+                      <tbody>
+                      </tbody>
+                 </table>
+    
 </form>
 {% endblock %}
 {% block extra_script %}
@@ -110,10 +136,12 @@
 <script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script>
 	$("#alert_close_sure").on("click", function(){
 		window.location.href='/plugins/vt/vm/list/' + {{sliceid}} + '/';
 	})
+	flavor_init();
 	
 </script>
 {% endblock %}
