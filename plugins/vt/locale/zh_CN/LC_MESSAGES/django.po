@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-15 08:06+0000\n"
+"POT-Creation-Date: 2014-02-13 16:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,112 +18,115 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:15
+#: models.py:19
 msgid "nostate"
 msgstr "初始状态"
 
-#: models.py:16
+#: models.py:20
 msgid "running"
 msgstr "运行中"
 
-#: models.py:17
+#: models.py:21
 msgid "blocked"
 msgstr ""
 
-#: models.py:18
+#: models.py:22
 msgid "paused"
 msgstr ""
 
-#: models.py:19
+#: models.py:23
 msgid "shutdown"
 msgstr ""
 
-#: models.py:20
+#: models.py:24
 msgid "shutoff"
 msgstr ""
 
-#: models.py:21
+#: models.py:25
 msgid "crashed"
 msgstr ""
 
-#: models.py:22
+#: models.py:26
 msgid "pmsuspended"
 msgstr ""
 
-#: models.py:23
+#: models.py:27
 msgid "building"
 msgstr ""
 
-#: models.py:24
+#: models.py:28
 msgid "failed"
 msgstr ""
 
-#: models.py:25
+#: models.py:29
 msgid "not exist"
 msgstr ""
 
-#: models.py:45
+#: models.py:49
 msgid "vm for controller"
 msgstr ""
 
-#: models.py:46
+#: models.py:50
 msgid "vm for slice"
 msgstr ""
 
-#: models.py:47
+#: models.py:51
 msgid "vm for gateway"
 msgstr ""
 
-#: models.py:62
+#: models.py:70
 msgid "Image"
 msgstr "镜像"
 
-#: models.py:74
+#: models.py:83
 msgid "Flavor"
 msgstr "虚拟机模板"
 
-#: models.py:158
+#: models.py:191
 msgid "Virtual Machine"
 msgstr "虚拟机"
 
-#: models.py:170
+#: models.py:202
 msgid "Host Mac"
 msgstr "主机Mac地址"
 
-#: templates/vt/create_vm.html:11
-msgid "create vm"
-msgstr "创建虚拟机"
-
-#: templates/vt/create_vm.html:69
-msgid "Cancel"
-msgstr "取消"
-
-#: templates/vt/create_vm.html:70
-msgid "Submit"
-msgstr "提交"
-
-#: templates/vt/vm_list.html:11 templates/vt/vnc.html:21
-msgid "Vm list"
-msgstr "虚拟机列表"
-
-#: plugins/vt/api.py:35 plugins/vt/views.py:51
-msgid "resource not enough"
-msgstr "宿主机资源不足"
-
-msgid "vm invalide"
-msgstr "虚拟机信息校验不成功"
-
+#: views.py:89 views.py:120
 msgid "connection refused"
 msgstr "远程连接失败"
 
-msgid "server error"
-msgstr "服务器出错"
+#: views.py:94
+msgid "vm invalide"
+msgstr "虚拟机信息校验不成功"
 
+#: views.py:121
 msgid "vm operation failed"
 msgstr "虚拟机操作失败"
 
+#: views.py:151
 msgid "failed to delete vm"
 msgstr "虚拟机删除失败"
+
+#: templates/vt/create_vm.html:10
+msgid "create vm"
+msgstr "创建虚拟机"
+
+#: templates/vt/create_vm.html:143 templates/vt/create_vm.html.py:145
+msgid "Cancel"
+msgstr "取消"
+
+#: templates/vt/create_vm.html:147
+msgid "Submit"
+msgstr "提交"
+
+#: templates/vt/vm_list.html:16 templates/vt/vnc.html:21
+msgid "Vm list"
+msgstr "虚拟机列表"
+
+msgid "resource not enough"
+msgstr "宿主机资源不足"
+
+msgid "server error"
+msgstr "服务器出错"
 
 msgid "micro"
 msgstr "微型"

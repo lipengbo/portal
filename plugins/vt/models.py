@@ -88,9 +88,12 @@ class VirtualMachine(IslandResource):
     ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
     gateway_public_ip = models.ForeignKey(IPUsage, null=True, related_name="gateway_set")
     mac = models.CharField(max_length=20, null=True)
+    cpu = models.IntegerField(null=True)
+    ram = models.IntegerField(null=True)
+    hdd = models.IntegerField(null=True)
     enable_dhcp = models.BooleanField(default=False)
     slice = models.ForeignKey(Slice)
-    flavor = models.ForeignKey(Flavor)
+    flavor = models.ForeignKey(Flavor, null=True)
     image = models.ForeignKey(Image)
     server = models.ForeignKey(Server)
     switch_port = models.ForeignKey(SwitchPort, null=True)
@@ -132,11 +135,17 @@ class VirtualMachine(IslandResource):
             print '----------------------create a vm=%s -------------------------' % self.name
         else:
             vmInfo = {}
+            if self.flavor == None:
+                vmInfo['mem'] = self.ram
+                vmInfo['cpus'] = self.cpu
+                vmInfo['hdd'] = self.hdd
+            else:
+                vmInfo['mem'] = self.flavor.ram
+                vmInfo['cpus'] = self.flavor.cpu
+                vmInfo['hdd'] = self.flavor.hdd
+
             vmInfo['name'] = self.uuid
-            vmInfo['mem'] = self.flavor.ram
-            vmInfo['cpus'] = self.flavor.cpu
             vmInfo['img'] = self.image.uuid
-            vmInfo['hdd'] = self.flavor.hdd
             vmInfo['glanceURL'] = self.image.url
             vmInfo['type'] = self.type
             vmInfo['network'] = []
@@ -198,6 +207,7 @@ def vm_pre_save(sender, instance, **kwargs):
         instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
+        instance.name = "VM-" + instance.uuid.split("-")[0]
     if not instance.mac:
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
     if not instance.state:
