@@ -18,8 +18,8 @@
 {% block body %}
 
     <legend>
-        <a href="{% url project_applicant project.id %}" class="btn btn-warning edit">审批</a>
-        <a href="{% url project_invite project.id %}" class="btn btn-warning edit">邀请</a>
+        <a href="{% url project_applicant project.id %}" class="btn btn-info edit">审批</a>
+        <a href="{% url project_invite project.id %}" class="btn btn-info edit">邀请</a>
         {% trans "Members" %}
     </legend>
 <div class="row-fluid">
@@ -28,11 +28,11 @@
             <thead>
                 <tr>
                     <th width="5%">序号</th>
-                    <th width="18%">{% trans "Member name" %}</th>
+                    <th width="15%">{% trans "Member name" %}</th>
                     <th width="20%">研究方向</th>
                     <th width="20%">Email</th>
                     <th width="20%">所属单位</th>
-                    <th width="18%">操作</th>
+                    <th width="20%">操作</th>
                 </tr>
             </thead>
             <tbody>
