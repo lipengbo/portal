@@ -358,25 +358,36 @@ def create_nw(request, owner, nw_num):
     """
     print "create_nw"
     try:
+        print 1
         nw_objs = Subnet.objects.filter(owner=owner)
+        print 2
         if owner == '0':
+            print 3
             for i in range(10):
                 if nw_objs:
                     uuid = utils.gen_uuid()
                     owner = ''.join(uuid.split('-'))
+                    print owner
                     nw_objs = Subnet.objects.filter(owner=owner)
                 else:
                     break
             if nw_objs:
+                print 4
                 return HttpResponse(json.dumps({'value': 1}))
         else:
+            print 5
             IPUsage.objects.delete_subnet(owner)
         nw = IPUsage.objects.create_subnet(owner, int(nw_num), 1800)
+        print 6
         if nw:
+            print 7
             return HttpResponse(json.dumps({'value': nw, 'owner': owner}))
         else:
+            print 8
             return HttpResponse(json.dumps({'value': 0}))
     except Exception, ex:
+        print 9
+        print ex
         return HttpResponse(json.dumps({'value': 0}))
 
 
