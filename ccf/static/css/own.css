@@ -5319,6 +5319,12 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
+legend span {
+  display: block;
+  background: #2489c5;
+  color: #fff;
+  float: left;
+}
 .modal-body table tr td {
   border: none;
 }
@@ -6547,7 +6553,11 @@ a.button-royal:hover {
   background: #fff;
   border: 1px solid #ccc;
 }
-.qwtp_count .qwtp .qwtp_tb {
+.qwtp_count .qwtp a {
+  display: block;
+  text-decoration: none;
+}
+.qwtp_count .qwtp a .qwtp_tb {
   height: 40px;
   padding: 10px;
   border-right: 1px solid #ccc;
@@ -6556,18 +6566,19 @@ a.button-royal:hover {
   float: left;
   line-height: 40px;
 }
-.qwtp_count .qwtp .qwtp_tb img {
+.qwtp_count .qwtp a .qwtp_tb img {
   width: 90px;
 }
-.qwtp_count .qwtp .qwtp_nums {
+.qwtp_count .qwtp a .qwtp_nums {
   padding-top: 10px;
   margin-left: 40%;
   text-align: center;
   font-size: 28px;
   font-weight: bold;
   color: #666;
+  text-decoration: none;
 }
-.qwtp_count .qwtp .qwtp_nums .qwtp_name {
+.qwtp_count .qwtp a .qwtp_nums .qwtp_name {
   margin-top: 5px;
   font-size: 14px;
   font-weight: normal;
@@ -6888,4 +6899,11 @@ a.button-royal:hover {
 }
 .table_list .actions-flowvisor {
   width: 30%;
+}
+.vm_state .icon-ok-sign {
+  color: #51a351;
+}
+.vm_state .icon-remove-sign,
+.vm_state .icon-minus-sign {
+  color: #bd362f;
 }

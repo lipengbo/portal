@@ -3,6 +3,11 @@
 {% load i18n %}
 {% load common_tags %}
 {% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block extra_style %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/citySelector.css" %}" />       
+{% endblock %}
 
 {% block breadcrumb %}
     {% with ModelClass|get_class_name as class_name  %}
@@ -27,11 +32,13 @@
             <button type="submit" class="btn btn-info">{% trans "Save" %}</button>
             {% endif %}
         </div>
+
     </form>
 {% endwith %}
 {% endblock %}
 
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/citySelector.js"></script>
 {% with ModelClass|get_class_name as class_name  %}
 <script type="text/javascript" charset="utf-8">
     {% if class_name == 'Flowvisor' %}

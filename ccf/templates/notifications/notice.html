@@ -2,7 +2,8 @@
 {% load common_tags %}
 {% load i18n %}
 <hr>
-<p>
+<p class="checkboxs">
+    <input type="checkbox" name="notification_id" value="{{ notice.id }}">
     {% if notice.unread %}
     <a class="muted pull-right text-success" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ notice.action_object.action_url }}">
         <i class="icon-chevron-right">

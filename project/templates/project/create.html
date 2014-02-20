@@ -24,7 +24,7 @@
 <form class="" action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
   <fieldset>			   
-    <legend>基本信息</legend>
+    <legend><span>基本信息</span></legend>
     <div class="form_inline control-group {% if form.name.errors %}error{% endif %}">
         <label>项目名称</label>
         <input type="text" name="name" value="{{ form.instance.name }}">  

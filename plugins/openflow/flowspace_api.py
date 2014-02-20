@@ -4,6 +4,7 @@ from django.db import transaction
 from slice.slice_exception import DbError
 from plugins.vt.api import get_slice_gw_mac, get_phydata_gw_mac
 from etc.config import gw_controller
+from etc.config import flowvisor_or_cnvp
 
 import logging
 LOG = logging.getLogger("CENI")
@@ -271,11 +272,17 @@ def matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
     LOG.debug('matches_to_arg_match')
     match = ''
     if in_port:
-        match += 'in_port=' + in_port + ','
+        match += 'in_port=' + str(in_port) + ','
     if dl_vlan:
-        match += 'dl_vlan=' + dl_vlan + ','
+        if flowvisor_or_cnvp == "cnvp":
+            match += 'dl_vlanid=' + dl_vlan + ','
+        else:
+            match += 'dl_vlan=' + dl_vlan + ','
     if dl_vpcp:
-        match += 'dl_vpcp=' + dl_vpcp + ','
+        if flowvisor_or_cnvp == "cnvp":
+            match += 'dl_vlanpcp=' + dl_vpcp + ','
+        else:
+            match += 'dl_vpcp=' + dl_vpcp + ','
     if dl_src:
         match += 'dl_src=' + dl_src + ','
     if dl_dst:
