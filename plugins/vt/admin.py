@@ -5,7 +5,7 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 from django.contrib import admin
-from models import VirtualMachine, HostMac, Flavor, Image
+from models import VirtualMachine, HostMac, Flavor, Image, SSHKey
 from django import forms
 
 
@@ -30,3 +30,4 @@ admin.site.register(VirtualMachine, VirtualMachineAdmin)
 admin.site.register(HostMac)
 admin.site.register(Flavor)
 admin.site.register(Image)
+admin.site.register(SSHKey)

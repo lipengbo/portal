@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.contrib.auth.models import User
 
 from resources.models import IslandResource, Server, SwitchPort
 from slice.models import Slice
@@ -83,6 +84,19 @@ class Flavor(models.Model):
         verbose_name = _("Flavor")
 
 
+class SSHKey(models.Model):
+    user = models.ForeignKey(User)
+    title = models.CharField(max_length=256)
+    sshkey = models.CharField(max_length=500)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        unique_together = (("user", "sshkey"), )
+        verbose_name = _("SSH Keys")
+
+
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=36, null=True, unique=True)
     ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
@@ -128,7 +142,11 @@ class VirtualMachine(IslandResource):
         return self.slice.id
 
     def get_user_keys(self):
-        return ['abc', '123']
+        user = self.slice.owner
+        ssh_keys = []
+        for i in SSHKey.objects.filter(user=user):
+            ssh_keys.append(i.sshkey)
+        return ssh_keys
 
     def create_vm(self):
         if function_test:
