@@ -5371,9 +5371,46 @@ legend .title_word_bg .triangle {
   background: #fff;
   border-radius: 0;
 }
-.modal_base_defined .modal-footer {
+.modal_poptip_defined {
+  padding-top: 10px;
+  background: #ffffff url(../img/tip_bg.png) top left;
+  background-repeat: repeat-x;
+}
+.modal_poptip_defined .modal-footer {
   background-color: #fff;
   border-top: none;
+}
+.modal_reg_defined .modal-header {
+  position: relative;
+  padding: 16px 10px 10px 10px;
+  border-bottom: none;
+}
+.modal_reg_defined .modal-header h3 {
+  font-size: 14px;
+  background: #3498db;
+  color: #fff;
+  margin-left: -10px;
+  margin-right: -10px;
+  padding-left: 10px;
+  height: 33px;
+  line-height: 33px;
+}
+.modal_reg_defined .modal-header .close {
+  font-size: 24px;
+  margin-top: 0;
+  line-height: 33px;
+  color: #fff;
+  opacity: 1;
+  filter: alpha(opacity=100);
+  font-weight: normal;
+}
+.modal_reg_defined .modal-header .reg_bg_part {
+  position: absolute;
+  left: -7px;
+  top: 9px;
+  width: 7px;
+  height: 47px;
+  background: url(../img/reg_part.png) no-repeat;
 }
 .sep_div {
   margin-bottom: 20px;
@@ -5935,11 +5972,12 @@ table {
 .example-sites li .logo_img {
   border-bottom: 1px solid #9c9c9c;
   background: #c2d0df;
-  padding-top: 72px;
-  padding-bottom: 72px;
+  padding-top: 41px;
+  padding-bottom: 41px;
+  text-align: center;
 }
 .example-sites li .logo_img img {
-  width: 100%;
+  width: auto;
   height: auto;
 }
 .example-sites li h5 {
@@ -6010,8 +6048,14 @@ table {
   height: 100%;
   border-right: 1px solid #9c9c9c;
 }
-.thumbnail .slice_left img {
+.thumbnail .slice_left .top_img {
+  width: 100%;
+  height: 70px;
   background: #c2d0df;
+  text-align: center;
+}
+.thumbnail .slice_left img {
+  height: 70px;
 }
 .thumbnail .slice_left ul {
   margin-bottom: 7px;

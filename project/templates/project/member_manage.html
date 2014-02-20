@@ -52,7 +52,7 @@
                         {% if  project.owner == user %}
                             {% if  membership.user.id != project.owner.id %}
                             <a class="btn" href="{% url project_perm project.id membership.user.id  %}">权限</a>
-                            <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}</a>
+                            <a href="{% url project_delete_member membership.id  %}" class="btn btn-danger btn-delete">{% trans "Remove" %}</a>
                             {%else%}
                             <a class="btn disabled" href="#" disabled>权限</a>
                             <button type="button" onclick="" class="btn btn-danger btn-delete" disabled>{% trans "Remove" %}</button>
