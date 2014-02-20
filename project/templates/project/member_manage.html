@@ -20,7 +20,10 @@
     <legend>
         <a href="{% url project_applicant project.id %}" class="btn btn-info edit">审批</a>
         <a href="{% url project_invite project.id %}" class="btn btn-info edit">邀请</a>
-        {% trans "Members" %}
+        <div class="title_word_bg">
+                                           {% trans "Members" %}
+           <div class="triangle"></div> 
+        </div>          
     </legend>
 <div class="row-fluid">
     <div class="span12">

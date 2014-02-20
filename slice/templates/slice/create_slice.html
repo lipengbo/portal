@@ -55,7 +55,12 @@
               		<p>{{error_info}}ok</p>
               	{%endif%}
               <fieldset>
-                 <legend>基本信息</legend>
+                 <legend>
+                    <div class="title_word_bg">
+                                        基本信息      
+                       <div class="triangle"></div> 
+                    </div> 
+                 </legend>
                  <div class="form_inline">
                     <label>虚网名称</label>
                     <input type="text" maxlength=30 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
@@ -99,7 +104,12 @@
              
              <div class="tab_part">
              <fieldset>
-                <legend>网络节点选择<small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
+                <legend>
+                    <div class="title_word_bg">
+                                       网络节点选择
+                       <div class="triangle"></div> 
+                    </div> 
+                    <small>点击拓扑图中网络节点选择需要的实验拓扑</small></legend>
                 <div class="alert alert-info">
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
@@ -163,7 +173,12 @@
                 </div>       
               </fieldset>
               <fieldset>
-                 <legend>网络地址<small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small></legend>
+                 <legend>
+                     <div class="title_word_bg">
+                                       网络地址
+                       <div class="triangle"></div> 
+                    </div> 
+                     <small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small></legend>
                 <div class="form_inline tooltip-demo"> 
                     <label>IP数量</label>
                     <select name="nw_num" id="nw_num">
@@ -188,7 +203,12 @@
              
              <div class="tab_part">
               <fieldset class="base_info tooltip-demo">
-                <legend>网络地址配置</legend>
+                <legend>
+                    <div class="title_word_bg">
+                                        网络地址配置      
+                       <div class="triangle"></div> 
+                    </div>               
+                </legend>
                 <table class="table">
                     <tbody>
                         <tr>
@@ -199,13 +219,18 @@
                             	<input type="text" value="" id="old_nw_num" style="display:none"/>
                             	<input type="text" value="" id="old_nw_owner" style="display:none"/>                            	<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="icon-question-sign icon-align-left"></i></a>
                             </td>	
-							<td colspan="2"><label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器</td>
+							<td><label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器</td>
 						</tr>
                     </tbody>
                 </table>
               </fieldset>
               <fieldset class="base_info tooltip-demo">
-                 <legend>控制器配置</legend>
+                 <legend>
+                    <div class="title_word_bg">
+                                        控制器配置      
+                       <div class="triangle"></div> 
+                    </div> 
+                     </legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -252,7 +277,12 @@
               </fieldset>
 			<!--div id="gw_setting" style="display:none"-->
               <fieldset class="base_info tooltip-demo">
-                 <legend>虚拟网关配置</legend>
+                 <legend>
+                      <div class="title_word_bg">
+                                                        虚拟网关配置      
+                       <div class="triangle"></div> 
+                    </div>                
+                 </legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -324,7 +354,12 @@
              </div>     
              <div class="tab_part">
                  <fieldset class="vm_info_list tooltip-demo">
-                     <legend>虚拟机配置</legend>                 
+                     <legend>
+                        <div class="title_word_bg">
+                                        虚拟机配置      
+                           <div class="triangle"></div> 
+                        </div>  
+                     </legend>                 
 				<!-- 拓扑图 -->
 				<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 					<div class="modal-header">
@@ -443,7 +478,12 @@
              </div>
              <div class="tab_part">
                  <fieldset>
-                 <legend>网络节点</legend>
+                 <legend>
+                       <div class="title_word_bg">
+                                        网络节点      
+                       <div class="triangle"></div> 
+                    </div>                
+                 </legend>
                  <table class="switch-manifest table table-striped table-hover">
                     <thead>
                         <tr>
@@ -458,7 +498,12 @@
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>网络地址</legend>
+                 <legend>
+                    <div class="title_word_bg">
+                                                            网络地址      
+                       <div class="triangle"></div> 
+                    </div> 
+                 </legend>
                  <table class="table">
                     <tbody>
                         <tr>
@@ -473,15 +518,30 @@
                  </table>   
               </fieldset>
               <fieldset class="base_info">
-                 <legend>控制器</legend>
+                 <legend>
+                    <div class="title_word_bg">
+                                                            控制器      
+                       <div class="triangle"></div> 
+                    </div>               
+                 </legend>
                  <div id="list_controller"></div>
               </fieldset>
               <fieldset class="base_info">
-                 <legend>虚拟网关</legend>
+                 <legend>
+                     <div class="title_word_bg">
+                                        虚拟网关      
+                       <div class="triangle"></div> 
+                    </div> 
+                 </legend>
                  <div id="list_gw"></div>
               </fieldset>
               <fieldset>
-                 <legend>虚拟机列表</legend>
+                 <legend>
+                    <div class="title_word_bg">
+                                        虚拟机列表      
+                       <div class="triangle"></div> 
+                    </div>               
+                 </legend>
                  <table class="table table-striped table-hover">
                     <thead>
                         <tr>

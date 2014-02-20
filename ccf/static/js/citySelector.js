@@ -504,5 +504,4 @@ Vcity.CitySelector.prototype = {
         }
     }
 };
- 
-    var test=new Vcity.CitySelector({input:'id_name'});
+  

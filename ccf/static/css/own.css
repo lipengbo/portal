@@ -5308,6 +5308,7 @@ legend {
   font-family: "Microsoft YaHei";
   color: #2489c5;
   border-bottom: 1px solid #2489c5;
+  font-size: 18px;
 }
 legend button,
 legend a {
@@ -5319,11 +5320,25 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
-legend span {
-  display: block;
+legend .title_word_bg {
+  position: relative;
   background: #2489c5;
   color: #fff;
   float: left;
+  width: auto;
+  min-width: 122px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+}
+legend .title_word_bg .triangle {
+  position: absolute;
+  right: -16px;
+  top: 12px;
+  height: 0px;
+  width: 0px;
+  border: 8px solid #000;
+  border-color: transparent transparent transparent #2489c5;
 }
 .modal-body table tr td {
   border: none;
@@ -5368,6 +5383,10 @@ legend span {
   background-image: linear-gradient(to bottom, #eeeeee, #eeeeee);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeeeeee', endColorstr='#ffeeeeee', GradientType=0);
+}
+.navbar-inverse .nav li.dropdown > .dropdown-toggle .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
 }
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
@@ -5665,7 +5684,7 @@ table {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 .fill_form fieldset textarea {
   width: 400px;
@@ -5759,7 +5778,7 @@ table {
   vertical-align: middle;
 }
 .form-wizard .nav-pills .visit .step .number {
-  background-color: #2489c5;
+  background-color: #f89406;
   color: #fff;
 }
 .form-wizard .nav-pills .visit .step .desc {
