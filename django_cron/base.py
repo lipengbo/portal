@@ -73,7 +73,8 @@ class CronScheduler(object):
         job.args = cPickle.dumps(args)
         job.kwargs = cPickle.dumps(kwargs)
         job.run_frequency = job_instance.run_every
-        job.last_run = datetime.datetime.now() + datetime.timedelta(seconds=1)
+#         job.last_run = datetime.datetime.now() + datetime.timedelta(seconds=1)
+        job.queued = False
         job.save()
         status, created = models.Cron.objects.get_or_create(pk=1)
         if status.executing:
@@ -119,7 +120,8 @@ class CronScheduler(object):
             if job.queued:
 #                 print "+++++++++++++++++++++++++4"
                 time_delta = datetime.datetime.now() - job.last_run
-                if time_delta.seconds > job.run_frequency:
+#                 print time_delta.total_seconds()
+                if time_delta.total_seconds() > job.run_frequency:
                     inst = cPickle.loads(str(job.instance))
                     args = cPickle.loads(str(job.args))
                     kwargs = cPickle.loads(str(job.kwargs))
