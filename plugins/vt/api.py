@@ -114,7 +114,8 @@ def do_vm_action(vm, action):
             result = True
         else:
             result = False
-    vm.save()
+    if result == True:
+        vm.save()
     return result
 
 

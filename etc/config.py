@@ -7,6 +7,7 @@
 #[plugin-vt]
 glance_host = '192.168.5.111'
 glance_port = 9292
+sFlow_service = 'http://192.168.5.24:8008/'
 
 #[agent-service]
 compute_service_port = 8886
