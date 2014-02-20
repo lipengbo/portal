@@ -5319,6 +5319,12 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
+legend span {
+  display: block;
+  background: #2489c5;
+  color: #fff;
+  float: left;
+}
 .modal-body table tr td {
   border: none;
 }
@@ -6893,4 +6899,11 @@ a.button-royal:hover {
 }
 .table_list .actions-flowvisor {
   width: 30%;
+}
+.vm_state .icon-ok-sign {
+  color: #51a351;
+}
+.vm_state .icon-remove-sign,
+.vm_state .icon-minus-sign {
+  color: #bd362f;
 }
