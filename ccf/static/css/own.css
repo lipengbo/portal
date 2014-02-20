@@ -5343,6 +5343,34 @@ legend .title_word_bg .triangle {
 .modal-body table tr td {
   border: none;
 }
+.modal_base_defined {
+  background: #3498db;
+  padding: 10px;
+}
+.modal_base_defined .modal-header {
+  padding: 0 0 10px 0;
+  border-bottom: none;
+  color: #fff;
+}
+.modal_base_defined .modal-header h3 {
+  line-height: normal;
+  font-size: 14px;
+}
+.modal_base_defined .modal-header .close {
+  margin-top: 0;
+  font-size: 24px;
+  color: #fff;
+  font-weight: normal;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.modal_base_defined .modal-body {
+  background: #fff;
+}
+.modal_base_defined .modal-footer {
+  background: #fff;
+  border-radius: 0;
+}
 .sep_div {
   margin-bottom: 20px;
 }
