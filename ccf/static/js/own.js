@@ -461,8 +461,8 @@ function page_function3(){
     //        increaseArea: '20%' // optional
    // });
         //虚拟机
-        fetch_vminfo();
-        return check_vminfo()
+        return fetch_vminfo();
+        //return check_vminfo()
 }
 function page_function4(){
 	var project_id = $("#project_id").text();

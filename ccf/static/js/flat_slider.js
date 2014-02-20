@@ -40,7 +40,7 @@ String.prototype.repeat = function(num) {
       $slider.slider({
         min: 1,
         max: 7,
-        value: 1,
+        value: 2,
         orientation: "horizontal",
         range: "min"
       }).addSliderSegments("ram_slider", $slider.slider("option").max);
