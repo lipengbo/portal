@@ -453,7 +453,7 @@ img {
                                     {% if slice_obj.state == 1 %}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse disabled slice_state_del">删除</a>
                                     {%else%}
-                                        <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse slice_state_del">删除</a>
+                                        <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger slice_state_del">删除</a>
                                     {%endif%}
                                </td>
                             {%endif%}
