@@ -156,7 +156,7 @@ class Slice(models.Model):
 
     def get_nw(self):
         try:
-            nw_obj = Subnet.objects.get(owner=self.name)
+            nw_obj = Subnet.objects.get(owner=self.uuid)
             return nw_obj.netaddr
         except:
             return None

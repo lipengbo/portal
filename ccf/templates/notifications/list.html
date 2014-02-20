@@ -19,8 +19,8 @@
         </ul>
         <hr>
         <a href="{% url notifications:mark_all_as_read %}" class="btn btn-block btn-info">{% trans "Mark as all read "%}</a>
-        <button id="delete-button" class="btn btn-input btn-block btn-info btn-delete disabled">{% trans "删 除"%}</button>
-        <a href="{% url delete_notifications %}" class="btn btn-block btn-info">{% trans "全部删除"%}</a>
+        <button id="delete-button" class="btn btn-input btn-block btn-danger btn-delete disabled">{% trans "删 除"%}</button>
+        <a href="{% url delete_notifications %}" class="btn btn-block btn-danger">{% trans "全部删除"%}</a>
         <hr>
     </div>
     <div class="span10">

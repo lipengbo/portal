@@ -5308,6 +5308,7 @@ legend {
   font-family: "Microsoft YaHei";
   color: #2489c5;
   border-bottom: 1px solid #2489c5;
+  font-size: 18px;
 }
 legend button,
 legend a {
@@ -5319,8 +5320,60 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
+legend .title_word_bg {
+  position: relative;
+  background: #2489c5;
+  color: #fff;
+  float: left;
+  width: auto;
+  min-width: 122px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
+}
+legend .title_word_bg .triangle {
+  position: absolute;
+  right: -16px;
+  top: 12px;
+  height: 0px;
+  width: 0px;
+  border: 8px solid #000;
+  border-color: transparent transparent transparent #2489c5;
+}
 .modal-body table tr td {
   border: none;
+}
+.modal_base_defined {
+  background: #3498db;
+  padding: 10px;
+}
+.modal_base_defined .modal-header {
+  padding: 0 0 10px 0;
+  border-bottom: none;
+  color: #fff;
+}
+.modal_base_defined .modal-header h3 {
+  line-height: normal;
+  font-size: 14px;
+}
+.modal_base_defined .modal-header .close {
+  margin-top: 0;
+  font-size: 24px;
+  color: #fff;
+  font-weight: normal;
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.modal_base_defined .modal-body {
+  background: #fff;
+}
+.modal_base_defined .modal-footer {
+  background: #fff;
+  border-radius: 0;
+}
+.modal_base_defined .modal-footer {
+  background-color: #fff;
+  border-top: none;
 }
 .sep_div {
   margin-bottom: 20px;
@@ -5362,6 +5415,10 @@ legend small {
   background-image: linear-gradient(to bottom, #eeeeee, #eeeeee);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeeeeee', endColorstr='#ffeeeeee', GradientType=0);
+}
+.navbar-inverse .nav li.dropdown > .dropdown-toggle .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
 }
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
@@ -5659,7 +5716,7 @@ table {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 .fill_form fieldset textarea {
   width: 400px;
@@ -5753,7 +5810,7 @@ table {
   vertical-align: middle;
 }
 .form-wizard .nav-pills .visit .step .number {
-  background-color: #2489c5;
+  background-color: #f89406;
   color: #fff;
 }
 .form-wizard .nav-pills .visit .step .desc {
@@ -6547,7 +6604,11 @@ a.button-royal:hover {
   background: #fff;
   border: 1px solid #ccc;
 }
-.qwtp_count .qwtp .qwtp_tb {
+.qwtp_count .qwtp a {
+  display: block;
+  text-decoration: none;
+}
+.qwtp_count .qwtp a .qwtp_tb {
   height: 40px;
   padding: 10px;
   border-right: 1px solid #ccc;
@@ -6556,18 +6617,19 @@ a.button-royal:hover {
   float: left;
   line-height: 40px;
 }
-.qwtp_count .qwtp .qwtp_tb img {
+.qwtp_count .qwtp a .qwtp_tb img {
   width: 90px;
 }
-.qwtp_count .qwtp .qwtp_nums {
+.qwtp_count .qwtp a .qwtp_nums {
   padding-top: 10px;
   margin-left: 40%;
   text-align: center;
   font-size: 28px;
   font-weight: bold;
   color: #666;
+  text-decoration: none;
 }
-.qwtp_count .qwtp .qwtp_nums .qwtp_name {
+.qwtp_count .qwtp a .qwtp_nums .qwtp_name {
   margin-top: 5px;
   font-size: 14px;
   font-weight: normal;
@@ -6888,4 +6950,11 @@ a.button-royal:hover {
 }
 .table_list .actions-flowvisor {
   width: 30%;
+}
+.vm_state .icon-ok-sign {
+  color: #51a351;
+}
+.vm_state .icon-remove-sign,
+.vm_state .icon-minus-sign {
+  color: #bd362f;
 }

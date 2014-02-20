@@ -18,9 +18,12 @@
 {% block body %}
 
     <legend>
-        <a href="{% url project_applicant project.id %}" class="btn btn-warning edit">审批</a>
-        <a href="{% url project_invite project.id %}" class="btn btn-warning edit">邀请</a>
-        {% trans "Members" %}
+        <a href="{% url project_applicant project.id %}" class="btn btn-info edit">审批</a>
+        <a href="{% url project_invite project.id %}" class="btn btn-info edit">邀请</a>
+        <div class="title_word_bg">
+                                           {% trans "Members" %}
+           <div class="triangle"></div> 
+        </div>          
     </legend>
 <div class="row-fluid">
     <div class="span12">
@@ -28,11 +31,11 @@
             <thead>
                 <tr>
                     <th width="5%">序号</th>
-                    <th width="18%">{% trans "Member name" %}</th>
+                    <th width="15%">{% trans "Member name" %}</th>
                     <th width="20%">研究方向</th>
                     <th width="20%">Email</th>
                     <th width="20%">所属单位</th>
-                    <th width="18%">操作</th>
+                    <th width="20%">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -52,7 +55,7 @@
                             <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}</a>
                             {%else%}
                             <a class="btn disabled" href="#" disabled>权限</a>
-                            <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>{% trans "Remove" %}</button>
+                            <button type="button" onclick="" class="btn btn-danger btn-delete" disabled>{% trans "Remove" %}</button>
                             {% endif %}
                         {% endif %}
                     </td>
