@@ -592,7 +592,7 @@ function show_vm_info_table(){
 							+"<td>"+vm.show_dhcp+"</td>"
                             +"<td>"
                             +"   <div>"
-                            +"    <button class='btn-danger' onclick='javascript:delete_vm("+vm.id+")'>删除</button>"
+                            +"    <button class='btn btn-danger' onclick='javascript:delete_vm("+vm.id+")'>删除</button>"
                             +"    </div>"
                             +"</td>"
                           +"</tr> ");
