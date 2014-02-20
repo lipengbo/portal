@@ -5371,6 +5371,10 @@ legend .title_word_bg .triangle {
   background: #fff;
   border-radius: 0;
 }
+.modal_base_defined .modal-footer {
+  background-color: #fff;
+  border-top: none;
+}
 .sep_div {
   margin-bottom: 20px;
 }
