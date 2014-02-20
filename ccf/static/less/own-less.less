@@ -31,6 +31,7 @@ legend {
     font-family: "Microsoft YaHei";
     color:#2489c5;
     border-bottom:1px solid #2489c5;
+    font-size:18px;
     button,a {
         margin-left:10px !important;
         font-family:"宋体";
@@ -40,11 +41,22 @@ legend {
         margin-left:10px;
         font-style:italic;
     }
-    span {
-        display:block;
+    .title_word_bg {
+        position:relative;
         background:#2489c5;
         color:#fff;
         float:left;
+        padding-left:10px;
+        padding-right:10px;
+        .triangle {
+            position:absolute;
+            right: -16px;
+            top: 12px;
+            height:0px; 
+            width:0px;
+            border:8px solid #000; 
+            border-color:transparent transparent transparent #2489c5;
+        }
     }
 }
 
@@ -518,7 +530,7 @@ filter: alpha(opacity=100);
 		}	
 		.visit .step {
 			.number {
-				background-color: #2489c5;
+				background-color: #f89406;
 				color: #fff;
 			}
 			.desc {

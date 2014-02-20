@@ -5308,6 +5308,7 @@ legend {
   font-family: "Microsoft YaHei";
   color: #2489c5;
   border-bottom: 1px solid #2489c5;
+  font-size: 18px;
 }
 legend button,
 legend a {
@@ -5319,11 +5320,22 @@ legend small {
   margin-left: 10px;
   font-style: italic;
 }
-legend span {
-  display: block;
+legend .title_word_bg {
+  position: relative;
   background: #2489c5;
   color: #fff;
   float: left;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+legend .title_word_bg .triangle {
+  position: absolute;
+  right: -16px;
+  top: 12px;
+  height: 0px;
+  width: 0px;
+  border: 8px solid #000;
+  border-color: transparent transparent transparent #2489c5;
 }
 .modal-body table tr td {
   border: none;
@@ -5759,7 +5771,7 @@ table {
   vertical-align: middle;
 }
 .form-wizard .nav-pills .visit .step .number {
-  background-color: #2489c5;
+  background-color: #f89406;
   color: #fff;
 }
 .form-wizard .nav-pills .visit .step .desc {

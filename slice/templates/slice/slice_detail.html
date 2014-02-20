@@ -48,11 +48,7 @@ img {
                     {%endif%}	
                 {%endif%}			           
 			    {{slice_obj.get_show_name}}
-			    {%if slice_obj.state == 0%}
-                    <span class="label label-important edit"><i class="icon-minus-sign icon-2x"></i></span>
-                {%else%}
-                    <span class="label label-success edit"><i class="icon-ok-sign icon-2x"></i></span>
-                {%endif%}  	
+			      	
                 <i class="icon-caret-down show_describe" style="cursor:pointer;"></i>	   	
             </legend>		
             <div class="well word_detail hide">
@@ -183,13 +179,13 @@ img {
                                 </div>
                             </td>
 
-                               <td>
+                               <td class="vm_state">
                                     <div id="controller_st">
                                         {%if controller.host%}
                                             {% if controller.host.state == 8 %}
                                                 <img src="{% static "img/loader.gif" %}" />
                                             {% elif controller.host.state == 9 %}
-                                                <i class="icon-remove"></i>
+                                                <i class="icon-remove-sign"></i>
                                             {%elif controller.host.state == 1 %}
                                                 <i class="icon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                                             {%else%}
@@ -263,13 +259,13 @@ img {
 				 			<td>虚拟网关</td>
 				 			<td>{{gw.ip}}</td>
 				 			<td>{{gw.server.ip}}</td>
-                                <td>
+                                <td class="vm_state">
                                     {% if gw.state == 8 %}
                                     <div id="gw_st{{gw.id}}">
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif gw.state == 9 %}
-                                        <i class="icon-remove"></i>
+                                        <i class="icon-remove-sign"></i>
                                     {%elif gw.state == 1 %}
                                         <i class="icon-ok-sign gw_dhcp_icon"></i>
                                     {%else%}
@@ -395,13 +391,13 @@ img {
 				 			<td>虚拟机{%if vm.enable_dhcp%}(DHCP){%endif%}</td>
 				 			<td>{{vm.ip}}</td>
 				 			<td>{{vm.server.ip}}</td>
-                                <td>
+                                <td class="vm_state">
                                     {% if vm.state == 8 %}
                                     <div id="vm_st{{vm.id}}">
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif vm.state == 9 %}
-                                        <i class="icon-remove"></i>
+                                        <i class="icon-remove-sign"></i>
                                     {%elif vm.state == 1 %}
                                         <i class="icon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
                                     {%else%}
