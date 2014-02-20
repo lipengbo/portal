@@ -156,7 +156,7 @@
             </td>
             {% endif %}
             <td>
-                <div class="btn-group">
+                
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
@@ -182,8 +182,8 @@
                         {% trans "Edit" %}
                     </a>
                     {% endif %}
-                    <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
-                </div>
+                    <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger  btn-delete btn-small">{% trans "Delete" %}</a>
+               
             </td>
         </tr>
     {% endfor %}
