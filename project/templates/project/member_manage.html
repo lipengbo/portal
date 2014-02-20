@@ -52,7 +52,7 @@
                             <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}</a>
                             {%else%}
                             <a class="btn disabled" href="#" disabled>权限</a>
-                            <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>{% trans "Remove" %}</button>
+                            <button type="button" onclick="" class="btn btn-danger btn-delete" disabled>{% trans "Remove" %}</button>
                             {% endif %}
                         {% endif %}
                     </td>
