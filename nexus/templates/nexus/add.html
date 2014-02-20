@@ -49,6 +49,9 @@
             });
         });
     {% endif %}
+    {% if class_name == 'City' %}
+     var test=new Vcity.CitySelector({input:'id_name'});
+     {% endif %}
 </script>
 {% endwith %}
 {% endblock %}

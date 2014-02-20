@@ -5325,8 +5325,11 @@ legend .title_word_bg {
   background: #2489c5;
   color: #fff;
   float: left;
-  padding-left: 10px;
-  padding-right: 10px;
+  width: auto;
+  min-width: 122px;
+  padding-left: 5px;
+  padding-right: 5px;
+  text-align: center;
 }
 legend .title_word_bg .triangle {
   position: absolute;
@@ -5380,6 +5383,10 @@ legend .title_word_bg .triangle {
   background-image: linear-gradient(to bottom, #eeeeee, #eeeeee);
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffeeeeee', endColorstr='#ffeeeeee', GradientType=0);
+}
+.navbar-inverse .nav li.dropdown > .dropdown-toggle .caret {
+  border-top-color: #fff;
+  border-bottom-color: #fff;
 }
 .navbar-inverse .nav li.dropdown.open > .dropdown-toggle,
 .navbar-inverse .nav li.dropdown.active > .dropdown-toggle,
@@ -5677,7 +5684,7 @@ table {
   opacity: .5;
 }
 .fill_form fieldset {
-  margin-bottom: 10px;
+  margin-bottom: 40px;
 }
 .fill_form fieldset textarea {
   width: 400px;
