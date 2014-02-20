@@ -127,6 +127,9 @@ class VirtualMachine(IslandResource):
     def get_slice_id(self):
         return self.slice.id
 
+    def get_user_keys(self):
+        return ['abc', '123']
+
     def create_vm(self):
         if function_test:
             print '----------------------create a vm=%s -------------------------' % self.name
@@ -149,8 +152,10 @@ class VirtualMachine(IslandResource):
                 network['address'] = self.gateway_public_ip.ipaddr + '/' + str(self.gateway_public_ip.supernet.get_network().prefixlen)
                 network['gateway'] = self.gateway_public_ip.supernet.get_gateway_ip()
                 vmInfo['network'].append(network)
+            keys = self.get_user_keys()
+            str_keys = '\n'.join(keys)
             agent_client = AgentClient(self.server.ip)
-            agent_client.create_vm(vmInfo)
+            agent_client.create_vm(vmInfo, key=str_keys)
 
     def delete_vm(self):
         try:

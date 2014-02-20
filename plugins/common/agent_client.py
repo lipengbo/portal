@@ -24,7 +24,7 @@ class AgentClient(object):
         client = get_rpc_client(self.ip, config.compute_service_port)
         return client.get_vnc_port(vname)
 
-    def create_vm(self, vmInfo):
+    def create_vm(self, vmInfo, key=None):
         """
         vmInfo:
             {
@@ -42,7 +42,7 @@ class AgentClient(object):
             }
         """
         client = get_rpc_client(self.ip, config.compute_service_port)
-        return client.create_vm(vmInfo)
+        return client.create_vm(vmInfo, key)
 
     def delete_vm(self, vname):
         client = get_rpc_client(self.ip, config.compute_service_port)
