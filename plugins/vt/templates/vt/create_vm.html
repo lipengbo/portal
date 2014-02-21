@@ -37,7 +37,13 @@
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
 	<fieldset class="">
-    	<legend>虚拟机信息</legend>
+    	<legend>
+                        <div class="title_word_bg">
+                                        虚拟机配置      
+                           <div class="triangle"></div> 
+                        </div>  
+                        <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
+                     </legend> 
     	<table cellpadding="0" cellspacing="0" class="create_vm_form">
 			<tbody>
 				<tr>
@@ -46,7 +52,6 @@
 						{%for flavor in flavors%}
 							<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
 						{%endfor%}
-			            <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">保存</button>                      
 			     	</td>
 				</tr>
 				<tr>
