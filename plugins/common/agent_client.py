@@ -63,3 +63,11 @@ class AgentClient(object):
     def get_domain_status(self, vname):
         client = get_rpc_client(self.ip, config.monitor_service_port)
         return client.get_domain_status(vname)
+
+    def add_sshkeys(self, vname, key=None):
+        client = get_rpc_client(self.ip, config.compute_service_port)
+        return client.add_sshkeys(vname, key)
+
+    def delete_sshkeys(self, vname, key=None):
+        client = get_rpc_client(self.ip, config.compute_service_port)
+        return client.delete_sshkeys(vname, key)

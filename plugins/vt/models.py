@@ -200,6 +200,20 @@ class VirtualMachine(IslandResource):
             result = agent_client.do_domain_action(self.uuid, action, ofport)
         return result
 
+    def add_sshkeys(self, key):
+        if function_test:
+            print '-------------------add ssh key = %s----------------------------' % key
+        else:
+            agent_client = AgentClient(self.server.ip)
+            agent_client.add_sshkeys(self.uuid, key)
+
+    def delete_sshkeys(self, key):
+        if function_test:
+            print '-------------------del ssh key = %s----------------------------' % key
+        else:
+            agent_client = AgentClient(self.server.ip)
+            agent_client.delete_sshkeys(self.uuid, key)
+
     class Meta:
         verbose_name = _("Virtual Machine")
 
@@ -251,3 +265,20 @@ def vm_post_delete(sender, instance, **kwargs):
             instance.switch_port.delete()
     except:
         pass
+
+
+@receiver(post_save, sender=SSHKey)
+def sshkey_post_save(sender, instance, **kwargs):
+    if kwargs.get('created'):
+        slices = Slice.objects.filter(owner=instance.user)
+        for slice in slices:
+            for vm in slice.get_vms():
+                vm.add_sshkeys(instance.sshkey)
+
+
+@receiver(post_delete, sender=SSHKey)
+def sshkey_post_delete(sender, instance, **kwargs):
+    slices = Slice.objects.filter(owner=instance.user)
+    for slice in slices:
+        for vm in slice.get_vms():
+            vm.delete_sshkeys(instance.sshkey)
