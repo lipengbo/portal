@@ -153,7 +153,8 @@ function fetch_vminfo()
 		});
        
         //alert(content)
-        insert_content_to_obj('id_vm_tbody',content)
+        insert_content_to_obj('id_vm_tbody',content);
+		return true;
 		
 }
 
