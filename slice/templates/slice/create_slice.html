@@ -360,6 +360,7 @@
                                         虚拟机配置      
                            <div class="triangle"></div> 
                         </div>  
+                        <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
                      </legend>                 
 				<!-- 拓扑图 -->
 				<div id="topologyModal" class="modal hide fade in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -382,8 +383,7 @@
 			                 <td class="type_chose">
 								{%for flavor in flavors%}
 									<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
-								{%endfor%}
-			                     <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">保存</button>                      
+								{%endfor%}			                     
 			                 </td>
 			             </tr>
 			             <tr>
@@ -457,9 +457,17 @@
                     <div class="span3"><button type="button" class="btn btn-large btn-block btn-step4 btn-info next_btn">下一步</button></div>
                     <div class="span3"></div>
                   </div>
-                 </div>
-			     
-			     <table class="table table-bordered table-striped" id="vms_info_table">
+                 </div>			                              
+              </fieldset>   
+              <fieldset>
+                 <legend>
+                     <div class="title_word_bg">
+                                                        虚拟机列表
+                       <div class="triangle"></div> 
+                    </div>  
+                 </legend>
+                 
+                 <table class="table table-bordered table-striped" id="vms_info_table">
                       <thead>
                           <tr>
                             <th>类型</th>
@@ -468,14 +476,14 @@
                             <th>磁盘</th>
                             <th>镜像</th>
                             <th>宿主机</th>
-							<th>是否启动DHCP</th>
+                            <th>是否启动DHCP</th>
                             <th>操作</th>
                           </tr>  
                       </thead>
                       <tbody>
                       </tbody>
-                 </table>                                
-              </fieldset>           
+                 </table>    
+               </fieldset>           
              </div>
              <div class="tab_part">
                  <fieldset>
