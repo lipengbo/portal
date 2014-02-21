@@ -25,10 +25,9 @@ from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
-from slice.models import Slice
+from slice.models import Slice, SliceDeleted
 
 from resources.models import Switch, Server, VirtualSwitch
-from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 from common.models import  Counter
 
@@ -45,7 +44,6 @@ def home(request):
 
 @login_required
 def index(request):
-    
     context = {}
     user = request.user
     context = {}
@@ -316,6 +314,25 @@ def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.user.has_perm('project.delete_project', project):
         try:
+            slice_objs = project.slice_set.all()
+            for slice_obj in slice_objs:
+                try:
+                    slice_deleted = SliceDeleted(name = slice_obj.name,
+                        show_name = slice_obj.show_name,
+                        owner_name = slice_obj.owner.username,
+                        description = slice_obj.description,
+                        project_name = slice_obj.project.name,
+                        date_created = slice_obj.date_created,
+                        date_expired = slice_obj.date_expired)
+                    if request.user.is_superuser:
+                        slice_deleted.type = 1
+                    else:
+                        slice_deleted.type = 0
+                    slice_obj.delete()
+                except Exception, ex:
+                    pass
+                else:
+                    slice_deleted.save()
             project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
@@ -441,15 +458,21 @@ def links_proxy(request, host, port):
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
 def links_direct(request, host, port):
+    from plugins.openflow.flowvisor_api import flowvisor_get_links
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    data = client.get_links()
+    try:
+        data = flowvisor_get_links(flowvisor)
+    except:
+        data = []
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def switch_direct(request, host, port):
+    from plugins.openflow.flowvisor_api import flowvisor_get_switches
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    json_data = client.get_switches()
+    try:
+        json_data = flowvisor_get_switches(flowvisor)
+    except:
+        json_data = []
     for i in range(len(json_data)):
         entry = json_data[i]
         dpid = entry['dpid']
@@ -471,6 +494,7 @@ def switch_direct(request, host, port):
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    """
     switch_ids_tuple = flowvisor.link_set.all().values_list(
             'source__switch__id', 'target__switch__id')
     switch_ids = set()
@@ -478,6 +502,8 @@ def switch_proxy(request, host, port):
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
     switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
+    """
+    switches = Switch.objects.filter(island=flowvisor.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()

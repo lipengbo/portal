@@ -142,15 +142,17 @@
                     </td>
                 {% endfor %}
             {% endif %}
-            {% if class_name == 'User' %}
+            {% if class_name == 'User'%}
             <td>
-                {% if object.get_profile.state == 0 %}
-                未审批
-                {% else %}
-                    {% if object.get_profile.state == 1 %}
-                    <span class="text-error">已拒绝</span>
+                {% if  not object.is_superuser  %}
+                    {% if object.get_profile.state == 0 %}
+                    未审批
                     {% else %}
-                    <span class="text-success">已接受</span>
+                        {% if object.get_profile.state == 1 %}
+                        <span class="text-error">已拒绝</span>
+                        {% else %}
+                        <span class="text-success">已接受</span>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </td>
@@ -160,7 +162,8 @@
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
-                    {% if class_name == 'User'  %}
+                    {% if class_name == 'User' and not object.is_superuser %}
+                    {{ object.is_superuser }}
                         {% if object.get_profile.state == 0 %}
                             <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">
                                 审批
@@ -176,13 +179,14 @@
                             </a>
                             {% endif %}
                         {% endif %}
-                    </a>
                     {% else %}
                     <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-small">
                         {% trans "Edit" %}
                     </a>
                     {% endif %}
+                    {% if class_name == 'User' and not object.is_superuser or class_name != 'User'%}
                     <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
+                    {% endif %}
                 </div>
             </td>
         </tr>
