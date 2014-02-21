@@ -83,17 +83,17 @@
         <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{{ class_verbose_name }}</a>
     {% endif %}
 </div>
-<table class="table table-bordered">
+<table class="table table-bordered table_list">
     <thead>
         <tr>
-            <th class="checkall" width="28"><input type="checkbox" name="some_name" value=""></th>
-            <th>{{ class_verbose_name }}</th>
+            <th class="checkall" width="5%"><input type="checkbox" name="some_name" value=""></th>
+            <th class="{{ class_name|lower }}">{{ class_verbose_name }}</th>
             {% for field in ModelClass|get_display_fields %}
-                <th>{{ field.verbose_name }}</th>
+                <th class="{{ field.name }}">{{ field.verbose_name }}</th>
             {% endfor %}
             {% if ModelClass.admin_options.related_models  %}
                 {% for related_model in ModelClass|get_related_models %}
-                    <th>
+                    <th class="{{ related_model.model }}">
                     {{ related_model.name }}
                     </th>
                 {% endfor %}
@@ -101,7 +101,7 @@
             {% if class_name == 'User' %}
                 <th>状态</th>
             {% endif %}
-            <th>{% trans "Action" %}</th>
+            <th class="actions-{{ class_name|lower }}">{% trans "Action" %}</th>
         </tr>
     </thead>
     <tbody class="checkboxs">
@@ -112,7 +112,7 @@
             </td>
             <td><a href="{% if class_name != 'User'%} {% url nexus_edit app_label class_name|lower object.id %}{% else %}#{% endif%}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
-                <td title="{{ object|get_value:field.name}}" class="field.name">
+                <td title="{{ object|get_value:field.name}}">
                     {% if field.name == 'cpu' %} 
                         {% if  object|get_value:field.name|truncatewords:"100000"|length > 15 %}
                             {{ object|get_value:field.name|slice:"15" }}...
@@ -158,7 +158,7 @@
             </td>
             {% endif %}
             <td>
-                <div class="btn-group">
+                
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-small">{% trans "Monitor" %}</a>
                     {% endif %}
@@ -185,7 +185,7 @@
                     </a>
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser or class_name != 'User'%}
-                    <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-delete btn-small">{% trans "Delete" %}</a>
+                    <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-delete btn-small">{% trans "Delete" %}</a>
                     {% endif %}
                 </div>
             </td>

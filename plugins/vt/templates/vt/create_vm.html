@@ -11,7 +11,7 @@
 {% endblock %}
 {% block body %}
 <!--警告框-->
-<div id="slicealertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="slicealertModal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body" id="slice_alert_info">
       <p class="text-center"></p>
     </div> 
@@ -21,10 +21,10 @@
 </div>
 
 <!-- 拓扑图 -->
-<div id="topologyModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="topologyModal" class="modal hide fade in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 	<div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">当前已选节点资源</h4>
+        <h3 class="modal-title">当前已选节点资源</h3>
     </div>
     <div class="modal-body" id="topology_info">
 		<div class="row-fluid">
@@ -36,123 +36,112 @@
 </div>
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
-    <fieldset class="vm_info_list tooltip-demo">
-    <legend>虚拟机信息</legend>
-    <div class="sec_block">
-	<a href="#" class="btn-delete close hide vm_block_del">×</a>
-    {% csrf_token %}
-  <div class="row-fluid vm_well_wrap"> 
-    <div class="span5 base_info">       
-    <table class="table">
-        <tbody>
-            <tr>
-                <td width="30%">名称</td>
-                <td>
-                    <input id="id_name" onblur="check_vm_name('name')" type="text" name="name" maxlength="20" />
-                    <span name="nameInfo"></span>                         
-                </td>
-            </tr>
-            <tr>
-                <td>虚拟机类型</td>
-                <td>
-                    {{ vm_form.flavor }} <span name="flavorInfo"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>虚拟机镜像</td>
-                <td>
-                    {{ vm_form.image }} <span name="imageInfo"></span>
-                </td>
-            </tr>
-            <tr>
-                <td>宿主机</td>
-                <td>
-                    {{ vm_form.server }} <span name="serverInfo"></span>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    {% if slice_obj.get_dhcp %}
-        <label class="">
-            {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                                                    是否启动DHCP
-        </label>
-    {%endif%}
-    <!--div class="operate_btn">
-        <button class="btn btn-inverse del" type="button">删 除</button>
-    </div--> 
-    </div>     
+	<fieldset class="">
+    	<legend>虚拟机信息</legend>
+    	<table cellpadding="0" cellspacing="0" class="create_vm_form">
+			<tbody>
+				<tr>
+			    	<td width="86"><img src="/site_media/static/img/icon_type.png" width="24">类型</td>
+			    	<td class="type_chose">
+						{%for flavor in flavors%}
+							<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
+						{%endfor%}
+			            <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">保存</button>                      
+			     	</td>
+				</tr>
+				<tr>
+            		<td><img src="/site_media/static/img/icon_cpu.png" width="24">CPU</td>
+                	<td class="cpu_chose">
+                    	<a href="javascript:void(0);" class="vm_active" id="cpu_1" value="1">1 核</a>
+                        <a href="javascript:void(0);" id="cpu_2" value="2">2 核</a>
+                        <a href="javascript:void(0);" id="cpu_4" value="4">4 核</a>
+						<a href="javascript:void(0);" id="cpu_6" value="6">6 核</a>
+                  	</td>
+                </tr>
+                <tr>
+                	<td><img src="/site_media/static/img/icon_nc.png" width="24">内存</td>
+                	<td class="slider_td">
+                    	<div id="ram_slider" class="ui-slider"></div>
+                    	<span class="value_s">128 MB</span>
+                    	<span class="value_e">8 GB</span>
+                 	</td>
+            	</tr>
+            	<tr>
+                	<td><img src="/site_media/static/img/icon_cp.png" width="24">磁盘</td>
+                	<td class="slider_td">
+                    	<div id="disk_slider" class="ui-slider ui_defined"></div>
+						<span class="value_s">10 GB</span>
+                        <span class="value_e">320 GB</span>
+                    </td>
+                </tr>
+                <tr>
+                	<td><img src="/site_media/static/img/icon_iso.png" width="24">镜像</td>
+                    <td>
+						{{ vm_form.image }} <span name="imageInfo"></span>
+                    </td>
+                </tr>
+                <tr>
+                	<td><img src="/site_media/static/img/icon_host.png" width="24">宿主机</td>
+                 	<td>
+						{{ vm_form.server }} <span name="serverInfo"></span>
+                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
+                	</td>
+       			</tr>
+               	<tr>
+                	<td colspan="2">
+                    	<div name="dhcp">                                
+                    		<label class="inline tab_checkbox">
+                        		{{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
+                       		</label>是否启动DHCP
+                    	</div>
+                 	</td>
+             	</tr>
+			</tbody>
+		</table>
+			     
+		<div class="form-actions">
+        	<div class="row-fluid">
+            	<div class="span3"></div>
+          			{% if from_link == '0' %}
+          				<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+          			{% else %}
+          				<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          			{% endif %}
+          		<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
+          		<div class="span3"></div>
+        	</div>
+    	</div>
+			     
+			     <table class="table table-bordered" id="vms_info_table">
+                      <thead>
+                          <tr>
+                            <th>类型</th>
+                            <th>CPU</th>
+                            <th>内存</th>
+                            <th>磁盘</th>
+                            <th>镜像</th>
+                            <th>宿主机</th>
+							<th>是否启动DHCP</th>
+                            <th>操作</th>
+                          </tr>  
+                      </thead>
+                      <tbody>
+                      </tbody>
+                 </table>
     
-    <div class="span7">
-    	<div class="vm_well">
-        	<table class="table table-bordered">
-            	<tbody>
-                	<!--    <tr>
-                     			<td width="80">类型</td>
-                                <td colspan="5"><span name="flavor_msg"></span></td>
-                            </tr>    -->    
-                 	<tr>
-                    	<td width="80"><img src="{% static "img/cpu.png" %}" width="20" />CPU</td>
-                     	<td><span name="cpu"></span></td>
-               		</tr>
-                    <tr>
-                                       <td width="80"><img src="{% static "img/nc.png" %}" width="20" />内存</td>
-                                       <td><span name="ram"></span></td>
-                                   </tr>
-                                   <tr>
-                                       <td width="80"><img src="{% static "img/cp.png" %}" width="20" />磁盘</td>
-                                       <td><span name="hdd"></span></td>
-                                   </tr>
-							    <!--   <tr>
-                                      <td>宿主机</td>
-                                      <td colspan="5"><span name="server_msg"></span></td>
-                                   </tr>  
-                                   <tr>
-                                      <td>镜像</td>
-                                      <td colspan="5"><span name="image_msg"></span></td>
-                                   </tr>  -->      
-                                 
-                                   <tr>
-                                      <td><img src="{% static "img/vm_user.png" %}" width="20" />用户名</td>
-                                      <td colspan="5"><span name="username"><span></td>
-                                   </tr>
-                                   <tr>
-                                      <td><img src="{% static "img/vm_pw.png" %}" width="20" />密码</td>
-                                      <td colspan="5"><span name="password"></span></td>
-                                   </tr>
-                               </tbody>
-                           </table>
-                       </div>
-                   </div> 
-   </div>                
-   </div>   
-    </fieldset>
-    <p class="add_btn">
-		<button class="btn btn-info" type="button" id="show_topo">查看拓扑</button>
-		<button class="btn btn-info add" type="button">继续添加</button>
-	</p>
-    <div class="form-actions">
-        <div class="row-fluid">
-            <div class="span3"></div>
-          {% if from_link == '0' %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
-          {% else %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
-          {% endif %}
-          <div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
-          <div class="span3"></div>
-        </div>
-    </div>
 </form>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script>
 	$("#alert_close_sure").on("click", function(){
 		window.location.href='/plugins/vt/vm/list/' + {{sliceid}} + '/';
 	})
+	flavor_init();
 	
 </script>
 {% endblock %}

@@ -86,6 +86,7 @@
           <div class="row-fluid qwtp_count">
               <div class="span4">
                   <div class="qwtp">
+                    <a href="{% url "nexus_list" "project" "city" %}">
                       <div class="qwtp_tb">
                           <img src="{% static "img/icon-01.png" %}" width="40" />
                       </div>
@@ -93,10 +94,12 @@
                           <p>{{ total_cities }}</p>
                           <p class="qwtp_name">城市</p>
                       </div>
+                    </a>
                   </div>
               </div>
               <div class="span4">
                   <div class="qwtp">
+                    <a href="{% url "nexus_list" "resources" "server" %}">
                       <div class="qwtp_tb">
                           <img src="{% static "img/icon-02.png" %}" width="40" />
                       </div>
@@ -104,17 +107,20 @@
                           <p>{{ total_servers }}</p>
                           <p class="qwtp_name">服务器</p>
                       </div>
+                    </a>
                   </div>
               </div>
               <div class="span4">
                   <div class="qwtp">
+                    <a href="{% url "nexus_list" "resources" "switch" %}">
                       <div class="qwtp_tb">
                           <img src="{% static "img/icon-03.png" %}" width="40" />
                       </div>
                       <div class="qwtp_nums">
                           <p>{{ total_switches }}</p>
                           <p class="qwtp_name">交换机</p>
-                      </div>                      
+                      </div>      
+                    </a>                
                   </div>
               </div>             
           </div>

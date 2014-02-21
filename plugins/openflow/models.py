@@ -153,7 +153,7 @@ def update_links(sender, instance, created, **kwargs):
 
     #: delete all existing links and ports
     instance.link_set.all().delete()
-    
+
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
@@ -188,7 +188,7 @@ def update_links(sender, instance, created, **kwargs):
                 source=source_port,
                 target=target_port)
         link_obj.save()
-        
+
     for dpid, port_entry in port_name_dict.items():
         source_switch = Switch.objects.get(dpid=dpid)
         for port_num, port_name in port_entry.items():
@@ -196,7 +196,7 @@ def update_links(sender, instance, created, **kwargs):
             switch=source_switch,
             port=port_num,
             defaults={'name': port_name})
-        
+
 def create_virtualswitch(island, datapaths):
     for datapath in datapaths:
         dpid = datapath['dpid']
@@ -209,5 +209,5 @@ def create_virtualswitch(island, datapaths):
                 logger.error('============= IP: ' + ip + '=============')
                 raise Exception(u"IP为" + ip + u"的服务器没有录入")
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
-                    ip=ip, defaults={'name': "ovs" + str(VirtualSwitch.objects.count() + 1), 'island': island, 'password': '123', 'username': 'admin', 'server': server})
+                    ip=ip, defaults={'name': "v-ovs" + str(VirtualSwitch.objects.count() + 1), 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
