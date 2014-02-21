@@ -356,7 +356,7 @@ function page_function2(){
 function page_function3(){
 	//判断是否选择虚拟机信息
 	if(vms_info().count() == 0){
-		document.getElementById('alert_info').innerHTML = '请先保存虚拟机配置信息！';
+		document.getElementById('alert_info').innerHTML = '请先添加虚拟机配置信息！';
 		$('#alert_modal').modal('show');
 		return;
 	}
