@@ -30,10 +30,9 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="5%">序号</th>
-                    <th width="15%">{% trans "Member name" %}</th>
+                    <th width="20%">成员名称</th>
                     <th width="20%">研究方向</th>
-                    <th width="20%">Email</th>
+                    <th width="20%">Email地址</th>
                     <th width="20%">所属单位</th>
                     <th width="20%">操作</th>
                 </tr>
@@ -41,7 +40,6 @@
             <tbody>
                 {% for membership in project.membership_set.all %}
                 <tr>
-                    <td>{{ forloop.counter }}</td>
                     <td>{{ membership.user }}</td>
                     <td>{{ membership.user.get_profile.realm|default:"未填写" }}</td>
                     <td>{{ membership.user.email }}</td>
