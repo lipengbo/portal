@@ -63,9 +63,11 @@
             <a href="{% url project_invite project.id %}" class="btn btn-info edit">{% trans "Invite members" %}</a>
             {% endif %}
         {%endif%}  -->
-        {% has_perm user 'project.change_project' project %}
-        {% if has_perm %}
-        <a href="{% url project_member_manage project.id %}" class="btn btn-info edit">管理</a>
+        {% if not user.is_superuser %}
+            {% has_perm user 'project.change_project' project %}
+            {% if has_perm %}
+                <a href="{% url project_member_manage project.id %}" class="btn btn-info edit">管理</a>
+            {% endif %}
         {% endif %}
         <div class="title_word_bg">
                                         {% trans "Members" %}
