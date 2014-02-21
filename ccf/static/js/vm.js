@@ -441,6 +441,22 @@ function do_vm_action(url)
         });
 }
 
+function delete_vm_from_list(url) {
+	$.ajax({
+		type: 'GET',
+		url: url,
+		dataType: 'json',
+		success: function(data) {
+			if(data.result == 1) {
+				document.getElementById('vm_alert').innerHTML = data.error_info;
+				$('.vm_alert').show();
+			}else{
+				window.location.reload();
+			}
+		}
+	});
+}
+
 function show_uuid(objs){
     for (var i=0; i<objs.length; i++){
         objs[i].innerHTML = objs[i].innerHTML.split("-")[0] + "...";

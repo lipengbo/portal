@@ -16,10 +16,13 @@ class Profile(ProfileBase):
     realm = models.CharField(max_length=1024, null=True, verbose_name=_("realm"))
     organization = models.CharField(max_length=64, null=True, verbose_name=_("Organization"))
     phone = models.CharField(max_length=11, null=True, blank=True, verbose_name=_("Phone"))
-    state = models.IntegerField(default=0)
+    state = models.IntegerField(default=0, choices=((1, 'reject'), (2, 'accept')))
 
     #def __unicode__(self):
     #    return self.realm and (self.realm[:10] + "...") or ""
+
+    def action_url(self):
+        return reverse('nexus_edit', args=('auth', 'user', self.user.id))
 
     def actions(self):
         if self.state != 0:

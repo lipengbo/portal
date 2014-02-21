@@ -84,21 +84,17 @@ def get_switch_port_info(request, switch_id):
     pre_port_data = None
     if request.method == 'POST':
         pre_port_data = json.loads(request.POST.get("pre_port_data"))
-        #print "===>", pre_port_data['eth1']
-
     try:
         switch = get_object_or_404(Switch, id=switch_id)
         switch_stat = get_switch_stat(switch.ip)
         if switch_stat == None:
             raise ConnectionRefused()
-        #ports_info = []
         print "---------------------------"
         port_info = {}
-        #i = 0
         for br in switch_stat:
             for port in br['ports']:
                 if 'v' in port['name']:
-                    break
+                    continue
                 recv_data = int(port['stats']['recv']['byte'])
                 send_data = int(port['stats']['recv']['byte'])
                 if pre_port_data:
@@ -108,10 +104,6 @@ def get_switch_port_info(request, switch_id):
                     recv_bps = 0
                     send_bps = 0
                 port_info[port['name']] = [recv_data, send_data, recv_bps, send_bps]
-            #ports_info.append(port_info)
-            #i = i + 1
-            #if i > 2:
-            #    break
         print port_info
         print "---------------------------"
     except socket_error as serr:

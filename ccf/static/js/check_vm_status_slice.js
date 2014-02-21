@@ -170,7 +170,7 @@ function check_vm_status(slice_id){
                                 
                                 $("span#controller_fc").empty();
                                 str = "";
-                                str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                                str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                                 $("span#controller_fc").append(str);
                             }
                             
@@ -181,7 +181,7 @@ function check_vm_status(slice_id){
                             
                             $("span#gw_fc"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#gw_fc"+cur_vm_id).append(str);
                             
                             $("div#dhcp_st"+cur_vm_id).empty();
@@ -191,7 +191,7 @@ function check_vm_status(slice_id){
                             
                             $("span#dhcp_fc"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#dhcp_fc"+cur_vm_id).append(str);
                             
                             $("div#vm_st"+cur_vm_id).empty();
@@ -201,13 +201,13 @@ function check_vm_status(slice_id){
                             
                             $("span#vm_fc"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
+                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
                         document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
                     }//endfor
 			        
-			    }else{
+			    }else if(admin == 0){
 			    
     			    for(var k=0;k<check_nodes.length;k++){
                         status = check_nodes[k].status;
@@ -353,6 +353,108 @@ function check_vm_status(slice_id){
                             str = str + "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-success start_vm\">启动</button>&nbsp;"
                                 + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+cur_vm_id+"\">登录</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
+                        }//endif
+                        //alert('here');
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
+                    }//endfor
+                }
+                else{
+                    for(var k=0;k<check_nodes.length;k++){
+                        status = check_nodes[k].status;
+                        cur_vm_id = check_nodes[k].cur_vm_id;
+                        if(status == 9){
+                            c_id = $("span#controller_fc").children(".aa").attr('value');
+                            if(c_id && c_id == cur_vm_id){
+                                $("div#controller_st").empty();
+                                str = "";
+                                str = str + "<i class=\"icon-remove\"></i>";
+                                $("div#controller_st").append(str);
+                                
+                                $("span#controller_fc").empty();
+                            }
+                            
+                            $("div#gw_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-remove\"></i>";
+                            $("div#gw_st"+cur_vm_id).append(str);
+                            
+                            $("span#gw_fc"+cur_vm_id).empty();
+                            
+                            $("div#dhcp_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-remove\"></i>";
+                            $("div#dhcp_st"+cur_vm_id).append(str);
+                            
+                            $("span#dhcp_fc"+cur_vm_id).empty();
+                            
+                            $("div#vm_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-remove\"></i>";
+                            $("div#vm_st"+cur_vm_id).append(str);
+                            
+                            $("span#vm_fc"+cur_vm_id).empty();
+                        }else if(status == 1){
+                            c_id = $("span#controller_fc").children(".aa").attr('value');
+                            if(c_id && c_id == cur_vm_id){
+                                $("div#controller_st").empty();
+                                str = "";
+                                str = str + "<i class=\"icon-ok-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
+                                $("div#controller_st").append(str);
+                                
+                                $("span#controller_fc").empty();
+                            }
+                            
+                            $("div#gw_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-ok-sign gw_dhcp_icon\"></i>";
+                            $("div#gw_st"+cur_vm_id).append(str);
+                            
+                            $("span#gw_fc"+cur_vm_id).empty();
+                            
+                            $("div#dhcp_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-ok-sign gw_dhcp_icon\"></i>";
+                            $("div#dhcp_st"+cur_vm_id).append(str);
+                            
+                            $("span#dhcp_fc"+cur_vm_id).empty();
+                            
+                            $("div#vm_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-ok-sign icon_state\"  id=\"icon_state"+cur_vm_id+"\"></i>";
+                            $("div#vm_st"+cur_vm_id).append(str);
+                            
+                            $("span#vm_fc"+cur_vm_id).empty();
+                        }else{
+                            c_id = $("span#controller_fc").children(".aa").attr('value');
+                            if(c_id && c_id == cur_vm_id){
+                                $("div#controller_st").empty();
+                                str = "";
+                                str = str + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
+                                $("div#controller_st").append(str);
+                                
+                                $("span#controller_fc").empty();
+                            }
+                            
+                            $("div#gw_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-minus-sign gw_dhcp_icon\"></i>";
+                            $("div#gw_st"+cur_vm_id).append(str);
+                            
+                            $("span#gw_fc"+cur_vm_id).empty();
+                            
+                            $("div#dhcp_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-minus-sign gw_dhcp_icon\"></i>";
+                            $("div#dhcp_st"+cur_vm_id).append(str);
+                            
+                            $("span#dhcp_fc"+cur_vm_id).empty();
+                            
+                            $("div#vm_st"+cur_vm_id).empty();
+                            str = "";
+                            str = str + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
+                            $("div#vm_st"+cur_vm_id).append(str);
+                            
+                            $("span#vm_fc"+cur_vm_id).empty();
                         }//endif
                         //alert('here');
                         document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);

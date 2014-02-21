@@ -4,6 +4,8 @@ from django.utils.translation import ugettext as _
 
 import account.forms
 from profiles.models import Profile
+from guardian.shortcuts import assign_perm, remove_perm
+from account.models import EmailAddress, EmailConfirmation
 
 class SignupForm(account.forms.SignupForm):
     realm = forms.CharField(max_length=1024, label=_("Realm"), widget=forms.Textarea)
@@ -13,3 +15,30 @@ class SignupForm(account.forms.SignupForm):
 class RejectForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, label=_("Reason"))
     user = forms.ModelChoiceField(queryset=User.objects.none, widget=forms.HiddenInput)
+
+class UserForm(forms.ModelForm):
+    
+    can_create_project = forms.BooleanField(initial=False, required=False, label=_("Can add Project"))
+
+    def __init__(self, *args, **kwargs):
+        super(UserForm, self).__init__(*args, **kwargs)
+        can_create_project_field = self.fields['can_create_project']
+        can_create_project_field.initial = self.instance.has_perm('project.add_project')
+
+    def save(self):
+        can_create_project = self.cleaned_data.get('can_create_project')
+        if can_create_project:
+            assign_perm('project.add_project', self.instance)
+        ea = EmailAddress.objects.get_primary(self.instance)
+        try:
+            ec = EmailConfirmation.objects.get(email_address=ea)
+        except EmailConfirmation.DoesNotExist:
+            ea.send_confirmation()
+        profile = self.instance.get_profile()
+        profile.state = 2
+        profile.save()
+        super(UserForm, self).save()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']

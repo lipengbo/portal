@@ -3,13 +3,18 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.contrib.auth.models import User
 
 from resources.models import IslandResource, Server, SwitchPort
 from slice.models import Slice
 from plugins.ipam.models import IPUsage
+from plugins.openflow.models import Controller
 from plugins.common import utils
 from plugins.common.agent_client import AgentClient
+from plugins.common.exception import ConnectionRefused
 from django.utils.translation import ugettext as _
+import errno
+from socket import error as socket_error
 from etc.config import function_test
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
@@ -79,6 +84,19 @@ class Flavor(models.Model):
         verbose_name = _("Flavor")
 
 
+class SSHKey(models.Model):
+    user = models.ForeignKey(User)
+    title = models.CharField(max_length=256)
+    sshkey = models.CharField(max_length=500)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        unique_together = (("user", "sshkey"), )
+        verbose_name = _("SSH Keys")
+
+
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=36, null=True, unique=True)
     ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
@@ -123,6 +141,13 @@ class VirtualMachine(IslandResource):
     def get_slice_id(self):
         return self.slice.id
 
+    def get_user_keys(self):
+        user = self.slice.owner
+        ssh_keys = []
+        for i in SSHKey.objects.filter(user=user):
+            ssh_keys.append(i.sshkey)
+        return ssh_keys
+
     def create_vm(self):
         if function_test:
             print '----------------------create a vm=%s -------------------------' % self.name
@@ -145,15 +170,21 @@ class VirtualMachine(IslandResource):
                 network['address'] = self.gateway_public_ip.ipaddr + '/' + str(self.gateway_public_ip.supernet.get_network().prefixlen)
                 network['gateway'] = self.gateway_public_ip.supernet.get_gateway_ip()
                 vmInfo['network'].append(network)
+            keys = self.get_user_keys()
+            str_keys = '\n'.join(keys)
             agent_client = AgentClient(self.server.ip)
-            agent_client.create_vm(vmInfo)
+            agent_client.create_vm(vmInfo, key=str_keys)
 
     def delete_vm(self):
-        if function_test:
-            print '----------------------delete a vm=%s -------------------------' % self.name
-        else:
-            agent_client = AgentClient(self.server.ip)
-            agent_client.delete_vm(self.uuid)
+        try:
+            if function_test:
+                print '----------------------delete a vm=%s -------------------------' % self.name
+            else:
+                agent_client = AgentClient(self.server.ip)
+                agent_client.delete_vm(self.uuid)
+        except socket_error as serr:
+            if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
+                raise ConnectionRefused()
 
     def do_action(self, action):
         if function_test:
@@ -161,8 +192,27 @@ class VirtualMachine(IslandResource):
             result = True
         else:
             agent_client = AgentClient(self.server.ip)
-            result = agent_client.do_domain_action(self.uuid, action)
+            switch_port = self.switch_port
+            if switch_port:
+                ofport = switch_port.port
+            else:
+                ofport = None
+            result = agent_client.do_domain_action(self.uuid, action, ofport)
         return result
+
+    def add_sshkeys(self, key):
+        if function_test:
+            print '-------------------add ssh key = %s----------------------------' % key
+        else:
+            agent_client = AgentClient(self.server.ip)
+            agent_client.add_sshkeys(self.uuid, key)
+
+    def delete_sshkeys(self, key):
+        if function_test:
+            print '-------------------del ssh key = %s----------------------------' % key
+        else:
+            agent_client = AgentClient(self.server.ip)
+            agent_client.delete_sshkeys(self.uuid, key)
 
     class Meta:
         verbose_name = _("Virtual Machine")
@@ -182,7 +232,7 @@ class HostMac(models.Model):
 @receiver(pre_save, sender=VirtualMachine)
 def vm_pre_save(sender, instance, **kwargs):
     if not instance.ip:
-        instance.ip = IPUsage.objects.allocate_ip(instance.slice.name)
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
     if not instance.mac:
@@ -200,8 +250,9 @@ def vm_post_save(sender, instance, **kwargs):
 @receiver(pre_delete, sender=VirtualMachine)
 def vm_pre_delete(sender, instance, **kwargs):
     instance.delete_vm()
-#     if instance.type == 0:
-#         instance.controller_set.all().delete()
+    if instance.type == 0:
+        controllers = Controller.objects.filter(object_id=instance.id)
+        controllers.delete()
 
 
 @receiver(post_delete, sender=VirtualMachine)
@@ -214,3 +265,20 @@ def vm_post_delete(sender, instance, **kwargs):
             instance.switch_port.delete()
     except:
         pass
+
+
+@receiver(post_save, sender=SSHKey)
+def sshkey_post_save(sender, instance, **kwargs):
+    if kwargs.get('created'):
+        slices = Slice.objects.filter(owner=instance.user)
+        for slice in slices:
+            for vm in slice.get_vms():
+                vm.add_sshkeys(instance.sshkey)
+
+
+@receiver(post_delete, sender=SSHKey)
+def sshkey_post_delete(sender, instance, **kwargs):
+    slices = Slice.objects.filter(owner=instance.user)
+    for slice in slices:
+        for vm in slice.get_vms():
+            vm.delete_sshkeys(instance.sshkey)

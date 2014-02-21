@@ -5,12 +5,16 @@
 {% load staticfiles %}
 
 {% block breadcrumb %}
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}js/jqPlot/jquery.jqplot.css" />
+{% endblock %}
 {% if vm_id == 0%}
 <a href="/nexus/resources/server/">服务器管理</a><span class="divider">/</span>
 <li class="active">服务器监控</li>
 {% else%}
+<a href="/project/">项目</a><span class="divider">/</span>
 <a href="{% url 'project_detail' project_id %}">项目详情</a><span class="divider">/</span>
-<a href="{% url 'slice_detail' slice_id %}">slice详情</a><span class="divider">/</span>
+<a href="{% url 'slice_detail' slice_id %}">虚网详情</a><span class="divider">/</span>
 虚拟机监控
 {% endif %}
 {% endblock %}
@@ -87,7 +91,8 @@
                     </h4>
                 </div>
                 <div class="content" style="padding-bottom:0;">
-                    <canvas id="disk_perf_chart" width="439" height="300"></canvas>
+                    <!--canvas id="disk_perf_chart" width="439" height="300"></canvas-->
+					<div id="disk_perf_chart" width="439" height="300"></div>
                     <div class="chart_tip">
                         <p id="disk_use"></p>
                         <p id="disk_free"></p>
@@ -100,8 +105,11 @@
 {% endblock %}
 {% block extra_script %}
         <script src="{{ STATIC_URL }}bootstrap/js/bootstrap-chart.js"></script>
-        <script src="{{ STATIC_URL }}js/monitor.js" ></script>
 		<script src="{{ STATIC_URL }}js/common.js" ></script>
+		<script src="{{ STATIC_URL }}js/jqPlot/jquery.jqplot.min.js"></script>
+		<script src="{{ STATIC_URL }}js/jqPlot/jqplot.pieRenderer.js"></script>
+		<script src="{{ STATIC_URL }}js/monitor.js" ></script>
+		
         <script>
             $(function(){
                 var vm_id = {{ vm_id }}

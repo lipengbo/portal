@@ -122,6 +122,9 @@ msgstr "服务器出错"
 msgid "vm operation failed"
 msgstr "虚拟机操作失败"
 
+msgid "failed to delete vm"
+msgstr "虚拟机删除失败"
+
 msgid "micro"
 msgstr "微型"
 
@@ -139,3 +142,6 @@ msgstr "大型"
 
 msgid "xlarge"
 msgstr "超大型"
+
+msgid "failed to allocate resources"
+msgstr "资源分配失败"
