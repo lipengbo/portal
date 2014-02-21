@@ -38,21 +38,17 @@ img {
                     {% if slice_obj.state == 0 %}
                         <a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit btn-slice-state">编辑</a>
                         <button type="button" class="btn btn-success start_btn edit start_slice">
-                            启动虚网
+                            启动
                         </button>
                     {%else%}    
                         <a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit disabled btn-slice-state" >编辑</a>
                         <button type="button" class="btn btn-danger start_btn edit start_slice">
-                            停止虚网
+                            停止
                         </button>
                     {%endif%}	
                 {%endif%}			           
 			    {{slice_obj.get_show_name}}
-			    {%if slice_obj.state == 0%}
-                    <span class="label label-important edit"><i class="icon-minus-sign icon-2x"></i></span>
-                {%else%}
-                    <span class="label label-success edit"><i class="icon-ok-sign icon-2x"></i></span>
-                {%endif%}  	
+			      	
                 <i class="icon-caret-down show_describe" style="cursor:pointer;"></i>	   	
             </legend>		
             <div class="well word_detail hide">
@@ -107,11 +103,11 @@ img {
 					{% if slice_obj.get_dhcp == None %}
 						{% if slice_obj.state == 0 and permission == "edit" %}
 							<button type="button" class="btn btn-success start_btn edit start_dhcp">
-                            	启动DHCP服务
+                            	启动DHCP
                         	</button>
 						{% else %}
 							<button type="button" class="btn btn-success start_btn edit start_dhcp" disabled>
-                            	启动DHCP服务
+                            	启动DHCP
                         	</button>
 						{%endif%}
 					{%else%}
@@ -126,7 +122,11 @@ img {
 						{%endif%}
 					{%endif%}
 				{%endif%}
-                虚网资源【网段: {{ start_ip }}-{{ end_ip }}】
+                <div class="title_word_bg">
+                                        虚网资源      
+                       <div class="triangle"></div> 
+                    </div> 
+                【网段: {{ start_ip }}-{{ end_ip }}】
             </legend>
 		  	 <table class="table table-striped table-hover tooltip-demo">
 		  	    <thead>
@@ -183,13 +183,13 @@ img {
                                 </div>
                             </td>
 
-                               <td>
+                               <td class="vm_state">
                                     <div id="controller_st">
                                         {%if controller.host%}
                                             {% if controller.host.state == 8 %}
                                                 <img src="{% static "img/loader.gif" %}" />
                                             {% elif controller.host.state == 9 %}
-                                                <i class="icon-remove"></i>
+                                                <i class="icon-remove-sign"></i>
                                             {%elif controller.host.state == 1 %}
                                                 <i class="icon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                                             {%else%}
@@ -221,9 +221,9 @@ img {
                                             {%endif%}
                                         </span>
                                         {% if slice_obj.state == 1 %}
-                                            <a data-toggle="modal" href="#editSliceModal" class="btn btn-info disabled btn-slice-state" >编辑</a>
+                                            <a data-toggle="modal" href="#editSliceModal" class="btn disabled btn-slice-state" >编辑</a>
                                         {%else%}
-                                            <a data-toggle="modal" href="#editSliceModal" class="btn btn-info btn-slice-state">编辑</a>
+                                            <a data-toggle="modal" href="#editSliceModal" class="btn btn-slice-state">编辑</a>
                                         {%endif%}
                                    </td>
                                 {%else%}
@@ -263,13 +263,13 @@ img {
 				 			<td>虚拟网关</td>
 				 			<td>{{gw.ip}}</td>
 				 			<td>{{gw.server.ip}}</td>
-                                <td>
+                                <td class="vm_state">
                                     {% if gw.state == 8 %}
                                     <div id="gw_st{{gw.id}}">
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif gw.state == 9 %}
-                                        <i class="icon-remove"></i>
+                                        <i class="icon-remove-sign"></i>
                                     {%elif gw.state == 1 %}
                                         <i class="icon-ok-sign gw_dhcp_icon"></i>
                                     {%else%}
@@ -395,13 +395,13 @@ img {
 				 			<td>虚拟机{%if vm.enable_dhcp%}(DHCP){%endif%}</td>
 				 			<td>{{vm.ip}}</td>
 				 			<td>{{vm.server.ip}}</td>
-                                <td>
+                                <td class="vm_state">
                                     {% if vm.state == 8 %}
                                     <div id="vm_st{{vm.id}}">
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif vm.state == 9 %}
-                                        <i class="icon-remove"></i>
+                                        <i class="icon-remove-sign"></i>
                                     {%elif vm.state == 1 %}
                                         <i class="icon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
                                     {%else%}
@@ -428,9 +428,9 @@ img {
                                             <button type="button" url="/plugins/vt/vm/vnc/{{ vm.id }}" class="btn btn_vnc disabled" id="btn_vnc{{vm.id}}">登录</button>
                                         {%endif%}
                     				{% if slice_obj.state == 1 %}
-                    				    <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse disabled slice_state_del">删除</a>
+                    				    <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger disabled slice_state_del">删除</a>
                     				{%else%}
-                    				    <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse slice_state_del">删除</a>
+                    				    <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger  slice_state_del">删除</a>
     				 			    {%endif%}
     				 			    </td>
     				 		     {%else%}
@@ -457,7 +457,7 @@ img {
                                     {% if slice_obj.state == 1 %}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse disabled slice_state_del">删除</a>
                                     {%else%}
-                                        <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse slice_state_del">删除</a>
+                                        <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger slice_state_del">删除</a>
                                     {%endif%}
                                </td>
                             {%endif%}
@@ -487,7 +487,7 @@ img {
 			 </div>
 		  </fieldset>			  		 
 		</div>
-		<div id="editInfoModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+		<div id="editInfoModal" class="modal hide fade in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3>虚网基本信息编辑</h3>      
@@ -511,12 +511,12 @@ img {
                   </table>
 	            </div>
 	            <div class="modal-footer">
-	              <button class="btn btn-info" data-dismiss="modal">取消</button>
+	              <button class="btn" data-dismiss="modal">取消</button>
 	              <button type="button" onclick="edit_description('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
 	            </div>
           </form>
          </div>
-         <div id="editSliceModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+         <div id="editSliceModal" class="modal hide fade in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
               <h3>虚网控制器编辑</h3>      
@@ -577,17 +577,17 @@ img {
                 </table>
 	          </div>
 	          <div class="modal-footer">
-	              <button class="btn btn-info" data-dismiss="modal">取消</button>
+	              <button class="btn" data-dismiss="modal">取消</button>
 	              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
 	          </div>
             </form>
          </div>
-<div id="slicealertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="slicealertModal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body" id="slice_alert_info">
       <p class="text-center">虚网创建失败！</p>
     </div> 
     <div class="modal-footer">
-      <button class="btn btn-info" data-dismiss="modal" id="alert_closed">确定</button>
+      <button class="btn btn-warning" data-dismiss="modal" id="alert_closed">确定</button>
     </div>          
 </div>
 {% endblock %}

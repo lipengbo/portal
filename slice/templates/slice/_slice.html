@@ -16,7 +16,7 @@
         <div class="row-fluid slice_list">
             <div class="span5">
                 <div class="slice_left">
-                    <img src="{% static slice.project.category.image %}" />
+                    <div class="top_img"><img src="{% static slice.project.category.image %}" /></div>
                     <ul>
                         <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="icon-file-alt icon-large"></i><b>{{ slice.get_show_name }}</b></li>
                         <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="icon-user icon-large"></i>{{ slice.owner }}</li>

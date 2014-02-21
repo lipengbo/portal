@@ -8,26 +8,14 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'SSHKey'
-        db.create_table('vt_sshkey', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('sshkey', self.gf('django.db.models.fields.CharField')(max_length=500)),
-        ))
-        db.send_create_signal('vt', ['SSHKey'])
 
-        # Adding unique constraint on 'SSHKey', fields ['user', 'sshkey']
-        db.create_unique('vt_sshkey', ['user_id', 'sshkey'])
-
+        # Changing field 'VirtualMachine.flavor'
+        db.alter_column('vt_virtualmachine', 'flavor_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Flavor'], null=True))
 
     def backwards(self, orm):
-        # Removing unique constraint on 'SSHKey', fields ['user', 'sshkey']
-        db.delete_unique('vt_sshkey', ['user_id', 'sshkey'])
 
-        # Deleting model 'SSHKey'
-        db.delete_table('vt_sshkey')
-
+        # Changing field 'VirtualMachine.flavor'
+        db.alter_column('vt_virtualmachine', 'flavor_id', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['vt.Flavor']))
 
     models = {
         'auth.group': {
@@ -228,24 +216,20 @@ class Migration(SchemaMigration):
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'})
         },
-        'vt.sshkey': {
-            'Meta': {'unique_together': "(('user', 'sshkey'),)", 'object_name': 'SSHKey'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sshkey': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
-        },
         'vt.virtualmachine': {
             'Meta': {'object_name': 'VirtualMachine'},
+            'cpu': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'enable_dhcp': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'flavor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Flavor']"}),
+            'flavor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Flavor']", 'null': 'True'}),
             'gateway_public_ip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'gateway_set'", 'null': 'True', 'to': "orm['ipam.IPUsage']"}),
+            'hdd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Image']"}),
             'ip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'virtualmachine_set'", 'null': 'True', 'to': "orm['ipam.IPUsage']"}),
             'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
             'mac': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'ram': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'server': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.Server']"}),
             'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"}),
             'state': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),

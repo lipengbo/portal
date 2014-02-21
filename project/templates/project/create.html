@@ -24,7 +24,12 @@
 <form class="" action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
   <fieldset>			   
-    <legend>基本信息</legend>
+    <legend>
+        <div class="title_word_bg">
+                                        基本信息
+           <div class="triangle"></div> 
+        </div>
+    </legend>
     <div class="form_inline control-group {% if form.name.errors %}error{% endif %}">
         <label>项目名称</label>
         <input type="text" name="name" value="{{ form.instance.name }}">  
@@ -83,7 +88,12 @@
     </div> -->
   </fieldset>
   <fieldset>
-    <legend>添加资源 </legend>
+    <legend>
+        <div class="title_word_bg">
+            添加资源 
+            <div class="triangle"></div> 
+        </div>       
+    </legend>
         {% get_all_cities %}
         {% get_total_resources %}
         <div class="progress edit" style="width:150px;margin-bottom:10px;">

@@ -72,9 +72,18 @@ def create_vm(request, sliceid, from_link):
                 slice = get_object_or_404(Slice, id=sliceid)
                 vm.slice = slice
                 vm.island = vm.server.island
+                vm.ram = request.POST.get("ram")
+                vm.cpu = request.POST.get("cpu")
+                vm.hdd = request.POST.get("hdd")
+                flavor = Flavor.objects.filter(id=request.POST.get("flavor"))
+                if flavor.count() == 0:
+                    vm.flavor = None
+                else:
+                    vm.flavor = flavor[0]
+
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
-                    serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
+                    serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)
                     if not serverid:
                         raise ResourceNotEnough()
                     vm.server = Server.objects.get(id=serverid)
@@ -97,6 +106,7 @@ def create_vm(request, sliceid, from_link):
         vm_form.fields['server'].choices = servers
         context = {}
         context['vm_form'] = vm_form
+        context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
         context['from_link'] = from_link

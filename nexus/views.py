@@ -105,12 +105,9 @@ def add_or_edit(request, app_label, model_class, id=None):
     else:
         formset = ModelForm(request.POST, instance=instance)
         if formset.is_valid():
-            try:
                 instances = formset.save()
                 return redirect('nexus_list', app_label=app_label, model_class=model_class)
-            except Exception, e:
                 transaction.rollback()
-                messages.error(request, e)
         context['formset'] = formset
     return render(request, 'nexus/add.html', context)
 
@@ -137,19 +134,3 @@ def get_servers(request):
     for server in servers:
         html += '<option value="' + str(server.id) + '">' + server.name + '</option>'
     return HttpResponse(html)
-
-
-def create_virtualswitch(sender, instance, created, **kwargs):
-    from communication.flowvisor_client import FlowvisorClient
-    from plugins.openflow.models import Flowvisor
-    if created:
-        server_ip = instance.ip
-
-        flowvisor = Flowvisor.objects.get(island=instance.island)
-        client = FlowvisorClient(instance.ip, instance.http_port, instance.password)
-        port_name_dict = {}
-        try:
-            switches = client.get_switches()
-        except Exception, e:
-            print e
-            return
