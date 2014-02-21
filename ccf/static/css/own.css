@@ -5299,6 +5299,25 @@ body {
 label {
   display: inline;
 }
+.btn-warning {
+  background-color: #faa732;
+  background-image: -moz-linear-gradient(top, #fba42e, #d87e04);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#fba42e), to(#d87e04));
+  background-image: -webkit-linear-gradient(top, #fba42e, #d87e04);
+  background-image: -o-linear-gradient(top, #fba42e, #d87e04);
+  background-image: linear-gradient(to bottom, #fba42e, #d87e04);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffba42e', endColorstr='#ffd87e04', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+.btn-warning:hover,
+.btn-warning:focus,
+.btn-warning:active,
+.btn-warning.active,
+.btn-warning.disabled,
+.btn-warning[disabled] {
+  background-color: #d67b00;
+}
 .main2 {
   padding-top: 20px;
 }
@@ -5375,6 +5394,12 @@ legend .title_word_bg .triangle {
   padding-top: 10px;
   background: #ffffff url(../img/tip_bg.png) top left;
   background-repeat: repeat-x;
+}
+.modal_poptip_defined .modal-body .text-center i {
+  color: #f75556;
+  font-size: 18px;
+  margin-right: 8px;
+  vertical-align: middle;
 }
 .modal_poptip_defined .modal-footer {
   background-color: #fff;
@@ -5859,7 +5884,7 @@ table {
 .form-wizard .show_frame {
   padding: 10px;
   border-radius: 4px;
-  background: #eee;
+  background: #f6f6f6;
 }
 .form-wizard .show_frame .frame_tip {
   float: right;
@@ -6975,10 +7000,10 @@ a.button-royal:hover {
   width: 10%;
 }
 .table_list .virtualswitch {
-  width: 15%;
+  width: 10%;
 }
 .table_list .actions-server {
-  width: 15%;
+  width: 20%;
 }
 .table_list .switch {
   width: 15px;
@@ -7001,4 +7026,17 @@ a.button-royal:hover {
 .vm_state .icon-remove-sign,
 .vm_state .icon-minus-sign {
   color: #bd362f;
+}
+.table-striped thead > tr > th {
+  background: #e2eaf3;
+}
+.table-striped tbody > tr > td {
+  background: #f0f0f0;
+}
+.table-striped tbody > tr:nth-child(odd) > td {
+  background: #eef2f5;
+}
+.icheckbox_square-blue,
+.iradio_square-blue {
+  background: #ffffff url(../css/square/blue.png) no-repeat;
 }
