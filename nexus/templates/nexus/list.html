@@ -163,7 +163,6 @@
                         <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn">{% trans "Monitor" %}</a>
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser %}
-                    {{ object.is_superuser }}
                         {% if object.get_profile.state == 0 %}
                             <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
                                 审批
