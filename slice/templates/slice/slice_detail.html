@@ -38,12 +38,12 @@ img {
                     {% if slice_obj.state == 0 %}
                         <a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit btn-slice-state">编辑</a>
                         <button type="button" class="btn btn-success start_btn edit start_slice">
-                            启动虚网
+                            启动
                         </button>
                     {%else%}    
                         <a data-toggle="modal" href="#editInfoModal" class="btn btn-info edit disabled btn-slice-state" >编辑</a>
                         <button type="button" class="btn btn-danger start_btn edit start_slice">
-                            停止虚网
+                            停止
                         </button>
                     {%endif%}	
                 {%endif%}			           
@@ -103,11 +103,11 @@ img {
 					{% if slice_obj.get_dhcp == None %}
 						{% if slice_obj.state == 0 and permission == "edit" %}
 							<button type="button" class="btn btn-success start_btn edit start_dhcp">
-                            	启动DHCP服务
+                            	启动DHCP
                         	</button>
 						{% else %}
 							<button type="button" class="btn btn-success start_btn edit start_dhcp" disabled>
-                            	启动DHCP服务
+                            	启动DHCP
                         	</button>
 						{%endif%}
 					{%else%}

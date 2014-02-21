@@ -6207,9 +6207,6 @@ table {
   float: left;
   margin-right: 5px;
 }
-.start_slice {
-  width: 118px;
-}
 #alertModal,
 #alert_modal,
 #slicealertModal,
@@ -6604,7 +6601,7 @@ a.button-royal:hover {
   color: #fff;
 }
 .nav-header {
-  font-size: 12px;
+  font-size: 14px;
 }
 #main_show {
   text-align: center;
