@@ -426,7 +426,7 @@ function not_contains(a, obj) {
 function create_vms(sliceid, flag, from_link)
 {
 	if(vms_info().count() == 0){
-		document.getElementById('alert_info').innerHTML = "请先保存虚拟机配置置信息！";
+		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置置信息！";
 		$('#alert_modal').modal('show');
 		return;
 	}
