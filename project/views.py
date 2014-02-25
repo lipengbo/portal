@@ -91,7 +91,7 @@ def perm_admin(request, id, user_id):
     context = {}
     context['project'] = project
     content_type = ContentType.objects.get_for_model(project)
-    perms = Permission.objects.filter(content_type=content_type).exclude(codename="add_project")
+    perms = Permission.objects.filter(content_type=content_type).exclude(codename__in=("add_project", "delete_project"))
     context['perms'] = perms
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
