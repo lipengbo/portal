@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-25 10:04+0800\n"
+"POT-Creation-Date: 2014-02-25 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -85,31 +85,36 @@ msgstr "可以创建虚网"
 msgid "Membership"
 msgstr "成员"
 
-#: views.py:160
+#: views.py:105
+msgid "Change permissions successfully"
+msgstr "权限修改成功"
+
+#: views.py:161
 msgid "The user has been invited of this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:168
+#: views.py:169
+#, python-format
 msgid "The user %(user)s has applied this project"
 msgstr "用户%(user)s已经申请了该项目"
 
-#: views.py:181
+#: views.py:182
 msgid "Invitation message is required."
 msgstr "邀请消息是必填项"
 
-#: views.py:234
+#: views.py:235
 msgid "You have applied for this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:242
+#: views.py:243
 msgid "The user has been invited for this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:257
+#: views.py:258
 msgid "Application is submitted, please wait to audit."
 msgstr "申请已经提交，请等待审批"
 
-#: views.py:259
+#: views.py:260
 msgid "Application message is required."
 msgstr "申请理由是必填项"
 

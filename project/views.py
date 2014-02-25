@@ -101,6 +101,7 @@ def perm_admin(request, id, user_id):
             remove_perm("{}.{}".format(perm.content_type.app_label, perm.codename), user, project)
         for perm in select_perms:
             assign_perm(perm, user, project)
+        messages.add_message(request, messages.INFO, _("Change permissions successfully"))
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
