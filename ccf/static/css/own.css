@@ -6872,6 +6872,7 @@ a.button-royal:hover {
   position: relative;
 }
 .slider_td {
+  display: block;
   position: relative;
 }
 .slider_td .value_s {
