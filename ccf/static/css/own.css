@@ -6810,7 +6810,7 @@ a.button-royal:hover {
   margin-bottom: 0;
 }
 .create_vm_form tbody tr td .view_topo {
-  margin-left: 20px;
+  margin-left: 5px;
   font-size: 12px;
 }
 .create_vm_form td.type_chose a {
@@ -7076,4 +7076,7 @@ a.button-royal:hover {
 }
 .iradio_square-blue.checked.disabled {
   background-position: -216px 0;
+}
+a[data-toggle="tooltip"] {
+  text-decoration: none;
 }
