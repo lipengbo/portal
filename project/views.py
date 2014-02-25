@@ -165,7 +165,7 @@ def invite(request, id):
                 try:
                     application = Application.objects.get(from_user=user, target_id=project.id, target_type=target_type, state__gt=0)
                     messages.add_message(request, messages.INFO,
-                            _("The user has applied this project"))
+                            _("The user %(user)s has applied this project") % ({'user': user}))
                     continue
                 except Application.DoesNotExist:
                     pass
