@@ -84,19 +84,6 @@ class Flavor(models.Model):
         verbose_name = _("Flavor")
 
 
-class SSHKey(models.Model):
-    user = models.ForeignKey(User)
-    title = models.CharField(max_length=256)
-    sshkey = models.CharField(max_length=500)
-
-    def __unicode__(self):
-        return self.title
-
-    class Meta:
-        #unique_together = (("user", "sshkey"), )
-        verbose_name = _("SSH Keys")
-
-
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=36, null=True, unique=True)
     ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
@@ -218,6 +205,20 @@ class VirtualMachine(IslandResource):
         verbose_name = _("Virtual Machine")
 
 
+class SSHKey(models.Model):
+    user = models.ForeignKey(User)
+    title = models.CharField(max_length=256)
+    sshkey = models.CharField(max_length=500)
+    vms = models.ManyToManyField(VirtualMachine)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        #unique_together = (("user", "sshkey"), )
+        verbose_name = _("SSH Keys")
+
+
 class HostMac(models.Model):
     mac = models.CharField(max_length=32)
     host_type = models.ForeignKey(ContentType)
@@ -278,7 +279,6 @@ def sshkey_post_save(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=SSHKey)
 def sshkey_post_delete(sender, instance, **kwargs):
-    slices = Slice.objects.filter(owner=instance.user)
-    for slice in slices:
-        for vm in slice.get_vms():
-            vm.delete_sshkeys(instance.sshkey)
+    vms = instance.vms.all()
+    for vm in vms:
+        vm.delete_sshkeys(instance.sshkey)
