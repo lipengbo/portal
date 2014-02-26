@@ -135,7 +135,10 @@
                         {% with related_attr=related.model|concat:"_set"%}
                         {% with object|get_attr:related_attr as related_objects %}
                         {% for related_model in related_objects.all %}
-                        <a href="{% url nexus_edit related.app_label related.model|lower related_model.id %}" class="">{{ related_model }}</a>
+                        {% comment %}
+                            <a href="{% url nexus_edit related.app_label related.model|lower related_model.id %}" class="">{{ related_model }}</a>
+                        {% endcomment %}
+                            {{ related_model }}
                         {% endfor %}
                         {% endwith %}
                         {% endwith %}
