@@ -274,6 +274,7 @@ def sshkey_post_save(sender, instance, **kwargs):
         slices = Slice.objects.filter(owner=instance.user)
         for slice in slices:
             for vm in slice.get_vms():
+                instance.vms.add(vm)
                 vm.add_sshkeys(instance.sshkey)
 
 
