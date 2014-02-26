@@ -93,7 +93,7 @@ class SSHKey(models.Model):
         return self.title
 
     class Meta:
-        unique_together = (("user", "sshkey"), )
+        #unique_together = (("user", "sshkey"), )
         verbose_name = _("SSH Keys")
 
 
