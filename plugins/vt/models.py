@@ -208,7 +208,7 @@ class SSHKey(models.Model):
     slice = models.ForeignKey(Slice)
     name = models.CharField(max_length=256)
     public_key = models.CharField(max_length=500, blank=True)
-    private_key = models.CharField(max_length=500, blank=True)
+    private_key = models.CharField(max_length=2048, blank=True)
     fingerprint = models.CharField(max_length=250, blank=True)
 
     def __unicode__(self):
@@ -297,13 +297,13 @@ def vm_post_delete(sender, instance, **kwargs):
         pass
 
 
-@receiver(post_save, sender=SSHKey)
-def sshkey_post_save(sender, instance, **kwargs):
-    if kwargs.get('created'):
-        slice = instance.slice
-        for vm in slice.get_vms():
-            instance.vms.add(vm)
-            vm.add_sshkeys(instance.sshkey)
+#@receiver(post_save, sender=SSHKey)
+#def sshkey_post_save(sender, instance, **kwargs):
+    #if kwargs.get('created'):
+        #slice = instance.slice
+        #for vm in slice.get_vms():
+            #instance.vms.add(vm)
+            #vm.add_sshkeys(instance.sshkey)
 
 
 @receiver(post_save, sender=Slice)
