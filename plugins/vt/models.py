@@ -17,6 +17,8 @@ from django.utils.translation import ugettext as _
 import errno
 from socket import error as socket_error
 from etc.config import function_test
+import logging
+LOG = logging.getLogger('plugins')
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
     (1, _('running')),
@@ -312,15 +314,10 @@ def slice_post_save(sender, instance, **kwargs):
             sshkey.slice = instance
             sshkey.name = '%s_key' % instance.name
             sshkey.private_key, sshkey.public_key, sshkey.fingerprint = sshkey.generate_key_pair()
-            print '-------------------------------------------'
-            print sshkey.private_key
-            print sshkey.public_key
-            print sshkey.fingerprint
-            print '-------------------------------------------'
             sshkey.save()
         except:
             import traceback
-            print traceback.print_exc()
+            LOG.error(traceback.print_exc())
 
 #@receiver(post_delete, sender=SSHKey)
 #def sshkey_post_delete(sender, instance, **kwargs):
