@@ -1,3 +1,4 @@
-€}qUplugins.vt.models]q(Uvm_pre_deleteqUvm_post_deleteqUvm_post_saveqUHostMacqUVM_TYPEqUVirtualMachineqUDOMAIN_STATE_DICq	Uvm_pre_saveq
-USSHKeyqUsshkey_post_deleteqU
-HOST_STATEqUImageqUsshkey_post_saveqUFlavorqUDOMAIN_STATE_TUPLEqes.
+€}q(U
+etc.config]q(Urpc_connection_timeoutqUovs_service_portqU	lock_pathqUglance_portqUdomain_count_infinityqUmax_diskqUcompute_service_portq	Uvt_manager_ipq
+Ugenerate_glance_urlqUgw_controllerqUmax_cpuqUunique_hosts_per_allocqUslice_expiration_daysqUflowvisor_disableqUdefault_flavor_idqUfunction_testqUuse_vt_manager_to_schedulqUsFlow_serviceqUmonitor_service_portqUmax_memqUglance_hostqUvt_manager_portqeUplugins.vt.models]q(Uvm_pre_deleteqUvm_post_deleteqUvm_post_saveqUHostMacqUVM_TYPEqUVirtualMachineqUDOMAIN_STATE_DICq Uvm_pre_saveq!Uslice_post_saveq"USSHKeyq#U
+HOST_STATEq$UImageq%Usshkey_post_saveq&UFlavorq'UDOMAIN_STATE_TUPLEq(eu.

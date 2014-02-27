@@ -11,19 +11,21 @@ class Migration(SchemaMigration):
         # Adding model 'SSHKey'
         db.create_table('vt_sshkey', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('sshkey', self.gf('django.db.models.fields.CharField')(max_length=500)),
+            ('slice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['slice.Slice'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('public_key', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
+            ('private_key', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
+            ('fingerprint', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
         ))
         db.send_create_signal('vt', ['SSHKey'])
 
-        # Adding unique constraint on 'SSHKey', fields ['user', 'sshkey']
-        db.create_unique('vt_sshkey', ['user_id', 'sshkey'])
+        # Adding unique constraint on 'SSHKey', fields ['fingerprint']
+        db.create_unique('vt_sshkey', ['fingerprint'])
 
 
     def backwards(self, orm):
-        # Removing unique constraint on 'SSHKey', fields ['user', 'sshkey']
-        db.delete_unique('vt_sshkey', ['user_id', 'sshkey'])
+        # Removing unique constraint on 'SSHKey', fields ['fingerprint']
+        db.delete_unique('vt_sshkey', ['fingerprint'])
 
         # Deleting model 'SSHKey'
         db.delete_table('vt_sshkey')
@@ -229,11 +231,13 @@ class Migration(SchemaMigration):
             'version': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'})
         },
         'vt.sshkey': {
-            'Meta': {'unique_together': "(('user', 'sshkey'),)", 'object_name': 'SSHKey'},
+            'Meta': {'unique_together': "(('fingerprint',),)", 'object_name': 'SSHKey'},
+            'fingerprint': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sshkey': ('django.db.models.fields.CharField', [], {'max_length': '500'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'private_key': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
+            'public_key': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
+            'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"})
         },
         'vt.virtualmachine': {
             'Meta': {'object_name': 'VirtualMachine'},
