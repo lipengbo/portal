@@ -7,6 +7,7 @@ from etc.config import flowvisor_disable
 
 
 def parseResponse(data):
+    print 1
     print data[0]["resultcode"]
     print data[0]["resultmsg"]
     return data
@@ -44,6 +45,7 @@ def cnvp_service(cnvp_ip, cnvp_port, cmd):
         resp = server.cnvp_jsonrpc_service(cmdline)
         return parseResponse(resp)
     except Exception, e:
+        print 2
         print str(e)
         raise
 
