@@ -19,3 +19,4 @@ git+https://github.com/eldarion/idios.git
 django-filter
 git+https://github.com/fay/django-notifications
 South==0.8.1
+django-smtp-ssl==1.0
