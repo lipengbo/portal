@@ -228,6 +228,7 @@ def edit_controller(request, slice_id):
                                                           'host_state': controller.host.state, 'host_id': controller.host.id,
                                                           'host_uuid': controller.host.uuid}}))
         else:
+            print 2
             return HttpResponse(json.dumps({'result': 2,
                                             'controller': {'name': controller.name, 'ip': controller.ip,
                                                           'port': controller.port}}))
@@ -325,6 +326,20 @@ def start_or_stop(request, slice_id, flag):
     return HttpResponse(json.dumps({'value': 1}))
 #     return HttpResponseRedirect(
 #         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+
+
+import threading
+import time
+ 
+def worker():
+    print "test"
+    time.sleep(2)
+ 
+threads = []
+for i in xrange(5):
+    t = threading.Thread(target=worker)
+    threads.append(t)
+    t.start()
 
 
 def topology(request, slice_id):
