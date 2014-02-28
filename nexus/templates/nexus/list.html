@@ -108,7 +108,9 @@
     {% for object in objects %}
         <tr>
             <td>
-                <input type="checkbox" name="id" value="{{ object.id }}">
+                <input type="checkbox" name="id" value="{{ object.id }}"
+                {% if class_name == 'User' and object.is_superuser %} disabled {% endif %}
+                >
             </td>
             <td><a href="{% if class_name != 'User'%} {% url nexus_edit app_label class_name|lower object.id %}{% else %}#{% endif%}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
