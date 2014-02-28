@@ -541,9 +541,9 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 1);
             if(ret){
                 $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止虚网");
+                $(this).text("停止");
                 $(".label").removeClass("label-important").addClass("label-success");
-                $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
+                //$(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
                 $(".btn-slice-state").addClass("disabled");
                 $(".slice_state_del").addClass("disabled");
 				$(".start_dhcp").attr("disabled", "true");
@@ -552,9 +552,9 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 2);
             if(ret){
                 $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动虚网");
+                $(this).text("启动");
                 $(".label").removeClass("label-success").addClass("label-important");
-                $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
+                //$(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                 $(".btn-slice-state").removeClass("disabled");
                 $(".slice_state_del").removeClass("disabled");
 				$(".start_dhcp").removeAttr("disabled");
@@ -886,10 +886,10 @@ function set_dhcp(slice_id, flag){
 				if(data.result == 0){
 					if(flag == 1){
 						$('.start_dhcp').removeClass("btn-success").addClass("btn-danger");           
-                		$('.start_dhcp').text("停止DHCP服务");
+                		$('.start_dhcp').text("停止DHCP");
 					}else{
 						$('.start_dhcp').removeClass("btn-danger").addClass("btn-success");
-                		$('.start_dhcp').text("启动DHCP服务");
+                		$('.start_dhcp').text("启动DHCP");
 					}
 					
 				}else{
