@@ -248,8 +248,6 @@ FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
 ]
 
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_USE_OPENID = False
@@ -263,8 +261,9 @@ ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_EMAIL_CONFIRMATION_EMAIL = False
 
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_PORT = 465
 EMAIL_HOST = 'mail.fnic.cn'
-EMAIL_PORT = '25'
 EMAIL_HOST_USER = 'ccf@fnic.cn'
 FROM_EMAIL = 'ccf@fnic.cn'
 DEFAULT_FROM_EMAIL = FROM_EMAIL
