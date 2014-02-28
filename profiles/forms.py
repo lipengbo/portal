@@ -3,6 +3,7 @@ import re
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from django.conf import settings
 
 import account.forms
 from profiles.models import Profile
@@ -32,18 +33,8 @@ class UserForm(forms.ModelForm):
     def clean_username(self):
         if not alnum_re.search(self.cleaned_data["username"]):
             raise forms.ValidationError(_("Usernames can only contain letters, numbers and underscores."))
-        qs = User.objects.filter(username__iexact=self.cleaned_data["username"])
-        if not qs.exists():
-            return self.cleaned_data["username"]
-        raise forms.ValidationError(_("This username is already taken. Please choose another."))
+        return self.cleaned_data["username"]
     
-    def clean_email(self):
-        value = self.cleaned_data["email"]
-        qs = EmailAddress.objects.filter(email__iexact=value)
-        if not qs.exists() or not settings.ACCOUNT_EMAIL_UNIQUE:
-            return value
-        raise forms.ValidationError(_("A user is registered with this email address."))
-
     def save(self):
         can_create_project = self.cleaned_data.get('can_create_project')
         if can_create_project:
