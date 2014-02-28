@@ -797,6 +797,7 @@ function start_or_stop(slice_id, flag){
                 success: function(data) {
                     if (data.result == 1 || data.result == 2){
                         //alert("ok");
+                        //alert(data.result);
                         controller = data.controller;
                         //alert(controller);
                         $("div#controller_nm").empty();
@@ -840,10 +841,10 @@ function start_or_stop(slice_id, flag){
                                 +"<button type=\"button\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
                             }else if(controller.host_state == 1){
                                 str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-danger start_vm\">停止</button>"                                         
-                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host+id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host_id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
                             }else{
-                                str = "" + "<button type=\"button\" vm_id=\""+controller.host.id+"\" class=\"btn btn-success start_vm\">启动</button>"
-                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host.id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                                str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-success start_vm\">启动</button>"
+                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
                             }
                             $("span#controller_fc").append(str);
                             if(controller.host_state == 8){
