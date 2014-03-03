@@ -49,6 +49,8 @@ def list_objects(request, app_label, model_class):
     objects = ModelClass.objects.order_by('-id')
     if model_class == 'switch':
         objects = objects.exclude(dpid__istartswith='00:ff')
+    if model_class == 'user':
+        objects = objects.exclude(is_superuser=True)
     objects = NexusFilter(request.GET, queryset=objects.order_by('-id'))
     cities = City.objects.all()
     islands = Island.objects.all()
