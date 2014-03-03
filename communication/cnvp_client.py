@@ -34,6 +34,7 @@ def buildRequest(method, cmd):
 
 
 def cnvp_service(cnvp_ip, cnvp_port, cmd):
+    import traceback
 #     cnvp_ip = "192.168.5.36"
     if flowvisor_disable:
         return [{"resultcode": 0, "resultmsg": "flowvisor_disable"}]
@@ -47,6 +48,8 @@ def cnvp_service(cnvp_ip, cnvp_port, cmd):
     except Exception, e:
         print 2
         print str(e)
+#         traceback.print_stack()
+#         traceback.print_exc()
         raise
 
 
