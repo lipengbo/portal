@@ -48,7 +48,7 @@ def cnvp_service(cnvp_ip, cnvp_port, cmd):
     except Exception, e:
         print 2
         print str(e)
-#         traceback.print_stack()
+        traceback.print_stack()
 #         traceback.print_exc()
         raise
 
