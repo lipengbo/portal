@@ -307,13 +307,13 @@ def vm_post_delete(sender, instance, **kwargs):
         pass
 
 
-@receiver(post_save, sender=SSHKey)
-def sshkey_post_save(sender, instance, **kwargs):
-    if kwargs.get('created'):
-        slice = instance.slice
-        for vm in slice.get_vms():
-            instance.vms.add(vm)
-            vm.add_sshkeys(instance.sshkey)
+#@receiver(post_save, sender=SSHKey)
+#def sshkey_post_save(sender, instance, **kwargs):
+    #if kwargs.get('created'):
+        #slice = instance.slice
+        #for vm in slice.get_vms():
+            #instance.vms.add(vm)
+            #vm.add_sshkeys(instance.sshkey)
 
 
 @receiver(post_save, sender=Slice)
