@@ -562,8 +562,21 @@ function submit_slice_info(project_id){
 			success: function(data) {
 	        	if (data.result == 1){
 	        		//alert(data.slice_id);
-	        		submit_vms(data.slice_id);
-	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+					submit_vms(data.slice_id);
+					if(!post_vm_result){
+						$("div#slice_alert_info").empty();
+                			str = "" + "<p class=\"text-center\">部分虚拟机由于资源不足，无法创建成功！</p>";
+                			$("div#slice_alert_info").append(str);
+                			$('#slicealertModal').modal('show');
+					
+							$('#alert_closed').on("click", function(){
+								location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+							});
+					}else{
+						location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+					}
+	        		
+	        		
 	            }
 	            else{
 	            	$("div#slice_alert_info").empty();

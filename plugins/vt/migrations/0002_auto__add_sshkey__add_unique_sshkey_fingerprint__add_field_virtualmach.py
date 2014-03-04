@@ -8,14 +8,58 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'SSHKey'
+        db.create_table('vt_sshkey', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('slice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['slice.Slice'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('public_key', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
+            ('private_key', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
+            ('fingerprint', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
+        ))
+        db.send_create_signal('vt', ['SSHKey'])
+
+        # Adding unique constraint on 'SSHKey', fields ['fingerprint']
+        db.create_unique('vt_sshkey', ['fingerprint'])
+
+        # Adding field 'VirtualMachine.cpu'
+        db.add_column('vt_virtualmachine', 'cpu',
+                      self.gf('django.db.models.fields.IntegerField')(null=True),
+                      keep_default=False)
+
+        # Adding field 'VirtualMachine.ram'
+        db.add_column('vt_virtualmachine', 'ram',
+                      self.gf('django.db.models.fields.IntegerField')(null=True),
+                      keep_default=False)
+
+        # Adding field 'VirtualMachine.hdd'
+        db.add_column('vt_virtualmachine', 'hdd',
+                      self.gf('django.db.models.fields.IntegerField')(null=True),
+                      keep_default=False)
+
 
         # Changing field 'VirtualMachine.flavor'
         db.alter_column('vt_virtualmachine', 'flavor_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Flavor'], null=True))
 
     def backwards(self, orm):
+        # Removing unique constraint on 'SSHKey', fields ['fingerprint']
+        db.delete_unique('vt_sshkey', ['fingerprint'])
+
+        # Deleting model 'SSHKey'
+        db.delete_table('vt_sshkey')
+
+        # Deleting field 'VirtualMachine.cpu'
+        db.delete_column('vt_virtualmachine', 'cpu')
+
+        # Deleting field 'VirtualMachine.ram'
+        db.delete_column('vt_virtualmachine', 'ram')
+
+        # Deleting field 'VirtualMachine.hdd'
+        db.delete_column('vt_virtualmachine', 'hdd')
+
 
         # Changing field 'VirtualMachine.flavor'
-        db.alter_column('vt_virtualmachine', 'flavor_id', self.gf('django.db.models.fields.related.ForeignKey')(default=0, to=orm['vt.Flavor']))
+        db.alter_column('vt_virtualmachine', 'flavor_id', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['vt.Flavor']))
 
     models = {
         'auth.group': {
@@ -76,7 +120,7 @@ class Migration(SchemaMigration):
             'is_owned': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_used': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'netaddr': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
-            'owner': ('django.db.models.fields.CharField', [], {'max_length': '60', 'unique': 'True', 'null': 'True'}),
+            'owner': ('django.db.models.fields.CharField', [], {'max_length': '100', 'unique': 'True', 'null': 'True'}),
             'size': ('django.db.models.fields.IntegerField', [], {}),
             'supernet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['ipam.Network']"}),
             'update_time': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
@@ -215,6 +259,15 @@ class Migration(SchemaMigration):
             'username': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'})
+        },
+        'vt.sshkey': {
+            'Meta': {'unique_together': "(('fingerprint',),)", 'object_name': 'SSHKey'},
+            'fingerprint': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'private_key': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
+            'public_key': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
+            'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"})
         },
         'vt.virtualmachine': {
             'Meta': {'object_name': 'VirtualMachine'},

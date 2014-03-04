@@ -91,7 +91,7 @@ def perm_admin(request, id, user_id):
     context = {}
     context['project'] = project
     content_type = ContentType.objects.get_for_model(project)
-    perms = Permission.objects.filter(content_type=content_type).exclude(codename="add_project")
+    perms = Permission.objects.filter(content_type=content_type).exclude(codename__in=("add_project", "delete_project"))
     context['perms'] = perms
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
@@ -101,6 +101,7 @@ def perm_admin(request, id, user_id):
             remove_perm("{}.{}".format(perm.content_type.app_label, perm.codename), user, project)
         for perm in select_perms:
             assign_perm(perm, user, project)
+        messages.add_message(request, messages.INFO, _("Change permissions successfully"))
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
@@ -165,7 +166,7 @@ def invite(request, id):
                 try:
                     application = Application.objects.get(from_user=user, target_id=project.id, target_type=target_type, state__gt=0)
                     messages.add_message(request, messages.INFO,
-                            _("The user has applied this project"))
+                            _("The user %(user)s has applied this project") % ({'user': user}))
                     continue
                 except Application.DoesNotExist:
                     pass

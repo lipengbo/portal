@@ -426,7 +426,7 @@ function not_contains(a, obj) {
 function create_vms(sliceid, flag, from_link)
 {
 	if(vms_info().count() == 0){
-		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置置信息！";
+		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置信息！";
 		$('#alert_modal').modal('show');
 		return;
 	}
@@ -570,7 +570,7 @@ function edit_vm(vm_id){
 	$("#disk_slider").slider("value", disk_flavor[vm.hdd]);
 }
 
-function delete_vm(vm_id){
+function delete_vminfo(vm_id){
 	vms_info({id:vm_id}).remove();
 	show_vm_info_table();
 }
@@ -593,7 +593,7 @@ function show_vm_info_table(){
 							+"<td>"+vm.show_dhcp+"</td>"
                             +"<td>"
                             +"   <div>"
-                            +"    <button class='btn btn-danger' onclick='javascript:delete_vm("+vm.id+")'>删除</button>"
+                            +"    <button class='btn btn-danger' onclick='javascript:delete_vminfo("+vm.id+")'>删除</button>"
                             +"    </div>"
                             +"</td>"
                           +"</tr> ");

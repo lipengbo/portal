@@ -179,10 +179,15 @@ def update_links(sender, instance, created, **kwargs):
                 switch=source_switch,
                 port=src_port,
                 defaults={'name': src_port_name})
+        source_port.name = src_port_name
+        source_port.save()
+
         target_port, created = SwitchPort.objects.get_or_create(
                 switch=target_switch,
                 port=dst_port,
                 defaults={'name': dst_port_name})
+        target_port.name = dst_port_name
+        target_port.save()
 
         link_obj = Link(flowvisor=instance,
                 source=source_port,

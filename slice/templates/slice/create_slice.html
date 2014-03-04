@@ -392,7 +392,7 @@
                                  <a href="javascript:void(0);" class="vm_active" id="cpu_1" value="1">1 核</a>
                                  <a href="javascript:void(0);" id="cpu_2" value="2">2 核</a>
                                  <a href="javascript:void(0);" id="cpu_4" value="4">4 核</a>
-								 <a href="javascript:void(0);" id="cpu_6" value="6">8   核</a>
+								 <a href="javascript:void(0);" id="cpu_6" value="8">8 核</a>
                              </td>
                          </tr>
                          <tr>
@@ -434,8 +434,9 @@
                                      <option value="" selected="selected">---------</option>
                                      <option value="1">server1</option>
                                  </select-->
-							 	{{ vm_form.server }} <span name="serverInfo"></span>
-                                 <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
+							 	{{ vm_form.server }} 
+                                 <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
+                                 <span name="serverInfo"></span>
                              </td>
                          </tr>
                          <tr>
@@ -645,6 +646,7 @@
         });
 		$('#alert_closed').on("click", function(){
 			window.location.href = window.location.href;
+			
 		});
 		flavor_init();
 		

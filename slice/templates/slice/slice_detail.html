@@ -48,7 +48,10 @@ img {
                     {%endif%}	
                 {%endif%}			           
 			    {{slice_obj.get_show_name}}
-			      	
+				<form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
+					<input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
+				</form>
+			      
                 <i class="icon-caret-down show_describe" style="cursor:pointer;"></i>	   	
             </legend>		
             <div class="well word_detail hide">
@@ -126,7 +129,7 @@ img {
                                         虚网资源      
                        <div class="triangle"></div> 
                     </div> 
-                【网段: {{ start_ip }}-{{ end_ip }}】
+                【网段: {{ start_ip }}-{{ end_ip }}】<a onclick="javascript:document.downloadkey.submit();">下载私钥</a>
             </legend>
 		  	 <table class="table table-striped table-hover tooltip-demo">
 		  	    <thead>
@@ -596,6 +599,7 @@ img {
 <!--<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>-->
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script>
 	$(function(){

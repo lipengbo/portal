@@ -20,7 +20,7 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 #from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
-from models import Image, Flavor
+from models import Image, Flavor, SSHKey
 from resources.models import Server, SwitchPort
 from plugins.vt import api
 import logging
@@ -210,3 +210,10 @@ def get_flavor_msg(request):
         image = get_object_or_404(Image, id=obj_id)
         print image.username, image.password
         return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
+
+def download_keypair(request):
+    slice_obj = get_object_or_404(Slice, id=request.POST.get("slice_id"))
+    sshkey = SSHKey.objects.get(slice=slice_obj)
+    response = HttpResponse(sshkey.private_key, content_type='plain/text')
+    response['Content-Disposition'] = 'attachment; filename="private_key"'
+    return response

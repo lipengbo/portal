@@ -1,3 +1,5 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
@@ -16,6 +18,7 @@ class RejectForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, label=_("Reason"))
     user = forms.ModelChoiceField(queryset=User.objects.none, widget=forms.HiddenInput)
 
+alnum_re = re.compile(r"^\w+$")
 class UserForm(forms.ModelForm):
     
     can_create_project = forms.BooleanField(initial=False, required=False, label=_("Can add Project"))
@@ -24,6 +27,22 @@ class UserForm(forms.ModelForm):
         super(UserForm, self).__init__(*args, **kwargs)
         can_create_project_field = self.fields['can_create_project']
         can_create_project_field.initial = self.instance.has_perm('project.add_project')
+        self.fields['username'].help_text = ''
+
+    def clean_username(self):
+        if not alnum_re.search(self.cleaned_data["username"]):
+            raise forms.ValidationError(_("Usernames can only contain letters, numbers and underscores."))
+        qs = User.objects.filter(username__iexact=self.cleaned_data["username"])
+        if not qs.exists():
+            return self.cleaned_data["username"]
+        raise forms.ValidationError(_("This username is already taken. Please choose another."))
+    
+    def clean_email(self):
+        value = self.cleaned_data["email"]
+        qs = EmailAddress.objects.filter(email__iexact=value)
+        if not qs.exists() or not settings.ACCOUNT_EMAIL_UNIQUE:
+            return value
+        raise forms.ValidationError(_("A user is registered with this email address."))
 
     def save(self):
         can_create_project = self.cleaned_data.get('can_create_project')
