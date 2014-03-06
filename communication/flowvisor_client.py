@@ -283,9 +283,9 @@ def do_listFlowSpace(flowvisor_url, flowvisor_ps):
         return ret
 
 
-def do_listDatapathStats(dpid, flowviser_url, flowviser_ps):
+def do_listDatapathStats(dpid, flowvisor_url, flowvisor_ps):
     req = {"dpid": dpid}
-    ret = connect("list-datapath-stats", data=req, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+    ret = connect("list-datapath-stats", data=req, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
@@ -294,24 +294,24 @@ def do_listDatapathStats(dpid, flowviser_url, flowviser_ps):
         return ret
 
 
-def do_list_links(flowviser_url, flowviser_ps):
-    ret = connect("list-links", data={}, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+def do_list_links(flowvisor_url, flowvisor_ps):
+    ret = connect("list-links", data={}, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
         return ret
 
 
-def do_list_datapaths(flowviser_url, flowviser_ps):
-    ret = connect("list-datapaths", data={}, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+def do_list_datapaths(flowvisor_url, flowvisor_ps):
+    ret = connect("list-datapaths", data={}, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
         return ret
 
 
-def do_list_datapath_info(dpid, flowviser_url, flowviser_ps):
-    ret = connect("list-datapath-info", data={'dpid': dpid}, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+def do_list_datapath_info(dpid, flowvisor_url, flowvisor_ps):
+    ret = connect("list-datapath-info", data={'dpid': dpid}, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
