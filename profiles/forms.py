@@ -39,6 +39,9 @@ class UserForm(forms.ModelForm):
         can_create_project = self.cleaned_data.get('can_create_project')
         if can_create_project:
             assign_perm('project.add_project', self.instance)
+        else:
+            remove_perm('project.add_project', self.instance)
+
         ea = EmailAddress.objects.get_primary(self.instance)
         try:
             ec = EmailConfirmation.objects.get(email_address=ea)
