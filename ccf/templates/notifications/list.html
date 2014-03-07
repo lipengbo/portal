@@ -8,6 +8,8 @@
 {% endblock %}
 
 {% block body %}
+<form action="{% url delete_notifications %}" method="post" accept-charset="utf-8">
+    {% csrf_token %}
 <div class="row-fluid">
     <div class="span2 columns">
         <ul class="nav nav-list">
@@ -16,7 +18,9 @@
             <li><a href="{% url notifications:unread %}">{% trans "Unread" %}</a></li>
         </ul>
         <hr>
-        <a href="{% url notifications:mark_all_as_read %}" class="btn btn-info">{% trans "Mark as all read "%}</a>
+        <a href="{% url notifications:mark_all_as_read %}" class="btn btn-block btn-info">{% trans "Mark as all read "%}</a>
+        <button id="delete-button" class="btn btn-input btn-block btn-danger btn-delete disabled">{% trans "删 除"%}</button>
+        <a href="{% url delete_notifications %}" class="btn btn-block btn-delete btn-danger">{% trans "全部删除"%}</a>
         <hr>
     </div>
     <div class="span10">
@@ -31,4 +35,31 @@
         {% endif %}
     </div>
 </div>
+</form>
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript" charset="utf-8">
+    $('.checkboxs input').on('ifChecked', function(event){
+        $('#delete-button').removeClass('disabled');
+    });
+    $('.checkboxs input').on('ifUnchecked', function(event){
+        if($('.checkboxs .checked').length == 1) {
+            $('#delete-button').addClass('disabled');
+        } else {
+            $('#delete-button').removeClass('disabled');
+        }
+    });
+    $('#apply-button').click(function() {
+        if($(this).hasClass('disabled')) {
+            return;
+        }
+        $("#applyModal").modal();
+    });
+    $('#apply-submit').click(function() {
+            if(!$('#message').val()) {
+                $('.message-error').show();
+                return false;
+            }
+    });
+</script>
 {% endblock %}

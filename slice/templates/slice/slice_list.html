@@ -57,12 +57,27 @@
                         </div> 
                     {%else%}
                         {%if type == 1 %}      
-                             <legend>删除失败的虚网</legend>
+                             <legend>
+                                 <div class="title_word_bg">
+                                                          虚网（失败）
+                                       <div class="triangle"></div> 
+                                 </div>                        
+                                 </legend>
                         {%else%}
                              {% if type == 2 %}
-                                 <legend>已删除的虚网</legend>
+                                 <legend>
+                                    <div class="title_word_bg">
+                                                          虚网（已删除）
+                                       <div class="triangle"></div> 
+                                    </div>                          
+                                 </legend>
                              {%else%}
-                                <legend>正常运行的虚网</legend>
+                                <legend>
+                                    <div class="title_word_bg">
+                                                          虚网（正常）
+                                       <div class="triangle"></div> 
+                                    </div>
+                                 </legend>
                              {%endif%}
                         {%endif%}
                         <div class="row-fluid countschart">

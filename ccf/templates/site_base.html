@@ -102,8 +102,13 @@
 		    <div class="push"></div>
 		{% endblock %}
 		
-		{% block script_base %}
+		{% block script_base %}		    
             <script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
+            <!--[if IE]>
+                <script type="text/javascript" src="{{ STATIC_URL}}js/html5.js"></script>
+                <script type="text/javascript" src="{{ STATIC_URL}}js/excanvas.js"></script>
+            <![endif]-->
+            <script src="{{ STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js"></script>
             <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
             <script src="{% static "pinax/js/theme.js" %}"></script>
             <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
@@ -168,32 +173,32 @@
 		
 {% block extra_body_base %}
 
-<div id="logoutModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="logoutModal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body">
       <p class="text-center">确定注销吗？</p>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-info delete-cancel" data-dismiss="modal">取消</button>
-      <a id="account_logout" class="btn btn-info" href="{% url "account_logout" %}">{% trans "Log out" %}</a>
+      <button class="btn delete-cancel" data-dismiss="modal">取消</button>
+      <a id="account_logout" class="btn btn-warning" href="{% url "account_logout" %}">{% trans "Log out" %}</a>
     </div>           
  </div>
-<div id="alertModal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="alertModal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body">
       <p class="text-center">确定删除吗？</p>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-info delete-cancel" data-dismiss="modal">取消</button>
-      <button class="btn delete-confirm btn-info" data-dismiss="modal">确定</button>
+      <button class="btn delete-cancel" data-dismiss="modal">取消</button>
+      <button class="btn delete-confirm btn-warning" data-dismiss="modal">确定</button>
     </div>           
  </div>
 
 <!--警告框-->
-<div id="alert_modal" class="modal hide fade in" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="alert_modal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-body">
       <p class="text-center" id="alert_info"></p>
     </div>
     <div class="modal-footer">
-      <button class="btn delete-confirm btn-info" data-dismiss="modal"id="alert_close">确定</button>
+      <button class="btn delete-confirm btn-warning" data-dismiss="modal"id="alert_close">确定</button>
     </div>           
  </div>
 

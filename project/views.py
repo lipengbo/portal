@@ -25,12 +25,12 @@ from project.models import Project, Membership, Category, Island, City
 from project.forms import ProjectForm
 from invite.forms import ApplicationForm, InvitationForm
 from invite.models import Invitation, Application
-from slice.models import Slice
+from slice.models import Slice, SliceDeleted
 
 from resources.models import Switch, Server, VirtualSwitch
-from communication.flowvisor_client import FlowvisorClient
 from plugins.openflow.models import Flowvisor
 from common.models import  Counter
+from notifications.models import Notification
 
 
 def home(request):
@@ -45,7 +45,6 @@ def home(request):
 
 @login_required
 def index(request):
-    
     context = {}
     user = request.user
     context = {}
@@ -92,7 +91,7 @@ def perm_admin(request, id, user_id):
     context = {}
     context['project'] = project
     content_type = ContentType.objects.get_for_model(project)
-    perms = Permission.objects.filter(content_type=content_type).exclude(codename="add_project")
+    perms = Permission.objects.filter(content_type=content_type).exclude(codename__in=("add_project", "delete_project"))
     context['perms'] = perms
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
@@ -102,6 +101,7 @@ def perm_admin(request, id, user_id):
             remove_perm("{}.{}".format(perm.content_type.app_label, perm.codename), user, project)
         for perm in select_perms:
             assign_perm(perm, user, project)
+        messages.add_message(request, messages.INFO, _("Change permissions successfully"))
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
@@ -166,7 +166,7 @@ def invite(request, id):
                 try:
                     application = Application.objects.get(from_user=user, target_id=project.id, target_type=target_type, state__gt=0)
                     messages.add_message(request, messages.INFO,
-                            _("The user has applied this project"))
+                            _("The user %(user)s has applied this project") % ({'user': user}))
                     continue
                 except Application.DoesNotExist:
                     pass
@@ -316,6 +316,25 @@ def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.user.has_perm('project.delete_project', project):
         try:
+            slice_objs = project.slice_set.all()
+            for slice_obj in slice_objs:
+                try:
+                    slice_deleted = SliceDeleted(name = slice_obj.name,
+                        show_name = slice_obj.show_name,
+                        owner_name = slice_obj.owner.username,
+                        description = slice_obj.description,
+                        project_name = slice_obj.project.name,
+                        date_created = slice_obj.date_created,
+                        date_expired = slice_obj.date_expired)
+                    if request.user.is_superuser:
+                        slice_deleted.type = 1
+                    else:
+                        slice_deleted.type = 0
+                    slice_obj.delete()
+                except Exception, ex:
+                    pass
+                else:
+                    slice_deleted.save()
             project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
@@ -441,15 +460,21 @@ def links_proxy(request, host, port):
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
 def links_direct(request, host, port):
+    from plugins.openflow.flowvisor_api import flowvisor_get_links
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    data = client.get_links()
+    try:
+        data = flowvisor_get_links(flowvisor)
+    except:
+        data = []
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def switch_direct(request, host, port):
+    from plugins.openflow.flowvisor_api import flowvisor_get_switches
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    client = FlowvisorClient(host, port, flowvisor.password)
-    json_data = client.get_switches()
+    try:
+        json_data = flowvisor_get_switches(flowvisor)
+    except:
+        json_data = []
     for i in range(len(json_data)):
         entry = json_data[i]
         dpid = entry['dpid']
@@ -462,6 +487,7 @@ def switch_direct(request, host, port):
             db_id = switch.id
             try:
                 db_id = switch.virtualswitch.server.id
+                json_data[i]['db_name'] = switch.virtualswitch.server.name
             except VirtualSwitch.DoesNotExist:
                 pass
             json_data[i]['db_id'] = db_id
@@ -471,6 +497,7 @@ def switch_direct(request, host, port):
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
     flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    """
     switch_ids_tuple = flowvisor.link_set.all().values_list(
             'source__switch__id', 'target__switch__id')
     switch_ids = set()
@@ -478,6 +505,8 @@ def switch_proxy(request, host, port):
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
     switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
+    """
+    switches = Switch.objects.filter(island=flowvisor.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()
@@ -529,3 +558,23 @@ def manage_index(request):
         return render(request, 'manage_index.html', context)
     else:
         return redirect("forbidden")
+
+@login_required
+def delete_notifications(request):
+    user = request.user
+    notifications = Notification.objects.filter(recipient=user)
+    if request.method == 'POST':
+        notice_ids = request.POST.getlist('notification_id')
+        notifications = notifications.filter(id__in=notice_ids)
+    notifications.delete()
+    return redirect('notifications:all')
+
+@login_required
+def member_manage(request, id):
+    project = get_object_or_404(Project, id=id)
+    #if not request.user.has_perm('project.invite_project_member', project):
+    if not (request.user == project.owner):
+        return redirect('forbidden')
+    context = {}
+    context['project'] = project
+    return render(request, 'project/member_manage.html', context)
