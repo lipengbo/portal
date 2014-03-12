@@ -697,6 +697,8 @@ function start_or_stop(slice_id, flag){
 }
 
     $(".slice_state_del").click(function(){
+        var vms_count = $("#vms_count").text();
+        //alert(vms_count);
         if($(this).hasClass("disabled")){
             return false;
         }else{
@@ -708,10 +710,14 @@ function start_or_stop(slice_id, flag){
                 //alert(vm_id);
                 ret = delete_vm(vm_id);
                 if(ret){
-                    $("#vm_tr"+vm_id).hide();
-                    document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
-                    slice_id = $("#slice_id").text();
-                    //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
+                    if(vms_count==1){          
+                        location.reload();
+                    }else{
+                        $("#vm_tr"+vm_id).hide();
+                        document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
+                        //slice_id = $("#slice_id").text();
+                        //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
+                    }
                 }
             });
             return false;
