@@ -48,7 +48,10 @@ img {
                     {%endif%}	
                 {%endif%}			           
 			    {{slice_obj.get_show_name}}
-			      	
+				<form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
+					<input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
+				</form>
+			      
                 <i class="icon-caret-down show_describe" style="cursor:pointer;"></i>	   	
             </legend>		
             <div class="well word_detail hide">
@@ -455,7 +458,7 @@ img {
                                         <button type="button" onclick="" class="btn" disabled>监控</button>
                                     {%endif%}
                                     {% if slice_obj.state == 1 %}
-                                        <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-inverse disabled slice_state_del">删除</a>
+                                        <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger disabled slice_state_del">删除</a>
                                     {%else%}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger slice_state_del">删除</a>
                                     {%endif%}
@@ -596,6 +599,7 @@ img {
 <!--<script src="{{ STATIC_URL}}js/slice_topology.js"  charset="utf-8"></script>-->
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script>
 	$(function(){
