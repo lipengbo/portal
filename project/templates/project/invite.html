@@ -8,7 +8,9 @@
 
 {% block head_title %}成员邀请{% endblock %}
 {% block breadcrumb %}
+<a href="/project/">项目</a><span class="divider">/</span>
 <a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>
+<a href="{% url "project_member_manage" project.id %}">成员管理</a><span class="divider">/</span>
 成员邀请
 {% endblock %}
 

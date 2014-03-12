@@ -112,7 +112,7 @@
                 {% if class_name == 'User' and object.is_superuser %} disabled {% endif %}
                 >
             </td>
-            <td><a href="{% if class_name != 'User'%} {% url nexus_edit app_label class_name|lower object.id %}{% else %}#{% endif%}">{{ object }}</a></td>
+            <td><a href="{% url nexus_edit app_label class_name|lower object.id %}">{{ object }}</a></td>
             {% for field in object|get_display_fields %}
                 <td title="{{ object|get_value:field.name}}">
                     {% if field.name == 'cpu' %} 

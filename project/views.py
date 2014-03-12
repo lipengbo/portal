@@ -487,6 +487,7 @@ def switch_direct(request, host, port):
             db_id = switch.id
             try:
                 db_id = switch.virtualswitch.server.id
+                json_data[i]['db_name'] = switch.virtualswitch.server.name
             except VirtualSwitch.DoesNotExist:
                 pass
             json_data[i]['db_id'] = db_id
