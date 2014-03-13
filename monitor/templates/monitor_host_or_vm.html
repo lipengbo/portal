@@ -12,8 +12,9 @@
 <a href="/nexus/resources/server/">服务器管理</a><span class="divider">/</span>
 <li class="active">服务器监控</li>
 {% else%}
+<a href="/project/">项目</a><span class="divider">/</span>
 <a href="{% url 'project_detail' project_id %}">项目详情</a><span class="divider">/</span>
-<a href="{% url 'slice_detail' slice_id %}">slice详情</a><span class="divider">/</span>
+<a href="{% url 'slice_detail' slice_id %}">虚网详情</a><span class="divider">/</span>
 虚拟机监控
 {% endif %}
 {% endblock %}

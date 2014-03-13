@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-25 11:04+0800\n"
+"POT-Creation-Date: 2014-02-25 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,15 +34,15 @@ msgstr "城市"
 msgid "Island"
 msgstr "节点"
 
-#: models.py:66 models.py:75 templates/project/detail.html:39
+#: models.py:66 models.py:75 templates/project/detail.html:44
 msgid "Category"
 msgstr "项目类型"
 
-#: models.py:70 templates/project/detail.html:36
+#: models.py:70 templates/project/detail.html:41
 msgid "Project Name"
 msgstr "项目名称"
 
-#: models.py:71 templates/project/detail.html:37
+#: models.py:71 templates/project/detail.html:42
 msgid "Project Description"
 msgstr "项目描述"
 
@@ -81,43 +81,40 @@ msgstr "项目"
 msgid "Can add Slice"
 msgstr "可以创建虚网"
 
-#: models.py:149
-msgid "Can delete Slice"
-msgstr "可以删除虚网"
-
-#: models.py:150
-msgid "Can edit Slice"
-msgstr "可以编辑虚网"
-
-#: models.py:170
+#: models.py:168
 msgid "Membership"
 msgstr "成员"
 
-#: views.py:151
+#: views.py:105
+msgid "Change permissions successfully"
+msgstr "权限修改成功"
+
+#: views.py:161
 msgid "The user has been invited of this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:159
-msgid "The user has applied this project"
-msgstr "该用户已经申请了该项目"
+#: views.py:169
+#, python-format
+msgid "The user %(user)s has applied this project"
+msgstr "用户%(user)s已经申请了该项目"
 
-#: views.py:172
+#: views.py:182
 msgid "Invitation message is required."
 msgstr "邀请消息是必填项"
 
-#: views.py:225
+#: views.py:235
 msgid "You have applied for this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:233
+#: views.py:243
 msgid "The user has been invited for this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:248
+#: views.py:258
 msgid "Application is submitted, please wait to audit."
 msgstr "申请已经提交，请等待审批"
 
-#: views.py:250
+#: views.py:260
 msgid "Application message is required."
 msgstr "申请理由是必填项"
 
@@ -129,55 +126,65 @@ msgstr "编辑项目"
 msgid "Create Project"
 msgstr "创建项目"
 
-#: templates/project/detail.html:7 templates/project/detail.html.py:11
+#: templates/project/detail.html:8 templates/project/detail.html.py:12
 #: templates/project/member.html:8 templates/project/member.html.py:11
+#: templates/project/member_manage.html:8
+#: templates/project/member_manage.html:13
 msgid "Project Detail"
 msgstr "项目详情"
 
-#: templates/project/detail.html:28
+#: templates/project/detail.html:30
 msgid "Edit"
 msgstr "编辑"
 
-#: templates/project/detail.html:31
+#: templates/project/detail.html:34
 msgid "Basic info"
 msgstr "基本信息"
 
-#: templates/project/detail.html:38
+#: templates/project/detail.html:43
 msgid "Creator"
 msgstr "创建者"
 
-#: templates/project/detail.html:56 templates/project/member.html:20
+#: templates/project/detail.html:62 templates/project/member.html:20
 msgid "View pending members"
 msgstr "查看待审批成员"
 
-#: templates/project/detail.html:57 templates/project/member.html:21
+#: templates/project/detail.html:63 templates/project/member.html:21
 msgid "Invite members"
 msgstr "邀请成员"
 
-#: templates/project/detail.html:60 templates/project/member.html:23
+#: templates/project/detail.html:73 templates/project/member.html:23
+#: templates/project/member_manage.html:24
 msgid "Members"
 msgstr "成员"
 
-#: templates/project/detail.html:67 templates/project/member.html:30
+#: templates/project/member.html:30
 msgid "No."
 msgstr "序号"
 
-#: templates/project/detail.html:68 templates/project/member.html:31
+#: templates/project/member.html:31
 msgid "Member name"
 msgstr "成员"
-
-#: templates/project/detail.html:70 templates/project/member.html:33
-msgid "Actions"
-msgstr "操作"
-
-#: templates/project/detail.html:83 templates/project/detail.html.py:85
-#: templates/project/member.html:44 templates/project/member.html.py:46
-msgid "Remove"
-msgstr "删除"
 
 #: templates/project/member.html:32
 msgid "Company/Organization"
 msgstr "所在单位"
+
+#: templates/project/member.html:33
+msgid "Actions"
+msgstr "操作"
+
+#: templates/project/member.html:44 templates/project/member.html.py:46
+#: templates/project/member_manage.html:53
+#: templates/project/member_manage.html:56
+msgid "Remove"
+msgstr "删除"
+
+#~ msgid "Can delete Slice"
+#~ msgstr "可以删除虚网"
+
+#~ msgid "Can edit Slice"
+#~ msgstr "可以编辑虚网"
 
 #~ msgid "Selected Islands"
 #~ msgstr "选择节点"

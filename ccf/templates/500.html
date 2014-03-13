@@ -1,0 +1,28 @@
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>500</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{% static "css/error_style.css" %}" rel="stylesheet">
+    <script src="{% static "js/jquery-1.9.1.min.js" %}" type="text/javascript"></script>
+    <script src="{% static "js/error.js" %}" type="text/javascript"></script>
+  </head>
+  <body>
+    <div class="error_top">
+        <div class="error_logo">
+            <a href="/"><img src="{% static "img/error_logo.png" %}" /></a>
+        </div>
+    </div>
+    
+    <div class="error_main">
+        <div class="error_tip error500">
+            <div class="error_img"><img src="{% static "img/500.png" %}" /></div>
+            <p>Internal Server Error</p>
+        </div>
+    </div>
+  </body>
+</html>

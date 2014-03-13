@@ -156,7 +156,7 @@ class Slice(models.Model):
 
     def get_nw(self):
         try:
-            nw_obj = Subnet.objects.get(owner=self.name)
+            nw_obj = Subnet.objects.get(owner=self.uuid)
             return nw_obj.netaddr
         except:
             return None
@@ -238,7 +238,7 @@ class Slice(models.Model):
             print "3:delete slice record success"
         except Exception, ex:
             print "4:delete slice failed and change slice record"
-            self.failure_reason = str(ex)
+            self.failure_reason = ex.message
             if self.type == 0:
                 self.type = 1
                 increase_failed_counter("slice")
@@ -300,7 +300,7 @@ def pre_delete_slice(sender, instance, **kwargs):
 
 # @receiver(post_delete, sender=Slice)
 # def post_delete_slice(sender, instance, **kwargs):
-#     print "delete post"
+#     print "post delete slice"
 #     if instance.id:
 #         print "s1"
 #     else:

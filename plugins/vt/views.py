@@ -9,7 +9,7 @@ import json
 import errno
 from socket import error as socket_error
 from plugins.common.exception import ResourceNotEnough
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from forms import VmForm
 from slice.models import Slice
@@ -29,19 +29,27 @@ LOG = logging.getLogger('plugins')
 
 
 def vm_list(request, sliceid):
-    vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
+    slice_obj = get_object_or_404(Slice, id=sliceid)
+    vms = slice_obj.get_common_vms()
     context = {}
     user = request.user
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
     else:
         context['extent_html'] = "site_base.html"
+        if user.has_perm('slice.change_slice', slice_obj):
+            context['permission'] = "edit"
+        else:
+            if user.has_perm('project.create_slice', slice_obj.project):
+                context['permission'] = "view"
+            else:
+                return redirect('forbidden')
     context['vms'] = vms
     context['sliceid'] = sliceid
     slice_obj = Slice.objects.get(id=sliceid)
     context['slice_obj'] = slice_obj
     context['check_vm_status'] = 0
-    subnet = get_object_or_404(Subnet, owner=slice_obj.name)
+    subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
 
@@ -64,9 +72,18 @@ def create_vm(request, sliceid, from_link):
                 slice = get_object_or_404(Slice, id=sliceid)
                 vm.slice = slice
                 vm.island = vm.server.island
+                vm.ram = request.POST.get("ram")
+                vm.cpu = request.POST.get("cpu")
+                vm.hdd = request.POST.get("hdd")
+                flavor = Flavor.objects.filter(id=request.POST.get("flavor"))
+                if flavor.count() == 0:
+                    vm.flavor = None
+                else:
+                    vm.flavor = flavor[0]
+
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
-                    serverid = VTClient().schedul(vm.flavor.cpu, vm.flavor.ram, vm.flavor.hdd, hostlist)
+                    serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)
                     if not serverid:
                         raise ResourceNotEnough()
                     vm.server = Server.objects.get(id=serverid)
@@ -89,6 +106,7 @@ def create_vm(request, sliceid, from_link):
         vm_form.fields['server'].choices = servers
         context = {}
         context['vm_form'] = vm_form
+        context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
         context['from_link'] = from_link
@@ -144,7 +162,16 @@ def get_vms_state_by_sliceid(request, sliceid):
     slice_obj = get_object_or_404(Slice, id=sliceid)
     vms = slice_obj.virtualmachine_set.all()
     context = {}
-    context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+#     context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+    context['vms'] = []
+    for vm in vms:
+        if vm.switch_port:
+            info = {'id': vm.id, 'state': vm.state,
+                'switch_id': vm.switch_port.switch.id,
+                'port': vm.switch_port.port, 'port_name':vm.switch_port.name}
+        else:
+            info = {'id': vm.id, 'state': vm.state}
+        context['vms'].append(info)
     context['sliceid'] = sliceid
     return HttpResponse(json.dumps(context))
 

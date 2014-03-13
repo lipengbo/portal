@@ -41,9 +41,9 @@
                                 <td>{{ membership.user.get_profile.organization }}</td>
                                 <td>
                                     {% if not membership.is_owner %}
-                                    <a href="{% url project_delete_member membership.id  %}" class="btn btn-inverse btn-delete">{% trans "Remove" %}</a>
+                                    <a href="{% url project_delete_member membership.id  %}" class="btn btn-danger btn-delete">{% trans "Remove" %}</a>
                                     {%else%}
-                                    <button type="button" onclick="" class="btn btn-inverse btn-delete" disabled>{% trans "Remove" %}</button>
+                                    <button type="button" onclick="" class="btn btn-danger btn-delete" disabled>{% trans "Remove" %}</button>
                                     {%endif%}
                                 </td>
                             </tr>

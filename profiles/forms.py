@@ -1,6 +1,9 @@
+import re
+
 from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from django.conf import settings
 
 import account.forms
 from profiles.models import Profile
@@ -16,19 +19,29 @@ class RejectForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, label=_("Reason"))
     user = forms.ModelChoiceField(queryset=User.objects.none, widget=forms.HiddenInput)
 
+alnum_re = re.compile(r"^\w+$")
 class UserForm(forms.ModelForm):
     
-    can_create_project = forms.BooleanField(initial=False, required=False)
+    can_create_project = forms.BooleanField(initial=False, required=False, label=_("Can add Project"))
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         can_create_project_field = self.fields['can_create_project']
         can_create_project_field.initial = self.instance.has_perm('project.add_project')
+        self.fields['username'].help_text = ''
 
+    def clean_username(self):
+        if not alnum_re.search(self.cleaned_data["username"]):
+            raise forms.ValidationError(_("Usernames can only contain letters, numbers and underscores."))
+        return self.cleaned_data["username"]
+    
     def save(self):
         can_create_project = self.cleaned_data.get('can_create_project')
         if can_create_project:
             assign_perm('project.add_project', self.instance)
+        else:
+            remove_perm('project.add_project', self.instance)
+
         ea = EmailAddress.objects.get_primary(self.instance)
         try:
             ec = EmailConfirmation.objects.get(email_address=ea)

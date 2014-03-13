@@ -1,10 +1,25 @@
+var vms_info = TAFFY();
+var vm_id;
+var flavor_selected;
+var flavor_text = ['定制', '微型', '迷你型', '小型', '中型', '大型', '超大型'];
+var cpu_selected;
+var ram_selected;
+var hdd_selected;
+var vm_info_flag;
+var dhcp_checked;
+var update_vm;
+var ram_flavor = {"256":2, "512":3, "1024":4, "2048":5, "4096":6, "8192":7};
+var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6};
+var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
+var disks = [10, 20, 40, 80, 160, 320];
+
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
-        var name = check_vm_name('name');
-        flavor = check_vm_select('flavor');
+        //var name = check_vm_name('name');
+       // flavor = check_vm_select('flavor');
         image = check_vm_select('image');
         server = check_vm_select('server');
-        return name && flavor && image && server
+        return image && server
 }
 
 function check_vm_name(obj){
@@ -55,14 +70,14 @@ function desc_msg(name, value, i){
 		data: data,
 		dataType: 'json',
 		success:function(data){
-			if(name == 'flavor'){
+			/*if(name == 'flavor'){
 				$('[name="cpu"]')[i].innerHTML = data['cpu'] + "核";
 				$('[name="ram"]')[i].innerHTML = data['ram'] + "MB";
 				$('[name="hdd"]')[i].innerHTML = data['hdd'] + "GB";		
 			}else if(name == 'image'){
 				$('[name="username"]')[i].innerHTML = data['username'];
 				$('[name="password"]')[i].innerHTML = data['password'];
-			}
+			}*/
 		}
 	});
 	
@@ -114,10 +129,10 @@ function check_vm_select(obj){
 //获取vm form的内容并填入slice清单中
 function fetch_vminfo()
 {
-        var objs = document.getElementsByName('name');
-        name_value = get_value_from_obj('name');
+       // var objs = document.getElementsByName('name');
+        //name_value = get_value_from_obj('name');
         //alert('name_value')
-        flavor_text = get_text_from_select('flavor');
+        //flavor_text = get_text_from_select('flavor');
         //alert(flavor_text)
         image_text = get_text_from_select('image');
         //alert(image_text)
@@ -126,18 +141,21 @@ function fetch_vminfo()
         enable_dhcp_value = get_checked_from_checkbox('enable_dhcp');
         //alert(enable_dhcp_value)
         content = ''
-        for(var i=0; i < objs.length; i++)
-        {
-                content = content + "<tr>"
-                content = content + "<td>" + name_value[i] + "</td>"
-                content = content + "<td>" + flavor_text[i] + "</td>"
-                content = content + "<td>" + image_text[i] + "</td>"
-                content = content + "<td>" + server_text[i] + "</td>"
-                content = content + "<td>" + enable_dhcp_value[i] + "</td>"
-                content = content + "</tr>"
-        }
+        //for(var i=0; i < objs.length; i++)
+		vms_info().each(function(vm){
+			content = content + "<tr>"
+            //content = content + "<td>" + name_value[i] + "</td>"
+            content = content + "<td>" + flavor_text[vm.flavor] + "</td>"
+            content = content + "<td>" + vm.image_text + "</td>"
+            content = content + "<td>" + vm.server_text + "</td>"
+            content = content + "<td>" + vm.show_dhcp + "</td>"
+            content = content + "</tr>"
+		});
+       
         //alert(content)
-        insert_content_to_obj('id_vm_tbody',content)
+        insert_content_to_obj('id_vm_tbody',content);
+		return true;
+		
 }
 
 function get_text_from_select(obj)
@@ -230,21 +248,27 @@ function insert_content_to_obj1(obj, content)
 var post_vm_result = true;
 function submit_vms(sliceid)
 {
-		//var result;
+		/*var result;
         var objs = document.getElementsByName('name');
         name_value = get_value_from_obj('name');
         flavor_text = get_value_from_select('flavor');
         image_text = get_value_from_select('image');
         server_text = get_value_from_select('server');
         enable_dhcp_value = get_checked_value_from_checkbox('enable_dhcp');
-        for(var i=0; i < objs.length; i++)
-        {
-                 post_vminfo(sliceid, name_value[i], flavor_text[i], image_text[i], server_text[i], enable_dhcp_value[i])
-        }
+		//var vm_record = vms_info.get();
+        //for(var i=0; i < objs.length; i++)
+       // {
+                 post_vminfo(sliceid, name_value[0], flavor_text[0], image_text[0], server_text[0], enable_dhcp_value[0]);
+       // }*/
+		vms_info().each(function(vm){
+			post_vminfo(sliceid, vm);
+		});
         
 }
 
-function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
+
+//function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp, vm_info_record)
+function post_vminfo(sliceid, vm)
 {
         url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
         $.ajax({
@@ -254,14 +278,15 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
         cache: false,
         async: false,  
         data: {
-                name: name,
-                flavor: flavor,
-                image: image,
-                server: server,
-                enable_dhcp: enable_dhcp
+				flavor: vm.flavor,
+				cpu: vm.cpu,
+				ram: vm.ram,
+				hdd: vm.hdd,
+                image: vm.image_id,
+                server: vm.server_id,
+                enable_dhcp: vm.enable_dhcp
         },
         success: function(data) {
-			
             if(data.result==1)
             {
                 //alert('Failed to operator vm!')
@@ -272,7 +297,6 @@ function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp)
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
             }
-
         }
         });
 }
@@ -288,8 +312,8 @@ function showMsg(_info, msg, state){
 	var info=_info;
 	if(state == 'ok'){
 		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title=""><i class="icon-ok"></i></a>';
-		info.innerHTML = "√";
-		info.style.color = "green";
+		info.innerHTML = "";
+		//info.style.color = "green";
 	}else{
 		info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
 		
@@ -401,6 +425,11 @@ function not_contains(a, obj) {
 
 function create_vms(sliceid, flag, from_link)
 {
+	if(vms_info().count() == 0){
+		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置信息！";
+		$('#alert_modal').modal('show');
+		return;
+	}
     if(check_vminfo())
     {
 		submit_vms(sliceid)
@@ -476,6 +505,132 @@ function check_gw_select(){
 	}else{
 		info.innerHTML = '';
 		return true;
+	}
+}
+
+
+
+
+function flavor_init(){
+	vm_id = 0;
+	flavor_selected = 1;
+	cpu_selected = 1;
+	ram_selected = 256;
+	hdd_selected = 10;
+	vm_info_flag = "save";
+	update_vm = null;
+	$(".micro").addClass("vm_active");
+}
+
+
+function update_vms_info(){
+	if(!check_vminfo()){
+		return
+	}
+	if(document.getElementById("id_enable_dhcp").checked){
+		dhcp_checked = "是";
+	}else{
+		dhcp_checked = "否";
+	}
+	if (vm_info_flag == "save"){
+		//var vm_info = {id:vm_id, flavor:flavor_selected,};
+		vms_info.insert({id:vm_id, flavor:flavor_selected, cpu:cpu_selected, 
+						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
+						 image_text:$("#id_image").find("option:selected").text(),
+						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
+						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 show_dhcp:dhcp_checked})
+		vm_id++;
+		
+	}else if (vm_info_flag == "update"){
+		if(update_vm != null){
+			update_vm.update({flavor:flavor_selected, cpu:cpu_selected, 
+						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
+						 image_text:$("#id_image").find("option:selected").text(),
+						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
+						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 show_dhcp:dhcp_checked});
+			vm_info_flag = "save";
+		}
+	}
+	show_vm_info_table();
+}
+
+
+function edit_vm(vm_id){
+	var vm = vms_info({id:vm_id}).first();
+	vm_info_flag = "update";
+	//替换上面的数据
+	update_vm = vms_info({id:vm_id});
+	$(".type_chose a").removeClass("vm_active");
+	$("a[value="+vm.flavor+"]").addClass("vm_active");
+	$(".cpu_chose a").removeClass("vm_active");
+	$("#cpu_"+vm.cpu).addClass("vm_active");
+	$("#ram_slider").slider("value", ram_flavor[vm.ram]);
+	$("#disk_slider").slider("value", disk_flavor[vm.hdd]);
+}
+
+function delete_vminfo(vm_id){
+	vms_info({id:vm_id}).remove();
+	show_vm_info_table();
+}
+
+function show_vm_info_table(){
+	$("#vms_info_table").find("tbody").empty();
+	vms_info().each(function(vm){
+		var ram = vm.ram, unit = 'MB';
+		if(ram >= 1024){
+			ram = ram/1024;
+			unit = 'GB';
+		}
+		$("#vms_info_table").find("tbody").append("<tr>"
+                            +"<td>"+flavor_text[vm.flavor]+"</td>"
+                            +"<td>"+vm.cpu+" 核</td>"
+                            +"<td>"+ram+" "+unit+"</td>"
+                            +"<td>"+vm.hdd+" GB</td>"
+                            +"<td>"+vm.image_text+"</td>"
+                            +"<td>"+vm.server_text+"</td>"
+							+"<td>"+vm.show_dhcp+"</td>"
+                            +"<td>"
+                            +"   <div>"
+                            +"    <button class='btn btn-danger' onclick='javascript:delete_vminfo("+vm.id+")'>删除</button>"
+                            +"    </div>"
+                            +"</td>"
+                          +"</tr> ");
+	});
+}
+
+function select_flavor(flavor_id){
+	var data = "name=flavor" + "&obj_id="+flavor_id;
+
+	$.ajax({
+		url : '/plugins/vt/get_flavor_msg/',
+		type : 'POST',
+		data: data,
+		dataType: 'json',
+		success:function(data){
+			$("#cpu_"+data['cpu']).addClass("vm_active");
+			$("#ram_slider").slider("value", ram_flavor[data['ram']]);
+			$("#disk_slider").slider("value", disk_flavor[data['hdd']]);
+			cpu_selected = data['cpu'];
+			ram_selected = data['ram'];
+			hdd_selected = data['hdd'];
+		}
+	});
+}
+
+function set_value(obj, value){
+	if(obj == "flavor"){
+		flavor_selected = value;
+	}else if(obj == "ram"){
+		flavor_selected = 0;
+		ram_selected = rams[value-1];
+	}else if(obj == "hdd"){
+		flavor_seleted = 0;
+		hdd_selected = disks[value-1];
+	}else if(obj == "cpu"){
+		flavor_selected = 0;
+		cpu_selected = value;
 	}
 }
 

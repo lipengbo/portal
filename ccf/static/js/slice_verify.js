@@ -24,7 +24,7 @@ function check_slice_name(obj_id,flag){
         		return false;
         	}
         	else{
-        		showInfo(info,"√","green");
+        		showInfo(info," ","green");
         		return true;
         	}
        // }
@@ -44,7 +44,7 @@ function check_slice_description(obj_id,flag){
         return false;
 	}
 	else{
-		showInfo(info,"√","green");
+		showInfo(info," ","green");
         return true;
 	}
 }
@@ -58,7 +58,7 @@ function check_island_id(obj_id){
 		return false;
 	}
 	else{
-		showInfo(info,"√","green");
+		showInfo(info," ","green");
 		return true;
 	}
 }
@@ -111,7 +111,7 @@ function check_ip(ip,flag){
 		//alert(ip);
 		if(reg.test(ip)){
 			if( RegExp.$1<256 && RegExp.$2<256 && RegExp.$3<256 && RegExp.$4<256){
-				showInfo(info,"√","green")
+				showInfo(info," ","green")
 				return true;
 			}
 		}
@@ -144,7 +144,7 @@ function check_port(port,flag){
 			return false;
 		}
 		else{
-			showInfo(info,"√","green");
+			showInfo(info," ","green");
 			return true;
 		}	
 	}
@@ -174,6 +174,7 @@ function check_nw_num(){
     var slice_name_obj = document.getElementById("slice_name");
     var old_nw_owner_obj = document.getElementById("old_nw_owner");
     var slice_nw_obj = document.getElementById("slice_nw");
+    var slice_nw_input_obj = document.getElementById("slice_nw_input");
     
     var user_id_obj = document.getElementById("user_id");
     var slice_name = slice_name_obj.value + "_" + user_id_obj.value;
@@ -186,7 +187,7 @@ function check_nw_num(){
     
     if(nw_num!=old_nw_num){
         if(old_slice_nw==''){
-            check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_uuid+"/"+nw_num+"/";
+            check_url = "http://" + window.location.host + "/slice/create_nw/0/"+nw_num+"/";
         }
         else{
             check_url = "http://" + window.location.host + "/slice/create_nw/"+slice_uuid+"/"+nw_num+"/";
@@ -207,13 +208,14 @@ function check_nw_num(){
                 else{
                     //alert(3);
                     slice_nw_obj.innerHTML = data.value;
+                    slice_nw_input_obj.value = data.value;
                     old_slice_nw_obj.value = data.value;
                     setTimeout("nw_timeout()",1750000);
                     
                     slice_uuid_obj.value = data.owner
                     old_nw_owner_obj.value = slice_name;
                     old_nw_num_obj.value = nw_num;
-                    showInfo(info,"√","green");
+                    showInfo(info," ","green");
                     //alert(5);
                     ajax_ret = true;
                 }
@@ -232,7 +234,7 @@ function check_nw_num(){
     }
     else{
         //alert(4);
-        showInfo(info,"√","green");
+        showInfo(info," ","green");
         return true;
     }
 }
@@ -289,7 +291,7 @@ function check_nw_num1(){
 	            	}
 	            	old_nw_owner_obj.value = slice_name;
 	    			old_nw_num_obj.value = nw_num;
-	    			showInfo(info,"√","green");
+	    			showInfo(info," ","green");
 	    			//alert(5);
 	    			ajax_ret = true;
 	            }
@@ -308,7 +310,7 @@ function check_nw_num1(){
 	}
 	else{
 		//alert(4);
-		showInfo(info,"√","green");
+		showInfo(info," ","green");
 		return true;
 	}
 }
@@ -398,7 +400,7 @@ function check_gw_ip(flag){
             masks = maskint_to_maskstr(mask);
             cur_ips = nw_ip.split(".");
             if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
-                showInfo(info,"√","green");
+                showInfo(info," ","green");
                 return true;
             }
         }
@@ -437,7 +439,7 @@ function check_dhcp_ip(flag){
                 des_ip = des_obj.value; 
                 cur_ips = des_ip.split(".");
                 if(((ips[0]&masks[0]) == (cur_ips[0]&masks[0]))&&((ips[1]&masks[1]) == (cur_ips[1]&masks[1]))&&((ips[2]&masks[2]) == (cur_ips[2]&masks[2]))&&((ips[3]&masks[3]) == (cur_ips[3]&masks[3]))){
-                    showInfo(info,"√","green");
+                    showInfo(info," ","green");
                     return true;
                 }
             }
@@ -532,6 +534,22 @@ function start_or_stop(slice_id, flag){
     return ret;
 }
 
+//启动停止带宽监控
+   $(".start_update_band").click(function(){
+        if($(this).hasClass("btn-success")){
+                $(this).removeClass("btn-success").addClass("btn-danger");           
+                $(this).text("停止带宽监控");
+                //$(".label").removeClass("label-important").addClass("label-success");
+                document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);    
+        } else {
+                $(this).removeClass("btn-danger").addClass("btn-success");
+                $(this).text("启动带宽监控");
+                //$(".label").removeClass("label-success").addClass("label-important");
+                document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);        
+        }
+    }); 
+
+
 //slice启动停止按钮
    $(".start_slice").click(function(){
         var slice_id = $("#slice_id").text();
@@ -539,9 +557,9 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 1);
             if(ret){
                 $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止虚网");
+                $(this).text("停止");
                 $(".label").removeClass("label-important").addClass("label-success");
-                $(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
+                //$(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
                 $(".btn-slice-state").addClass("disabled");
                 $(".slice_state_del").addClass("disabled");
 				$(".start_dhcp").attr("disabled", "true");
@@ -550,9 +568,9 @@ function start_or_stop(slice_id, flag){
             ret = start_or_stop(slice_id, 2);
             if(ret){
                 $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动虚网");
+                $(this).text("启动");
                 $(".label").removeClass("label-success").addClass("label-important");
-                $(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
+                //$(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                 $(".btn-slice-state").removeClass("disabled");
                 $(".slice_state_del").removeClass("disabled");
 				$(".start_dhcp").removeAttr("disabled");
@@ -605,6 +623,7 @@ function start_or_stop(slice_id, flag){
         }else{
             //alert("he");
             vm_id = $(this).attr('vm_id');
+            url = $("#url").text();
             //alert(vm_id);
             if($(this).hasClass("btn-success")){
                 ret = start_or_stop_vm(vm_id, "create");
@@ -613,8 +632,9 @@ function start_or_stop(slice_id, flag){
                     $(this).text("停止");
                     $("#btn_vnc"+vm_id).removeClass("disabled");
                     $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
-                    document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
-                    
+                    if(url == "slice_detail"){
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
+                    }
                 }     
             } else {
                 ret = start_or_stop_vm(vm_id, "destroy");
@@ -624,7 +644,9 @@ function start_or_stop(slice_id, flag){
                     $("#btn_vnc"+vm_id).addClass("disabled");
                     //$(this).parent("td").prev("td").children(".icon_state").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                     $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
-                    document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+                    if(url == "slice_detail"){
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+                    }
                 }         
             }
         }
@@ -695,6 +717,9 @@ function start_or_stop(slice_id, flag){
 }
 
     $(".slice_state_del").click(function(){
+        var vms_count = $("#vms_count").text();
+        //alert(vms_count);
+        var url = $("#url").text();
         if($(this).hasClass("disabled")){
             return false;
         }else{
@@ -706,10 +731,16 @@ function start_or_stop(slice_id, flag){
                 //alert(vm_id);
                 ret = delete_vm(vm_id);
                 if(ret){
-                    $("#vm_tr"+vm_id).hide();
-                    document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
-                    slice_id = $("#slice_id").text();
-                    //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
+                    if(vms_count==1){          
+                        location.reload();
+                    }else{
+                        $("#vm_tr"+vm_id).hide();
+                        if(url == "slice_detail"){
+                            document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
+                        }
+                        //slice_id = $("#slice_id").text();
+                        //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
+                    }
                 }
             });
             return false;
@@ -795,6 +826,7 @@ function start_or_stop(slice_id, flag){
                 success: function(data) {
                     if (data.result == 1 || data.result == 2){
                         //alert("ok");
+                        //alert(data.result);
                         controller = data.controller;
                         //alert(controller);
                         $("div#controller_nm").empty();
@@ -838,10 +870,10 @@ function start_or_stop(slice_id, flag){
                                 +"<button type=\"button\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
                             }else if(controller.host_state == 1){
                                 str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-danger start_vm\">停止</button>"                                         
-                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host+id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host_id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
                             }else{
-                                str = "" + "<button type=\"button\" vm_id=\""+controller.host.id+"\" class=\"btn btn-success start_vm\">启动</button>"
-                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host.id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
+                                str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-success start_vm\">启动</button>"
+                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
                             }
                             $("span#controller_fc").append(str);
                             if(controller.host_state == 8){
@@ -883,10 +915,10 @@ function set_dhcp(slice_id, flag){
 				if(data.result == 0){
 					if(flag == 1){
 						$('.start_dhcp').removeClass("btn-success").addClass("btn-danger");           
-                		$('.start_dhcp').text("停止DHCP服务");
+                		$('.start_dhcp').text("停止DHCP");
 					}else{
 						$('.start_dhcp').removeClass("btn-danger").addClass("btn-success");
-                		$('.start_dhcp').text("启动DHCP服务");
+                		$('.start_dhcp').text("启动DHCP");
 					}
 					
 				}else{

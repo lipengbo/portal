@@ -26,7 +26,7 @@ class Checkslice(Job):
         #check_feedback_mailbox()
         if DEBUG == True:
             pdb.set_trace()
-#         print "timer ******"
+#         print "+++++++++++++++++++++job"
 #         print "before time"
         slices = Slice.objects.filter(type=0)
         #user = request.user
@@ -40,6 +40,7 @@ class Checkslice(Job):
 #                 print "_____________________________________________________________time manage 2"
                 try:
                     print 1
+                    email = slice_obj.owner.email
                     slice_deleted = SliceDeleted(name = slice_obj.name,
                         show_name = slice_obj.show_name,
                         owner_name = slice_obj.owner.username,
@@ -53,19 +54,12 @@ class Checkslice(Job):
                     print 3
                 except Exception, ex:
                     print 4
-                    print ex
                     pass
                 else:
                     print 5
                     slice_deleted.save()
-#                 email = '350603736@qq.com'
-#                 slice_obj.expired = 1
-#                 slice_obj.save()
-#                     try:
-#                         flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.name)
-#                     except:
-#                         pass
-#                 send_mail("slice 已过期 ", '该slice已过期！', 'chenjunxia@fnic.cn', [email], fail_silently=False)
+#                     if email:
+#                         send_mail("slice 已过期 ", 'slice('+slice_deleted.show_name+')已过期！', 'chenjunxia@fnic.cn', [email], fail_silently=False)
             else:
                 pass
 

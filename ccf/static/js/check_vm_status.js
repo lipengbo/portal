@@ -26,7 +26,7 @@ function check_vm_status(slice_id){
         url: check_url,
         dataType: "json",
         cache: false,
-        async: false,  
+        async: true,  
         success: function(data) {
         	vms = data.vms;
         	status = 8;

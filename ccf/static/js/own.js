@@ -2,6 +2,7 @@ $(document).ready(function() {
 	//help页面滑动到顶部效果
 	$(".bs-docs-sidenav li a").click(function() {
 		var navHeight = $(".navbar").height();
+		aa = $($(this).attr("href")).offset().top - navHeight + "px";
 		$("html, body").animate({
 			scrollTop: $($(this).attr("href")).offset().top - navHeight + "px"
 			}, {
@@ -110,10 +111,7 @@ $(document).ready(function() {
         $('.switch-manifest tbody input').attr('disabled', '');
     });
     //slice步骤切换
-    $(".tab_part:not(:first)").hide();
     $(".next_btn").click(function(){
-
-
         $('.no-virtual-switch').hide();
         if ($(this).hasClass('btn-step2')) {
             var has_virtual_switch = false;
@@ -250,7 +248,37 @@ $(document).ready(function() {
 	//创建虚拟机时显示拓扑
 	$("#show_topo").on("click", function(){
 		show_topology();
+	});
+	
+	//创建虚拟机页面类型、cpu选择
+	$(".type_chose a").click(function(){
+	    $(".type_chose a").removeClass("vm_active");
+	    $(this).addClass("vm_active");
+		var flavor_id = $(this).attr("value");
+		set_value("flavor", flavor_id);
+		$(".cpu_chose a").removeClass("vm_active");
+		select_flavor(flavor_id);
+		
+	});
+	$(".cpu_chose a").click(function(){
+        $(".cpu_chose a").removeClass("vm_active");
+		$(".type_chose a").removeClass("vm_active");
+        $(this).addClass("vm_active");
+		set_value("cpu", $(this).attr("value"));
+    });
+	$( "#ram_slider" ).slider({
+		stop:function(event, ui){
+			$(".type_chose a").removeClass("vm_active");
+			set_value("ram", ui.value);
+		}
+	});
+	$( "#disk_slider" ).slider({
+		stop:function(event, ui){
+			$(".type_chose a").removeClass("vm_active");
+			set_value("hdd", ui.value);
+		}
 	})
+	
 });
 
 
@@ -301,7 +329,7 @@ function page_function1(){
 }
 function page_function2(){
     fetch_serverinfo("id_server");
-	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&switch_port_ids=" + get_select_ports())
+	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&switch_port_ids=" + get_select_ports())
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
 
 	if(!document.getElementById('dhcp_selected').checked){
@@ -326,6 +354,12 @@ function page_function2(){
 	}
 }
 function page_function3(){
+	//判断是否选择虚拟机信息
+	if(vms_info().count() == 0){
+		document.getElementById('alert_info').innerHTML = '请先添加虚拟机配置信息！';
+		$('#alert_modal').modal('show');
+		return;
+	}
 	//网段
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
@@ -427,8 +461,8 @@ function page_function3(){
     //        increaseArea: '20%' // optional
    // });
         //虚拟机
-        fetch_vminfo();
-        return check_vminfo()
+        return fetch_vminfo();
+        //return check_vminfo()
 }
 function page_function4(){
 	var project_id = $("#project_id").text();
@@ -528,8 +562,21 @@ function submit_slice_info(project_id){
 			success: function(data) {
 	        	if (data.result == 1){
 	        		//alert(data.slice_id);
-	        		submit_vms(data.slice_id);
-	        		location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+					submit_vms(data.slice_id);
+					if(!post_vm_result){
+						$("div#slice_alert_info").empty();
+                			str = "" + "<p class=\"text-center\">部分虚拟机由于资源不足，无法创建成功！</p>";
+                			$("div#slice_alert_info").append(str);
+                			$('#slicealertModal').modal('show');
+					
+							$('#alert_closed').on("click", function(){
+								location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+							});
+					}else{
+						location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+					}
+	        		
+	        		
 	            }
 	            else{
 	            	$("div#slice_alert_info").empty();

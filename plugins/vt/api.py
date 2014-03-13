@@ -11,12 +11,9 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.exception import ResourceNotEnough, ConnectionRefused, FailedToAllocateResources
 from resources.models import Server
 from etc.config import function_test
-import errno
+import errno, traceback, logging
 from socket import error as socket_error
-
-
-from django.utils.translation import ugettext as _
-
+LOG = logging.getLogger("plugins")
 
 def create_vm_for_controller(island_obj, slice_obj, image_name):
     try:
@@ -39,20 +36,25 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         vm.type = 0
         vm.save()
     except socket_error as serr:
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
             raise ConnectionRefused()
     except ResourceNotEnough:
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise ResourceNotEnough()
     except:
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise FailedToAllocateResources()
     finally:
-        IPUsage.objects.release_ip(ip_obj)
+        LOG.error(traceback.print_exc())
     return vm, str(ip_obj)
 
 
 def delete_vm_for_controller(vm):
     vm.delete()
-
 
 def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway', enable_dhcp=True):
     try:
@@ -77,14 +79,20 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         vm.type = 2
         vm.save()
     except socket_error as serr:
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
             raise ConnectionRefused()
     except ResourceNotEnough:
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise ResourceNotEnough()
     except:
+        if ip_obj:
+            IPUsage.objects.release_ip(ip_obj)
         raise FailedToAllocateResources()
     finally:
-        IPUsage.objects.release_ip(ip_obj)
+        LOG.error(traceback.print_exc())
     return vm
 
 
@@ -106,7 +114,8 @@ def do_vm_action(vm, action):
             result = True
         else:
             result = False
-    vm.save()
+    if result == True:
+        vm.save()
     return result
 
 
