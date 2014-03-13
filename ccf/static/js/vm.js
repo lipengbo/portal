@@ -567,7 +567,7 @@ function edit_vm(vm_id){
 	$(".cpu_chose a").removeClass("vm_active");
 	$("#cpu_"+vm.cpu).addClass("vm_active");
 	$("#ram_slider").slider("value", ram_flavor[vm.ram]);
-	$("#disk_slider").slider("value", disk_flavor[vm.hdd]);
+	//$("#disk_slider").slider("value", disk_flavor[vm.hdd]);
 }
 
 function delete_vminfo(vm_id){
@@ -587,7 +587,7 @@ function show_vm_info_table(){
                             +"<td>"+flavor_text[vm.flavor]+"</td>"
                             +"<td>"+vm.cpu+" 核</td>"
                             +"<td>"+ram+" "+unit+"</td>"
-                            +"<td>"+vm.hdd+" GB</td>"
+                            //+"<td>"+vm.hdd+" GB</td>"
                             +"<td>"+vm.image_text+"</td>"
                             +"<td>"+vm.server_text+"</td>"
 							+"<td>"+vm.show_dhcp+"</td>"
@@ -611,7 +611,7 @@ function select_flavor(flavor_id){
 		success:function(data){
 			$("#cpu_"+data['cpu']).addClass("vm_active");
 			$("#ram_slider").slider("value", ram_flavor[data['ram']]);
-			$("#disk_slider").slider("value", disk_flavor[data['hdd']]);
+			//$("#disk_slider").slider("value", disk_flavor[data['hdd']]);
 			cpu_selected = data['cpu'];
 			ram_selected = data['ram'];
 			hdd_selected = data['hdd'];

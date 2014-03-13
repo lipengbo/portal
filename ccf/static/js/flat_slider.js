@@ -46,7 +46,7 @@ String.prototype.repeat = function(num) {
       }).addSliderSegments("ram_slider", $slider.slider("option").max);
     }    
     
-    var $slider2 = $("#disk_slider");
+   /* var $slider2 = $("#disk_slider");
     if ($slider2.length) {
       $slider2.slider({
         min: 1,
@@ -55,7 +55,7 @@ String.prototype.repeat = function(num) {
         orientation: "horizontal",
         range: "min"
       }).addSliderSegments("disk_slider", $slider2.slider("option").max);
-    }    
+    }    */
     
     
   });

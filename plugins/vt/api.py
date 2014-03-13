@@ -24,6 +24,9 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         if images:
             vm.image = images[0]
         vm.flavor = Flavor.objects.get(id=default_flavor_id)
+        vm.cpu = vm.flavor.cpu
+        vm.ram = vm.flavor.ram
+        vm.hdd = vm.flavor.hdd
         if function_test:
             hostlist = Server.objects.filter(island=island_obj)
             vm.server = hostlist[0]
@@ -67,6 +70,9 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         if images:
             vm.image = images[0]
         vm.flavor = Flavor.objects.get(id=default_flavor_id)
+        vm.cpu = vm.flavor.cpu
+        vm.ram = vm.flavor.ram
+        vm.hdd = vm.flavor.hdd
         host_server = Server.objects.get(id=server_id)
         if function_test:
             vm.server = host_server
