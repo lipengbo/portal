@@ -447,6 +447,7 @@ def topology_d3(request):
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
+    context['band'] = request.GET.get('band')
     if int(context['slice_id']) == 0:
         context['switch_port_ids'] = request.GET.get('switch_port_ids')
     user = request.user
@@ -519,6 +520,19 @@ def test_cnvp():
         flowvisor_del_port, flowvisor_add_port, flowvisor_update_sice_controller,\
         flowvisor_get_switches, flowvisor_get_links, flowvisor_show_slice
     from plugins.openflow.models import Flowvisor, Controller
+#     from resources.models import SwitchPort
+#     from plugins.vt.models import VirtualMachine
+#     vm = VirtualMachine.objects.get(mac='FA:16:0A:00:00:0A')
+#     vm.state = 8
+#     vm.switch_port = None
+#     vm.save()
+#     slice = Slice.objects.get(id=1)
+#     switch_port = SwitchPort.objects.get(port=678)
+#     slice.remove_resource(switch_port)
+#     vm.switch_port = switch_port
+#     vm.save()
+#     print 'vm change ok'
+#     slice.add_resource(switch_port)
     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp"
     flowvisor = Flowvisor.objects.all()[0]
     controller = Controller.objects.filter(ip = "172.16.0.5")[0]

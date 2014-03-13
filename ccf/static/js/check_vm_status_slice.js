@@ -37,7 +37,7 @@ function check_vm_status(slice_id){
         url: check_url,
         dataType: "json",
         cache: false,
-        async: false,  
+        async: true,  
         success: function(data) {
         	vms = data.vms;
         	status = 8;
@@ -62,6 +62,15 @@ function check_vm_status(slice_id){
 						    var check_node = {};
 						    check_node.status = status;
 						    check_node.cur_vm_id = cur_vm_id;
+						    if(status==9 || status==10){
+						        check_node.switch_id = 0;
+                                check_node.port = 0;
+                                check_node.port_name = '';
+						    }else{
+						        check_node.switch_id = vms[j].switch_id;
+                                check_node.port = vms[j].port; 
+                                check_node.port_name = vms[j].port_name;
+						    }
 						    check_nodes.push(check_node);
                         }
                         else{
@@ -74,7 +83,7 @@ function check_vm_status(slice_id){
 			     for(var k=0;k<check_nodes.length;k++){
                         status = check_nodes[k].status;
                         cur_vm_id = check_nodes[k].cur_vm_id;
-                        if(status == 9){
+                        if(status == 9 || status == 10){
                             c_id = $("span#controller_fc").children(".aa").attr('value');
                             if(c_id && c_id == cur_vm_id){
                                 $("div#controller_st").empty();
@@ -204,7 +213,7 @@ function check_vm_status(slice_id){
                             str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status, check_nodes[k].switch_id, check_nodes[k].port, check_nodes[k].port_name);
                     }//endfor
 			        
 			    }else if(admin == 0){
@@ -355,7 +364,7 @@ function check_vm_status(slice_id){
                             $("span#vm_fc"+cur_vm_id).append(str);
                         }//endif
                         //alert('here');
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status, check_nodes[k].switch_id, check_nodes[k].port, check_nodes[k].port_name);
                     }//endfor
                 }
                 else{
@@ -457,7 +466,7 @@ function check_vm_status(slice_id){
                             $("span#vm_fc"+cur_vm_id).empty();
                         }//endif
                         //alert('here');
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status);
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status, check_nodes[k].switch_id, check_nodes[k].port, check_nodes[k].port_name);
                     }//endfor
                 }//endif
                     

@@ -68,7 +68,7 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
         if slice_obj:
             try:
                 slice_obj.delete()
-            except:
+            except Exception, ex2:
                 pass
         print "10:delete slice success and raise exception"
         raise DbError(ex.message)

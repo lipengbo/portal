@@ -27,7 +27,7 @@ default_flavor_id = 4
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
 #配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。
-gw_controller = False
+gw_controller = True
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False

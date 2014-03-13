@@ -29,8 +29,8 @@ LOG = logging.getLogger('plugins')
 
 
 def vm_list(request, sliceid):
-    vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     slice_obj = get_object_or_404(Slice, id=sliceid)
+    vms = slice_obj.get_common_vms()
     context = {}
     user = request.user
     if user.is_superuser:
@@ -162,7 +162,16 @@ def get_vms_state_by_sliceid(request, sliceid):
     slice_obj = get_object_or_404(Slice, id=sliceid)
     vms = slice_obj.virtualmachine_set.all()
     context = {}
-    context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+#     context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+    context['vms'] = []
+    for vm in vms:
+        if vm.switch_port:
+            info = {'id': vm.id, 'state': vm.state,
+                'switch_id': vm.switch_port.switch.id,
+                'port': vm.switch_port.port, 'port_name':vm.switch_port.name}
+        else:
+            info = {'id': vm.id, 'state': vm.state}
+        context['vms'].append(info)
     context['sliceid'] = sliceid
     return HttpResponse(json.dumps(context))
 

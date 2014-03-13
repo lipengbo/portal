@@ -534,6 +534,22 @@ function start_or_stop(slice_id, flag){
     return ret;
 }
 
+//启动停止带宽监控
+   $(".start_update_band").click(function(){
+        if($(this).hasClass("btn-success")){
+                $(this).removeClass("btn-success").addClass("btn-danger");           
+                $(this).text("停止带宽监控");
+                //$(".label").removeClass("label-important").addClass("label-success");
+                document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);    
+        } else {
+                $(this).removeClass("btn-danger").addClass("btn-success");
+                $(this).text("启动带宽监控");
+                //$(".label").removeClass("label-success").addClass("label-important");
+                document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);        
+        }
+    }); 
+
+
 //slice启动停止按钮
    $(".start_slice").click(function(){
         var slice_id = $("#slice_id").text();
@@ -607,6 +623,7 @@ function start_or_stop(slice_id, flag){
         }else{
             //alert("he");
             vm_id = $(this).attr('vm_id');
+            url = $("#url").text();
             //alert(vm_id);
             if($(this).hasClass("btn-success")){
                 ret = start_or_stop_vm(vm_id, "create");
@@ -615,8 +632,9 @@ function start_or_stop(slice_id, flag){
                     $(this).text("停止");
                     $("#btn_vnc"+vm_id).removeClass("disabled");
                     $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
-                    document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
-                    
+                    if(url == "slice_detail"){
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
+                    }
                 }     
             } else {
                 ret = start_or_stop_vm(vm_id, "destroy");
@@ -626,7 +644,9 @@ function start_or_stop(slice_id, flag){
                     $("#btn_vnc"+vm_id).addClass("disabled");
                     //$(this).parent("td").prev("td").children(".icon_state").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                     $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
-                    document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+                    if(url == "slice_detail"){
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+                    }
                 }         
             }
         }
@@ -697,6 +717,9 @@ function start_or_stop(slice_id, flag){
 }
 
     $(".slice_state_del").click(function(){
+        var vms_count = $("#vms_count").text();
+        //alert(vms_count);
+        var url = $("#url").text();
         if($(this).hasClass("disabled")){
             return false;
         }else{
@@ -708,10 +731,16 @@ function start_or_stop(slice_id, flag){
                 //alert(vm_id);
                 ret = delete_vm(vm_id);
                 if(ret){
-                    $("#vm_tr"+vm_id).hide();
-                    document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
-                    slice_id = $("#slice_id").text();
-                    //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
+                    if(vms_count==1){          
+                        location.reload();
+                    }else{
+                        $("#vm_tr"+vm_id).hide();
+                        if(url == "slice_detail"){
+                            document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
+                        }
+                        //slice_id = $("#slice_id").text();
+                        //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
+                    }
                 }
             });
             return false;
