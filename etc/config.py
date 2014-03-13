@@ -5,7 +5,7 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 #[plugin-vt]
-glance_host = '192.168.5.111'
+glance_host = '192.168.5.122'
 glance_port = 9292
 sFlow_service = 'http://192.168.5.24:8008/'
 

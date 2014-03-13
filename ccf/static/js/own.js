@@ -272,12 +272,6 @@ $(document).ready(function() {
 			set_value("ram", ui.value);
 		}
 	});
-	$( "#disk_slider" ).slider({
-		stop:function(event, ui){
-			$(".type_chose a").removeClass("vm_active");
-			set_value("hdd", ui.value);
-		}
-	})
 	
 });
 
