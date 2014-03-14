@@ -1,9 +1,10 @@
+import os
+import tempfile
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
-from django.contrib.auth.models import User
 
 from resources.models import IslandResource, Server, SwitchPort
 from slice.models import Slice
@@ -16,6 +17,8 @@ from django.utils.translation import ugettext as _
 import errno
 from socket import error as socket_error
 from etc.config import function_test
+import logging
+LOG = logging.getLogger('plugins')
 DOMAIN_STATE_TUPLE = (
     (0, _('nostate')),
     (1, _('running')),
@@ -131,13 +134,6 @@ class VirtualMachine(IslandResource):
     def get_slice_id(self):
         return self.slice.id
 
-    def get_user_keys(self):
-        user = self.slice.owner
-        ssh_keys = []
-        for i in SSHKey.objects.filter(user=user):
-            ssh_keys.append(i.sshkey)
-        return ssh_keys
-
     def create_vm(self):
         if function_test:
             print '----------------------create a vm=%s -------------------------' % self.name
@@ -166,7 +162,10 @@ class VirtualMachine(IslandResource):
                 network['address'] = self.gateway_public_ip.ipaddr + '/' + str(self.gateway_public_ip.supernet.get_network().prefixlen)
                 network['gateway'] = self.gateway_public_ip.supernet.get_gateway_ip()
                 vmInfo['network'].append(network)
-            keys = self.get_user_keys()
+            keys = []
+            sshkeys = self.slice.sshkey_set.all()
+            for key in sshkeys:
+                keys.append(key.public_key)
             str_keys = '\n'.join(keys)
             agent_client = AgentClient(self.server.ip)
             agent_client.create_vm(vmInfo, key=str_keys)
@@ -308,18 +307,30 @@ def vm_post_delete(sender, instance, **kwargs):
         pass
 
 
-#@receiver(post_save, sender=SSHKey)
-#def sshkey_post_save(sender, instance, **kwargs):
-    #if kwargs.get('created'):
-        #slice = instance.slice
-        #for vm in slice.get_vms():
-            #instance.vms.add(vm)
-            #vm.add_sshkeys(instance.sshkey)
-
-
-@receiver(post_delete, sender=SSHKey)
-def sshkey_post_delete(sender, instance, **kwargs):
-    slices = Slice.objects.filter(owner=instance.user)
-    for slice in slices:
+@receiver(post_save, sender=SSHKey)
+def sshkey_post_save(sender, instance, **kwargs):
+    if kwargs.get('created'):
+        slice = instance.slice
         for vm in slice.get_vms():
-            vm.delete_sshkeys(instance.sshkey)
+            instance.vms.add(vm)
+            vm.add_sshkeys(instance.sshkey)
+
+
+@receiver(post_save, sender=Slice)
+def slice_post_save(sender, instance, **kwargs):
+    if kwargs.get('created'):
+        try:
+            sshkey = SSHKey()
+            sshkey.slice = instance
+            sshkey.name = '%s_key' % instance.name
+            sshkey.private_key, sshkey.public_key, sshkey.fingerprint = sshkey.generate_key_pair()
+            sshkey.save()
+        except:
+            import traceback
+            LOG.error(traceback.print_exc())
+
+#@receiver(post_delete, sender=SSHKey)
+#def sshkey_post_delete(sender, instance, **kwargs):
+    #vms = instance.vms.all()
+    #for vm in vms:
+        #vm.delete_sshkeys(instance.sshkey)
