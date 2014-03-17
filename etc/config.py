@@ -23,7 +23,7 @@ def generate_glance_url():
 #[plugin-advance]
 #高级配置项，用于配置文件锁的位置
 lock_path = '/var/run/'
-default_flavor_id = 4
+default_flavor_id = 1
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
 #配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。

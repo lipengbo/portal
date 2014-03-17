@@ -24,6 +24,10 @@ class City(models.Model):
     name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
 
+    def change_desc(self, new_desc):
+        self.description = new_desc
+        self.save()
+
     def __unicode__(self):
         return self.name
 

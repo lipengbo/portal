@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
         db.send_create_signal('vt', ['SSHKey'])
 
         # Adding unique constraint on 'SSHKey', fields ['user', 'sshkey']
-        db.create_unique('vt_sshkey', ['user_id', 'sshkey'])
+        # db.create_unique('vt_sshkey', ['user_id', 'sshkey'])
 
 
     def backwards(self, orm):

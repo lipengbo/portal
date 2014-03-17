@@ -493,7 +493,7 @@ def countiframe(request):
 
 
 def get_count_show(request):
-    print "------------------------------------========================================="
+    print 'get_count_show'
     target = request.GET.get('target')
     type = request.GET.get('type')
     total_num = request.GET.get('total_num')

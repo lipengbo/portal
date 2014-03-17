@@ -230,6 +230,7 @@ class Slice(models.Model):
             nsc.save()
 
     def delete(self, *args, **kwargs):
+        import traceback
         try:
             print "1:delete slice on flowvisor"
             flowvisor_del_slice(self.get_flowvisor(), self.id)
@@ -238,6 +239,7 @@ class Slice(models.Model):
             print "3:delete slice record success"
         except Exception, ex:
             print "4:delete slice failed and change slice record"
+            print traceback.print_exc()
             self.failure_reason = ex.message
             if self.type == 0:
                 self.type = 1
