@@ -9,4 +9,5 @@ urlpatterns = patterns('plugins.vt.views',
     url(r'^do/vm/action/(?P<vmid>\d+)/(?P<action>\w+)/$', "do_vm_action", name='do_vm_action'),
     url(r'^get_slice_gateway_ip/(?P<slice_name>\w+)/$', "get_slice_gateway_ip", name='get_slice_gateway_ip'),
     url(r'^get_flavor_msg/$', "get_flavor_msg", name ='get_flavor_msg'),
+	url(r'^download_keypair/$', "download_keypair", name = "download_keypair"),
 )
