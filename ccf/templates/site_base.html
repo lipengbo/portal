@@ -4,40 +4,38 @@
 {% load notifications_tags %}
 {% load metron_tags %}
 {% load i18n %}
-        
-        <title>{% block head_title_base %}SDN创新实验平台{% endblock %}</title>   
-          
-       {% block style_base %}   
-         
-            <link href="{% static "css/square/blue.css" %}" rel="stylesheet">
-            <!--<link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">-->
-            <link href="{% static "css/own.css" %}" rel="stylesheet">
-            <link rel="stylesheet" href="{% static "css/font-awesome.min.css" %}">
-            <!--[if IE 7]>
-            <link rel="stylesheet" href="{% static "css/font-awesome-ie7.min.css" %}">
-            <![endif]-->
-            {% block extra_style %}{% endblock %}
-        {% endblock %}
-        
-		{% block extra_head_base %}
-		    {% block extra_head %}{% endblock %}
-		{% endblock %}
-        {% block body_class %}{{ request.current_app }}-body common{% endblock %}
-	    {% block wrapper_class %}wrapper_all{% endblock %}
-		{% block topbar_base %}
-                <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %} navbar-inverse">
-                    <div class="navbar-inner">
-                        <div class="container">
+
+<title>{% block head_title_base %}SDN创新实验平台{% endblock %}</title>
+
+{% block style_base %}
+    <link href="{% static "pinax/css/theme.css" %}" rel="stylesheet">
+    <link href="{% static "css/site.css" %}" rel="stylesheet">
+    {% block extra_style %}{% endblock %}
+{% endblock %}
+
+{% block extra_head_base %}
+    {% block extra_head %}{% endblock %}
+{% endblock %}
+
+{% block body_class %}{{ request.current_app }}-body common{% endblock %}
+
+{% block wrapper_class %}wrapper_all{% endblock %}
+
+{% block topbar_base %}
+                <div class="navbar {% block navbar_class %}navbar-fixed-top{% endblock %} navbar-inverse" role="navigation">
+                        <div class="container-fluid">
                             {% block topbar %}
+                            <div class="navbar-header">
                                 <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                     <span class="icon-bar"></span>
                                 </a>
+                            </div>
                                 {% block site_brand %}{% endblock %}
-                                <div class="nav-collapse collapse">
+                                <div class="navbar-collapse collapse">
                                     {% block nav %}
-                                    	<ul class="nav">
+                                    	<ul class="nav navbar-nav">
                                             {% notifications_unread as unread_count %}
                                             {% if user.is_superuser %}
                                                 <li class="index_menu"><a href="{% url "manage_index" %}">首页</a></li>
@@ -68,10 +66,9 @@
                                     {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
                                 </div>
                             {% endblock %}
-                        </div>
                     </div>
                 </div>
-            {% endblock %}
+{% endblock %}
 		{% block body_base %}
 		    {% block blank_block %}<div class="blank_block"></div>{% endblock %}
 		    <div class="container">	        
