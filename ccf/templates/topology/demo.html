@@ -129,7 +129,7 @@
 {% endblock %}
 
 {% block body %}
-<div class="row-fluid">
+<div class="row">
     <div class="col-md-9 topo-box">
         <div id="island-img">
         </div>
@@ -153,7 +153,7 @@
             </li>
             <li class="head" data-id="0">
                 <a href="#">
-                    <div class="row-fluid">
+                    <div class="row">
                         <div class="col-md-8 column">
                             虚网描述
                         </div>
@@ -166,7 +166,7 @@
             {% for slice in slices %}
             <li class="island-button slice-menu" data-id="{{ slice.id }}" data-title="{{ slice.name }} 虚网网络拓扑" data-islands="{% for island in slice.islands %}{{ island }}{% if not forloop.last %},{% endif %}{% endfor %}">
                 <a href="javascript:;" data-id="{{ slice.id }}">
-                    <div class="row-fluid">
+                    <div class="row">
                         <div class="col-md-8 slice-name">
                             {{ slice.name }} 
                         </div>

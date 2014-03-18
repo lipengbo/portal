@@ -26,7 +26,7 @@
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
 {% if class_name != 'User' %}
-<div class="row-fluid margin_rows">
+<div class="row margin_rows">
     <div class="col-md-1"></div>
     <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'City' %}active{% endif %}"><a href="{% url nexus_list "project" "city" %}" class="button button-circle button-primary"><i class="cs"></i>城市</a></span></div>
     <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'Island' %}active{% endif %}"><a href="{% url nexus_list "project" "island" %}" class="button button-circle button-action"><i class="icon-sitemap"></i>节点</a></span></div>

@@ -10,7 +10,7 @@
 {% block body %}
 <form action="{% url delete_notifications %}" method="post" accept-charset="utf-8">
     {% csrf_token %}
-<div class="row-fluid">
+<div class="row">
     <div class="col-md-2 columns">
         <ul class="nav nav-list">
             <li class="nav-header">{% trans "Notifications" %}</li>

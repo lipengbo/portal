@@ -31,7 +31,7 @@
                 {% endfor %}
             {% endif %}
             {% csrf_token %}
-    		<div class="row-fluid">
+    		<div class="row">
     			<div class="col-md-4">   	
                     <div class="control-group {% if form.username.errors %}error{% endif %}">		
                       <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="login-field" value="" placeholder="请输入用户名" id="login-name">   

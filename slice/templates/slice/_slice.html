@@ -13,7 +13,7 @@
     {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">{%else%}
     <div class="thumbnail">{%endif%}{%endif%}
-        <div class="row-fluid slice_list">
+        <div class="row slice_list">
             <div class="col-md-5">
                 <div class="slice_left">
                     <div class="top_img"><img src="{% static slice.project.category.image %}" /></div>
