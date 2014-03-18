@@ -100,11 +100,11 @@
         	<div class="row">
             	<div class="col-md-3"></div>
           			{% if from_link == '0' %}
-          				<div class="col-md-3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+          				<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
           			{% else %}
-          				<div class="col-md-3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          				<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
           			{% endif %}
-          		<div class="col-md-3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
+          		<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
           		<div class="col-md-3"></div>
         	</div>
     	</div>
