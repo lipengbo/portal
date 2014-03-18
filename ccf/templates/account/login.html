@@ -32,7 +32,7 @@
             {% endif %}
             {% csrf_token %}
     		<div class="row-fluid">
-    			<div class="span4">   	
+    			<div class="col-md-4">   	
                     <div class="control-group {% if form.username.errors %}error{% endif %}">		
                       <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
     				<label class="login-field-icon fui-user" for="login-name"></label>
@@ -43,7 +43,7 @@
                     {% endif %}
     			  </div>				  
     			</div>
-    			<div class="span4">
+    			<div class="col-md-4">
                     <div class="control-group {% if form.password.errors %}error{% endif %}">	
                         <input type="password" class="login-field" name="password" value="" placeholder="请输入密码" id="login-pass">
                         <label class="login-field-icon fui-lock" for="login-name"></label>
@@ -54,15 +54,15 @@
                         {% endif %}
     			    </div>
     			</div>    			
-    			<div class="span2">
+    			<div class="col-md-2">
     				<button class="btn btn-large btn-block btn-warning" type="submit" style="*height:45px;">登 录</button>
     			</div>
-    			<div class="span2">
+    			<div class="col-md-2">
     				<a data-toggle="modal" href="#registerModal" class="btn btn-large btn-info btn-block" id="register" style="*width:106px;">注册</a>
     			</div>
     		</div>
     		<div class="row">
-    		    <div class="span4 offset4 text-right"><a href="{% url "account_password_reset" %}" class="forgetpwd">忘记密码？</a></div>
+    		    <div class="col-md-4 offset4 text-right"><a href="{% url "account_password_reset" %}" class="forgetpwd">忘记密码？</a></div>
     		</div>
     	</form>
 	</div>

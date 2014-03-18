@@ -17,7 +17,7 @@
         <div class="search">
             <form class="form-search">
               <div class="input-append">
-                  <input type="text" value="{{ query }}" name="query" value="" class="span2 search-query">
+                  <input type="text" value="{{ query }}" name="query" value="" class="col-md-2 search-query">
                   <button type="submit" class="btn">搜索</button>
               </div>
             </form>
@@ -38,7 +38,7 @@
                         </div>
                     </legend>
                     <div class="row-fluid countschart">
-                        <div class="span2 counts">
+                        <div class="col-md-2 counts">
                             <div class="counts_block">
                                 <p><img src="{% static "img/file-01.png" %}"  /></p>
                                 <p class="counts_block_title">新增项目</p>
@@ -50,7 +50,7 @@
                                 <p class="counts_block_nums">{{ total_projects}}</p>
                             </div>                                                 
                         </div>
-                        <div class="span10">
+                        <div class="col-md-10">
                             <iframe scrolling="no" id="countiframe" width="100%" height="182" src="/slice/countiframe/?target=project&type=day&stype=0" frameborder="0"></iframe>
                             <div id="countbutton">
                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="30">

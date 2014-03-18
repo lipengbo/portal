@@ -62,31 +62,31 @@ common
 
 <div id="svg">
 <div class="row-fluid hide">
-    <div class="span12">
+    <div class="col-md-12">
         {% if not no_parent %}
         <div class="hero-unit">
                 <div class="tempStats">
-                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                    <div class="tempStatBox col-md-2" ontablet="col-md-4" ondesktop="col-md-2">
                         <div class="tempStat" style="border-color: rgb(103, 194, 239);">{{ total_nodes }}</div>
                         <span>城市节点</span>
                     </div>
-                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                    <div class="tempStatBox col-md-2" ontablet="col-md-4" ondesktop="col-md-2">
                         <div class="tempStat" style="border-color: rgb(250, 96, 61);">{{ total_island }}</div>
                         <span>实验节点</span>
                     </div>
-                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                    <div class="tempStatBox col-md-2" ontablet="col-md-4" ondesktop="col-md-2">
                         <div class="tempStat" style="border-color: rgb(203, 233, 104);">{{ total_server }}</div>
                         <span>服务器</span>
                     </div>
-                    <div class="tempStatBox span2 noMargin" ontablet="span4" ondesktop="span2">
+                    <div class="tempStatBox col-md-2 noMargin" ontablet="col-md-4" ondesktop="col-md-2">
                         <div class="tempStat" style="border-color: rgb(255, 84, 84);">{{ total_switch }}</div>
                         <span>交换机</span>
                     </div>
-                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                    <div class="tempStatBox col-md-2" ontablet="col-md-4" ondesktop="col-md-2">
                         <div class="tempStat" style="border-color: rgb(234, 232, 116);">{{ total_ctrl }}</div>
                         <span>控制器</span>
                     </div>
-                    <div class="tempStatBox span2" ontablet="span4" ondesktop="span2">
+                    <div class="tempStatBox col-md-2" ontablet="col-md-4" ondesktop="col-md-2">
                         <div class="tempStat" style="border-color: rgb(250, 187, 61);">{{ total_facility }}</div>
                         <span>其他设备</span>
                     </div>
@@ -94,14 +94,14 @@ common
                 </div>
         </div>
         <div class="hide row-fluid">
-            <div class="span12 well well-small">
+            <div class="col-md-12 well well-small">
                 {% include "topology/_city_filter.html" %}
-                <div class="span2">
+                <div class="col-md-2">
                     <label class="inline checkbox">
                         <input type="checkbox" name="quanwang" id="quanwang" value="1" checked />显示服务器
                     </label>
                 </div>
-                <div class="span2">
+                <div class="col-md-2">
                     <label class="inline checkbox">
                         <input type="checkbox" name="" id="show-logical" value="1" />显示逻辑拓扑
                     </label>
@@ -110,7 +110,7 @@ common
         </div>
         {% else %}
             {% if not hide_filter %}
-                <div class="span2">
+                <div class="col-md-2">
                     <label class="inline checkbox">
                         <input type="checkbox" name="quanwang" id="quanwang" value="1" checked />显示服务器
                     </label>

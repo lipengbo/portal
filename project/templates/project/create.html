@@ -70,7 +70,7 @@
     <!--<div class="form_inline control-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
         <label>项目类型</label>
         <div class="input-append select_input">
-            <input class="span2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text" />
+            <input class="col-md-2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text" />
             <div class="btn-group">
                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                 <ul class="dropdown-menu">
@@ -143,7 +143,7 @@
 			  </fieldset>
 			  <div class="form-actions">
 				  <div class="row-fluid">
-                    <div class="span3 offset5"><button type="submit" class="btn btn-large btn-block btn-info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
+                    <div class="col-md-3 offset5"><button type="submit" class="btn btn-large btn-block btn-info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
 				  </div>
 			  </div>
 </form>

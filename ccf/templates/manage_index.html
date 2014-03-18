@@ -8,7 +8,7 @@
 {% block body_class %}home home-body{% endblock %}
 {% block body %}
 <div class="row-fluid margin_rows">
-    <div class="span3">
+    <div class="col-md-3">
         <div class="nums_block" style="border:1px solid #3182ad;">
           <a href="{% url "nexus_list" "project" "island" %}">
             <div class="nums_top" style="background:#3398cc;">
@@ -23,7 +23,7 @@
           </a>  
         </div>
     </div>
-    <div class="span3">
+    <div class="col-md-3">
         <div class="nums_block" style="border:1px solid #2fb157;">
           <a href="{% url "project_index" %}">
             <div class="nums_top" style="background:#34cc67;">
@@ -38,7 +38,7 @@
           </a>  
         </div>
     </div>  
-    <div class="span3">
+    <div class="col-md-3">
         <div class="nums_block" style="border:1px solid #893080;">
           <a href="{% url "slice_list" 0 0 %}">
             <div class="nums_top" style="background:#993399;">
@@ -53,7 +53,7 @@
           </a>  
         </div>
     </div>  
-    <div class="span3">
+    <div class="col-md-3">
         <div class="nums_block" style="border:1px solid #e5b232;">
           <a href="{% url "nexus_list" "auth" "user" %}">
             <div class="nums_top" style="background:#ffcc33;">
@@ -71,7 +71,7 @@
 </div>
 
 <div class="row-fluid margin_rows">
-    <div class="span12">
+    <div class="col-md-12">
         <div class="tp_block">
           <div class="tp_title">
             <h4>全网物理拓扑<small>（网络拓扑链路通过SDN控制器实时获取）</small></h4>
@@ -84,7 +84,7 @@
               <li><span>无数据</span><div class="tp_bar" style="background:#000;"></div></li>
       </ul>  -->
           <div class="row-fluid qwtp_count">
-              <div class="span4">
+              <div class="col-md-4">
                   <div class="qwtp">
                     <a href="{% url "nexus_list" "project" "city" %}">
                       <div class="qwtp_tb">
@@ -97,7 +97,7 @@
                     </a>
                   </div>
               </div>
-              <div class="span4">
+              <div class="col-md-4">
                   <div class="qwtp">
                     <a href="{% url "nexus_list" "resources" "server" %}">
                       <div class="qwtp_tb">
@@ -110,7 +110,7 @@
                     </a>
                   </div>
               </div>
-              <div class="span4">
+              <div class="col-md-4">
                   <div class="qwtp">
                     <a href="{% url "nexus_list" "resources" "switch" %}">
                       <div class="qwtp_tb">
@@ -128,7 +128,7 @@
           </iframe>            
         </div>
     </div>
-  <!--  <div class="span6">
+  <!--  <div class="col-md-6">
         <div class="tp_block">
             {%if slices%}
             <div id="myCarousel" class="carousel slide carousel_defined">
@@ -142,7 +142,7 @@
                     {%endif%}
                         <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
                             <div class="row-fluid slice_list">
-                                <div class="span5">
+                                <div class="col-md-5">
                                     <div class="slice_left">
                                         <img src="{% static slice.project.category.image %}" />
                                         <ul>
@@ -170,7 +170,7 @@
                                         </div>
                                     </div>        
                                 </div>
-                                <div class="span7">
+                                <div class="col-md-7">
                                     <div class="slice_right">
                                         <div>
                                         <iframe scrolling="no" id="topologyiframe" width="250" height="320" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=320" frameborder="0"></iframe>
@@ -200,7 +200,7 @@
 
 <!--
 <div class="row-fluid">
-    <div class="span6">
+    <div class="col-md-6">
         <div class="tp_block tp_charts" id = "show_server">
             <div class="pull-right" style="margin:5px 10px 5px 0">
                 cpu:<span id="id_cpu_index"></span>%
@@ -210,7 +210,7 @@
 			<canvas id="manage_server_chart" width="460" height="210" style="margin-left:10px;"></canvas>			
 		</div>        
     </div>
-    <div class="span6">
+    <div class="col-md-6">
         <div class="tp_block tp_charts" id="show_switch">
             <div class="pull-right" style="margin:5px 10px 5px 0">
                                                     每秒接收量：<span id="id_port_recv_bps"></span>/S

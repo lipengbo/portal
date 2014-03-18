@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load project_tags %}
 {% load common_tags %}
-<li class="span6 slice_topology slice_list" {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}>
+<li class="col-md-6 slice_topology slice_list" {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}>
     {% has_perm user 'slice.delete_slice' slice %}
     {% if has_perm %}
     <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
@@ -14,7 +14,7 @@
     <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">{%else%}
     <div class="thumbnail">{%endif%}{%endif%}
         <div class="row-fluid slice_list">
-            <div class="span5">
+            <div class="col-md-5">
                 <div class="slice_left">
                     <div class="top_img"><img src="{% static slice.project.category.image %}" /></div>
                     <ul>
@@ -42,7 +42,7 @@
                     </div>
                 </div>        
             </div>
-            <div class="span7">
+            <div class="col-md-7">
                 <div class="slice_right">
                     <div>
                     <iframe scrolling="no" id="topologyiframe" width="270" height="325" src="/slice/topology_d3/?slice_id={{slice.id}}&width=230&height=325&top=0&band=0" frameborder="0"></iframe>

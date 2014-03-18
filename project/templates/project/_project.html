@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<li class="span3 project_list" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
+<li class="col-md-3 project_list" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
         <a href="{% url project_delete project.id %}?next={{ request.path }}" class="btn-delete close">×</a>
         <div class="thumbnail">
             <div class="logo_img"><img src="{% static project.category.image %}" /></div>

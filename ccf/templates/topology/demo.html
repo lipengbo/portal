@@ -130,7 +130,7 @@
 
 {% block body %}
 <div class="row-fluid">
-    <div class="span9 topo-box">
+    <div class="col-md-9 topo-box">
         <div id="island-img">
         </div>
         <div class="hide" id="city-topo">
@@ -146,7 +146,7 @@
             <iframe class="topology"></iframe>
         </div>
     </div>
-    <div class="span3">
+    <div class="col-md-3">
         <ul class="nav nav-tabs nav-stacked">
             <li class="island-button" data-id="0">
                 <a href="#" class="caption" data-title="全网网络拓扑">虚网列表</a>
@@ -154,10 +154,10 @@
             <li class="head" data-id="0">
                 <a href="#">
                     <div class="row-fluid">
-                        <div class="span8 column">
+                        <div class="col-md-8 column">
                             虚网描述
                         </div>
-                        <div class="span4 column">
+                        <div class="col-md-4 column">
                             状态
                         </div>
                     </div>
@@ -167,13 +167,13 @@
             <li class="island-button slice-menu" data-id="{{ slice.id }}" data-title="{{ slice.name }} 虚网网络拓扑" data-islands="{% for island in slice.islands %}{{ island }}{% if not forloop.last %},{% endif %}{% endfor %}">
                 <a href="javascript:;" data-id="{{ slice.id }}">
                     <div class="row-fluid">
-                        <div class="span8 slice-name">
+                        <div class="col-md-8 slice-name">
                             {{ slice.name }} 
                         </div>
-                        <div class="span2">
+                        <div class="col-md-2">
                             <span class="label label-success status">激活</span>
                         </div>
-                        <div class="span6 hide">
+                        <div class="col-md-6 hide">
                         <button class="btn hide btn-{% if slice.status == 'up' %}danger{% else %}success{% endif %} action pull-right" data-toggle="button" data-id="{{ slice.id }}">
                         {% if  slice.status == 'up' %}停止{% else %}启动{% endif %}
                         </button>
