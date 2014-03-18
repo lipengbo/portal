@@ -5,7 +5,7 @@
         <a href="{% url project_delete project.id %}?next={{ request.path }}" class="btn-delete close">×</a>
         <div class="thumbnail">
             <div class="logo_img"><img src="{% static project.category.image %}" /></div>
-            <h5>项目名称：{{ project.name }}<a href="{% url project_detail project.id %}" class="view_more_icon"><i class="icon-double-angle-right" title="点击查看"></i></a></h5>                              
+            <h5>项目名称：{{ project.name }}<a href="{% url project_detail project.id %}" class="view_more_icon"><i class="glyphicon glyphicon-double-angle-right" title="点击查看"></i></a></h5>                              
         </div>
 
 </li>

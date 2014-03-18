@@ -18,7 +18,7 @@
             </div>
             <div class="nums_bottom" style="background:#0a5da3;">
                 <span>VIEW MORE</span>
-                <i class="icon-circle-arrow-right"></i>
+                <i class="glyphicon glyphicon-circle-arrow-right"></i>
             </div>
           </a>  
         </div>
@@ -33,7 +33,7 @@
             </div>
             <div class="nums_bottom" style="background:#09a32b;">
                 <span>VIEW MORE</span>
-                <i class="icon-circle-arrow-right"></i>
+                <i class="glyphicon glyphicon-circle-arrow-right"></i>
             </div>
           </a>  
         </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="nums_bottom" style="background:#5c0b58;">
                 <span>VIEW MORE</span>
-                <i class="icon-circle-arrow-right"></i>
+                <i class="glyphicon glyphicon-circle-arrow-right"></i>
             </div>
           </a>  
         </div>
@@ -63,7 +63,7 @@
             </div>
             <div class="nums_bottom" style="background:#fea30a;">
                 <span>VIEW MORE</span>
-                <i class="icon-circle-arrow-right"></i>
+                <i class="glyphicon glyphicon-circle-arrow-right"></i>
             </div>
           </a>  
         </div>
@@ -146,9 +146,9 @@
                                     <div class="slice_left">
                                         <img src="{% static slice.project.category.image %}" />
                                         <ul>
-                                            <li><i class="icon-file-alt icon-large"></i><b>{{ slice.get_show_name }}</b></li>
-                                            <li><i class="icon-user icon-large"></i>{{ slice.owner }}</li>
-                                            <li><i class="icon-rss icon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
+                                            <li><i class="glyphicon glyphicon-file-alt glyphicon glyphicon-large"></i><b>{{ slice.get_show_name }}</b></li>
+                                            <li><i class="glyphicon glyphicon-user glyphicon glyphicon-large"></i>{{ slice.owner }}</li>
+                                            <li><i class="glyphicon glyphicon-rss glyphicon glyphicon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
                                         </ul>
                                         <div class="circle_bar">
                                             <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
@@ -166,7 +166,7 @@
                                             data-min="0" data-max="100" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_nw_num}}">
                                         </div>
                                         <div class="slice_date">
-                                            <i class="icon-calendar icon-large"></i>{{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
+                                            <i class="glyphicon glyphicon-calendar glyphicon glyphicon-large"></i>{{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
                                         </div>
                                     </div>        
                                 </div>

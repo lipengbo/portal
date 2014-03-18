@@ -52,7 +52,7 @@ img {
 					<input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
 				</form>
 			      
-                <i class="icon-caret-down show_describe" style="cursor:pointer;"></i>	   	
+                <i class="glyphicon glyphicon-caret-down show_describe" style="cursor:pointer;"></i>	   	
             </legend>		
             <div class="well word_detail hide">
             <p>
@@ -204,11 +204,11 @@ img {
                                             {% if controller.host.state == 8 %}
                                                 <img src="{% static "img/loader.gif" %}" />
                                             {% elif controller.host.state == 9 %}
-                                                <i class="icon-remove-sign"></i>
+                                                <i class="glyphicon glyphicon-remove-sign"></i>
                                             {%elif controller.host.state == 1 %}
-                                                <i class="icon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
+                                                <i class="glyphicon glyphicon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                                             {%else%}
-                                                <i class="icon-minus-sign icon_state" id="icon_state{{controller.host.id}}"></i>
+                                                <i class="glyphicon glyphicon-minus-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                                             {%endif%}
                                         {%endif%}
                                     </div>
@@ -284,11 +284,11 @@ img {
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif gw.state == 9 %}
-                                        <i class="icon-remove-sign"></i>
+                                        <i class="glyphicon glyphicon-remove-sign"></i>
                                     {%elif gw.state == 1 %}
-                                        <i class="icon-ok-sign gw_dhcp_icon"></i>
+                                        <i class="glyphicon glyphicon-ok-sign gw_dhcp_icon"></i>
                                     {%else%}
-                                        <i class="icon-minus-sign gw_dhcp_icon"></i>
+                                        <i class="glyphicon glyphicon-minus-sign gw_dhcp_icon"></i>
                                     {%endif%}  
                                 </td>
 				 			{%if extent_html == "site_base.html" %}
@@ -351,11 +351,11 @@ img {
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif vm.state == 9 %}
-                                        <i class="icon-remove-sign"></i>
+                                        <i class="glyphicon glyphicon-remove-sign"></i>
                                     {%elif vm.state == 1 %}
-                                        <i class="icon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
+                                        <i class="glyphicon glyphicon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
                                     {%else%}
-                                        <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
+                                        <i class="glyphicon glyphicon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
                                     {%endif%}  
                                 </td>
 				 			{%if extent_html == "site_base.html" %}
@@ -417,7 +417,7 @@ img {
 			 	</tbody>
 			 </table>
 		    {% if vms.count > 3 %}
-                <a class="edit view_more" href="{% url 'vm_list' slice_obj.id %}">More&nbsp;<i class="icon-play"></i></a>                                            
+                <a class="edit view_more" href="{% url 'vm_list' slice_obj.id %}">More&nbsp;<i class="glyphicon glyphicon-play"></i></a>                                            
             {%endif%}
 			 <div class="clear" style="display: none" >
 			    {% if vms.count > 3 %}
@@ -503,7 +503,7 @@ img {
                                       <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
                                     </select>
                                 {%endif%}
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -524,7 +524,7 @@ img {
                             <td width="30">端口</td>
                             <td>
                                 <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
-                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
@@ -568,10 +568,10 @@ img {
         $(".show_describe").click(function(){
             if($(".word_detail").is(":hidden")) {
                 $(".word_detail").slideDown(); 
-                $(this).removeClass("icon-caret-down").addClass("icon-caret-up");
+                $(this).removeClass("glyphicon glyphicon-caret-down").addClass("glyphicon glyphicon-caret-up");
             } else {
                 $(".word_detail").slideUp();
-                $(this).removeClass("icon-caret-up").addClass("icon-caret-down");
+                $(this).removeClass("glyphicon glyphicon-caret-up").addClass("glyphicon glyphicon-caret-down");
             }
         });
     });

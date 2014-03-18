@@ -59,11 +59,11 @@
                                         <img src="{% static "img/loader.gif" %}" />
                                     </div>
                                     {% elif vm.state == 9 %}
-                                        <i class="icon-remove-sign"></i>
+                                        <i class="glyphicon glyphicon-remove-sign"></i>
                                     {%elif vm.state == 1 %}
-                                        <i class="icon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
+                                        <i class="glyphicon glyphicon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
                                     {%else%}
-                                        <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
+                                        <i class="glyphicon glyphicon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
                                     {%endif%}  
                                 </td>
                             {%if extent_html == "site_base.html" %}

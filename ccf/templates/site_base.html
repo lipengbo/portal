@@ -76,9 +76,9 @@
                 {% if user.is_authenticated %}
 		        <ul class="breadcrumb">
                     {% if user.is_superuser %}
-		                <li><span class="icon-home"></span><a href="{% url "home" %}">首页</a><span class="divider">/</span>
+		                <li><span class="glyphicon glyphicon-home"></span><a href="{% url "home" %}">首页</a><span class="divider">/</span>
                     {% else %}
-		                <li><span class="icon-home"></span><a href="{% url "project_manage" %}">首页</a><span class="divider">/</span>
+		                <li><span class="glyphicon glyphicon-home"></span><a href="{% url "project_manage" %}">首页</a><span class="divider">/</span>
                     {% endif %}
 		            {% block breadcrumb %}
 		            {% endblock %}

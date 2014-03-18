@@ -29,7 +29,7 @@
 <div class="row margin_rows">
     <div class="col-md-1"></div>
     <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'City' %}active{% endif %}"><a href="{% url nexus_list "project" "city" %}" class="button button-circle button-primary"><i class="cs"></i>城市</a></span></div>
-    <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'Island' %}active{% endif %}"><a href="{% url nexus_list "project" "island" %}" class="button button-circle button-action"><i class="icon-sitemap"></i>节点</a></span></div>
+    <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'Island' %}active{% endif %}"><a href="{% url nexus_list "project" "island" %}" class="button button-circle button-action"><i class="glyphicon glyphicon-sitemap"></i>节点</a></span></div>
     <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'Server' %}active{% endif %}"><a href="{% url nexus_list "resources" "server" %}" class="button button-circle button-highlight"><i class="fwq"></i>服务器</a></span></div>
     <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'Switch' %}active{% endif %}"><a href="{% url nexus_list "resources" "switch" %}" class="button button-circle button-caution"><i class="jhj"></i>交换机</a></span></div>
     <div class="col-md-2"><span class="button-wrap device_link {% if class_name == 'Flowvisor' %}active{% endif %}"><a href="{% url nexus_list "openflow" "flowvisor" %}" class="button button-circle button-royal"><i class="fv"></i>Flowvisor</a></span></div>
@@ -40,7 +40,7 @@
 <!--
 <ul class="nav nav-tabs base_device_tab">
   <li class="active"><a href="#"><img src="{% static "img/cs.png" %}" width="20" />城市</a></li>
-  <li><a href="#"><i class="icon-sitemap"></i>节点</a></li>
+  <li><a href="#"><i class="glyphicon glyphicon-sitemap"></i>节点</a></li>
   <li><a href="#"><img src="{% static "img/fwq.png" %}" width="20" />服务器</a></li>
   <li><a href="#"><img src="{% static "img/jhj.png" %}" width="20" />交换机</a></li>
   <li><a href="#"><img src="{% static "img/fv.png" %}" width="20" />Flowvisor</a></li>

@@ -20,15 +20,15 @@
                 <ul class="dropdown-menu">
                     <li>
                     <a href="{% url "account_password" %}">
-                        <i class="icon-cog"></i>
+                        <i class="glyphicon glyphicon-cog"></i>
                         {% trans "Change password" %}</a>
                     </li>
                     {% if request.user.is_staff %}
-                        <li><a href="{% url THEME_ADMIN_URL|default:"admin:index" %}"><i class="icon-wrench"></i> {% trans "Admin" %}</a></li>
+                        <li><a href="{% url THEME_ADMIN_URL|default:"admin:index" %}"><i class="glyphicon glyphicon-wrench"></i> {% trans "Admin" %}</a></li>
                     {% endif %}
                     <li class="divider"></li>
                     <li>
-                        <a id="account_logout" href="{% url "account_logout" %}"><i class="icon-off"></i> {% trans "Log out" %}</a>
+                        <a id="account_logout" href="{% url "account_logout" %}"><i class="glyphicon glyphicon-off"></i> {% trans "Log out" %}</a>
                     </li>
                 </ul>
             </li>
