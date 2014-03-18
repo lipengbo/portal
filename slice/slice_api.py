@@ -36,7 +36,7 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
     print "create_slice_step"
     slice_obj = None
     try:
-        print "1:create slice record"
+        print "1:create slice record, add island, add flowvisor"
         slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
         print "2:add ovs ports"
         slice_add_ovs_ports(slice_obj, ovs_ports)
@@ -52,29 +52,25 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
         print "7:create gateway"
         enabled_dhcp = (int(dhcp_selected) == 1)
         if gw_host_id and int(gw_host_id) > 0:
-            try:
-                gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id),
-                                           image_name='gateway',
-                                           enable_dhcp=enabled_dhcp)
-            except Exception, ex:
-                LOG.debug(traceback.print_exc())
-                raise DbError(ex.message)
-#             flowspace_gw_add(slice_obj, gw.mac)
-#         创建并添加虚拟机
+            gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id),
+                                       image_name='gateway',
+                                       enable_dhcp=enabled_dhcp)
         print "8:create slice success and return"
         return slice_obj
     except Exception, ex:
+        LOG.debug(traceback.print_exc())
         print "9:create slice failed and delete slice"
         if slice_obj:
             try:
                 slice_obj.delete()
-            except Exception, ex2:
-                pass
+            except Exception:
+                if slice_obj:
+                    slice_obj.type = 1
+                    slice_obj.save()
         print "10:delete slice success and raise exception"
         raise DbError(ex.message)
 
 
-@transaction.commit_on_success
 def create_slice_api(project, slice_uuid, name, description, island, user):
     """slice创建
     """
@@ -113,7 +109,6 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
                     slice_obj.add_resource(flowvisors[0])
                     return slice_obj
                 except Exception, ex:
-                    transaction.rollback()
                     if slice_obj:
                         try:
                             slice_obj.delete()
@@ -176,7 +171,7 @@ def delete_slice_api(slice_obj):
 
 
 @transaction.commit_on_success
-def start_slice_api(slice_obj):
+def start_slice_api1(slice_obj):
     """启动slice
     """
     print 'start_slice_api'
@@ -215,11 +210,46 @@ def start_slice_api(slice_obj):
                 except:
                     pass
                 raise DbError("虚网启动失败！")
-#             else:
-#                 try:
-#                     update_slice_virtual_network(slice_obj)
-#                 except:
-#                     pass
+
+
+@transaction.commit_manually
+def start_slice_api(slice_obj):
+    """启动slice
+    """
+    print 'start_slice_api'
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError("虚网启动失败！")
+    else:
+        if slice_obj.state == SLICE_STATE_STOPPED:
+            all_vms = slice_obj.get_vms()
+            for vm in all_vms:
+                if vm.state == 8:
+                    raise DbError("资源分配中，请稍后启动！")
+            controller = slice_obj.get_controller()
+            if controller.host and controller.host.state != 1:
+                raise DbError("请确保控制器已启动！")
+            gw = slice_obj.get_gw()
+            if gw and gw.enable_dhcp and gw.state != 1:
+                raise DbError("请确保gateway已启动！")
+            try:
+                slice_obj.start()
+                if flowvisor_or_cnvp == "cnvp":
+                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+                                                  slice_obj.id, False)
+                    update_slice_virtual_network(slice_obj)
+                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+                                                  slice_obj.id, True)
+                else:
+                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+                                                  slice_obj.id, True)
+                    update_slice_virtual_network(slice_obj)
+            except Exception, ex:
+                transaction.rollback()
+                raise DbError("虚网启动失败！")
+            else:
+                transaction.commit()
 
 
 @transaction.commit_on_success
@@ -247,6 +277,21 @@ def update_slice_virtual_network_cnvp_dn(slice_obj):
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex.message)
+    if slice_obj.changed != None:
+        if slice_obj.changed & 0b1100 == 0:
+            return
+        flowvisor = slice_obj.get_flowvisor()
+        dhcp_tag = slice_obj.get_dhcp()
+        if slice_obj.changed & 0b1101 == 4:
+            if dhcp_tag:
+                for dhcp_mac in dhcp_macs:
+                    arg_match = matches_to_arg_match("", "", "", dhcp_mac['mac'], "", "0x800",
+                                     "0.0.0.0", "255.255.255.255", "", "", "", "")
+                    flowvisor_add_flowspace(flowvisor, None,
+                                            slice_obj.id,
+                                            4, 'cdn%nf',
+                                            dhcp_mac['dpid'],
+                                            100, arg_match)
     flowvisor = slice_obj.get_flowvisor()
     try:
         flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
@@ -306,13 +351,6 @@ def update_slice_virtual_network_cnvp_dn(slice_obj):
                                         4, 'cdn%nf',
                                         dhcp_mac['dpid'],
                                         100, arg_match)
-#                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-#                                  slice_nw, "255.255.255.255", "", "", "", "")
-#                 flowvisor_add_flowspace(flowvisor, None,
-#                                         slice_obj.id,
-#                                         4, 'cdn%nf',
-#                                         dpid,
-#                                         100, arg_match)
     except:
         raise
 

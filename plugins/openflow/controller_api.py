@@ -9,7 +9,6 @@ import logging
 LOG = logging.getLogger("CENI")
 
 
-@transaction.commit_on_success
 def create_add_controller(slice_obj, controller_info):
     """创建并添加slice控制器
     """
@@ -24,14 +23,12 @@ def create_add_controller(slice_obj, controller_info):
                                                             controller_info['controller_port'])
             slice_add_controller(slice_obj, controller)
             return controller
-        except Exception, ex:
-            transaction.rollback()
+        except Exception:
             raise
     else:
         raise DbError("数据库异常")
 
 
-@transaction.commit_on_success
 def slice_add_controller(slice_obj, controller):
     """slice添加控制器
     """
@@ -39,17 +36,15 @@ def slice_add_controller(slice_obj, controller):
     if slice_obj and controller:
         if controller.is_used():
             raise ControllerUsedError('控制器已经被使用！')
-        if not slice_obj.get_controller():
-            try:
+        try:
+            if not slice_obj.get_controller():
                 slice_obj.add_resource(controller)
-            except Exception, ex:
-                transaction.rollback()
-                raise DbError(ex)
+        except Exception:
+            raise DbError("数据库异常")
     else:
         raise DbError("数据库异常")
 
 
-@transaction.commit_on_success
 def create_user_defined_controller(slice_obj, controller_ip, controller_port):
     """创建用户自定义控制器记录
     """
@@ -62,32 +57,24 @@ def create_user_defined_controller(slice_obj, controller_ip, controller_port):
                 island=slice_obj.get_island())
             controller.save()
             return controller
-        except Exception, ex:
-            transaction.rollback()
-            raise DbError(ex)
+        except Exception:
+            raise DbError("数据库异常")
     else:
         raise DbError("数据库异常")
 
 
-#@transaction.commit_on_success
 def create_default_controller(slice_obj, controller_sys):
     """创建默认控制器
     """
     if slice_obj:
+        island = slice_obj.get_island()
         try:
-            #调用控制器创建接口
-            #controller = Controller(
-                #name=controller_sys,
-                #ip='192.168.8.9',
-                #port=7687,
-                #http_port=0,
-                #state=1,
-                #island=slice_obj.get_island())
-            island = slice_obj.get_island()
-            #先创建虚拟机然后再创建controller
             vm, ip = create_vm_for_controller(island_obj=island,
                                               slice_obj=slice_obj,
                                               image_name=controller_sys)
+        except Exception, ex:
+            raise DbError(ex.message)
+        try:
             controller = Controller(name=controller_sys,
                                     port=6633,
                                     island=island)
@@ -95,11 +82,10 @@ def create_default_controller(slice_obj, controller_sys):
             controller.host = vm
             controller.save()
             return controller
-        except Exception, ex:
-            #transaction.rollback()
+        except Exception:
 #             import traceback
 #             print traceback.print_exc()
-            raise DbError(ex.message)
+            raise DbError("数据库异常！")
     else:
         raise DbError("数据库异常！")
 

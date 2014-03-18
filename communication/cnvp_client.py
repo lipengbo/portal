@@ -66,7 +66,6 @@ class CnvpClient(object):
             if ret[0]["resultcode"] != 0:
                 raise FlowvisorError("虚网创建失败!")
         except:
-            print "a6"
             raise FlowvisorError("虚网创建失败!")
 
     def show_slice(self, slice_name):

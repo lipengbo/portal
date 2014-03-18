@@ -45,6 +45,7 @@ class Slice(models.Model):
     failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
     uuid = models.CharField(max_length=36, null=True, unique=True)
+    changed = models.IntegerField(null=True)
 
     def created_date(self):
         return self.date_created
@@ -252,6 +253,27 @@ class Slice(models.Model):
             self.save()
             print "5:raise exception"
             raise
+
+    def flowspace_changed(self, flag):
+        a = self.changed
+        if flag == 0:
+            if a & 0b0100 == 0:
+                a = a | 0b0100 & 0b1110
+            else:
+                a = a & 0b1011
+        if flag == 1:
+            if a & 0b0100 == 0:
+                a = a | 0b0101
+            else:
+                a = a & 0b1011
+        if flag == 2:
+            if a & 0b1000 == 0:
+                a = a | 0b1000
+        if flag == 3:
+            if a & 0b1000 == 0:
+                a = a | 0b1010
+        self.changed = a
+        self.save()
 
     def __unicode__(self):
         return self.name
