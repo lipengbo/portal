@@ -33,7 +33,7 @@
             {% csrf_token %}
     		<div class="row">
     			<div class="col-md-4">   	
-                    <div class="control-group {% if form.username.errors %}error{% endif %}">		
+                    <div class="form-group {% if form.username.errors %}error{% endif %}">		
                       <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
     				<label class="login-field-icon fui-user" for="login-name"></label>
                     {% if form.username.errors %}
@@ -44,7 +44,7 @@
     			  </div>				  
     			</div>
     			<div class="col-md-4">
-                    <div class="control-group {% if form.password.errors %}error{% endif %}">	
+                    <div class="form-group {% if form.password.errors %}error{% endif %}">	
                         <input type="password" class="login-field" name="password" value="" placeholder="请输入密码" id="login-pass">
                         <label class="login-field-icon fui-lock" for="login-name"></label>
                         {% if form.password.errors %}
@@ -75,37 +75,37 @@
             	<form class="signup-form form-horizontal pop_form">
             <div class="modal-body">
 				  <fieldset>
-				    <div class="control-group">
+				    <div class="form-group">
 				      <label class="control-label" for="input01">用户名</label>
 				      <div class="controls">
 				        <input type="text" name="username" class="input-xlarge" id="input01" placeholde="字母，数字，汉字皆可"><span>*</span>
 				      </div>
 				    </div>
-				    <div class="control-group">
+				    <div class="form-group">
 				      <label class="control-label" for="input01">密码</label>
 				      <div class="controls">
 				        <input type="password" name="password" class="input-xlarge" id="input01" placeholde="字母，数字、特殊符号皆可"><span>*</span>
 				      </div>
 				    </div>
-				    <div class="control-group">
+				    <div class="form-group">
 				      <label class="control-label" for="input01">重复密码</label>
 				      <div class="controls">
 				        <input type="password" class="input-xlarge" name="password_confirm" id="input01" placeholde="请再次确认密码"><span>*</span>
 				      </div>
 				    </div>
-				    <div class="control-group">
+				    <div class="form-group">
 				      <label class="control-label" for="input01">Email</label>
 				      <div class="controls">
 				        <input type="text" class="input-xlarge" id="input01" name="email" placeholde="请输入常用邮箱"><span>*</span>
 				      </div>
 				    </div>
-				    <div class="control-group">
+				    <div class="form-group">
 				      <label class="control-label" for="input01">研究方向</label>
 				      <div class="controls">
                           <textarea rows="2" cols="40" class="input-xlarge" style="" id="input01" name="realm" placeholde="请输入您的研究方向"></textarea><span>*</span>
 				      </div>
 				    </div>
-				    <div class="control-group">
+				    <div class="form-group">
 				      <label class="control-label" for="input01">所属单位</label>
 				      <div class="controls">
                           <input type="text" class="input-xlarge" style="" id="input01" name="organization" placeholde="请输入您所在单位"><span>*</span>
