@@ -41,9 +41,12 @@ class Migration(SchemaMigration):
             ('ip', self.gf('django.db.models.fields.related.ForeignKey')(related_name='virtualmachine_set', null=True, to=orm['ipam.IPUsage'])),
             ('gateway_public_ip', self.gf('django.db.models.fields.related.ForeignKey')(related_name='gateway_set', null=True, to=orm['ipam.IPUsage'])),
             ('mac', self.gf('django.db.models.fields.CharField')(max_length=20, null=True)),
-            ('enable_dhcp', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('cpu', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('ram', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('hdd', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('enable_dhcp', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('slice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['slice.Slice'])),
-            ('flavor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Flavor'])),
+            ('flavor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Flavor'], null=True)),
             ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Image'])),
             ('server', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.Server'])),
             ('switch_port', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.SwitchPort'], null=True)),
@@ -51,6 +54,20 @@ class Migration(SchemaMigration):
             ('type', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('vt', ['VirtualMachine'])
+
+        # Adding model 'SSHKey'
+        db.create_table('vt_sshkey', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('slice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['slice.Slice'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('public_key', self.gf('django.db.models.fields.CharField')(max_length=500, blank=True)),
+            ('private_key', self.gf('django.db.models.fields.CharField')(max_length=2048, blank=True)),
+            ('fingerprint', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
+        ))
+        db.send_create_signal('vt', ['SSHKey'])
+
+        # Adding unique constraint on 'SSHKey', fields ['fingerprint']
+        db.create_unique('vt_sshkey', ['fingerprint'])
 
         # Adding model 'HostMac'
         db.create_table('vt_hostmac', (
@@ -63,6 +80,9 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
+        # Removing unique constraint on 'SSHKey', fields ['fingerprint']
+        db.delete_unique('vt_sshkey', ['fingerprint'])
+
         # Deleting model 'Image'
         db.delete_table('vt_image')
 
@@ -71,6 +91,9 @@ class Migration(SchemaMigration):
 
         # Deleting model 'VirtualMachine'
         db.delete_table('vt_virtualmachine')
+
+        # Deleting model 'SSHKey'
+        db.delete_table('vt_sshkey')
 
         # Deleting model 'HostMac'
         db.delete_table('vt_hostmac')
@@ -121,8 +144,11 @@ class Migration(SchemaMigration):
             'supernet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['ipam.Subnet']"})
         },
         'ipam.network': {
-            'Meta': {'ordering': "['id']", 'object_name': 'Network'},
+            'Meta': {'ordering': "['id']", 'unique_together': "(('island', 'type'),)", 'object_name': 'Network'},
+            'gw_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
+            'gw_mac': ('django.db.models.fields.CharField', [], {'max_length': '64', 'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'island': ('django.db.models.fields.related.ForeignKey', [], {'default': 'None', 'to': "orm['project.Island']", 'null': 'True', 'blank': 'True'}),
             'netaddr': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
             'type': ('django.db.models.fields.IntegerField', [], {})
         },
@@ -132,7 +158,7 @@ class Migration(SchemaMigration):
             'is_owned': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_used': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'netaddr': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '20'}),
-            'owner': ('django.db.models.fields.CharField', [], {'max_length': '60', 'unique': 'True', 'null': 'True'}),
+            'owner': ('django.db.models.fields.CharField', [], {'max_length': '100', 'unique': 'True', 'null': 'True'}),
             'size': ('django.db.models.fields.IntegerField', [], {}),
             'supernet': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['ipam.Network']"}),
             'update_time': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
@@ -167,6 +193,7 @@ class Migration(SchemaMigration):
         'project.project': {
             'Meta': {'object_name': 'Project'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Category']"}),
+            'created_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'islands': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Island']", 'symmetrical': 'False'}),
@@ -182,10 +209,9 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'unique': 'True', 'max_length': '15'}),
             'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
-            'mac': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True'}),
             'mem': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'os': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True'}),
+            'os': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'state': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'update_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
@@ -207,13 +233,11 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Switch'},
             'dpid': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'has_gre_tunnel': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'http_port': ('django.db.models.fields.IntegerField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15'}),
             'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'port': ('django.db.models.fields.IntegerField', [], {}),
             'slices': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['slice.Slice']", 'through': "orm['resources.SliceSwitch']", 'symmetrical': 'False'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
@@ -229,14 +253,17 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Slice'},
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_expired': ('django.db.models.fields.DateTimeField', [], {}),
-            'description': ('django.db.models.fields.TextField', [], {}),
+            'description': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
+            'failure_reason': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'islands': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Island']", 'through': "orm['slice.SliceIsland']", 'symmetrical': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Project']"}),
             'show_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'state': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+            'state': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'type': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'uuid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'unique': 'True', 'null': 'True'})
         },
         'slice.sliceisland': {
             'Meta': {'unique_together': "(('slice', 'island'),)", 'object_name': 'SliceIsland'},
@@ -271,17 +298,29 @@ class Migration(SchemaMigration):
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
             'version': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'})
         },
+        'vt.sshkey': {
+            'Meta': {'unique_together': "(('fingerprint',),)", 'object_name': 'SSHKey'},
+            'fingerprint': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
+            'private_key': ('django.db.models.fields.CharField', [], {'max_length': '2048', 'blank': 'True'}),
+            'public_key': ('django.db.models.fields.CharField', [], {'max_length': '500', 'blank': 'True'}),
+            'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"})
+        },
         'vt.virtualmachine': {
             'Meta': {'object_name': 'VirtualMachine'},
-            'enable_dhcp': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'flavor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Flavor']"}),
+            'cpu': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
+            'enable_dhcp': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'flavor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Flavor']", 'null': 'True'}),
             'gateway_public_ip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'gateway_set'", 'null': 'True', 'to': "orm['ipam.IPUsage']"}),
+            'hdd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Image']"}),
             'ip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'virtualmachine_set'", 'null': 'True', 'to': "orm['ipam.IPUsage']"}),
             'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
             'mac': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'ram': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'server': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.Server']"}),
             'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"}),
             'state': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
