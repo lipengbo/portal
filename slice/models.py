@@ -235,6 +235,18 @@ class Slice(models.Model):
                              num=1)
             nsc.save()
 
+    def checkband(self):
+        from plugins.openflow.models import Link
+        switch_ports = self.get_switch_ports
+        if Link.objects.filter(source__in=switch_ports, target__in=switch_ports).count() > 0:
+            return 1
+        else:
+            return 0
+#         for switch_port_src in switch_ports:
+#             for switch_port_dst in switch_ports:
+#                 if Link.objects.filter(source=switch_port_src, target=switch_port_dst).count() > 0:
+#                     return 1
+
     def delete(self, *args, **kwargs):
         import traceback
         try:
