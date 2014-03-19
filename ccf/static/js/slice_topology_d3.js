@@ -1043,11 +1043,11 @@ function topology_update_vm_state_o(vm_id, state){
     }
     var host = circle.selectAll('.host-node-icon');
     host.attr("xlink:href", function(d){ return static_url + d.icon});
-}
+ }
 
 function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
     //alert('here2');
-    topology_update_vm_state_o(vm_id, state)
+    topology_update_vm_state_o(vm_id, state);
     var nid = get_node_by_yid(switch_id, 'switch');
     if(nid>=0){
         port_info={name: port_name, port: port};
