@@ -72,21 +72,25 @@
                 </div>
 {% endblock %}
 		{% block body_base %}
-		    <div class="container">	        
-		    	{% block breadcrumb_base %}
+            {% block breadcrumb_base %}
                 {% if user.is_authenticated %}
-		        <ul class="breadcrumb">
-                    {% if user.is_superuser %}
-		                <li><span class="glyphicon glyphicon-home"></span><a href="{% url "home" %}">首页</a><span class="divider">/</span>
-                    {% else %}
-		                <li><span class="glyphicon glyphicon-home"></span><a href="{% url "project_manage" %}">首页</a><span class="divider">/</span>
-                    {% endif %}
-		            {% block breadcrumb %}
-		            {% endblock %}
-		            </li>
-		        </ul>
+                <div class="breadcrumb_defined">
+                    <div class="container-fluid">
+                        <ol class="breadcrumb">
+                            {% if user.is_superuser %}
+                            <li><a href="{% url "home" %}">首页</a>
+                            {% else %}
+                                <li><span class="glyphicon glyphicon-home"></span><a href="{% url "project_manage" %}">首页</a><span class="divider">/</span>
+                            {% endif %}
+                            {% block breadcrumb %}
+                            {% endblock %}
+                            </li>
+                        </ol>
+                    </div>
+                </div>
                 {% endif %}
-		        {% endblock %}
+            {% endblock %}
+		    <div class="container">	        
                 {% block messages %}
 		        {% include "_messages.html" %}
                 {% endblock %}
@@ -116,13 +120,12 @@
                     $("#accounts_logout").click(function(e) {
                         e.preventDefault();
                         $("#logoutModal").modal();
-                    });*/
+                    });
                     $('input').iCheck({
                         checkboxClass: 'icheckbox_square-blue',
                         radioClass: 'iradio_square-blue',
                         increaseArea: '20%'  // optional
-                    });
-                    $('')
+                    });*/
                     $('.btn-input.btn-delete').click(function(){
                         if($(this).hasClass('disabled')) {
                             return false;
