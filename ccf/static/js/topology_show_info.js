@@ -1,21 +1,24 @@
 // set up SVG for D3
 
 function initboard(){
-    $("div#topology_top").empty();
-    var str = "";
-    str = str + "<svg id='svgc' width='100%' height='100%' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
-    str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='15'>无负载信息</text>";
-    str = str + "<line x1='70' y1='10' x2='90' y2='10' style=\"stroke:black;stroke-width:2\"/>";
-    str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='35'>0~30</text>";
-    str = str + "<line x1='40' y1='30' x2='60' y2='30' style=\"stroke:green;stroke-width:2\"/>";
-    str = str + "<text style=\"fill:black;font-size:10pt\" x='70' y='35'>30~60</text>";
-    str = str + "<line x1='115' y1='30' x2='135' y2='30' style=\"stroke:yellow;stroke-width:2\"/>";
-    str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='50'>60~90</text>";
-    str = str + "<line x1='40' y1='45' x2='60' y2='45' style=\"stroke:orange;stroke-width:2\"/>";
-    str = str + "<text style=\"fill:black;font-size:10pt\" x='70' y='50'>90~100</text>";
-    str = str + "<line x1='115' y1='45' x2='135' y2='45' style=\"stroke:red;stroke-width:2\"/>";
-    str = str + "</svg>";
-    $("div#topology_top").append(str);
+    var checkband = $("#checkband").text();
+    if(checkband == 1){
+        $("div#topology_top").empty();
+        var str = "";
+        str = str + "<svg id='svgc' width='100%' height='100%' version='1.1' xmlns='http://www.w3.org/2000/svg'>";
+        str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='15'>无负载信息</text>";
+        str = str + "<line x1='70' y1='10' x2='90' y2='10' style=\"stroke:black;stroke-width:2\"/>";
+        str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='35'>0~30</text>";
+        str = str + "<line x1='40' y1='30' x2='60' y2='30' style=\"stroke:green;stroke-width:2\"/>";
+        str = str + "<text style=\"fill:black;font-size:10pt\" x='70' y='35'>30~60</text>";
+        str = str + "<line x1='115' y1='30' x2='135' y2='30' style=\"stroke:yellow;stroke-width:2\"/>";
+        str = str + "<text style=\"fill:black;font-size:10pt\" x='0' y='50'>60~90</text>";
+        str = str + "<line x1='40' y1='45' x2='60' y2='45' style=\"stroke:orange;stroke-width:2\"/>";
+        str = str + "<text style=\"fill:black;font-size:10pt\" x='70' y='50'>90~100</text>";
+        str = str + "<line x1='115' y1='45' x2='135' y2='45' style=\"stroke:red;stroke-width:2\"/>";
+        str = str + "</svg>";
+        $("div#topology_top").append(str);
+    }
 }
 function initboard2(){
     var top = $("#top").text();
