@@ -624,7 +624,6 @@ function start_or_stop(slice_id, flag){
             //alert("he");
             vm_id = $(this).attr('vm_id');
             url = $("#url").text();
-            //alert(vm_id);
             if($(this).hasClass("btn-success")){
                 ret = start_or_stop_vm(vm_id, "create");
                 if(ret){
@@ -632,7 +631,7 @@ function start_or_stop(slice_id, flag){
                     $(this).text("停止");
                     $("#btn_vnc"+vm_id).removeClass("disabled");
                     $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
-                    if(url == "slice_detail"){
+                    if(url=="slice_detail"){
                         document.getElementById('topologyiframe').contentWindow.topology_update_vm_state_o(vm_id, 1);
                     }
                 }     
@@ -644,7 +643,7 @@ function start_or_stop(slice_id, flag){
                     $("#btn_vnc"+vm_id).addClass("disabled");
                     //$(this).parent("td").prev("td").children(".icon_state").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                     $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
-                    if(url == "slice_detail"){
+                    if(url=="slice_detail"){
                         document.getElementById('topologyiframe').contentWindow.topology_update_vm_state_o(vm_id, 5);
                     }
                 }         
