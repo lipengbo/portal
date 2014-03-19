@@ -169,11 +169,11 @@
             <td>
                 
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
-                        <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn">{% trans "Monitor" %}</a>
+                        <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn btn-default">{% trans "Monitor" %}</a>
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser %}
                         {% if object.get_profile.state == 0 %}
-                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-default">
                                 审批
                             </a>
                         {% else %}
@@ -182,13 +182,13 @@
                             {% trans "Edit" %}
                             </a>
                             {% else %}
-                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-default">
                             {% trans "Edit" %}
                             </a>
                             {% endif %}
                         {% endif %}
                     {% else %}
-                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
+                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-default">
                         {% trans "Edit" %}
                     </a>
                     {% endif %}

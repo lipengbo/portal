@@ -105,12 +105,12 @@
                                     {% if vm.state == 8 %}
                                     <span id="vm_fc{{vm.id}}">
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>
+                                        <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                     </span>
                                     {%elif vm.state == 1 %} 
-                                        <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
+                                        <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn btn-default">监控</button>
                                     {%else%}
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>
+                                        <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                     {%endif%}
                                     {% if slice_obj.state == 1 %}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger disabled slice_state_del">删除</a>

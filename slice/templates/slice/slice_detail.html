@@ -258,12 +258,12 @@ img {
     					 		        {% if controller.host.state == 8 %}
                                         <span id="controller_fc">
                                             <input class="aa" type="checkbox" name="check_vm_ids" value="{{controller.host.id}}" checked style="display:none"/>
-                                            <button type="button" onclick="" class="btn" disabled>监控</button>
+                                            <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                         </span>
                                         {%elif controller.host.state == 1 %} 
-                                            <button type="button" onclick="document.location='/monitor/vm/{{ controller.host.id }}/'" class="btn">监控</button> 
+                                            <button type="button" onclick="document.location='/monitor/vm/{{ controller.host.id }}/'" class="btn btn-default">监控</button> 
                                         {%else%}
-                                            <button type="button" onclick="" class="btn" disabled>监控</button>
+                                            <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                         {%endif%}
     					 		    {%endif%}
 					 		    </td>
@@ -325,12 +325,12 @@ img {
                                     {% if gw.state == 8 %}
                                     <span id="gw_fc{{gw.id}}">
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{gw.id}}" checked style="display:none"/>
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>
+                                        <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                     </span>
                                     {%elif gw.state == 1 %} 
-                                        <button type="button" onclick="document.location='/monitor/vm/{{ gw.id }}/'" class="btn">监控</button>
+                                        <button type="button" onclick="document.location='/monitor/vm/{{ gw.id }}/'" class="btn btn-default">监控</button>
                                     {%else%}
-                                        <button type="button" onclick="" class="btn" disabled>监控</button> 
+                                        <button type="button" onclick="" class="btn btn-default" disabled>监控</button> 
                                     {%endif%}
                                 </td>
                             {%endif%}
@@ -397,12 +397,12 @@ img {
 					 		        {% if vm.state == 8 %}
                                     <span id="vm_fc{{vm.id}}">
                                         <input class="aa" type="checkbox" name="check_vm_ids" value="{{vm.id}}" checked style="display:none"/>
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>
+                                        <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                     </span>
                                     {%elif vm.state == 1 %} 
-                                        <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn">监控</button>
+                                        <button type="button" onclick="document.location='/monitor/vm/{{ vm.id }}/'" class="btn btn-default">监控</button>
                                     {%else%}
-                                        <button type="button" onclick="" class="btn" disabled>监控</button>
+                                        <button type="button" onclick="" class="btn btn-default" disabled>监控</button>
                                     {%endif%}
                                     {% if slice_obj.state == 1 %}
                                         <a href="{% url 'delete_vm' vm.id 0 %}" vm_id="{{vm.id}}" class="btn btn-danger disabled slice_state_del">删除</a>
@@ -466,7 +466,7 @@ img {
                   </table>
 	            </div>
 	            <div class="modal-footer">
-	              <button class="btn" data-dismiss="modal">取消</button>
+	              <button class="btn btn-default" data-dismiss="modal">取消</button>
 	              <button type="button" onclick="edit_description('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
 	            </div>
           </form>
@@ -532,7 +532,7 @@ img {
                 </table>
 	          </div>
 	          <div class="modal-footer">
-	              <button class="btn" data-dismiss="modal">取消</button>
+	              <button class="btn btn-default" data-dismiss="modal">取消</button>
 	              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
 	          </div>
             </form>
