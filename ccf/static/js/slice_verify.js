@@ -633,7 +633,7 @@ function start_or_stop(slice_id, flag){
                     $("#btn_vnc"+vm_id).removeClass("disabled");
                     $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
                     if(url == "slice_detail"){
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state_o(vm_id, 1);
                     }
                 }     
             } else {
@@ -645,7 +645,7 @@ function start_or_stop(slice_id, flag){
                     //$(this).parent("td").prev("td").children(".icon_state").removeClass("icon-ok-sign").addClass("icon-minus-sign");
                     $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
                     if(url == "slice_detail"){
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state_o(vm_id, 5);
                     }
                 }         
             }

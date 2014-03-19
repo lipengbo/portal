@@ -1030,7 +1030,8 @@ function random_refresh2 (update) {
 }  
 random_refresh2(0);
 
-function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
+
+function topology_update_vm_state_o(vm_id, state){
     //alert('here2');
     var nid = get_node_by_yid(vm_id, 'host');
     if(nid>=0){
@@ -1041,6 +1042,11 @@ function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
             nodes_data[nid].icon = 'img/host_down.png';
         }
     }
+}
+
+function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
+    //alert('here2');
+    topology_update_vm_state_o(vm_id, state)
     var host = circle.selectAll('.host-node-icon');
     host.attr("xlink:href", function(d){ return static_url + d.icon});
     var nid = get_node_by_yid(switch_id, 'switch');
@@ -1049,6 +1055,7 @@ function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
         nodes_data[nid].ports.push(port_info);
     }
 }
+
 
 function topology_del_vm(vm_id){
     var nid = get_node_by_yid(vm_id, 'host');
