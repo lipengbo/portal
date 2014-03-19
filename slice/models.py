@@ -70,6 +70,7 @@ class Slice(models.Model):
 
     def start(self):
         self.state = SLICE_STATE_STARTED
+        self.changed = 0
         self.save()
 
     def get_flowvisor(self):
@@ -203,6 +204,10 @@ class Slice(models.Model):
             else:
                 gws[0].enable_dhcp = False
             gws[0].save()
+            if flag == '1':
+                self.flowspace_changed(0)
+            else:
+                self.flowspace_changed(1)
             return True
         else:
             return False
