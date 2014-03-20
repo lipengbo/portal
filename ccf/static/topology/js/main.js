@@ -141,7 +141,7 @@ var svg = svg_obj.append('g')
     if (size == 'big') {
         rect_color = 'transparent';
     }
-initboard2();
+//initboard2();
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")

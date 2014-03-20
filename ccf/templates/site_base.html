@@ -77,27 +77,30 @@
                 <div class="breadcrumb_defined">
                     <div class="container-fluid">
                         <ol class="breadcrumb">
+                            <li>
                             {% if user.is_superuser %}
-                            <li><a href="{% url "home" %}">首页</a>
+                                <a href="{% url "home" %}">首页</a>
                             {% else %}
-                                <li><span class="glyphicon glyphicon-home"></span><a href="{% url "project_manage" %}">首页</a><span class="divider">/</span>
+                                <a href="{% url "project_manage" %}">首页</a>
                             {% endif %}
                             {% block breadcrumb %}
                             {% endblock %}
                             </li>
                         </ol>
+                        {% block extra_breadcrumb %}
+                        {% endblock %}
                     </div>
                 </div>
                 {% endif %}
             {% endblock %}
-		    <div class="container">	        
+		    <div class="container main">
                 {% block messages %}
 		        {% include "_messages.html" %}
                 {% endblock %}
-		         <div class="">	
+		         <div class="">
 		           <div class="main2">
     		        {% block body %}
-    		        {% endblock %}	
+    		        {% endblock %}
     		       </div>                
 		        </div>
 		    </div>
@@ -113,7 +116,7 @@
             <script src="{{ STATIC_URL}}js/jquery-ui-1.10.3.custom.min.js"></script>
             <script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
             <script src="{% static "pinax/js/theme.js" %}"></script>
-            <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+            <script src="{% static "js/default.js" %}"></script>
             <script>
                 $(document).ready(function(){
                     /*
@@ -205,12 +208,12 @@
 
     {% analytics %}
     {% block extra_body %}
-    	{% block footer_base %}
-            <footer>
-                {% block footer %}
-                    {% include "_footer.html" %}
-                {% endblock %}
-            </footer>
-        {% endblock %}
     {% endblock %}
 {% endblock %}
+    {% block footer_base %}
+        <footer id="footer">
+            {% block footer %}
+                {% include "_footer.html" %}
+            {% endblock %}
+        </footer>
+    {% endblock %}

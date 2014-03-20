@@ -10,20 +10,47 @@
         项目
 {% endblock %}
 {% block breadcrumb %}
-        项目
+        <li>项目</li>
+{% endblock %}
+
+{% block extra_breadcrumb %}
+            <form class="navbar-form navbar-right search_defined">
+                <div class="form-group">
+                  <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
+                 <a href="#"><i class="glyphicon glyphicon-search"></i></a>
+                </div>
+            </form>
 {% endblock %}
 
 {% block body %}
-        <div class="search">
-            <form class="form-search">
-              <div class="input-group">
-                  <input type="text" value="{{ query }}" name="query" value="" class="col-md-2 search-query">
-                  <button type="submit" class="btn btn-default">搜索</button>
-              </div>
-            </form>
-        </div>
-
-        <div class="fill_form">    
+<div class="row">
+            <div class="col-md-2 count_block">
+                <div class="squares">
+                    <span class="s_name">新增项目</span>
+                    <span class="s_num">25</span>
+                </div>
+                <div class="squares">
+                    <span class="s_name">全部项目</span>
+                    <span class="s_num">25</span>
+                </div>
+                <a href="javascript:void(0);" class="chart_btn active">
+                    年<span class="color_blue"></span>
+                </a>
+                <a href="javascript:void(0);" class="chart_btn">
+                    月<span class="color_green"></span>
+                </a>
+                <a href="javascript:void(0);" class="chart_btn">
+                    日<span class="color_red"></span>
+                </a>
+            </div>
+            <div class="col-md-10">
+                <div class="chart">
+                    <div class="chart_title">2014年每月新增项目数</div>
+                    <div id="container" style="min-width: 400px; height: 309px; margin: 0 auto"></div>
+                </div>
+            </div>
+</div>
+        <div class="fill_form">
             <fieldset>
                     {%if extent_html == "site_base.html" %}
                     <div class="well">
@@ -92,14 +119,12 @@
                     {% endif %}
                 {% endif %}
                 
-                <div class="row">
                 {%if projects %}
-                 <div id="list_show">
+                 <div id="list_show" class="project_list">
                      {% include "project/list_page.html" %}
                  </div>
                  {%endif%}
-                </div>
-            </fieldset>        
+            </fieldset>
         </div>
 {% endblock %}
 {% block extra_script %}

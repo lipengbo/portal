@@ -1,11 +1,16 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load project_tags %}
-<li class="col-md-3 project_list" {% if extent_html == "site_base.html" and user != project.owner %}style="background:#ddd;"{% endif %}>
-        <a href="{% url project_delete project.id %}?next={{ request.path }}" class="btn-delete close">×</a>
-        <div class="thumbnail">
-            <div class="logo_img"><img src="{% static project.category.image %}" /></div>
-            <h5>项目名称：{{ project.name }}<a href="{% url project_detail project.id %}" class="view_more_icon"><i class="glyphicon glyphicon-double-angle-right" title="点击查看"></i></a></h5>                              
-        </div>
-
-</li>
+                <div class="col-md-3">
+                    <div class="project_list_block {% if extent_html == 'site_base.html' and user != project.owner %}active{% endif %}">
+                        <a href="{% url project_detail project.id %}" class="view_more_icon">
+                            <div class="project_list_block_l"><img src="{% static project.category.image %}"></div>
+                            <div class="project_list_block_r">
+                                <h4>{{ project.category.name }}</h4>
+                                <span>项目名称：{{ project.name }}</span>                            
+                            </div>
+                        </a>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <a href="{% url project_delete project.id %}?next={{ request.path }}" class="close">×</a>
+                    </div>
+                </div>

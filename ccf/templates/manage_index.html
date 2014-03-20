@@ -4,226 +4,99 @@
 {% load staticfiles %}
 
 {% block head_title %}{% endblock %}
-{% block breadcrumb_base %}{% endblock %}
 {% block body_class %}home home-body{% endblock %}
-{% block body %}
-<div class="row margin_rows">
-    <div class="col-md-3">
-        <div class="nums_block" style="border:1px solid #3182ad;">
-          <a href="{% url "nexus_list" "project" "island" %}">
-            <div class="nums_top" style="background:#3398cc;">
-                <img src="{% static "img/node.png" %}" width="60" />                
-                <span class="total_nums">{{ total_islands }}</span>
-                <span class="total_name">设施</span>
-            </div>
-            <div class="nums_bottom" style="background:#0a5da3;">
-                <span>VIEW MORE</span>
-                <i class="glyphicon glyphicon-circle-arrow-right"></i>
-            </div>
-          </a>  
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="nums_block" style="border:1px solid #2fb157;">
-          <a href="{% url "project_index" %}">
-            <div class="nums_top" style="background:#34cc67;">
-                <img src="{% static "img/project.png" %}" width="60" />                
-                <span class="total_nums">{{ total_projects }}</span>
-                <span class="total_name">项目</span>
-            </div>
-            <div class="nums_bottom" style="background:#09a32b;">
-                <span>VIEW MORE</span>
-                <i class="glyphicon glyphicon-circle-arrow-right"></i>
-            </div>
-          </a>  
-        </div>
-    </div>  
-    <div class="col-md-3">
-        <div class="nums_block" style="border:1px solid #893080;">
-          <a href="{% url "slice_list" 0 0 %}">
-            <div class="nums_top" style="background:#993399;">
-                <img src="{% static "img/slice.png" %}" width="60" />
-                <span class="total_nums">{{slices.count}}</span>
-                <span class="total_name">虚网</span>
-            </div>
-            <div class="nums_bottom" style="background:#5c0b58;">
-                <span>VIEW MORE</span>
-                <i class="glyphicon glyphicon-circle-arrow-right"></i>
-            </div>
-          </a>  
-        </div>
-    </div>  
-    <div class="col-md-3">
-        <div class="nums_block" style="border:1px solid #e5b232;">
-          <a href="{% url "nexus_list" "auth" "user" %}">
-            <div class="nums_top" style="background:#ffcc33;">
-                <img src="{% static "img/user.png" %}" width="60" />
-                <span class="total_nums">{{ total_users }}</span>
-                <span class="total_name">用户</span>
-            </div>
-            <div class="nums_bottom" style="background:#fea30a;">
-                <span>VIEW MORE</span>
-                <i class="glyphicon glyphicon-circle-arrow-right"></i>
-            </div>
-          </a>  
-        </div>
-    </div>      
-</div>
-
-<div class="row margin_rows">
-    <div class="col-md-12">
-        <div class="tp_block">
-          <div class="tp_title">
-            <h4>全网物理拓扑<small>（网络拓扑链路通过SDN控制器实时获取）</small></h4>
-          </div>
-      <!--    <ul>
-              <li><span><b>链路负载（%）</b>0~30</span><div class="tp_bar" style="background:#267e28;"></div></li>
-              <li><span>30~60</span><div class="tp_bar" style="background:#f0f074;"></div></li>
-              <li><span>60~90</span><div class="tp_bar" style="background:#cfa14b;"></div></li>
-              <li><span>90~100</span><div class="tp_bar" style="background:#db270e;"></div></li>
-              <li><span>无数据</span><div class="tp_bar" style="background:#000;"></div></li>
-      </ul>  -->
-          <div class="row qwtp_count">
-              <div class="col-md-4">
-                  <div class="qwtp">
-                    <a href="{% url "nexus_list" "project" "city" %}">
-                      <div class="qwtp_tb">
-                          <img src="{% static "img/icon-01.png" %}" width="40" />
-                      </div>
-                      <div class="qwtp_nums">
-                          <p>{{ total_cities }}</p>
-                          <p class="qwtp_name">城市</p>
-                      </div>
+{% block breadcrumb_base %}
+<div class="manage_index">
+        <div class="container-fluid main">
+            <div class="row">
+                <div class="col-md-3">
+                    <a class="manage_index_block" href="{% url "nexus_list" "project" "island" %}">
+                        <div class="manage_index_block_l">
+                            <span class="manage_index_name">设施</span>
+                            <span>{{ total_islands }}</span>
+                        </div>
+                        <div class="manage_index_block_r">
+                            <img src="{% static "img/ic_ss.png" %}" style="opacity: 1;">
+                        </div>
                     </a>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="qwtp">
-                    <a href="{% url "nexus_list" "resources" "server" %}">
-                      <div class="qwtp_tb">
-                          <img src="{% static "img/icon-02.png" %}" width="40" />
-                      </div>
-                      <div class="qwtp_nums">
-                          <p>{{ total_servers }}</p>
-                          <p class="qwtp_name">服务器</p>
-                      </div>
+                </div>
+                <div class="col-md-3">
+                    <a class="manage_index_block" href="{% url "project_index" %}">
+                        <div class="manage_index_block_l">
+                            <span class="manage_index_name">项目</span>
+                            <span>{{ total_projects }}</span>
+                        </div>
+                        <div class="manage_index_block_r">
+                            <img src="{% static "img/ic_xm.png" %}" style="opacity: 1;">
+                        </div>
                     </a>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                  <div class="qwtp">
-                    <a href="{% url "nexus_list" "resources" "switch" %}">
-                      <div class="qwtp_tb">
-                          <img src="{% static "img/icon-03.png" %}" width="40" />
-                      </div>
-                      <div class="qwtp_nums">
-                          <p>{{ total_switches }}</p>
-                          <p class="qwtp_name">交换机</p>
-                      </div>      
-                    </a>                
-                  </div>
-              </div>             
-          </div>
-          <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true&size=big" width="100%" height="603px;" frameborder="0">
-          </iframe>            
-        </div>
+                </div>
+                <div class="col-md-3">
+                    <a class="manage_index_block" href="{% url "slice_list" 0 0 %}">
+                        <div class="manage_index_block_l">
+                            <span class="manage_index_name">虚网</span>
+                            <span>{{ slices.count}}</span>
+                        </div>
+                        <div class="manage_index_block_r">
+                            <img src="{% static "img/ic_xw.png" %}" style="opacity: 1;">
+                        </div>
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <a class="manage_index_block" href="{% url "nexus_list" "auth" "user" %}">
+                        <div class="manage_index_block_l">
+                            <span class="manage_index_name">用户</span>
+                            <span>{{ total_users }}</span>
+                        </div>
+                        <div class="manage_index_block_r">
+                            <img src="{% static "img/ic_yh.png" %}" style="opacity: 1;">
+                        </div>
+                    </a>
+                </div>
+            </div>    
+        </div>    
     </div>
-  <!--  <div class="col-md-6">
-        <div class="tp_block">
-            {%if slices%}
-            <div id="myCarousel" class="carousel slide carousel_defined">
-              // Carousel items 
-              <div class="carousel-inner">
-                {%for slice in slices%}
-                    {%if forloop.counter == 1 %}
-                        <div class="active item slice_topology">
-                    {%else%}
-                        <div class="item slice_topology">
-                    {%endif%}
-                        <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">
-                            <div class="row slice_list">
-                                <div class="col-md-5">
-                                    <div class="slice_left">
-                                        <img src="{% static slice.project.category.image %}" />
-                                        <ul>
-                                            <li><i class="glyphicon glyphicon-file-alt glyphicon glyphicon-large"></i><b>{{ slice.get_show_name }}</b></li>
-                                            <li><i class="glyphicon glyphicon-user glyphicon glyphicon-large"></i>{{ slice.owner }}</li>
-                                            <li><i class="glyphicon glyphicon-rss glyphicon glyphicon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
-                                        </ul>
-                                        <div class="circle_bar">
-                                            <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
-                                            <input readonly="readonly" class="knob" data-width="36" data-height="36"
-                                            data-min="0" data-max="100" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_switches.count}}">
-                                        </div>
-                                        <div class="circle_bar">
-                                            <canvas class="circle_canvas" id="vmCanvas{{slice.id}}" width="135" height="20" data-text="虚拟机（VM）"></canvas>
-                                            <input readonly="readonly" class="knob" data-width="36" data-height="36" 
-                                            data-min="0" data-max="100" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_common_vms.count}}">
-                                        </div>
-                                        <div class="circle_bar">
-                                            <canvas class="circle_canvas" id="ipCanvas{{slice.id}}" width="135" height="20" data-text="IP地址（IP）"></canvas>
-                                            <input readonly="readonly" class="knob" data-width="36" data-height="36" 
-                                            data-min="0" data-max="100" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_nw_num}}">
-                                        </div>
-                                        <div class="slice_date">
-                                            <i class="glyphicon glyphicon-calendar glyphicon glyphicon-large"></i>{{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
-                                        </div>
-                                    </div>        
-                                </div>
-                                <div class="col-md-7">
-                                    <div class="slice_right">
-                                        <div>
-                                        <iframe scrolling="no" id="topologyiframe" width="250" height="320" src="/slice/topology_d3/?slice_id={{slice.id}}&width=210&height=320" frameborder="0"></iframe>
-                                        </div>
-                                        <div class="slice_text">
-                                            {{slice.description}}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
+<div class="m_tuopu">
+        <div class="container-fluid">
+            <p class="tuopu_title">全网物理拓扑</p>
+        </div>
+        <div class="tuopu_frame">
+            <div class="frame_sj">
+            </div>
+            <div class="tuopu_sign_l">
+                <div class="tuopu_sign_img">
+                    负载（%）
+                    <img src="{% static "img/ic_quan.png" %}">
+                    <div class="tuopu_sign_num">
+                        <span>无</span>
+                        <span>0</span>
+                        <span>10</span>
+                        <span>30</span>
+                        <span>60</span>
+                        <span>90</span>
                     </div>
-                {%endfor%}
-              </div>
-              // Carousel nav 
-              <a class="carousel-control left control_defined" href="#myCarousel" data-slide="prev">&lsaquo;</a>
-              <a class="carousel-control right control_defined" href="#myCarousel" data-slide="next">&rsaquo;</a>
-            </div>     
-            {%else%}
-                <h4 class='text-center' style='margin-top:32%;'>
-                     <small><i>当前没有添加SLICE</i></small>
-                </h4>
-            {%endif%}  
-        </div>       
-    </div>  -->
-</div>
-
-<!--
-<div class="row">
-    <div class="col-md-6">
-        <div class="tp_block tp_charts" id = "show_server">
-            <div class="pull-right" style="margin:5px 10px 5px 0">
-                cpu:<span id="id_cpu_index"></span>%
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    内存:<span id="id_mem_index"></span>%
+                </div>
             </div>
-			<canvas id="manage_server_chart" width="460" height="210" style="margin-left:10px;"></canvas>			
-		</div>        
-    </div>
-    <div class="col-md-6">
-        <div class="tp_block tp_charts" id="show_switch">
-            <div class="pull-right" style="margin:5px 10px 5px 0">
-                                                    每秒接收量：<span id="id_port_recv_bps"></span>/S
-                                                    &nbsp;&nbsp;&nbsp;&nbsp;
-                                                    每秒发送量：<span id="id_port_send_bps"></span>/S 
+              <iframe src="/topology/?direct=true&no_parent=true&hide_filter=true&size=big" width="100%" height="603px;" frameborder="0">
+              </iframe>
+            <div class="tuopu_sign_r">
+                <a href="{% url "nexus_list" "project" "city" %}" class="tuopu_sign_block">
+                    城市
+                    <span>{{ total_cities }}</span>
+                </a>
+                <a href="{% url "nexus_list" "resources" "server" %}" class="tuopu_sign_block">
+                    服务器
+                    <span>{{ total_servers }}</span>
+                </a>
+                <a href="{% url "nexus_list" "resources" "switch" %}" class="tuopu_sign_block">
+                    交换机
+                    <span>{{ total_switches }}</span>
+                </a>
             </div>
-			<canvas id="port_perf_chart" width="460" height="210" style="margin-left:10px;"></canvas><br/>				
-
-		</div>
+        </div>
     </div>
-</div>
--->
-   
+{% endblock %}
+{% block body %}
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
