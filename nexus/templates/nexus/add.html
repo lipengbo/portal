@@ -20,7 +20,7 @@
 
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
-    <form class="form-horizontal" method="post" action="">
+    <form class="" method="post" action="">
         {% csrf_token %}
         {{ formset|crispy }}
         <div class="form-actions">
