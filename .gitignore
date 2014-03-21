@@ -4,7 +4,7 @@
 *.swp
 *.rbc
 *.pyc
-.ropeproject
+.ropeproject/
 logs
 dev.db
 ccf/site_media/
