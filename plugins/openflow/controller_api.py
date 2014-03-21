@@ -9,6 +9,25 @@ import logging
 LOG = logging.getLogger("CENI")
 
 
+def create_controller(slice_obj, controller_info):
+    """创建控制器
+    """
+    if slice_obj:
+        try:
+            if controller_info['controller_type'] == 'default_create':
+                controller = create_default_controller(slice_obj,
+                                                       controller_info['controller_sys'])
+            else:
+                controller = create_user_defined_controller(slice_obj,
+                                                            controller_info['controller_ip'],
+                                                            controller_info['controller_port'])
+            return controller
+        except Exception:
+            raise
+    else:
+        raise DbError("数据库异常")
+
+
 def create_add_controller(slice_obj, controller_info):
     """创建并添加slice控制器
     """
@@ -83,8 +102,11 @@ def create_default_controller(slice_obj, controller_sys):
             controller.save()
             return controller
         except Exception:
-#             import traceback
-#             print traceback.print_exc()
+            if vm:
+                try:
+                    vm.delete()
+                except:
+                    pass
             raise DbError("数据库异常！")
     else:
         raise DbError("数据库异常！")
@@ -105,7 +127,7 @@ def delete_controller(controller, flag):
                     controller.delete()
 
 
-def slice_change_controller(slice_obj, controller_info):
+def slice_change_controller1(slice_obj, controller_info):
     """slice更改控制器
     """
     LOG.debug('slice_change_controller')
@@ -145,5 +167,53 @@ def slice_change_controller(slice_obj, controller_info):
                 delete_controller(haved_controller, True)
             except:
                 pass
+    else:
+        raise DbError("数据库异常")
+
+
+@transaction.commit_manually
+def slice_change_controller(slice_obj, controller_info):
+    """slice更改控制器
+    """
+    LOG.debug('slice_change_controller')
+    if slice_obj:
+        try:
+            haved_controller = slice_obj.get_controller()
+            if controller_info['controller_type'] == 'default_create':
+                if haved_controller.name == controller_info['controller_sys']:
+                    if haved_controller.host.state != 9:
+                        return
+            else:
+                if haved_controller.name == 'user_define' and\
+                        haved_controller.ip == controller_info['controller_ip'] and\
+                        haved_controller.port == int(controller_info['controller_port']):
+                    return
+            controller_n = create_controller(slice_obj, controller_info)
+        except Exception:
+            transaction.rollback()
+            raise
+        else:
+            transaction.commit()
+        try:
+            slice_obj.remove_resource(haved_controller)
+            slice_add_controller(slice_obj, controller_n)
+            flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+                                             slice_obj.id, controller_n.ip,
+                                             controller_n.port)
+        except Exception, ex:
+            transaction.rollback()
+            try:
+                delete_controller(controller_n, True)
+            except:
+                pass
+            transaction.commit()
+            raise DbError(ex.message)
+        else:
+            transaction.commit()
+            try:
+                delete_controller(haved_controller, True)
+            except:
+                pass
+            transaction.commit()
     else:
         raise DbError("数据库异常")

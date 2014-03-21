@@ -1,7 +1,6 @@
 # coding:utf-8
 from communication.flowvisor_client import  do_updateFlowSpace, FlowvisorClient
 from slice.slice_exception import FlowvisorError, DbError
-from etc.config import flowvisor_or_cnvp
 from communication.cnvp_client import CnvpClient
 
 import logging
@@ -14,7 +13,7 @@ def flowvisor_add_slice(flowvisor, slice_name, controller, user_email):
     LOG.debug('flowvisor_add_slice')
     try:
         slice_name = "slice" + str(slice_name)
-        if flowvisor_or_cnvp == "cnvp":
+        if flowvisor.type == 1:
             print "cnvp"
             if flowvisor and controller:
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
@@ -38,7 +37,7 @@ def flowvisor_show_slice(flowvisor, slice_name):
     try:
         slice_name = "slice" + str(slice_name)
         if flowvisor:
-            if flowvisor_or_cnvp == "cnvp":
+            if flowvisor.type == 1:
                 print "cnvp"
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
                 return client.show_slice(slice_name)
@@ -58,7 +57,7 @@ def flowvisor_update_sice_controller(flowvisor, slice_name, controller_ip, contr
     try:
         slice_name = "slice" + str(slice_name)
         if flowvisor and slice_name and controller_ip and controller_port:
-            if flowvisor_or_cnvp == "cnvp":
+            if flowvisor.type == 1:
                 print "cnvp"
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
             else:
@@ -77,7 +76,7 @@ def flowvisor_update_slice_status(flowvisor, slice_name, status):
     try:
         slice_name = "slice" + str(slice_name)
         if flowvisor and slice_name:
-            if flowvisor_or_cnvp == "cnvp":
+            if flowvisor.type == 1:
                 print "cnvp"
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
                 if status:
@@ -100,7 +99,7 @@ def flowvisor_del_slice(flowvisor, slice_name):
     try:
         if flowvisor and slice_name:
             slice_name = "slice" + str(slice_name)
-            if flowvisor_or_cnvp == "cnvp":
+            if flowvisor.type == 1:
                 print "cnvp"
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
             else:
@@ -116,17 +115,17 @@ def flowvisor_add_port(flowvisor, slice_name, dpid, port):
     """cnvp上添加port
     """
     LOG.debug('flowvisor_add_port')
-    slice_name = "slice" + str(slice_name)
-    if flowvisor_or_cnvp == "cnvp":
-        print "cnvp"
+    try:
         if flowvisor:
-            client = CnvpClient(flowvisor.ip, flowvisor.http_port)
-            try:
+            slice_name = "slice" + str(slice_name)
+            if flowvisor.type == 1:
+                print "cnvp"
+                client = CnvpClient(flowvisor.ip, flowvisor.http_port)
                 client.add_port(slice_name, dpid, port)
-            except:
-                raise
         else:
             raise DbError("数据库异常")
+    except:
+        raise
 
 
 def flowvisor_del_port(flowvisor, slice_name, dpid, port):
@@ -134,7 +133,7 @@ def flowvisor_del_port(flowvisor, slice_name, dpid, port):
     """
     LOG.debug('flowvisor_del_port')
     slice_name = "slice" + str(slice_name)
-    if flowvisor_or_cnvp == "cnvp":
+    if flowvisor.type == 1:
         print "cnvp"
         if flowvisor:
             client = CnvpClient(flowvisor.ip, flowvisor.http_port)
@@ -154,7 +153,7 @@ def flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
     try:
         if flowvisor:
             slice_name = "slice" + str(slice_name)
-            if flowvisor_or_cnvp == "cnvp":
+            if flowvisor.type == 1:
                 print "cnvp"
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
                 client.add_flowspace(slice_name, slice_action,
@@ -197,7 +196,7 @@ def flowvisor_del_flowspace(flowvisor, slice_name, flowspace_name):
     try:
         if flowvisor:
             slice_name = "slice" + str(slice_name)
-            if flowvisor_or_cnvp == "cnvp":
+            if flowvisor.type == 1:
                 print "cnvp"
                 client = CnvpClient(flowvisor.ip, flowvisor.http_port)
                 client.delete_flowspace(slice_name, None)
@@ -215,7 +214,7 @@ def flowvisor_get_switches(flowvisor):
     """
     LOG.debug('flowvisor_get_switches')
     if flowvisor:
-        if flowvisor_or_cnvp == "cnvp":
+        if flowvisor.type == 1:
             print "cnvp"
             client = CnvpClient(flowvisor.ip, flowvisor.http_port)
         else:
@@ -233,7 +232,7 @@ def flowvisor_get_links(flowvisor):
     """
     LOG.debug('flowvisor_get_links')
     if flowvisor:
-        if flowvisor_or_cnvp == "cnvp":
+        if flowvisor.type == 1:
             print "cnvp"
             client = CnvpClient(flowvisor.ip, flowvisor.http_port)
         else:

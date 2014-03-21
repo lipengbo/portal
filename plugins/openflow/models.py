@@ -22,6 +22,11 @@ from resources.models import ServiceResource, Resource, \
         SwitchPort, Switch, Server, VirtualSwitch
 from slice.models import Slice
 
+FLOWVISOR = 0
+CNVP = 1
+FLOWVISOR_TYPES = ((FLOWVISOR, 'flowvisor'),
+               (CNVP, 'cnvp'),)
+
 
 class Controller(ServiceResource):
     username = models.CharField(max_length=20, verbose_name=_("username"))
@@ -52,6 +57,8 @@ class Flowvisor(ServiceResource):
         super(Flowvisor, self).__init__(*args, **kwargs)
 
     http_port = models.IntegerField(verbose_name=_("Http Port"))
+    type = models.IntegerField(choices=FLOWVISOR_TYPES,
+                               default=FLOWVISOR)
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)

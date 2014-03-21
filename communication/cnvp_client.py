@@ -37,6 +37,8 @@ def cnvp_service(cnvp_ip, cnvp_port, cmd):
     import traceback
 #     cnvp_ip = "192.168.5.36"
     if flowvisor_disable:
+        cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
+        print cmdline
         return [{"resultcode": 0, "resultmsg": "flowvisor_disable"}]
     try:
         cmdline = buildRequest('cnvp_jsonrpc_service', cmd)

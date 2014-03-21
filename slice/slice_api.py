@@ -19,7 +19,7 @@ from django.db import transaction
 import datetime
 import traceback
 import calendar
-from etc.config import gw_controller, flowvisor_or_cnvp
+from etc.config import gw_controller
 
 from plugins.vt.api import get_slice_gw_mac
 
@@ -186,20 +186,22 @@ def start_slice_api(slice_obj):
             gw = slice_obj.get_gw()
             if gw and gw.enable_dhcp and gw.state != 1:
                 raise DbError("请确保gateway已启动！")
+            flowvisor = slice_obj.get_flowvisor()
+            if flowvisor == None:
+                raise DbError("虚网启动异常！")
             try:
-                if flowvisor_or_cnvp == "cnvp":
+                if flowvisor.type == 1:
                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                                   slice_obj.id, False)
-                    update_slice_virtual_network(slice_obj)
+                    update_slice_virtual_network_cnvp(slice_obj)
                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                                   slice_obj.id, True)
                 else:
                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                                   slice_obj.id, True)
-                    update_slice_virtual_network(slice_obj)
+                    update_slice_virtual_network_flowvisor(slice_obj)
                 slice_obj.start()
             except Exception, ex:
-                transaction.rollback()
                 raise DbError("虚网启动失败！")
     except Exception, ex:
         transaction.rollback()
@@ -232,7 +234,7 @@ def add_flowspace(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
     try:
         arg_match = matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src,
                                          dl_dst, dl_type, nw_src, nw_dst,
-                                         nw_proto, nw_tos, tp_src, tp_dst)
+                                         nw_proto, nw_tos, tp_src, tp_dst, flowvisor.type)
         flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
                                 pwd, dpid, priority, arg_match)
     except:
@@ -268,28 +270,28 @@ def update_slice_virtual_network_cnvp(slice_obj):
             slice_nw = slice_obj.get_nw()
             for dpid in dpids:
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                                 slice_nw, slice_nw, "", "", "", "")
+                                 slice_nw, slice_nw, "", "", "", "", flowvisor.type)
                 flowvisor_add_flowspace(flowvisor, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
                                         100, arg_match)
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x806",
-                                 slice_nw, slice_nw, "", "", "", "")
+                                 slice_nw, slice_nw, "", "", "", "", flowvisor.type)
                 flowvisor_add_flowspace(flowvisor, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
                                         100, arg_match)
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                                 slice_nw, "other", "", "", "", "")
+                                 slice_nw, "other", "", "", "", "", flowvisor.type)
                 flowvisor_add_flowspace(flowvisor, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
                                         100, arg_match)
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                                 "other", slice_nw, "", "", "", "")
+                                 "other", slice_nw, "", "", "", "", flowvisor.type)
                 flowvisor_add_flowspace(flowvisor, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
@@ -299,7 +301,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
         if dhcp_tag:
             for dhcp_mac in dhcp_macs:
                 arg_match = matches_to_arg_match("", "", "", dhcp_mac['mac'], "", "0x800",
-                                 "0.0.0.0", "255.255.255.255", "", "", "", "")
+                                 "0.0.0.0", "255.255.255.255", "", "", "", "", flowvisor.type)
                 flowvisor_add_flowspace(flowvisor, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
@@ -345,7 +347,7 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                             default_flowspace.dl_dst, default_flowspace.dl_type,
                             default_flowspace.nw_src, default_flowspace.nw_dst,
                             default_flowspace.nw_proto, default_flowspace.nw_tos,
-                            default_flowspace.tp_src, default_flowspace.tp_dst)
+                            default_flowspace.tp_src, default_flowspace.tp_dst, flowvisor.type)
                         flowvisor_add_flowspace(flowvisor, flowspace_name,
                                                 slice_obj.id,
                                                 default_flowspace.actions, 'cdn%nf',
@@ -364,7 +366,7 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                         default_flowspace.dl_dst, default_flowspace.dl_type,
                         default_flowspace.nw_src, default_flowspace.nw_dst,
                         default_flowspace.nw_proto, default_flowspace.nw_tos,
-                        default_flowspace.tp_src, default_flowspace.tp_dst)
+                        default_flowspace.tp_src, default_flowspace.tp_dst, flowvisor.type)
                     flowvisor_add_flowspace(flowvisor, flowspace_name,
                                             slice_obj.id,
                                             default_flowspace.actions, 'cdn%nf',
@@ -372,19 +374,20 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                                             default_flowspace.priority, arg_match)
                 else:
                     if gw_controller and (switch_port.switch.dpid not in dpids):
-                        dpids.append(switch_port.switch.dpid)
                         arg_match = matches_to_arg_match(
                             None, default_flowspace.dl_vlan,
                             default_flowspace.dl_vpcp, default_flowspace.dl_src,
                             default_flowspace.dl_dst, default_flowspace.dl_type,
                             default_flowspace.nw_src, default_flowspace.nw_dst,
                             default_flowspace.nw_proto, default_flowspace.nw_tos,
-                            default_flowspace.tp_src, default_flowspace.tp_dst)
+                            default_flowspace.tp_src, default_flowspace.tp_dst, flowvisor.type)
                         flowvisor_add_flowspace(flowvisor, flowspace_name,
                                                 slice_obj.id,
                                                 default_flowspace.actions, 'cdn%nf',
                                                 switch_port.switch.dpid,
                                                 default_flowspace.priority, arg_match)
+            if switch_port.switch.dpid not in dpids:
+                dpids.append(switch_port.switch.dpid)
     except:
         raise
 
@@ -393,10 +396,14 @@ def update_slice_virtual_network(slice_obj):
     """更新slice的虚网，添加或删除交换机端口、网段、gateway、dhcp、vm后调用
     """
     print 'update_slice_virtual_network'
-    if flowvisor_or_cnvp == "cnvp":
-        update_slice_virtual_network_cnvp(slice_obj)
+    flowvisor = slice_obj.get_flowvisor()
+    if flowvisor:
+        if flowvisor.type == 1:
+            update_slice_virtual_network_cnvp(slice_obj)
+        else:
+            update_slice_virtual_network_flowvisor(slice_obj)
     else:
-        update_slice_virtual_network_flowvisor(slice_obj)
+        raise DbError("数据库异常!")
 
 
 def get_slice_topology(slice_obj):

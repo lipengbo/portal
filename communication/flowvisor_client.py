@@ -96,6 +96,7 @@ def makeMatch(matchStr):
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
     if flowvisor_disable:
+        print data
         return "success"
     try:
 #         flowvisor_url = "https://192.168.5.123:8181"

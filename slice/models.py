@@ -273,6 +273,8 @@ class Slice(models.Model):
 
     def flowspace_changed(self, flag):
         a = self.changed
+        if a == None:
+            return
         if flag == 0:
             if a & 0b0100 == 0:
                 a = a | 0b0100 & 0b1110
