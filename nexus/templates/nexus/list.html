@@ -183,8 +183,8 @@
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser %}
                         {% if object.get_profile.state == 0 %}
-                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn btn-default">
-                                审批
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="">
+                                <img src="{% static "img/btn_sp.png" %}" title="审批">
                             </a>
                         {% else %}
                             {% if object.get_profile.state == 1 %}

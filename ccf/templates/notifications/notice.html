@@ -1,43 +1,44 @@
 {% load url from future %}
 {% load common_tags %}
 {% load i18n %}
-<hr>
-<p class="checkboxs">
-    <input type="checkbox" name="notification_id" value="{{ notice.id }}">
-    {% if notice.unread %}
-    <a class="muted pull-right text-success" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ notice.action_object.action_url }}">
-        <i class="glyphicon glyphicon-chevron-right">
-        </i>
-         去处理
-    </a>
-    <i class="glyphicon glyphicon-envelope"></i>&nbsp;
-    {% else %}
-    <span class="text-success pull-right">已处理</span>
-    <i class="glyphicon glyphicon-envelope-open"></i>&nbsp;
-    {% endif %}
-    {% if notice.unread %}<b>{% endif%}
-    {{ notice.actor }}
-    {% trans notice.verb %}
-    {% if notice.target %}
-        <a href="{{ notice.target.absolute_url }}">{{ notice.target }}</a>
-    {% endif %}
-    {% if notice.unread %}</b>{% endif%}
-    <small class="muted">{{ notice.timesince }}{% trans "ago" %}</small>
-</p>
-{% if notice.description %}
-    <div class="well well-small">
-        {% if notice.description %}{{ notice.description|linebreaksbr }}{% endif %}
+<div class="checkboxs news_list">
+    <div class="news_list_top">
+        <input type="checkbox" name="notification_id" value="{{ notice.id }}">
+        {% if notice.unread %}
+        <a class="muted pull-right text-success" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ notice.action_object.action_url }}">
+            <i class="glyphicon glyphicon-circle-arrow-right">
+            </i>
+             去处理
+        </a>
+        <i class="glyphicon glyphicon-envelope"></i>&nbsp;
+        {% else %}
+        <span class="text-success pull-right">已处理</span>
+        <i class="glyphicon glyphicon-envelope"></i>&nbsp;
+        {% endif %}
+        {% if notice.unread %}<b>{% endif%}
+        {{ notice.actor }}
+        {% trans notice.verb %}
+        {% if notice.target %}
+            <a href="{{ notice.target.absolute_url }}">{{ notice.target }}</a>
+        {% endif %}
+        {% if notice.unread %}</b>{% endif%}
+        <small class="muted">{{ notice.timesince }}{% trans "ago" %}</small>
     </div>
-    {% comment %}
-        <div class="text-center actions">
-        {% for action in notice.action_object.actions %}
-        <a class="btn btn-{{ action.action_level }}" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ action.action_url|urlencode }}">{{ action.action_title }}</a>
-        {% endfor %}
+    {% if notice.description %}
+        <div class="news_list_bottom">
+            {% if notice.description %}{{ notice.description|linebreaksbr }}{% endif %}
         </div>
-    {% endcomment %}
-{% endif %}
-<div class="notice-actions">
-    {% for action in notice.data.actions %}
-      <a class="btn btn-default" href="{{ action.href }}">{{ action.title }}</a>
-    {% endfor %}
+        {% comment %}
+            <div class="text-center actions">
+            {% for action in notice.action_object.actions %}
+            <a class="btn btn-{{ action.action_level }}" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ action.action_url|urlencode }}">{{ action.action_title }}</a>
+            {% endfor %}
+            </div>
+        {% endcomment %}
+    {% endif %}
+    <div class="notice-actions">
+        {% for action in notice.data.actions %}
+          <a class="btn btn-default" href="{{ action.href }}">{{ action.title }}</a>
+        {% endfor %}
+    </div>
 </div>
