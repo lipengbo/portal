@@ -20,7 +20,8 @@
 
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
-    <form class="" method="post" action="">
+<div class="row">
+    <form class="col-md-5" method="post" action="">
         {% csrf_token %}
         {{ formset|crispy }}
         <div class="form-actions">
@@ -33,6 +34,7 @@
         </div>
 
     </form>
+</div>
 {% endwith %}
 {% endblock %}
 
