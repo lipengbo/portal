@@ -59,4 +59,15 @@ $(function(){
         $('form.search_defined').submit();
         return false;
     });
+    $('.checkboxs input').on('change', function(event){
+        if($(this).prop('checked')){
+            $('.action-btn').removeClass('disabled');
+        } else {
+            if($('.checkboxs input:checked').length == 0) {
+                $('.action-btn').addClass('disabled');
+            } else {
+                $('.action-btn').removeClass('disabled');
+            }
+        }
+    });
 });
