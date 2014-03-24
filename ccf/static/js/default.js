@@ -55,4 +55,8 @@ $(function(){
             }
         });    
     });
+    $('.glyphicon-search').click(function(){
+        $('form.search_defined').submit();
+        return false;
+    });
 });
