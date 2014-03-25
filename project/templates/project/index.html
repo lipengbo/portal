@@ -27,33 +27,34 @@
     <div class="row">
         <div class="col-md-2 count_block">
             <div class="squares">
-                <span class="s_name">{%if type == 0 %}新增虚网数
-                                {%else%}{% if type == 1 %}新删除失败虚网数
-                                {%else%}新删除虚网数{%endif%}{%endif%}</span>
-                <span class="s_num">{{new_num}}</span>
+                <span class="s_name">新增项目</span>
+                <span class="s_num">{{ new_projects_num }}</span>
             </div>
             <div class="squares">
-                <span class="s_name">{%if type == 0 %}虚网总数
-                                {%else%}{% if type == 1 %}删除失败虚网总数
-                                {%else%}已删除虚网总数{%endif%}{%endif%}</span>
-                <span class="s_num">{{total_num}}</span>
+                <span class="s_name">全部项目</span>
+                <span class="s_num">{{ total_projects}}</span>
             </div>
-            <a href="javascript:void(0);" class="chart_btn chart_year" onclick="refreshcountiframe('slice', 'year', {{type}});">
+            <a href="javascript:void(0);" class="chart_btn chart_year" onclick="refreshcountiframe('project', 'year');">
                 年<span class="color_blue"></span>
             </a>
-            <a href="javascript:void(0);" class="chart_btn chart_month" onclick="refreshcountiframe('slice', 'month', {{type}});">
+            <a href="javascript:void(0);" class="chart_btn chart_month" onclick="refreshcountiframe('project', 'month');">
                 月<span class="color_green"></span>
             </a>
-            <a href="javascript:void(0);" class="chart_btn active chart_day" onclick="refreshcountiframe('slice', 'day', {{type}});">
+            <a href="javascript:void(0);" class="chart_btn active chart_day" onclick="refreshcountiframe('project', 'day');">
                 日<span class="color_red"></span>
             </a>
         </div>
         <div class="col-md-10">
             <div class="chart">
-                <iframe scrolling="no" id="countiframe" width="100%" height="361" src="/slice/countiframe/?target=slice&type=day&stype={{type}}" frameborder="0"></iframe>
+                <iframe scrolling="no" id="countiframe" width="100%" height="361" src="/slice/countiframe/?target=project&type=day&stype=0" frameborder="0"></iframe>
             </div>      
         </div>
     </div>
+{%else%}
+<div class="well">
+    <h3 class="list_title">项目（Project）</h3>                        
+    <p class="list_lead">项目是SDN创新实验平台中用于组织和开展研究的载体，项目由若干实验和参与实验的研究人员组成。</p>                     
+</div> 
 {% endif %}
 
 {% if not projects %}

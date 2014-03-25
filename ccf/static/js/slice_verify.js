@@ -939,21 +939,3 @@ $('.start_dhcp').click(function(){
             set_dhcp(slice_id, 0);
         }
     }); 
-
-
-$('input').on('ifChecked', function(event){
-  //alert("here");
-  var band = document.getElementsByName("band");
-  for(var i=0;i<band.length;i++){  
-        if(band[i].checked){  
-            if(band[i].value=="up"){ 
-               // alert("here1"); 
-                document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);
-            }  
-            if(band[i].value=="down"){
-               // alert("here2");
-                document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);
-            }  
-        }   
-    }
-});

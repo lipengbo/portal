@@ -8,13 +8,13 @@
 {% block head_title %}虚网列表{% endblock %}
 {% block breadcrumb %}
     {%if extent_html == "site_base.html" %}
-        <a href="/project/">项目</a><span class="divider">/</span>
-        <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>  
-        虚网列表
+        <li><a href="/project/">项目</a></li>
+        <li><a href="/project/detail/{{ project.id }}/">项目详情</a></li>
+        <li>虚网列表</li>
     {%else%}
         {%if project%}
-        <a href="/project/">项目</a><span class="divider">/</span>
-        <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
+        <li><a href="/project/">项目</a></li>
+        <li><a href="/project/detail/{{ project.id }}/">项目详情</a></li>
         {%endif%}
         <li>虚网</li>
     {%endif%}
@@ -119,18 +119,6 @@
      {%endif%}
 {% endblock %}
 {% block extra_script %}
-<script> 
-   (function() {      
-     if (! 
-     /*@cc_on!@*/
-     0) return;
-     var e = "abbr, article, aside, audio, canvas, datalist, details, dialog, eventsource, figure, footer, header, hgroup, mark, menu, meter, nav, output, progress, section, time, video".split(', ');
-     var i= e.length;
-     while (i--){
-         document.createElement(e[i])
-     } 
-})() 
-</script>
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
