@@ -237,7 +237,7 @@ a.chart_btn span.color_red {
 	border-radius:5px;
 	overflow:hidden;
 	/*box-shadow: inset 0 -5px 0 #e04356;*/
-	padding-bottom:5px;
+	/*padding-bottom:5px;*/
 	margin-bottom:40px;
 }
 .chart_title {

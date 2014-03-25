@@ -2,58 +2,67 @@
 {% load staticfiles %}
 {% load project_tags %}
 {% load common_tags %}
-<li class="col-md-6 slice_topology slice_list" {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}>
-    {% has_perm user 'slice.delete_slice' slice %}
-    {% if has_perm %}
-    <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="btn-delete close">×</a>
-    {%endif%}
-    
-    {% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
-    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">{%else%}
-    {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
-    <a class="thumbnail" href="/slice/detail/{{ slice.id }}/">{%else%}
-    <div class="thumbnail">{%endif%}{%endif%}
-        <div class="row slice_list">
+
+{% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
+<div class="col-md-6" onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice.id }}/';">
+{%else%}
+{% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
+<div class="col-md-6" onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice.id }}/';">
+{%else%}
+<div class="col-md-6">
+{%endif%}{%endif%}
+    <div {% if project and user != slice.owner %}class="slice_list_block active"{%else%}class="slice_list_block"{% endif %}>
+        <div class="row">
             <div class="col-md-5">
-                <div class="slice_left">
-                    <div class="top_img"><img src="{% static slice.project.category.image %}" /></div>
-                    <ul>
-                        <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="glyphicon glyphicon-file-alt glyphicon glyphicon-large"></i><b>{{ slice.get_show_name }}</b></li>
-                        <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="glyphicon glyphicon-user glyphicon glyphicon-large"></i>{{ slice.owner }}</li>
-                        <li {% if project and user != slice.owner %}style="background:#ddd;"{% endif %}><i class="glyphicon glyphicon-rss glyphicon glyphicon-large"></i>{%if slice.state == 0 %}<span class="label label-important">off</span>{%else%}<span class="label label-success">on</span>{%endif%}</li>
-                    </ul>
-                    <div class="circle_bar">
-                        <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="135" height="20" data-text="交换机（SW）"></canvas>
-                        <input readonly="readonly" class="knob" data-width="36" data-height="36"
-                        data-min="0" data-max="100" data-fgcolor="#fe0000" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_switches.count}}">
+                <div class="slice_list_block_l">
+                    <div class="slice_logo">
+                        <img src="{% static slice.project.category.image %}" />
+                        {{slice.project.category.name }}
                     </div>
-                    <div class="circle_bar">
-                        <canvas class="circle_canvas" id="vmCanvas{{slice.id}}" width="135" height="20" data-text="虚拟机（VM）"></canvas>
-                        <input readonly="readonly" class="knob" data-width="36" data-height="36" 
-                        data-min="0" data-max="100" data-fgcolor="#ff9930" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_common_vms.count}}">
+                    <p class="slice_detail">
+                        <i class="glyphicon glyphicon-list-alt"></i>
+                        {{ slice.get_show_name }}
+                    </p>
+                    <p class="slice_detail">
+                        <i class="glyphicon glyphicon-user"></i>
+                        {{ slice.owner }}
+                    </p>
+                    <p class="slice_detail">
+                        {%if slice.state == 0 %}
+                        <i class="glyphicon glyphicon-off"></i>
+                        <span class="slice_off">off</span>
+                        {%else%}
+                        <i class="glyphicon glyphicon-on"></i>
+                        <span class="slice_off">on</span>
+                        {%endif%}
+                    </p>
+                    <div class="circle_bars">
+                        <div class="circle_bar">
+                            <canvas class="circle_canvas" id="swCanvas{{slice.id}}" width="120" height="20" data-text="交换机（SW）"></canvas>
+                            <input class="knob" data-fgColor="#c22139" data-thickness=".2" data-readOnly=true value="{{slice.get_switches.count}}" data-min="0" data-max="100">
+                        </div>
+                        <div class="circle_bar">
+                            <canvas class="circle_canvas" id="vmCanvas{{slice.id}}" width="120" height="20" data-text="虚拟机（VM）"></canvas>
+                            <input class="knob" data-fgColor="#e4970a" data-thickness=".2" data-readOnly=true value="{{slice.get_common_vms.count}}" data-min="0" data-max="100">
+                        </div>
+                        <div class="circle_bar">
+                            <canvas class="circle_canvas" id="ipCanvas{{slice.id}}" width="120" height="20" data-text="IP地址（IP）"></canvas>
+                            <input class="knob" data-fgColor="#4a97ad" data-thickness=".2" data-readOnly=true value="{{slice.get_nw_num}}" data-min="0" data-max="100">
+                        </div>
                     </div>
-                    <div class="circle_bar">
-                        <canvas class="circle_canvas" id="ipCanvas{{slice.id}}" width="135" height="20" data-text="IP地址（IP）"></canvas>
-                        <input readonly="readonly" class="knob" data-width="36" data-height="36" 
-                        data-min="0" data-max="100" data-fgcolor="#00ccff" data-bgcolor="#cccccc" data-thickness=".2" value="{{slice.get_nw_num}}">
-                    </div>
-                    <div class="slice_date">
-                        <i class="glyphicon glyphicon-calendar glyphicon glyphicon-large"></i>{{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
-                    </div>
-                </div>        
-            </div>
-            <div class="col-md-7">
-                <div class="slice_right">
-                    <div>
-                    <iframe scrolling="no" id="topologyiframe" width="270" height="325" src="/slice/topology_d3/?slice_id={{slice.id}}&width=230&height=325&top=0&band=0" frameborder="0"></iframe>
-                    </div>
+                    <p class="slice_detail_btm">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                        {{slice.date_created|date:"Y.m.d"}} - {{slice.date_expired|date:"Y.m.d"}}
+                    </p>
                 </div>
             </div>
+            <div class="col-md-7"><iframe scrolling="no" id="topologyiframe" width="290" height="330" src="/slice/topology_d3/?slice_id={{slice.id}}&width=290&height=330&top=0&band=0" frameborder="0"></iframe></div>                             
         </div>
-    
-    {% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
-    </a>{%else%}
-    {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
-    </a>{%else%}
-    </div>{%endif%}{%endif%}
-</li>
+        {% has_perm user 'slice.delete_slice' slice %}
+        {% if has_perm %}
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        {%endif%}
+    </div>
+</div>
+
+

@@ -16,167 +16,139 @@
         <a href="/project/">项目</a><span class="divider">/</span>
         <a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
         {%endif%}
-        虚网
+        <li>虚网</li>
     {%endif%}
 {% endblock %}
 
-{% block body %}
 
-    <div class="search">
+{% block extra_breadcrumb %}
+    <form class="navbar-form navbar-right search_defined" role="search">
         {%if extent_html == "admin_base.html" %}
-            {%if not project%}
-            <form class="form-inline" style="float:left;">
-                <label>虚网类型：</label>
-                <select name="slice_type" id="slice_type" onchange="slice_type_change()">
-                    <option value="0" {%if type == 0 %}selected{%endif%}>正常运行</option>
-                    <option value="1" {%if type == 1 %}selected{%endif%}>删除失败</option>
-                    <option value="2" {%if type == 2 %}selected{%endif%}>已删除</option>          
-                </select>
-            </form>
-            {%endif%}
+        {%if not project%}
+        <div class="form-group">
+            虚网类型
+            <select class="form-control" name="slice_type" id="slice_type" onchange="slice_type_change()">
+                <option value="0" {%if type == 0 %}selected{%endif%}>正常运行</option>
+                <option value="1" {%if type == 1 %}selected{%endif%}>删除失败</option>
+                <option value="2" {%if type == 2 %}selected{%endif%}>已删除</option>          
+            </select>
+        </div>
         {%endif%}
-        <form class="form-search">
-          <div class="input-group">
-              <input type="text" value="{{ query }}" name="query" id="query" class="col-md-2 search-query">
-              <button type="submit" class="btn btn-default" >搜索</button>
-          </div>
-        </form>
-    </div>
-    <div class="fill_form">
-        <fieldset>
-            {%if extent_html == "site_base.html" %}
-                    <div class="well">
-                    <h3 class="list_title">我的虚网</h3>
-                    <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
-                    </div> 
-                {%else%}
-                    {%if project%}
-                        <div class="well">
-                        <h3 class="list_title">我的虚网</h3>
-                        <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
-                        </div> 
-                    {%else%}
-                        {%if type == 1 %}      
-                             <legend>
-                                 <div class="title_word_bg">
-                                                          虚网（失败）
-                                       <div class="triangle"></div> 
-                                 </div>                        
-                                 </legend>
-                        {%else%}
-                             {% if type == 2 %}
-                                 <legend>
-                                    <div class="title_word_bg">
-                                                          虚网（已删除）
-                                       <div class="triangle"></div> 
-                                    </div>                          
-                                 </legend>
-                             {%else%}
-                                <legend>
-                                    <div class="title_word_bg">
-                                                          虚网（正常）
-                                       <div class="triangle"></div> 
-                                    </div>
-                                 </legend>
-                             {%endif%}
-                        {%endif%}
-                        <div class="row countschart">
-                            <div class="col-md-2 counts">
-                                <div class="counts_block">
-                                    <p><img src="{% static "img/file-01.png" %}"  /></p>
-                                    <p class="counts_block_title">
-                                    {%if type == 0 %}新增虚网数
+        {%endif%}
+        <div class="form-group">
+             <input placeholder="搜索" type="text" value="{{ query }}" name="query" class="form-control search-query">
+             <a href="#"><i class="glyphicon glyphicon-search"></i></a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block body %}
+{%if extent_html == "site_base.html" %}
+    <div class="well">
+    <h3 class="list_title">我的虚网</h3>
+    <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
+    </div> 
+{%else%}
+    {%if project%}
+        <div class="well">
+        <h3 class="list_title">我的虚网</h3>
+        <p class="list_lead">虚网是CCF中用于提供研究人员进行实验的最小独立容器，虚网由实验所需要的计算和网络资源组成。</p>
+        </div> 
+    {%else%}
+        <div class="row slice_working_block">
+            <div class="col-md-2 count_block">
+                <div class="squares">
+                    <span class="s_name">{%if type == 0 %}新增虚网数
                                     {%else%}{% if type == 1 %}新删除失败虚网数
-                                    {%else%}新删除虚网数{%endif%}{%endif%}
-                                    </p>
-                                    <p class="counts_block_nums">{{new_num}}</p>
-                                </div>
-                                <div class="counts_block">
-                                    <p><img src="{% static "img/file-02.png" %}"  /></p>
-                                    <p class="counts_block_title">
-                                    {%if type == 0 %}虚网总数
+                                    {%else%}新删除虚网数{%endif%}{%endif%}</span>
+                    <span class="s_num">{{new_num}}</span>
+                </div>
+                <div class="squares">
+                    <span class="s_name">{%if type == 0 %}虚网总数
                                     {%else%}{% if type == 1 %}删除失败虚网总数
-                                    {%else%}已删除虚网总数{%endif%}{%endif%}
-                                    </p>
-                                    <p class="counts_block_nums">{{total_num}}</p>
-                                </div>                                                 
-                            </div>                        
-                            <div class="col-md-10">
-                                <iframe scrolling="no" id="countiframe" width="100%" height="182" src="/slice/countiframe/?target=slice&type=day&stype={{type}}" frameborder="0"></iframe>
-                                <div id="countbutton">
-                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="100%" height="30">
-                                <g class="highcharts-legend" zIndex="7" transform="translate(325,0)">
-                                <rect rx="5" ry="5" fill="white" x="0.5" y="0.5" width="168" height="24" stroke="#CCC" stroke-width="1" visibility="visible"></rect>
-                                <g zIndex="1">
-                                <g>
-                                <g class="highcharts-legend-item" zIndex="1" transform="translate(8,3)">
-                                    <text x="30" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;cursor:pointer;color:#274b6d;fill:#274b6d;" text-anchor="start" zIndex="2">
-                                    <tspan x="30" onclick="refreshcountiframe('slice', 'year', {{type}});"> 年</tspan>
-                                    </text>
-                                    <rect rx="2" ry="2" fill="#8bbc21" style="cursor:pointer" x="0" y="4" width="25" height="12" zIndex="3" onclick="refreshcountiframe('slice', 'year', {{type}});"></rect>
-                                </g>
-                                <g class="highcharts-legend-item" zIndex="1" transform="translate(64.28125,3)">
-                                    <text x="30" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;cursor:pointer;color:#274b6d;fill:#274b6d;" text-anchor="start" zIndex="2">
-                                    <tspan x="30" onclick="refreshcountiframe('slice', 'month', {{type}});"> 月</tspan>
-                                    </text>
-                                    <rect rx="2" ry="2" fill="#0d233a" style="cursor:pointer" x="0" y="4" width="25" height="12" zIndex="3" onclick="refreshcountiframe('slice', 'month', {{type}});"></rect>
-                                </g>
-                                <g class="highcharts-legend-item" zIndex="1" transform="translate(120.5625,3)">
-                                    <text x="30" y="15" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Verdana, Arial, Helvetica, sans-serif;font-size:12px;cursor:pointer;color:#274b6d;fill:#274b6d;" text-anchor="start" zIndex="2">
-                                    <tspan x="30" onclick="refreshcountiframe('slice', 'day', {{type}});"> 日</tspan>
-                                    </text>
-                                    <rect rx="2" ry="2" fill="#2f7ed8" style="cursor:pointer" x="0" y="4" width="25" height="12" zIndex="3" onclick="refreshcountiframe('slice', 'day', {{type}});"></rect>
-                                </g>
-                                </g>
-                                </g>
-                                </g>
-                                </svg>
-                                </div>
-                            </div>     
-                        </div>
-                        
-                        
-                    {%endif%}
-                {%endif%}
-             <div class="clear" style="display: none" >
-                {%if extent_html == "site_base.html"%}
-                    <p id="slice_show">0</p>
-                {%else%}
-                    {%if project %}
-                        <p id="slice_show">0</p>
-                    {%else%}
-                        <p id="slice_show">1</p>
-                    {%endif%}
-                {%endif%}
-             </div>
-             {% if not slices %}
-                {%if query %}
-                <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
-                {%else%}
-                <p class="alert alert-info">
-                    {%if type == 0 %}当前没有正常运行的虚网{%endif%}
-                    {%if type == 1 %}当前没有删除失败的虚网{%endif%}
-                    {%if type == 2 %}当前没有已删除的虚网{%endif%}
-                </p>
-                {%endif%}
-             {% endif %}
-             <div class="row">
-                 {%if slices %}
-                     <div id="list_show">
-                         {% include "slice/list_page.html" %}
-        		     </div>
-    		     {%endif%}
-		     </div>
-         </fieldset>
-    </div>
+                                    {%else%}已删除虚网总数{%endif%}{%endif%}</span>
+                    <span class="s_num">{{total_num}}</span>
+                </div>
+                <a href="javascript:void(0);" class="chart_btn chart_year" onclick="refreshcountiframe('slice', 'year', {{type}});">
+                    年<span class="color_blue"></span>
+                </a>
+                <a href="javascript:void(0);" class="chart_btn chart_month" onclick="refreshcountiframe('slice', 'month', {{type}});">
+                    月<span class="color_green"></span>
+                </a>
+                <a href="javascript:void(0);" class="chart_btn active chart_day" onclick="refreshcountiframe('slice', 'day', {{type}});">
+                    日<span class="color_red"></span>
+                </a>
+            </div>
+            <div class="col-md-10">
+                <div class="chart">
+                    <iframe scrolling="no" id="countiframe" width="100%" height="361" src="/slice/countiframe/?target=slice&type=day&stype={{type}}" frameborder="0"></iframe>
+                </div>      
+            </div>
+        </div>
+    {%endif%}
+{%endif%}
+<div class="clear" style="display: none" >
+    {%if extent_html == "site_base.html"%}
+        <p id="slice_show">0</p>
+    {%else%}
+        {%if project %}
+            <p id="slice_show">0</p>
+        {%else%}
+            <p id="slice_show">1</p>
+        {%endif%}
+    {%endif%}
+ </div>
+     
+ {% if not slices %}
+    {%if query %}
+    <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+    {%else%}
+    <p class="alert alert-info">
+        {%if type == 0 %}当前没有正常运行的虚网{%endif%}
+        {%if type == 1 %}当前没有删除失败的虚网{%endif%}
+        {%if type == 2 %}当前没有已删除的虚网{%endif%}
+    </p>
+    {%endif%}
+ {% endif %}
+ 
+ 
+     {%if slices %}
+         <div id="list_show">
+             {% include "slice/list_page.html" %}
+	     </div>
+     {%endif%}
 {% endblock %}
 {% block extra_script %}
+<script> 
+   (function() {      
+     if (! 
+     /*@cc_on!@*/
+     0) return;
+     var e = "abbr, article, aside, audio, canvas, datalist, details, dialog, eventsource, figure, footer, header, hgroup, mark, menu, meter, nav, output, progress, section, time, video".split(', ');
+     var i= e.length;
+     while (i--){
+         document.createElement(e[i])
+     } 
+})() 
+</script>
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
-<script src="{{ STATIC_URL}}js/slice_list.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
+<script src="{{ STATIC_URL}}js/circlebar_defined.js"></script>
 <script type="text/javascript">
     function refreshcountiframe(target, type, stype){
+        $(".chart_btn").removeClass("active");
+        if(type == 'year'){
+            $(".chart_year").addClass("active");
+        }
+        else{
+            if(type == 'month'){
+                $(".chart_month").addClass("active");
+            }
+            else{
+                $(".chart_day").addClass("active");
+            }
+        }
         document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype="+stype; 
     }
     function slice_type_change(){

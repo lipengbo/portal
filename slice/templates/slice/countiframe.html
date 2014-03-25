@@ -1,7 +1,11 @@
 {% load i18n %}
 {% load staticfiles %}
-<body style="margin: 0">
-<div id="container" style="min-width: 400px; height: 182px; margin: 0 auto"></div>
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{{ STATIC_URL}}css/own.css" />
+<link rel="stylesheet" href="{{ STATIC_URL}}css/theme-blue.css" />
+<body style="margin: 0; padding-top: 0">
+<div class="chart_title" id="chart_title"></div>
+<div id="container" style="min-width: 400px; height: 309px; margin: 0 auto"></div>
 <div class="clear" style="display: none" >
     <p id="target">{{target}}</p>
     <p id="type">{{type}}</p>
@@ -10,7 +14,8 @@
 </body>
 <script src="{{ STATIC_URL}}topology/lib/jquery.min.js"></script>
 <script src="{{ STATIC_URL}}js/highcharts/highcharts.js"></script>
-<script src="{{ STATIC_URL}}js/highcharts/modules/exporting.js"></script>
+<script src="{{ STATIC_URL}}js/highcharts/exporting.js"></script>
+<script src="{{ STATIC_URL}}js/highcharts/grid.js"></script>
 <script type="text/javascript">
     $(function () {
         //alert("in");
@@ -88,72 +93,55 @@
                 title = year + "年" + month + "月每日"+showtype+"虚网数";
             }
         }
+        $("div#chart_title").empty();
+        str = title;
+        $("div#chart_title").append(str);
+        
         $('#container').highcharts({
             chart: {
-                type: 'column',
-                margin: [ 50, 50, 20, 50]
+                type: 'line',
+                marginRight: 25,
+                marginBottom: 25
             },
             colors: coler,
             title: {
-                text: title,
-                y: 5
+                text: '',
+                x: -20 //center
             },
-            exporting: {
-                enabled: false
+            subtitle: {
+                text: '',
+                x: -20
             },
             xAxis: {
                 categories: show_dates,
-                labels: {
-                    rotation: 0,
-                    align: 'center',
-                    style: {
-                        fontSize: '11px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
             },
             yAxis: {
-                min: 0,
                 title: {
                     text: name + '数(个)'
-                }
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: ''
+                }]
             },
             tooltip: {
-                shared: true,
-                useHTML: true,
-                headerFormat: titshow,
-            //    pointFormat: '<tr><td style="color: {series.color}">{series.name}: </td>' +
-            //    '<td style="text-align: right"><b>{point.y}个</b></td></tr>',
-            //    footerFormat: '</table>',
-            //    valueDecimals: 2
+                valueSuffix: '个'
             },
             legend: {
-                enabled: false
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
             },
-            //tooltip: {
-            //    formatter: function() {
-            //        return '<b>'+ this.x +'</b><br/>'+
-            //            'Population in 2008: '+ Highcharts.numberFormat(this.y, 1) +
-             //           ' millions';
-            //    }
-           // },
             series: [{
                 name: name,
                 data: show_nums,
-                dataLabels: {
-                    enabled: true,
-                    rotation: -90,
-                    color: '#FFFFFF',
-                    align: 'right',
-                    x: 4,
-                    y: 5,
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
-                    }
-                }
             }]
         });
-        
+            
     });
-    </script>
+   
+</script>
