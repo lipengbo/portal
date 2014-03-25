@@ -34,21 +34,20 @@
                     <span class="s_name">全部项目</span>
                     <span class="s_num">{{ total_projects }}</span>
                 </div>
-                <a href="javascript:void(0);" class="chart_btn active">
+                <a href="javascript:void(0);" class="chart_btn chart_year" onclick="refreshcountiframe('project', 'year', 0);">
                     年<span class="color_blue"></span>
                 </a>
-                <a href="javascript:void(0);" class="chart_btn">
+                <a href="javascript:void(0);" class="chart_btn chart_month" onclick="refreshcountiframe('project', 'month', 0);">
                     月<span class="color_green"></span>
                 </a>
-                <a href="javascript:void(0);" class="chart_btn">
+                <a href="javascript:void(0);" class="chart_btn active chart_day" onclick="refreshcountiframe('project', 'day', 0);">
                     日<span class="color_red"></span>
                 </a>
             </div>
             <div class="col-md-10">
                 <div class="chart">
-                    <div class="chart_title">2014年每月新增项目数</div>
-                    <div id="container" style="min-width: 400px; height: 309px; margin: 0 auto"></div>
-                </div>
+                    <iframe scrolling="no" id="countiframe" width="100%" height="361" src="/slice/countiframe/?target=project&type=day&stype=0" frameborder="0"></iframe>
+                </div>      
             </div>
 </div>
 {% endif %}
@@ -70,10 +69,29 @@
 {% endblock %}
 
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
+<script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
+<script src="{{ STATIC_URL}}js/circlebar_defined.js"></script>
 <script type="text/javascript">
-    function refreshcountiframe(target, type){
-        document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype=0"; 
+    function refreshcountiframe(target, type, stype){
+        $(".chart_btn").removeClass("active");
+        if(type == 'year'){
+            $(".chart_year").addClass("active");
+        }
+        else{
+            if(type == 'month'){
+                $(".chart_month").addClass("active");
+            }
+            else{
+                $(".chart_day").addClass("active");
+            }
+        }
+        document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype="+stype; 
+    }
+    function slice_type_change(){
+        var slice_type = document.getElementById("slice_type");
+        location.href = "http://" + window.location.host + "/slice/list/0/"+slice_type.value+"/"; 
     }
 </script>
 {% endblock %}
