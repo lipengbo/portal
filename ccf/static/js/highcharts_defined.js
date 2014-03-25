@@ -1,6 +1,5 @@
 // JavaScript Document
 $(function () {
-        return;
         //alert("in");
         var target = $("#target").text();
         var type = $("#type").text();
@@ -81,51 +80,51 @@ $(function () {
         $("div#chart_title").append(str);
         
         $('#container').highcharts({
-        chart: {
-            type: 'line',
-            marginRight: 25,
-            marginBottom: 25
-        },
-        colors: coler,
-        title: {
-            text: '',
-            x: -20 //center
-        },
-        subtitle: {
-            text: '',
-            x: -20
-        },
-        xAxis: {
-            categories: show_dates,
-        },
-        yAxis: {
-            title: {
-                text: name + '数(个)'
+            chart: {
+                type: 'line',
+                marginRight: 25,
+                marginBottom: 25
             },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: ''
+            colors: coler,
+            title: {
+                text: '',
+                x: -20 //center
+            },
+            subtitle: {
+                text: '',
+                x: -20
+            },
+            xAxis: {
+                categories: show_dates,
+            },
+            yAxis: {
+                title: {
+                    text: name + '数(个)'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: ''
+                }]
+            },
+            tooltip: {
+                valueSuffix: '个'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -10,
+                y: 100,
+                borderWidth: 0
+            },
+            series: [{
+                name: name,
+                data: show_nums,
             }]
-        },
-        tooltip: {
-            valueSuffix: '个'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'top',
-            x: -10,
-            y: 100,
-            borderWidth: 0
-        },
-        series: [{
-            name: name,
-            data: show_nums,
-        }]
+        });
+            
     });
-        
-});
 
 function fu() {	
 //highcharts	
