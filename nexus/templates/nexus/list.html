@@ -224,16 +224,6 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script type="text/javascript" charset="utf-8">
-    $('.checkboxs input').on('ifChecked', function(event){
-        $('.action-btn').removeClass('disabled');
-    });
-    $('.checkboxs input').on('ifUnchecked', function(event){
-        if($('.checkboxs .checked').length == 1) {
-            $('.action-btn').addClass('disabled');
-        } else {
-            $('.action-btn').removeClass('disabled');
-        }
-    });
     $('.delete-action').click(function(e){
         $('#action').val('delete');
     });
