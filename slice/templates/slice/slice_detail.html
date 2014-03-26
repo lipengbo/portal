@@ -58,33 +58,4 @@
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
-<script src="{{ STATIC_URL}}js/own.js"></script>
-<script src="{{ STATIC_URL}}js/topology_show_info.js"  charset="utf-8"></script>
-<script src="{{ STATIC_URL }}js/d3.v3.min.js"></script>
-<script src="{{ STATIC_URL}}js/slice_verify.js"></script>
-<script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
-<script src="{{ STATIC_URL}}js/taffy.js"></script>
-<script src="{{ STATIC_URL}}js/vm.js"></script>
-<script>
-	$(function(){
-		$(".aa").iCheck("destroy");
-		show_uuid($("[id='uuid']"));
-	})
-</script>
-<script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
-<script type="text/javascript">
-    $(document).ready(function(){
-        $("#ipInput").ipInput();
-        init_ipinput();
-        $(".show_describe").click(function(){
-            if($(".word_detail").is(":hidden")) {
-                $(".word_detail").slideDown(); 
-                $(this).removeClass("glyphicon glyphicon-caret-down").addClass("glyphicon glyphicon-caret-up");
-            } else {
-                $(".word_detail").slideUp();
-                $(this).removeClass("glyphicon glyphicon-caret-up").addClass("glyphicon glyphicon-caret-down");
-            }
-        });
-    });
-</script>
 {% endblock %}

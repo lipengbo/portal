@@ -271,11 +271,13 @@ def detail(request, slice_id):
             show_vm['host_ip'] = controller.host.server.ip
             show_vm['state'] = controller.host.state
             show_vm['uuid'] = controller.host.uuid
+            show_vm['type_id'] = 2
         else:
             show_vm['id'] = 0
             show_vm['host_ip'] = ""
             show_vm['state'] = ""
             show_vm['uuid'] = ""
+            show_vm['type_id'] = 1
         if controller.name == 'user_define':
             show_vm['name'] = "自定义控制器"
         else:
@@ -285,14 +287,14 @@ def detail(request, slice_id):
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
     if gw:
-        show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid,
+        show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
                          'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state})
     for vm in vms:
         if vm.enable_dhcp:
-            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid,
+            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
                          'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
         else:
-            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid,
+            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
                          'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
         
     context['vms'] = show_vms
