@@ -260,15 +260,50 @@ def detail(request, slice_id):
                 return redirect('forbidden')
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
-    context['controller'] = slice_obj.get_controller()
+    controller = slice_obj.get_controller()
+    gw = slice_obj.get_gw()
+    vms = slice_obj.get_common_vms()
+    show_vms = []
+    if controller:
+        show_vm = {}
+        if controller.host:
+            show_vm['id'] = controller.host.id
+            show_vm['host_ip'] = controller.host.server.ip
+            show_vm['state'] = controller.host.state
+            show_vm['uuid'] = controller.host.uuid
+        else:
+            show_vm['id'] = 0
+            show_vm['host_ip'] = ""
+            show_vm['state'] = ""
+            show_vm['uuid'] = ""
+        if controller.name == 'user_define':
+            show_vm['name'] = "自定义控制器"
+        else:
+            show_vm['name'] = controller.name
+        
+        show_vm['type'] = "控制器"
+        show_vm['ip'] = controller.ip + ":" + str(controller.port)
+        show_vms.append(show_vm)
+    if gw:
+        show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid,
+                         'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state})
+    for vm in vms:
+        if vm.enable_dhcp:
+            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid,
+                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+        else:
+            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid,
+                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+        
+    context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
-    context['gw'] = slice_obj.get_gw()
     context['dhcp'] = slice_obj.get_dhcp()
-    context['vms'] = slice_obj.get_common_vms()
     print "get slice subnet"
     subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
+    if request.is_ajax():
+        return render(request, 'slice/vm_list_page.html', context)
     return render(request, 'slice/slice_detail.html', context)
 
 
