@@ -265,6 +265,7 @@ def detail(request, slice_id):
     context['gw'] = slice_obj.get_gw()
     context['dhcp'] = slice_obj.get_dhcp()
     context['vms'] = slice_obj.get_common_vms()
+    context['checkband'] = slice_obj.checkband()
     print "get slice subnet"
     subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]

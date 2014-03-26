@@ -58,8 +58,8 @@
         <label>项目类型</label>
         <select name="category_name">
             {% for cat in cats %}
-                <option data-id="{{ cat.id }}" value="{{ cat }}">{{ cat }}</option>
-            {% endfor %}         
+            <option data-id="{{ cat.id }}" {% if cat.id == form.instance.category.id %}selected{% endif %} value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
         </select>
         {% if form.category_name.errors %}
                 {% for error in form.category_name.errors %}
