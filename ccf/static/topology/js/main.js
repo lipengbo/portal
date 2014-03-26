@@ -27,7 +27,7 @@ if (size == 'small') {
     width = 500;
     height = 300;
 } else if (size == 'big') {
-    width = 950;
+    width = 900;
     height = 450;
 }
 
