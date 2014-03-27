@@ -124,6 +124,14 @@
           </div>
         </form>
     </div>
+    <div id="slicealertModal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-body" id="slice_alert_info">
+          <p class="text-center">虚网创建失败！</p>
+        </div> 
+        <div class="modal-footer">
+          <button class="btn btn-warning" data-dismiss="modal" id="alert_closed">确定</button>
+        </div>          
+    </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
