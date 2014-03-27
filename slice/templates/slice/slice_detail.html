@@ -55,7 +55,77 @@
             {% include "slice/vm_list_page.html" %}
         </div>   
     </div>
+    <div class="clear" style="display: none" >
+        <p id="STATIC_URL">{{STATIC_URL}}</p>
+    </div>
+    <div id="editSliceModal" class="modal hide fade in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h3>虚网控制器编辑</h3>      
+        </div>
+        <form class="" accept-charset="utf-8">{% csrf_token %}
+            <div class="modal-body base_info tooltip-demo">
+              <table class="table">
+                <tbody>
+                    <tr>
+                        <td width="100">
+                            <label class="tab_radio1">
+                              <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
+                              {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
+                              默认创建
+                            </label>
+                        </td>
+                        <td width="70">控制器类型</td>
+                        <td colspan="3">
+                            {%if controller.name == "user_define" %}
+                                <select name="controller_sys" id="controller_sys" disabled>
+                                  <option value="Floodlight">Floodlight</option>
+                                  <option value="POX">POX</option>
+                                  <option value="OpenDaylight">OpenDaylight</option>
+                                </select>
+                            {%else%}
+                                <select name="controller_sys" id="controller_sys">
+                                  <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
+                                  <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
+                                  <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
+                                </select>
+                            {%endif%}
+                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="tab_radio2">
+                              <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
+                              {%if controller.name == "user_define"%}checked{%endif%}>
+                              自定义
+                            </label>
+                        </td>
+                        <td>控制器IP</td> 
+                        <!--<td>
+                            <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                        </td>-->
+                        <td width="230">
+                            <div id="ipInput" class="disabled"></div>
+                        </td>
+                        <td width="30">端口</td>
+                        <td>
+                            <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
+                            <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
+          </div>
+        </form>
+    </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
+<script src="{{ STATIC_URL}}js/slice_detail.js"></script>
 {% endblock %}
