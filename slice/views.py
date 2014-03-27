@@ -365,20 +365,6 @@ def start_or_stop(request, slice_id, flag):
 #         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
-import threading
-import time
- 
-def worker():
-    print "test"
-    time.sleep(2)
- 
-threads = []
-for i in xrange(5):
-    t = threading.Thread(target=worker)
-    threads.append(t)
-    t.start()
-
-
 def topology(request, slice_id):
     """ajax获取slice拓扑信息。"""
     slice_obj = get_object_or_404(Slice, id=slice_id)
