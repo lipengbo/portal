@@ -61,7 +61,7 @@
         {% has_perm user 'slice.delete_slice' slice %}
         {% if has_perm %}
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <a href="{% url project_delete project.id %}?next={{ request.path }}" class="close btn-delete">×</a>
+        <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}" class="close btn-delete">×</a>
         {%endif%}
     </div>
 </div>
