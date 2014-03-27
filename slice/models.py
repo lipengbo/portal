@@ -45,6 +45,7 @@ class Slice(models.Model):
     failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
     uuid = models.CharField(max_length=36, null=True, unique=True)
+    changed = models.IntegerField(null=True)
 
     def created_date(self):
         return self.date_created
@@ -69,6 +70,7 @@ class Slice(models.Model):
 
     def start(self):
         self.state = SLICE_STATE_STARTED
+        self.changed = 0
         self.save()
 
     def get_flowvisor(self):
@@ -202,6 +204,10 @@ class Slice(models.Model):
             else:
                 gws[0].enable_dhcp = False
             gws[0].save()
+            if flag == '1':
+                self.flowspace_changed(0)
+            else:
+                self.flowspace_changed(1)
             return True
         else:
             return False
@@ -229,6 +235,18 @@ class Slice(models.Model):
                              num=1)
             nsc.save()
 
+    def checkband(self):
+        from plugins.openflow.models import Link
+        switch_ports = self.get_switch_ports
+        if Link.objects.filter(source__in=switch_ports, target__in=switch_ports).count() > 0:
+            return 1
+        else:
+            return 0
+#         for switch_port_src in switch_ports:
+#             for switch_port_dst in switch_ports:
+#                 if Link.objects.filter(source=switch_port_src, target=switch_port_dst).count() > 0:
+#                     return 1
+
     def delete(self, *args, **kwargs):
         import traceback
         try:
@@ -252,6 +270,29 @@ class Slice(models.Model):
             self.save()
             print "5:raise exception"
             raise
+
+    def flowspace_changed(self, flag):
+        a = self.changed
+        if a == None:
+            return
+        if flag == 0:
+            if a & 0b0100 == 0:
+                a = a | 0b0100 & 0b1110
+            else:
+                a = a & 0b1011
+        if flag == 1:
+            if a & 0b0100 == 0:
+                a = a | 0b0101
+            else:
+                a = a & 0b1011
+        if flag == 2:
+            if a & 0b1000 == 0:
+                a = a | 0b1000
+        if flag == 3:
+            if a & 0b1000 == 0:
+                a = a | 0b1010
+        self.changed = a
+        self.save()
 
     def __unicode__(self):
         return self.name

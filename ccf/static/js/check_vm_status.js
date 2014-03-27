@@ -66,7 +66,7 @@ function check_vm_status(slice_id){
                         if(status == 9){
                             $("div#controller_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#controller_st"+cur_vm_id).append(str);
                             
                             $("span#controller_fc"+cur_vm_id).empty();
@@ -76,7 +76,7 @@ function check_vm_status(slice_id){
                             
                             $("div#gw_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#gw_st"+cur_vm_id).append(str);
                             
                             $("span#gw_fc"+cur_vm_id).empty();
@@ -86,7 +86,7 @@ function check_vm_status(slice_id){
                             
                             $("div#dhcp_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#dhcp_st"+cur_vm_id).append(str);
                             
                             $("span#dhcp_fc"+cur_vm_id).empty();
@@ -96,7 +96,7 @@ function check_vm_status(slice_id){
                             
                             $("div#vm_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#vm_st"+cur_vm_id).append(str);
                             
                             $("span#vm_fc"+cur_vm_id).empty();
@@ -194,7 +194,7 @@ function check_vm_status(slice_id){
                         if(status == 9){
                             $("div#controller_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#controller_st"+cur_vm_id).append(str);
                             
                             $("span#controller_fc"+cur_vm_id).empty();
@@ -205,7 +205,7 @@ function check_vm_status(slice_id){
                             
                             $("div#gw_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#gw_st"+cur_vm_id).append(str);
                             
                             $("span#gw_fc"+cur_vm_id).empty();
@@ -216,7 +216,7 @@ function check_vm_status(slice_id){
                             
                             $("div#dhcp_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#dhcp_st"+cur_vm_id).append(str);
                             
                             $("span#dhcp_fc"+cur_vm_id).empty();
@@ -227,7 +227,7 @@ function check_vm_status(slice_id){
                             
                             $("div#vm_st"+cur_vm_id).empty();
                             str = "";
-                            str = str + "<i class=\"icon-remove\"></i>";
+                            str = str + "<i class=\"icon-remove-sign\"></i>";
                             $("div#vm_st"+cur_vm_id).append(str);
                             
                             $("span#vm_fc"+cur_vm_id).empty();

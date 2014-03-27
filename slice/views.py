@@ -300,6 +300,7 @@ def detail(request, slice_id):
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
+    context['checkband'] = slice_obj.checkband()
     print "get slice subnet"
     subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]

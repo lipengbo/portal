@@ -4,13 +4,11 @@ from django.db import transaction
 from slice.slice_exception import DbError
 from plugins.vt.api import get_slice_gw_mac, get_phydata_gw_mac
 from etc.config import gw_controller
-from etc.config import flowvisor_or_cnvp
 
 import logging
 LOG = logging.getLogger("CENI")
 
 
-@transaction.commit_on_success
 def flowspace_nw_add(slice_obj, old_nws, new_nw):
     """添加网段时添加flowspace
     """
@@ -46,7 +44,6 @@ def flowspace_nw_add(slice_obj, old_nws, new_nw):
                                          gw.mac, '', '0x800', '', new_nw, '',
                                          '', '', '')
         except Exception, ex:
-            transaction.rollback()
             raise DbError(ex)
 
 
@@ -234,39 +231,35 @@ def create_default_flowspace(slice_obj, name, priority, in_port, dl_vlan,
         return flowspace_obj
 
 
-@transaction.commit_on_success
 def delete_default_flowspace(slice_obj, name, dl_src, dl_dst, nw_src, nw_dst, dl_type):
     """删除默认flowspace
     """
     LOG.debug('delete_default_flowspace')
-    try:
-        flowspace_objs = FlowSpaceRule.objects.filter(name=name, is_default=1)
-        if dl_src:
-            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
-                                                          dl_src=dl_src,
-                                                          dl_type=dl_type,
-                                                          is_default=1)
-        if dl_dst:
-            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
-                                                          dl_dst=dl_dst,
-                                                          dl_type=dl_type,
-                                                          is_default=1)
-        if nw_src:
-            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
-                                                          nw_src=nw_src,
-                                                          is_default=1)
-        if nw_dst:
-            flowspace_objs = FlowSpaceRule.objects.filter(name=name,
-                                                          nw_dst=nw_dst,
-                                                          is_default=1)
-        if flowspace_objs:
-            flowspace_objs.delete()
-    except Exception, ex:
-        transaction.rollback()
+    flowspace_objs = FlowSpaceRule.objects.filter(name=name, is_default=1)
+    if dl_src:
+        flowspace_objs = FlowSpaceRule.objects.filter(name=name,
+                                                      dl_src=dl_src,
+                                                      dl_type=dl_type,
+                                                      is_default=1)
+    if dl_dst:
+        flowspace_objs = FlowSpaceRule.objects.filter(name=name,
+                                                      dl_dst=dl_dst,
+                                                      dl_type=dl_type,
+                                                      is_default=1)
+    if nw_src:
+        flowspace_objs = FlowSpaceRule.objects.filter(name=name,
+                                                      nw_src=nw_src,
+                                                      is_default=1)
+    if nw_dst:
+        flowspace_objs = FlowSpaceRule.objects.filter(name=name,
+                                                      nw_dst=nw_dst,
+                                                      is_default=1)
+    if flowspace_objs:
+        flowspace_objs.delete()
 
 
 def matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
-                         nw_src, nw_dst, nw_proto, nw_tos, tp_src, tp_dst):
+                         nw_src, nw_dst, nw_proto, nw_tos, tp_src, tp_dst, flowvisor_type):
     """将12个匹配相转化为flowspace的arg_match参数格式
     """
     LOG.debug('matches_to_arg_match')
@@ -274,12 +267,12 @@ def matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
     if in_port:
         match += 'in_port=' + str(in_port) + ','
     if dl_vlan:
-        if flowvisor_or_cnvp == "cnvp":
+        if flowvisor_type == 1:
             match += 'dl_vlanid=' + dl_vlan + ','
         else:
             match += 'dl_vlan=' + dl_vlan + ','
     if dl_vpcp:
-        if flowvisor_or_cnvp == "cnvp":
+        if flowvisor_type == 1:
             match += 'dl_vlanpcp=' + dl_vpcp + ','
         else:
             match += 'dl_vpcp=' + dl_vpcp + ','

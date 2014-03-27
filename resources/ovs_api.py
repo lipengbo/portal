@@ -10,16 +10,12 @@ LOG = logging.getLogger("CENI")
 OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
 
 
-@transaction.commit_on_success
 def slice_add_ovs_ports(slice_obj, ovs_ports):
     """slice添加交换端口
     """
     LOG.debug('slice_add_ovs_ports')
     try:
         Slice.objects.get(id=slice_obj.id)
-    except Exception, ex:
-        raise DbError(ex)
-    try:
         for ovs_port in ovs_ports:
             slice_obj.add_resource(ovs_port)
             if ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
@@ -30,8 +26,7 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
                 else:
                     flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
     except Exception, ex:
-        transaction.rollback()
-        raise DbError(ex)
+        raise DbError("资源分配失败！")
 
 
 @transaction.commit_on_success
