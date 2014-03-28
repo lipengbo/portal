@@ -291,4 +291,20 @@
         show_uuid($("[id='uuid']"));
     })
 </script>
+<script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#ipInput").ipInput();
+        init_ipinput();
+        $(".show_describe").click(function(){
+            if($(".word_detail").is(":hidden")) {
+                $(".word_detail").slideDown(); 
+                $(this).removeClass("icon-caret-down").addClass("icon-caret-up");
+            } else {
+                $(".word_detail").slideUp();
+                $(this).removeClass("icon-caret-up").addClass("icon-caret-down");
+            }
+        });
+    });
+</script>
 {% endblock %}
