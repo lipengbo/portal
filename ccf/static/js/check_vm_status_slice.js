@@ -1,37 +1,42 @@
 //入口,定期获取slice中虚拟机状态
-var check_time_id;
+var check_vm_time_id;
+var check_slice_time_id;
 
 $(document).ready(function() {
 	//alert("here");
 	update_vm_status();
+	update_slice_status();
 });
 
+//监控虚拟机状态
 function update_vm_status(){
-    if(check_time_id){
-        clearTimeout(check_time_id);
+    if(check_vm_time_id){
+        clearTimeout(check_vm_time_id);
     }
-    var check_vm_ids_obj = document.getElementsByName("check_vm_ids");
-    if(check_vm_ids_obj){
-       for(var i=0;i<check_vm_ids_obj.length;i++){
-           if(check_vm_ids_obj[i].checked){
-               slice_id = $("#slice_id").text();
-               check_time_id = setTimeout("check_vm_status("+slice_id+")",5000);
-           }
-       }
+    var check_vm_id_objs = $(".check_vm");
+    //alert(check_vm_id_objs.length);
+    if(check_vm_id_objs.length > 0){
+        slice_id = $("#slice_id").text();
+        check_vm_time_id = setTimeout("check_vm_status("+slice_id+")",5000);
+    }else{
+        //check_vm_time_id = setTimeout("update_vm_status()",5000);
     }
 }
 
+//ajax监控虚拟机状态
 function check_vm_status(slice_id){
-	//alert(3);
-	check_url = "http://" + window.location.host + "/plugins/vt/get_vms_state/"+slice_id+"/";
-	var check_vm_ids_obj = document.getElementsByName("check_vm_ids");
-	var check = false;
-	var status;
-	var cur_vm_id;
-	var str;
-	var check_nodes = [];
-	var admin = $("#admin").text();
-	//alert(check_url)
+    check_url = "http://" + window.location.host + "/plugins/vt/get_vms_state/"+slice_id+"/";
+    var check_vm_id_objs = $(".check_vm");
+    var check = false;
+    var status;
+    var cur_obj
+    var cur_vm_id;
+    var check_nodes = [];
+    var cur_obj;
+    var a_obj;
+    var img_obj;
+    var STATIC_URL = $("#STATIC_URL").text();
+    //alert(check_url)
     $.ajax({
         type: "GET",
         url: check_url,
@@ -39,441 +44,184 @@ function check_vm_status(slice_id){
         cache: false,
         async: true,  
         success: function(data) {
-        	vms = data.vms;
-        	status = 8;
-        	if(vms){
-        	    //alert('check_vm_ids_obj.length');
-        	    //alert(check_vm_ids_obj.length);
-	        	for(var i=0;i<check_vm_ids_obj.length;i++){
-	        	    //alert(i);
-					if(check_vm_ids_obj[i].checked){
-					    //alert('checked id');
-					    //alert(i)
-						cur_vm_id = check_vm_ids_obj[i].value;
-						for(var j=0;j<vms.length;j++){
-							if(vms[j].id == cur_vm_id){
-								status = vms[j].state;
-								break;
-							}
-						}
-						//alert('status');
-						//alert(status);
-						if(status!=8){
-						    var check_node = {};
-						    check_node.status = status;
-						    check_node.cur_vm_id = cur_vm_id;
-						    if(status==9 || status==10){
-						        check_node.switch_id = 0;
-                                check_node.port = 0;
-                                check_node.port_name = '';
-						    }else{
-						        check_node.switch_id = vms[j].switch_id;
-                                check_node.port = vms[j].port; 
-                                check_node.port_name = vms[j].port_name;
-						    }
-						    check_nodes.push(check_node);
+            vms = data.vms;
+            if(vms){
+                for(var i=0;i<check_vm_id_objs.length;i++){
+                    status = 8;
+                    cur_obj = check_vm_id_objs[i].id;
+                    cur_vm_id = cur_obj.split("e")[1]
+                    for(var j=0;j<vms.length;j++){
+                        if(vms[j].id == cur_vm_id){
+                            status = vms[j].state;
+                            break;
                         }
-                        else{
-                            check = true;
+                    }
+                    if(status!=8){
+                        var check_node = {};
+                        check_node.status = status;
+                        check_node.cur_vm_id = cur_vm_id;
+                        if(status==9 || status==10){
+                            check_node.switch_id = 0;
+                            check_node.port = 0;
+                            check_node.port_name = '';
+                        }else{
+                            check_node.switch_id = vms[j].switch_id;
+                            check_node.port = vms[j].port; 
+                            check_node.port_name = vms[j].port_name;
                         }
-					}
-					//alert(i);
-			    } 
-			    if(admin == 1){
-			     for(var k=0;k<check_nodes.length;k++){
-                        status = check_nodes[k].status;
-                        cur_vm_id = check_nodes[k].cur_vm_id;
-                        if(status == 9 || status == 10){
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-remove-sign\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                                str = "";
-                                str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                                $("span#controller_fc").append(str);
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                            $("span#gw_fc"+cur_vm_id).append(str);
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                            $("span#dhcp_fc"+cur_vm_id).append(str);
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                            $("span#vm_fc"+cur_vm_id).append(str);
-                        }else if(status == 1){
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                            $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-ok-sign\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                                str = "";
-                                str = str +  "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
-                                $("span#controller_fc").append(str);
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str +  "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
-                            $("span#gw_fc"+cur_vm_id).append(str);
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str +  "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
-                            $("span#dhcp_fc"+cur_vm_id).append(str);
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"document.location='/monitor/vm/"+cur_vm_id+"/'\" class=\"btn\">监控</button>";
-                            $("span#vm_fc"+cur_vm_id).append(str);
-                        }else{
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-minus-sign\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                                str = "";
-                                str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                                $("span#controller_fc").append(str);
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                            $("span#gw_fc"+cur_vm_id).append(str);
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                            $("span#dhcp_fc"+cur_vm_id).append(str);
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn\" disabled>监控</button>";
-                            $("span#vm_fc"+cur_vm_id).append(str);
-                        }//endif
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status, check_nodes[k].switch_id, check_nodes[k].port, check_nodes[k].port_name);
-                    }//endfor
-			        
-			    }else if(admin == 0){
-			    
-    			    for(var k=0;k<check_nodes.length;k++){
-                        status = check_nodes[k].status;
-                        cur_vm_id = check_nodes[k].cur_vm_id;
-                        if(status == 9){
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-remove-sign\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                                str = "";
-                                str = str + "<button type=\"button\" onclick=\"\" class=\"btn btn-success start_btn\" disabled>启动</button>&nbsp;"
-                                    +"<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
-                                $("span#controller_fc").append(str);
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn btn-success start_btn\" disabled>启动</button>&nbsp;"
-                                +"<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
-                            $("span#gw_fc"+cur_vm_id).append(str);
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn btn-success start_btn\" disabled>启动</button>&nbsp;"
-                                +"<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
-                            $("span#dhcp_fc"+cur_vm_id).append(str);
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" onclick=\"\" class=\"btn btn-success start_btn\" disabled>启动</button>&nbsp;"
-                                +"<button type=\"button\" onclick=\"\" class=\"btn\" disabled>登录</button>";
-                            $("span#vm_fc"+cur_vm_id).append(str);
-                        }else if(status == 1){
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-ok-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                                str = "";
-                                str = str +  "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-danger start_vm\">停止</button>&nbsp;"
-                                    + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+cur_vm_id+"\">登录</button>";
-                                $("span#controller_fc").append(str);
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign gw_dhcp_icon\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str +  "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-danger start_gw_dhcp\">停止</button>&nbsp;"
-                                + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc gw_dhcp_vnc\">登录</button>";
-                            $("span#gw_fc"+cur_vm_id).append(str);
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign gw_dhcp_icon\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str +  "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-danger start_gw_dhcp\">停止</button>&nbsp;"
-                                + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc gw_dhcp_vnc\">登录</button>";
-                            $("span#dhcp_fc"+cur_vm_id).append(str);
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign icon_state\"  id=\"icon_state"+cur_vm_id+"\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-danger start_vm\">停止</button>&nbsp;"
-                                + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+cur_vm_id+"\">登录</button>";
-                            $("span#vm_fc"+cur_vm_id).append(str);
-                        }else{
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                                str = "";
-                                str = str + "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-success start_vm\">启动</button>&nbsp;"
-                                    + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+cur_vm_id+"\">登录</button>";
-                                $("span#controller_fc").append(str);
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign gw_dhcp_icon\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-success start_gw_dhcp\">启动</button>&nbsp;"
-                                + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc gw_dhcp_vnc disabled\">登录</button>";
-                            $("span#gw_fc"+cur_vm_id).append(str);
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign gw_dhcp_icon\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-success start_gw_dhcp\">启动</button>&nbsp;"
-                                + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc gw_dhcp_vnc disabled\">登录</button>";
-                            $("span#dhcp_fc"+cur_vm_id).append(str);
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<button type=\"button\" vm_id=\""+cur_vm_id+"\" class=\"btn btn-success start_vm\">启动</button>&nbsp;"
-                                + "<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+cur_vm_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+cur_vm_id+"\">登录</button>";
-                            $("span#vm_fc"+cur_vm_id).append(str);
-                        }//endif
-                        //alert('here');
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status, check_nodes[k].switch_id, check_nodes[k].port, check_nodes[k].port_name);
-                    }//endfor
+                        check_nodes.push(check_node);
+                    }
                 }
-                else{
-                    for(var k=0;k<check_nodes.length;k++){
-                        status = check_nodes[k].status;
-                        cur_vm_id = check_nodes[k].cur_vm_id;
-                        if(status == 9){
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-remove-sign\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-remove-sign\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
+                for(var j=0;j<check_nodes.length;j++){
+                    vm_obj = $("#icon_state"+check_nodes[j].cur_vm_id);
+                    if(vm_obj){
+                        status = check_nodes[j].status;
+                        if(status == 9 || status == 10){
+                            vm_obj.removeClass("icon-spinner")
+                                .removeClass("icon-spin")
+                                .removeClass("check_vm")
+                                .addClass("icon-remove-sign");   
                         }else if(status == 1){
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-ok-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign gw_dhcp_icon\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign gw_dhcp_icon\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-ok-sign icon_state\"  id=\"icon_state"+cur_vm_id+"\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
+                            vm_obj.removeClass("icon-spinner")
+                                .removeClass("icon-spin")
+                                .removeClass("check_vm")
+                                .addClass("icon-ok-sign")
+                                .addClass("icon_state"); 
+                            //启停虚拟机按钮
+                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
+                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
+                            if(a_obj){
+                            a_obj.style.cursor = "pointer";}
+                            if(img_obj){
+                            img_obj.src = STATIC_URL + "img/btn_tz.png";       
+                            img_obj.title = "停止";}
+                            //虚拟机登录按钮
+                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_dl")[0];
+                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_dl").children("img")[0];
+                            if(a_obj){
+                            a_obj.style.cursor = "pointer";}
+                            if(img_obj){
+                            img_obj.src = STATIC_URL + "img/btn_dl.png"; }
+                            //虚拟机监控按钮
+                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_jk")[0];
+                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_jk").children("img")[0];
+                            if(a_obj){
+                            a_obj.style.cursor = "pointer";}
+                            if(img_obj){
+                            img_obj.src = STATIC_URL + "img/btn_jk.png"; }    
                         }else{
-                            c_id = $("span#controller_fc").children(".aa").attr('value');
-                            if(c_id && c_id == cur_vm_id){
-                                $("div#controller_st").empty();
-                                str = "";
-                                str = str + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
-                                $("div#controller_st").append(str);
-                                
-                                $("span#controller_fc").empty();
-                            }
-                            
-                            $("div#gw_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign gw_dhcp_icon\"></i>";
-                            $("div#gw_st"+cur_vm_id).append(str);
-                            
-                            $("span#gw_fc"+cur_vm_id).empty();
-                            
-                            $("div#dhcp_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign gw_dhcp_icon\"></i>";
-                            $("div#dhcp_st"+cur_vm_id).append(str);
-                            
-                            $("span#dhcp_fc"+cur_vm_id).empty();
-                            
-                            $("div#vm_st"+cur_vm_id).empty();
-                            str = "";
-                            str = str + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+cur_vm_id+"\"></i>";
-                            $("div#vm_st"+cur_vm_id).append(str);
-                            
-                            $("span#vm_fc"+cur_vm_id).empty();
-                        }//endif
-                        //alert('here');
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(cur_vm_id, status, check_nodes[k].switch_id, check_nodes[k].port, check_nodes[k].port_name);
-                    }//endfor
-                }//endif
-                    
-			}    
-        	if (check){
-                check_time_id = setTimeout("check_vm_status("+slice_id+")",5000);
-            } 
+                            vm_obj.removeClass("icon-spinner")
+                                .removeClass("icon-spin")
+                                .removeClass("check_vm")
+                                .addClass("icon-minus-sign")
+                                .addClass("icon_state"); 
+                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
+                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
+                            if(a_obj){
+                            a_obj.style.cursor = "pointer";}
+                            if(img_obj){
+                            img_obj.src = STATIC_URL + "img/btn_qd.png";       
+                            img_obj.title = "启动"; }
+                        }
+                    }
+                }
+                    //alert(i);
+            }
+            update_vm_status();   
+        },
+        error: function(data) {
+            update_vm_status();
         }
     });
+    
+}
+
+
+//监控虚网状态
+function update_slice_status(){
+    //alert("h1");
+    if(check_slice_time_id){
+        clearTimeout(check_slice_time_id);
+    }
+    var check_slice_objs = $("#slice_state");
+    if(check_slice_objs.hasClass("icon-spin")){
+        //alert("h2");
+        slice_id = $("#slice_id").text();
+        check_slice_time_id = setTimeout("check_slice_status("+slice_id+")",5000);
+    }else{
+    //alert("h3");
+        //check_slice_time_id = setTimeout("update_slice_status()",5000);
+    }
+}
+
+
+//ajax监控slice状态
+function check_slice_status(slice_id){
+    check_url = "http://" + window.location.host + "/slice/get_slice_state/"+slice_id+"/";
+    var check = false;
+    var status;
+    var a_obj;
+    var img_obj;
+    var STATIC_URL = $("#STATIC_URL").text();
+    //alert(check_url)
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: true,  
+        success: function(data) {
+            //alert("h4");
+            if(data.value == 0){
+                //alert("h5");
+                status = data.state;
+                var check_slice_objs = $("#slice_state");
+                //alert(status);
+                if(status == 0){
+                    check_slice_objs.removeClass("icon-spinner")
+                        .removeClass("icon-spin")
+                        .addClass("icon-minus-sign")
+                        .addClass("icon_state")
+                    //alert($("#edit").text());
+                    if($("#edit").text() == 1){
+                        //alert("h6");
+                        a_obj = $("#slice_qt")[0]
+                        img_obj = $("#slice_qt").children("img")[0]
+                        if(a_obj){
+                        a_obj.style.cursor == "pointer";}
+                        if(img_obj){
+                        img_obj.src = STATIC_URL + "img/btn_qd.png";       
+                        img_obj.title = "启动"; }
+                        //控制器编辑、slice编辑按钮变化
+                        $(".bianji").attr("style","cursor:pointer");
+                        $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj.png");
+                        //dhcp启停、vm添加
+                        $(".dhcp").attr("style","cursor:pointer");
+                        $("#vm_add").attr("style","cursor:pointer");   
+                    } 
+                }else if(status == 1){
+                    check_slice_objs.removeClass("icon-spinner")
+                        .removeClass("icon-spin")
+                        .addClass("icon-ok-sign")
+                        .addClass("icon_state"); 
+                    //alert($("#edit").text());
+                    if($("#edit").text() == 1){
+                        //alert("h7");
+                        a_obj = $("#slice_qt")[0]
+                        img_obj = $("#slice_qt").children("img")[0]
+                        if(a_obj){
+                        a_obj.style.cursor == "pointer";}
+                        if(a_obj){
+                        img_obj.src = STATIC_URL + "img/btn_tz.png";       
+                        img_obj.title = "停止";  }
+                    }   
+                }
+            }
+            update_slice_status();
+        },
+        error: function(data) {
+            update_slice_status();
+        }
+    });
+    
 }

@@ -1,5 +1,8 @@
 {% load i18n %}
 {% load staticfiles %}
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{{ STATIC_URL}}css/slice_topology_d3.css">
+
 <body style="margin: 0">
 {%if top == '2' %}
 <div id="topology_top" style="background-color:#FFFFFF; width:100%; height:30px">
@@ -29,6 +32,7 @@
 </div>
 </body>
 <script src="{{ STATIC_URL}}topology/lib/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}pinax/js/theme.js"></script>
 <script src="{{ STATIC_URL }}js/d3.v3.min.js"></script>
 <script src="{{ STATIC_URL }}topology/lib/custom-tooltip.js"></script>
 <script src="{{ STATIC_URL }}js/slice_topology_d3.js"></script> 

@@ -486,12 +486,6 @@ function delete_vm_from_list(url) {
 	});
 }
 
-function show_uuid(objs){
-    for (var i=0; i<objs.length; i++){
-        objs[i].innerHTML = objs[i].innerHTML.split("-")[0] + "...";
-    }
-}
-
 function show_topology(){
 	//alert(get_select_ports());
 	$('#topologyModal').modal('show');

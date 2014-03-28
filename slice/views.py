@@ -537,6 +537,26 @@ def dhcp_switch(request, slice_id, flag):
     else:
         return HttpResponse(json.dumps({'result': 1}))
 
+
+@login_required
+def get_slice_state(request, slice_id):
+    """
+    获取slice状态
+    return:
+        value:
+          slice状态获取失败:value = 1
+          slice状态获取成功：value = 0
+    """
+    try:
+        slice_obj = Slice.objects.get(id=int(slice_id))
+    except:
+        print 1
+        return HttpResponse(json.dumps({'value': 1}))
+    else:
+        print 2
+        return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state}))
+
+
 def test_cnvp():
     from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
         flowvisor_del_flowspace, flowvisor_add_flowspace,\

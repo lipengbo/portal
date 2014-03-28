@@ -1,5 +1,5 @@
 function update_list(url){
-    alert(url);
+    //alert(url);
     //check_url = "http://" + window.location.host + url;
     check_url = url;
     //alert(check_url);

@@ -32,17 +32,6 @@ $(function(){
             $(".slice_name i").removeClass("icon-caret-up").addClass("icon-caret-down");
         }
     });
-    $(".tuopu_btn .switch_btn").click(function(){
-        if($(this).hasClass("checked")) {
-            $(this).removeClass("checked");
-            $(this).children(".switch_content").html("停止");
-            document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);
-        }else {
-            $(this).addClass("checked");
-            $(this).children(".switch_content").html("启动");
-            document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);
-        }
-    });
     
     //全选全不选
     $(".checkall input").click(function(){
