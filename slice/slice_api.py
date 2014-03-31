@@ -225,7 +225,7 @@ def stop_slice_api(slice_obj):
         if slice_obj.state == SLICE_STATE_STARTED:
             try:
                 slice_obj.stopping()
-                start_slice_sync.delay(slice_obj.id)
+                stop_slice_sync.delay(slice_obj.id)
             except Exception:
                 transaction.rollback()
                 raise

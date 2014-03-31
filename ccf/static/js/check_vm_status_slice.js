@@ -147,10 +147,10 @@ function update_slice_status(){
     if(check_slice_objs.hasClass("icon-spin")){
         //alert("h2");
         slice_id = $("#slice_id").text();
-        check_slice_time_id = setTimeout("check_slice_status("+slice_id+")",5000);
+        check_slice_time_id = setTimeout("check_slice_status("+slice_id+")",1000);
     }else{
     //alert("h3");
-        //check_slice_time_id = setTimeout("update_slice_status()",5000);
+        //check_slice_time_id = setTimeout("update_slice_status()",1000);
     }
 }
 
@@ -188,7 +188,7 @@ function check_slice_status(slice_id){
                         a_obj = $("#slice_qt")[0]
                         img_obj = $("#slice_qt").children("img")[0]
                         if(a_obj){
-                        a_obj.style.cursor == "pointer";}
+                        a_obj.style.cursor = "pointer";}
                         if(img_obj){
                         img_obj.src = STATIC_URL + "img/btn_qd.png";       
                         img_obj.title = "启动"; }
@@ -210,7 +210,7 @@ function check_slice_status(slice_id){
                         a_obj = $("#slice_qt")[0]
                         img_obj = $("#slice_qt").children("img")[0]
                         if(a_obj){
-                        a_obj.style.cursor == "pointer";}
+                        a_obj.style.cursor = "pointer";}
                         if(a_obj){
                         img_obj.src = STATIC_URL + "img/btn_tz.png";       
                         img_obj.title = "停止";  }
