@@ -78,6 +78,14 @@ class Slice(models.Model):
         self.changed = 0
         self.save()
 
+    def starting(self):
+        self.state = SLICE_STATE_STARTING
+        self.save()
+
+    def stopping(self):
+        self.state = SLICE_STATE_STOPPING
+        self.save()
+
     def get_flowvisor(self):
         flowvisors = self.flowvisor_set.all()
         if flowvisors:

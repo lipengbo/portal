@@ -1,5 +1,6 @@
 import os
-
+import djcelery
+djcelery.setup_loader()
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -177,8 +178,13 @@ INSTALLED_APPS = [
     "django_cron",
     "nexus",
     "monitor",
-    "guardian"
+    "guardian",
+    'djcelery'
 ]
+
+# Celery settings
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
 

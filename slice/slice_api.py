@@ -174,6 +174,7 @@ def start_slice_api(slice_obj):
     """启动slice
     """
     print 'start_slice_api'
+    from slice.tasks import start_slice_sync
     try:
         if slice_obj and slice_obj.state == SLICE_STATE_STOPPED:
             all_vms = slice_obj.get_vms()
@@ -190,17 +191,19 @@ def start_slice_api(slice_obj):
             if flowvisor == None:
                 raise DbError("虚网启动异常！")
             try:
-                if flowvisor.type == 1:
-                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                                  slice_obj.id, False)
-                    update_slice_virtual_network_cnvp(slice_obj)
-                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                                  slice_obj.id, True)
-                else:
-                    flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                                  slice_obj.id, True)
-                    update_slice_virtual_network_flowvisor(slice_obj)
-                slice_obj.start()
+                slice_obj.starting()
+                start_slice_sync.delay(slice_obj.id)
+#                 if flowvisor.type == 1:
+#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+#                                                   slice_obj.id, False)
+#                     update_slice_virtual_network_cnvp(slice_obj)
+#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+#                                                   slice_obj.id, True)
+#                 else:
+#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+#                                                   slice_obj.id, True)
+#                     update_slice_virtual_network_flowvisor(slice_obj)
+#                 slice_obj.start()
             except Exception, ex:
                 raise DbError("虚网启动失败！")
     except Exception, ex:
@@ -213,6 +216,7 @@ def stop_slice_api(slice_obj):
     """停止slice
     """
     LOG.debug('stop_slice_api')
+    from slice.tasks import stop_slice_sync
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -220,9 +224,8 @@ def stop_slice_api(slice_obj):
     else:
         if slice_obj.state == SLICE_STATE_STARTED:
             try:
-                slice_obj.stop()
-                flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-                                              slice_obj.id, False)
+                slice_obj.stopping()
+                start_slice_sync.delay(slice_obj.id)
             except Exception:
                 transaction.rollback()
                 raise
