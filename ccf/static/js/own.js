@@ -74,24 +74,6 @@ $(document).ready(function() {
         $(".tab_radio4").parent("td").siblings("td").children("input").removeAttr("disabled");
     });
     
-    //slice详情启动停止按钮
-/*    $(".start_btn").click(function(){
-        if($(this).hasClass("btn-success")){
-            $(this).removeClass("btn-success").addClass("btn-danger");
-            if($(this).hasClass("btn-large")){            
-                $(this).text("停止虚网");
-            } else {              
-                $(this).text("停止");
-            }           
-        } else {
-            $(this).removeClass("btn-danger").addClass("btn-success");
-            if($(this).hasClass("btn-large")){
-                $(this).text("启动虚网");
-            } else {
-                $(this).text("启动");
-            }           
-        }
-    });      */
     
     // show topology
     $('.btn-step1').click(function () {
