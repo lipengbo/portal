@@ -5,7 +5,7 @@
     <div class="news_list_top">
         <input type="checkbox" name="notification_id" value="{{ notice.id }}">
         {% if notice.unread %}
-        <a class="muted pull-right text-success" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ notice.action_object.action_url }}">
+        <a class="muted pull-right text-info" href="{% url 'notifications:mark_as_read' notice.slug %}?next={{ notice.action_object.action_url }}">
             <i class="glyphicon glyphicon-circle-arrow-right">
             </i>
              去处理
