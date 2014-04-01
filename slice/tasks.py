@@ -25,9 +25,10 @@ def start_slice_sync(slice_id):
                                           slice_obj.id, True)
             update_slice_virtual_network_flowvisor(slice_obj)
         slice_obj.start()
+    except Slice.DoesNotExist:
+        pass
     except:
-        if slice_obj:
-            slice_obj.stop()
+        slice_obj.stop()
 
 
 @task()
@@ -37,6 +38,7 @@ def stop_slice_sync(slice_id):
         flowvisor_update_slice_status(slice_obj.get_flowvisor(),
                                               slice_obj.id, False)
         slice_obj.stop()
+    except Slice.DoesNotExist:
+        pass
     except:
-        if slice_obj:
-            slice_obj.start()
+        slice_obj.start()

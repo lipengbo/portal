@@ -89,6 +89,7 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
             flowvisors = island.flowvisor_set.all()
             if flowvisors:
                 try:
+                    slice_obj = None
                     date_now = datetime.datetime.now()
     #                 date_delta = datetime.timedelta(seconds=slice_expiration_days)
                     date_delta = datetime.timedelta(days=slice_expiration_days)
