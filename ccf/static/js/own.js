@@ -375,9 +375,7 @@ function page_function3(){
                 cip1_obj = document.getElementById("cip1");
                 cip2_obj = document.getElementById("cip2");
                 cip3_obj = document.getElementById("cip3");
-                //controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
                 controller_port_obj = document.getElementById("controller_port");
-				//var controller_ip_port_obj = document.getElementById("controller_ip_port");
 				var controller_ip_port = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value+':'+controller_port_obj.value;
 				var str = "";
 				str = str + "<table class=\"table\">"
@@ -413,15 +411,6 @@ function page_function3(){
                         +"<td>"+ id_server_gw_obj.options[id_server_gw_index].text +"</td></tr>"
                     +"<tr><td>网关IP地址：</td>"
                         +"<td>"+ gateway_ip_obj.value +"</td></tr>";
-        
-        //if(dhcp_selected_obj.checked){
-        //   str = str + "<tr><td colspan=2>"
-        //   +"已配置DHCP服务器</td></tr>";
-           
-       // }else{
-       //    str = str + "<tr><td colspan=2>"
-       //    +"未配置DHCP服务器</td></tr>";
-       // }
         str = str + "</tbody></table>";  
     }else{
         str = str + "<table class=\"table\">"
@@ -431,14 +420,8 @@ function page_function3(){
     }  
 
     $("div#list_gw").append(str); 
-    //$("#dhcp_show").iCheck({
-    //        checkboxClass: 'icheckbox_square-blue',
-    //        radioClass: 'iradio_square-blue',
-    //        increaseArea: '20%' // optional
-   // });
         //虚拟机
         return fetch_vminfo();
-        //return check_vminfo()
 }
 function page_function4(){
 	var project_id = $("#project_id").text();
