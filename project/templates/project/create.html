@@ -16,78 +16,25 @@
     </style>    
 {% endblock %}
 {% block breadcrumb %}
-<a href="/project/">项目</a><span class="divider">/</span>
+<li><a href="/project/">项目</a></li>
 <li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
 <div class="fill_form">
 <form class="" action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
-  <fieldset>			   
     <legend>
         <div class="title_word_bg">
-                                        基本信息
-           <div class="triangle"></div> 
+            基本信息
         </div>
     </legend>
-    <div class="form_inline form-group {% if form.name.errors %}error{% endif %}">
-        <label>项目名称</label>
-        <input type="text" name="name" value="{{ form.instance.name }}">  
-        <span class="muted"><i>学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目</i></span>     
-        {% if form.name.errors %}
-                {% for error in form.name.errors %}
-                    <span class="help-inline">{{ error }}</span>
-                {% endfor %}
-        {% endif %}
-    </div>
-    <div class="form_inline form-group {% if form.description.errors %}error{% endif %}">
-        <label class="v_top">项目描述</label>
-        <textarea name="description" rows="5">{{ form.instance.description }}</textarea>
-        <span class="muted pro_describe"><i>
-                                    如项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />
-                                     项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />
-                                    项目支持：国家自然科学基金或863、973项目支持；</i>
-        </span>  
-        {% if form.description.errors %}
-                {% for error in form.description.errors %}
-                    <span class="help-inline">{{ error }}</span>
-                {% endfor %}
-        {% endif %}
-    </div>
-    <div class="form_inline form-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
-        <label>项目类型</label>
-        <select name="category_name">
-            {% for cat in cats %}
-                <option data-id="{{ cat.id }}" value="{{ cat }}">{{ cat }}</option>
-            {% endfor %}         
-        </select>
-        {% if form.category_name.errors %}
-                {% for error in form.category_name.errors %}
-                    <span class="help-inline">{{ error }}</span>
-                {% endfor %}
-        {% endif %}
-    </div>
-    <!--<div class="form_inline form-group {% if form.category.errors or form.category_name.errors %}error{% endif %}">
-        <label>项目类型</label>
-        <div class="input-group select_input">
-            <input class="col-md-2" id="appendedDropdownButton" name="category_name" value="{% if form.category_name.value %}{{ form.category_name.value }}{% else %}{{ form.instance.category }}{% endif %}" type="text" />
-            <div class="btn-group">
-                <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    {% for cat in cats %}
-                    <li><a href="javascript:void(0);" data-id="{{ cat.id }}">{{ cat }}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
+    <div class="row">
+        <div class="col-md-5">
+            {{ form|crispy }}
         </div>
-        {% if form.category_name.errors %}
-                {% for error in form.category_name.errors %}
-                    <span class="help-inline">{{ error }}</span>
-                {% endfor %}
-        {% endif %}
-    </div> -->
-  </fieldset>
-  <fieldset>
+    </div>
+  <div class="row">
+      <div class="col-md-12">
     <legend>
         <div class="title_word_bg">
             添加资源 
@@ -140,12 +87,11 @@
                 {% endfor %}
             </tbody>
         </table>
-			  </fieldset>
-			  <div class="form-actions">
 				  <div class="row">
-                    <div class="col-md-3 col-md-offset-5"><button type="submit" class="btn btn-lg btn-block btn-info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
+                    <div class="col-md-3"><button type="submit" class="btn btn-lg btn-block btn-info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
 				  </div>
-			  </div>
+        </div>
+      </div>
 </form>
 </div>
 {% endblock %}

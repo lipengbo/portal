@@ -2,13 +2,18 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   background: #fff;
   min-width: 980px;
+  padding-top: 0;
 }
 .login_bg .main {
   padding: 0px;
 }
 .login_bg .main .main2 {
   width: 980px;
-  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -350px;
+  margin-left: -490px;
 }
 .login_bg .login_logo {
   margin-bottom: 20px;
@@ -57,10 +62,7 @@
   padding-right: 50px;
 }
 .login_bg .login_all {
-  top: 50%;
-  position: absolute;
   width: 980px;
-  margin-top: -291px;
 }
 .pop_form input {
   padding: 5px;
