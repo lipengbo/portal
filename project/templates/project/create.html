@@ -31,7 +31,17 @@
 
     <div class="row">
         <div class="col-md-5">
-            {{ form|crispy }}
+            {{ form.name|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            {{ form.description|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            {{ form.category|as_crispy_field }}
         </div>
     </div>
   <div class="row">
