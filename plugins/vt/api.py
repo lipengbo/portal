@@ -6,7 +6,7 @@
 # E-mail:lipengbo10054444@gmail.com
 from plugins.vt.models import VirtualMachine, Image, Flavor, DOMAIN_STATE_DIC
 from plugins.ipam.models import IPUsage, Subnet
-from etc.config import default_flavor_id
+from etc.config import controller_flavor_id, gateway_flavor_id
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.exception import ResourceNotEnough, ConnectionRefused, FailedToAllocateResources
 from resources.models import Server
@@ -24,7 +24,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         images = Image.objects.filter(name=image_name)
         if images:
             vm.image = images[0]
-        vm.flavor = Flavor.objects.get(id=default_flavor_id)
+        vm.flavor = Flavor.objects.get(id=controller_flavor_id)
         vm.cpu = vm.flavor.cpu
         vm.ram = vm.flavor.ram
         vm.hdd = vm.flavor.hdd
@@ -71,7 +71,7 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         images = Image.objects.filter(name=image_name)
         if images:
             vm.image = images[0]
-        vm.flavor = Flavor.objects.get(id=default_flavor_id)
+        vm.flavor = Flavor.objects.get(id=gateway_flavor_id)
         vm.cpu = vm.flavor.cpu
         vm.ram = vm.flavor.ram
         vm.hdd = vm.flavor.hdd
@@ -155,3 +155,21 @@ def try_start_gw_and_ctr(vm):
             return do_vm_action(vm, 'create')
         except:
             return False
+
+def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
+    if controller_info['controller_type'] == 'default_create':
+        controller_flavor = Flavor.objects.get(id=controller_flavor_id)
+        hostlist = [(server.id, server.ip) for server in Server.objects.filter(island=island_obj)]
+        serverid = VTClient().schedul(controller_flavor.cpu, controller_flavor.ram, controller_flavor.hdd, hostlist)
+        if not serverid:
+            raise ResourceNotEnough()
+    host_server = Server.objects.get(id=gw_host_id)
+    hostlist = [(host_server.id, host_server.ip)]
+    gateway_flavor = Flavor.objects.get(id=gateway_flavor_id)
+    serverid = VTClient().schedul(gateway_flavor.cpu, gateway_flavor.ram, gateway_flavor.hdd, hostlist)
+    if not serverid:
+        raise ResourceNotEnough()
+
+
+
+
