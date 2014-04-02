@@ -7080,3 +7080,9 @@ a.button-royal:hover {
 a[data-toggle="tooltip"] {
   text-decoration: none;
 }
+#svg .modal.fade.in {
+  top: 20%;
+}
+#svg .modal-body {
+  max-height: 160px;
+}
