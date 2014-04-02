@@ -51,23 +51,21 @@
                                     {% block nav %}
                                     	<ul class="navbar_list nav navbar-nav">
                                             {% notifications_unread as unread_count %}
+                                            <li class="index_menu {% if request.current_app == 'manage_index' %}active{% endif %}"><a href="{% url "manage_index" %}">首页</a></li>
+                                            <li class="pro_menu {% if request.current_app == 'project' %}active{% endif %}"><a href="{% url "project_index" %}">项目</a></li>
                                             {% if user.is_superuser %}
-                                                <li class="index_menu"><a href="{% url "manage_index" %}">首页</a></li>
-                                                <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>
-                                                <li class="slice_menu"><a href="{% url "slice_list" 0 0 %}">虚网</a></li>
-                                                <li class="{% if '/nexus/auth/user/' not in request.path %}device_menu{% endif %}">
+                                            <li class="slice_menu {% if request.current_app == 'slice' %}active{% endif %}"><a href="{% url "slice_list" 0 0 %}">虚网</a></li>
+                                            <li class="{% if '/nexus/auth/user/' not in request.path %}{% if request.current_app == 'nexus' %}active{% endif %} device_menu{% endif %}">
                                                     <a href="{% url "nexus_list" "project" "city" %}">
                                                         基础设施
                                                     </a>
                                                 </li>
-                                                <li class="{% if '/nexus/auth/user/' in request.path  %}user_menu{% endif %}"><a href="{% url "nexus_list" "auth" "user" %}">用户管理</a></li>
-                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息日志{% if unread_count > 0%} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
-                                            {% else %}
-					                            <li class="index_menu"><a href="{% url "project_manage" %}">首页</a></li>
-					                            <li class="pro_menu"><a href="{% url "project_index" %}">项目</a></li>        
-                                                <li class="news_menu"><a href="{% url "notifications:all" %}">消息{% if unread_count > 0 %} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
+                                                <li class="{% if '/nexus/auth/user/' in request.path  %}{% if request.current_app == 'nexus' %}active{% endif %} user_menu{% endif %}"><a href="{% url "nexus_list" "auth" "user" %}">用户管理</a></li>
+                                            {% endif %}
+                                                <li class="news_menu {% if request.current_app == 'notifications' %}active{% endif %}"><a href="{% url "notifications:all" %}">消息{% if unread_count > 0%} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
 
-					                            <li><a href="/help/" class="help_menu">帮助</a></li>
+                                            {% if not user.is_superuser %}
+                                            <li class="{% if request.current_app == 'help' %}active{% endif %}"><a href="/help/" class="help_menu">帮助</a></li>
                                             {% endif %}
 					                    </ul>
                                         {% comment %}
