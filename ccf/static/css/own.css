@@ -374,6 +374,12 @@ a.chart_btn span.color_red {
 	background:#bd494c;
 	border-radius:5px;
 }
+.slice_detail .slice_on {
+    color: #fff;
+    padding: 2px 6px;
+    background: #009900;
+    border-radius: 5px;
+}
 .circle_bars {
 	padding:8px 8px 0 8px;
 	border-bottom:1px solid #cacaca;

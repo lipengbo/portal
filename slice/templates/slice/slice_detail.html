@@ -233,10 +233,7 @@
                               自定义
                             </label>
                         </td>
-                        <td>控制器IP</td> 
-                        <!--<td>
-                            <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
-                        </td>-->
+                        <td>控制器IP</td>
                         <td width="230">
                             <div id="ipInput" class="disabled"></div>
                         </td>
@@ -299,15 +296,6 @@
     $(document).ready(function(){
         $("#ipInput").ipInput();
         init_ipinput();
-        $(".show_describe").click(function(){
-            if($(".word_detail").is(":hidden")) {
-                $(".word_detail").slideDown(); 
-                $(this).removeClass("icon-caret-down").addClass("icon-caret-up");
-            } else {
-                $(".word_detail").slideUp();
-                $(this).removeClass("icon-caret-up").addClass("icon-caret-down");
-            }
-        });
     });
 </script>
 {% endblock %}
