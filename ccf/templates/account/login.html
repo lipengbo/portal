@@ -12,6 +12,12 @@
 {% block topbar_base %}{% endblock %}
 {% block breadcrumb_base %}{% endblock %}
 
+{% block messages %}
+<div class="hide">
+    {% include "_messages.html" %}
+</div>
+{% endblock %}
+
 {% block body %}
 {% block blank_block %}{% endblock %}
 
