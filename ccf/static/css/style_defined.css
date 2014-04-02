@@ -6650,14 +6650,14 @@ fieldset legend {
   margin-bottom: 40px;
 }
 .help_main section h4 {
-  color: #2489c5;
-  font-family: "Microsoft YaHei";
+  font-weight: bold;
   padding-bottom: 5px;
-  border-bottom: 1px solid #2489c5;
 }
 .help_main section h4 i {
-  font-size: 15px;
+  color: #2489c5;
+  font-size: 20px;
   margin-right: 10px;
+  vertical-align: middle;
 }
 .help_main section p {
   line-height: 24px;
@@ -6679,7 +6679,7 @@ fieldset legend {
 .help_main section img {
   display: block;
   margin: 20px auto 0;
-  width: 100%;
+  max-width: 100%;
 }
 .bs-docs-sidenav {
   border: 1px solid #e5e5e5;

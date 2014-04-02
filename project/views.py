@@ -582,7 +582,7 @@ def manage_index(request):
             context['switch_id'] = -1
         return render(request, 'manage_index.html', context)
     else:
-        return redirect("forbidden")
+        return redirect("project_manage")
 
 @login_required
 def delete_notifications(request):

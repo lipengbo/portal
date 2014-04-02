@@ -9,6 +9,10 @@ class CurrentViewApplicationName(object):
             request.current_app = 'slice'
         elif func_name.startswith('island') or func_name.startswith('node'):
             request.current_app = 'node'
+        elif func_name.startswith('manage_index') or func_name.startswith('manage'):
+            request.current_app = 'manage_index'
+        elif request.path == '/help/':
+            request.current_app = 'help'
         else:
             mod_parts = view_func.__module__.split('.')
             if len(mod_parts) >= 2:
