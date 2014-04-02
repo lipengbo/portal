@@ -8,7 +8,9 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
 {% endblock %}
-{% block breadcrumb_base %}{% endblock %}
+{% block breadcrumb %}
+        <li>帮助</li>
+{% endblock %}
 {% block body_class %}common help_box{% endblock %}
 
 {% block body %}
@@ -16,13 +18,13 @@
        <div class="col-md-9">
        	 	<div class="help_main">
        	 	  <section id="help_sdn">
-       	 		<h4><i class="glyphicon glyphicon-laptop"></i>什么是SDN创新实验平台？</h4>
+       	 		<h4><i class="icon-laptop"></i>什么是SDN创新实验平台？</h4>
        	 		<p>SDN创新实验平台为高校等科研机构用于验证网络实验提供服务，用户可以通过平台获取实验所需要的网络、计算、存储资源进行SDN、云计算、移动网络、信息中心网络等未来网络相关的不同方向研究实验。</p>
                 <p> 平台提供用户灵活的环境配置，如自定义SDN控制器、网关、DHCP服务器，以及网络实验所需要的拓扑的自由选择，帮助用户降低实验过程中环境搭建以及运维的成本，提高用户进行科研实验的效率。</p>                        	 	              
                 <img src="{% static "img/help_sdn.png" %}" />
               </section>
               <section id="help_project">
-                <h4><i class="glyphicon glyphicon-folder-close-alt"></i>什么是项目？</h4>
+                <h4><i class="icon-folder-close-alt"></i>什么是项目？</h4>
                 <p>项目是SDN创新实验平台中用于组织和进行创新研究试验的载体，它具有如下特点：</p>
                 <ul>
                     <li>项目由项目leader创建，项目leader一般为教授或高级研究人员、资深爱好者等，项目leader可以创建多个项目；</li>
@@ -30,7 +32,7 @@
                 </ul>                 
               </section>
               <section id="help_slice">
-                <h4> <i class="glyphicon glyphicon-globe"></i>什么是虚网？</h4>
+                <h4> <i class="icon-globe"></i>什么是虚网？</h4>
                 <p>虚网是SDN创新实验平台的项目中实验的最小独立载体，它具有如下特点：</p>
                 <ul>
                     <li>虚网由项目成员创建，项目成员创建虚网的权限由项目leader授予；</li>
@@ -42,7 +44,7 @@
                 <img src="{% static "img/help_slice.png" %}" />
               </section>
               <section id="help_process">
-                <h4><i class="glyphicon glyphicon-random"></i>使用SDN创新平台进行实验的流程？</h4>
+                <h4><i class="icon-random"></i>使用SDN创新平台进行实验的流程？</h4>
                 <ol>
                     <li>创建实验
                         <ul>
