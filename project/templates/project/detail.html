@@ -24,17 +24,16 @@
 <div class="fill_form">
 <fieldset>
     <legend>
-        {%if extent_html == "site_base.html" %}
-            {% has_perm user 'project.change_project' project %}
-            {% if has_perm %}
-            <a href="{% url project_edit project.id %}" class="btn btn-info edit">{% trans "Edit" %}</a>
-            {% endif %}
-        {%endif%} 
-        <div class="block_title">
+        <h4 class="block_title">
             <img src="{% static "img/ic_baseinfo.png" %}">
-                                        {% trans "Basic info" %}
-           <div class="triangle"></div> 
-        </div>
+            {% trans "Basic info" %}
+            {%if extent_html == "site_base.html" %}
+                {% has_perm user 'project.change_project' project %}
+                {% if has_perm %}
+                <a href="{% url project_edit project.id %}" class="btn btn-info edit pull-right">{% trans "Edit" %}</a>
+                {% endif %}
+            {%endif%} 
+        </h4>
     </legend>
     <table class="table_defined">
         <thead>
