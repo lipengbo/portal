@@ -9,19 +9,19 @@ from project.models import Project, Category
 
 class ProjectForm(forms.ModelForm):
 
-    category_name = forms.RegexField(regex=u"^[\w\u4e00-\u9fa5]+$", required=True, max_length=64)
+    #    category_name = forms.RegexField(regex=u"^[\w\u4e00-\u9fa5]+$", required=True, max_length=64)
 
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
+        self.fields['description'].widget = forms.Textarea()
 
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit('submit', '创建'))
 
     def clean_name(self):
         return self.cleaned_data['name'].strip()
 
     class Meta:
         model = Project
-        fields = ("name", "description", "islands")
+        fields = ("name", "description", "category", "islands")
         widgets = {"islands": forms.SelectMultiple(attrs={"class": "hide"})}
