@@ -6705,3 +6705,6 @@ fieldset legend {
 .bs-docs-sidenav a:hover .icon-chevron-left {
   opacity: .5;
 }
+.asteriskField {
+  display: none;
+}
