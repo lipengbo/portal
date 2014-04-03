@@ -2,7 +2,7 @@
 from django import forms
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, ButtonHolder
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
 
 from project.models import Project, Category
@@ -17,6 +17,15 @@ class ProjectForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-md-1'
+        self.helper.field_class = 'col-md-6'
+        self.helper.help_text_inline = True
+        self.helper.layout = Layout(
+            Fieldset(
+                "", "name", "description", "category"
+            ),
+            Field('islands', template="project/_create_project_islands.html"),
+        )
 
     def clean_name(self):
         return self.cleaned_data['name'].strip()
@@ -24,4 +33,4 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = ("name", "description", "category", "islands")
-        widgets = {"islands": forms.SelectMultiple(attrs={"class": "hide"})}
+        #widgets = {"islands": forms.SelectMultiple(attrs={"class": "hide"})}

@@ -427,9 +427,26 @@ a.chart_btn span.color_red {
     width: 100%;
     margin-bottom: 20px;
 }
+.table_defined td.btn_operation {
+    button {
+        border:none;
+        background:none;
+        img {
+            width:24px;
+        }
+    }
+}
 .table_defined td.btn_operation a {
     display:inline-block;
     margin-right:10px;
+}
+.table_defined td.btn_operation .disabled {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    box-shadow: none;
 }
 .table_defined td.btn_operation a img {
     width:24px;
@@ -516,8 +533,10 @@ a.chart_btn span.color_red {
     background:url(../img/wlxngj2.png) no-repeat center center;
 }
 .index_block .active {
-    background:#3399fe;
-    color:#fff;
+    background:#3399fe;    
+    a {
+        color:#fff;
+    }
 }
 .infrastructure_form {
     margin-bottom:15px;
@@ -690,12 +709,16 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
 .none_tip {
     text-align:center;
     padding:10px;
+    color:#999;
 }
 .block_title {
     font-size:18px;
     font-weight:bold;
     height: 34px;
     line-height: 34px;
+    a:hover i {
+        text-decoration:none;
+    }
     i {
         font-size: 21px;
         margin-right: 5px;
@@ -919,4 +942,34 @@ fieldset {
     a:hover .icon-chevron-left {
         opacity: .5;
     }
+}
+.asteriskField {
+    display:none;
+}
+.progress_explain {
+    margin-bottom:10px;
+    span {
+        vertical-align: middle;
+        margin-left:10px;
+      }
+    img {
+        width:auto;
+        margin-bottom:0;
+        margin-right:0;
+    }
+}
+.progress_defined {
+    background:#2291fe;
+    margin-bottom:0;
+    border-radius: 10px;
+    .progress-bar-info {
+        background:#2291fe;
+    }
+    .progress-bar-success {
+        border-radius: 10px;   
+        background:#00cc33;     
+    }
+}
+.buttons_margin {
+    margin-top:50px;
 }
