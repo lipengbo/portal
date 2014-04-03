@@ -6139,6 +6139,7 @@ a.chart_btn span.color_red {
 }
 .slice_list_block_l .slice_logo img {
   vertical-align: middle;
+  height: 40px;
 }
 .slice_detail {
   border-bottom: 1px solid #cacaca;
@@ -6784,7 +6785,7 @@ fieldset legend {
 .nav-pills li a.step i {
   font-size: 18px;
   position: absolute;
-  right: 0;
+  left: 0;
   top: 22px;
   color: #999;
 }
@@ -6812,9 +6813,10 @@ fieldset legend {
 }
 .nav-pills .visit .step .desc {
   color: #555;
-}
-.nav-pills .visit .step .active {
   font-weight: bold;
+}
+.nav-pills .visit .step i {
+  color: #3399fe;
 }
 .show_frame {
   min-height: 200px;
