@@ -652,9 +652,9 @@
                 if(!is_delete) {
                     window.selected_dpids[checkbox.data('dpid')] = true;
                     selected_ports[port_id] = port_id;
-                    checkbox.parents('label').show();
+                    checkbox.parents('label').removeClass('hide').show();
                     checkbox.removeAttr('disabled');
-                    checkbox.parents('.switch-data').show();
+                    checkbox.parents('.switch-data').removeClass('hide')show();
                 }
             }
             var ports = [];
