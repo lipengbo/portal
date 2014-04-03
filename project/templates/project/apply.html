@@ -30,12 +30,12 @@
 {% block body %}
 {% paginate  projects %}
         <div class="fill_form">
-          <form action="" method="POST">
+          <form class="form-horizontal" action="" method="POST">
               {% csrf_token %}
                  
                     <h4 class="title_word_bg block_title">
                          <img src="{% static "img/ic_11.png" %}">项目列表                      
-                         <a id="apply-button" href="javascript:;" class="btn btn-default disabled edit pull-right">申请</a>
+                         <a id="apply-button" href="javascript:;" class="btn action-btn btn-default disabled edit pull-right">申请</a>
                     </h4>
                  <table class="table_defined">
                     <thead>
@@ -90,28 +90,30 @@
               {% show_pages %}
           </ul>
         </div>   
-        <div id="applyModal" class="modal hide in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-              <h3 id="myModalLabel">申请</h3>      
-            </div>
-                <div class="modal-body">
-                        <div class="alert message-error alert-error hide">
+        <div id="applyModal" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+                      <h4 class="modal-title" id="myModalLabel">申请</h4>      
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert message-error alert-danger hide">
                             消息是必填项
                         </div>
-                      <table class="table">
-                          <tbody>
-                              <tr>
-                                  <td width="150" class="v_top text_r">申请理由</td>
-                                  <td><textarea id="message" rows="3" name="message"></textarea></td>
-                              </tr>
-                          </tbody>
-                      </table>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">申请理由</label>
+                            <div class="col-md-8">
+                                <textarea class="form-control message" name="message" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-default" data-dismiss="modal">取消</button>
+                      <button id="apply-submit" type="submit" class="btn btn-info">提交</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                  <button class="btn btn-default" data-dismiss="modal">取消</button>
-                  <button id="apply-submit" type="submit" class="btn btn-info">提交</button>
-                </div>
+            </div>
          </div>
   </form>
   </div>
@@ -143,8 +145,8 @@
         $("#applyModal").modal();
     });
     $('#apply-submit').click(function() {
-            if(!$('#message').val()) {
-                $('.message-error').show();
+            if(!$('.message').val()) {
+                $('.message-error').removeClass('hide').show();
                 return false;
             }
     });

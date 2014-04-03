@@ -6,10 +6,10 @@
 {% load staticfiles %}
 {% load endless %}
 {% block breadcrumb %}
-<a href="/project/">项目</a><span class="divider">/</span>
-<a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>
-<a href="{% url "project_member_manage" project.id %}">成员管理</a><span class="divider">/</span>
-项目权限
+<li><a href="/project/">项目</a></li>
+<li><a href="{% url "project_detail" project.id %}">项目详情</a></li>
+<li><a href="{% url "project_member_manage" project.id %}">成员管理</a></li>
+<li>项目权限</li>
 {% endblock %}
 {% block body %}
         <form class="fill_form" action="" method="post" accept-charset="utf-8">
