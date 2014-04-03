@@ -107,33 +107,31 @@
 <a class="enter_link" href="{% url project_member project.id  %}">More&nbsp;<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
 {%endif%}
 
+           {%if extent_html == "site_base.html" %}
+           {% if user|is_membership:project %}
             <h4 class="block_title">
                 <img src="{% static "img/ic_slice.png" %}">
                                             虚网
                 <a href="{% url create_slice project.id %}" class="edit pull-right" title="新建"><i class="icon-plus"></i></a>
             </h4>           
-           {%if extent_html == "site_base.html" %}
-           {% if user|is_membership:project %}
            
           {% endif %}
           {%endif%}       
-        <div class="row">
             {% with project.get_slices as slices  %}
                 {% if not slices %}
                     <p class="none_tip">暂无虚网！</p>
                 {% else %}
-                    <ul class="thumbnails example-sites">
+                    <div class="row example-sites">
                         {% for slice in project.get_slices %}
                         {% if forloop.counter <= 2  %}
                               {% include "slice/_slice.html" %}
                         {%endif%}
                         {% endfor %}
-                    </ul>
+                    </div>
                 {% endif %}
              {% endwith %}
-		</div>
 		{%if  project.get_slices.count > 2 %}
-		<a class="enter_link" href="/slice/list/{{ project.id }}/0/">More&nbsp;<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
+		<a class="enter_link pull-right" href="/slice/list/{{ project.id }}/0/"><i class="glyphicon glyphicon-circle-arrow-right"></i> 更多</a>
         {%endif%}
   </div>
 {% endblock %}
