@@ -6762,6 +6762,9 @@ fieldset legend {
 .buttons_margin {
   margin-top: 50px;
 }
+.search_chose select {
+  max-width: 175px;
+}
 .nav-pills li {
   padding: 0;
   text-align: center;
