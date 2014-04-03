@@ -7103,3 +7103,9 @@ fieldset legend {
 #div_normal_data .row .box.gradient .title {
   background: #f1f1f1;
 }
+.tab_part {
+  display: none;
+}
+.tab_part.tab_1 {
+  display: block;
+}
