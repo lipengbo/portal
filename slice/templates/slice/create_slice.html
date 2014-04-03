@@ -467,7 +467,7 @@
                                     <option value="" selected="selected">---------</option>
                                     <option value="51">1</option>
                                   </select> <span name="imageInfo"></span-->
-							 	{{ vm_form.image }} <span name="imageInfo"></span>
+							 	<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                              </td>
                          </tr>
                          <tr>
@@ -478,7 +478,7 @@
                                      <option value="" selected="selected">---------</option>
                                      <option value="1">server1</option>
                                  </select-->
-							 	{{ vm_form.server }} 
+							 	<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div>
                                  <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
                                  <span name="serverInfo"></span>
                              </td>
