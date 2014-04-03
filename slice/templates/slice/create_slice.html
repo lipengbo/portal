@@ -7,8 +7,7 @@
 
 {% block head_title %}创建虚网{% endblock %}
 {% block breadcrumb %}
-	<a href="/project/">项目</a><span class="divider">/</span><a href="/project/detail/{{ project.id }}/">项目详情</a><span class="divider">/</span>
-	创建虚网
+	<li><a href="/project/">项目</a></li><li><a href="/project/detail/{{ project.id }}/">项目详情</a></li><li>创建虚网</li>
 {% endblock %}
 
 {% block body %}
@@ -22,6 +21,7 @@
                     <span class="number">1</span>
                     <span class="desc active">基本信息</span>   
                     </a>
+                    <i class="icon-caret-right"></i>
                 </li>
                 <li class="col-md-2">
                     <a href="#tab2" class="step">
@@ -54,13 +54,11 @@
               	{% if error_info %}
               		<p>{{error_info}}ok</p>
               	{%endif%}
-              <fieldset>
-                 <legend>
-                    <div class="title_word_bg">
-                                        基本信息      
-                       <div class="triangle"></div> 
-                    </div> 
-                 </legend>
+
+                 <h4 class="title_word_bg block_title">
+                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息      
+                 </h4> 
+
                  <div class="form_inline">
                     <label>虚网名称</label>
                     <input type="text" maxlength=30 id="slice_name" name="slice_name" onblur="check_slice_name('slice_name',1)">
