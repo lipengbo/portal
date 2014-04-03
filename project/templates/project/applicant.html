@@ -54,8 +54,8 @@
                             <td>{{ application.from_user.get_profile.realm|default:"未填写"}}</td>
                             <td>{{ application.created_time|date:"Y.m.d H:i" }}</td>
                             <td class="btn_operation">
-                                <a class="reject-btn" title="批准"><img src="{% static "img/btn_pz.png" %}"></a>
-                                <a class="approve-btn" title="拒绝"><img src="{% static "img/btn_jj.png" %}"></a>
+                                <a class="approve-btn" title="批准"><img src="{% static "img/btn_pz.png" %}"></a>
+                                <a class="reject-btn" title="拒绝"><img src="{% static "img/btn_jj.png" %}"></a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -79,27 +79,12 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script type="text/javascript" charset="utf-8">
-    $('.checkboxs input').on('ifChecked', function(event){
-        $('.action-btn').removeClass('disabled');
-    });
-    $('.checkboxs input').on('ifUnchecked', function(event){
-        if($('.checkboxs .checked').length == 1) {
-            $('.action-btn').addClass('disabled');
-        } else {
-            $('.action-btn').removeClass('disabled');
-        }
-    });
-    $('.action-btn').click(function(){
-        if($(this).hasClass('disabled')) {
-            return false;
-        }
-    });
     $('.approve-btn').click(function(){
-        $(this).parents('tr').find('input').iCheck('check');
+        $(this).parents('tr').find('input').prop('checked', true).trigger('change');
         $('.action-btn[name="approve"]').trigger('click');
     });
     $('.reject-btn').click(function(){
-        $(this).parents('tr').find('input').iCheck('check');
+        $(this).parents('tr').find('input').prop('checked', true).trigger('change');
         $('.action-btn[name="deny"]').trigger('click');
     });
 </script>
