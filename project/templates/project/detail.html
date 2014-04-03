@@ -118,14 +118,19 @@
           {% endif %}
           {%endif%}       
         <div class="row">
-             <p class="none_tip">暂无虚网！</p>
-             <ul class="thumbnails example-sites">
-		         {% for slice in project.get_slices %}
-		         {% if forloop.counter <= 2  %}
-		               {% include "slice/_slice.html" %}
-		         {%endif%}
-		         {% endfor %}
-		     </ul>
+            {% with project.get_slices as slices  %}
+                {% if not slices %}
+                    <p class="none_tip">暂无虚网！</p>
+                {% else %}
+                    <ul class="thumbnails example-sites">
+                        {% for slice in project.get_slices %}
+                        {% if forloop.counter <= 2  %}
+                              {% include "slice/_slice.html" %}
+                        {%endif%}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+             {% endwith %}
 		</div>
 		{%if  project.get_slices.count > 2 %}
 		<a class="enter_link" href="/slice/list/{{ project.id }}/0/">More&nbsp;<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
