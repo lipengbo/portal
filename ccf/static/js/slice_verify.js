@@ -50,9 +50,13 @@ function check_slice_description(obj_id,flag){
 }
 //验证节点的选择
 function check_island_id(obj_id){
+    alert('h1');
 	var obj = document.getElementById(obj_id);
+	alert('h2');
 	var info = document.getElementById(obj_id+"Info"); 
+	alert('h3');
 	var island_id = obj.options[obj.selectedIndex].value;
+	alert('h4');
 	if(obj.value == "no"){
 		showInfo(info," * 必选","red");
 		return false;
