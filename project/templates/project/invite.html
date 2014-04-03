@@ -25,13 +25,13 @@
 
 {% block body %}
 {% paginate users %}
-        <form class="invite-form" action="" method="post" accept-charset="utf-8">
+        <form class="invite-form form-horizontal" action="" method="post" accept-charset="utf-8">
             {% csrf_token %}
 
                                   
                  <h4 class="title_word_bg block_title">
                       <img src="{% static "img/ic_baseinfo.png" %}" />邀请成员                  
-                      <a  href="javascript:;" id="invite-button" class="btn disabled btn-default edit pull-right">邀请</a>  
+                      <a  href="javascript:;" id="invite-button" class="btn action-btn disabled btn-default edit pull-right">邀请</a>  
                  </h4>
             
                  <table class="table_defined">
@@ -87,27 +87,29 @@
               {% show_pages %}
           </ul>
         </div>
-        <div id="inviteModal" class="modal hide in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-              <h3 id="myModalLabel">邀请</h3>      
-            </div>
-            <div class="modal-body base_info">
-                <div class="alert hide blank-message alert-error">
-                    请填写邀请消息
+        <div id="inviteModal" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                      <h4 id="myModalLabel" class="modal-title">邀请</h4>      
+                    </div>
+                    <div class="modal-body base_info">
+                        <div class="alert hide blank-message alert-danger">
+                            请填写邀请消息
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-2">捎句话</label>
+                            <div class="col-md-8">
+                                    <textarea class="form-control message" name="message" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-default" data-dismiss="modal">取消</button>
+                      <button class="btn btn-info submit-invite">邀请</button>
+                    </div>
                 </div>
-                  <table class="table">
-                      <tbody>
-                          <tr>
-                              <td width="150" class="v_top text_r">捎句话</td>
-                              <td><textarea class="message" name="message" rows="3"></textarea></td>
-                          </tr>
-                      </tbody>
-                  </table>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn-info submit-invite">邀请</button>
             </div>
          </div>
         </form>
@@ -134,10 +136,10 @@
     $('.invite-form').submit(function(){
         $('.blank-message').hide();
         if(!$('.message').val().trim()) {
+            $('.blank-message').removeClass('hide');
             $('.blank-message').show();
             return false;
         }
     });
 </script>
 {% endblock %}
-

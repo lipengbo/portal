@@ -44,7 +44,7 @@ $(function(){
             } else {
                 $(".checkall input").prop("checked",false);
             }
-        });    
+        });
     });
     $('.glyphicon-search').click(function(){
         $('form.search_defined').submit();
