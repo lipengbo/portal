@@ -18,7 +18,7 @@
 
         
         <h4 class="title_word_bg block_title">
-                                          <img src="{% static "img/ic_25.png" %}" />{% trans "Members" %}
+           <img src="{% static "img/ic_25.png" %}" />{% trans "Members" %}
            <div class="pull-right">               
                <a href="{% url project_invite project.id %}" class="btn btn-default edit">邀请</a>
                <a href="{% url project_applicant project.id %}" class="btn btn-default edit">审批</a>
@@ -50,10 +50,10 @@
                         {% if  project.owner == user %}
                             {% if  membership.user.id != project.owner.id %}
                             <a href="{% url project_perm project.id membership.user.id  %}"  title="权限"><img src="{% static "img/btn_qx.png" %}" /></a>
-                            <a href="{% url project_delete_member membership.id  %}" class="btn-delete"><img src="{% static "img/btn_sc.png" %}" /></a>
+                            <a href="{% url project_delete_member membership.id  %}" class="btn-delete" title="删除"><img src="{% static "img/btn_sc.png" %}" /></a>
                             {%else%}
-                            <a class="disabled" href="#" disabled><img src="{% static "img/btn_qx.png" %}" /></a>
-                            <button type="button" onclick="" class="btn-delete disabled" disabled><img src="{% static "img/btn_sc.png" %}" /></button>
+                            <a class="disabled" href="#" disabled title="权限"><img src="{% static "img/btn_qx.png" %}" /></a>
+                            <button type="button" onclick="" class="btn-delete disabled" disabled title="删除"><img src="{% static "img/btn_sc.png" %}" /></button>
                             {% endif %}
                         {% endif %}
                     </td>
