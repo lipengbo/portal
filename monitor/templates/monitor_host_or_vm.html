@@ -3,18 +3,17 @@
 {% load staticfiles %}
 {% load url from future %}
 {% load staticfiles %}
-
-{% block breadcrumb %}
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}js/jqPlot/jquery.jqplot.css" />
 {% endblock %}
+{% block breadcrumb %}
 {% if vm_id == 0%}
-<a href="/nexus/resources/server/">服务器管理</a><span class="divider">/</span>
+<li><a href="/nexus/resources/server/">服务器管理</a></li>
 <li class="active">服务器监控</li>
 {% else%}
-<a href="/project/">项目</a><span class="divider">/</span>
-<a href="{% url 'project_detail' project_id %}">项目详情</a><span class="divider">/</span>
-<a href="{% url 'slice_detail' slice_id %}">虚网详情</a><span class="divider">/</span>
+<li><a href="/project/">项目</a></li>
+<li><a href="{% url 'project_detail' project_id %}">项目详情</a></li>
+<li><a href="{% url 'slice_detail' slice_id %}">虚网详情</a></li>
 虚拟机监控
 {% endif %}
 {% endblock %}

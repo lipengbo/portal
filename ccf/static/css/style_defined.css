@@ -7055,3 +7055,51 @@ fieldset legend {
 .ui_defined .ui-slider-handle:active {
   background-color: #fea30a;
 }
+#div_normal_data .row {
+  margin-bottom: 20px;
+}
+#div_normal_data .row .box .title {
+  height: auto;
+  position: relative;
+  border: 1px solid #c4c4c4;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+}
+#div_normal_data .row .box .title h4 {
+  padding-left: 15px;
+  margin-bottom: 0;
+  padding-bottom: 9px;
+  font-size: 14px;
+  line-height: 18px;
+}
+#div_normal_data .row .box .content {
+  padding: 10px;
+  border: 1px solid #c4c4c4;
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-top: none;
+  background-color: #fff;
+  position: relative;
+}
+#div_normal_data .row .box .content .chart_tip {
+  position: absolute;
+  height: 44px;
+  top: 5px;
+  right: 5px;
+  background-color: #ffffff;
+  opacity: 0.85;
+  padding: 5px 10px 5px 10px;
+}
+#div_normal_data .row .box .content .chart_tip p {
+  font-size: smaller;
+  color: #3f3f3f;
+}
+#div_normal_data .row .box .content .chart_tip p span {
+  display: inline-block;
+  width: 14px;
+  height: 10px;
+  margin-right: 5px;
+}
+#div_normal_data .row .box.gradient .title {
+  background: #f1f1f1;
+}
