@@ -1,19 +1,27 @@
 {% load project_tags %}
+{% load staticfiles %}
+
   <div class="row">
       <div class="col-md-12">
-    <legend>
-        <div class="title_word_bg">
-            添加资源 
-            <div class="triangle"></div> 
-        </div>       
-    </legend>
-        <div class="progress edit" style="width:150px;margin-bottom:10px;">
-             <div class="bar bar-success" style="width: 50%;">交换机</div>
-             <div class="bar bar-warning" style="width: 50%;">服务器</div>
-        </div>
+        <h4 class="title_word_bg block_title">
+            <img src="{% static "img/ic_21.png" %}" />添加资源 
+            <div class="progress_explain pull-right">
+                <span>交换机</span><img src="{% static "img/ic_19.png" %}" />
+                <span>服务器</span><img src="{% static "img/ic_23.png" %}" />
+            </div>
+        </h4>       
         {% get_all_cities %}
         {% get_total_resources %}
-        <table class="table table-striped table-hover" cellspacing="1">
+        
+        {% if form.islands.errors %}
+        <div class="has-error">
+                {% for error in form.islands.errors %}
+                    <strong class="help-block">{{ error }}</strong>
+                {% endfor %}
+        </div>
+        {% endif %}
+
+        <table class="table_defined" cellspacing="1">
             <thead>
                 <tr>
                     <th width="10%" class="checkall"><input type="checkbox"></th>
@@ -34,9 +42,9 @@
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
-                                <div class="progress">
-                                    <div class="bar bar-success" style="width: {% resource_ratio switch_num total_resource%}%;">{{ switch_num }}</div>
-                                    <div class="bar bar-warning" style="width: {% resource_ratio server_num total_resource%}%;">{{ server_num }}</div>
+                                <div class="progress progress-bar-info progress_defined">
+                                    <div class="progress-bar progress-bar-info" style="width: {% resource_ratio switch_num total_resource%}%;">{{ switch_num }}</div>
+                                    <div class="progress-bar progress-bar-success" style="width: {% resource_ratio server_num total_resource%}%;">{{ server_num }}</div>
                                 </div>
                             </td>
                         </tr>
@@ -45,4 +53,3 @@
                 {% endfor %}
             </tbody>
         </table>
-

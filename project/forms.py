@@ -17,17 +17,14 @@ class ProjectForm(forms.ModelForm):
 
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-md-2'
+        self.helper.label_class = 'col-md-1'
         self.helper.field_class = 'col-md-6'
         self.helper.help_text_inline = True
         self.helper.layout = Layout(
             Fieldset(
-                "", "name", "description", "category", "islands",
+                "", "name", "description", "category"
             ),
             Field('islands', template="project/_create_project_islands.html"),
-            ButtonHolder(
-                Submit('submit', u'创建', css_class='btn btn-info')
-            )
         )
 
     def clean_name(self):
