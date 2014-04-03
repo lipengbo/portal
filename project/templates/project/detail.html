@@ -107,13 +107,13 @@
 <a class="enter_link" href="{% url project_member project.id  %}">More&nbsp;<i class="glyphicon glyphicon-circle-arrow-right"></i></a>
 {%endif%}
 
+           {%if extent_html == "site_base.html" %}
+           {% if user|is_membership:project %}
             <h4 class="block_title">
                 <img src="{% static "img/ic_slice.png" %}">
                                             虚网
                 <a href="{% url create_slice project.id %}" class="edit pull-right" title="新建"><i class="icon-plus"></i></a>
             </h4>           
-           {%if extent_html == "site_base.html" %}
-           {% if user|is_membership:project %}
            
           {% endif %}
           {%endif%}       
