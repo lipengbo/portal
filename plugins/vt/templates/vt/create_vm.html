@@ -74,13 +74,13 @@
                 <tr>
                 	<td><img src="/site_media/static/img/icon_iso.png" width="24">镜像</td>
                     <td>
-						{{ vm_form.image }} <span name="imageInfo"></span>
+						<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                     </td>
                 </tr>
                 <tr>
                 	<td><img src="/site_media/static/img/icon_host.png" width="24">宿主机</td>
                  	<td>
-						{{ vm_form.server }} <span name="serverInfo"></span>
+						<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div> <span name="serverInfo"></span>
                     	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
                 	</td>
        			</tr>

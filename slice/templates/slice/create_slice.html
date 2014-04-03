@@ -112,6 +112,7 @@
                                          <option value="no">无可选节点</option>
                                     </select>
                                  {%endif%}
+                                    <span id="island_idInfo" style="display:inline;float:none;"></span>
                              </td>
                              <td>
                                  <span id="island_idInfo col-md-6" style="display:inline;float:none;"></span>
@@ -467,7 +468,7 @@
                                     <option value="" selected="selected">---------</option>
                                     <option value="51">1</option>
                                   </select> <span name="imageInfo"></span-->
-							 	{{ vm_form.image }} <span name="imageInfo"></span>
+							 	<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                              </td>
                          </tr>
                          <tr>
@@ -478,7 +479,7 @@
                                      <option value="" selected="selected">---------</option>
                                      <option value="1">server1</option>
                                  </select-->
-							 	{{ vm_form.server }} 
+							 	<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div>
                                  <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
                                  <span name="serverInfo"></span>
                              </td>
@@ -652,9 +653,9 @@
                 if(!is_delete) {
                     window.selected_dpids[checkbox.data('dpid')] = true;
                     selected_ports[port_id] = port_id;
-                    checkbox.parents('label').show();
+                    checkbox.parents('label').removeClass('hide').show();
                     checkbox.removeAttr('disabled');
-                    checkbox.parents('.switch-data').show();
+                    checkbox.parents('.switch-data').removeClass('hide')show();
                 }
             }
             var ports = [];
