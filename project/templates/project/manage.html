@@ -3,6 +3,7 @@
 {% load url from future %}
 {% load staticfiles %}
 {% load i18n %}
+{% load endless %}
 
 {% block head_title %}项目管理{% endblock %}
 {% block breadcrumb_base %}{% endblock %}
@@ -29,20 +30,16 @@
 </header>
 </div>
 <div class="container-fluid pro_manage_container">
-<div class="row">
-                 <div class="alert alert-block nothing_tip">
-                     <h4>没有已创建的项目,请通过上方"创建项目"按钮进行创建！</h4>
-                </div>
-                 <ul class="thumbnails example-sites">
-                    {% for project in projects %}
-                        {% include "project/_project.html" %}
-                    {% endfor %}
-                  </ul>
-                  {% if projects|length == 4 %}
-                  <a class="edit view_more" href="{% url "project_index" %}">More&nbsp;<i class="glyphicon glyphicon-caret-right"></i></a>
-                  {% endif %}
-</div>
-</div>
+    {%if projects %}
+        <div id="list_show" class="project_list">
+            {% include "project/list_page.html" %}
+        </div>
+    {% else %}
+                     <div class="alert alert-block nothing_tip">
+                         <h4>没有已创建的项目,请通过上方"创建项目"按钮进行创建！</h4>
+                    </div>
+    {%endif%}
+    </div>
             <div class="blank_block"></div>
 {% endblock %}
 {% endblock %}

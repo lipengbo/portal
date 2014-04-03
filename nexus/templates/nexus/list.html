@@ -203,7 +203,7 @@
                     </a>
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser or class_name != 'User'%}
-                    <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="">
+                    <a class="btn-delete" href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="">
                                 <img src="{% static "img/btn_sc.png" %}" title="删除">
                     </a>
                     {% endif %}
