@@ -167,7 +167,7 @@ def manage(request):
     projects = Project.objects.filter(id__in=project_ids)
     context = {}
     context['extent_html'] = "site_base.html"
-    context['projects'] = projects[:4]
+    context['projects'] = projects
     return render(request, 'project/manage.html', context)
 
 

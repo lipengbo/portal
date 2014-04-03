@@ -1,4 +1,5 @@
 {% load endless %}
+{% load project_tags %}
 {% paginate 8 projects  %}
 {% for group in projects|group_by:4 %}
 <div class="row">
