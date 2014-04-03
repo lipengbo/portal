@@ -266,19 +266,13 @@ $(document).ready(function() {
 
 //slice创建页面js
 function page_function0(){
-    alert(1);
 	ret1 = check_slice_name('slice_name',2);
-	alert(4);
 	ret2 = check_slice_description('slice_description',2);
-	alert(5);
 	ret3 = check_island_id('island_id')
-	alert(6);
 	if (ret1 && ret2 && ret3){
-	    alert(2);
 		return true;
 	}
 	else{
-	   alert(3);
 		return false;
 	}
 }
