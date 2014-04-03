@@ -22,28 +22,12 @@
 {% endblock %}
 {% block body %}
 <div class="fill_form">
-<form class="" action="" method="post" accept-charset="utf-8">
-    {% csrf_token %}
 
         <h4 class="title_word_bg block_title">
             <img src="{% static "img/ic_baseinfo.png" %}" />基本信息
         </h4>
 
-    <div class="row">
-        <div class="col-md-5">
-            {{ form.name|as_crispy_field }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-7">
-            {{ form.description|as_crispy_field }}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-5">
-            {{ form.category|as_crispy_field }}
-        </div>
-    </div>
+            {% crispy form %}
   <div class="row">
       <div class="col-md-12">
         <h4 class="title_word_bg block_title">
@@ -101,7 +85,6 @@
 				  </div>
         </div>
       </div>
-</form>
 </div>
 {% endblock %}
 
