@@ -32,7 +32,7 @@
         {% if vm.state != "" %}
             {% if vm.state == 8 %}
                 <i class="icon-spinner icon-spin check_vm" id="icon_state{{vm.id}}"></i>
-            {% elif vm.state == 9 or status == 10 %}
+            {% elif vm.state == 9 or vm.state == 10 %}
                 <i class="icon-remove-sign" id="icon_state{{vm.id}}"></i>
             {% elif vm.state == 11 %}
                 <i class="icon-warning-sign" id="icon_state{{vm.id}}" title="资源不足"></i>
@@ -43,10 +43,10 @@
             {%endif%}
           {%endif%}
         </div></td>
-        <td class="btn_operation">
+        <td class="btn_operation"> 
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
-                    {%if vm.state == 8 or vm.state == 9 or vm.status == 10 or vm.status == 11 %}
+                {%if vm.state == 8 or vm.state == 9 or vm.state == 10 or vm.state == 11 %}
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:default">
                             <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启动" />
                         </a>
