@@ -54,7 +54,7 @@
                                     	<ul class="navbar_list nav navbar-nav">
                                             {% notifications_unread as unread_count %}
                                             <li class="index_menu {% if request.current_app == 'manage_index' %}active{% endif %}"><a href="{% url "manage_index" %}">首页</a></li>
-                                            <li class="pro_menu {% if request.current_app == 'project' %}active{% endif %}"><a href="{% url "project_index" %}">项目</a></li>
+                                            <li class="pro_menu {% if request.current_app == 'slice' and not user.is_superuser %}active{% endif %} {% if request.current_app == 'project' %}active{% endif %}"><a href="{% url "project_index" %}">项目</a></li>
                                             {% if user.is_superuser %}
                                             <li class="slice_menu {% if request.current_app == 'slice' %}active{% endif %}"><a href="{% url "slice_list" 0 0 %}">虚网</a></li>
                                             <li class="{% if '/nexus/auth/user/' not in request.path %}{% if request.current_app == 'nexus' %}active{% endif %} device_menu{% endif %}">
