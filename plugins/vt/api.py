@@ -157,6 +157,8 @@ def try_start_gw_and_ctr(vm):
             return False
 
 def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
+    import pdb
+    pdb.set_trace()
     if controller_info['controller_type'] == 'default_create':
         controller_flavor = Flavor.objects.get(id=controller_flavor_id)
         hostlist = [(server.id, server.ip) for server in Server.objects.filter(island=island_obj)]
