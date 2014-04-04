@@ -30,7 +30,8 @@ DOMAIN_STATE_TUPLE = (
     (7, _('pmsuspended')),
     (8, _('building')),
     (9, _('failed')),
-    (10, _('not exist'))
+    (10, _('not exist')),
+    (11, _('resource not enough'))
 )
 DOMAIN_STATE_DIC = {
     'nostate': 0,
@@ -44,6 +45,7 @@ DOMAIN_STATE_DIC = {
     "building": 8,
     "failed": 9,
     "notexist": 10,
+    'resource not enough': 11,
 }
 HOST_STATE = {
     'active': 1,
@@ -270,11 +272,13 @@ class HostMac(models.Model):
 
 @receiver(pre_save, sender=VirtualMachine)
 def vm_pre_save(sender, instance, **kwargs):
-    if not instance.ip:
-        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
         instance.name = "VM-" + instance.uuid.split("-")[0]
+    if instance.state == 11:
+        return
+    if not instance.ip:
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.mac:
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
     if not instance.state:
