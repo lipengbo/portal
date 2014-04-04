@@ -5795,6 +5795,9 @@ body {
 body {
   padding-top: 60px;
 }
+textarea {
+  resize: none;
+}
 .clear {
   clear: both;
 }
