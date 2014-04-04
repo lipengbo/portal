@@ -26,27 +26,26 @@
 
 <!-- 拓扑图 -->
 <div id="topologyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-<div class="modal-dialog">
-<div class="modal-content">
-	<div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">当前已选节点资源</h4>
+    <div class="modal-dialog">
+        <div class="modal-content">
+        	<div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">当前已选节点资源</h4>
+            </div>
+            <div class="modal-body" id="topology_info">
+        		<div class="row">
+                	<div class="col-md-8">
+                		<iframe scrolling="no" id="topologyiframe" width="530" height="305" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=560&height=305&top=0" frameborder="0"></iframe>
+                 	</div>
+                 </div>  
+        	</div>                
+        </div>
     </div>
-    <div class="modal-body" id="topology_info">
-		<div class="row">
-        	<div class="col-md-8">
-        		<iframe scrolling="no" id="topologyiframe" width="530" height="305" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=560&height=305&top=0" frameborder="0"></iframe>
-         	</div>
-         </div>  
-	</div>                
 </div>
-</div>
-</div>
-<form class="form-wizard" action="" method="post" accept-charset="utf-8">
-
+<form class="form-horizontal" action="" method="post" accept-charset="utf-8">
     
                         <h4 class="title_word_bg block_title">
-                                        虚拟机配置      
+                                       <img src="{% static "img/ic_41.png" %}" /> 虚拟机配置      
                         </h4>  
                
     	<table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
@@ -92,7 +91,7 @@
                	<tr>
                 	<td colspan="2">
                 	    <label class="pull-left control-label">启动DHCP</label>
-                    	<div name="dhcp_vm" class="pull-left">                                
+                    	<div name="dhcp_vm" class="pull-left dhcp_vm">                                
                     		<!--label class="inline tab_checkbox">
                         		{{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                        		</label>是否启动DHCP-->
