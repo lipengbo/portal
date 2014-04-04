@@ -104,10 +104,9 @@ $('a.btn-delete').click(function(){
     }
 });
 //列表框，指针放上去时显示删除图标                 
-$(".example-sites li").mouseenter(function(){
-    $(this).children(".close").stop(true,false).fadeIn();
-});
-$(".example-sites li").mouseleave(function(){
-    $(this).children(".close").stop(false,true).hide();
-});
+    $(".slice_list_block").hover(function(){
+        $(this).children(".close").show();
+    },function(){
+        $(this).children(".close").hide();
+    }); 
 </script>

@@ -1,6 +1,6 @@
 {% load endless %}
 {% load project_tags %}
-{% paginate 8 projects  %}
+{% paginate 2 projects  %}
 {% for group in projects|group_by:4 %}
 <div class="row">
     {% for project in group %}
@@ -13,3 +13,10 @@
         {% show_pages %}
     </ul>
 </div>
+<script type="text/javascript" charset="utf-8">
+    $(".project_list_block").hover(function(){
+        $(this).children(".close").show();
+    },function(){
+        $(this).children(".close").hide();
+    });
+</script>
