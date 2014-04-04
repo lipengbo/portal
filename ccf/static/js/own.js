@@ -276,7 +276,6 @@ function page_function1(){
 	
 	//ret1 = check_switch_port();
 	var ret2 = check_nw_num();
-	//alert(ret1);
 	//alert(ret2);
 	if (ret2){
 		
@@ -306,13 +305,13 @@ function page_function2(){
 
 	if(!document.getElementById('dhcp_selected').checked){
 		var objs = document.getElementsByName("dhcp");
-		$('[name="enable_dhcp"]').iCheck('uncheck');
+		//$('[name="enable_dhcp"]').Check('uncheck');
 		for(var i=0; i<objs.length; i++){
 			objs[i].style.display = "none";
 		}
 	}else{
 		var objs = document.getElementsByName("dhcp");
-		$('[name="enable_dhcp"]').iCheck('check');		
+		//$('[name="enable_dhcp"]').Check('check');		
 		for(var i=0; i<objs.length; i++){
 			objs[i].style.display = "block";
 		}

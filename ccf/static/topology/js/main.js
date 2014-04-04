@@ -542,7 +542,7 @@ function init_svg () {
                     var content = "";
                     $.each(origin_data.ports, function(index, port){
                         content +=  
-                            "<label><input class='checkbox' type='checkbox' ";
+                            "<div class='checkbox'><label class='lael-control'><input class='checkbox' type='checkbox' ";
                         if (port.db_id in parent.selected_ports) {
                             content += "checked ";
                         }
@@ -567,7 +567,7 @@ function init_svg () {
                                 content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
                             }
                         });
-                        content += "</label>";
+                        content += "</label></div>";
                     });
                     $('.port-modal .confirm-port').unbind("click");
                     $('.port-modal .confirm-port').click(function () {
