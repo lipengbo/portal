@@ -130,7 +130,7 @@
                 
                 {%if extent_html == "site_base.html" and permission == "edit"%}
                 <a class="btn btn-default" id="vm_add" href="/plugins/vt/create/vm/{{ slice_obj.id }}/0/"
-                onclick="return add_vm({{slice_obj.id}});" {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
+                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
                 添加
                 </a>
                 {%endif%}

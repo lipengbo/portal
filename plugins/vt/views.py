@@ -84,8 +84,8 @@ def create_vm(request, sliceid, from_link):
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)
-                    if not serverid:
-                        raise ResourceNotEnough()
+                    #if not serverid:
+                    raise ResourceNotEnough()
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
@@ -95,6 +95,9 @@ def create_vm(request, sliceid, from_link):
                 if serr.errno == errno.ECONNREFUSED:
                     return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
+                vm.state = 11
+                vm.type =1
+                vm.save()
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except StopIteration, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
