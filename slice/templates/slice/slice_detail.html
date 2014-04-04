@@ -105,7 +105,10 @@
         <div class="show-dhcp">
             <div class="pull-left">
                 <h4 class="block_title">
-                    <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{{ start_ip }}-{{ end_ip }}】<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
+                    <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{{ start_ip }}-{{ end_ip }}】
+					{%if extent_html == "site_base.html" and permission == "edit"%}
+					<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
+					{%endif%}
                 </h4>
             </div>
             <form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
