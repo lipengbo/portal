@@ -151,6 +151,7 @@
         {%else%}
         <p id="edit">0</p>
         {%endif%}
+        <p id="controller_ip_port_old">{{vms.0.ip}}</p>
     </div>
     
     
@@ -301,6 +302,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#ipInput").ipInput();
+        init_ipinput();
     });
 </script>
 {% endblock %}
