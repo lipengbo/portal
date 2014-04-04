@@ -94,6 +94,7 @@ $(document).ready(function() {
     });
     //slice步骤切换
     $(".next_btn").click(function(){
+        alert("r");
         $('.no-virtual-switch').hide();
         if ($(this).hasClass('btn-step2')) {
             var has_virtual_switch = false;
@@ -103,6 +104,7 @@ $(document).ready(function() {
                 }
             }
             if (!has_virtual_switch) {
+                alert("p");
                 $('.no-virtual-switch').show();
                 return false;
             }
@@ -118,6 +120,7 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 1){
+           alert(0);
        	   ret = page_function1();
        	   if (!ret){
            		return;
@@ -279,8 +282,9 @@ function page_function0(){
 function page_function1(){
 	
 	//ret1 = check_switch_port();
+	alert(1);
 	var ret2 = check_nw_num();
-	//alert(ret1);
+	alert(2);
 	//alert(ret2);
 	if (ret2){
 		
@@ -309,14 +313,16 @@ function page_function2(){
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
 
 	if(!document.getElementById('dhcp_selected').checked){
+	    alert(12);
 		var objs = document.getElementsByName("dhcp");
-		$('[name="enable_dhcp"]').iCheck('uncheck');
+		//$('[name="enable_dhcp"]').Check('uncheck');
 		for(var i=0; i<objs.length; i++){
 			objs[i].style.display = "none";
 		}
 	}else{
+	    alert(13);
 		var objs = document.getElementsByName("dhcp");
-		$('[name="enable_dhcp"]').iCheck('check');		
+		//$('[name="enable_dhcp"]').Check('check');		
 		for(var i=0; i<objs.length; i++){
 			objs[i].style.display = "block";
 		}
