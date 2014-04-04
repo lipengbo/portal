@@ -653,16 +653,9 @@
 			window.location.href = window.location.href;
 			
 		});
+		
+		
 		flavor_init();
-		$('.switch_btn.dhcp').on("click", function(){
-			if($(this).hasClass("checked")) {
-                $(this).removeClass("checked");
-                $(this).children(".switch_content").html("否");
-            }else{
-				$(this).addClass("checked");
-                $(this).children(".switch_content").html("是");
-			}
-		});
 
     });
 </script> 

@@ -332,9 +332,9 @@ function page_function3(){
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
 	//DHCP
-	var dhcp_selected_obj = document.getElementById("dhcp_selected");
+	//var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	var list_slice_dhcp = document.getElementById("list_slice_dhcp");
-	if(dhcp_selected_obj.checked){
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
        list_slice_dhcp.innerHTML = "已配置";
     }else{
        list_slice_dhcp.innerHTML = "未配置";
@@ -473,7 +473,8 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
-    if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
+    //if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
+	if($('.switch_btn.dhcp').hasClass("checked")){
        // alert(1); 
         dhcp_selected = 1; 
     }   

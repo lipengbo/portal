@@ -518,12 +518,15 @@ function flavor_init(){
 
 
 function update_vms_info(){
+	var enable_dhcp_checked;
 	if(!check_vminfo()){
 		return
 	}
-	if(document.getElementById("id_enable_dhcp").checked){
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
+		enable_dhcp_checked = true;
 		dhcp_checked = "是";
 	}else{
+		enable_dhcp_checked = false;
 		dhcp_checked = "否";
 	}
 	if (vm_info_flag == "save"){
@@ -532,7 +535,7 @@ function update_vms_info(){
 						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
 						 image_text:$("#id_image").find("option:selected").text(),
 						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
-						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 enable_dhcp:enable_dhcp_checked,
 						 show_dhcp:dhcp_checked})
 		vm_id++;
 		
@@ -542,7 +545,7 @@ function update_vms_info(){
 						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
 						 image_text:$("#id_image").find("option:selected").text(),
 						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
-						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 enable_dhcp:enable_dhcp_checked,
 						 show_dhcp:dhcp_checked});
 			vm_info_flag = "save";
 		}
@@ -628,7 +631,13 @@ function set_value(obj, value){
 	}
 }
 
-function switch_dhcp(obj){
-	alert(obj);
-}
+$('.switch_btn.dhcp').on("click", function(){
+			if($(this).hasClass("checked")) {
+                $(this).removeClass("checked");
+                $(this).children(".switch_content").html("否");
+            }else{
+				$(this).addClass("checked");
+                $(this).children(".switch_content").html("是");
+			}
+		});
 
