@@ -275,8 +275,8 @@ def vm_pre_save(sender, instance, **kwargs):
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
         instance.name = "VM-" + instance.uuid.split("-")[0]
-    if instance.state == 11:
-        return
+    #if instance.state == 11:
+    #    return
     if not instance.ip:
         instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
     if not instance.mac:
