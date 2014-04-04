@@ -29,7 +29,7 @@
         {{vm.host_ip}}
         </div></td>
       <td class="slice_state"><div>
-        {%if vm.state %}
+        {% if vm.state != "" %}
             {% if vm.state == 8 %}
                 <i class="icon-spinner icon-spin check_vm" id="icon_state{{vm.id}}"></i>
             {% elif vm.state == 9 or status == 10 %}
@@ -41,7 +41,8 @@
             {%else%}
                 <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
             {%endif%}
-        {%endif%}</div></td>
+          {%endif%}
+        </div></td>
         <td class="btn_operation">
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
