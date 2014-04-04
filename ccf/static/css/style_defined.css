@@ -7124,3 +7124,8 @@ fieldset legend {
 .frame_tuopu .main #svg {
   text-align: center;
 }
+@media (min-width: 768px) {
+  #editSliceModal .modal-content {
+    width: 800px;
+  }
+}
