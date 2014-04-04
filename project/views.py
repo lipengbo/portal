@@ -167,7 +167,7 @@ def manage(request):
     projects = Project.objects.filter(id__in=project_ids)
     context = {}
     context['extent_html'] = "site_base.html"
-    context['projects'] = projects[:4]
+    context['projects'] = projects
     return render(request, 'project/manage.html', context)
 
 
@@ -314,13 +314,6 @@ def create_or_edit(request, id=None):
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             project = form.save(commit=False)
-            category_name = request.POST.get('category_name')
-            try:
-                category = Category.objects.get(name=category_name)
-            except Category.DoesNotExist:
-                category = Category(name=category_name)
-                category.save()
-            project.category = category
             if not id:
                 project.owner = user
             project.save()
@@ -589,7 +582,7 @@ def manage_index(request):
             context['switch_id'] = -1
         return render(request, 'manage_index.html', context)
     else:
-        return redirect("forbidden")
+        return redirect("project_manage")
 
 @login_required
 def delete_notifications(request):

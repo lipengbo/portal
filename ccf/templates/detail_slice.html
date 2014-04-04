@@ -35,17 +35,17 @@
 				 		<tr>
 				 			<td width="20%">控制器</td>
 				 			<td width="55%">IP：192.168.5.123：6633</td>
-				 			<td width="25%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
+				 			<td width="25%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn btn-default">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
 				 		</tr>
 				 		<tr>
 				 			<td>虚拟网关</td>
 				 			<td>IP：192.168.5.124</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn btn-default">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
 				 		</tr>
 				 		<tr>
 				 			<td>DHCP服务器</td>
 				 			<td>IP：192.168.5.123</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn btn-default">登录</button><a data-toggle="modal" href="#editSliceModal" class="btn btn-primary">编辑</a></td>
 				 		</tr>
 				 	</tbody>
 				 </table>
@@ -55,19 +55,19 @@
 				 			<td width="20%">VM1</td>
 				 			<td width="25%">IP：192.168.5.123</td>
 				 			<td width="30%">所属网络节点：192.168.20.6</td>
-				 			<td width="25%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+				 			<td width="25%"><button type="button" class="btn btn-success start_btn">启动</button><button type="button" class="btn btn-default">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
 				 		</tr>
 				 		<tr>
 				 			<td>VM2</td>
 				 			<td>IP：192.168.5.125</td>
 				 			<td>所属网络节点：192.168.20.6</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn btn-default">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
 				 		</tr>
 				 		<tr>
 				 			<td>VM3</td>
 				 			<td>IP：192.168.5.126</td>
 				 			<td>所属网络节点：192.168.20.7</td>
-				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
+				 			<td><button type="button" class="btn btn-danger start_btn">停止</button><button type="button" class="btn btn-default">登录</button><button type="button" class="btn btn-inverse">删除</button></td>
 				 		</tr>
 				 		<tr>
 				 			<td></td>
@@ -85,10 +85,10 @@
 			  	 </div>
 			  </fieldset>
 			  <div class="form-actions">
-    			  <div class="row-fluid">
-    			  	<div class="span4"></div>
-    			  	<div class="span4"><button type="submit" class="btn btn-large btn-block btn-success start_btn">启动Slice</button></div>
-    			  	<div class="span4"></div>
+    			  <div class="row">
+    			  	<div class="col-md-4"></div>
+    			  	<div class="col-md-4"><button type="submit" class="btn btn-lg btn-block btn-success start_btn">启动Slice</button></div>
+    			  	<div class="col-md-4"></div>
     			  </div>
 			  </div>			 
 		</div>
@@ -114,7 +114,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal">取消</button>
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
               <button class="btn btn-primary">提交</button>
             </div>
          </div>
@@ -141,7 +141,7 @@
                                   <option>pox</option>
                                   <option>nox</option>
                                 </select>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="icon-question-sign icon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                         </tr>
                         <tr>
@@ -161,7 +161,7 @@
               </form>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal">取消</button>
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
               <button class="btn btn-primary">提交</button>
             </div>
          </div>

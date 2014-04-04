@@ -1022,6 +1022,7 @@ function random_refresh2 (update) {
                     random_refresh2();
                 },
                 error: function(data) {
+                    alert("here");
                     refresh_time = Math.floor(Math.random() * 10000 + 10000 );
                     random_refresh2();
                 }
@@ -1032,7 +1033,6 @@ random_refresh2(0);
 
 
 function topology_update_vm_state_o(vm_id, state){
-    //alert('here2');
     var nid = get_node_by_yid(vm_id, 'host');
     if(nid>=0){
         nodes_data[nid].type_id = state;
@@ -1055,6 +1055,7 @@ function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
         nodes_data[nid].ports.push(port_info);
     }
 }
+
 
 function topology_del_vm(vm_id){
     var nid = get_node_by_yid(vm_id, 'host');

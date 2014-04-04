@@ -84,11 +84,12 @@ def create_vm(request, sliceid, from_link):
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)
-                    if not serverid:
-                        raise ResourceNotEnough()
+                    #if not serverid:
+                    raise ResourceNotEnough()
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
+                vm.slice.flowspace_changed(2)
                 return HttpResponse(json.dumps({'result': 0}))
             except socket_error as serr:
                 if serr.errno == errno.ECONNREFUSED:
@@ -153,6 +154,7 @@ def delete_vm(request, vmid, flag):
         #if flag == '1':
             #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         #else:
+        vm.slice.flowspace_changed(3)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())

@@ -15,13 +15,18 @@ import datetime
 
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
+SLICE_STATE_STOPPING = 3
+SLICE_STATE_STARTING = 4
+
 SLICE_TYPE_USABLE = 0
 SLICE_TYPE_DELETE = 1
 USER_DELETE = 0
 ADMINISTRATOR_DELETE = 1
 EXPIRED_DELETE = 2
 SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
-                (SLICE_STATE_STARTED, 'started'),)
+                (SLICE_STATE_STARTED, 'started'),
+                (SLICE_STATE_STOPPING, 'stopping'),
+                (SLICE_STATE_STARTING, 'starting'),)
 SLICE_TYPES = ((SLICE_TYPE_USABLE, 'usable'),
                 (SLICE_TYPE_DELETE, 'delete'),)
 SLICE_DELETE_TYPE = ((USER_DELETE, 'usable'),
@@ -45,6 +50,7 @@ class Slice(models.Model):
     failure_reason = models.TextField()
     islands = models.ManyToManyField(Island, through="SliceIsland")
     uuid = models.CharField(max_length=36, null=True, unique=True)
+    changed = models.IntegerField(null=True)
 
     def created_date(self):
         return self.date_created
@@ -69,6 +75,15 @@ class Slice(models.Model):
 
     def start(self):
         self.state = SLICE_STATE_STARTED
+        self.changed = 0
+        self.save()
+
+    def starting(self):
+        self.state = SLICE_STATE_STARTING
+        self.save()
+
+    def stopping(self):
+        self.state = SLICE_STATE_STOPPING
         self.save()
 
     def get_flowvisor(self):
@@ -141,7 +156,7 @@ class Slice(models.Model):
         return self.virtualmachine_set.all()
 
     def get_common_vms(self):
-        return self.virtualmachine_set.filter(type=1)
+        return self.virtualmachine_set.filter(type=1).order_by("-id")
 
     def get_controller_vms(self):
         return self.virtualmachine_set.filter(type=0)
@@ -202,6 +217,10 @@ class Slice(models.Model):
             else:
                 gws[0].enable_dhcp = False
             gws[0].save()
+            if flag == '1':
+                self.flowspace_changed(0)
+            else:
+                self.flowspace_changed(1)
             return True
         else:
             return False
@@ -264,6 +283,29 @@ class Slice(models.Model):
             self.save()
             print "5:raise exception"
             raise
+
+    def flowspace_changed(self, flag):
+        a = self.changed
+        if a == None:
+            return
+        if flag == 0:
+            if a & 0b0100 == 0:
+                a = a | 0b0100 & 0b1110
+            else:
+                a = a & 0b1011
+        if flag == 1:
+            if a & 0b0100 == 0:
+                a = a | 0b0101
+            else:
+                a = a & 0b1011
+        if flag == 2:
+            if a & 0b1000 == 0:
+                a = a | 0b1000
+        if flag == 3:
+            if a & 0b1000 == 0:
+                a = a | 0b1010
+        self.changed = a
+        self.save()
 
     def __unicode__(self):
         return self.name

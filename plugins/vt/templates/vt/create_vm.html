@@ -27,8 +27,8 @@
         <h3 class="modal-title">当前已选节点资源</h3>
     </div>
     <div class="modal-body" id="topology_info">
-		<div class="row-fluid">
-        	<div class="span8">
+		<div class="row">
+        	<div class="col-md-8">
         		<iframe scrolling="no" id="topologyiframe" width="530" height="305" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=560&height=305&top=0" frameborder="0"></iframe>
          	</div>
          </div>  
@@ -74,13 +74,13 @@
                 <tr>
                 	<td><img src="/site_media/static/img/icon_iso.png" width="24">镜像</td>
                     <td>
-						{{ vm_form.image }} <span name="imageInfo"></span>
+						<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                     </td>
                 </tr>
                 <tr>
                 	<td><img src="/site_media/static/img/icon_host.png" width="24">宿主机</td>
                  	<td>
-						{{ vm_form.server }} <span name="serverInfo"></span>
+						<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div> <span name="serverInfo"></span>
                     	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
                 	</td>
        			</tr>
@@ -97,15 +97,15 @@
 		</table>
 			     
 		<div class="form-actions">
-        	<div class="row-fluid">
-            	<div class="span3"></div>
+        	<div class="row">
+            	<div class="col-md-3"></div>
           			{% if from_link == '0' %}
-          				<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+          				<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
           			{% else %}
-          				<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+          				<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
           			{% endif %}
-          		<div class="span3"><button type="button" class="btn btn-large btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
-          		<div class="span3"></div>
+          		<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
+          		<div class="col-md-3"></div>
         	</div>
     	</div>
 			     

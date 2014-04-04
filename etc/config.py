@@ -37,7 +37,7 @@ function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
 flowvisor_disable = False
 #配置系统虚网划分使用flowvisor还是cnvp
-flowvisor_or_cnvp = "cnvp"
+flowvisor_or_cnvp = "flowvisor"
 #本期可以不用部署vt_manager；当use_vt_manager_to_schedul = False不需部署vt_manager；当use_vt_manager_to_schedul = True需要部署vt_manager；
 use_vt_manager_to_schedul = False
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效
