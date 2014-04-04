@@ -6543,6 +6543,9 @@ a.tuopu_sign_block:focus {
 .slice_state i.icon-minus-sign {
   color: #f99c61;
 }
+.slice_state i.icon-warning-sign {
+  color: #f9e99b;
+}
 .news ul {
   margin-bottom: 20px;
 }
