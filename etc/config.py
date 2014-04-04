@@ -51,3 +51,7 @@ max_disk = 0
 #[vt_manager]只有在use_vt_manager_to_schedul = True时才生效
 vt_manager_ip = '127.0.0.1'
 vt_manager_port = 8891
+try:
+    from etc.local_config import *
+except ImportError:
+    pass
