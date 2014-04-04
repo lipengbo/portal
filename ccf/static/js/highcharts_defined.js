@@ -9,7 +9,7 @@ $(function () {
         var show_nums = [];
         var title = "";
         var name = "";
-        var coler = ['#2f7ed8', '#0d233a', '#8bbc21'];
+        var coler = ['#ff3300', '#009900', '#3366ff'];
         var check_url = "/slice/get_count_show/?target="+target+"&type="+type+"&total_num="+total_num+"&stype="+stype;
         $.ajax({
             type: "GET",
@@ -51,7 +51,7 @@ $(function () {
         var titshow = '<small>{point.key}</small><br>'
         if(type == "year"){
             total_num = 5;
-            coler = ['#8bbc21', '#0d233a', '#2f7ed8'];
+            coler = ['#3366ff', '#009900', '#ff3300'];
             if(target == "project"){
                 title = show_dates[0]+"-"+show_dates[9]+"每年新增项目数";
             }else{
@@ -59,7 +59,7 @@ $(function () {
             }
         }else if(type == "month"){
             total_num = 12;
-            coler = ['#0d233a', '#8bbc21', '#2f7ed8'];
+            coler = ['#009900', '#3366ff', '#ff3300'];
             if(target == "project"){
                 title = year + "年每月新增项目数";
             }else{
@@ -68,7 +68,7 @@ $(function () {
         }else{
             titshow = '<small>{point.key}日</small><br>'
             total_num = 15;
-            coler = ['#2f7ed8', '#0d233a', '#8bbc21'];
+            coler = ['#ff3300', '#009900', '#3366ff'];
             if(target == "project"){
                 title = year + "年" + month + "月每日新增项目数";
             }else{
