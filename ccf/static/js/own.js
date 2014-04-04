@@ -146,12 +146,10 @@ $(document).ready(function() {
        }
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
-       $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
        if(nowIndex == 0){
-       		$(".nav-pills .span2").removeClass("visit");
+       		$(".nav-pills .col-md-2").removeClass("visit");
        }
-       $(".nav-pills .span2").eq(nowIndex).addClass("visit");
-       $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
+       $(".nav-pills .col-md-2").eq(nowIndex).addClass("visit");
     });
     $(".prev_btn").click(function(){
        $("html, body").scrollTop(0);
@@ -160,10 +158,8 @@ $(document).ready(function() {
        //alert(vm_info_flag);
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
-       $(".nav-pills .span2").eq(thisIndex).removeClass("visit");
-       $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
-       $(".nav-pills .span2").eq(nowIndex).addClass("visit");
-       $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
+       $(".nav-pills .col-md-2").eq(thisIndex).removeClass("visit");
+       $(".nav-pills .col-md-2").eq(nowIndex).addClass("visit");
     });
     
     //通过复选框控制表单显示和隐藏
