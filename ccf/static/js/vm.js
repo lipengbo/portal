@@ -628,3 +628,7 @@ function set_value(obj, value){
 	}
 }
 
+function switch_dhcp(obj){
+	alert(obj);
+}
+

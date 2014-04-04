@@ -268,14 +268,12 @@
                                  <td>
                                     <a href="javascript:void(0);" class="tooltip_defined" data-toggle="tooltip" data-placement="right" title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                                  </td>
-                             </tr>     
-                             <tr>
-                                 <td></td>                             
                                  <td colspan="2">
                                     <!--label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器  -->
-					<span class="switch_btn dhcp checked" style="cursor:default">
-                    				<span class="switch_content">否</span>
-                			</span>                        
+					<div class="tuopu_btn">配置DHCP服务器
+					<span class="switch_btn dhcp checked" style="cursor:pointer">
+                    				<span class="switch_content">是</span>
+                			</span>   </div>                     
                                  </td>
                              </tr>                  
                          </tbody>
@@ -456,10 +454,17 @@
                          </tr>
                          <tr>
                              <td colspan="2">
-                                 <div name="dhcp">                                
-                                     <label class="inline tab_checkbox">
+                                 <div id="dhcp_vm"> 
+									                            
+                                     <!--label class="inline tab_checkbox">
                                                     {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                                     </label>是否启动DHCP
+	                                     </label>-->
+								<div class="tuopu_btn">
+									<span class="switch_btn dhcp vm" style="cursor:pointer">
+                    					<span class="switch_content"></span>
+                					</span>
+								</div> 									
+								启动DHCP
                                  </div>
                              </td>
                          </tr>
@@ -649,6 +654,15 @@
 			
 		});
 		flavor_init();
+		$('.switch_btn.dhcp').on("click", function(){
+			if($(this).hasClass("checked")) {
+                $(this).removeClass("checked");
+                $(this).children(".switch_content").html("否");
+            }else{
+				$(this).addClass("checked");
+                $(this).children(".switch_content").html("是");
+			}
+		});
 
     });
 </script> 
