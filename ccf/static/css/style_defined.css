@@ -7129,3 +7129,6 @@ fieldset legend {
     width: 800px;
   }
 }
+.show_dhcp .tuopu_btn {
+  margin-top: 10px;
+}
