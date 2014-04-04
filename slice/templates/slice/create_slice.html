@@ -163,7 +163,7 @@
                        </div>
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
                   </div>
-                  <table class="table_defined">
+                  <table class="switch-table table_defined">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -204,7 +204,7 @@
                     	{%endfor%}
                     </tbody>
                   </table>              
-                  <div class="hide no-virtual-switch alert alert-error">
+                  <div class="hide no-virtual-switch alert alert-danger">
                       请至少选择一个虚拟机关联节点
                   </div>
                 </div>       
@@ -648,7 +648,7 @@
                 if(is_delete) {
                     delete selected_ports[port_id];
                     delete window.selected_dpids[checkbox.data('dpid')];
-                    
+
                     checkbox.attr('disabled', "");
                     checkbox.parents('label').hide();
                     if(checkbox.parents('.switch-data').find('input.port-checkbox:not([disabled])').length == 0) {
