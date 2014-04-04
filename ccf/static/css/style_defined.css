@@ -6897,19 +6897,21 @@ fieldset legend {
 }
 .table_base {
   width: 100%;
+  margin-bottom: 20px;
 }
 .table_base thead tr td,
 .table_base tbody tr td {
   padding: 0 8px 8px 8px;
+}
+.table_base .slider_td {
+  padding-top: 8px;
+  padding-bottom: 16px;
 }
 .v_top {
   vertical-align: top;
 }
 .create_vm_form {
   width: 100%;
-}
-.create_vm_form tbody tr td {
-  padding: 15px;
 }
 .create_vm_form tbody tr td img {
   margin-right: 20px;
@@ -6919,8 +6921,20 @@ fieldset legend {
   margin-bottom: 0;
 }
 .create_vm_form tbody tr td .view_topo {
-  margin-left: 5px;
+  margin-left: 20px;
   font-size: 12px;
+  margin-top: 8px;
+  display: inline-block;
+}
+.create_vm_form tbody tr td .error_icon {
+  margin-left: 20px;
+  margin-top: 8px;
+  display: inline-block;
+  color: #fc0500;
+}
+.create_vm_form tbody tr td #dhcp_vm {
+  margin-left: 13px;
+  margin-top: 3px;
 }
 .create_vm_form td.type_chose a {
   display: inline-block;
@@ -6982,7 +6996,7 @@ fieldset legend {
 }
 .slider_td .value_s {
   position: absolute;
-  top: 10px;
+  top: 3px;
   left: -16px;
   display: block;
   width: 60px;
@@ -6991,11 +7005,12 @@ fieldset legend {
 }
 .slider_td .value_e {
   position: absolute;
-  top: 5px;
+  top: 3px;
   left: 630px;
   display: block;
   width: 60px;
   text-align: center;
+  font-size: 12px;
 }
 .slider_td .cpu_value {
   position: absolute;
@@ -7021,8 +7036,9 @@ fieldset legend {
   width: 60px;
   text-align: center;
   position: absolute;
-  top: -28px;
+  top: -23px;
   left: -28px;
+  font-size: 12px;
 }
 .ui-slider-range {
   background-color: #1abc9c;
@@ -7125,7 +7141,7 @@ fieldset legend {
   padding-top: 40px;
 }
 @media (min-width: 768px) {
-  #editSliceModal .modal-content {
+  #editSliceModal .modal-dialog {
     width: 800px;
   }
 }
@@ -7134,4 +7150,16 @@ fieldset legend {
 }
 body.nexus-body .action_box {
   margin-bottom: 15px;
+}
+#div_id_image.form-group {
+  margin-bottom: 0;
+}
+#div_id_image.form-group label {
+  display: none;
+}
+#div_id_server.form-group {
+  margin-bottom: 0;
+}
+#div_id_server.form-group label {
+  display: none;
 }

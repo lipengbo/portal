@@ -84,8 +84,8 @@ def create_vm(request, sliceid, from_link):
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)
-                    #if not serverid:
-                    raise ResourceNotEnough()
+                    if not serverid:
+                        raise ResourceNotEnough()
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
