@@ -10,6 +10,9 @@ html,body {
 body {
     padding-top:60px;   
 }
+textarea {
+    resize:none;
+}
 .clear {
     clear:both;
 }
@@ -634,11 +637,11 @@ a.chart_btn span.color_red {
 .tuopu_sign_num {
     position: absolute;
     right: -12px;
-    top: 20px;
+    top: 17px;
 }
 .tuopu_sign_num span {
     display: inline-block;
-    margin-left: 6px;
+    margin-left: 5px;
     width: 30px;
     text-align: center;
 }
@@ -1050,8 +1053,8 @@ fieldset {
         .frame_tip {
             color:#999;
             position:absolute;
-            right:58px;
-            top:20px;
+            right:25px;
+            top:10px;
             span {
                 display:inline-block;
                 width:10px;
@@ -1068,6 +1071,10 @@ fieldset {
             span.frame_tip_g {
                 background-color:#009933;
             }
+        }
+        .tuopu_sign_l {
+            top:10px;
+            left:25px;
         }
     }
 }
@@ -1349,4 +1356,12 @@ transition: background 0.25s;
 
 .tab_part.tab_1 {
  display:block;      
+}
+.frame_tuopu {
+    .main {
+        padding-top:40px;
+        #svg {
+            text-align:center;
+        }
+    }
 }

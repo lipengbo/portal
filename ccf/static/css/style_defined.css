@@ -6420,11 +6420,11 @@ a.chart_btn span.color_red {
 .tuopu_sign_num {
   position: absolute;
   right: -12px;
-  top: 20px;
+  top: 17px;
 }
 .tuopu_sign_num span {
   display: inline-block;
-  margin-left: 6px;
+  margin-left: 5px;
   width: 30px;
   text-align: center;
 }
@@ -6832,8 +6832,8 @@ fieldset legend {
 .show_frame .main_frame .frame_tip {
   color: #999;
   position: absolute;
-  right: 58px;
-  top: 20px;
+  right: 25px;
+  top: 10px;
 }
 .show_frame .main_frame .frame_tip span {
   display: inline-block;
@@ -6850,6 +6850,10 @@ fieldset legend {
 }
 .show_frame .main_frame .frame_tip span.frame_tip_g {
   background-color: #009933;
+}
+.show_frame .main_frame .tuopu_sign_l {
+  top: 10px;
+  left: 25px;
 }
 .ipInput-border {
   border-width: 1;
@@ -7113,4 +7117,10 @@ fieldset legend {
 }
 .tab_part.tab_1 {
   display: block;
+}
+.frame_tuopu .main {
+  padding-top: 40px;
+}
+.frame_tuopu .main #svg {
+  text-align: center;
 }
