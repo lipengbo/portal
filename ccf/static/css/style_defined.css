@@ -6543,6 +6543,9 @@ a.tuopu_sign_block:focus {
 .slice_state i.icon-minus-sign {
   color: #f99c61;
 }
+.slice_state i.icon-warning-sign {
+  color: #f9e99b;
+}
 .news ul {
   margin-bottom: 20px;
 }
@@ -7128,4 +7131,10 @@ fieldset legend {
   #editSliceModal .modal-content {
     width: 800px;
   }
+}
+.show_dhcp .tuopu_btn {
+  margin-top: 10px;
+}
+body.nexus-body .action_box {
+  margin-bottom: 15px;
 }

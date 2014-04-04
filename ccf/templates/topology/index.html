@@ -17,10 +17,6 @@ common
 
 {% block extra_style %}
     <link href="{{ STATIC_URL }}topology/css/topology.css?v=1" rel="stylesheet" />
-    <link type="text/css" href="{{ STATIC_URL }}css/redmond/jquery-ui.css" rel="Stylesheet" />
-    {% if no_parent %}
-        <link type="text/css" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="Stylesheet" />
-    {% endif %}
     <style type="text/css">
         {% if no_parent %}
             .container {

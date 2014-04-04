@@ -95,7 +95,7 @@
         </div>
         <div class="clearfix"></div>
 </div>
-<table class="table table-bordered table-striped table_list table_defined">
+<table class="table_list table_defined">
     <thead>
         <tr>
             <th class="checkall" width="5%"><input type="checkbox" name="some_name" value=""></th>
@@ -188,8 +188,8 @@
                             </a>
                         {% else %}
                             {% if object.get_profile.state == 1 %}
-                            <a href="#" class="disabled btn btn-default">
-                            {% trans "Edit" %}
+                            <a href="#" class="">
+                                <img src="{% static "img/btn_bj_gray.png" %}" title="编辑">
                             </a>
                             {% else %}
                             <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="">

@@ -36,7 +36,7 @@
                       <td>{{slice.date_expired|date:"Y-m-d H:i:s"}}</td>
                       <td>{{slice.failure_reason}}</td>
                       <td class="btn_operation">
-                      <a href="/slice/delete/{{ slice.id }}/?next={{ request.path }}?type=1"><img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" /></a>
+                      <a class="btn-delete" href="/slice/delete/{{ slice.id }}/?next={{ request.path }}?type=1"><img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" /></a>
                       </td>
                  </tr>
                  {% endfor %}
