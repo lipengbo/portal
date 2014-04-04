@@ -181,11 +181,13 @@ def slice_change_controller(slice_obj, controller_info):
         if controller_info['controller_type'] == 'default_create':
             if haved_controller.name == controller_info['controller_sys']:
                 if haved_controller.host.state != 9:
+                    transaction.commit()
                     return
         else:
             if haved_controller.name == 'user_define' and\
                     haved_controller.ip == controller_info['controller_ip'] and\
                     haved_controller.port == int(controller_info['controller_port']):
+                transaction.commit()
                 return
         controller_n = create_controller(slice_obj, controller_info)
     except Exception:

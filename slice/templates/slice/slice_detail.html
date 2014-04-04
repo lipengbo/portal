@@ -205,23 +205,23 @@
                         <td width="100">
                             <label class="tab_radio1">
                               <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
-                              {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
+                              {%if vms.0.type_id == 1 %}{%else%}checked{%endif%}>
                               默认创建
                             </label>
                         </td>
                         <td width="100">控制器类型</td>
                         <td>
-                            {%if controller.name == "user_define" %}
-                                <select name="controller_sys" id="controller_sys" disabled>
+                            {%if vms.0.type_id == 1 %}
+                                <select name="controller_sys" id="controller_sys" class="form-control" disabled>
                                   <option value="Floodlight">Floodlight</option>
                                   <option value="POX">POX</option>
                                   <option value="OpenDaylight">OpenDaylight</option>
                                 </select>
                             {%else%}
                                 <select name="controller_sys" id="controller_sys" class="form-control">
-                                  <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
-                                  <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
-                                  <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
+                                  <option value="Floodlight" {%if vms.0.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
+                                  <option value="POX" {%if vms.0.name == "POX" %}selected = "selected"{%endif%}>POX</option>
+                                  <option value="OpenDaylight" {%if vms.0.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
                                 </select>
                             {%endif%}
                             
@@ -234,7 +234,7 @@
                         <td>
                             <label class="tab_radio2">
                               <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
-                              {%if controller.name == "user_define"%}checked{%endif%}>
+                              {%if vms.0.type_id == 1 %}checked{%endif%}>
                               自定义
                             </label>
                         </td>
