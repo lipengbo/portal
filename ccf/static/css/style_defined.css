@@ -7141,7 +7141,7 @@ fieldset legend {
   padding-top: 40px;
 }
 @media (min-width: 768px) {
-  #editSliceModal .modal-content {
+  #editSliceModal .modal-dialog {
     width: 800px;
   }
 }
