@@ -272,7 +272,10 @@
                              <tr>
                                  <td></td>                             
                                  <td colspan="2">
-                                    <label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器                          
+                                    <!--label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器  -->
+					<span class="switch_btn dhcp checked" style="cursor:default">
+                    				<span class="switch_content">否</span>
+                			</span>                        
                                  </td>
                              </tr>                  
                          </tbody>
@@ -362,42 +365,7 @@
                     </tbody>
                 </table>
  
-              <!--<fieldset class="base_info hide_form tooltip-demo">
-                 <legend>DHCP服务器配置<small>(可选)</small></legend>
-                 <table class="table">
-                    <tbody>
-                        <tr>
-                            <td colspan="6">
-                                <label class="tab_radio3">
-                                  <input type="radio" name="dhcp_type" id="optionsRadios3" value="default">
-                                  默认DHCP服务
-                                </label>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td width="150">
-                                <label class="tab_radio4">
-                                  <input type="radio" name="dhcp_type" id="optionsRadios4" value="user_define" checked>
-                                  自定义DHCP服务
-                                </label>
-                            </td>
-                            <td width="100">DHCP地址池</td>
-                            <td width="35">开始</td>
-                            <td width="120">
-                                <input type="text" class="input-small" id="dhcp_src_ip" name="dhcp_src_ip">
-                            </td>
-                            <td width="35">结束</td>
-                            <td>
-                                <input type="text" class="input-small" id="dhcp_des_ip" name="dhcp_des_ip">
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="用户为DHCP分配地址池，地址池必须包含在第2步获取的网络段内部"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </fieldset>-->
-              
-            <!--/div-->  
+        
               <div class="form-actions">
                   <div class="row buttons_margin">
                     <div class="col-md-4"></div>
