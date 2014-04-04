@@ -52,7 +52,7 @@
 
 {% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}
 
-<div class="well col-md-6">
+<div class="col-md-6">
 <form action="" class="form-inline" method="get">
     <label for="id_island__city">城市：</label>
     <select class="form-control" name="island__city" id="id_island__city">
@@ -79,7 +79,7 @@
 {% paginate 20 objects %}
 <form action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
-    <div class="well {% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}col-md-6{% else %}{% endif %}">
+    <div class="{% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}col-md-6{% else %}{% endif %}">
         <div class="pull-right">
             <input type="hidden" name="action" id="action" value="">
             {% if class_name != 'User' %}
