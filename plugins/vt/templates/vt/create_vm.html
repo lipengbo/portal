@@ -4,10 +4,10 @@
 {% load crispy_forms_tags %}
 {% load staticfiles %}
 {% block breadcrumb %}
-    <a href="/project/">项目</a><span class="divider">/</span>
-	<a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a><span class="divider">/</span>
-	<a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a><span class="divider">/</span>
-        <li class="active">{% trans "create vm" %}</li>
+    <li><a href="/project/">项目</a></li>
+	<li><a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a></li>
+	<li><a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a></li>
+    <li class="active">{% trans "create vm" %}</li>
 {% endblock %}
 {% block body %}
 <!--警告框-->
@@ -36,18 +36,16 @@
 </div>
 
 <form class="form-wizard" action="" method="post" accept-charset="utf-8">
-	<fieldset class="">
-    	<legend>
-                        <div class="title_word_bg">
+
+    
+                        <h4 class="title_word_bg block_title">
                                         虚拟机配置      
-                           <div class="triangle"></div> 
-                        </div>  
-                        <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
-                     </legend> 
-    	<table cellpadding="0" cellspacing="0" class="create_vm_form">
+                        </h4>  
+               
+    	<table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
 			<tbody>
 				<tr>
-			    	<td width="86"><img src="/site_media/static/img/icon_type.png" width="24">类型</td>
+			    	<td width="80"><b>类型</b></td>
 			    	<td class="type_chose">
 						{%for flavor in flavors%}
 							<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
@@ -55,7 +53,7 @@
 			     	</td>
 				</tr>
 				<tr>
-            		<td><img src="/site_media/static/img/icon_cpu.png" width="24">CPU</td>
+            		<td><b>CPU</b></td>
                 	<td class="cpu_chose">
                     	<a href="javascript:void(0);" class="vm_active" id="cpu_1" value="1">1 核</a>
                         <a href="javascript:void(0);" id="cpu_2" value="2">2 核</a>
@@ -64,7 +62,7 @@
                   	</td>
                 </tr>
                 <tr>
-                	<td><img src="/site_media/static/img/icon_nc.png" width="24">内存</td>
+                	<td><b>内存</b></td>
                 	<td class="slider_td">
                     	<div id="ram_slider" class="ui-slider"></div>
                     	<span class="value_s">128 MB</span>
@@ -72,13 +70,13 @@
                  	</td>
             	</tr>
                 <tr>
-                	<td><img src="/site_media/static/img/icon_iso.png" width="24">镜像</td>
+                	<td><b>镜像</b></td>
                     <td>
 						<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                     </td>
                 </tr>
                 <tr>
-                	<td><img src="/site_media/static/img/icon_host.png" width="24">宿主机</td>
+                	<td><b>宿主机</b></td>
                  	<td>
 						<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div> <span name="serverInfo"></span>
                     	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
@@ -86,7 +84,8 @@
        			</tr>
                	<tr>
                 	<td colspan="2">
-                    	<div name="dhcp_vm">                                
+                	    <label class="pull-left control-label">启动DHCP</label>
+                    	<div name="dhcp_vm" class="pull-left">                                
                     		<!--label class="inline tab_checkbox">
                         		{{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                        		</label>是否启动DHCP-->
@@ -94,28 +93,21 @@
 									<span class="switch_btn dhcp vm" style="cursor:pointer">
 										<span class="switch_content">否</span>
                 					</span>
-						</div> 									
-								启动DHCP
+						        </div> 									
+				
                     	</div>
                  	</td>
              	</tr>
 			</tbody>
 		</table>
 			     
-		<div class="form-actions">
-        	<div class="row">
-            	<div class="col-md-3"></div>
-          			{% if from_link == '0' %}
-          				<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
-          			{% else %}
-          				<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
-          			{% endif %}
-          		<div class="col-md-3"><button type="button" class="btn btn-lg btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
-          		<div class="col-md-3"></div>
-        	</div>
-    	</div>
+		
+    	<h4 class="title_word_bg block_title">
+                        <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表      
+                        <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
+        </h4>
 			     
-			     <table class="table table-striped table-bordered" id="vms_info_table">
+			     <table class="table_defined" id="vms_info_table">
                       <thead>
                           <tr>
                             <th>类型</th>
@@ -130,6 +122,19 @@
                       <tbody>
                       </tbody>
                  </table>
+                 
+                 <div class="form-actions">
+                    <div class="row buttons_margin">
+                        <div class="col-md-4"></div>
+                            {% if from_link == '0' %}
+                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+                            {% else %}
+                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+                            {% endif %}
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
     
 </form>
 {% endblock %}

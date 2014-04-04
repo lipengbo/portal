@@ -399,7 +399,7 @@
 				 </div>
 				 </div>               
 			     </div>
-			     <table cellpadding="0" cellspacing="0" class="create_vm_form">
+			     <table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
 			         <tbody>
 			             <tr>
 			                 <td width="80"><b>类型</b></td>
@@ -454,19 +454,21 @@
                          </tr>
                          <tr>
                              <td colspan="2">
-                                 <div id="dhcp_vm"> 
+                                 
 									                            
                                      <!--label class="inline tab_checkbox">
                                                     {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
 	                                     </label>-->
-								<div class="tuopu_btn">
-									<span class="switch_btn dhcp vm" style="cursor:pointer">
-                    					<span class="switch_content"></span>
-                					</span>
-								</div> 									
-								启动DHCP
+								<label class="pull-left control-label">启动DHCP</label>
+								<div id="dhcp_vm" class="pull-left"> 
+                                     <div class="tuopu_btn">
+                                        <span class="switch_btn dhcp vm" style="cursor:pointer">
+                                            <span class="switch_content">否</span>
+                                        </span>
+                                    </div>                                                                 
                                  </div>
                              </td>
+
                          </tr>
 			         </tbody>
 			     </table>
