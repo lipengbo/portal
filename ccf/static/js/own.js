@@ -103,7 +103,7 @@ $(document).ready(function() {
                 }
             }
             if (!has_virtual_switch) {
-                $('.no-virtual-switch').show();
+                $('.no-virtual-switch').removeClass('hide').show();
                 return false;
             }
         }

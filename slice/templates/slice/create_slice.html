@@ -163,7 +163,7 @@
                        </div>
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
                   </div>
-                  <table class="table_defined">
+                  <table class="switch-table table_defined">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -204,7 +204,7 @@
                     	{%endfor%}
                     </tbody>
                   </table>              
-                  <div class="hide no-virtual-switch alert alert-error">
+                  <div class="hide no-virtual-switch alert alert-danger">
                       请至少选择一个虚拟机关联节点
                   </div>
                 </div>       
@@ -286,7 +286,7 @@
                 <table class="table_base tooltip-demo">
                          <tbody>
                              <tr>
-                                 <td width="120" class="text-right">
+                                 <td width="120">
                                      <label class="tab_radio1 control-label" for="optionsRadios1">
                                         <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
                                                                                                                                    创建控制器 
@@ -338,7 +338,7 @@
                  <table class="table_base tooltip-demo">
                     <tbody>
                         <tr>
-                            <td width="100" class="text-right">网关宿主机</td>
+                            <td width="120" class="text-right">网关宿主机</td>
                             <td width="30%">
                                 <select id="id_server_gw" class="form-control" onblur="check_gw_select()">
                               
@@ -416,7 +416,9 @@
                          
                           
 				<!-- 拓扑图 -->
-				<div id="topologyModal" class="modal hide fade in modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+				<div id="topologyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+				<div class="modal-dialog">
+                <div class="modal-content">
 					<div class="modal-header">
         				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         				<h3 class="modal-title" >当前已选节点资源</h3>
@@ -427,7 +429,9 @@
             					<iframe scrolling="no" id="topologyiframe" width="530" height="305"  frameborder="0"></iframe>
              				</div>
              			</div>  
-				    </div>                
+				    </div> 
+				 </div>
+				 </div>               
 			     </div>
 			     <table cellpadding="0" cellspacing="0" class="create_vm_form">
 			         <tbody>
@@ -620,13 +624,17 @@
            </form>
         </div>
         
-<div id="slicealertModal" class="modal hide fade in modal_poptip_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal-dialog">
+<div class="modal-content">
     <div class="modal-body" id="slice_alert_info">
       <p class="text-center">虚网创建失败！</p>
     </div> 
     <div class="modal-footer">
       <button class="btn delete-confirm btn-warning" data-dismiss="modal" id="alert_closed">确定</button>
-    </div>          
+    </div>   
+</div>
+</div>       
 </div>
 {% endblock %}
 {% block extra_script %}
@@ -640,7 +648,7 @@
                 if(is_delete) {
                     delete selected_ports[port_id];
                     delete window.selected_dpids[checkbox.data('dpid')];
-                    
+
                     checkbox.attr('disabled', "");
                     checkbox.parents('label').hide();
                     if(checkbox.parents('.switch-data').find('input.port-checkbox:not([disabled])').length == 0) {
