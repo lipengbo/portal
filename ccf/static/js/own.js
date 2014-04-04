@@ -302,19 +302,15 @@ function page_function2(){
     fetch_serverinfo("id_server");
 	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&switch_port_ids=" + get_select_ports())
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
-
-	if(!document.getElementById('dhcp_selected').checked){
-		var objs = document.getElementsByName("dhcp");
-		//$('[name="enable_dhcp"]').Check('uncheck');
-		for(var i=0; i<objs.length; i++){
-			objs[i].style.display = "none";
-		}
+	if($('.switch_btn.dhcp').hasClass("checked")){
+		var obj = $('.switch_btn.dhcp.vm');
+		obj.addClass("checked");
+        obj.children(".switch_content").html("启动");
 	}else{
-		var objs = document.getElementsByName("dhcp");
-		//$('[name="enable_dhcp"]').Check('check');		
-		for(var i=0; i<objs.length; i++){
-			objs[i].style.display = "block";
+		if($('.switch_btn.dhcp.vm').hasClass("checked")){
+			$('.switch_btn.dhcp.vm').removeClass("checked");
 		}
+		$("#dhcp_vm").hide();
 	}
 	if (ret1){
 		//
@@ -336,9 +332,9 @@ function page_function3(){
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
 	//DHCP
-	var dhcp_selected_obj = document.getElementById("dhcp_selected");
+	//var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	var list_slice_dhcp = document.getElementById("list_slice_dhcp");
-	if(dhcp_selected_obj.checked){
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
        list_slice_dhcp.innerHTML = "已配置";
     }else{
        list_slice_dhcp.innerHTML = "未配置";
@@ -477,7 +473,8 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
-    if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
+    //if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
+	if($('.switch_btn.dhcp').hasClass("checked")){
        // alert(1); 
         dhcp_selected = 1; 
     }   

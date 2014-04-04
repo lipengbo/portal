@@ -21,7 +21,7 @@ import traceback
 import calendar
 from etc.config import gw_controller
 
-from plugins.vt.api import get_slice_gw_mac
+from plugins.vt.api import get_slice_gw_mac, schedul_for_controller_and_gw
 
 import logging
 LOG = logging.getLogger("ccf")
@@ -40,6 +40,8 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
         slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
         print "2:add ovs ports"
         slice_add_ovs_ports(slice_obj, ovs_ports)
+        print "scheduler for resources"
+        schedul_for_controller_and_gw(controller_info, gw_host_id, island)
         print "3:create and add controller"
         create_add_controller(slice_obj, controller_info)
         print "4:create slice on flowvisor"

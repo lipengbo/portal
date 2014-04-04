@@ -101,9 +101,9 @@
 function init_ipinput(){
     var slice_id = $("#slice_id").text();
     if(slice_id>=0){
-        
-        controller_ip = $("#controller_ip_old").text();
-        controller_port = $("#controller_port_old").text();
+        controller_ip_port = $("#controller_ip_port_old").text();
+        controller_ip = controller_ip_port.split(":")[0];
+        controller_port = controller_ip_port.split(":")[1];
         if(controller_ip && controller_port){
             ips = controller_ip.split(".");
             cip0_obj = document.getElementById("cip0");
@@ -119,6 +119,7 @@ function init_ipinput(){
             $(".tab_radio2").parent("td").siblings("td").children("#ipInput").css({"background":"#fff"}).removeClass("disabled");        
             $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").removeAttr("disabled");
             $(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
+            $(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");
         }   
     }
 }

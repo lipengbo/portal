@@ -35,7 +35,7 @@
             {% elif vm.state == 9 or status == 10 %}
                 <i class="icon-remove-sign" id="icon_state{{vm.id}}"></i>
             {% elif vm.state == 11 %}
-                <i class="icon-remove-sign" id="icon_state{{vm.id}}" title="资源不足"></i>
+                <i class="icon-warning-sign" id="icon_state{{vm.id}}" title="资源不足"></i>
             {% elif vm.state == 1 %}
                 <i class="icon-ok-sign icon_state" id="icon_state{{vm.id}}"></i>
             {%else%}
@@ -45,7 +45,7 @@
         <td class="btn_operation">
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
-                    {%if vm.state == 8 or vm.state == 9 or status == 10 or status == 11 %}
+                    {%if vm.state == 8 or vm.state == 9 or vm.status == 10 or vm.status == 11 %}
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:default">
                             <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启动" />
                         </a>

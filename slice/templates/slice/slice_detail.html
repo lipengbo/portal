@@ -102,7 +102,7 @@
             <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=1140&height=300&top=0&band=1" frameborder="0"></iframe>
         </div>
         
-        <div class="well well-sm">
+        <div class="show-dhcp">
             <div class="pull-left">
                 <h4 class="block_title">
                     <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{{ start_ip }}-{{ end_ip }}】<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
@@ -130,7 +130,7 @@
                 
                 {%if extent_html == "site_base.html" and permission == "edit"%}
                 <a class="btn btn-default" id="vm_add" href="/plugins/vt/create/vm/{{ slice_obj.id }}/0/"
-                onclick="return add_vm({{slice_obj.id}});" {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
+                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
                 添加
                 </a>
                 {%endif%}
@@ -151,6 +151,7 @@
         {%else%}
         <p id="edit">0</p>
         {%endif%}
+        <p id="controller_ip_port_old">{{vms.0.ip}}</p>
     </div>
     
     
@@ -161,20 +162,22 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
           <h4 class="modal-title">虚网基本信息编辑</h4>      
         </div>
-        <form class="" accept-charset="utf-8">{% csrf_token %}
+        <form class="" accept-charset="utf-8">{% csrf_token %}    r
             <div class="modal-body base_info">
-              <table class="table">
+              <table class="table_base">
                   <tbody>
                       <tr>
-                          <td width="70" class="text_r">名称</td>
-                          <td>{{slice_obj.get_show_name}}</td>
+                          <td width="100" class="text-right">虚网名称</td>
+                          <td width="400">{{slice_obj.get_show_name}}</td>
+                          <td></td>
                       </tr>
                       <tr>
-                          <td class="v_top text_r">描述</td>
-                          <td>
-                                <textarea rows="3" maxlength=1024 name="slice_description" id="slice_description">{{slice_obj.description}}</textarea>
-                                <span id="slice_descriptionInfo" style="display:inline;float:none;"></span> 
-                          </td>
+                          <td class="text-right v_top">虚网描述</td>
+                             <td>
+                                <textarea class="form-control" rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)">{{slice_obj.description}}</textarea>
+                                
+                             </td>
+                          <td><span id="slice_descriptionInfo" style="display:inline;float:none;"></span> </td>
                       </tr>
                   </tbody>
               </table>
@@ -196,32 +199,35 @@
           <h4 class="modal-title">虚网控制器编辑</h4>      
         </div>
         <form class="" accept-charset="utf-8">{% csrf_token %}
-            <div class="modal-body base_info tooltip-demo">
-              <table class="table">
+            <div class="modal-body base_info">
+              <table class="table_base tooltip-demo">
                 <tbody>
                     <tr>
                         <td width="100">
                             <label class="tab_radio1">
                               <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
-                              {%if controller.name == "user_define" %}{%else%}checked{%endif%}>
+                              {%if vms.0.type_id == 1 %}{%else%}checked{%endif%}>
                               默认创建
                             </label>
                         </td>
-                        <td width="70">控制器类型</td>
-                        <td colspan="3">
-                            {%if controller.name == "user_define" %}
-                                <select name="controller_sys" id="controller_sys" disabled>
+                        <td width="100">控制器类型</td>
+                        <td>
+                            {%if vms.0.type_id == 1 %}
+                                <select name="controller_sys" id="controller_sys" class="form-control" disabled>
                                   <option value="Floodlight">Floodlight</option>
                                   <option value="POX">POX</option>
                                   <option value="OpenDaylight">OpenDaylight</option>
                                 </select>
                             {%else%}
-                                <select name="controller_sys" id="controller_sys">
-                                  <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
-                                  <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
-                                  <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
+                                <select name="controller_sys" id="controller_sys" class="form-control">
+                                  <option value="Floodlight" {%if vms.0.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
+                                  <option value="POX" {%if vms.0.name == "POX" %}selected = "selected"{%endif%}>POX</option>
+                                  <option value="OpenDaylight" {%if vms.0.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
                                 </select>
                             {%endif%}
+                            
+                        </td>
+                        <td colspan="2">
                             <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                         </td>
                     </tr>
@@ -229,7 +235,7 @@
                         <td>
                             <label class="tab_radio2">
                               <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
-                              {%if controller.name == "user_define"%}checked{%endif%}>
+                              {%if vms.0.type_id == 1 %}checked{%endif%}>
                               自定义
                             </label>
                         </td>
@@ -237,7 +243,7 @@
                         <td width="230">
                             <div id="ipInput" class="disabled"></div>
                         </td>
-                        <td width="30">端口</td>
+                        <td width="50">端口</td>
                         <td>
                             <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
                             <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
@@ -282,6 +288,7 @@
     </div>
 {% endblock %}
 {% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
 <script src="{{ STATIC_URL}}js/slice_detail.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>

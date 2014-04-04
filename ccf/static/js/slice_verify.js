@@ -140,7 +140,7 @@ function check_port(port,flag){
 	var reg = /^[0-9]*$/;
 	if(port.length > 0){
 		if(port >= 65535 || port < 0 || !reg.test(port)){
-			showInfo(info," * port在(0-65535)之间","red");
+			showInfo(info," * (0-65535)","red");
 			return false;
 		}
 		else{

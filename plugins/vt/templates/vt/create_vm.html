@@ -86,10 +86,16 @@
        			</tr>
                	<tr>
                 	<td colspan="2">
-                    	<div name="dhcp">                                
-                    		<label class="inline tab_checkbox">
+                    	<div name="dhcp_vm">                                
+                    		<!--label class="inline tab_checkbox">
                         		{{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-                       		</label>是否启动DHCP
+                       		</label>是否启动DHCP-->
+								<div class="tuopu_btn">
+									<span class="switch_btn dhcp vm" style="cursor:pointer">
+										<span class="switch_content">否</span>
+                					</span>
+						</div> 									
+								启动DHCP
                     	</div>
                  	</td>
              	</tr>
