@@ -6932,7 +6932,8 @@ fieldset legend {
   display: inline-block;
   color: #fc0500;
 }
-.create_vm_form tbody tr td #dhcp_vm {
+.create_vm_form tbody tr td #dhcp_vm,
+.create_vm_form tbody tr td .dhcp_vm {
   margin-left: 13px;
   margin-top: 3px;
 }
@@ -7141,7 +7142,7 @@ fieldset legend {
   padding-top: 40px;
 }
 @media (min-width: 768px) {
-  #editSliceModal .modal-content {
+  #editSliceModal .modal-dialog {
     width: 800px;
   }
 }
