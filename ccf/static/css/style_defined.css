@@ -6932,7 +6932,8 @@ fieldset legend {
   display: inline-block;
   color: #fc0500;
 }
-.create_vm_form tbody tr td #dhcp_vm {
+.create_vm_form tbody tr td #dhcp_vm,
+.create_vm_form tbody tr td .dhcp_vm {
   margin-left: 13px;
   margin-top: 3px;
 }
