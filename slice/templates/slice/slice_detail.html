@@ -152,6 +152,7 @@
         <p id="edit">0</p>
         {%endif%}
         <p id="controller_ip_port_old">{{vms.0.ip}}</p>
+        <p id="controller_type">{{vms.0.type_id}}</p>
     </div>
     
     
@@ -302,7 +303,10 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#ipInput").ipInput();
-        init_ipinput();
+        var controller_type = $("#controller_type").text();
+        if(controller_type == 1){
+            init_ipinput();
+        }
     });
 </script>
 {% endblock %}
