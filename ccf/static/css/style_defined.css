@@ -6509,7 +6509,7 @@ a.tuopu_sign_block:focus {
   height: 34px;
   line-height: 34px;
 }
-.block_title a:hover i {
+.block_title a:hover {
   text-decoration: none;
 }
 .block_title i {
@@ -6615,6 +6615,12 @@ a.tuopu_sign_block:focus {
 .tuopu_btn .checked .switch_content {
   float: left;
 }
+.tuopu_btn.disabled .switch_btn {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+}
 #deleteModal {
   margin-top: 200px;
 }
@@ -6661,6 +6667,7 @@ fieldset legend {
 }
 .intro_well .list_title {
   font-weight: bold;
+  margin-top: 10px;
 }
 .intro_well p {
   color: #999;
