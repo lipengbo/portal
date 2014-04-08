@@ -588,10 +588,15 @@ function show_vm_info_table(){
                             +"<td>"+vm.image_text+"</td>"
                             +"<td>"+vm.server_text+"</td>"
 							+"<td>"+vm.show_dhcp+"</td>"
-                            +"<td>"
-                            +"   <div>"
-                            +"    <button class='btn btn-danger' onclick='javascript:delete_vminfo("+vm.id+")'>删除</button>"
-                            +"    </div>"
+                            +"<td class='btn_operation'>"
+                            +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
+                            +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
+                            +"    </a>"
+                            
+                            +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
+                            +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
+                            +"    </a>"
+                            
                             +"</td>"
                           +"</tr> ");
 	});
