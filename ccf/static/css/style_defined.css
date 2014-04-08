@@ -6880,6 +6880,7 @@ fieldset legend {
   font-size: 20px;
 }
 .ipInput-cell {
+  background: transparent;
   width: 23%;
   height: 20px;
   border-width: 0px !important;
