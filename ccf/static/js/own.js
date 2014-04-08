@@ -334,7 +334,7 @@ function page_function3(){
 	//DHCP
 	//var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	var list_slice_dhcp = document.getElementById("list_slice_dhcp");
-	if($('.switch_btn.dhcp.vm').hasClass("checked")){
+	if($('.switch_btn.dhcp').hasClass("checked")){
        list_slice_dhcp.innerHTML = "已配置";
     }else{
        list_slice_dhcp.innerHTML = "未配置";
@@ -475,7 +475,7 @@ function submit_slice_info(project_id){
 	}
     //if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
 	if($('.switch_btn.dhcp').hasClass("checked")){
-       // alert(1); 
+        //alert(1000); 
         dhcp_selected = 1; 
     }   
 	//var controller_ip_port = controller_ip_port_obj.value.split(":");
