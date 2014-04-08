@@ -63,7 +63,7 @@ class Connection(models.Model):
                     'action_title': _('Accept')
                 },
                 {
-                    'action_level': 'error',
+                    'action_level': 'danger',
                     'action_url': reverse('invite_reject', args=(self.get_kind(), self.key)),
                     'action_title': _('Reject')
                 },
