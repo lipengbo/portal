@@ -475,7 +475,7 @@
 			     
     			    <h4 class="title_word_bg block_title">
                                                            <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表      
-                                                           <button type="button" class="btn btn-default pull-right" onclick="javascript:update_vms_info()">添加</button>                                   
+                                                           <button type="button" class="btn btn-info  pull-right" onclick="javascript:update_vms_info()">添加</button>                                   
                     </h4>
                 
                  <table class="table_defined" id="vms_info_table">
@@ -661,6 +661,9 @@
 
     });
 </script> 
+<script>
+    var STATIC_URL = "{{ STATIC_URL}}";
+</script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/taffy.js"></script>

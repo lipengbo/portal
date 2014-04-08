@@ -523,10 +523,10 @@ function update_vms_info(){
 		return
 	}
 	if($('.switch_btn.dhcp.vm').hasClass("checked")){
-		enable_dhcp_checked = true;
+		enable_dhcp_checked = 1;
 		dhcp_checked = "是";
 	}else{
-		enable_dhcp_checked = false;
+		enable_dhcp_checked = 0;
 		dhcp_checked = "否";
 	}
 	if (vm_info_flag == "save"){
@@ -588,10 +588,15 @@ function show_vm_info_table(){
                             +"<td>"+vm.image_text+"</td>"
                             +"<td>"+vm.server_text+"</td>"
 							+"<td>"+vm.show_dhcp+"</td>"
-                            +"<td>"
-                            +"   <div>"
-                            +"    <button class='btn btn-danger' onclick='javascript:delete_vminfo("+vm.id+")'>删除</button>"
-                            +"    </div>"
+                            +"<td class='btn_operation'>"
+                            +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
+                            +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
+                            +"    </a>"
+                            
+                            +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
+                            +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
+                            +"    </a>"
+                            
                             +"</td>"
                           +"</tr> ");
 	});
