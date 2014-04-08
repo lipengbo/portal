@@ -112,7 +112,7 @@
 		
     	<h4 class="title_word_bg block_title">
                         <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表      
-                        <button type="button" class="btn btn-info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
+                        <button type="button" class="btn btn-default" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
         </h4>
 			     
 			     <table class="table_defined" id="vms_info_table">
@@ -135,9 +135,9 @@
                     <div class="row buttons_margin">
                         <div class="col-md-4"></div>
                             {% if from_link == '0' %}
-                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
+                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
                             {% else %}
-                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
+                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url vm_list sliceid %}'">{% trans "Cancel" %}</button></div>
                             {% endif %}
                         <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-info" onclick="create_vms({{ sliceid }}, 1, {{from_link}})">{% trans "Submit" %}</button></div>
                         <div class="col-md-4"></div>
