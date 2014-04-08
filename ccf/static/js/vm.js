@@ -592,11 +592,6 @@ function show_vm_info_table(){
                             +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
                             +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
                             +"    </a>"
-                            
-                            +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
-                            +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
-                            +"    </a>"
-                            
                             +"</td>"
                           +"</tr> ");
 	});

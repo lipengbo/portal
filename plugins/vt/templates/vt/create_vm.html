@@ -88,6 +88,7 @@
                     	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
                 	</td>
        			</tr>
+				
                	<tr>
                 	<td colspan="2">
                 	    <label class="pull-left control-label">启动DHCP</label>
@@ -96,7 +97,7 @@
                         		{{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
                        		</label>是否启动DHCP-->
 								<div class="tuopu_btn">
-									<span class="switch_btn dhcp vm" style="cursor:pointer">
+									<span class="switch_btn dhcp vm" style="cursor:pointer disabled">
 										<span class="switch_content">否</span>
                 					</span>
 						        </div> 									
@@ -104,6 +105,7 @@
                     	</div>
                  	</td>
              	</tr>
+				{%if slice_obj.get_dhcp != None %}{%endif%}
 			</tbody>
 		</table>
 			     
@@ -151,10 +153,12 @@
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script>
+	var STATIC_URL = "{{ STATIC_URL}}";
 	$("#alert_close_sure").on("click", function(){
 		window.location.href='/slice/detail/' + {{sliceid}} + '/';
 	})
 	flavor_init();
 	
 </script>
+
 {% endblock %}
