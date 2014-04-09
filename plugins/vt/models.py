@@ -287,6 +287,8 @@ def vm_pre_save(sender, instance, **kwargs):
 
 @receiver(post_save, sender=VirtualMachine)
 def vm_post_save(sender, instance, **kwargs):
+    if instance.state == 11:
+        return
     if kwargs.get('created'):
         instance.create_vm()
 

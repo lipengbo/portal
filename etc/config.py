@@ -5,7 +5,7 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 #[plugin-vt]
-glance_host = '192.168.5.16'
+glance_host = '192.168.5.111'
 glance_port = 9292
 sFlow_service = 'http://192.168.5.24:8008/'
 
@@ -24,7 +24,7 @@ def generate_glance_url():
 #高级配置项，用于配置文件锁的位置
 lock_path = '/var/run/'
 #控制器和网关模板
-controller_flavor_id = 3
+controller_flavor_id = 1
 gateway_flavor_id = 1
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
