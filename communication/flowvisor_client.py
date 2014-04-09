@@ -67,7 +67,11 @@ def parseResponse(data):
     j = json.loads(data)
     if 'error' in j:
         print "%s -> %s" % (getError(j['error']['code']), j['error']['message'])
-        if getError(j['error']['code']) == "Invalid Params":
+        error_str = ""+str(getError(j['error']['code']))+" -> "+str(j['error']['message'])
+        error_str_sp = error_str.split(":")
+        if (len(error_str_sp) == 3 and error_str_sp[0] == "Internal Error -> remove-flowspace" \
+            and error_str_sp[1] == " unable to find flow entry ") \
+            or getError(j['error']['code']) == "Invalid Params":
             return "Invalid Params remove"
         else:
             return ""

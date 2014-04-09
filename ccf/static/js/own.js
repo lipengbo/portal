@@ -265,7 +265,8 @@ function page_function0(){
 	ret1 = check_slice_name('slice_name',2);
 	ret2 = check_slice_description('slice_description',2);
 	ret3 = check_island_id('island_id')
-	if (ret1 && ret2 && ret3){
+	ret4 = check_nw_num();
+	if (ret1 && ret2 && ret3 && ret4){
 		return true;
 	}
 	else{
@@ -275,7 +276,7 @@ function page_function0(){
 function page_function1(){
 	
 	//ret1 = check_switch_port();
-	var ret2 = check_nw_num();
+	var ret2 = true;
 	//alert(ret2);
 	if (ret2){
 		
@@ -286,12 +287,6 @@ function page_function1(){
     	fetch_gw_ip(slice_uuid);
 
         
-    /*if(check_ovs_gw()){
-			$('#gw_setting').show();
-		}else{
-			$('#gw_setting').hide();
-		}
-    */
 		return true;
 	}
 	else{
@@ -348,7 +343,7 @@ function page_function3(){
 				var controller_sys_obj = document.getElementById("controller_sys");
 				var controller_sys = controller_sys_obj.options[controller_sys_obj.selectedIndex].value;
 				var str = "";
-				str = str + "<table class=\"table\">"
+				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
 			        + "<td width=\"100\">创建方式：</td>"
@@ -369,7 +364,7 @@ function page_function3(){
                 controller_port_obj = document.getElementById("controller_port");
 				var controller_ip_port = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value+':'+controller_port_obj.value;
 				var str = "";
-				str = str + "<table class=\"table\">"
+				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
 			        + "<td width=\"100\">创建方式：</td>"
@@ -396,7 +391,7 @@ function page_function3(){
     var str = "";
     if(id_server_gw_obj && gateway_ip_obj && id_server_gw_obj.value && gateway_ip_obj.value){  
         
-        str = str + "<table class=\"table\">"
+        str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
                         +"<td width=\"100\">网关宿主机：</td>"
                         +"<td>"+ id_server_gw_obj.options[id_server_gw_index].text +"</td></tr>"
@@ -404,7 +399,7 @@ function page_function3(){
                         +"<td>"+ gateway_ip_obj.value +"</td></tr>";
         str = str + "</tbody></table>";  
     }else{
-        str = str + "<table class=\"table\">"
+        str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
                         +"<td>未配置</td>"                 
         str = str + "</tr></tbody></table>"; 

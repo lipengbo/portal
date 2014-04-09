@@ -108,8 +108,12 @@ $(function () {
                 }]
             },
             tooltip: {
+                shared: true,
+                useHTML: true,
+                headerFormat: titshow,
                 valueSuffix: '个'
             },
+
             legend: {
                 layout: 'vertical',
                 align: 'right',

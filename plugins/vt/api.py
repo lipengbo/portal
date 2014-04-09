@@ -157,6 +157,8 @@ def try_start_gw_and_ctr(vm):
             return False
 
 def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
+    if function_test:
+        return
     try:
         if controller_info['controller_type'] == 'default_create':
             controller_flavor = Flavor.objects.get(id=controller_flavor_id)
@@ -175,7 +177,6 @@ def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
     except socket_error as serr:
         if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
             raise ConnectionRefused()
-
 
 
 

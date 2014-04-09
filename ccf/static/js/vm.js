@@ -316,7 +316,8 @@ function showMsg(_info, msg, state){
 		//info.style.color = "green";
 	}else{
 		info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
-		
+		info.innerHTML = msg;
+		info.style.color = "red";
 	}
 }
 
