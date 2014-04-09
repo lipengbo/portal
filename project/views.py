@@ -102,6 +102,7 @@ def perm_admin(request, id, user_id):
         for perm in select_perms:
             assign_perm(perm, user, project)
         messages.add_message(request, messages.INFO, _("Change permissions successfully"))
+        return redirect('project_member_manage', id=id)
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 

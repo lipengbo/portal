@@ -145,7 +145,10 @@ class Application(Connection):
 
     @property
     def action_url(self):
-        return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
+        if self.state == 0:
+            return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
+        else:
+            return ""
 
     class Meta:
         verbose_name = _("Application")
