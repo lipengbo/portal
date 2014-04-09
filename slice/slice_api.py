@@ -692,7 +692,7 @@ def get_count_show_data(target, type, total_num, stype):
                                                 date__month=date_now.strftime('%m'),
                                                 date__day=str(i + 1),
                                                 type=2)
-                show_dates.append(str(i + 1) + "日")
+                show_dates.append(str(i + 1))
                 if sc:
                     num = sc[0].count
                 else:
