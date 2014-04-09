@@ -139,7 +139,7 @@ var svg = svg_obj.append('g')
     .on("mousedown", mousedown);
     var rect_color = 'white';
     if (size == 'big') {
-        rect_color = 'transparent';
+        rect_color = '#8287a9';
     }
 //initboard2();
 svg.append('rect')
