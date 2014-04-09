@@ -119,12 +119,12 @@ class Application(Connection):
         self.state = 1
         self.save()
         notify.send(self.to_user, recipient=self.from_user, verb=_('approved your application to join'), action_object=self,
-                target=self)
+                target=self.target)
 
     def reject(self):
         super(Application, self).reject()
         notify.send(self.to_user, recipient=self.from_user, verb=_('rejected your application to join'), action_object=self,
-                target=self)
+                target=self.target)
 
     @property
     def subject(self):
