@@ -132,7 +132,7 @@
                 {%endif%}
                 
                 {%if extent_html == "site_base.html" and permission == "edit"%}
-                <a class="btn btn-default" id="vm_add" href="javascript:void(0);" onclick="add_vm({{slice_obj.id}});"
+                <a class="btn btn-default {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="add_vm({{slice_obj.id}});"
                  {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
                 添加
                 </a>
