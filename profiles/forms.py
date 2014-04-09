@@ -21,7 +21,7 @@ class SignupForm(account.forms.SignupForm):
         super(SignupForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.label_class = 'col-md-2'
-        self.helper.field_class = 'col-md-8'
+        self.helper.field_class = 'col-md-7'
 
 class RejectForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, label=_("Reason"))
