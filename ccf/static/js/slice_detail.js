@@ -332,12 +332,11 @@ function add_vm(slice_id){
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "default"){
         //alert(0);
-        ret = false;
+        return;
     }else{
         //alert(1);
-        ret = true;
+        location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
     }
-    return ret;
 }
 
 

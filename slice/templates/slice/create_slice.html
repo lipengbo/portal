@@ -116,6 +116,26 @@
                                  <span id="island_idInfo col-md-6" style="display:inline;float:none;"></span>
                              </td>
                          </tr>
+                         
+
+                         <tr>
+                             <td class="text-right">
+                                 虚拟机数量
+                             </td>
+                             <td>                                
+                               <select name="nw_num" id="nw_num" class="form-control">
+                                  <option value="8">5</option>
+                                  <option value="16">13</option>
+                                  <option value="32">29</option>
+                                  <option value="64">61</option>
+                                </select>  
+                             </td>
+                             <td>
+                                <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量。" data-original-title="请根据实际需求选择最大虚拟机数量。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                <span id="nw_numInfo" style="display:inline;float:none;"></span>
+                             </td>
+                         </tr>  
+                         
                      </tbody>
                  </table>                                             
                 
@@ -209,7 +229,7 @@
                   </div>
                 </div>       
 
-                 <h4 class="title_word_bg block_title">
+                <!--<h4 class="title_word_bg block_title">
                    <img src="{% static "img/ic_31.png" %}" />网络地址
                    <small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small>
                 </h4>   
@@ -234,7 +254,7 @@
                              </td>
                          </tr>                       
                      </tbody>
-                 </table>                                                                                                               
+                 </table>  -->                                                                                                             
              
               <div class="form-actions">
                   <div class="row buttons_margin">

@@ -322,7 +322,7 @@ function nw_timeout(){
     $("div#slice_alert_info").append(str);
     $('#slicealertModal').modal('show');
 	//alert("分配的网段已过期！");
-	//window.top.location.reload();
+	//window.location.href = window.location.href;
 }
 
 //验证交换机端口的选择

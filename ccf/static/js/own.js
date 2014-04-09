@@ -265,7 +265,8 @@ function page_function0(){
 	ret1 = check_slice_name('slice_name',2);
 	ret2 = check_slice_description('slice_description',2);
 	ret3 = check_island_id('island_id')
-	if (ret1 && ret2 && ret3){
+	ret4 = check_nw_num();
+	if (ret1 && ret2 && ret3 && ret4){
 		return true;
 	}
 	else{
@@ -275,7 +276,7 @@ function page_function0(){
 function page_function1(){
 	
 	//ret1 = check_switch_port();
-	var ret2 = check_nw_num();
+	var ret2 = true;
 	//alert(ret2);
 	if (ret2){
 		
@@ -286,12 +287,6 @@ function page_function1(){
     	fetch_gw_ip(slice_uuid);
 
         
-    /*if(check_ovs_gw()){
-			$('#gw_setting').show();
-		}else{
-			$('#gw_setting').hide();
-		}
-    */
 		return true;
 	}
 	else{
