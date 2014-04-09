@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-03 19:01+0800\n"
+"POT-Creation-Date: 2014-04-09 10:49+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgstr "拒绝"
 msgid "Project Invitation"
 msgstr "项目邀请"
 
-#: models.py:97
+#: models.py:86
 #, python-format
 msgid ""
 "You're invited by %(inviter)s to join a project of %(project)s.\n"
@@ -64,27 +64,35 @@ msgid ""
 "%(accept_link)s"
 msgstr ""
 "亲爱的用户，您好：\n"
-"    用户%(inviter)s邀请您加入项目“%(project)s”，这是%(inviter)s留给您的消息：\n"
+"    用户%(inviter)s邀请您加入项目“%(project)s”，这是%(inviter)s留给您的消"
+"息：\n"
 "    %(message)s\n"
 "    您可以单击以下链接查看邀请详情：\n"
 "    %(accept_link)s\n"
 "\n"
 "SDN创新实验平台"
 
-
-#: models.py:98
+#: models.py:102
 msgid "invited you to join in"
 msgstr "邀请你加入"
 
-#: models.py:102
+#: models.py:110
 msgid "Invitation"
 msgstr "邀请"
 
-#: models.py:116
+#: models.py:121
+msgid "approved your application to join"
+msgstr "批准了你的申请加入"
+
+#: models.py:126
+msgid "rejected your application to join"
+msgstr "拒绝了你的申请加入"
+
+#: models.py:131
 msgid "Project Application"
 msgstr "项目申请"
 
-#: models.py:123
+#: models.py:135
 #, python-format
 msgid ""
 "%(applicant)s wants to join in %(project)s.\n"
@@ -94,22 +102,23 @@ msgid ""
 "%(accept_link)s"
 msgstr ""
 "亲爱的用户，您好：\n"
-"    用户%(applicant)s申请加入您的项目“%(project)s”，这是%(applicant)s留给您的消息：\n"
+"    用户%(applicant)s申请加入您的项目“%(project)s”，这是%(applicant)s留给您的"
+"消息：\n"
 "    %(message)s\n"
 "    您可以单击以下链接查看申请详情：\n"
 "    %(accept_link)s\n"
 "\n"
 "SDN创新实验平台"
 
-#: models.py:124
+#: models.py:143
 msgid "applied to join in"
 msgstr "申请加入"
 
-#: models.py:128
+#: models.py:151
 msgid "Application"
 msgstr "申请"
 
-#: models.py:155
+#: models.py:183
 #, python-format
 msgid "[%(site_name)s] You have new notification messages"
 msgstr "[%(site_name)s] 你有一个新的通知消息"

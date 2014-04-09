@@ -40,28 +40,28 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
         slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
         print "2:add ovs ports"
         slice_add_ovs_ports(slice_obj, ovs_ports)
-        print "scheduler for resources"
+        print "3:scheduler for resources"
         schedul_for_controller_and_gw(controller_info, gw_host_id, island)
-        print "3:create and add controller"
+        print "4:create and add controller"
         create_add_controller(slice_obj, controller_info)
-        print "4:create slice on flowvisor"
+        print "5:create slice on flowvisor"
         flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.id,
                             slice_obj.get_controller(), user.email)
-        print "5:create subnet"
+        print "6:create subnet"
         IPUsage.objects.subnet_create_success(slice_obj.uuid)
-        print "6:add nw flowspace in database"
+        print "7:add nw flowspace in database"
         flowspace_nw_add(slice_obj, [], slice_nw)
-        print "7:create gateway"
+        print "8:create gateway"
         enabled_dhcp = (int(dhcp_selected) == 1)
         if gw_host_id and int(gw_host_id) > 0:
             gw = create_vm_for_gateway(island, slice_obj, int(gw_host_id),
                                        image_name='gateway',
                                        enable_dhcp=enabled_dhcp)
-        print "8:create slice success and return"
+        print "9:create slice success and return"
         return slice_obj
     except Exception, ex:
         LOG.debug(traceback.print_exc())
-        print "9:create slice failed and delete slice"
+        print "10:create slice failed and delete slice"
         if slice_obj:
             try:
                 slice_obj.delete()
@@ -69,7 +69,7 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
                 if slice_obj:
                     slice_obj.type = 1
                     slice_obj.save()
-        print "10:delete slice success and raise exception"
+        print "11:delete slice success and raise exception"
         raise DbError(ex.message)
 
 

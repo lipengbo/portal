@@ -118,6 +118,13 @@ class Application(Connection):
         self.target.accept(self.from_user)
         self.state = 1
         self.save()
+        notify.send(self.to_user, recipient=self.from_user, verb=_('approved your application to join'), action_object=self,
+                target=self.target)
+
+    def reject(self):
+        super(Application, self).reject()
+        notify.send(self.to_user, recipient=self.from_user, verb=_('rejected your application to join'), action_object=self,
+                target=self.target)
 
     @property
     def subject(self):
@@ -138,7 +145,10 @@ class Application(Connection):
 
     @property
     def action_url(self):
-        return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
+        if self.state == 0:
+            return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
+        else:
+            return ""
 
     class Meta:
         verbose_name = _("Application")
@@ -167,7 +177,9 @@ def send_notification_email(sender, instance, created, **kwargs):
     content = render_to_string('notifications/notice.txt', {'notice': instance,
         'notification_link': "http://" + site.domain + reverse("notifications:all")})
     site_name = site.name
-    if hasattr(instance.action_object, 'subject'):
+    subject = ''
+    has_state = hasattr(instance.action_object, 'state')
+    if hasattr(instance.action_object, 'subject') and ((has_state and instance.action_object.state == 0) or not has_state):
         subject = site_name + instance.action_object.subject
         content = instance.action_object.content
     else:

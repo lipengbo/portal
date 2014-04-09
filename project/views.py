@@ -102,6 +102,7 @@ def perm_admin(request, id, user_id):
         for perm in select_perms:
             assign_perm(perm, user, project)
         messages.add_message(request, messages.INFO, _("Change permissions successfully"))
+        return redirect('project_member_manage', id=id)
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
@@ -390,7 +391,7 @@ def applicant(request, id, user_id=None):
 
     if request.method == 'POST':
         application_ids = request.POST.getlist('application')
-        selected_applications = Application.objects.filter(id__in=application_ids)
+        selected_applications = Application.objects.select_related('from_user', 'to_user', 'target').filter(id__in=application_ids)
         for application in selected_applications:
             if 'approve' in request.POST:
                 application.accept()
