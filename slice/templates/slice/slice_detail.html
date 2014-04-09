@@ -107,7 +107,9 @@
 			{%if extent_html == "site_base.html" and permission == "edit"%}
 			<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
 			{%endif%}
-			<div class="pull-right tuopu_btn">
+			<div class="pull-right tuopu_btn dhcp_div
+			    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
+                {%else%}disabled{%endif%}">
         启动DHCP：                
                 {%if slice_obj.get_dhcp != None %}
                 <span class="switch_btn dhcp checked" 
@@ -124,7 +126,7 @@
                 {%endif%}
                 
                 {%if extent_html == "site_base.html" and permission == "edit"%}
-                <a class="btn btn-default" id="vm_add" href="javascript:void(0);" onclick="add_vm({{slice_obj.id}});"
+                <a class="btn btn-default {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="add_vm({{slice_obj.id}});"
                  {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
                 添加
                 </a>

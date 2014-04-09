@@ -196,8 +196,9 @@ function check_slice_status(slice_id){
                         $(".bianji").attr("style","cursor:pointer");
                         $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj.png");
                         //dhcp启停、vm添加
+                        $(".dhcp_div").removeClass("disabled");
                         $(".dhcp").attr("style","cursor:pointer");
-                        $("#vm_add").attr("style","cursor:pointer");   
+                        $("#vm_add").removeClass("disabled").attr("style","cursor:pointer");   
                     } 
                 }else if(status == 1){
                     check_slice_objs.removeClass("icon-spinner")
