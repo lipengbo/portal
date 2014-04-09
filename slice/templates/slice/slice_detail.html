@@ -181,7 +181,7 @@
               </table>
             </div>
             <div class="modal-footer">
-              <button class="btn btn_info" data-dismiss="modal">取消</button>
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
               <button type="button" onclick="edit_description('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
             </div>
       </form>
@@ -196,19 +196,20 @@
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
           <h4 class="modal-title">虚网控制器编辑</h4>      
         </div>
-        <form class="" accept-charset="utf-8">{% csrf_token %}
+        <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
             <div class="modal-body base_info">
               <table class="table_base tooltip-demo">
                 <tbody>
                     <tr>
-                        <td width="100">
-                            <label class="tab_radio1">
+                        <td width="120" class="text-right">
+                            <label class="tab_radio1 control-label">
                               <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                               {%if vms.0.type_id == 1 %}{%else%}checked{%endif%}>
                               默认创建
                             </label>
+                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                         </td>
-                        <td width="100">控制器类型</td>
+                        <td width="100" class="text-right">控制器类型</td>
                         <td>
                             {%if vms.0.type_id == 1 %}
                                 <select name="controller_sys" id="controller_sys" class="form-control" disabled>
@@ -226,25 +227,25 @@
                             
                         </td>
                         <td colspan="2">
-                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="text-right">
                             <label class="tab_radio2">
                               <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
                               {%if vms.0.type_id == 1 %}checked{%endif%}>
                               自定义
                             </label>
+                            <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                         </td>
-                        <td>控制器IP</td>
+                        <td class="text-right">控制器IP</td>
                         <td width="230">
                             <div id="ipInput" class="disabled"></div>
                         </td>
-                        <td width="50">端口</td>
-                        <td>
-                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>
-                            <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                        <td width="50" class="text-right">端口</td>
+                        <td width="100">
+                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                           
                             <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                         </td>
                     </tr>
