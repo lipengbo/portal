@@ -60,7 +60,7 @@
                        <img src="{% static "img/ic_baseinfo.png" %}" />基本信息      
                  </h4> 
                  
-                 <table class="table_base">
+                 <table class="table_base tooltip-demo">
                      <tbody>
                          <tr>
                              <td width="100" class="text-right">
@@ -120,7 +120,9 @@
 
                          <tr>
                              <td class="text-right">
+                                 
                                  虚拟机数
+                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量" data-original-title="请根据实际需求选择最大虚拟机数量"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                              </td>
                              <td>                                
                                <select name="nw_num" id="nw_num" class="form-control">
@@ -131,7 +133,6 @@
                                 </select>  
                              </td>
                              <td>
-                                <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量" data-original-title="请根据实际需求选择最大虚拟机数量"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                                 <span id="nw_numInfo" style="display:inline;float:none;"></span>
                              </td>
                          </tr>  
@@ -233,7 +234,7 @@
                    <img src="{% static "img/ic_31.png" %}" />网络地址
                    <small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small>
                 </h4>   
-                
+                    
                 <table class="table_base tooltip-demo">
                      <tbody>
                          <tr>
@@ -275,8 +276,9 @@
                     <table class="table_base tooltip-demo">
                          <tbody>
                              <tr>
-                                 <td width="120" class="text-right">
+                                 <td width="150" class="text-right">
                                      网络地址
+                                     <a href="javascript:void(0);" class="tooltip_defined" data-toggle="tooltip" data-placement="right" title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                                  </td>
                                  <td width="30%">                                
                                    <input type="text" id="slice_nw_input" class="form-control" disabled/>
@@ -286,7 +288,7 @@
                                     <input type="text" value="" id="old_nw_owner" style="display:none"/>   
                                  </td>
                                  <td>
-                                    <a href="javascript:void(0);" class="tooltip_defined" data-toggle="tooltip" data-placement="right" title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。" data-original-title="分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                    
                                  </td>
                                  <td colspan="2">
                                     <!--label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器  -->
@@ -307,11 +309,12 @@
                 <table class="table_base tooltip-demo">
                          <tbody>
                              <tr>
-                                 <td width="120">
+                                 <td width="150" class="text-right">
                                      <label class="tab_radio1 control-label" for="optionsRadios1">
                                         <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
-                                                                                                                                   创建控制器 
+                                                                                                                                   创建控制器                                                                                                                 
                                     </label> 
+                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>                  
                                  </td>  
                                  <td width="100" class="text-right">控制器类型</td>                              
                                  <td width="30%">                                                                    
@@ -322,7 +325,7 @@
                                     </select>                                    
                                  </td>
                                  <td colspan="3">
-                                   <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                   
                                  </td>
                              </tr>     
                              <tr>
@@ -330,6 +333,7 @@
                                       <label class="tab_radio2 control-label" for="optionsRadios2">
                                             <input type="radio" name="controller_type" id="optionsRadios2" value="user_define">
                                                                                                                                    自定义控制器
+                                                                                                                                   <a href="javascript:void(0);" title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。" data-toggle="tooltip" data-placement="right" data-original-title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                                       </label>
                                  </td>  
                                  <td class="text-right">控制器IP</td>                              
@@ -340,8 +344,7 @@
                                  <td width="10%">
                                      <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                                    
                                  </td>
-                                 <td>
-                                     <a href="javascript:void(0);" title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。" data-toggle="tooltip" data-placement="right" data-original-title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                 <td>                                     
                                      <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                                  </td>
                              </tr>                  
@@ -359,24 +362,29 @@
                  <table class="table_base tooltip-demo">
                     <tbody>
                         <tr>
-                            <td width="120" class="text-right">网关宿主机</td>
+                            <td width="150" class="text-right">
+                                网关宿主机
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            </td>
                             <td width="30%">
                                 <select id="id_server_gw" class="form-control" onblur="check_gw_select()">
                               
                                 </select>								                                
                             </td>
-                            <td>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            <td>                               
                                 <span id="gwInfo"></span>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-right">网关IP地址</td>
+                            <td class="text-right">
+                                网关IP地址
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            </td>
                             <td>
                                 <input type="text" class="form-control" id="gateway_ip" disabled/>                               
                             </td>
                             <td>
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                
                                 <span id="gw_ipInfo" style="display:inline;float:none;"></span>
                             </td>
                         </tr>
@@ -495,7 +503,7 @@
 			     
     			    <h4 class="title_word_bg block_title">
                                                            <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表      
-                                                           <button type="button" class="btn btn-info  pull-right" onclick="javascript:update_vms_info()">添加</button>                                   
+                                                           <button type="button" class="btn btn-default  pull-right" onclick="javascript:update_vms_info()">添加</button>                                   
                     </h4>
                 
                  <table class="table_defined" id="vms_info_table">
