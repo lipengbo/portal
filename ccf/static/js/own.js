@@ -343,7 +343,7 @@ function page_function3(){
 				var controller_sys_obj = document.getElementById("controller_sys");
 				var controller_sys = controller_sys_obj.options[controller_sys_obj.selectedIndex].value;
 				var str = "";
-				str = str + "<table class=\"table\">"
+				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
 			        + "<td width=\"100\">创建方式：</td>"
@@ -364,7 +364,7 @@ function page_function3(){
                 controller_port_obj = document.getElementById("controller_port");
 				var controller_ip_port = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value+':'+controller_port_obj.value;
 				var str = "";
-				str = str + "<table class=\"table\">"
+				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
 			        + "<td width=\"100\">创建方式：</td>"
@@ -391,7 +391,7 @@ function page_function3(){
     var str = "";
     if(id_server_gw_obj && gateway_ip_obj && id_server_gw_obj.value && gateway_ip_obj.value){  
         
-        str = str + "<table class=\"table\">"
+        str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
                         +"<td width=\"100\">网关宿主机：</td>"
                         +"<td>"+ id_server_gw_obj.options[id_server_gw_index].text +"</td></tr>"
@@ -399,7 +399,7 @@ function page_function3(){
                         +"<td>"+ gateway_ip_obj.value +"</td></tr>";
         str = str + "</tbody></table>";  
     }else{
-        str = str + "<table class=\"table\">"
+        str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
                         +"<td>未配置</td>"                 
         str = str + "</tr></tbody></table>"; 
