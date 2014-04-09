@@ -390,7 +390,7 @@ def applicant(request, id, user_id=None):
 
     if request.method == 'POST':
         application_ids = request.POST.getlist('application')
-        selected_applications = Application.objects.filter(id__in=application_ids)
+        selected_applications = Application.objects.select_related('from_user', 'to_user', 'target').filter(id__in=application_ids)
         for application in selected_applications:
             if 'approve' in request.POST:
                 application.accept()

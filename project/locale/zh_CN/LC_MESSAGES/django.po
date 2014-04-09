@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-25 11:11+0800\n"
+"POT-Creation-Date: 2014-04-09 10:48+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,47 +18,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:24 models.py:41
+#: models.py:24 models.py:45
 msgid "name"
 msgstr "名称"
 
-#: models.py:25 models.py:42
+#: models.py:25 models.py:46
 msgid "description"
 msgstr "描述"
 
-#: models.py:38 models.py:43
+#: models.py:42 models.py:47
 msgid "City"
 msgstr "城市"
 
-#: models.py:56 models.py:72
+#: models.py:60 models.py:76
 msgid "Island"
 msgstr "节点"
 
-#: models.py:66 models.py:75 templates/project/detail.html:44
+#: models.py:70 models.py:79 templates/project/detail.html:44
 msgid "Category"
 msgstr "项目类型"
 
-#: models.py:70 templates/project/detail.html:41
+#: models.py:74 templates/project/detail.html:41
 msgid "Project Name"
 msgstr "项目名称"
 
-#: models.py:71 templates/project/detail.html:42
+#: models.py:75 templates/project/detail.html:42
 msgid "Project Description"
 msgstr "项目描述"
 
-#: models.py:74
+#: models.py:78
 msgid "Memberships"
 msgstr "成员"
 
-#: models.py:100
+#: models.py:104
 msgid " quit from"
 msgstr "退出了项目："
 
-#: models.py:103
+#: models.py:107
 msgid "User quit from project"
 msgstr "SDN创新实验平台用户退出项目通知"
 
-#: models.py:104
+#: models.py:108
 #, python-format
 msgid ""
 "Dear user:\n"
@@ -73,71 +73,67 @@ msgstr ""
 "\n"
 "SDN创新实验平台\n"
 
-#: models.py:146
+#: models.py:150
 msgid "Project"
 msgstr "项目"
 
-#: models.py:148
+#: models.py:152
 msgid "Can add Slice"
 msgstr "可以创建虚网"
 
-#: models.py:168
+#: models.py:172
 msgid "Membership"
 msgstr "成员"
 
-#: views.py:105
+#: views.py:104
 msgid "Change permissions successfully"
 msgstr "权限修改成功"
 
-#: views.py:161
+#: views.py:193
 msgid "The user has been invited of this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:169
+#: views.py:201
 #, python-format
 msgid "The user %(user)s has applied this project"
 msgstr "用户%(user)s已经申请了该项目"
 
-#: views.py:182
+#: views.py:214
 msgid "Invitation message is required."
 msgstr "邀请消息是必填项"
 
-#: views.py:235
+#: views.py:267
 msgid "You have applied for this project"
 msgstr "该用户已经申请了该项目"
 
-#: views.py:243
+#: views.py:275
 msgid "The user has been invited for this project"
 msgstr "该用户已经被邀请过"
 
-#: views.py:258
+#: views.py:290
 msgid "Application is submitted, please wait to audit."
 msgstr "申请已经提交，请等待审批"
 
-#: views.py:260
+#: views.py:292
 msgid "Application message is required."
 msgstr "申请理由是必填项"
 
-#: templates/project/create.html:20
+#: templates/project/create.html:21
 msgid "Edit Project"
 msgstr "编辑项目"
 
-#: templates/project/create.html:20
+#: templates/project/create.html:21
 msgid "Create Project"
 msgstr "创建项目"
 
 #: templates/project/detail.html:8 templates/project/detail.html.py:12
 #: templates/project/member.html:8 templates/project/member.html.py:11
 #: templates/project/member_manage.html:8
-#: templates/project/member_manage.html:13
+#: templates/project/member_manage.html:12
 msgid "Project Detail"
 msgstr "项目详情"
 
-#: templates/project/detail.html:30
-msgid "Edit"
-msgstr "编辑"
-
-#: templates/project/detail.html:34
+#: templates/project/detail.html:29
 msgid "Basic info"
 msgstr "基本信息"
 
@@ -145,16 +141,16 @@ msgstr "基本信息"
 msgid "Creator"
 msgstr "创建者"
 
-#: templates/project/detail.html:62 templates/project/member.html:20
+#: templates/project/detail.html:60 templates/project/member.html:20
 msgid "View pending members"
 msgstr "查看待审批成员"
 
-#: templates/project/detail.html:63 templates/project/member.html:21
+#: templates/project/detail.html:61 templates/project/member.html:21
 msgid "Invite members"
 msgstr "邀请成员"
 
-#: templates/project/detail.html:73 templates/project/member.html:23
-#: templates/project/member_manage.html:24
+#: templates/project/detail.html:67 templates/project/member.html:23
+#: templates/project/member_manage.html:21
 msgid "Members"
 msgstr "成员"
 
@@ -175,10 +171,14 @@ msgid "Actions"
 msgstr "操作"
 
 #: templates/project/member.html:44 templates/project/member.html.py:46
-#: templates/project/member_manage.html:53
-#: templates/project/member_manage.html:56
 msgid "Remove"
 msgstr "删除"
+
+#~ msgid "approved your application to join"
+#~ msgstr "批准了你的申请加入"
+
+#~ msgid "Edit"
+#~ msgstr "编辑"
 
 #~ msgid "Can delete Slice"
 #~ msgstr "可以删除虚网"
