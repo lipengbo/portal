@@ -5819,6 +5819,9 @@ textarea {
 .btn i {
   margin-right: 10px;
 }
+.modal {
+  overflow-y: auto;
+}
 .modal .modal-footer {
   text-align: center;
   padding: 15px 20px;
@@ -6037,6 +6040,10 @@ a.chart_btn span.color_red {
   margin-bottom: 15px;
   cursor: pointer;
   border: 1px solid #3399ff;
+}
+.project_list_block a {
+  display: block;
+  overflow: hidden;
 }
 .project_list_block a:hover {
   text-decoration: none;
@@ -6518,6 +6525,16 @@ a.tuopu_sign_block:focus {
   vertical-align: middle;
   color: #3399fe;
 }
+.block_title .tuopu_btn {
+  font-size: 14px;
+  font-weight: normal;
+}
+.block_title .tuopu_btn .switch_content {
+  font-size: 12px;
+}
+.block_title .btn {
+  margin-left: 10px;
+}
 .block_title img {
   margin-bottom: 2px;
   margin-right: 5px;
@@ -6599,10 +6616,11 @@ a.tuopu_sign_block:focus {
   height: 24px;
   line-height: 24px;
   width: 60px;
-  vertical-align: middle;
   cursor: pointer;
   padding-left: 10px;
   padding-right: 10px;
+  vertical-align: middle;
+  margin-bottom: 2px;
 }
 .switch_content {
   color: #fff;
@@ -6765,16 +6783,17 @@ fieldset legend {
   margin-right: 0;
 }
 .progress_defined {
-  background: #2291fe;
   margin-bottom: 0;
   border-radius: 10px;
 }
 .progress_defined .progress-bar-info {
   background: #2291fe;
+  border-radius: 10px;
 }
 .progress_defined .progress-bar-success {
   border-radius: 10px;
   background: #00cc33;
+  float: right;
 }
 .buttons_margin {
   margin-top: 50px;
@@ -6839,6 +6858,7 @@ fieldset legend {
   margin-top: -20px;
 }
 .show_frame .main_frame {
+  height: 500px;
   background: #f1f1f1;
   position: relative;
 }
@@ -6917,6 +6937,14 @@ fieldset legend {
 .table_base .slider_td {
   padding-top: 8px;
   padding-bottom: 16px;
+}
+.table_base .tab_radio1,
+.table_base .tab_radio2 {
+  padding-top: 2px;
+}
+.table_base .tab_radio1 input[type="radio"],
+.table_base .tab_radio2 input[type="radio"] {
+  vertical-align: -2px;
 }
 .v_top {
   vertical-align: top;
@@ -7174,4 +7202,13 @@ body.nexus-body .action_box {
 }
 #div_id_server.form-group label {
   display: none;
+}
+@media (min-width: 768px) {
+  .modal-dialog {
+    margin: 50px auto;
+  }
+}
+#svg .modal-dialog .modal-body {
+  max-height: 270px;
+  overflow: auto;
 }

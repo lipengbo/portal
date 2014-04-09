@@ -102,21 +102,13 @@
             <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=1140&height=300&top=0&band=1" frameborder="0"></iframe>
         </div>
         
-        <div class="show-dhcp">
-            <div class="pull-left">
-                <h4 class="block_title">
-                    <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{{ start_ip }}-{{ end_ip }}】
-					{%if extent_html == "site_base.html" and permission == "edit"%}
-					<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
-					{%endif%}
-                </h4>
-            </div>
-            <form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
-                <input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
-            </form>
-            <div class="pull-right tuopu_btn">
-                启动DHCP：
-                
+        <h4 class="block_title show-dhcp">
+            <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{{ start_ip }}-{{ end_ip }}】
+			{%if extent_html == "site_base.html" and permission == "edit"%}
+			<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
+			{%endif%}
+			<div class="pull-right tuopu_btn">
+        启动DHCP：                
                 {%if slice_obj.get_dhcp != None %}
                 <span class="switch_btn dhcp checked" 
                 {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
@@ -139,8 +131,10 @@
                 {%endif%}
                 
             </div>
-            <div class="clear"></div>
-        </div>
+        </h4>
+        <form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
+            <input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
+        </form>
         
         <div id="list_show">
             {% include "slice/vm_list_page.html" %}
@@ -187,8 +181,8 @@
               </table>
             </div>
             <div class="modal-footer">
-              <button class="btn" data-dismiss="modal">取消</button>
-              <button type="button" onclick="edit_description('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
+              <button class="btn btn_info" data-dismiss="modal">取消</button>
+              <button type="button" onclick="edit_description('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
             </div>
       </form>
       </div>
@@ -249,7 +243,7 @@
                         </td>
                         <td width="50">端口</td>
                         <td>
-                            <input type="text" maxlength="5" id="controller_port" class="dk_pull" disabled onblur="check_port('port',1)"/>
+                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>
                             <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
                         </td>
@@ -259,7 +253,7 @@
           </div>
           <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn-info">确定</button>
+              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
           </div>
         </form>
         </div>
@@ -273,7 +267,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary">确定</button>
+            <button type="button" class="btn btn_info">确定</button>
           </div>
         </div>
       </div>
@@ -285,7 +279,7 @@
             <p class="text-center">虚网创建失败！</p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">确定</button>
+            <button type="button" class="btn btn_info" data-dismiss="modal">确定</button>
           </div>
         </div>
       </div>
