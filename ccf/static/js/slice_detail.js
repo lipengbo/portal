@@ -190,6 +190,7 @@ function start_stop_slice(slice_id){
             $(".bianji").attr("style","cursor:default");
             $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj_gray.png");
             //dhcp启停、vm添加
+            $(".dhcp_div").addClass("disabled");
             $(".dhcp").attr("style","cursor:default");
             $("#vm_add").addClass("disabled").attr("style","cursor:default");
             update_slice_status(); 
