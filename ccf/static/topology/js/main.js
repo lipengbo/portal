@@ -27,7 +27,7 @@ if (size == 'small') {
     width = 500;
     height = 300;
 } else if (size == 'big') {
-    width = 900;
+    width = $('#topology-svg').width();
     height = 450;
 }
 
@@ -139,7 +139,7 @@ var svg = svg_obj.append('g')
     .on("mousedown", mousedown);
     var rect_color = 'white';
     if (size == 'big') {
-        rect_color = '#8287a9';
+        rect_color = '#CCC';
     }
 //initboard2();
 svg.append('rect')
