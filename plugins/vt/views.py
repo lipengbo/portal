@@ -75,6 +75,10 @@ def create_vm(request, sliceid, from_link):
                 vm.ram = request.POST.get("ram")
                 vm.cpu = request.POST.get("cpu")
                 vm.hdd = request.POST.get("hdd")
+                if request.POST.get("enable_dhcp") == '0':
+                    vm.enable_dhcp = False
+                else:
+                    vm.enable_dhcp = True
                 flavor = Flavor.objects.filter(id=request.POST.get("flavor"))
                 if flavor.count() == 0:
                     vm.flavor = None

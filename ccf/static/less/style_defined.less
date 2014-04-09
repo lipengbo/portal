@@ -726,7 +726,7 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
     font-weight:bold;
     height: 34px;
     line-height: 34px;
-    a:hover i {
+    a:hover {
         text-decoration:none;
     }
     i {
@@ -833,7 +833,14 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
 .tuopu_btn .checked .switch_content {
     float:left;
 }
-
+.tuopu_btn.disabled {
+    .switch_btn {
+        cursor: not-allowed;
+        pointer-events: none;
+        opacity: 0.65;
+        filter: alpha(opacity=65);
+    }
+}
 #deleteModal {
     margin-top:200px;   
 }
@@ -868,6 +875,9 @@ fieldset {
     p a:first-child {
         margin-right:50px;
     }
+    .enter_btn a {
+        font-family:"Microsoft YaHei";
+    }
 }
 .intro_well {
     background:#f1f1f1;
@@ -875,6 +885,7 @@ fieldset {
     .box-shadow(none);
     .list_title {
         font-weight:bold;
+        margin-top:10px;
     }
     p {
         color:#999;
@@ -1094,6 +1105,7 @@ fieldset {
     }
 } 
 .ipInput-cell{    
+    background:transparent;
     width:23%;
     height:20px;
     border-width:0px !important;
@@ -1392,7 +1404,7 @@ transition: background 0.25s;
 }
 .show_dhcp {
     .tuopu_btn {
-        margin-top:10px;
+        margin-top:10px;        
     }
 }
 body.nexus-body .action_box {
