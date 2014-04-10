@@ -98,6 +98,7 @@ $(function () {
                 categories: show_dates,
             },
             yAxis: {
+                allowDecimals: false,
                 title: {
                     text: name + '数(个)'
                 },
