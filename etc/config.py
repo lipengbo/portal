@@ -5,7 +5,7 @@
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
 #[plugin-vt]
-glance_host = '192.168.5.16'
+glance_host = '192.168.5.111'
 glance_port = 9292
 sFlow_service = 'http://192.168.5.24:8008/'
 
@@ -24,7 +24,7 @@ def generate_glance_url():
 #高级配置项，用于配置文件锁的位置
 lock_path = '/var/run/'
 #控制器和网关模板
-controller_flavor_id = 3
+controller_flavor_id = 1
 gateway_flavor_id = 1
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
@@ -33,9 +33,9 @@ gw_controller = False
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = True
+function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
-flowvisor_disable = True
+flowvisor_disable = False
 #直接调度底层资源判断，发布时设置为True
 use_vt_manager_to_schedul = True
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效

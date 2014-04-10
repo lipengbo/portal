@@ -300,7 +300,7 @@ function page_function2(){
 	if($('.switch_btn.dhcp').hasClass("checked")){
 		var obj = $('.switch_btn.dhcp.vm');
 		obj.addClass("checked");
-        obj.children(".switch_content").html("启动");
+        obj.children(".switch_content").html("是");
 	}else{
 		if($('.switch_btn.dhcp.vm').hasClass("checked")){
 			$('.switch_btn.dhcp.vm').removeClass("checked");
