@@ -190,14 +190,21 @@ function check_slice_status(slice_id){
                         if(a_obj){
                         a_obj.style.cursor = "pointer";}
                         if(img_obj){
-                        img_obj.src = STATIC_URL + "img/btn_qd.png";       
+                        img_obj.src = STATIC_URL + "img/btn_qd.png";
+                        if(img_obj.title == "启动中"){
+                            $("div#slice_alert_info").empty();
+                            var str = "" + "<p class=\"text-center\">虚网启动失败！</p>";
+                            $("div#slice_alert_info").append(str);
+                            $('#slicealertModal').modal('show');
+                        }    
                         img_obj.title = "启动"; }
                         //控制器编辑、slice编辑按钮变化
                         $(".bianji").attr("style","cursor:pointer");
                         $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj.png");
                         //dhcp启停、vm添加
+                        $(".dhcp_div").removeClass("disabled");
                         $(".dhcp").attr("style","cursor:pointer");
-                        $("#vm_add").attr("style","cursor:pointer");   
+                        $("#vm_add").removeClass("disabled").attr("style","cursor:pointer");   
                     } 
                 }else if(status == 1){
                     check_slice_objs.removeClass("icon-spinner")
@@ -212,7 +219,13 @@ function check_slice_status(slice_id){
                         if(a_obj){
                         a_obj.style.cursor = "pointer";}
                         if(a_obj){
-                        img_obj.src = STATIC_URL + "img/btn_tz.png";       
+                        img_obj.src = STATIC_URL + "img/btn_tz.png";
+                        if(img_obj.title == "停止中"){
+                            $("div#slice_alert_info").empty();
+                            var str = "" + "<p class=\"text-center\">虚网停止失败！</p>";
+                            $("div#slice_alert_info").append(str);
+                            $('#slicealertModal').modal('show');
+                        }       
                         img_obj.title = "停止";  }
                     }   
                 }

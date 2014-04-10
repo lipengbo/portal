@@ -18,7 +18,7 @@
       <p class="text-center"></p>
     </div> 
     <div class="modal-footer">
-      <button class="btn delete-confirm btn-warning" data-dismiss="modal" id="alert_close_sure">确定</button>
+      <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>
     </div>          
 </div>
 </div>
@@ -78,14 +78,16 @@
                 <tr>
                 	<td><b>镜像</b></td>
                     <td>
-						<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
+						<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> 
+						<span name="imageInfo"></span>
                     </td>
                 </tr>
                 <tr>
                 	<td><b>宿主机</b></td>
                  	<td>
-						<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div> <span name="serverInfo"></span>
-                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
+						<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div><span name="serverInfo"></span> 
+                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button></a>
+						
                 	</td>
        			</tr>
 				
@@ -98,14 +100,17 @@
                        		</label>是否启动DHCP-->
 								{%if slice_obj.get_dhcp != None %}
 								<div class="tuopu_btn">
+									<span class="switch_btn dhcp vm checked" style="cursor:pointer ">
+										<span class="switch_content">是</span>
+                					</span>
+						        </div> 
 								{%else%}
 								<div class="tuopu_btn disabled">
-								{%endif%}
-									<span class="switch_btn dhcp vm" style="cursor:pointer disabled">
+									<span class="switch_btn dhcp vm" style="cursor:pointer">
 										<span class="switch_content">否</span>
                 					</span>
 						        </div> 									
-				
+							{%endif%}
                     	</div>
                  	</td>
              	</tr>
@@ -116,7 +121,7 @@
 		
     	<h4 class="title_word_bg block_title">
                         <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表      
-                        <button type="button" class="btn btn-default" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
+                        <button type="button" class="btn btn_info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
         </h4>
 			     
 			     <table class="table_defined" id="vms_info_table">
