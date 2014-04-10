@@ -78,14 +78,16 @@
                 <tr>
                 	<td><b>镜像</b></td>
                     <td>
-						<div class="col-md-3 has-error">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
+						<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> 
+						<span name="imageInfo"></span>
                     </td>
                 </tr>
                 <tr>
                 	<td><b>宿主机</b></td>
                  	<td>
-						<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div> <span name="serverInfo"></span>
-                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button>
+						<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div><span name="serverInfo"></span> 
+                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button></a>
+						
                 	</td>
        			</tr>
 				
