@@ -6161,6 +6161,12 @@ a.chart_btn span.color_red {
   border-right: 1px solid #ccc;
   border-left: 1px solid #ccc;
 }
+.slice_detail .slice_on {
+  color: #fff;
+  padding: 2px 6px;
+  background: #009900;
+  border-radius: 5px;
+}
 .slice_detail i {
   margin-right: 5px;
   color: #999;
@@ -6525,7 +6531,7 @@ a.tuopu_sign_block:focus {
   color: #3399fe;
 }
 .block_title .tuopu_btn {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: normal;
 }
 .block_title .tuopu_btn .switch_content {
