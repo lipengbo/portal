@@ -163,7 +163,9 @@ def update_host_performace_data(request):
         server = get_object_or_404(Server, id = host_id)
         agent = AgentClient(ip = server.ip)
         host_perf_data = json.loads(agent.get_host_status())
-        #print host_perf_data
+        print "----------------------"
+        print host_perf_data
+        print "----------------------"
         net_data = {}
         if pre_net_data[0] == '':
             for (key, value) in host_perf_data["net"].items():
