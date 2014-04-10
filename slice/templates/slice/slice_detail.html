@@ -49,29 +49,29 @@
                             <img src="{{ STATIC_URL}}img/btn_qd.png" title="启动" />
                         </a>
                         {% elif slice_obj.state == 3 %}
-                        <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:default">
+                        <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="停止中" />
                         </a>
                         {%else%}
-                        <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:default">
+                        <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启动中" />
                         </a>
                         {%endif%}
                         
                         {%if slice_obj.state == 0 %}
-                        <a class="bianji" data-toggle="modal" href="#editInfoModal" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:pointer">
+                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:pointer">
                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                         </a>
                         {%else%}
-                        <a class="bianji" data-toggle="modal" href="#editInfoModal" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:default">
+                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                         {%endif%}
                     {%else%}
-                        <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:default">
+                        <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启停" />
                         </a>
-                        <a data-toggle="modal" href="#editInfoModal" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:default">
+                        <a data-toggle="modal" href="#editInfoModal" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                     {%endif%}
@@ -118,20 +118,20 @@
                 {%if slice_obj.get_dhcp != None %}
                 <span class="switch_btn dhcp checked" 
                 {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
+                style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
                     <span class="switch_content">启动</span>
                 </span>
                 {%else%}
                 <span class="switch_btn dhcp" 
                 {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
+                style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
                     <span class="switch_content">停止</span>
                 </span>
                 {%endif%}
                 
                 {%if extent_html == "site_base.html" and permission == "edit"%}
                 <a class="btn btn_info {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="add_vm({{slice_obj.id}});"
-                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
+                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
                 添加
                 </a>
                 {%endif%}
@@ -207,7 +207,7 @@
               <table class="table_base tooltip-demo">
                 <tbody>
                     <tr>
-                        <td width="120" class="text-right">
+                        <td width="120">
                             <label class="tab_radio1 control-label">
                               <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                               {%if vms.0.type_id == 1 %}{%else%}checked{%endif%}>
@@ -232,12 +232,12 @@
                             {%endif%}
                             
                         </td>
-                        <td colspan="2">
+                        <td colspan="3">
                             
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-right">
+                        <td>
                             <label class="tab_radio2">
                               <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
                               {%if vms.0.type_id == 1 %}checked{%endif%}>
@@ -251,9 +251,9 @@
                         </td>
                         <td width="50" class="text-right">端口</td>
                         <td width="100">
-                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                           
-                            <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                                                       
                         </td>
+                        <td><span id="controller_ip_portInfo" style="display:inline;float:none;"></span></td>
                     </tr>
                 </tbody>
             </table>

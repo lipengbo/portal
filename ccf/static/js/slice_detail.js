@@ -1,7 +1,7 @@
 //虚拟机启动停止click事件
 function start_stop_vm(vm_id, vm_type){
     var a_obj = $("#"+vm_id+"_qt")[0];
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }
@@ -32,7 +32,7 @@ function start_stop_vm(vm_id, vm_type){
             document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
             a_obj = $("#"+vm_id+"_dl")[0];
             img_obj = $("#"+vm_id+"_dl").children("img")[0];
-            a_obj.style.cursor = "default";
+            a_obj.style.cursor = "not-allowed";
             img_obj.src = STATIC_URL + "img/btn_dl_gray.png"; 
         }else{
             //alert(2);
@@ -73,7 +73,7 @@ function start_or_stop_vm(vm_id, flag){
 //虚拟机监控click事件
 function jk_vm(vm_id){
     var a_obj = $("#"+vm_id+"_jk")[0];
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }
@@ -84,7 +84,7 @@ function jk_vm(vm_id){
 function dl_vm(vm_id){
     var a_obj = $("#"+vm_id+"_dl")[0];
     //alert(a_obj.attr("style"));
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }
@@ -96,11 +96,12 @@ function dl_vm(vm_id){
 function bj_vm(vm_id){
     var a_obj = $("#"+vm_id+"_bj")[0];
     //alert(a_obj.attr("style"));
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
         //alert(1);
+        $('#editSliceModal').modal('show');
         return true;
     }
 }
@@ -111,7 +112,7 @@ function sc_vm(vm_id){
     var a_obj = $("#"+vm_id+"_sc")[0];
     //alert($('.endless_page_current')[0].innerHTML);
     //alert(document.location);
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         return false;
     }else{
         $('#alertModal').modal();
@@ -166,7 +167,7 @@ function delete_vm(vm_id){
 //虚网启动停止click事件
 function start_stop_slice(slice_id){
     var a_obj = $("#slice_qt")[0];
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }
@@ -183,16 +184,16 @@ function start_stop_slice(slice_id){
                 .removeClass("icon_state")
                 .addClass("icon-spinner")
                 .addClass("icon-spin");
-            a_obj.style.cursor = "default";
+            a_obj.style.cursor = "not-allowed";
             img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
             img_obj.title = "启动中"; 
             //控制器编辑、slice编辑按钮变化
-            $(".bianji").attr("style","cursor:default");
+            $(".bianji").attr("style","cursor:not-allowed");
             $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj_gray.png");
             //dhcp启停、vm添加
             $(".dhcp_div").addClass("disabled");
-            $(".dhcp").attr("style","cursor:default");
-            $("#vm_add").addClass("disabled").attr("style","cursor:default");
+            $(".dhcp").attr("style","cursor:not-allowed");
+            $("#vm_add").addClass("disabled").attr("style","cursor:not-allowed");
             update_slice_status(); 
         }else{
             //alert("in2");
@@ -208,7 +209,7 @@ function start_stop_slice(slice_id){
                 .removeClass("icon_state")
                 .addClass("icon-spinner")
                 .addClass("icon-spin");
-            a_obj.style.cursor = "default";
+            a_obj.style.cursor = "not-allowed";
             img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
             img_obj.title = "停止中";
             update_slice_status();
@@ -253,18 +254,19 @@ function start_or_stop_slice(slice_id, flag){
 function bj_slice(vm_id){
     var a_obj = $("#slice_bj")[0];
     //alert(a_obj.attr("style"));
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
         //alert(1);
+        $('#editInfoModal').modal('show');
         return true;
     }
 }
 
 //带宽监控与dhcp启停按钮点击事件
 $(".switch_btn").click(function(){
-    if($(this)[0].style.cursor == "default"){
+    if($(this)[0].style.cursor == "not-allowed"){
         //alert(1);
         return false;
     }
@@ -331,7 +333,7 @@ function set_dhcp(slice_id, flag){
 function add_vm(slice_id){
     var a_obj = $("#vm_add")[0];
     //alert(a_obj.attr("style"));
-    if(a_obj.style.cursor == "default"){
+    if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }else{
