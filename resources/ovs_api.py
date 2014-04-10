@@ -10,7 +10,7 @@ LOG = logging.getLogger("CENI")
 OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
 
 
-def slice_add_ovs_ports(slice_obj, ovs_ports):
+def slice_add_ovs_ports2(slice_obj, ovs_ports):
     """slice添加交换端口
     """
     LOG.debug('slice_add_ovs_ports')
@@ -25,6 +25,41 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
                     pass
                 else:
                     flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
+    except Exception, ex:
+        raise DbError("资源分配失败！")
+
+
+def slice_add_ovs_ports(slice_obj, ovs_ports):
+    """slice添加交换端口
+    """
+    LOG.debug('slice_add_ovs_ports')
+    try:
+        Slice.objects.get(id=slice_obj.id)
+        switches = []
+        for ovs_port in ovs_ports:
+            if ovs_port.switch not in switches:
+                switches.append(ovs_port.switch)
+        ports = []
+        for switch in switches:
+            slice_obj.add_resource(switch)
+            s_ports = switch.SwitchPort_set.all()
+            ports.extend(s_ports)
+        links = Link.objects.filter(source__in=ports, target__in=ports)
+        add_ports = []
+        for link in links:
+            if link.source not in add_ports:
+                add_ports.append(link.source)
+            if link.target not in add_ports:
+                add_ports.append(link.target)
+        for add_port in add_ports:
+            slice_obj.add_resource(add_port)
+            if add_port.switch.type() == OVS_TYPE['EXTERNAL']:
+                try:
+                    add_port.switch.virtualswitch
+                except VirtualSwitch.DoesNotExist:
+                    pass
+                else:
+                    flowspace_gw_add(slice_obj, add_port.switch.virtualswitch.server.mac)
     except Exception, ex:
         raise DbError("资源分配失败！")
 
