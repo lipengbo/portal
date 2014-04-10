@@ -1,12 +1,46 @@
+import json
+
 from django.template.defaultfilters import register
 from django.conf import settings
 
+from plugins.common.agent_client import AgentClient
 from project.models import City
 from resources.models import Resource
 @register.simple_tag(takes_context=True)
 def get_all_cities(context):
     context['cities'] = City.objects.all()
     return ''
+
+@register.simple_tag(takes_context=True)
+def resource_usage(context, island):
+    servers = island.server_set.all()
+    switches = island.switch_set.all()
+    print servers, switches
+    server_ratios = []
+    switch_ratios = []
+    for server in servers:
+        client = AgentClient(server.ip)
+        try:
+            host_status = json.loads(client.get_host_status())
+        except Exception:
+            pass
+        else:
+            ratio = (host_status['mem'][2] + host_status['cpu']) / 2
+            server_ratios.append(ratio)
+
+    for switch in switches:
+        client = AgentClient(switch.ip)
+        try:
+            host_status = json.loads(client.get_host_status())
+        except Exception:
+            pass
+        else:
+            ratio = (host_status['mem'][2] + host_status['cpu']) / 2
+            switch_ratios.append(ratio)
+    context['switch_ratio'] = sum(switch_ratios) / float(len(switch_ratios) or 1)
+    context['server_ratio'] = sum(server_ratios) / float(len(server_ratios) or 1)
+    return ""
+
 
 @register.simple_tag()
 def resource_ratio(num, total):

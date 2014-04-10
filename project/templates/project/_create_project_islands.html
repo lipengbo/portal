@@ -42,12 +42,16 @@
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
-                                <div class="progress progress_defined">
-                                    <div class="progress-bar progress-bar-info" style="width: {% resource_ratio switch_num|add:server_num total_resource%}%;">
-                                        {{ switch_num }}
-                                        <div class="progress-bar progress-bar-success" style="width: {% resource_ratio server_num total_resource%}%;">{{ server_num }}</div>
+                                {% resource_usage island %}
+                                <div class="progress col-md-6 progress_defined">
+                                    服务器
+                                    <div class="progress-bar progress-bar-info" style="width: {{ server_ratio}}%;">
                                     </div>
-                                    
+                                </div>
+                                <div class="progress col-md-6 progress_defined">
+                                    交换机
+                                    <div class="progress-bar progress-bar-info" style="width: {{ switch_ratio}}%;">
+                                    </div>
                                 </div>
                             </td>
                         </tr>
