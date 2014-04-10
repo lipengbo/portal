@@ -6234,7 +6234,6 @@ a.chart_btn span.color_red {
 }
 .table_defined td.btn_operation .disabled {
   cursor: not-allowed;
-  pointer-events: none;
   opacity: 0.65;
   filter: alpha(opacity=65);
   -webkit-box-shadow: none;
@@ -6909,8 +6908,7 @@ fieldset legend {
   height: 100%;
 }
 #ipInput {
-  height: 30px;
-  line-height: 30px;
+  height: 34px;
   width: 100%;
   display: inline-block;
   font-size: 14px;
@@ -6925,6 +6923,9 @@ fieldset legend {
 #ipInput input.ipInput-cell {
   -webkit-box-shadow: none;
   box-shadow: none;
+}
+.dk_pull {
+  text-align: center;
 }
 .table_base {
   width: 100%;
@@ -7021,7 +7022,7 @@ fieldset legend {
 }
 /* flatui */
 .ui-slider {
-  width: 650px;
+  width: 440px;
   background: #dfdfdf;
   border-radius: 32px;
   height: 12px;
@@ -7046,7 +7047,7 @@ fieldset legend {
 .slider_td .value_e {
   position: absolute;
   top: 3px;
-  left: 630px;
+  left: 414px;
   display: block;
   width: 60px;
   text-align: center;
@@ -7211,4 +7212,22 @@ body.nexus-body .action_box {
 #svg .modal-dialog .modal-body {
   max-height: 270px;
   overflow: auto;
+}
+i.error_icon {
+  color: #a94442;
+}
+i.error_icon:hover {
+  text-decoration: none;
+}
+span[name="imageInfo"] {
+  margin-left: 5px;
+  margin-top: 5px;
+  display: inline-block;
+  vertical-align: middle;
+}
+span[name="serverInfo"] {
+  margin-left: 5px;
+}
+.dhcp_div .switch_btn {
+  margin-right: 40px;
 }
