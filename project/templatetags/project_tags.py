@@ -25,7 +25,7 @@ def resource_usage(context, island):
         except Exception:
             pass
         else:
-            ratio = host_status['mem'][2]
+            ratio = (host_status['mem'][2] + host_status['cpu']) / 2
             server_ratios.append(ratio)
 
     for switch in switches:
@@ -35,7 +35,7 @@ def resource_usage(context, island):
         except Exception:
             pass
         else:
-            ratio = host_status['mem'][2]
+            ratio = (host_status['mem'][2] + host_status['cpu']) / 2
             switch_ratios.append(ratio)
     context['switch_ratio'] = sum(switch_ratios) / float(len(switch_ratios) or 1)
     context['server_ratio'] = sum(server_ratios) / float(len(server_ratios) or 1)
