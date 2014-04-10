@@ -207,7 +207,7 @@
               <table class="table_base tooltip-demo">
                 <tbody>
                     <tr>
-                        <td width="120" class="text-right">
+                        <td width="120">
                             <label class="tab_radio1 control-label">
                               <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
                               {%if vms.0.type_id == 1 %}{%else%}checked{%endif%}>
@@ -232,12 +232,12 @@
                             {%endif%}
                             
                         </td>
-                        <td colspan="2">
+                        <td colspan="3">
                             
                         </td>
                     </tr>
                     <tr>
-                        <td class="text-right">
+                        <td>
                             <label class="tab_radio2">
                               <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
                               {%if vms.0.type_id == 1 %}checked{%endif%}>
@@ -251,9 +251,9 @@
                         </td>
                         <td width="50" class="text-right">端口</td>
                         <td width="100">
-                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                           
-                            <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                            <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                                                       
                         </td>
+                        <td><span id="controller_ip_portInfo" style="display:inline;float:none;"></span></td>
                     </tr>
                 </tbody>
             </table>
