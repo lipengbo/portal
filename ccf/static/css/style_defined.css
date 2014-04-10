@@ -7189,7 +7189,7 @@ fieldset legend {
 }
 @media (min-width: 768px) {
   #editSliceModal .modal-dialog {
-    width: 600px;
+    width: 750px;
   }
 }
 .show_dhcp .tuopu_btn {
