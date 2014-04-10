@@ -274,7 +274,8 @@ class HostMac(models.Model):
 def vm_pre_save(sender, instance, **kwargs):
     if not instance.uuid:
         instance.uuid = utils.gen_uuid()
-        instance.name = "VM-" + instance.uuid.split("-")[0]
+        if instance.type == 1:
+            instance.name = "VM-" + instance.uuid.split("-")[0]
     #if instance.state == 11:
     #    return
     if not instance.ip:
