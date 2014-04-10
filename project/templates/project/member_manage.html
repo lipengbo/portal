@@ -9,25 +9,25 @@
 {% endblock %}
 {% block breadcrumb %}
 <li><a href="/project/">项目</a></li>
-<li class='divider'>/</li>
 <li><a href="{% url project_detail project.id %}">{% trans "Project Detail" %}</a></li>
-<li class='divider'>/</li>
 <li class="active">成员管理</li>
 {% endblock %}
 
 {% block body %}
 
-    <legend>
-        <a href="{% url project_applicant project.id %}" class="btn btn-info edit">审批</a>
-        <a href="{% url project_invite project.id %}" class="btn btn-info edit">邀请</a>
-        <div class="title_word_bg">
-                                           {% trans "Members" %}
-           <div class="triangle"></div> 
-        </div>          
-    </legend>
-<div class="row-fluid">
-    <div class="span12">
-        <table class="table table-striped table-hover">
+
+        
+        <h4 class="title_word_bg block_title">
+           <img src="{% static "img/ic_25.png" %}" />{% trans "Members" %}
+           <div class="pull-right">               
+               <a href="{% url project_invite project.id %}" class="btn btn_info edit">邀请</a>
+               <a href="{% url project_applicant project.id %}" class="btn btn_info edit">审批</a>
+           </div>
+        </h4>          
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table_defined">
             <thead>
                 <tr>
                     <th width="20%">成员名称</th>
@@ -46,14 +46,14 @@
                     <td>
                         {{ membership.user.get_profile.organization|default:"未填写" }}
                     </td>
-                    <td>
+                    <td class="btn_operation">
                         {% if  project.owner == user %}
                             {% if  membership.user.id != project.owner.id %}
-                            <a class="btn" href="{% url project_perm project.id membership.user.id  %}">权限</a>
-                            <a href="{% url project_delete_member membership.id  %}" class="btn btn-danger btn-delete">{% trans "Remove" %}</a>
+                            <a href="{% url project_perm project.id membership.user.id  %}"  title="权限"><img src="{% static "img/btn_qx.png" %}" /></a>
+                            <a href="{% url project_delete_member membership.id  %}" class="btn-delete" title="删除"><img src="{% static "img/btn_sc.png" %}" /></a>
                             {%else%}
-                            <a class="btn disabled" href="#" disabled>权限</a>
-                            <button type="button" onclick="" class="btn btn-danger btn-delete" disabled>{% trans "Remove" %}</button>
+                            <a class="disabled" href="#" disabled title="权限"><img src="{% static "img/btn_qx.png" %}" /></a>
+                            <a title="删除"><img src="{% static "img/btn_sc_gray.png" %}" /></a>
                             {% endif %}
                         {% endif %}
                     </td>

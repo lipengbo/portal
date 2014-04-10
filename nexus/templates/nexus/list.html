@@ -17,7 +17,7 @@
 {% block breadcrumb %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
-<a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a>
+<li><a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a></li>
 {% endwith %}
 {% endwith %}
 {% endblock %}
@@ -26,21 +26,24 @@
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
 {% if class_name != 'User' %}
-<div class="row-fluid margin_rows">
-    <div class="span1"></div>
-    <div class="span2"><span class="button-wrap device_link {% if class_name == 'City' %}active{% endif %}"><a href="{% url nexus_list "project" "city" %}" class="button button-circle button-primary"><i class="cs"></i>城市</a></span></div>
-    <div class="span2"><span class="button-wrap device_link {% if class_name == 'Island' %}active{% endif %}"><a href="{% url nexus_list "project" "island" %}" class="button button-circle button-action"><i class="icon-sitemap"></i>节点</a></span></div>
-    <div class="span2"><span class="button-wrap device_link {% if class_name == 'Server' %}active{% endif %}"><a href="{% url nexus_list "resources" "server" %}" class="button button-circle button-highlight"><i class="fwq"></i>服务器</a></span></div>
-    <div class="span2"><span class="button-wrap device_link {% if class_name == 'Switch' %}active{% endif %}"><a href="{% url nexus_list "resources" "switch" %}" class="button button-circle button-caution"><i class="jhj"></i>交换机</a></span></div>
-    <div class="span2"><span class="button-wrap device_link {% if class_name == 'Flowvisor' %}active{% endif %}"><a href="{% url nexus_list "openflow" "flowvisor" %}" class="button button-circle button-royal"><i class="fv"></i>Flowvisor</a></span></div>
-    <div class="span1"></div>
-</div>
+        <div class="infrastructure_index">
+            <div class="index_block"><div class="index_block_btn {% if class_name == 'City' %}active{% endif %}"><a href="{% url nexus_list "project" "city" %}"><div class=" btn_1"></div>城市</a></div></div>
+
+            <div class="index_block"><div class="index_block_btn  {% if class_name == 'Island' %}active{% endif %}"><a href="{% url nexus_list "project" "island" %}"><div class=" btn_2"></div>节点</a></div></div>
+
+            <div class="index_block"><div class="index_block_btn {% if class_name == 'Server' %}active{% endif %}"><a href="{% url nexus_list "resources" "server" %}"><div class=" btn_3"></div>服务器</a></div></div>
+
+            <div class="index_block"><div class="index_block_btn {% if class_name == 'Switch' %}active{% endif %}"><a href="{% url nexus_list "resources" "switch" %}"><div class=" btn_4"></div>交换机</a></div></div>
+
+            <div class="index_block"><div class="index_block_btn {% if class_name == 'Flowvisor' %}active{% endif %}"><a href="{% url nexus_list "openflow" "flowvisor" %}"><div class=" btn_5"></div>网络虚拟工具</a></div></div>
+
+        </div>
 {% endif %}
 
 <!--
 <ul class="nav nav-tabs base_device_tab">
   <li class="active"><a href="#"><img src="{% static "img/cs.png" %}" width="20" />城市</a></li>
-  <li><a href="#"><i class="icon-sitemap"></i>节点</a></li>
+  <li><a href="#"><i class="glyphicon glyphicon-sitemap"></i>节点</a></li>
   <li><a href="#"><img src="{% static "img/fwq.png" %}" width="20" />服务器</a></li>
   <li><a href="#"><img src="{% static "img/jhj.png" %}" width="20" />交换机</a></li>
   <li><a href="#"><img src="{% static "img/fv.png" %}" width="20" />Flowvisor</a></li>
@@ -49,10 +52,10 @@
 
 {% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}
 
-<div class="well">
+<div class="col-md-6 action_box">
 <form action="" class="form-inline" method="get">
     <label for="id_island__city">城市：</label>
-    <select name="island__city" id="id_island__city">
+    <select class="form-control" name="island__city" id="id_island__city">
         <option value="">---------</option>
         {% for city in cities %}
             <option value="{{ city.id }}" {% if city.id == current_city.id %}
@@ -61,7 +64,7 @@
         {% endfor %}
     </select>
     <label for="id_island">节点：</label>
-    <select name="island" id="id_island">
+    <select class="form-control" name="island" id="id_island">
         <option value="">---------</option>
         {% for island in current_city.island_set.all %}
         <option value="{{ island.id }}" {% if current_island.id == island.id %}
@@ -69,21 +72,30 @@
         {% endif %}>{{ island.name }}</option>
         {% endfor %}
     </select>
-    <input type="submit" name="" value="筛选" class="btn btn-info">
+    <input type="submit" name="" value="筛选" class="btn btn-inverse">
 </form>
 </div>
 {% endif %}
 {% paginate 20 objects %}
 <form action="" method="post" accept-charset="utf-8">
     {% csrf_token %}
-<div class="well">
-    <input type="hidden" name="action" id="action" value="">
-    <button type="submit" class="delete-action disabled action-btn btn-input btn-delete btn btn-danger pull-left">{% trans "Delete" %}{{ class_verbose_name }}</button>
-    {% if class_name != 'User' %}
-        <a class="btn btn-success pull-right" href="{% url nexus_add app_label class_name|lower %}">{% trans "Add" %}{{ class_verbose_name }}</a>
-    {% endif %}
+    <div class="{% if class_name != 'Island' and class_name != 'City' and class_name != 'User' %}col-md-6{% else %}{% endif %} action_box">
+        <div class="pull-right">
+            <input type="hidden" name="action" id="action" value="">
+            {% if class_name != 'User' %}
+                <a class="btn btn-default" href="{% url nexus_add app_label class_name|lower %}">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    {% trans "Add" %}
+                </a>
+            {% endif %}
+            <button type="submit" class="delete-action disabled action-btn btn-input btn-delete btn btn-default">
+                <i class="glyphicon glyphicon-minus"></i>
+                {% trans "Delete" %}
+            </button>
+        </div>
+        <div class="clearfix"></div>
 </div>
-<table class="table table-bordered table-striped table_list">
+<table class="table_list table_defined clear">
     <thead>
         <tr>
             <th class="checkall" width="5%"><input type="checkbox" name="some_name" value=""></th>
@@ -162,34 +174,38 @@
                 {% endif %}
             </td>
             {% endif %}
-            <td>
+            <td class="btn_operation">
                 
                     {% if class_name != 'VirtualSwitch' and class_name != 'Flowvisor' and class_name != 'Island'  and class_name != 'City' and class_name != 'User'%}
-                        <a href="/monitor/{{class_name}}/{{ object.id }}/" class="btn">{% trans "Monitor" %}</a>
+                    <a href="/monitor/{{class_name}}/{{ object.id }}/" class="">
+                        <img src="{% static "img/btn_jk.png" %}" title="监控">
+                    </a>
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser %}
                         {% if object.get_profile.state == 0 %}
-                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
-                                审批
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="">
+                                <img src="{% static "img/btn_sp.png" %}" title="审批">
                             </a>
                         {% else %}
                             {% if object.get_profile.state == 1 %}
-                            <a href="#" class="btn disabled">
-                            {% trans "Edit" %}
+                            <a href="#" class="">
+                                <img src="{% static "img/btn_bj_gray.png" %}" title="编辑">
                             </a>
                             {% else %}
-                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
-                            {% trans "Edit" %}
+                            <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="">
+                                <img src="{% static "img/btn_bj.png" %}" title="编辑">
                             </a>
                             {% endif %}
                         {% endif %}
                     {% else %}
-                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="btn">
-                        {% trans "Edit" %}
+                    <a href="{% url nexus_edit app_label class_name|lower object.id %}" class="">
+                                <img src="{% static "img/btn_bj.png" %}" title="编辑">
                     </a>
                     {% endif %}
                     {% if class_name == 'User' and not object.is_superuser or class_name != 'User'%}
-                    <a href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-delete ">{% trans "Delete" %}</a>
+                    <a class="btn-delete" href="{% url nexus_delete app_label class_name|lower object.id %}?next={{ request.get_full_path|urlencode }}" class="">
+                                <img src="{% static "img/btn_sc.png" %}" title="删除">
+                    </a>
                     {% endif %}
             </td>
         </tr>
@@ -203,20 +219,11 @@
         </div>
 {% endwith %}
 {% endwith %}
+</form>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script type="text/javascript" charset="utf-8">
-    $('.checkboxs input').on('ifChecked', function(event){
-        $('.action-btn').removeClass('disabled');
-    });
-    $('.checkboxs input').on('ifUnchecked', function(event){
-        if($('.checkboxs .checked').length == 1) {
-            $('.action-btn').addClass('disabled');
-        } else {
-            $('.action-btn').removeClass('disabled');
-        }
-    });
     $('.delete-action').click(function(e){
         $('#action').val('delete');
     });
@@ -228,4 +235,3 @@
     });
 </script>
 {% endblock %}
-</form>

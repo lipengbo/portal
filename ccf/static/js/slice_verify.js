@@ -140,7 +140,7 @@ function check_port(port,flag){
 	var reg = /^[0-9]*$/;
 	if(port.length > 0){
 		if(port >= 65535 || port < 0 || !reg.test(port)){
-			showInfo(info," * port在(0-65535)之间","red");
+			showInfo(info," * (0-65535)","red");
 			return false;
 		}
 		else{
@@ -322,7 +322,7 @@ function nw_timeout(){
     $("div#slice_alert_info").append(str);
     $('#slicealertModal').modal('show');
 	//alert("分配的网段已过期！");
-	//window.top.location.reload();
+	//window.location.href = window.location.href;
 }
 
 //验证交换机端口的选择
@@ -505,151 +505,6 @@ function trans(mask){
     }
 }
 
-function start_or_stop(slice_id, flag){
-    check_url = "http://" + window.location.host + "/slice/start_or_stop/"+slice_id+"/"+flag+"/";
-    //alert(check_url)
-    var ret = false;
-    $.ajax({
-        type: "GET",
-        url: check_url,
-        dataType: "json",
-        cache: false,
-        async: false,  
-        success: function(data) {
-            if (data.value == 1)
-             {
-                //alert("ok");
-                ret = true;
-             } 
-             else
-             {
-                //alert("failed");
-                $("div#slice_alert_info").empty();
-                var str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
-                $("div#slice_alert_info").append(str);
-                $('#slicealertModal').modal('show');
-             }
-        }
-    });
-    return ret;
-}
-
-//启动停止带宽监控
-   $(".start_update_band").click(function(){
-        if($(this).hasClass("btn-success")){
-                $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止带宽监控");
-                //$(".label").removeClass("label-important").addClass("label-success");
-                document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);    
-        } else {
-                $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动带宽监控");
-                //$(".label").removeClass("label-success").addClass("label-important");
-                document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);        
-        }
-    }); 
-
-
-//slice启动停止按钮
-   $(".start_slice").click(function(){
-        var slice_id = $("#slice_id").text();
-        if($(this).hasClass("btn-success")){
-            ret = start_or_stop(slice_id, 1);
-            if(ret){
-                $(this).removeClass("btn-success").addClass("btn-danger");           
-                $(this).text("停止");
-                $(".label").removeClass("label-important").addClass("label-success");
-                //$(".icon-2x").removeClass("icon-minus-sign").addClass("icon-ok-sign");
-                $(".btn-slice-state").addClass("disabled");
-                $(".slice_state_del").addClass("disabled");
-				$(".start_dhcp").attr("disabled", "true");
-            }     
-        } else {
-            ret = start_or_stop(slice_id, 2);
-            if(ret){
-                $(this).removeClass("btn-danger").addClass("btn-success");
-                $(this).text("启动");
-                $(".label").removeClass("label-success").addClass("label-important");
-                //$(".icon-2x").removeClass("icon-ok-sign").addClass("icon-minus-sign");
-                $(".btn-slice-state").removeClass("disabled");
-                $(".slice_state_del").removeClass("disabled");
-				$(".start_dhcp").removeAttr("disabled");
-            }         
-        }
-    }); 
-
-     $(".btn-slice-state").click(function(){
-        if($(this).hasClass("disabled")){
-            return false;
-        } else {
-            return true;
-        }
-     }); 
- 
- function start_or_stop_vm(vm_id, flag){
-    check_url = "http://" + window.location.host + "/plugins/vt/do/vm/action/"+vm_id+"/"+flag+"/";
-    //alert(check_url)
-    var ret = false;
-    $.ajax({
-        type: "GET",
-        url: check_url,
-        dataType: "json",
-        cache: false,
-        async: false,  
-        success: function(data) {
-            if (data.result==1)
-             {
-                //alert("failed");
-                $("div#slice_alert_info").empty();
-                var str = "" + "<p class=\"text-center\">" + data.error + "</p>";
-                $("div#slice_alert_info").append(str);
-                $('#slicealertModal').modal('show');
-             } 
-             else
-             {
-                //alert("ok");
-                ret = true;
-             }
-        }
-    });
-    return ret;
-}
- 
- 
- //虚拟机启动停止按钮
-   $(".start_vm").live("click", function(){
-        if($(this).hasClass("disabled")){
-            return false;
-        }else{
-            //alert("he");
-            vm_id = $(this).attr('vm_id');
-            url = $("#url").text();
-            if($(this).hasClass("btn-success")){
-                ret = start_or_stop_vm(vm_id, "create");
-                if(ret){
-                    $(this).removeClass("btn-success").addClass("btn-danger");           
-                    $(this).text("停止");
-                    $("#btn_vnc"+vm_id).removeClass("disabled");
-                    $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
-                    if(url=="slice_detail"){
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state_o(vm_id, 1);
-                    }
-                }     
-            } else {
-                ret = start_or_stop_vm(vm_id, "destroy");
-                if(ret){
-                    $(this).removeClass("btn-danger").addClass("btn-success");
-                    $(this).text("启动");
-                    $("#btn_vnc"+vm_id).addClass("disabled");
-                    //$(this).parent("td").prev("td").children(".icon_state").removeClass("icon-ok-sign").addClass("icon-minus-sign");
-                    $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
-                    if(url=="slice_detail"){
-                        document.getElementById('topologyiframe').contentWindow.topology_update_vm_state_o(vm_id, 5);
-                    }
-                }         
-            }
-        }
-    });
   
    $(".start_gw_dhcp").live("click", function(){
         if($(this).hasClass("disabled")){
@@ -686,103 +541,7 @@ function start_or_stop(slice_id, flag){
         }
      }); 
  
-  function delete_vm(vm_id){
-    check_url = "http://" + window.location.host + "/plugins/vt/delete/vm/"+vm_id+"/"+0+"/";
-    //alert(check_url)
-    var ret = false;
-    $.ajax({
-        type: "GET",
-        url: check_url,
-        dataType: "json",
-        cache: false,
-        async: false,  
-        success: function(data) {
-            if (data.result==1)
-             {
-                //alert("failed");
-                $("div#slice_alert_info").empty();
-                var str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
-                $("div#slice_alert_info").append(str);
-                $('#slicealertModal').modal('show');
-             } 
-             else
-             {
-                //alert("ok");
-                ret = true;
-             }
-        }
-    });
-    return ret;
-}
 
-    $(".slice_state_del").click(function(){
-        var vms_count = $("#vms_count").text();
-        //alert(vms_count);
-        var url = $("#url").text();
-        if($(this).hasClass("disabled")){
-            return false;
-        }else{
-            $('#alertModal').modal();
-            var self = $(this);
-            $('.delete-confirm').unbind('click');
-            $('.delete-confirm').click(function(){
-                vm_id = self.attr('vm_id');
-                //alert(vm_id);
-                ret = delete_vm(vm_id);
-                if(ret){
-                    if(vms_count==1){          
-                        location.reload();
-                    }else{
-                        $("#vm_tr"+vm_id).hide();
-                        if(url == "slice_detail"){
-                            document.getElementById('topologyiframe').contentWindow.topology_del_vm(vm_id);
-                        }
-                        //slice_id = $("#slice_id").text();
-                        //document.getElementById("topologyiframe").src="/slice/topology_d3/?slice_id="+slice_id+"&width=800&height=300&top=1";
-                    }
-                }
-            });
-            return false;
-        }
-    });
- 
- //编辑slice描述信息
- function edit_description(slice_id){
-    var ret;
-    ret = check_slice_description('slice_description',1);
-    if(ret){
-        var obj = document.getElementById('slice_description');
-        check_url = "http://" + window.location.host + "/slice/edit_description/"+slice_id+"/";
-        $.ajax({
-                type: "POST",
-                url: check_url,
-                dataType: "json",
-                data: {"slice_description": obj.value},
-                async: false, 
-                success: function(data) {
-                    if (data.result == 1){
-                        //alert("ok");
-                        var description_old = document.getElementById('slice_description_old');
-                        description_old.innerHTML = "描述："+obj.value;
-                    }
-                    else{
-                        //alert(failed);
-                        $("div#slice_alert_info").empty();
-                        str = "" + "<p class=\"text-center\">编辑失败！</p>";
-                        $("div#slice_alert_info").append(str);
-                        $('#editSliceModal').modal('show');
-                    }
-                },
-                error: function(data) {
-                    $("div#slice_alert_info").empty();
-                    str = "" + "<p class=\"text-center\">编辑失败！</p>";
-                    $("div#slice_alert_info").append(str);
-                    $('#slicealertModal').modal('show');
-                }
-        });
-        $('#editInfoModal').modal('hide');
-    }
- }
  
   //编辑slice控制器
  function edit_controller(slice_id){
@@ -804,17 +563,25 @@ function start_or_stop(slice_id, flag){
                 }  
             }   
         }
-        cip0_obj = document.getElementById("cip0");
-        cip1_obj = document.getElementById("cip1");
-        cip2_obj = document.getElementById("cip2");
-        cip3_obj = document.getElementById("cip3");
-        controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
-        controller_port_obj = document.getElementById("controller_port");
-        //var controller_ip_port = controller_ip_port_obj.value.split(":");
-        var submit_data = {"controller_type": controller_type,
+        var submit_data;
+        if(controller_type == "default_create"){
+            submit_data = {"controller_type": controller_type,
                         "controller_sys": controller_sys_obj.value,
-                        "controller_ip": controller_ip,
-                        "controller_port": controller_port_obj.value};
+                        "controller_ip": "",
+                        "controller_port": ""};
+        }else{
+            cip0_obj = document.getElementById("cip0");
+            cip1_obj = document.getElementById("cip1");
+            cip2_obj = document.getElementById("cip2");
+            cip3_obj = document.getElementById("cip3");
+            controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+            controller_port_obj = document.getElementById("controller_port");
+            //var controller_ip_port = controller_ip_port_obj.value.split(":");
+            submit_data = {"controller_type": controller_type,
+                            "controller_sys": controller_sys_obj.value,
+                            "controller_ip": controller_ip,
+                            "controller_port": controller_port_obj.value};
+        }
         check_url = "http://" + window.location.host + "/slice/edit_controller/"+slice_id+"/";
         $.ajax({
                 type: "POST",
@@ -824,68 +591,7 @@ function start_or_stop(slice_id, flag){
                 async: false, 
                 success: function(data) {
                     if (data.result == 1 || data.result == 2){
-                        //alert("ok");
-                        //alert(data.result);
-                        controller = data.controller;
-                        //alert(controller);
-                        $("div#controller_nm").empty();
-                        if(controller.name == 'user_define'){
-                            str = "" + "自定义控制器";
-                        }else{
-                            str = "" + controller.name;
-                        }
-                        $("div#controller_nm").append(str);
-                        $("div#controller_pp").empty();
-                        str = "" + controller.ip + ":" + controller.port;
-                        $("div#controller_pp").append(str);
-
-                        if(data.result == 1){
-                            //alert(controller.host_uuid);
-                            $("div#controller_uuid").empty();
-                            str = "" + "<a id=\"uuid\" href=\"javascript:void(0);\" data-toggle=\"tooltip\" data-placement=\"bottom\" title=\"\" data-original-title=\""+controller.host_uuid+"\">";
-                            str = str + controller.host_uuid.split("-")[0] + "..." + "</a>";
-                            $("div#controller_uuid").append(str);
-                            $("div#controller_sp").empty();
-                            str = "" + controller.server_ip;
-                            $("div#controller_sp").append(str);
-                            $("div#controller_st").empty();
-                            if(controller.host_state == 8){
-                                str = "" + "<img src=\""+STATIC_URL+"img/loader.gif\"/>";
-                            }else if(controller.host_state == 9){
-                                str = "" + "<i class=\"icon-remove\"></i>";
-                            }else if(controller.host_state == 1){
-                                str = "" + "<i class=\"icon-ok-sign icon_state\" id=\"icon_state"+controller.host_id+"\"></i>";
-                            }else{
-                                str = "" + "<i class=\"icon-minus-sign icon_state\" id=\"icon_state"+controller.host_id+"\"></i>";
-                            }
-                            $("div#controller_st").append(str);
-                            $("span#controller_fc").empty();
-                            if(controller.host_state == 8){
-                                str = "" + "<input class=\"aa\" type=\"checkbox\" name=\"check_vm_ids\" value=\""+controller.host_id+"\" checked style=\"display:none\"/>"
-                                +"<button type=\"button\" class=\"btn btn-success disabled start_vm\">启动</button>"
-                                +"<button type=\"button\" class=\"btn  btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button> ";
-                            }else if(controller.host_state == 9){
-                                str = "" + "<button type=\"button\" class=\"btn btn-success disabled start_vm\">启动</button>"
-                                +"<button type=\"button\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
-                            }else if(controller.host_state == 1){
-                                str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-danger start_vm\">停止</button>"                                         
-                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host_id+"\" class=\"btn btn_vnc\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
-                            }else{
-                                str = "" + "<button type=\"button\" vm_id=\""+controller.host_id+"\" class=\"btn btn-success start_vm\">启动</button>"
-                                +"<button type=\"button\" url=\"/plugins/vt/vm/vnc/"+controller.host_id+"\" class=\"btn btn_vnc disabled\" id=\"btn_vnc"+controller.host_id+"\">登录</button>";
-                            }
-                            $("span#controller_fc").append(str);
-                            if(controller.host_state == 8){
-                                update_vm_status();
-                            }
-                        }else{
-                            $("div#controller_uuid").empty();
-                            $("div#controller_sp").empty();
-                            $("div#controller_st").empty();
-                            $("span#controller_fc").empty();
-                        }
-                        //var description_old = document.getElementById('slice_description_old');
-                        //description_old.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+obj.value;
+                        update_list(document.location);
                     }
                     else{
                         //alert(failed);
@@ -905,54 +611,4 @@ function start_or_stop(slice_id, flag){
         $('#editSliceModal').modal('hide');
     }
  }
-function set_dhcp(slice_id, flag){
-	$.ajax({
-			url: '/slice/dhcp_switch/'+slice_id+"/"+flag+"/",
-			type: 'GET',
-			dataType: "json",
-			success: function(data){
-				if(data.result == 0){
-					if(flag == 1){
-						$('.start_dhcp').removeClass("btn-success").addClass("btn-danger");           
-                		$('.start_dhcp').text("停止DHCP");
-					}else{
-						$('.start_dhcp').removeClass("btn-danger").addClass("btn-success");
-                		$('.start_dhcp').text("启动DHCP");
-					}
-					
-				}else{
-					$("div#slice_alert_info").empty();
-                    str = "" + "<p class=\"text-center\">设置网关服务失败！</p>";
-                    $("div#slice_alert_info").append(str);
-                    $('#slicealertModal').modal('show');
-				}
-			}
-		});
-}
 
-$('.start_dhcp').click(function(){
-        var slice_id = $("#slice_id").text();
-        if($(this).hasClass("btn-success")){
-            set_dhcp(slice_id, 1);
-        } else {
-            set_dhcp(slice_id, 0);
-        }
-    }); 
-
-
-$('input').on('ifChecked', function(event){
-  //alert("here");
-  var band = document.getElementsByName("band");
-  for(var i=0;i<band.length;i++){  
-        if(band[i].checked){  
-            if(band[i].value=="up"){ 
-               // alert("here1"); 
-                document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);
-            }  
-            if(band[i].value=="down"){
-               // alert("here2");
-                document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);
-            }  
-        }   
-    }
-});

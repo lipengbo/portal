@@ -9,11 +9,19 @@ import account.forms
 from profiles.models import Profile
 from guardian.shortcuts import assign_perm, remove_perm
 from account.models import EmailAddress, EmailConfirmation
+from crispy_forms.helper import FormHelper
+
 
 class SignupForm(account.forms.SignupForm):
     realm = forms.CharField(max_length=1024, label=_("Realm"), widget=forms.Textarea)
     organization = forms.CharField(max_length=64, label=_("Organization"))
     #phone = forms.CharField(max_length=11, label=_("Phone"), required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.label_class = 'col-md-2'
+        self.helper.field_class = 'col-md-7'
 
 class RejectForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, label=_("Reason"))

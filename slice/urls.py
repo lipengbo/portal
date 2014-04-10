@@ -20,4 +20,5 @@ urlpatterns = patterns('slice.views',
     url(r'^get_count_show/$', "get_count_show", name='get_count_show'),
     url(r'^countiframe/$', "countiframe", name='countiframe'),
     url(r'^dhcp_switch/(?P<slice_id>\d+)/(?P<flag>[0-1])/$', "dhcp_switch", name='dhcp_switch'),
+    url(r'^get_slice_state/(?P<slice_id>\d+)/$', "get_slice_state", name='get_slice_state'),
 )

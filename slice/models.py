@@ -15,13 +15,18 @@ import datetime
 
 SLICE_STATE_STOPPED = 0
 SLICE_STATE_STARTED = 1
+SLICE_STATE_STOPPING = 3
+SLICE_STATE_STARTING = 4
+
 SLICE_TYPE_USABLE = 0
 SLICE_TYPE_DELETE = 1
 USER_DELETE = 0
 ADMINISTRATOR_DELETE = 1
 EXPIRED_DELETE = 2
 SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
-                (SLICE_STATE_STARTED, 'started'),)
+                (SLICE_STATE_STARTED, 'started'),
+                (SLICE_STATE_STOPPING, 'stopping'),
+                (SLICE_STATE_STARTING, 'starting'),)
 SLICE_TYPES = ((SLICE_TYPE_USABLE, 'usable'),
                 (SLICE_TYPE_DELETE, 'delete'),)
 SLICE_DELETE_TYPE = ((USER_DELETE, 'usable'),
@@ -71,6 +76,14 @@ class Slice(models.Model):
     def start(self):
         self.state = SLICE_STATE_STARTED
         self.changed = 0
+        self.save()
+
+    def starting(self):
+        self.state = SLICE_STATE_STARTING
+        self.save()
+
+    def stopping(self):
+        self.state = SLICE_STATE_STOPPING
         self.save()
 
     def get_flowvisor(self):
@@ -143,7 +156,7 @@ class Slice(models.Model):
         return self.virtualmachine_set.all()
 
     def get_common_vms(self):
-        return self.virtualmachine_set.filter(type=1)
+        return self.virtualmachine_set.filter(type=1).order_by("-id")
 
     def get_controller_vms(self):
         return self.virtualmachine_set.filter(type=0)

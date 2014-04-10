@@ -14,6 +14,6 @@ class VTClient(object):
         self.client = get_rpc_client(ip, config.vt_manager_port)
 
     def schedul(self, vcpu, mem, disk, hostlist):
-        if config.use_vt_manager_to_schedul:
-            return self.client.schedul(vcpu, mem, disk, hostlist)
+        #if config.use_vt_manager_to_schedul:
+            #return self.client.schedul(vcpu, mem, disk, hostlist)
         return Filter(vcpu, mem, disk).filter(hostlist)

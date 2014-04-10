@@ -227,7 +227,9 @@ class FileNotFound(NotFound):
     message = _("File %(file_path)s could not be found.")
 
 class ResourceNotEnough(CCFException):
-    message = _("resource not enough")
+    def __init__(self, message):
+        self.message = _(message)
+    #message = _("resource not enough")
 
 class ConnectionRefused(CCFException):
     message = _("connection refused")

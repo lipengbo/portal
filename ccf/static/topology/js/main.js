@@ -27,7 +27,7 @@ if (size == 'small') {
     width = 500;
     height = 300;
 } else if (size == 'big') {
-    width = 950;
+    width = $('#topology-svg').width();
     height = 450;
 }
 
@@ -139,9 +139,9 @@ var svg = svg_obj.append('g')
     .on("mousedown", mousedown);
     var rect_color = 'white';
     if (size == 'big') {
-        rect_color = 'transparent';
+        rect_color = '#CCC';
     }
-initboard2();
+//initboard2();
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
@@ -542,7 +542,7 @@ function init_svg () {
                     var content = "";
                     $.each(origin_data.ports, function(index, port){
                         content +=  
-                            "<label><input class='checkbox' type='checkbox' ";
+                            "<div class='checkbox'><label class='lael-control'><input class='checkbox' type='checkbox' ";
                         if (port.db_id in parent.selected_ports) {
                             content += "checked ";
                         }
@@ -567,7 +567,7 @@ function init_svg () {
                                 content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
                             }
                         });
-                        content += "</label>";
+                        content += "</label></div>";
                     });
                     $('.port-modal .confirm-port').unbind("click");
                     $('.port-modal .confirm-port').click(function () {

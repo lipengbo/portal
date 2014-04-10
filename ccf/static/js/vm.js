@@ -84,12 +84,12 @@ function desc_msg(name, value, i){
 }
 
 //验证vm的flavor,image,server等以select形式提供的选项不能为空
-function check_vm_select(obj){
-	var field = obj;
+function check_vm_select(ele){
+	var field = ele;
 	//var obj = document.getElementById(obj);
-	var objs = document.getElementsByName(obj);
+	var objs = document.getElementsByName(ele);
 	//var info = document.getElementById(obj+"Info"); 
-	var infos = document.getElementsByName(obj+"Info"); 
+	var infos = document.getElementsByName(ele+"Info"); 
         var results = new Array();
         var result = true;
         for(var i=0; i < objs.length; i++)
@@ -97,11 +97,13 @@ function check_vm_select(obj){
                obj = objs[i];
                info = infos[i];
                if(obj.selectedIndex == 0){
+						$("."+ele+"").addClass("has-error");
                         showMsg(info,"该项为必填项","err")
                         results[i] = false;
                }
                else
                {
+					   $("."+ele+"").removeClass("has-error");
                        showMsg(info,"","ok");
                        results[i] = true
 					   
@@ -315,8 +317,9 @@ function showMsg(_info, msg, state){
 		info.innerHTML = "";
 		//info.style.color = "green";
 	}else{
-		info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
-		
+		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
+		info.innerHTML = msg;
+		info.style.color = "red";
 	}
 }
 
@@ -486,12 +489,6 @@ function delete_vm_from_list(url) {
 	});
 }
 
-function show_uuid(objs){
-    for (var i=0; i<objs.length; i++){
-        objs[i].innerHTML = objs[i].innerHTML.split("-")[0] + "...";
-    }
-}
-
 function show_topology(){
 	//alert(get_select_ports());
 	$('#topologyModal').modal('show');
@@ -500,10 +497,12 @@ function show_topology(){
 function check_gw_select(){
 	var info = document.getElementById('gwInfo');
 	if($('#id_server_gw').get(0).selectedIndex == 0){
+		$(".gw_ip").addClass("has-error");
 		showMsg(info,"该项为必填项","err");
 		return false;
 	}else{
 		info.innerHTML = '';
+		$(".gw_ip").removeClass("has-error");
 		return true;
 	}
 }
@@ -524,12 +523,15 @@ function flavor_init(){
 
 
 function update_vms_info(){
+	var enable_dhcp_checked;
 	if(!check_vminfo()){
 		return
 	}
-	if(document.getElementById("id_enable_dhcp").checked){
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
+		enable_dhcp_checked = 1;
 		dhcp_checked = "是";
 	}else{
+		enable_dhcp_checked = 0;
 		dhcp_checked = "否";
 	}
 	if (vm_info_flag == "save"){
@@ -538,7 +540,7 @@ function update_vms_info(){
 						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
 						 image_text:$("#id_image").find("option:selected").text(),
 						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
-						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 enable_dhcp:enable_dhcp_checked,
 						 show_dhcp:dhcp_checked})
 		vm_id++;
 		
@@ -548,7 +550,7 @@ function update_vms_info(){
 						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
 						 image_text:$("#id_image").find("option:selected").text(),
 						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
-						 enable_dhcp:document.getElementById("id_enable_dhcp").checked,
+						 enable_dhcp:enable_dhcp_checked,
 						 show_dhcp:dhcp_checked});
 			vm_info_flag = "save";
 		}
@@ -591,10 +593,10 @@ function show_vm_info_table(){
                             +"<td>"+vm.image_text+"</td>"
                             +"<td>"+vm.server_text+"</td>"
 							+"<td>"+vm.show_dhcp+"</td>"
-                            +"<td>"
-                            +"   <div>"
-                            +"    <button class='btn btn-danger' onclick='javascript:delete_vminfo("+vm.id+")'>删除</button>"
-                            +"    </div>"
+                            +"<td class='btn_operation'>"
+                            +"   <a href='javascript:;' onclick='javascript:delete_vminfo("+vm.id+")'>"
+                            +"    <img src='"+STATIC_URL+"img/btn_sc.png' title='删除'>"
+                            +"    </a>"
                             +"</td>"
                           +"</tr> ");
 	});
@@ -633,4 +635,14 @@ function set_value(obj, value){
 		cpu_selected = value;
 	}
 }
+
+$('.switch_btn.dhcp').on("click", function(){
+			if($(this).hasClass("checked")) {
+                $(this).removeClass("checked");
+                $(this).children(".switch_content").html("否");
+            }else{
+				$(this).addClass("checked");
+                $(this).children(".switch_content").html("是");
+			}
+		});
 

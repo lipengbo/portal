@@ -8,12 +8,14 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}" />
 {% endblock %}
-{% block breadcrumb_base %}{% endblock %}
+{% block breadcrumb %}
+        <li>帮助</li>
+{% endblock %}
 {% block body_class %}common help_box{% endblock %}
 
 {% block body %}
-	<div class="row-fluid help_all">
-       <div class="span9">
+	<div class="row help_all">
+       <div class="col-md-9">
        	 	<div class="help_main">
        	 	  <section id="help_sdn">
        	 		<h4><i class="icon-laptop"></i>什么是SDN创新实验平台？</h4>
@@ -71,13 +73,13 @@
        	 	</div>
        </div>	
 
-       <div class="span3 help_chose">
+       <div class="col-md-3 help_chose">
        	 <div class="help_main_wrap">
           <ul class="nav nav-list bs-docs-sidenav">
-	          <li><a href="#help_sdn"><i class="icon-chevron-left"></i> 什么是SDN创新实验平台？</a></li>
-	          <li><a href="#help_project"><i class="icon-chevron-left"></i> 什么是项目？</a></li>
-	          <li><a href="#help_slice"><i class="icon-chevron-left"></i> 什么是虚网？</a></li>
-	          <li><a href="#help_process"><i class="icon-chevron-left"></i> 使用SDN创新平台进行实验的流程？</a></li>
+	          <li><a href="#help_sdn"><i class="glyphicon glyphicon-chevron-left"></i> 什么是SDN创新实验平台？</a></li>
+	          <li><a href="#help_project"><i class="glyphicon glyphicon-chevron-left"></i> 什么是项目？</a></li>
+	          <li><a href="#help_slice"><i class="glyphicon glyphicon-chevron-left"></i> 什么是虚网？</a></li>
+	          <li><a href="#help_process"><i class="glyphicon glyphicon-chevron-left"></i> 使用SDN创新平台进行实验的流程？</a></li>
 	       </ul>	
 	     </div>
        </div>

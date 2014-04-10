@@ -20,7 +20,7 @@ def parseResponse(data):
 #         if data[0]["resultcode"] == 3758125059 and data[0]["resultmsg"] == "slice name is NOT exist!":
 #             return []
 #         if data[0]["resultcode"] == 3758120963 and data[0]["resultmsg"] == "no port in this slice!":
-#             return [] 
+#             return []
 #         return None
 
 

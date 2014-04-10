@@ -1,6 +1,6 @@
 uwsgi
 Django==1.4.5
-pinax-theme-bootstrap==3.0a9
+pinax-theme-bootstrap==5.1.0
 django-user-accounts==1.0b13
 django-forms-bootstrap==2.0.3.post1
 metron==1.1
@@ -20,3 +20,4 @@ django-filter
 git+https://github.com/fay/django-notifications
 South==0.8.1
 django-smtp-ssl==1.0
+django-celery-with-redis==3.0

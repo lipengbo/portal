@@ -123,7 +123,7 @@ msgid "Vm list"
 msgstr "虚拟机列表"
 
 msgid "resource not enough"
-msgstr "宿主机资源不足"
+msgstr "本节点资源不足，请更换节点或等待一段时间后重试"
 
 msgid "server error"
 msgstr "服务器出错"
@@ -148,3 +148,15 @@ msgstr "超大型"
 
 msgid "failed to allocate resources"
 msgstr "资源分配失败"
+
+msgid "too many vms on this server"
+msgstr "资源分配失败：所选宿主机上虚拟机数量超过限制，请更换宿主机后重试"
+
+msgid "multi-cores could not be supported"
+msgstr "资源分配失败：所选宿主机不支持这个数量的多核cpu，请重新设置虚拟机的cpu内核数"
+
+msgid "cpu overload"
+msgstr "资源分配失败：所选宿主机上cpu过载，请更换宿主机后重试"
+
+msgid "mem overload"
+msgstr "资源分配失败：所选宿主机上内存过载，请更换宿主机后重试"

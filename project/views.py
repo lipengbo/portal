@@ -102,6 +102,7 @@ def perm_admin(request, id, user_id):
         for perm in select_perms:
             assign_perm(perm, user, project)
         messages.add_message(request, messages.INFO, _("Change permissions successfully"))
+        return redirect('project_member_manage', id=id)
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
@@ -167,7 +168,7 @@ def manage(request):
     projects = Project.objects.filter(id__in=project_ids)
     context = {}
     context['extent_html'] = "site_base.html"
-    context['projects'] = projects[:4]
+    context['projects'] = projects
     return render(request, 'project/manage.html', context)
 
 
@@ -314,13 +315,6 @@ def create_or_edit(request, id=None):
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
             project = form.save(commit=False)
-            category_name = request.POST.get('category_name')
-            try:
-                category = Category.objects.get(name=category_name)
-            except Category.DoesNotExist:
-                category = Category(name=category_name)
-                category.save()
-            project.category = category
             if not id:
                 project.owner = user
             project.save()
@@ -397,7 +391,7 @@ def applicant(request, id, user_id=None):
 
     if request.method == 'POST':
         application_ids = request.POST.getlist('application')
-        selected_applications = Application.objects.filter(id__in=application_ids)
+        selected_applications = Application.objects.select_related('from_user', 'to_user', 'target').filter(id__in=application_ids)
         for application in selected_applications:
             if 'approve' in request.POST:
                 application.accept()
@@ -589,7 +583,7 @@ def manage_index(request):
             context['switch_id'] = -1
         return render(request, 'manage_index.html', context)
     else:
-        return redirect("forbidden")
+        return redirect("project_manage")
 
 @login_required
 def delete_notifications(request):
