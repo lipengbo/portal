@@ -84,12 +84,12 @@ function desc_msg(name, value, i){
 }
 
 //验证vm的flavor,image,server等以select形式提供的选项不能为空
-function check_vm_select(obj){
-	var field = obj;
+function check_vm_select(ele){
+	var field = ele;
 	//var obj = document.getElementById(obj);
-	var objs = document.getElementsByName(obj);
+	var objs = document.getElementsByName(ele);
 	//var info = document.getElementById(obj+"Info"); 
-	var infos = document.getElementsByName(obj+"Info"); 
+	var infos = document.getElementsByName(ele+"Info"); 
         var results = new Array();
         var result = true;
         for(var i=0; i < objs.length; i++)
@@ -97,11 +97,13 @@ function check_vm_select(obj){
                obj = objs[i];
                info = infos[i];
                if(obj.selectedIndex == 0){
+						$("."+ele+"").addClass("has-error");
                         showMsg(info,"该项为必填项","err")
                         results[i] = false;
                }
                else
                {
+					   $("."+ele+"").removeClass("has-error");
                        showMsg(info,"","ok");
                        results[i] = true
 					   
@@ -315,8 +317,9 @@ function showMsg(_info, msg, state){
 		info.innerHTML = "";
 		//info.style.color = "green";
 	}else{
-		info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
-		
+		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
+		info.innerHTML = msg;
+		info.style.color = "red";
 	}
 }
 
@@ -494,10 +497,12 @@ function show_topology(){
 function check_gw_select(){
 	var info = document.getElementById('gwInfo');
 	if($('#id_server_gw').get(0).selectedIndex == 0){
+		$(".gw_ip").addClass("has-error");
 		showMsg(info,"该项为必填项","err");
 		return false;
 	}else{
 		info.innerHTML = '';
+		$(".gw_ip").removeClass("has-error");
 		return true;
 	}
 }

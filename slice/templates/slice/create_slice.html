@@ -292,7 +292,7 @@
                                  </td>
                                  <td colspan="2">
                                     <!--label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器  -->
-					<div class="tuopu_btn">配置DHCP服务器
+					<div class="tuopu_btn">配置DHCP服务
 					<span class="switch_btn dhcp checked" style="margin-left:10px;">
                     				<span class="switch_content">是</span>
                 			</span>   </div>                     
@@ -367,9 +367,11 @@
                                 <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                             <td width="30%">
+								<div class="gw_ip">
                                 <select id="id_server_gw" class="form-control" onblur="check_gw_select()">
                               
-                                </select>								                                
+                                </select>					
+								</div>			                                
                             </td>
                             <td>                               
                                 <span id="gwInfo"></span>
@@ -464,7 +466,7 @@
                                     <option value="" selected="selected">---------</option>
                                     <option value="51">1</option>
                                   </select> <span name="imageInfo"></span-->
-							 	<div class="col-md-3">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
+							 	<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                              </td>
                          </tr>
                          <tr>
@@ -475,9 +477,10 @@
                                      <option value="" selected="selected">---------</option>
                                      <option value="1">server1</option>
                                  </select-->
-							 	<div class="col-md-3">{{ vm_form.server|as_crispy_field }} </div>
+							 	<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div>
+								<span name="serverInfo"></span>
                                  <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
-                                 <span name="serverInfo"></span>
+                                 
                              </td>
                          </tr>
                          <tr>
