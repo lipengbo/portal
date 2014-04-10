@@ -277,12 +277,12 @@ $(".switch_btn").click(function(){
             //alert(ret);
             if(ret){
                 $(this).removeClass("checked");
-                $(this).children(".switch_content").html("否");
+                $(this).children(".switch_content").html("停止");
             }
         }else{
             document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);
             $(this).removeClass("checked");
-            $(this).children(".switch_content").html("否");
+            $(this).children(".switch_content").html("停止");
         }
     }else {
         //alert(4);
@@ -292,12 +292,12 @@ $(".switch_btn").click(function(){
             //alert(ret);
             if(ret){
                 $(this).addClass("checked");
-                $(this).children(".switch_content").html("是");
+                $(this).children(".switch_content").html("启动");
             }
         }else{
             document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);
             $(this).addClass("checked");
-            $(this).children(".switch_content").html("是"); 
+            $(this).children(".switch_content").html("启动"); 
         }
     }
 });

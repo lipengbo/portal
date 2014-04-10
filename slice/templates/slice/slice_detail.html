@@ -114,18 +114,18 @@
 			<div class="pull-right tuopu_btn dhcp_div
 			    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
                 {%else%}disabled{%endif%}">
-        启动DHCP：                
+        DHCP服务：                
                 {%if slice_obj.get_dhcp != None %}
                 <span class="switch_btn dhcp checked" 
                 {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
                 style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
-                    <span class="switch_content">是</span>
+                    <span class="switch_content">启动</span>
                 </span>
                 {%else%}
                 <span class="switch_btn dhcp" 
                 {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
                 style="cursor:pointer"{%else%}style="cursor:default"{%endif%}>
-                    <span class="switch_content">否</span>
+                    <span class="switch_content">停止</span>
                 </span>
                 {%endif%}
                 
