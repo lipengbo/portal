@@ -100,14 +100,17 @@
                        		</label>是否启动DHCP-->
 								{%if slice_obj.get_dhcp != None %}
 								<div class="tuopu_btn">
+									<span class="switch_btn dhcp vm checked" style="cursor:pointer ">
+										<span class="switch_content">是</span>
+                					</span>
+						        </div> 
 								{%else%}
 								<div class="tuopu_btn disabled">
-								{%endif%}
-									<span class="switch_btn dhcp vm" style="cursor:pointer disabled">
+									<span class="switch_btn dhcp vm" style="cursor:pointer">
 										<span class="switch_content">否</span>
                 					</span>
 						        </div> 									
-				
+							{%endif%}
                     	</div>
                  	</td>
              	</tr>
