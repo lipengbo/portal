@@ -185,7 +185,7 @@ function start_stop_slice(slice_id){
                 .addClass("icon-spin");
             a_obj.style.cursor = "default";
             img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
-            img_obj.title = "启停"; 
+            img_obj.title = "启动中"; 
             //控制器编辑、slice编辑按钮变化
             $(".bianji").attr("style","cursor:default");
             $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj_gray.png");
@@ -208,9 +208,9 @@ function start_stop_slice(slice_id){
                 .removeClass("icon_state")
                 .addClass("icon-spinner")
                 .addClass("icon-spin");
-            a_obj.style.cursor == "default";
+            a_obj.style.cursor = "default";
             img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
-            img_obj.title = "启停";
+            img_obj.title = "停止中";
             update_slice_status();
         }else{
             //alert(2);

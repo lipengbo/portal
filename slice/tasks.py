@@ -11,6 +11,7 @@ def add(x, y):
 
 @task()
 def start_slice_sync(slice_id):
+    flag = False
     try:
         slice_obj = Slice.objects.get(id=slice_id)
         if slice_obj.state == 4:
@@ -21,15 +22,23 @@ def start_slice_sync(slice_id):
                 update_slice_virtual_network_cnvp(slice_obj)
                 flowvisor_update_slice_status(flowvisor,
                                               slice_obj.id, True)
+                flag = True
             else:
                 flowvisor_update_slice_status(flowvisor,
                                               slice_obj.id, True)
+                flag = True
                 update_slice_virtual_network_flowvisor(slice_obj)
             slice_obj.start()
     except Slice.DoesNotExist:
         pass
     except:
-        slice_obj.stop()
+        try:
+            slice_obj.stop()
+            if flag:
+                flowvisor_update_slice_status(flowvisor,
+                                              slice_obj.id, False)
+        except:
+            pass
 
 
 @task()
