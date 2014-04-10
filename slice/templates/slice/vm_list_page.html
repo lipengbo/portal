@@ -47,7 +47,7 @@
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
                 {%if vm.state == 8 or vm.state == 9 or vm.state == 10 or vm.state == 11 %}
-                        <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:default">
+                        <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启动" />
                         </a>
                     {%else%}
@@ -68,7 +68,7 @@
                         <img src="{{ STATIC_URL}}img/btn_jk.png" title="监控" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{vm.id}}_jk" onclick="jk_vm({{vm.id}});" style="cursor:default">
+                        <a href="javascript:void(0);" id="{{vm.id}}_jk" onclick="jk_vm({{vm.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_jk_gray.png" title="监控" />
                         </a>
                     {%endif%}
@@ -81,7 +81,7 @@
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}});" style="cursor:default">
+                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}
@@ -90,11 +90,11 @@
             {%if extent_html == "site_base.html" and permission == "edit" %}
                 {%if vm.type_id == 1 or vm.type_id == 2 %}
                     {%if slice_obj.state == 0 %}
-                        <a class="bianji" data-toggle="modal" href="#editSliceModal" id="{{vm.id}}_bj" onclick="bj_vm({{vm.id}});" style="cursor:pointer">
+                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{vm.id}}_bj" onclick="return bj_vm({{vm.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                         </a>
                     {%else%}
-                        <a class="bianji" data-toggle="modal" href="#editSliceModal" id="{{vm.id}}_bj" onclick="bj_vm({{vm.id}});" style="cursor:default">
+                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{vm.id}}_bj" onclick="return bj_vm({{vm.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                     {%endif%}
