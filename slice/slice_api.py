@@ -702,3 +702,10 @@ def get_count_show_data(target, type, total_num, stype):
 #     show_nums.reverse()
     ret = {"show_dates": show_dates, "show_nums": show_nums}
     return ret
+
+
+def topology_mapping(slice_obj):
+    """拓扑映射
+    """
+    LOG.debug('topology_mapping')
+    
