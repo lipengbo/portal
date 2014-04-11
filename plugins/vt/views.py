@@ -123,6 +123,7 @@ def create_vm(request, sliceid, from_link):
 
 def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
+    print '===============action is ', action
     if action in operator:
         try:
             vm = VirtualMachine.objects.get(id=vmid)
