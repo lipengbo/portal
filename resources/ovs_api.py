@@ -42,7 +42,7 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
         ports = []
         for switch in switches:
             slice_obj.add_resource(switch)
-            s_ports = switch.SwitchPort_set.all()
+            s_ports = switch.switchport_set.all()
             ports.extend(s_ports)
         links = Link.objects.filter(source__in=ports, target__in=ports)
         add_ports = []
@@ -61,6 +61,7 @@ def slice_add_ovs_ports(slice_obj, ovs_ports):
                 else:
                     flowspace_gw_add(slice_obj, add_port.switch.virtualswitch.server.mac)
     except Exception, ex:
+#         print ex
         raise DbError("资源分配失败！")
 
 
@@ -180,27 +181,6 @@ def get_select_topology(switch_port_ids):
                             'dst_port': link_obj.target.port,
                             'dst_port_name': link_obj.target.name}
                     links.append(link)
-#                     if link_obj.source.switch.id in switch_ids:
-#                         if link_obj.source.port not in ports[link_obj.source.switch.id]:
-#                             ports[link_obj.source.switch.id].append(link_obj.source.port)
-#                     else:
-#                         switch_ids.append(link_obj.source.switch.id)
-#                         ports[link_obj.source.switch.id] = [link_obj.source.port]
-#                     if link_obj.target.switch.id in switch_ids:
-#                         if link_obj.target.port not in ports[link_obj.target.switch.id]:
-#                             ports[link_obj.target.switch.id].append(link_obj.target.port)
-#                     else:
-#                         switch_ids.append(link_obj.target.switch.id)
-#                         ports[link_obj.target.switch.id] = [link_obj.target.port]
-#             for switch_id in switch_ids:
-#                 try:
-#                     switch = Switch.objects.get(id=switch_id)
-#                 except:
-#                     pass
-#                 else:
-#                     for port in ports[switch_id]:
-#                         bandwidth.append({'id': (str(switch_id) + '_' + str(port)),
-#                                     'cur_bd': 0, 'total_bd': 0})
 
         topology = {'switches': switches, 'links': links,
                     'normals': [], 'specials': [],
