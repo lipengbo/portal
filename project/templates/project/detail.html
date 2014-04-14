@@ -66,8 +66,7 @@
             <img src="{% static "img/ic_user.png" %}">
             {% trans "Members" %}
             {% if not user.is_superuser %}
-                {% has_perm user 'project.change_project' project %}
-                {% if has_perm %}
+                {% if user == project.owner %}
                     <a href="{% url project_member_manage project.id %}" class="edit pull-right" title="管理"><i class="icon-wrench"></i></a>
                 {% endif %}
             {% endif %}
