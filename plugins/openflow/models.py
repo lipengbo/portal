@@ -9,7 +9,7 @@ logger = logging.getLogger("plugins")
 from django.db import models
 from django.db import transaction
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
 from django.conf import settings
@@ -223,3 +223,6 @@ def create_virtualswitch(island, datapaths):
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
                     ip=ip, defaults={'name': "v-ovs" + ip.split('.')[-1], 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
+@receiver(pre_delete, sender=Flowvisor)
+def delete_slice(sender, instance, **kwargs):
+    instance.slices.all().delete()
