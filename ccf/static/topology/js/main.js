@@ -175,24 +175,28 @@ function assign_node_icon(d) {
     } else if(d.group == 2) { 
         ovs_image = STATIC_URL + "topology/img/server-phy";
     } else {
-        if (d.id.indexOf('00:ee:') == 0) {
-            // gre switch
+        if(d.selected && d.selected == 1) {
             ovs_image = STATIC_URL + 'topology/img/ovs-red';
-            if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
-            }
-        } else if (d.id.indexOf('00:ff:') == 0) {
-            // virtual switch
-            ovs_image = STATIC_URL + 'topology/img/ovs-green';
-            if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
-            }
-        } else {
-            if (!show_logical) {
-                // physical
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+        }else{
+            if (d.id.indexOf('00:ee:') == 0) {
+                // gre switch
+                ovs_image = STATIC_URL + 'topology/img/ovs-red';
+                if (!show_logical) {
+                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
+                }
+            } else if (d.id.indexOf('00:ff:') == 0) {
+                // virtual switch
+                ovs_image = STATIC_URL + 'topology/img/ovs-green';
+                if (!show_logical) {
+                    ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+                }
             } else {
-                ovs_image = STATIC_URL + 'topology/img/ovs';
+                if (!show_logical) {
+                    // physical
+                    ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+                } else {
+                    ovs_image = STATIC_URL + 'topology/img/ovs';
+                }
             }
         }
 
@@ -535,16 +539,33 @@ function init_svg () {
 
                 var data = d;
                 if (data.id in origin_nodes_map) {
+                    if(parent.tp_mod == 2){}
                     var origin_data = origin_nodes_map[data.id];
                     if (!origin_data.ports) {
                         return;
                     }
                     var content = "";
+                    var tp_mod = $("#tp_mod").text();
                     $.each(origin_data.ports, function(index, port){
                         content +=  
                             "<div class='checkbox'><label class='lael-control'><input class='checkbox' type='checkbox' ";
-                        if (port.db_id in parent.selected_ports) {
-                            content += "checked ";
+                        if (tp_mod == 2) {
+                            if (port.db_id in parent.selected_ports) {
+                                parent.add_port(port.db_id, true);
+                                d.selected = 0;
+                                svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
+                                //d.attr("xlink:href", assign_node_icon(d));
+                            }else{
+                                parent.add_port(port.db_id, false);
+                                content += "checked ";
+                                d.selected = 1;
+                                svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
+                                //d.attr("xlink:href", STATIC_URL + 'topology/img/ovs-red');
+                            }   
+                        }else{
+                            if (port.db_id in parent.selected_ports) {
+                                content += "checked ";
+                            }
                         }
                         content += "value='" + port.db_id+ "'/> " + 
                             d.db_name + ":" + port.name;
@@ -581,7 +602,9 @@ function init_svg () {
                         });
                     });
                     $('.port-modal .modal-body').html(content);
-                    $('.port-modal').modal();
+                    //if (tp_mod != 2) {
+                        $('.port-modal').modal();
+                    //}
                 }
             }
         } else {

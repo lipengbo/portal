@@ -154,10 +154,28 @@ def get_select_topology(switch_port_ids):
                     pass
                 else:
                     switch_ports.append(switch_port)
+#     链接
+            switch_port_sels = []
+            switch_ids = []
+            link_objs = Link.objects.filter(
+                source__in=switch_ports, target__in=switch_ports)
+            for link_obj in link_objs:
+                link = {'src_switch': link_obj.source.switch.dpid,
+                        'src_port_name': link_obj.source.name,
+                        'src_port': link_obj.source.port,
+                        'dst_switch': link_obj.target.switch.dpid,
+                        'dst_port': link_obj.target.port,
+                        'dst_port_name': link_obj.target.name}
+                links.append(link)
+                if link_obj.source not in switch_port_sels:
+                    switch_port_sels.append(link_obj.source)
+                if link_obj.target not in switch_port_sels:
+                    switch_port_sels.append(link_obj.target)
+                
+            for 
                     if switch_port.switch.id not in switch_ids:
                         switch_ids.append(switch_port.switch.id)
                         switch_objs.append(switch_port.switch)
-                        dpids.append(switch_port.switch.dpid)
                         switches_ports[switch_port.switch.id] = []
                     switches_ports[switch_port.switch.id].append({'name': switch_port.name,
                                                                   'port': switch_port.port})
@@ -168,19 +186,7 @@ def get_select_topology(switch_port_ids):
                           'id': switch_obj.id,
                           'ports': switches_ports[switch_obj.id]}
                 switches.append(switch)
-#     链接
-            switch_ids = []
-            link_objs = Link.objects.filter(
-                source__in=switch_ports, target__in=switch_ports)
-            for link_obj in link_objs:
-                if (link_obj.source.switch.dpid in dpids) and (link_obj.target.switch.dpid in dpids):
-                    link = {'src_switch': link_obj.source.switch.dpid,
-                            'src_port_name': link_obj.source.name,
-                            'src_port': link_obj.source.port,
-                            'dst_switch': link_obj.target.switch.dpid,
-                            'dst_port': link_obj.target.port,
-                            'dst_port_name': link_obj.target.name}
-                    links.append(link)
+
 
         topology = {'switches': switches, 'links': links,
                     'normals': [], 'specials': [],
