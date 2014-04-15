@@ -661,7 +661,11 @@
 <script>  
     $(document).ready(function() {
         window.selected_ports = {};
+        window.selected_switchs = {};
         window.selected_dpids = {};
+        window.add_port = function(port_id, is_delete) {
+            
+        });
         window.add_port = function(port_id, is_delete) {
             var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
             if(port_id in selected_ports) {

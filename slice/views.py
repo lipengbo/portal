@@ -51,6 +51,10 @@ def create(request, proj_id):
                 ovs_ports.append({'switch_type': switch.type(),
                                   'switch': switch,
                                   'switch_ports': switch_ports})
+            else:
+                ovs_ports.append({'switch_type': switch.type(),
+                                  'switch': switch,
+                                  'switch_ports': []})
     vm_form = VmForm()
     context = {}
     context['project'] = project
