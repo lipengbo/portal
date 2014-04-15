@@ -53,3 +53,5 @@ try:
     from etc.local_config import *
 except ImportError:
     pass
+#aes字符长度必须为16位
+aes_key = 'fnic123456789012'
