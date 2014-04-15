@@ -109,22 +109,8 @@ def delete_vm_for_gateway(vm):
 
 
 def do_vm_action(vm, action):
-    action_result = vm.do_action(action)
-    if action_result:
-        if action == "destroy":
-            vm.state = DOMAIN_STATE_DIC['shutoff']
-        else:
-            vm.state = DOMAIN_STATE_DIC['running']
-        result = True
-    else:
-        if action == "destroy":
-            vm.state = DOMAIN_STATE_DIC['shutoff']
-            result = True
-        else:
-            result = False
-    if result == True:
-        vm.save()
-    return result
+    from tasks import do_vm_action
+    do_vm_action.delay(vm, action)
 
 
 def get_slice_gw_mac(slice):

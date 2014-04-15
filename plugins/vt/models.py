@@ -31,7 +31,7 @@ DOMAIN_STATE_TUPLE = (
     (8, _('building')),
     (9, _('failed')),
     (10, _('not exist')),
-    (11, _('resource not enough'))
+    (11, _('resource not enough')),
 )
 DOMAIN_STATE_DIC = {
     'nostate': 0,
@@ -45,7 +45,7 @@ DOMAIN_STATE_DIC = {
     "building": 8,
     "failed": 9,
     "notexist": 10,
-    'resource not enough': 11,
+    'resource not enough': 11
 }
 HOST_STATE = {
     'active': 1,
