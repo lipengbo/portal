@@ -299,14 +299,19 @@ def create_or_edit(request, id=None):
     user = request.user
     context = {}
     instance = None
+    project_count = user.project_set.all().count()
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
         if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
+        if user.quotas.project < project_count:
+            return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
     else:
         if not user.has_perm('project.add_project'):
+            return redirect('forbidden')
+        if user.quotas.project <= project_count:
             return redirect('forbidden')
 
     if request.method == 'GET':
@@ -317,6 +322,12 @@ def create_or_edit(request, id=None):
             project = form.save(commit=False)
             if not id:
                 project.owner = user
+                if user.quotas.project < project_count:
+                    return redirect('forbidden')
+            else:
+                if user.quotas.project <= project_count:
+                    return redirect('forbidden')
+
             project.save()
             form.save_m2m()
             return redirect('project_detail', id=project.id)
