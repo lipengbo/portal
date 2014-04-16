@@ -79,6 +79,11 @@ $(document).ready(function() {
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
         var tp_mod = $('select[name="tp_mod"]').val();
+        if(tp_mod == 2){
+            $('.switch-table').attr('style', 'display:none');
+        }else{
+            $('.switch-table').attr('style', '');
+        }
         $('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
         selected_ports = {};
         $('.switch-table tbody tr').hide();

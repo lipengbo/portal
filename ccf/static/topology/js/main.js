@@ -539,33 +539,31 @@ function init_svg () {
 
                 var data = d;
                 if (data.id in origin_nodes_map) {
-                    if(parent.tp_mod == 2){}
+                    var tp_mod = $("#tp_mod").text();
                     var origin_data = origin_nodes_map[data.id];
+                    if(tp_mod == 2){
+                        if (origin_data.dpid in parent.selected_dpids) {
+                            parent.add_dpid(origin_data.dpid, true);
+                            d.selected = 0;
+                            svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
+                            //d.attr("xlink:href", assign_node_icon(d));
+                        }else{
+                            parent.add_dpid(origin_data.dpid, false);
+                            d.selected = 1;
+                            svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
+                            //d.attr("xlink:href", STATIC_URL + 'topology/img/ovs-red');
+                        } 
+                        return;  
+                    }
                     if (!origin_data.ports) {
                         return;
                     }
                     var content = "";
-                    var tp_mod = $("#tp_mod").text();
                     $.each(origin_data.ports, function(index, port){
                         content +=  
                             "<div class='checkbox'><label class='lael-control'><input class='checkbox' type='checkbox' ";
-                        if (tp_mod == 2) {
-                            if (port.db_id in parent.selected_ports) {
-                                parent.add_port(port.db_id, true);
-                                d.selected = 0;
-                                svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
-                                //d.attr("xlink:href", assign_node_icon(d));
-                            }else{
-                                parent.add_port(port.db_id, false);
-                                content += "checked ";
-                                d.selected = 1;
-                                svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
-                                //d.attr("xlink:href", STATIC_URL + 'topology/img/ovs-red');
-                            }   
-                        }else{
-                            if (port.db_id in parent.selected_ports) {
-                                content += "checked ";
-                            }
+                        if (port.db_id in parent.selected_ports) {
+                            content += "checked ";
                         }
                         content += "value='" + port.db_id+ "'/> " + 
                             d.db_name + ":" + port.name;
@@ -602,9 +600,7 @@ function init_svg () {
                         });
                     });
                     $('.port-modal .modal-body').html(content);
-                    //if (tp_mod != 2) {
-                        $('.port-modal').modal();
-                    //}
+                    $('.port-modal').modal();
                 }
             }
         } else {

@@ -198,7 +198,7 @@
                        </div>
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
                   </div>
-                  <table class="switch-table table_defined">
+                  <table class="switch-table table_defined" style="display:none">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -210,24 +210,32 @@
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
                     		<tr class="hide switch-data">
-                                    <td>{{ovs_port.switch.name}}</td>
+                                <td>
+                                    <input name="switch{{ovs_port.switch.dpid}}" type="hidden" disabled value="{{ ovs_port.switch.id }}" 
+                                    {%if ovs_port.switch_type == 3%}
+                                    serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" 
+                                    {%endif%}
+                                    switchtype="{{ovs_port.switch_type}}" />
+                                    {{ovs_port.switch.name}}
+                                </td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
-	                            {% if ovs_port.switch_type == 1 %}
-	                            	交换节点
-	                            {%endif%}
-	                            {% if ovs_port.switch_type == 2 %}
-	                            	网络出口节点
-	                            {%endif%}
-	                            {% if ovs_port.switch_type == 3 %}
-	                            	虚拟机关联节点
-	                            {%endif%}
+    	                            {% if ovs_port.switch_type == 1 %}
+    	                            	交换节点
+    	                            {%endif%}
+    	                            {% if ovs_port.switch_type == 2 %}
+    	                            	网络出口节点
+    	                            {%endif%}
+    	                            {% if ovs_port.switch_type == 3 %}
+    	                            	虚拟机关联节点
+    	                            {%endif%}
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{ port.name }}
+                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" 
+                                    serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{ port.name }}
 					    {%else%}
                         <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{ port.name }}
 		                            {%endif%}
@@ -661,11 +669,18 @@
 <script>  
     $(document).ready(function() {
         window.selected_ports = {};
-        window.selected_switchs = {};
         window.selected_dpids = {};
-        window.add_port = function(port_id, is_delete) {
-            
-        });
+        window.add_dpid = function(dpid, is_delete) {
+            if(dpid in selected_dpids) {
+                if(is_delete) {
+                    delete selected_dpids[dpid];
+                }
+            } else {
+                if(!is_delete) {
+                    selected_dpids[dpid] = true;
+                }
+            }
+        };
         window.add_port = function(port_id, is_delete) {
             var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
             if(port_id in selected_ports) {
