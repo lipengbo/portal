@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from django.template.defaultfilters import register
 from django.conf import settings
@@ -11,6 +12,8 @@ def get_all_cities(context):
     context['cities'] = City.objects.all()
     return ''
 
+RESOURCE_USAGES = {}
+
 @register.simple_tag(takes_context=True)
 def resource_usage(context, island):
     servers = island.server_set.all()
@@ -18,25 +21,36 @@ def resource_usage(context, island):
     print servers, switches
     server_ratios = []
     switch_ratios = []
-    for server in servers:
-        client = AgentClient(server.ip)
-        try:
-            host_status = json.loads(client.get_host_status())
-        except Exception:
-            pass
-        else:
-            ratio = (host_status['mem'][2] + host_status['cpu']) / 2
-            server_ratios.append(ratio)
+    now = datetime.datetime.now()
+    global RESOURCE_USAGES
+    if (island.id not in RESOURCE_USAGES) or ((now - RESOURCE_USAGES[island.id]['time']).total_seconds() > (60 * 60)):
 
-    for switch in switches:
-        client = AgentClient(switch.ip)
-        try:
-            host_status = json.loads(client.get_host_status())
-        except Exception:
-            pass
-        else:
-            ratio = (host_status['mem'][2] + host_status['cpu']) / 2
-            switch_ratios.append(ratio)
+        for server in servers:
+            client = AgentClient(server.ip)
+            try:
+                host_status = json.loads(client.get_host_status())
+            except Exception:
+                pass
+            else:
+                ratio = (host_status['mem'][2] + host_status['cpu']) / 2
+                server_ratios.append(ratio)
+
+        for switch in switches:
+            client = AgentClient(switch.ip)
+            try:
+                host_status = json.loads(client.get_host_status())
+            except Exception:
+                pass
+            else:
+                ratio = (host_status['mem'][2] + host_status['cpu']) / 2
+                switch_ratios.append(ratio)
+
+        RESOURCE_USAGES[island.id] = {}
+        RESOURCE_USAGES[island.id]['usage'] = (switch_ratios, server_ratios)
+        RESOURCE_USAGES[island.id]['time'] = now
+    else:
+        switch_ratios, server_ratios = RESOURCE_USAGES[island.id]['usage']
+
     context['switch_ratio'] = sum(switch_ratios) / float(len(switch_ratios) or 1)
     context['server_ratio'] = sum(server_ratios) / float(len(server_ratios) or 1)
     return ""

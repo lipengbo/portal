@@ -46,15 +46,15 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="progress progress_defined">
-                                            {{ server_ratio}}%
-                                            <div class="progress-bar progress-bar-info" style="width: {{ server_ratio}}%;">
+                                            {{ server_ratio|stringformat:"1.2f"}}%
+                                            <div class="progress-bar progress-bar-success" style="width: {{ server_ratio}}%;">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="progress progress_defined">
-                                            {{ switch_ratio}}%
-                                            <div class="progress-bar progress-bar-success" style="width: {{ switch_ratio}}%;">
+                                            {{ switch_ratio|stringformat:"1.2f"}}%
+                                            <div class="progress-bar progress-bar-info" style="width: {{ switch_ratio}}%;">
                                             </div>
                                         </div>
                                     </div>
