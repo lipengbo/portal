@@ -6955,6 +6955,11 @@ fieldset legend {
 .table_base .tab_radio2 input[type="radio"] {
   vertical-align: -2px;
 }
+.table_base .tab_radio1 .block_span,
+.table_base .tab_radio2 .block_span {
+  width: 10px;
+  display: inline-block;
+}
 .v_top {
   vertical-align: top;
 }
