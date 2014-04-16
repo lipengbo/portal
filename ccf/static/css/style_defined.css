@@ -6949,6 +6949,7 @@ fieldset legend {
 .table_base .tab_radio1,
 .table_base .tab_radio2 {
   padding-top: 2px;
+  font-weight: normal;
 }
 .table_base .tab_radio1 input[type="radio"],
 .table_base .tab_radio2 input[type="radio"] {
@@ -7237,4 +7238,10 @@ span[name="serverInfo"] {
 }
 .dhcp_div .switch_btn {
   margin-right: 40px;
+}
+.table_base tbody tr td.title_padding {
+  padding-right: 4px;
+}
+.table_base tbody tr td.td_tooltip_padding {
+  padding-left: 0;
 }
