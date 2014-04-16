@@ -159,6 +159,7 @@ INSTALLED_APPS = [
     "endless_pagination",
     "notifications",
     "south",
+    "quotas",
 
     #xmlrpc
     'django_xmlrpc',
@@ -292,6 +293,11 @@ ACCOUNT_PASSWORD_CHANGE_REDIRECT_URL = 'password_change_success'
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'signup_confirmation_complete'
 ACCOUNT_PASSWORD_RESET_REDIRECT_URL = 'password_reset_success'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL
+QUOTAS = {
+    'cpu': (2, 4, 8),
+    'mem': (512, 1024, 2048),
+    'disk': (10, 20, 50),
+        }
 try:
     from ccf.local_settings import *
 except ImportError:
