@@ -6,6 +6,7 @@
 # E-mail:lipengbo10054444@gmail.com
 import traceback
 import json
+import time
 import errno
 from socket import error as socket_error
 from plugins.common.exception import ResourceNotEnough
@@ -138,8 +139,10 @@ def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
-    token = '%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip, vm.image.username, vm.image.password)
-    novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' % (request.META.get('HTTP_HOST').split(':')[0], token)
+    token = '%s_%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip,\
+                                      vm.image.username, vm.image.password, time.time())
+    novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
+            % (request.META.get('HTTP_HOST').split(':')[0], token)
     #context = {}
     #context['host_ip'] = host_ip
     #context['vnc_port'] = vnc_port
