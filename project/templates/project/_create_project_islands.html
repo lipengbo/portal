@@ -43,14 +43,20 @@
                             <td>{{ island }}</td>
                             <td>
                                 {% resource_usage island %}
-                                <div class="progress col-md-6 progress_defined">
-                                    服务器
-                                    <div class="progress-bar progress-bar-info" style="width: {{ server_ratio}}%;">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="progress progress_defined">
+                                            {{ server_ratio|stringformat:"1.2f"}}%
+                                            <div class="progress-bar progress-bar-success" style="width: {{ server_ratio}}%;">
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="progress col-md-6 progress_defined">
-                                    交换机
-                                    <div class="progress-bar progress-bar-info" style="width: {{ switch_ratio}}%;">
+                                    <div class="col-md-6">
+                                        <div class="progress progress_defined">
+                                            {{ switch_ratio|stringformat:"1.2f"}}%
+                                            <div class="progress-bar progress-bar-info" style="width: {{ switch_ratio}}%;">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </td>

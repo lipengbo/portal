@@ -141,7 +141,7 @@
                         radioClass: 'iradio_square-blue',
                         increaseArea: '20%'  // optional
                     });*/
-                    $('.btn-input.btn-delete').click(function(){
+                    $('.btn-input.btn-delete').live('click', function(){
                         if($(this).hasClass('disabled')) {
                             return false;
                         }
@@ -154,7 +154,7 @@
                         });
                         return false;
                     });
-                    $('a.btn-delete').click(function(){
+                    $('a.btn-delete').live('click', function(){
                         if($(this).hasClass("disabled")){
                             return false;
                         }else{
@@ -197,7 +197,7 @@
         </div>
         <div class="modal-footer">
           <button class="btn delete-cancel" data-dismiss="modal">取消</button>
-          <a id="account_logout" class="btn btn-warning" href="{% url "account_logout" %}">{% trans "Log out" %}</a>
+          <a id="account_logout" class="btn btn_info" href="{% url "account_logout" %}">{% trans "Log out" %}</a>
         </div>
         </div>
         </div>         
@@ -211,8 +211,8 @@
                     <p class="text-center">确定删除吗？</p>
                 </div>
                 <div class="modal-footer">
-                  <button class="btn delete-cancel" data-dismiss="modal">取消</button>
-                  <button class="btn delete-confirm btn-warning" data-dismiss="modal">确定</button>
+                  <button class="btn btn-default delete-cancel" data-dismiss="modal">取消</button>
+                  <button class="btn delete-confirm btn_info" data-dismiss="modal">确定</button>
                 </div>           
             </div>
         </div>
@@ -226,7 +226,7 @@
           <p class="text-center" id="alert_info"></p>
         </div>
         <div class="modal-footer">
-          <button class="btn delete-confirm btn-warning" data-dismiss="modal"id="alert_close">确定</button>
+          <button class="btn delete-confirm btn_info" data-dismiss="modal"id="alert_close">确定</button>
         </div>   
         </div>
         </div>        

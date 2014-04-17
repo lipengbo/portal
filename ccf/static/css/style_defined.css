@@ -6255,7 +6255,7 @@ a.chart_btn span.color_red {
   vertical-align: top;
 }
 .table_defined thead {
-  background: #444;
+  background: #666;
   color: #fff;
 }
 .table_defined > tbody > tr:nth-child(odd) > td {
@@ -6788,6 +6788,8 @@ fieldset legend {
   margin-right: 0;
 }
 .progress_defined {
+  text-align: center;
+  background: #eee;
   margin-bottom: 0;
   border-radius: 10px;
 }
@@ -6798,7 +6800,6 @@ fieldset legend {
 .progress_defined .progress-bar-success {
   border-radius: 10px;
   background: #00cc33;
-  float: right;
 }
 .buttons_margin {
   margin-top: 50px;
@@ -6948,10 +6949,16 @@ fieldset legend {
 .table_base .tab_radio1,
 .table_base .tab_radio2 {
   padding-top: 2px;
+  font-weight: normal;
 }
 .table_base .tab_radio1 input[type="radio"],
 .table_base .tab_radio2 input[type="radio"] {
   vertical-align: -2px;
+}
+.table_base .tab_radio1 .block_span,
+.table_base .tab_radio2 .block_span {
+  width: 10px;
+  display: inline-block;
 }
 .v_top {
   vertical-align: top;
@@ -7236,4 +7243,10 @@ span[name="serverInfo"] {
 }
 .dhcp_div .switch_btn {
   margin-right: 40px;
+}
+.table_base tbody tr td.title_padding {
+  padding-right: 4px;
+}
+.table_base tbody tr td.td_tooltip_padding {
+  padding-left: 0;
 }
