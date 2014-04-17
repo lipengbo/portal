@@ -248,6 +248,7 @@ function constructor() {
         if (rfb_state === 'disconnect') {
             updateState('disconnected', 'VNC disconnected' + msg);
         } else if (rfb_state === 'ProtocolVersion') {
+            expire()
             fail('Failed to connect to server' + msg);
         } else if (rfb_state in {'failed':1, 'disconnected':1}) {
             Util.Error("Received onclose while disconnected" + msg);
@@ -257,7 +258,7 @@ function constructor() {
     });
     ws.on('error', function(e) {
         Util.Warn("WebSocket on-error event");
-        //fail("WebSock reported an error");
+        fail("WebSock reported an error");
     });
 
 
@@ -522,6 +523,7 @@ fail = function(msg) {
     updateState('failed', msg);
     return false;
 };
+
 
 handle_message = function() {
     //Util.Debug(">> handle_message ws.rQlen(): " + ws.rQlen());

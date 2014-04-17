@@ -34,9 +34,9 @@ class mycrypt():
         return cryptor.decrypt(decode_base64_str).strip()
 
 
-if __name__ == '__main__':
-    my1 = mycrypt()
-    haha = my1.encrypt('192')
-    print haha
-    print my1.decrypt(haha)
-    print len(my1.decrypt(haha))
+#if __name__ == '__main__':
+#    my1 = mycrypt()
+#    haha = my1.encrypt('192')
+#    print haha
+#    print my1.decrypt(haha)
+#    print len(my1.decrypt(haha))

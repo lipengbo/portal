@@ -19,6 +19,7 @@ from django.core.urlresolvers import reverse
 from etc.config import function_test
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
+from plugins.common.aes import *
 #from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
 from models import Image, Flavor, SSHKey
@@ -139,8 +140,10 @@ def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
-    token = '%s_%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip,\
-                                      vm.image.username, vm.image.password, time.time())
+    private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
+    vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, vm.image.username, vm.image.password)
+    mycrypt_tool = mycrypt()
+    token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
             % (request.META.get('HTTP_HOST').split(':')[0], token)
     #context = {}

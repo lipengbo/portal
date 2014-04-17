@@ -26,6 +26,7 @@ lock_path = '/var/run/'
 #控制器和网关模板
 controller_flavor_id = 1
 gateway_flavor_id = 1
+aes_key = 'fnic123456789012'
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
 #配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。
