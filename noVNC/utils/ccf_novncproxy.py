@@ -73,7 +73,7 @@ if __name__ == '__main__':
     # Create and start the NovaWebSockets proxy
     server = CCFWebSocketProxy(listen_host='0.0.0.0',
                                listen_port=6080,
-                               daemon=False,
+                               daemon=True,
                                web='./',
                                target_host='ignore',
                                target_port='ignore',
