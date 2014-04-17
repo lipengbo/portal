@@ -11,7 +11,7 @@ from plugins.openflow.flowspace_api import matches_to_arg_match,\
 from plugins.openflow.controller_api import slice_change_controller,\
     delete_controller, create_add_controller
 from plugins.vt.api import create_vm_for_gateway
-from resources.ovs_api import slice_add_ovs_ports
+from resources.ovs_api import slice_add_ovs_or_ports
 from plugins.ipam.models import IPUsage
 from plugins.common.ovs_client import get_switch_stat, get_sFlow_metric
 from resources.models import Switch
@@ -31,15 +31,15 @@ from etc import config
 # from etc.config import slice_expiration_days
 
 
-def create_slice_step(project, slice_uuid, name, description, island, user, ovs_ports,
-                      controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
+def create_slice_step(project, slice_uuid, name, description, island, user, ovs_or_ports,
+                      controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected, tp_mod):
     print "create_slice_step"
     slice_obj = None
     try:
         print "1:create slice record, add island, add flowvisor"
         slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
-        print "2:add ovs ports"
-        slice_add_ovs_ports(slice_obj, ovs_ports)
+        print "2:add ovses or ports"
+        slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod)
         print "3:scheduler for resources"
         schedul_for_controller_and_gw(controller_info, gw_host_id, island)
         print "4:create and add controller"

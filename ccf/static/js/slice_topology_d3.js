@@ -319,11 +319,11 @@ function inittpdata(){
                     nodes_data[node_id].type_id = switches[i].type;
                     nodes_data[node_id].ports = switches[i].ports;
                     if(switches[i].type == 1){
-                        nodes_data[node_id].icon = 'img/ovs.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_normal.png';
                     }else if(switches[i].type == 2){
-                        nodes_data[node_id].icon = 'img/ovs-red.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_external.png';
                     }else{
-                        nodes_data[node_id].icon = 'img/ovs-green.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_related.png';
                     }
                 }
             }
@@ -409,13 +409,17 @@ function inittpdata(){
 }
 function inittpdata2(){
     //获取数据库中该slice的拓扑信息 
+    alert(1);
     var topology_url = "http://" + window.location.host + "/resources/topology_select/";
+    var tp_mod = $("#tp_mod").text();
+    alert(tp_mod);
+    var switch_ids = $("#switch_ids").text();
     var switch_port_ids = $("#switch_port_ids").text();
     $.ajax({
         type: "POST",
         url: topology_url,
         dataType: "json",
-        data: {"switch_port_ids": switch_port_ids},
+        data: {"tp_mod": tp_mod, "switch_port_ids": switch_port_ids, "switch_ids": switch_ids},
         async: false, 
         success: function(data) {
             switches = data.switches;
@@ -457,11 +461,11 @@ function inittpdata2(){
                     nodes_data[node_id].type_id = switches[i].type;
                     nodes_data[node_id].ports = switches[i].ports;
                     if(switches[i].type == 1){
-                        nodes_data[node_id].icon = 'img/ovs.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_normal.png';
                     }else if(switches[i].type == 2){
-                        nodes_data[node_id].icon = 'img/ovs-red.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_external.png';
                     }else{
-                        nodes_data[node_id].icon = 'img/ovs-green.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_related.png';
                     }
                 }
             }

@@ -170,6 +170,9 @@
                    <small>点击拓扑图中网络节点选择需要的实验拓扑</small>
                 </h4>              
                 <div class="alert alert-info">
+                  <!--<img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网络出口节点，用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
+                  <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点；<br />
+                  <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点，提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />-->
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
                 </div>
@@ -192,10 +195,15 @@
                             </div>
                        </div>
                        <div class="frame_tip">
+                           <img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网络出口节点&nbsp
+                           <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点&nbsp
+                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点
+                       </div>
+                       <!--<div class="frame_tip">
                            <span class="frame_tip_r"></span>网络出口节点
                            <span class="frame_tip_b"></span>普通交换节点
                            <span class="frame_tip_g"></span>虚拟机关联节点
-                       </div>
+                       </div>-->
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
                   </div>
                   <table class="switch-table table_defined" style="display:none">
@@ -215,7 +223,8 @@
                                     {%if ovs_port.switch_type == 3%}
                                     serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" 
                                     {%endif%}
-                                    switchtype="{{ovs_port.switch_type}}" />
+                                    switchtype="{{ovs_port.switch_type}}" 
+                                    switchname="{{ovs_port.switch.name}}" />
                                     {{ovs_port.switch.name}}
                                 </td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
@@ -719,8 +728,6 @@
 			window.location.href = window.location.href;
 			
 		});
-		
-		
 		flavor_init();
 
     });

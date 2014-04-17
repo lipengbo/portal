@@ -86,17 +86,51 @@ $(document).ready(function() {
         }
         $('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
         selected_ports = {};
+        selected_dpids = {};
         $('.switch-table tbody tr').hide();
         $('.switch-table tbody tr label').hide();
     });
 
     $('.btn-step4').click(function () {
-        $('.switch-manifest tbody').html('');
-        $.each($('.switch-table tbody tr'), function (index, tr) {
-            var clone = $(tr).clone();
-            $('.switch-manifest tbody').append(clone);
-        });
-        $('.switch-manifest tbody input').attr('disabled', '');
+        var tp_mod = $('select[name="tp_mod"]').val();
+        if(tp_mod == 2){
+            $('.switch-manifest').html('');
+            str = "";
+
+            str = str + "<thead>"
+                + "<tr>"
+                + "<th>名称</th>"
+                + "<th>DPID</th>"
+                + "<th>节点类型</th>"
+                + "</tr>"
+                + "</thead>"
+                + "<tbody>";
+            for(dpid in window.selected_dpids) {
+                switch_ids_obj = document.getElementsByName("switch"+dpid);
+                switchtype = switch_ids_obj[0].getAttribute("switchtype") 
+                if(switchtype == 1){
+                    type_name = "交换节点";
+                }else if(switchtype == 2){
+                    type_name = "网络出口节点";
+                }else if(switchtype == 3){
+                    type_name = "虚拟机关联节点";
+                }
+                str = str + "<tr>"
+                + "<td>"+switch_ids_obj[0].getAttribute("switchname")+"</td>"
+                + "<td>"+dpid+"</td>"
+                + "<td>"+type_name+"</td>"
+                + "</tr>";    
+            }
+            str = str + "</tbody>"
+            $('.switch-manifest').html(str);
+        }else{
+            $('.switch-manifest tbody').html('');
+            $.each($('.switch-table tbody tr'), function (index, tr) {
+                var clone = $(tr).clone();
+                $('.switch-manifest tbody').append(clone);
+            });
+            $('.switch-manifest tbody input').attr('disabled', '');
+        }
     });
     //slice步骤切换
     $(".next_btn").click(function(){
@@ -301,7 +335,12 @@ function page_function1(){
 }
 function page_function2(){
     fetch_serverinfo("id_server");
-	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&switch_port_ids=" + get_select_ports())
+    var tp_mod = $('select[name="tp_mod"]').val();
+    if(tp_mod == 2){
+	   $('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&tp_mod=2&switch_ids=" + get_select_switches())
+	}else{
+	   $('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&tp_mod=1&switch_port_ids=" + get_select_ports())
+	}
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
 	if($('.switch_btn.dhcp').hasClass("checked")){
 		var obj = $('.switch_btn.dhcp.vm');
@@ -452,18 +491,24 @@ function submit_slice_info(project_id){
     var cip3_obj = document.getElementById("cip3");
     var controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
     var controller_port_obj = document.getElementById("controller_port");
-    for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(!switch_port_ids_obj[i].disabled){
-			//alert(switch_port_ids_obj[i].value);
-			if(j==0){
-				switch_port_ids = switch_port_ids_obj[i].value;
-			}
-			else{
-				switch_port_ids = switch_port_ids + "," + switch_port_ids_obj[i].value;
-			}
-			j++;
-		}
-    }      
+    var switch_ids = "";
+    var tp_mod = $('select[name="tp_mod"]').val();
+    if(tp_mod == 2){
+        switch_ids = get_select_switches();
+    }else{
+        for(var i=0;i<switch_port_ids_obj.length;i++){
+    		if(!switch_port_ids_obj[i].disabled){
+    			//alert(switch_port_ids_obj[i].value);
+    			if(j==0){
+    				switch_port_ids = switch_port_ids_obj[i].value;
+    			}
+    			else{
+    				switch_port_ids = switch_port_ids + "," + switch_port_ids_obj[i].value;
+    			}
+    			j++;
+    		}
+        }  
+    }    
 	for(var i=0;i<controller_type_objs.length;i++){  
 		if(controller_type_objs[i].checked){  
 			if(controller_type_objs[i].value=="default_create"){  
@@ -495,7 +540,9 @@ function submit_slice_info(project_id){
 						"controller_sys": controller_sys_obj.value,
 						"controller_ip": controller_ip,
 						"controller_port": controller_port.value,
+						"tp_mod": tp_mod,
 						"switch_port_ids": switch_port_ids,
+						"switch_ids": switch_ids,
 						"slice_nw": old_slice_nw_obj.value,
 						"gw_host_id": id_server_gw_obj_value,
 						"gw_ip": gateway_ip_obj_value,

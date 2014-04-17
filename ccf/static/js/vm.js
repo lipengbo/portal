@@ -415,7 +415,18 @@ function get_select_ports(){
 	port_ids = port_ids.substr(0,port_ids.length-1);
     return port_ids;
 }
-
+function get_select_switches(){
+    var switch_ids = ""
+    for(dpid in window.selected_dpids) {
+        switch_ids_obj = document.getElementsByName("switch"+dpid);
+        switchid = switch_ids_obj[0].getAttribute("value");
+        if( switchid ){
+            switch_ids = switch_ids + switchid + ",";
+        }
+    }
+    switch_ids = switch_ids.substr(0,switch_ids.length-1);
+    return switch_ids;
+}
 function get_select_server_id(){
     var tp_mod = $('select[name="tp_mod"]').val();
     var j =0
