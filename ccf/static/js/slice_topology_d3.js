@@ -409,10 +409,8 @@ function inittpdata(){
 }
 function inittpdata2(){
     //获取数据库中该slice的拓扑信息 
-    alert(1);
     var topology_url = "http://" + window.location.host + "/resources/topology_select/";
     var tp_mod = $("#tp_mod").text();
-    alert(tp_mod);
     var switch_ids = $("#switch_ids").text();
     var switch_port_ids = $("#switch_port_ids").text();
     $.ajax({

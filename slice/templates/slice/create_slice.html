@@ -34,16 +34,16 @@
                         <i class="icon-caret-right"></i> 
                     </a>
                 </li>
-                <li class="col-md-2">
+                <!--<li class="col-md-2">
                     <a href="#tab4" class="step">
                         <span class="number">4</span>
                         <span class="desc">虚拟机创建</span> 
                         <i class="icon-caret-right"></i>  
                     </a> 
-                </li>
+                </li>-->
                 <li class="col-md-2">
                     <a href="#tab4" class="step">
-                    <span class="number">5</span>
+                    <span class="number">4</span>
                     <span class="desc">虚网清单</span>   
                     <i class="icon-caret-right"></i>
                     </a> 
@@ -435,14 +435,14 @@
               </div>
              </div>     
              
-             <div class="tab_part">
+             <!--<div class="tab_part">
 
                 <h4 class="title_word_bg block_title">
                                  <img src="{% static "img/ic_41.png" %}" />虚拟机配置                                        
                 </h4>  
                          
                           
-				<!-- 拓扑图 -->
+				
 				<div id="topologyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 				<div class="modal-dialog">
                 <div class="modal-content">
@@ -492,22 +492,12 @@
                          <tr>
                              <td><b>镜像</b></td>
                              <td>
-								<!--
-                                  <select onblur="check_vm_select('image')" name="image" id="id_image">
-                                    <option value="" selected="selected">---------</option>
-                                    <option value="51">1</option>
-                                  </select> <span name="imageInfo"></span-->
 							 	<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                              </td>
                          </tr>
                          <tr>
                              <td><b>宿主机</b></td>
                              <td>
-								<!--
-                                 <select onblur="check_vminfo()" name="server" id="id_server">
-                                     <option value="" selected="selected">---------</option>
-                                     <option value="1">server1</option>
-                                 </select-->
 							 	<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div>
 								<span name="serverInfo"></span>
                                  <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
@@ -516,11 +506,6 @@
                          </tr>
                          <tr>
                              <td colspan="2">
-                                 
-									                            
-                                     <!--label class="inline tab_checkbox">
-                                                    {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-	                                     </label>-->
 								<label class="pull-left control-label">启动DHCP</label>
 								<div id="dhcp_vm" class="pull-left"> 
                                      <div class="tuopu_btn">
@@ -564,7 +549,7 @@
                     <div class="col-md-4"></div>
                   </div>
                  </div>             
-             </div>
+             </div>-->
              
              <div class="tab_part">
 
@@ -614,7 +599,7 @@
 
                  <div id="list_gw"></div>
 
-                    <h4 class="title_word_bg block_title">
+                 <!--   <h4 class="title_word_bg block_title">
                                         <img src="{% static "img/ic_11.png" %}" />虚拟机列表      
                     </h4>               
                  </legend>
@@ -628,22 +613,15 @@
                         </tr>
                     </thead>
                     <tbody id="id_vm_tbody">
-                   <!-- <tr>
+                        <tr>
                             <td>VM1</td>
                             <td>small</td>
                             <td>ubuntu</td>
                             <td>DPID</td>
                             <td>是</td>
                         </tr>
-                        <tr>
-                            <td>VM2</td>
-                            <td>small</td>
-                            <td>ubuntu</td>
-                            <td>DPID</td>
-                            <td>否</td>
-                        </tr>-->
                     </tbody>
-                 </table>   
+                 </table>--> 
               
               <div class="form-actions">
                   <div class="row buttons_margin">
