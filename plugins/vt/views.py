@@ -128,6 +128,11 @@ def do_vm_action(request, vmid, action):
     if action in operator:
         try:
             vm = VirtualMachine.objects.get(id=vmid)
+            if action == 'create':
+                vm.state = DOMAIN_STATE_DIC['starting']
+            elif action == 'destroy':
+                vm.state = DOMAIN_STATE_DIC['stopping']
+            vm.save()
             api.do_vm_action(vm, action)
             return HttpResponse(json.dumps({'result': 0}))
         except socket_error as serr:
