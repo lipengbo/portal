@@ -12,7 +12,7 @@ function start_stop_vm(vm_id, vm_type){
         ret = start_or_stop_vm(vm_id, "create");
         if(ret){
             img_obj.src = STATIC_URL + "img/btn_qd_gray.png";//"img/btn_tz.png";       
-            //img_obj.title = "启动中";//"停止";
+            img_obj.title = "启动中";//"停止";
             //$("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
 			$("#icon_state"+vm_id)
 				.removeClass("icon-minus-sign")
@@ -34,7 +34,7 @@ function start_stop_vm(vm_id, vm_type){
         ret = start_or_stop_vm(vm_id, "destroy");
         if(ret){
             img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
-            ///img_obj.title = "停止中";//"启动";
+            img_obj.title = "停止中";//"启动";
             //$("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
 			$("#icon_state"+vm_id).removeClass("icon-ok-sign").removeClass("icon_state")
 								  .addClass("icon-spinner").addClass("icon-spin").addClass("check_vm");

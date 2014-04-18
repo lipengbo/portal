@@ -90,7 +90,7 @@ function check_vm_status(slice_id){
                             //启停虚拟机按钮
                             a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
                             img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
-							if(img_obj.title == "停止"){
+							if(img_obj.title == "停止中"){
 								$("div#slice_alert_info").empty();
                             	var str = "" + "<p class=\"text-center\">虚拟机停止失败！</p>";
                             	$("div#slice_alert_info").append(str);
@@ -118,7 +118,7 @@ function check_vm_status(slice_id){
                             if(img_obj){
                             img_obj.src = STATIC_URL + "img/btn_jk.png"; } 
 							document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(check_nodes[j].cur_vm_id, 1);   
-                        }else{
+                        }else if(status == 5){
 							vm_obj.removeClass("icon-spinner")
                                 .removeClass("icon-spin")
                                 .removeClass("check_vm")
@@ -126,7 +126,7 @@ function check_vm_status(slice_id){
                                 .addClass("icon_state"); 
                             a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
                             img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
-							if(img_obj.title == "启动"){
+							if(img_obj.title == "启动中"){
 								$("div#slice_alert_info").empty();
                             	var str = "" + "<p class=\"text-center\">虚拟机启动失败！</p>";
                             	$("div#slice_alert_info").append(str);
