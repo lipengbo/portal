@@ -42,12 +42,22 @@
                             <td>{{ city }}</td>
                             <td>{{ island }}</td>
                             <td>
-                                <div class="progress progress_defined">
-                                    <div class="progress-bar progress-bar-info" style="width: {% resource_ratio switch_num|add:server_num total_resource%}%;">
-                                        {{ switch_num }}
-                                        <div class="progress-bar progress-bar-success" style="width: {% resource_ratio server_num total_resource%}%;">{{ server_num }}</div>
+                                {% resource_usage island %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="progress progress_defined">
+                                            {{ server_ratio|stringformat:"1.2f"}}%
+                                            <div class="progress-bar progress-bar-success" style="width: {{ server_ratio}}%;">
+                                            </div>
+                                        </div>
                                     </div>
-                                    
+                                    <div class="col-md-6">
+                                        <div class="progress progress_defined">
+                                            {{ switch_ratio|stringformat:"1.2f"}}%
+                                            <div class="progress-bar progress-bar-info" style="width: {{ switch_ratio}}%;">
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </td>
                         </tr>

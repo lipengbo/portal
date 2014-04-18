@@ -37,5 +37,8 @@ msgstr "可以编辑项目"
 msgid "Can delete 项目"
 msgstr "可以删除项目"
 
+msgid "Flowvisor"
+msgstr "网络虚拟工具"
+
 msgid ", %(number)d %(type)s"
 msgstr " %(number)d %(type)s"

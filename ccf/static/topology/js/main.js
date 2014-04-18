@@ -469,7 +469,7 @@ function init_svg () {
         })
         .style("stroke-width", function (d) { 
             var width = 1;
-            if (d.type) {
+            if (d.type && d.source.id != d.target.id) {
                 width = 3;
             }
             return width; 

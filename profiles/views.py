@@ -45,7 +45,7 @@ def reject(request, id=None):
         profile.state = 1
         profile.save()
         send_mail(_("Account Review Result"), _("Sorry, we cannot let you pass the review according to your profile.If you have any question about the result, you can contact us by replying this email."), settings.DEFAULT_FROM_EMAIL, [user.email])
-        return redirect('notifications:all')
+        return redirect('nexus_list', app_label='auth', model_class='user')
     else:
         form = profiles.forms.RejectForm(request.POST)
         #if form.is_valid():

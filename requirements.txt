@@ -21,3 +21,4 @@ git+https://github.com/fay/django-notifications
 South==0.8.1
 django-smtp-ssl==1.0
 django-celery-with-redis==3.0
+pycrypto==2.6.1

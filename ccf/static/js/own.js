@@ -2,7 +2,7 @@ $(document).ready(function() {
 	//help页面滑动到顶部效果
 	$(".bs-docs-sidenav li a").click(function() {
 		var navHeight = $(".navbar").height();
-		aa = $($(this).attr("href")).offset().top - navHeight + "px";
+		//aa = $($(this).attr("href")).offset().top - navHeight + "px";
 		$("html, body").animate({
 			scrollTop: $($(this).attr("href")).offset().top - navHeight + "px"
 			}, {
@@ -357,11 +357,11 @@ function page_function3(){
 				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
-			        + "<td width=\"100\">创建方式：</td>"
+			        + "<td width=\"120\">创建方式：</td>"
 			        + "<td>默认创建</td>"
 			        + "</tr>"
 			        + "<tr>"
-			        + "<td width=\"100\">控制器类型：</td>"
+			        + "<td width=\"120\">控制器类型：</td>"
 			        + "<td>" + controller_sys + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
@@ -378,11 +378,11 @@ function page_function3(){
 				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
-			        + "<td width=\"100\">创建方式：</td>"
+			        + "<td width=\"120\">创建方式：</td>"
 			        + "<td>自定义</td>"
 			        + "</tr>"
 			        + "<tr>"
-			        + "<td width=\"100\">控制器IP端口：</td>"
+			        + "<td width=\"120\">控制器IP端口：</td>"
 			        + "<td>" + controller_ip_port + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
@@ -404,7 +404,7 @@ function page_function3(){
         
         str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
-                        +"<td width=\"100\">网关宿主机：</td>"
+                        +"<td width=\"120\">网关宿主机：</td>"
                         +"<td>"+ id_server_gw_obj.options[id_server_gw_index].text +"</td></tr>"
                     +"<tr><td>网关IP地址：</td>"
                         +"<td>"+ gateway_ip_obj.value +"</td></tr>";
@@ -501,7 +501,7 @@ function submit_slice_info(project_id){
     var cip1_obj = document.getElementById("cip1");
     var cip2_obj = document.getElementById("cip2");
     var cip3_obj = document.getElementById("cip3");
-    var controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+    var controller_ip = ''+parseInt(cip0_obj.value)+'.'+parseInt(cip1_obj.value)+'.'+parseInt(cip2_obj.value)+'.'+parseInt(cip3_obj.value);
     var controller_port_obj = document.getElementById("controller_port");
     var switch_ids = "";
     var tp_mod = $('select[name="tp_mod"]').val();
