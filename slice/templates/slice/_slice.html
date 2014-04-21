@@ -3,16 +3,17 @@
 {% load project_tags %}
 {% load common_tags %}
 
-{% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
-<div class="col-md-6" onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice.id }}/';">
-{%else%}
-{% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
-<div class="col-md-6" onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice.id }}/';">
-{%else%}
+
 <div class="col-md-6">
-{%endif%}{%endif%}
-    <div {% if project and user != slice.owner %}class="slice_list_block active"{%else%}class="slice_list_block"{% endif %}>
-        <div class="row">
+
+    <div class="slice_list_block {% if extent_html == 'site_base.html' and project and user != slice.owner %}active{% endif %}">
+        <div class="row" 
+        {% has_perm user 'project.create_slice' slice.project %}{% if has_perm %}
+        onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice.id }}/';"
+        {%else%}
+        {% has_perm user 'slice.change_slice' slice %}{% if has_perm %}
+        onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice.id }}/';"
+        {%endif%}{%endif%}>
             <div class="col-md-5">
                 <div class="slice_list_block_l">
                     <div class="slice_logo">
