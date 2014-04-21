@@ -28,6 +28,9 @@ if (size == 'small') {
     height = 300;
 } else if (size == 'big') {
     width = $('#topology-svg').width();
+    if (width == 0) {
+        width = 960;
+    }
     height = 450;
 }
 
