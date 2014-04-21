@@ -11,6 +11,7 @@ from socket import error as socket_error
 from plugins.common.exception import ResourceNotEnough
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib import messages
 from forms import VmForm
 from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
@@ -64,7 +65,11 @@ def create_vm(request, sliceid, from_link):
     """
     from_link : 记录链接跳转的入口，以便返回原来的页面。 0 为从slic详情页面转入， 1为从虚拟机列表页面转入
     """
+    user = request.user
+    vm_count = VirtualMachine.objects.total_vms(user)
     if request.method == 'POST':
+        if user.quotas.vm <= vm_count:
+            return redirect('forbidden')
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
             try:
@@ -75,6 +80,22 @@ def create_vm(request, sliceid, from_link):
                 vm.ram = request.POST.get("ram")
                 vm.cpu = request.POST.get("cpu")
                 vm.hdd = request.POST.get("hdd")
+
+                #: test ram quota
+                if user.quotas.mem < (vm.ram + VirtualMachine.objects.user_stat_sum(user, 'ram')):
+                    messages.add_message(request, messages.INFO, "您已分配的内存大小已经超过配额")
+                    return redirect('forbidden')
+
+                #: test cpu quota
+                if user.quotas.cpu < (vm.cpu + VirtualMachine.objects.user_stat_sum(user, 'cpu')):
+                    messages.add_message(request, messages.INFO, "您的CPU数量已经超过配额")
+                    return redirect('forbidden')
+
+                #: test disk quota
+                if user.quotas.disk < (vm.hdd + VirtualMachine.objects.user_stat_sum(user, 'hdd')):
+                    messages.add_message(request, messages.INFO, "您的磁盘容量已经超过配额")
+                    return redirect('forbidden')
+
                 if request.POST.get("enable_dhcp") == '0':
                     vm.enable_dhcp = False
                 else:
@@ -107,6 +128,24 @@ def create_vm(request, sliceid, from_link):
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
         return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
+        if user.quotas.vm <= vm_count:
+            messages.add_message(request, messages.INFO, "您的虚拟机数量已经超过配额")
+            return redirect('forbidden')
+        #: test ram quota
+        if user.quotas.mem <= VirtualMachine.objects.user_stat_sum(user, 'ram'):
+            messages.add_message(request, messages.INFO, "您已分配的内存大小已经超过配额")
+            return redirect('forbidden')
+
+        #: test cpu quota
+        if user.quotas.cpu <= VirtualMachine.objects.user_stat_sum(user, 'cpu'):
+            messages.add_message(request, messages.INFO, "您的CPU数量已经超过配额")
+            return redirect('forbidden')
+
+        #: test disk quota
+        if user.quotas.disk <= VirtualMachine.objects.user_stat_sum(user, 'hdd'):
+            messages.add_message(request, messages.INFO, "您的磁盘容量已经超过配额")
+            return redirect('forbidden')
+
         vm_form = VmForm()
         slice = get_object_or_404(Slice, id=sliceid)
         servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]

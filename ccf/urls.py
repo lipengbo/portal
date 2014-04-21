@@ -13,8 +13,8 @@ from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
 import django_cron
-# if not settings.DEBUG:
-django_cron.autodiscover()
+if settings.ENABLE_CRON:
+    django_cron.autodiscover()
 
 urlpatterns = patterns("",
     url(r"^$",  "project.views.home", name="home"),

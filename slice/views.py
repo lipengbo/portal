@@ -38,6 +38,10 @@ def create(request, proj_id):
     project = get_object_or_404(Project, id=proj_id)
     if not request.user.has_perm('project.create_slice', project):
         return redirect('forbidden')
+    slice_count = request.user.slice_set.all().count()
+    if request.user.quotas.slice <= slice_count:
+        messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+        return redirect("forbidden")
     error_info = None
     islands = project.islands.all()
     if not islands:
@@ -68,6 +72,10 @@ def create(request, proj_id):
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
     project = get_object_or_404(Project, id=proj_id)
+    slice_count = request.user.slice_set.all().count()
+    if request.user.quotas.slice <= slice_count:
+        messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+        return redirect("forbidden")
     if request.method == 'POST':
         try:
             user = request.user

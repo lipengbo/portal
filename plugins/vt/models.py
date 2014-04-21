@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.db.models import Sum
 
 from resources.models import IslandResource, Server, SwitchPort
 from slice.models import Slice
@@ -89,6 +90,20 @@ class Flavor(models.Model):
         verbose_name = _("Flavor")
 
 
+class VirtualMachineManager(models.Manager):
+
+    def user_stat_sum(self, user, kind):
+        total = 0
+        for slice in user.slice_set.all():
+            total += slice.get_vms().aggregate(Sum(kind))[kind+'__sum']
+        return total
+
+    def total_vms(self, user):
+        total = 0
+        for slice in user.slice_set.all():
+            total += slice.get_vms().count()
+        return total
+
 class VirtualMachine(IslandResource):
     uuid = models.CharField(max_length=36, null=True, unique=True)
     ip = models.ForeignKey(IPUsage, null=True, related_name="virtualmachine_set")
@@ -105,6 +120,8 @@ class VirtualMachine(IslandResource):
     switch_port = models.ForeignKey(SwitchPort, null=True)
     state = models.IntegerField(null=True, choices=DOMAIN_STATE_TUPLE)
     type = models.IntegerField(null=False, choices=VM_TYPE)
+
+    objects = VirtualMachineManager()
 
     def get_ipaddr(self):
         return self.ip.ipaddr
