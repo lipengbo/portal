@@ -143,7 +143,11 @@ $(function(){
                         $('.btn_register').hide();
                         $('.btn_ok').removeClass('hide');
                     }
-                    $('.signup-form .modal-body').html($(data).html());
+                    var replacement = $(data).html();
+                    if(!replacement) {
+                        replacement = data;
+                    }
+                    $('.signup-form .modal-body').html(replacement);
                 } else {
                     window.location.href = '/';
                 }
