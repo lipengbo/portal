@@ -173,6 +173,37 @@ def delete_slice_api(slice_obj):
 
 
 @transaction.commit_on_success
+def start_slice_api1(slice_obj):
+    """启动slice
+    """
+    print 'start_slice_api'
+    from slice.tasks import start_slice_sync
+    try:
+        if slice_obj and slice_obj.state == SLICE_STATE_STOPPED:
+            all_vms = slice_obj.get_vms()
+            for vm in all_vms:
+                if vm.state == 8:
+                    raise DbError("资源分配中，请稍后启动！")
+            controller = slice_obj.get_controller()
+            if controller.host and controller.host.state != 1:
+                raise DbError("请确保控制器已启动！")
+            gw = slice_obj.get_gw()
+            if gw and gw.enable_dhcp and gw.state != 1:
+                raise DbError("请确保gateway已启动！")
+            flowvisor = slice_obj.get_flowvisor()
+            if flowvisor == None:
+                raise DbError("虚网启动异常！")
+            try:
+                slice_obj.starting()
+                start_slice_sync.delay(slice_obj.id)
+            except Exception, ex:
+                raise DbError("虚网启动失败！")
+    except Exception, ex:
+        transaction.rollback()
+        raise
+
+
+@transaction.commit_on_success
 def start_slice_api(slice_obj):
     """启动slice
     """
@@ -196,17 +227,6 @@ def start_slice_api(slice_obj):
             try:
                 slice_obj.starting()
                 start_slice_sync.delay(slice_obj.id)
-#                 if flowvisor.type == 1:
-#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-#                                                   slice_obj.id, False)
-#                     update_slice_virtual_network_cnvp(slice_obj)
-#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-#                                                   slice_obj.id, True)
-#                 else:
-#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-#                                                   slice_obj.id, True)
-#                     update_slice_virtual_network_flowvisor(slice_obj)
-#                 slice_obj.start()
             except Exception, ex:
                 raise DbError("虚网启动失败！")
     except Exception, ex:
