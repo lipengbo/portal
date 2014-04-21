@@ -177,11 +177,11 @@ def update_links(sender, instance, created, **kwargs):
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
         except KeyError:
-            src_port_name = 'eth' + src_port
+            src_port_name = 'eth' + str(src_port)
         try:
             dst_port_name = port_name_dict[target_switch.dpid][int(dst_port)]
         except KeyError:
-            dst_port_name = 'eth' + dst_port
+            dst_port_name = 'eth' + str(dst_port)
         source_port, created = SwitchPort.objects.get_or_create(
                 switch=source_switch,
                 port=src_port,
