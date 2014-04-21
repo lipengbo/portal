@@ -210,6 +210,8 @@ def start_slice_api(slice_obj):
     print 'start_slice_api'
     from slice.tasks import start_slice_sync
     try:
+        controller_flag = False
+        gw_flag = False
         if slice_obj and slice_obj.state == SLICE_STATE_STOPPED:
             all_vms = slice_obj.get_vms()
             for vm in all_vms:
@@ -217,16 +219,43 @@ def start_slice_api(slice_obj):
                     raise DbError("资源分配中，请稍后启动！")
             controller = slice_obj.get_controller()
             if controller.host and controller.host.state != 1:
-                raise DbError("请确保控制器已启动！")
+                if controller.host.state == 0 or controller.host.state == 5:
+                    controller_flag = True
+                else:
+                    if controller.state == 12:
+                        pass
+                    if controller.host.state == 13:
+                        raise DbError("操作失败，请稍后再试！")
+                    else:
+                        raise DbError("请确保控制器可用！")
             gw = slice_obj.get_gw()
             if gw and gw.enable_dhcp and gw.state != 1:
-                raise DbError("请确保gateway已启动！")
+                if gw.state == 0 or gw.state == 5:
+                    gw_flag = True
+                else:
+                    if gw.state == 12:
+                        pass
+                    if gw.state == 13:
+                        raise DbError("操作失败，请稍后再试！")
+                    else:
+                        raise DbError("请确保gateway可用！")
             flowvisor = slice_obj.get_flowvisor()
             if flowvisor == None:
                 raise DbError("虚网启动异常！")
             try:
-                slice_obj.starting()
-                start_slice_sync.delay(slice_obj.id)
+                if slice_obj.state == 0:
+                    slice_flag = True
+                if slice_obj.state == 4:
+                    raise DbError("操作失败，请稍后再试！")
+                if slice_flag:
+                    slice_obj.starting()
+                    if controller_flag:
+                        controller.host.state = 12
+                        controller.host.save()
+                    if gw_flag:
+                        gw.state = 12
+                        gw.save()
+                    start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag)
             except Exception, ex:
                 raise DbError("虚网启动失败！")
     except Exception, ex:
