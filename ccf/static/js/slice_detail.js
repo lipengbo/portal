@@ -339,8 +339,8 @@ function set_dhcp(slice_id, flag){
 }
 
 
-//添加虚拟机click事件
-function add_vm(slice_id){
+//添加设备
+function select_to_add_device(slice_id){
     var a_obj = $("#vm_add")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
@@ -348,10 +348,25 @@ function add_vm(slice_id){
         return;
     }else{
         //alert(1);
-        location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+        //location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+		$("#adddevicetModal").modal('show');
     }
+	//
 }
 
+function add_device(slice_id){
+	var device_type = document.getElementsByName("device");
+	 for(var i=0; i<device_type.length; i++){  
+            if(device_type[i].checked){  
+                if(device_type[i].value == "customdevice"){
+					location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";  
+                }  
+                if(device_type[i].value == "vmdevice"){
+					location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+                }  
+            }   
+        }
+}
 
  //编辑slice描述信息
  function edit_description(slice_id){

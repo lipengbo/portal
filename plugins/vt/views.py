@@ -123,6 +123,14 @@ def create_vm(request, sliceid, from_link):
         return render(request, 'vt/create_vm.html', context)
 
 
+def create_device(request, sliceid):
+    if request.method == 'POST':
+        pass
+    else:
+        context = {}
+        context['slice_obj'] = Slice.objects.get(id=sliceid)
+        return render(request, 'vt/custom_device.html', context)
+
 def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
     if action in operator:

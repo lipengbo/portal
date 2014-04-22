@@ -802,6 +802,8 @@ function restart() {
             else{
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
+        }else{
+            
         }
     })
     .on('mouseover', function(d) {

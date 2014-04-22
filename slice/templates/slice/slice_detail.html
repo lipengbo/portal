@@ -130,7 +130,7 @@
                 {%endif%}
                 
                 {%if extent_html == "site_base.html" and permission == "edit"%}
-                <a class="btn btn_info {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="add_vm({{slice_obj.id}});"
+                <a class="btn btn_info {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="select_to_add_device({{slice_obj.id}});"
                  {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
                 添加
                 </a>
@@ -287,6 +287,42 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn_info" data-dismiss="modal">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+	<div class="modal fade" id="adddevicetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+		<div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h4 class="modal-title">请选择添加设备的类型</h4>      
+        </div>
+          <div class="modal-body">
+			<table class="table_base">
+                <tbody>
+                    <tr>
+                        <td width="120">
+            				<label class="tab_radio1 control-label">
+            					<input type="radio" name="device" id="customdevice" value="customdevice"/>
+                				接入自有设备             
+            				</label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label class="tab_radio1 control-label">
+            					<input type="radio" name="device" id="vmdevice" value="vmdevice"/>
+                				添加虚拟机             
+           					 </label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+          </div>
+          <div class="modal-footer">
+			<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn_info" onclick="add_device('{{ slice_obj.id }}')">确定</button>
           </div>
         </div>
       </div>
