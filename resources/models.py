@@ -15,7 +15,10 @@ from project.models import Island
 from slice.models import Slice
 
 OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
-
+PORT_MONOPOLIZE = 0
+PORT_SHARE = 1
+PORT_TYPES = ((PORT_MONOPOLIZE, 'port_monopolize'),
+              (PORT_SHARE, 'port_share'),)
 
 class ResourceBase(ModelBase):
 
@@ -209,6 +212,8 @@ class SwitchPort(Resource):
 class SlicePort(models.Model):
     slice = models.ForeignKey(Slice)
     switch_port = models.ForeignKey(SwitchPort)
+    type = models.IntegerField(choices=PORT_TYPES,
+                               default=PORT_SHARE)
 
     class Meta:
         unique_together = (("slice", "switch_port"), )

@@ -11,7 +11,7 @@ function start_stop_vm(vm_id, vm_type){
         //alert(1);
         ret = start_or_stop_vm(vm_id, "create");
         if(ret){
-            img_obj.src = STATIC_URL + "img/btn_qd_gray.png";//"img/btn_tz.png";       
+            img_obj.src = STATIC_URL + "img/ic-ks-un.png";      
             img_obj.title = "启动中";//"停止";
             //$("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
 			$("#icon_state"+vm_id)
@@ -33,7 +33,7 @@ function start_stop_vm(vm_id, vm_type){
         //alert(2);
         ret = start_or_stop_vm(vm_id, "destroy");
         if(ret){
-            img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
+            img_obj.src = STATIC_URL + "img/ic-tz-un.png";       
             img_obj.title = "停止中";//"启动";
             //$("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
 			$("#icon_state"+vm_id).removeClass("icon-ok-sign").removeClass("icon_state")
@@ -195,7 +195,7 @@ function start_stop_slice(slice_id){
                 .addClass("icon-spinner")
                 .addClass("icon-spin");
             a_obj.style.cursor = "not-allowed";
-            img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
+            img_obj.src = STATIC_URL + "img/ic-ks-un.png";       
             img_obj.title = "启动中"; 
             //控制器编辑、slice编辑按钮变化
             $(".bianji").attr("style","cursor:not-allowed");
@@ -204,6 +204,33 @@ function start_stop_slice(slice_id){
             $(".dhcp_div").addClass("disabled");
             $(".dhcp").attr("style","cursor:not-allowed");
             $("#vm_add").addClass("disabled").attr("style","cursor:not-allowed");
+            //controller、gw状态和操作
+            if ($(".default_create").length > 0){
+                vm_id = $(".default_create")[0].getAttribute("vm_id");
+                if($("#icon_state"+vm_id).hasClass("icon-minus-sign")){
+                    img_obj = $("#"+vm_id+"_qt").children("img")[0];
+                    img_obj.src = STATIC_URL + "img/ic-ks-un.png";     
+                    img_obj.title = "启动中";
+                    $("#icon_state"+vm_id)
+                        .removeClass("icon-minus-sign")
+                        .removeClass("icon_state")
+                        .addClass("icon-spinner")
+                        .addClass("icon-spin");
+                }
+            }
+            if ($(".gw").length > 0){
+                vm_id = $(".gw")[0].getAttribute("vm_id");
+                if($("#icon_state"+vm_id).hasClass("icon-minus-sign")){
+                    img_obj = $("#"+vm_id+"_qt").children("img")[0];
+                    img_obj.src = STATIC_URL + "img/ic-ks-un.png";      
+                    img_obj.title = "启动中";
+                    $("#icon_state"+vm_id)
+                        .removeClass("icon-minus-sign")
+                        .removeClass("icon_state")
+                        .addClass("icon-spinner")
+                        .addClass("icon-spin");
+                }
+            }
             update_slice_status(); 
         }else{
             //alert("in2");
@@ -220,7 +247,7 @@ function start_stop_slice(slice_id){
                 .addClass("icon-spinner")
                 .addClass("icon-spin");
             a_obj.style.cursor = "not-allowed";
-            img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
+            img_obj.src = STATIC_URL + "img/ic-tz-un.png";       
             img_obj.title = "停止中";
             update_slice_status();
         }else{

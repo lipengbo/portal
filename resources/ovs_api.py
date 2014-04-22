@@ -10,22 +10,48 @@ LOG = logging.getLogger("CENI")
 OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
 
 
-def slice_add_ovs_ports(slice_obj, ovs_ports):
-    """slice添加交换端口
+def slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod):
+    """slice添加交换端口，包括选择交换机模式和选择交换机端口模式。
     """
     LOG.debug('slice_add_ovs_ports')
     try:
         Slice.objects.get(id=slice_obj.id)
-        for ovs_port in ovs_ports:
-            slice_obj.add_resource(ovs_port)
-            if ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
-                try:
-                    ovs_port.switch.virtualswitch
-                except VirtualSwitch.DoesNotExist:
-                    pass
-                else:
-                    flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
+        if int(tp_mod) == 2:
+            switches = ovs_or_ports
+            ports = []
+            for switch in switches:
+                slice_obj.add_resource(switch)
+                s_ports = switch.switchport_set.all()
+                ports.extend(s_ports)
+            links = Link.objects.filter(source__in=ports, target__in=ports)
+            add_ports = []
+            for link in links:
+                if link.source not in add_ports:
+                    add_ports.append(link.source)
+                if link.target not in add_ports:
+                    add_ports.append(link.target)
+            for add_port in add_ports:
+                slice_obj.add_resource(add_port)
+                if add_port.switch.type() == OVS_TYPE['EXTERNAL']:
+                    try:
+                        add_port.switch.virtualswitch
+                    except VirtualSwitch.DoesNotExist:
+                        pass
+                    else:
+                        flowspace_gw_add(slice_obj, add_port.switch.virtualswitch.server.mac)
+        else:
+            ports = ovs_or_ports
+            for port in ports:
+                slice_obj.add_resource(port)
+                if port.switch.type() == OVS_TYPE['EXTERNAL']:
+                    try:
+                        port.switch.virtualswitch
+                    except VirtualSwitch.DoesNotExist:
+                        pass
+                    else:
+                        flowspace_gw_add(slice_obj, port.switch.virtualswitch.server.mac)
     except Exception, ex:
+#         print ex
         raise DbError("资源分配失败！")
 
 
@@ -96,84 +122,128 @@ def get_ovs_class(ovs):
     return ovs.__class__.__name__
 
 
-def get_select_topology(switch_port_ids):
-    """获取选择的交换机端口拓扑信息
+def get_ports_by_switchs(switch_ids):
+    """根据选择的交换机获取链路端口
+    """
+    print 'get_ports_by_switchs'
+    print switch_ids
+#     交换机
+    try:
+        add_ports = []
+        if switch_ids:
+            switch_objs = []
+            sw_ids = switch_ids.split(',')
+            for sw_id in sw_ids:
+                try:
+                    switch = Switch.objects.get(id=int(sw_id))
+                except:
+                    pass
+                else:
+                    switch_objs.append(switch)
+            print switch_objs
+            ports = []
+            for switch_obj in switch_objs:
+                s_ports = switch_obj.switchport_set.all()
+                ports.extend(s_ports)
+            links = Link.objects.filter(source__in=ports, target__in=ports)
+            print links
+            for link in links:
+                if link.source not in add_ports:
+                    add_ports.append(link.source)
+                if link.target not in add_ports:
+                    add_ports.append(link.target)
+        print add_ports
+        return add_ports
+    except Exception, ex:
+        print ex
+        return []
+
+
+def get_select_topology(tp_mod, switch_ids, switch_port_ids):
+    """获取选择的交换机或交换机端口的拓扑信息
     """
     print 'get_select_topology'
 #     交换机
     try:
         switches = []
         links = []
-        if switch_port_ids:
-            switch_ids = []
-            switch_objs = []
-            dpids = []
-            switch_ports = []
-            switches_ports = {}
-            sp_ids = switch_port_ids.split(',')
-            for sp_id in sp_ids:
-                try:
-                    switch_port = SwitchPort.objects.get(id=int(sp_id))
-                except:
-                    pass
-                else:
-                    switch_ports.append(switch_port)
-                    if switch_port.switch.id not in switch_ids:
-                        switch_ids.append(switch_port.switch.id)
-                        switch_objs.append(switch_port.switch)
-                        dpids.append(switch_port.switch.dpid)
-                        switches_ports[switch_port.switch.id] = []
-                    switches_ports[switch_port.switch.id].append({'name': switch_port.name,
-                                                                  'port': switch_port.port})
-            for switch_obj in switch_objs:
-                switch = {'dpid': switch_obj.dpid,
-                          'name': switch_obj.name,
-                          'type': switch_obj.type(),
-                          'id': switch_obj.id,
-                          'ports': switches_ports[switch_obj.id]}
-                switches.append(switch)
+        switch_objs = []
+        switch_ports = []
+        if int(tp_mod) == 2:
+            if switch_ids:
+                switches_ports = {}
+                ports = []
+                sw_ids = switch_ids.split(',')
+                for sw_id in sw_ids:
+                    try:
+                        switch = Switch.objects.get(id=int(sw_id))
+                    except:
+                        pass
+                    else:
+                        switch_objs.append(switch)
+                        s_ports = switch.switchport_set.all()
+                        ports.extend(s_ports)
+                add_links = Link.objects.filter(source__in=ports, target__in=ports)
+                for link in add_links:
+                    if link.source not in switch_ports:
+                        switch_ports.append(link.source)
+                        if link.source.switch.id not in switches_ports:
+                            switches_ports[link.source.switch.id] = []
+                        switches_ports[link.source.switch.id].append({'name': link.source.name,
+                                                                      'port': link.source.port})
+                    if link.target not in switch_ports:
+                        switch_ports.append(link.target)
+                        if link.target.switch.id not in switches_ports:
+                            switches_ports[link.target.switch.id] = []
+                        switches_ports[link.target.switch.id].append({'name': link.target.name,
+                                                                      'port': link.target.port})
+        else:
+            if switch_port_ids:
+                switches_ports = {}
+                sp_ids = switch_port_ids.split(',')
+                for sp_id in sp_ids:
+                    try:
+                        switch_port = SwitchPort.objects.get(id=int(sp_id))
+                    except:
+                        pass
+                    else:
+                        switch_ports.append(switch_port)
+                        if switch_port.switch not in switch_objs:
+                            switch_objs.append(switch_port.switch)
+                            switches_ports[switch_port.switch.id] = []
+                        switches_ports[switch_port.switch.id].append({'name': switch_port.name,
+                                                                      'port': switch_port.port})
+#     交换机
+        for switch_obj in switch_objs:
+            if switch_obj.id not in switches_ports:
+                switches_ports[switch_obj.id] = []
+            switch = {'dpid': switch_obj.dpid,
+                      'name': switch_obj.name,
+                      'type': switch_obj.type(),
+                      'id': switch_obj.id,
+                      'ports': switches_ports[switch_obj.id]}
+            switches.append(switch)
 #     链接
-            switch_ids = []
-            link_objs = Link.objects.filter(
-                source__in=switch_ports, target__in=switch_ports)
-            for link_obj in link_objs:
-                if (link_obj.source.switch.dpid in dpids) and (link_obj.target.switch.dpid in dpids):
-                    link = {'src_switch': link_obj.source.switch.dpid,
-                            'src_port_name': link_obj.source.name,
-                            'src_port': link_obj.source.port,
-                            'dst_switch': link_obj.target.switch.dpid,
-                            'dst_port': link_obj.target.port,
-                            'dst_port_name': link_obj.target.name}
-                    links.append(link)
-#                     if link_obj.source.switch.id in switch_ids:
-#                         if link_obj.source.port not in ports[link_obj.source.switch.id]:
-#                             ports[link_obj.source.switch.id].append(link_obj.source.port)
-#                     else:
-#                         switch_ids.append(link_obj.source.switch.id)
-#                         ports[link_obj.source.switch.id] = [link_obj.source.port]
-#                     if link_obj.target.switch.id in switch_ids:
-#                         if link_obj.target.port not in ports[link_obj.target.switch.id]:
-#                             ports[link_obj.target.switch.id].append(link_obj.target.port)
-#                     else:
-#                         switch_ids.append(link_obj.target.switch.id)
-#                         ports[link_obj.target.switch.id] = [link_obj.target.port]
-#             for switch_id in switch_ids:
-#                 try:
-#                     switch = Switch.objects.get(id=switch_id)
-#                 except:
-#                     pass
-#                 else:
-#                     for port in ports[switch_id]:
-#                         bandwidth.append({'id': (str(switch_id) + '_' + str(port)),
-#                                     'cur_bd': 0, 'total_bd': 0})
-
+        link_objs = Link.objects.filter(
+            source__in=switch_ports, target__in=switch_ports)
+        for link_obj in link_objs:
+            link = {'src_switch': link_obj.source.switch.dpid,
+                    'src_port_name': link_obj.source.name,
+                    'src_port': link_obj.source.port,
+                    'dst_switch': link_obj.target.switch.dpid,
+                    'dst_port': link_obj.target.port,
+                    'dst_port_name': link_obj.target.name}
+            links.append(link)
         topology = {'switches': switches, 'links': links,
                     'normals': [], 'specials': [],
                     'bandwidth': [], 'maclist': []}
     except Exception, ex:
         print 1
-        print ex
+        import traceback
+        traceback.print_stack()
+        traceback.print_exc()
         return []
     else:
         print 2
+        print topology
         return topology

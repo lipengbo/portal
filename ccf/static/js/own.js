@@ -78,20 +78,19 @@ $(document).ready(function() {
     // show topology
     $('.btn-step1').click(function () {
         var island_id = $('select[name="island_id"]').val();
-        $('#topology-iframe').attr('src', '/topology/?size=big&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        var tp_mod = $('select[name="tp_mod"]').val();
+        if(tp_mod == 2){
+            $('.switch-table').attr('style', 'display:none');
+        }else{
+            $('.switch-table').attr('style', '');
+        }
+        $('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
         selected_ports = {};
+        selected_dpids = {};
         $('.switch-table tbody tr').hide();
         $('.switch-table tbody tr label').hide();
     });
 
-    $('.btn-step4').click(function () {
-        $('.switch-manifest tbody').html('');
-        $.each($('.switch-table tbody tr'), function (index, tr) {
-            var clone = $(tr).clone();
-            $('.switch-manifest tbody').append(clone);
-        });
-        $('.switch-manifest tbody input').attr('disabled', '');
-    });
     //slice步骤切换
     $(".next_btn").click(function(){
         $('.no-virtual-switch').hide();
@@ -124,21 +123,23 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 2){
-           ret = page_function2();
-           if (!ret){
+           ret1 = page_function2();
+           ret2 = page_function3();
+           if (!ret1 || !ret2){
            		return;
            }
        }
-       if(thisIndex == 3){
+       /*if(thisIndex == 3){
            ret = page_function3();
            if (!ret){
            		return;
            }
-       }
-       if(thisIndex == 4){
+       }*/
+       if(thisIndex == 3){
            ret = page_function4();
            if (!ret){
-           		nowIndex = 0;
+                return;
+           		//nowIndex = 0;
            }
     	   else{
 				return;
@@ -294,9 +295,17 @@ function page_function1(){
 	}
 }
 function page_function2(){
+    //虚网拓扑
     fetch_serverinfo("id_server");
-	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&switch_port_ids=" + get_select_ports())
+    var tp_mod = $('select[name="tp_mod"]').val();
+    if(tp_mod == 2){
+	   $('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&tp_mod=2&switch_ids=" + get_select_switches())
+	}else{
+	   $('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&tp_mod=1&switch_port_ids=" + get_select_ports())
+	}
+	//控制器和网关
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
+	//虚拟机dhcp
 	if($('.switch_btn.dhcp').hasClass("checked")){
 		var obj = $('.switch_btn.dhcp.vm');
 		obj.addClass("checked");
@@ -307,8 +316,8 @@ function page_function2(){
 		}
 		$("#dhcp_vm").hide();
 	}
+	
 	if (ret1){
-		//
 		return true;
 	}
 	else{
@@ -316,12 +325,14 @@ function page_function2(){
 	}
 }
 function page_function3(){
+    //交换机及端口
+    switch_manifest()
 	//判断是否选择虚拟机信息
-	if(vms_info().count() == 0){
+	/*if(vms_info().count() == 0){
 		document.getElementById('alert_info').innerHTML = '请先添加虚拟机配置信息！';
 		$('#alert_modal').modal('show');
 		return;
-	}
+	}*/
 	//网段
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
@@ -406,9 +417,55 @@ function page_function3(){
     }  
 
     $("div#list_gw").append(str); 
+    return true;
         //虚拟机
-        return fetch_vminfo();
+        //return fetch_vminfo();
 }
+
+
+function switch_manifest() {
+    var tp_mod = $('select[name="tp_mod"]').val();
+    if(tp_mod == 2){
+        $('.switch-manifest').html('');
+        str = "";
+
+        str = str + "<thead>"
+            + "<tr>"
+            + "<th>名称</th>"
+            + "<th>DPID</th>"
+            + "<th>节点类型</th>"
+            + "</tr>"
+            + "</thead>"
+            + "<tbody>";
+        for(dpid in window.selected_dpids) {
+            switch_ids_obj = document.getElementsByName("switch"+dpid);
+            switchtype = switch_ids_obj[0].getAttribute("switchtype") 
+            if(switchtype == 1){
+                type_name = "交换节点";
+            }else if(switchtype == 2){
+                type_name = "网络出口节点";
+            }else if(switchtype == 3){
+                type_name = "虚拟机关联节点";
+            }
+            str = str + "<tr>"
+            + "<td>"+switch_ids_obj[0].getAttribute("switchname")+"</td>"
+            + "<td>"+dpid+"</td>"
+            + "<td>"+type_name+"</td>"
+            + "</tr>";    
+        }
+        str = str + "</tbody>"
+        $('.switch-manifest').html(str);
+    }else{
+        $('.switch-manifest tbody').html('');
+        $.each($('.switch-table tbody tr'), function (index, tr) {
+            var clone = $(tr).clone();
+            $('.switch-manifest tbody').append(clone);
+        });
+        $('.switch-manifest tbody input').attr('disabled', '');
+    }
+}
+
+
 function page_function4(){
 	var project_id = $("#project_id").text();
 	//alert(project_id);
@@ -444,20 +501,26 @@ function submit_slice_info(project_id){
     var cip1_obj = document.getElementById("cip1");
     var cip2_obj = document.getElementById("cip2");
     var cip3_obj = document.getElementById("cip3");
-    var controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+    var controller_ip = ''+parseInt(cip0_obj.value)+'.'+parseInt(cip1_obj.value)+'.'+parseInt(cip2_obj.value)+'.'+parseInt(cip3_obj.value);
     var controller_port_obj = document.getElementById("controller_port");
-    for(var i=0;i<switch_port_ids_obj.length;i++){
-		if(!switch_port_ids_obj[i].disabled){
-			//alert(switch_port_ids_obj[i].value);
-			if(j==0){
-				switch_port_ids = switch_port_ids_obj[i].value;
-			}
-			else{
-				switch_port_ids = switch_port_ids + "," + switch_port_ids_obj[i].value;
-			}
-			j++;
-		}
-    }      
+    var switch_ids = "";
+    var tp_mod = $('select[name="tp_mod"]').val();
+    if(tp_mod == 2){
+        switch_ids = get_select_switches();
+    }else{
+        for(var i=0;i<switch_port_ids_obj.length;i++){
+    		if(!switch_port_ids_obj[i].disabled){
+    			//alert(switch_port_ids_obj[i].value);
+    			if(j==0){
+    				switch_port_ids = switch_port_ids_obj[i].value;
+    			}
+    			else{
+    				switch_port_ids = switch_port_ids + "," + switch_port_ids_obj[i].value;
+    			}
+    			j++;
+    		}
+        }  
+    }    
 	for(var i=0;i<controller_type_objs.length;i++){  
 		if(controller_type_objs[i].checked){  
 			if(controller_type_objs[i].value=="default_create"){  
@@ -489,7 +552,9 @@ function submit_slice_info(project_id){
 						"controller_sys": controller_sys_obj.value,
 						"controller_ip": controller_ip,
 						"controller_port": controller_port.value,
+						"tp_mod": tp_mod,
 						"switch_port_ids": switch_port_ids,
+						"switch_ids": switch_ids,
 						"slice_nw": old_slice_nw_obj.value,
 						"gw_host_id": id_server_gw_obj_value,
 						"gw_ip": gateway_ip_obj_value,
@@ -507,22 +572,21 @@ function submit_slice_info(project_id){
 			async: false, 
 			success: function(data) {
 	        	if (data.result == 1){
+	        	    location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
 	        		//alert(data.slice_id);
-					submit_vms(data.slice_id);
+					/*submit_vms(data.slice_id);
 					if(!post_vm_result){
-						$("div#slice_alert_info").empty();
-                			str = "" + "<p class=\"text-center\">部分虚拟机由于资源不足，无法创建成功！</p>";
-                			$("div#slice_alert_info").append(str);
-                			$('#slicealertModal').modal('show');
-					
-							$('#alert_closed').on("click", function(){
-								location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
-							});
-					}else{
+					    $("div#slice_alert_info").empty();
+                        str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                        $("div#slice_alert_info").append(str);
+                        $('#slicealertModal').modal('show');
+                        $('#alert_closed').on("click", function(){
+                          location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+                        });
+				    }else{
 						location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
-					}
-	        		
-	        		
+				    }*/
+
 	            }
 	            else{
 	            	$("div#slice_alert_info").empty();
@@ -537,6 +601,7 @@ function submit_slice_info(project_id){
                 str = "" + "<p class=\"text-center\">" + "创建虚网异常！" + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
+                ajax_ret = false;
 	        }
 	});
 	if(ajax_ret){

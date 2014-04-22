@@ -338,7 +338,8 @@ function fetch_serverinfo(id){
     }
     var objs = $("[id='"+id+"']");
     for (var i=0; i<objs.length; i++){
-        objs[i].innerHTML = obj.innerHTML + content;
+        //objs[i].innerHTML = obj.innerHTML + content;
+        objs[i].innerHTML = "" + content;
     }
 }
 
@@ -364,24 +365,40 @@ function check_ovs_gw(){
 }
 
 function get_select_server_name(){
-    var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
-    var results = new Array();
+    var tp_mod = $('select[name="tp_mod"]').val();
     var j =0
-	ovs_check_flag = false;
-    for(var i=0;i<switch_port_ids_obj.length;i++){
-        obj = switch_port_ids_obj[i];
-        if(!obj.disabled){
-			if(obj.getAttribute("switchtype") == 3){
-				ovs_check_flag = true;
-			}
-            servername = obj.getAttribute("servername");
-            if( servername && not_contains(results, servername))
-            {
-                results[j] = servername;
-                j++;
+    var results = new Array();
+    ovs_check_flag = false;
+    if(tp_mod == 2){
+        for(dpid in window.selected_dpids) {
+            if (dpid.indexOf('00:ff:') == 0) {
+                ovs_check_flag = true;
+                switch_ids_obj = document.getElementsByName("switch"+dpid);
+                servername = switch_ids_obj[0].getAttribute("servername");
+                if( servername && not_contains(results, servername))
+                {
+                    results[j] = servername;
+                    j++;
+                }
             }
         }
-    }      
+    }else{
+        var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
+        for(var i=0;i<switch_port_ids_obj.length;i++){
+            obj = switch_port_ids_obj[i];
+            if(!obj.disabled){
+    			if(obj.getAttribute("switchtype") == 3){
+    				ovs_check_flag = true;
+    			}
+                servername = obj.getAttribute("servername");
+                if( servername && not_contains(results, servername))
+                {
+                    results[j] = servername;
+                    j++;
+                }
+            }
+        }
+    }   
     return results
 }
 function get_select_ports(){
@@ -398,23 +415,49 @@ function get_select_ports(){
 	port_ids = port_ids.substr(0,port_ids.length-1);
     return port_ids;
 }
-
+function get_select_switches(){
+    var switch_ids = ""
+    for(dpid in window.selected_dpids) {
+        switch_ids_obj = document.getElementsByName("switch"+dpid);
+        switchid = switch_ids_obj[0].getAttribute("value");
+        if( switchid ){
+            switch_ids = switch_ids + switchid + ",";
+        }
+    }
+    switch_ids = switch_ids.substr(0,switch_ids.length-1);
+    return switch_ids;
+}
 function get_select_server_id(){
-    var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
-    var results = new Array();
+    var tp_mod = $('select[name="tp_mod"]').val();
     var j =0
-    for(var i=0;i<switch_port_ids_obj.length;i++){
-        obj = switch_port_ids_obj[i];
-        if(!obj.disabled){
-            serverid = obj.getAttribute("serverid");
-            if( serverid && not_contains(results, serverid))
-            {
-                results[j] = serverid;
-                j++;
+    var results = new Array();
+    if(tp_mod == 2){
+        for(dpid in window.selected_dpids) {
+            if (dpid.indexOf('00:ff:') == 0) {
+                switch_ids_obj = document.getElementsByName("switch"+dpid);
+                serverid = switch_ids_obj[0].getAttribute("serverid");
+                if( serverid && not_contains(results, serverid))
+                {
+                    results[j] = serverid;
+                    j++;
+                }
             }
         }
-    }      
-    return results
+    }else{
+        var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
+        for(var i=0;i<switch_port_ids_obj.length;i++){
+            obj = switch_port_ids_obj[i];
+            if(!obj.disabled){
+                serverid = obj.getAttribute("serverid");
+                if( serverid && not_contains(results, serverid))
+                {
+                    results[j] = serverid;
+                    j++;
+                }
+            }
+        }      
+    } 
+    return results; 
 }
 
 function not_contains(a, obj) {
