@@ -725,7 +725,7 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
     margin-bottom:15px;
 }
 .tuopu .tuopu_sign_l {
-    left:20px;
+    left:0px;
     top:0;
 }
 .none_tip {
@@ -831,7 +831,7 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
     color:#666;
     position: absolute;
     top: 0;
-    right: 20px;
+    right: 0px;
 }
 .switch_btn {
     display:inline-block;
@@ -937,7 +937,8 @@ fieldset {
         margin-bottom:40px;
         h4 {
             font-weight:bold;
-            padding-bottom:5px;           
+            padding-bottom:5px;   
+            padding-top:20px;        
             i{
                 color:#2489c5;
                 font-size:20px;
@@ -1490,7 +1491,7 @@ span[name="serverInfo"] {
 }
 .dhcp_div {
     .switch_btn {
-        margin-right:40px;
+       
     }
 }
 .table_base tbody tr td.title_padding {
@@ -1498,4 +1499,45 @@ span[name="serverInfo"] {
 }
 .table_base tbody tr td.td_tooltip_padding {
     padding-left:0;
+}
+.device_access {
+    margin-bottom:20px;
+    .col-md-9 {
+        background:#f1f1f1;
+        .topology {
+            background:#f1f1f1;
+        }
+    }
+    .col-md-3 {
+        padding-right:0px;
+    }
+    .device_access_form {
+        background:#9b999a;
+        border-radius:5px;
+        height:404px;
+        padding:15px;
+        color:#fff;
+        p {
+            margin-bottom:20px;
+        }
+        .form-group {
+            display:block;
+            margin-bottom:20px;
+            label {
+                margin-right:15px;
+            }
+        }
+        .device_access_btn {      
+            label {
+                margin-right:15px;
+            }     
+            .tuopu_btn {
+                display:inline-block;              
+            }          
+        }      
+        .device_access_savebtn {
+            margin-top:50px;
+            text-align:center;
+        }
+    }
 }
