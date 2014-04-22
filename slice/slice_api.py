@@ -241,12 +241,12 @@ def start_slice_api(slice_obj):
                         raise DbError("请确保gateway可用！")
             flowvisor = slice_obj.get_flowvisor()
             if flowvisor == None:
-                raise DbError("虚网启动异常！")
+                raise DbError("虚网启动失败！")
+            if slice_obj.state == 0:
+                slice_flag = True
+            if slice_obj.state == 4:
+                raise DbError("操作失败，请稍后再试！")
             try:
-                if slice_obj.state == 0:
-                    slice_flag = True
-                if slice_obj.state == 4:
-                    raise DbError("操作失败，请稍后再试！")
                 if slice_flag:
                     slice_obj.starting()
                     if controller_flag:
@@ -257,6 +257,8 @@ def start_slice_api(slice_obj):
                         gw.save()
                     start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag)
             except Exception, ex:
+                import traceback
+                traceback.print_exc()
                 raise DbError("虚网启动失败！")
     except Exception, ex:
         transaction.rollback()

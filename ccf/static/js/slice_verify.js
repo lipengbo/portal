@@ -139,8 +139,8 @@ function check_port(port,flag){
 	}
 	var reg = /^[0-9]*$/;
 	if(port.length > 0){
-		if(port >= 65535 || port < 0 || !reg.test(port)){
-			showInfo(info," * (0-65535)","red");
+		if(!reg.test(port) || port > 65535 || port < 1){
+			showInfo(info," * (1~65535)","red");
 			return false;
 		}
 		else{

@@ -568,13 +568,22 @@ def get_slice_state(request, slice_id):
           slice状态获取成功：value = 0
     """
     try:
+        c_state = -1
+        g_state = -1
         slice_obj = Slice.objects.get(id=int(slice_id))
+        controller = slice_obj.get_controller()
+        if controller and controller.host:
+            c_state = controller.host.state
+        gw = slice_obj.get_gw()
+        if gw:
+            g_state = gw.state
     except:
         print 1
         return HttpResponse(json.dumps({'value': 1}))
     else:
         print 2
-        return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state}))
+        return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
+                                        'c_state': c_state, 'g_state': g_state}))
 
 
 def test_cnvp():
