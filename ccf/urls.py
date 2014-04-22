@@ -50,6 +50,8 @@ urlpatterns = patterns("",
     url(r"^signup_confirmation_complete/$", TemplateView.as_view(template_name="account/signup_confirmation_complete.html"), name="signup_confirmation_complete"),
     url(r"^password_reset_success/$", TemplateView.as_view(template_name="account/password_reset_success.html"), name="password_reset_success"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
+    #url(r'^feedback/', include('feedback.urls')),
+
 
 
     url(r"^accounts/signup/$", SignupView.as_view(form_class=SignupForm), name="account_signup"),

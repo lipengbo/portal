@@ -160,6 +160,7 @@ INSTALLED_APPS = [
     "notifications",
     "south",
     "quotas",
+    #"feedback",
 
     #xmlrpc
     'django_xmlrpc',
