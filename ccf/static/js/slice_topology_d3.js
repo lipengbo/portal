@@ -74,6 +74,17 @@ function initboard2(){
           .attr('x2', 135)
           .attr('y2', 45)
           .attr('style', "stroke:red;stroke-width:2")
+   //    svg.append('svg:rect')
+   //       .attr('x', 200)
+   //       .attr('y', 45)
+   //       .attr('rx', 15)
+   //       .attr('ry', 15)
+   //       .attr('width', 100)
+   //       .attr('height', 30)
+   //       .attr('style', "fill:red;stroke:black;")
+   //       .on('click', function(d) {
+   //   
+   //       })
     }
 }
 //initboard()
@@ -168,6 +179,7 @@ var vm_state = {
 }
 var server = '/';
 var static_url = $("#STATIC_URL").text();
+var band = $("#band").text();
 var create_node = function(d, point, trigger) {
       // insert new node at point
       var node = {id: ++lastNodeId, reflexive: false};
@@ -240,9 +252,9 @@ function get_node(key){
     return -1;
 }
 
-function get_node_by_yid(yid){
+function get_node_by_yid(yid, type){
     for(var i=0; i< nodes_data.length; i++){
-        if(nodes_data[i].yid == yid){
+        if(nodes_data[i].yid == yid && nodes_data[i].type == type){
             return i;
         }
     }
@@ -477,23 +489,6 @@ function inittpdata2(){
                         src_bandwidth = 0;
                         dst_capacity = 0;
                         dst_bandwidth = 0;
-                        //src_id = '' + nodes_data[src_node_id].yid + '_' + srcLinks[i].src_port;
-                        //dst_id = '' + nodes_data[dst_node_id].yid + '_' + srcLinks[i].dst_port;
-                        //for(var k=0; k< bandwidth.length; k++){
-                        //    count = 0;
-                        //    if(src_id == bandwidth[k].id){
-                        //        src_capacity = bandwidth[k].total_bd;
-                        //        src_bandwidth = bandwidth[k].cur_bd;
-                        //        count++;
-                        //     }else if(dst_id == bandwidth[k].id){
-                        //        dst_capacity = bandwidth[k].total_bd;
-                        //        dst_bandwidth = bandwidth[k].cur_bd;
-                         //       count++;
-                         //   }
-                         //   if(count == 2){
-                         //       break;
-                        //    }
-                       // }
                         link = {source: nodes_data[src_node_id], target: nodes_data[dst_node_id], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
                             dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
@@ -699,7 +694,7 @@ function highlight( data, element ) {
         dst_capacity_show = bd_show(data.dst_capacity);
         content += "<h6>" + data.source.name + ":" + data.src_port_name;
         content += ' <-----> ' + data.target.name + ":" + data.dst_port_name + "</h6>";
-        if(slice_id != 0){
+        if(slice_id != 0 && band == 1 && slice_show_band == 1){
            // content += "<h6>带宽使用：" + data.bandwidth + data.capacity.slice(data.capacity.length - 1) + "/" + data.capacity + "</h6>";
             
             content += "<table class='table'>";
@@ -920,6 +915,7 @@ function mouseup() {
 restart();
 
 var refresh_time = 10000;
+var slice_show_band = 0;
 
 function random_refresh () {
     setTimeout(function  () {
@@ -950,12 +946,26 @@ function random_refresh () {
 }
 
 var submit_data = {"info": bd_data, "maclist": maclist};
-function random_refresh2 () {
+var topology_update_band_id;
+function random_refresh2 (update) {
+    if(band==0){
+        //alert("do not update bandwidth");
+        return;
+    }else{
+        if(topology_update_band_id){
+            clearTimeout(topology_update_band_id);
+        }
+        if(update == 0){
+            slice_show_band = 0;
+            return;
+        }
+    }
     if(bd_data == '' || maclist == ''){
         //alert("h");
         return;
     }
-    setTimeout(function  () {
+    slice_show_band = 1;
+    topology_update_band_id = setTimeout(function  () {
         //alert('in');
         check_url = "http://" + window.location.host + "/slice/update_links_bandwidths/"+slice_id+"/";
         var ajax_ret = true;
@@ -1012,17 +1022,18 @@ function random_refresh2 () {
                     random_refresh2();
                 },
                 error: function(data) {
+                    alert("here");
                     refresh_time = Math.floor(Math.random() * 10000 + 10000 );
                     random_refresh2();
                 }
         });
     }, refresh_time);
 }  
-random_refresh2();
+random_refresh2(0);
 
-function topology_update_vm_state(vm_id, state){
-    //alert('here2');
-    var nid = get_node_by_yid(vm_id);
+
+function topology_update_vm_state_o(vm_id, state){
+    var nid = get_node_by_yid(vm_id, 'host');
     if(nid>=0){
         nodes_data[nid].type_id = state;
         if(state == 1){
@@ -1033,10 +1044,21 @@ function topology_update_vm_state(vm_id, state){
     }
     var host = circle.selectAll('.host-node-icon');
     host.attr("xlink:href", function(d){ return static_url + d.icon});
+ }
+
+function topology_update_vm_state(vm_id, state, switch_id, port, port_name){
+    //alert('here2');
+    topology_update_vm_state_o(vm_id, state);
+    var nid = get_node_by_yid(switch_id, 'switch');
+    if(nid>=0){
+        port_info={name: port_name, port: port};
+        nodes_data[nid].ports.push(port_info);
+    }
 }
 
+
 function topology_del_vm(vm_id){
-    var nid = get_node_by_yid(vm_id);
+    var nid = get_node_by_yid(vm_id, 'host');
     if(nid>=0){
         nodes_data.splice(nid,1); 
         for(var i=0; i< links.length; i++){

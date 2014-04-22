@@ -6,11 +6,17 @@
 
 {% block head_title %}{% trans "help" %}{% endblock %}
 {% block extra_style %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/own-flatui.css" %}" />       
+   <link rel="stylesheet" type="text/css" href="{% static "css/own-flatui.css" %}" />       
 {% endblock %}
 {% block body_class %}login_bg{% endblock %}
 {% block topbar_base %}{% endblock %}
 {% block breadcrumb_base %}{% endblock %}
+
+{% block messages %}
+<div class="hide">
+    {% include "_messages.html" %}
+</div>
+{% endblock %}
 
 {% block body %}
 {% block blank_block %}{% endblock %}
@@ -25,17 +31,17 @@
     	<form class="login-form" method='post'>
             {% if form.non_field_errors %}
                 {% for error in form.non_field_errors %}
-                <div class="alert alert-error">
+                <div class="alert alert-danger">
                     {{ error }}
                 </div>
                 {% endfor %}
             {% endif %}
             {% csrf_token %}
-    		<div class="row-fluid">
-    			<div class="span4">   	
-                    <div class="control-group {% if form.username.errors %}error{% endif %}">		
-                      <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="login-field" value="" placeholder="请输入用户名" id="login-name">   
-    				<label class="login-field-icon fui-user" for="login-name"></label>
+    		<div class="row">
+    			<div class="col-md-4">   	
+                    <div class="form-group {% if form.username.errors %}error{% endif %}">		
+                      <input type="text" name="username" value="{{ form.username.value|default:"" }}" class="form-control" value="" placeholder="请输入用户名" id="login-name">   
+    				
                     {% if form.username.errors %}
                             {% for error in form.username.errors %}
                                 <span class="help-inline">{{ error }}</span>
@@ -43,10 +49,10 @@
                     {% endif %}
     			  </div>				  
     			</div>
-    			<div class="span4">
-                    <div class="control-group {% if form.password.errors %}error{% endif %}">	
-                        <input type="password" class="login-field" name="password" value="" placeholder="请输入密码" id="login-pass">
-                        <label class="login-field-icon fui-lock" for="login-name"></label>
+    			<div class="col-md-4">
+                    <div class="form-group {% if form.password.errors %}error{% endif %}">	
+                        <input type="password" class="form-control" name="password" value="" placeholder="请输入密码" id="login-pass">
+                       
                         {% if form.password.errors %}
                                 {% for error in form.password.errors %}
                                     <span class="help-inline">{{ error }}</span>
@@ -54,80 +60,72 @@
                         {% endif %}
     			    </div>
     			</div>    			
-    			<div class="span2">
-    				<button class="btn btn-large btn-block btn-warning" type="submit" style="*height:45px;">登 录</button>
+    			<div class="col-md-2">
+    				<button class="btn btn-lg btn-block btn-warning" type="submit" style="*height:45px;">登 录</button>
     			</div>
-    			<div class="span2">
-    				<a data-toggle="modal" href="#registerModal" class="btn btn-large btn-info btn-block" id="register" style="*width:106px;">注册</a>
+    			<div class="col-md-2">
+    				<a data-toggle="modal" href="#registerModal" class="btn btn-lg btn_info btn-block" id="register" style="*width:106px;">注册</a>
     			</div>
     		</div>
     		<div class="row">
-    		    <div class="span4 offset4 text-right"><a href="{% url "account_password_reset" %}" class="forgetpwd">忘记密码？</a></div>
+    		    <div class="col-md-4 col-md-offset-4 text-right"><a href="{% url "account_password_reset" %}" class="forgetpwd">忘记密码？</a></div>
     		</div>
     	</form>
 	</div>
-        <div id="registerModal" class="modal hide fade modal_reg_defined">
-            <div class="modal-header">
-              <a class="close" data-dismiss="modal">×</a>
-              <h3>注册</h3>
-              <div class="reg_bg_part"></div>
+        <div id="registerModal" class="modal fade modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">\
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                      <h4 class="modal-title">注册</h4>
+                    </div>
+                    <form class="form-horizontal edit_form signup-form" role="form">
+                        <div class="modal-body">                       
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="inputUsername">用户名</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" name="username" id="inputUsername" placeholde="字母，数字，下划线皆可">
+                            </div>                           
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="inputPassword">密码</label>
+                            <div class="col-sm-10">
+                              <input type="password" name="password"  class="form-control" id="inputPassword" placeholde="字母，数字、特殊符号皆可">
+                            </div>                           
+                          </div>
+                          <div class="form-group">
+                            <label class="col-sm-2 control-label" for="reInputPassword">重复密码</label>
+                            <div class="col-sm-10">
+                              <input type="password" name="password_confirm"  class="form-control" id="reInputPassword" laceholder="字母，数字、特殊符号皆可">
+                            </div>                           
+                          </div>
+                          <div class="form-group">
+                            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                              <input type="email" class="form-control" id="inputEmail" name="email" laceholder="请输入常用邮箱">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="inputContent" class="col-sm-2 control-label">研究方向</label>
+                            <div class="col-sm-10">
+                              <textarea name="realm" class="form-control" rows="3" id="inputContent" laceholder="请输入您的研究方向"></textarea>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="inputCompany" class="col-sm-2 control-label">所属单位</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="inputCompany" name="organization" laceholder="请输入您所在单位">
+                            </div>
+                          </div>                    			
+                        </div>
+                        <div class="modal-footer">
+                          <button type="submit" class="btn btn_info btn_register btn-lg">注册</button>
+                          <a href="/" type="" class="hide btn btn-info btn_ok">确定</a>
+                        </div>
+				    </form>
+			     </div>
             </div>
-            	<form class="signup-form form-horizontal pop_form">
-            <div class="modal-body">
-				  <fieldset>
-				    <div class="control-group">
-				      <label class="control-label" for="input01">用户名</label>
-				      <div class="controls">
-				        <input type="text" name="username" class="input-xlarge" id="input01" placeholde="字母，数字，汉字皆可"><span>*</span>
-				      </div>
-				    </div>
-				    <div class="control-group">
-				      <label class="control-label" for="input01">密码</label>
-				      <div class="controls">
-				        <input type="password" name="password" class="input-xlarge" id="input01" placeholde="字母，数字、特殊符号皆可"><span>*</span>
-				      </div>
-				    </div>
-				    <div class="control-group">
-				      <label class="control-label" for="input01">重复密码</label>
-				      <div class="controls">
-				        <input type="password" class="input-xlarge" name="password_confirm" id="input01" placeholde="请再次确认密码"><span>*</span>
-				      </div>
-				    </div>
-				    <div class="control-group">
-				      <label class="control-label" for="input01">Email</label>
-				      <div class="controls">
-				        <input type="text" class="input-xlarge" id="input01" name="email" placeholde="请输入常用邮箱"><span>*</span>
-				      </div>
-				    </div>
-				    <div class="control-group">
-				      <label class="control-label" for="input01">研究方向</label>
-				      <div class="controls">
-                          <textarea rows="2" cols="40" class="input-xlarge" style="" id="input01" name="realm" placeholde="请输入您的研究方向"></textarea><span>*</span>
-				      </div>
-				    </div>
-				    <div class="control-group">
-				      <label class="control-label" for="input01">所属单位</label>
-				      <div class="controls">
-                          <input type="text" class="input-xlarge" style="" id="input01" name="organization" placeholde="请输入您所在单位"><span>*</span>
-				      </div>
-				    </div>				
-				  </fieldset>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-warning btn_register btn-large">注册</button>
-              <a href="/" type="" class="hide btn btn-info btn_ok">确定</a>
-            </div>
-				</form>
-          </div>
-        
-{% endblock %}
-
-{% block footer_base %}
-    <footer>
-        {% block footer %}
-            {% include "_footer.html" %}
-        {% endblock %}
-    </footer>
+       </div>
 {% endblock %}
 
 {% block extra_script %}
@@ -143,9 +141,13 @@ $(function(){
                 if(data.indexOf('DOCTYPE') < 0) {
                     if(data.indexOf('input') < 0) {
                         $('.btn_register').hide();
-                        $('.btn_ok').show();
+                        $('.btn_ok').removeClass('hide');
                     }
-                    $('.signup-form fieldset').html(data);
+                    var replacement = $(data).html();
+                    if(!replacement) {
+                        replacement = data;
+                    }
+                    $('.signup-form .modal-body').html(replacement);
                 } else {
                     window.location.href = '/';
                 }
@@ -155,14 +157,14 @@ $(function(){
     function judgePosition(){
         var windowHeight = $(window).height();
         if(windowHeight < 720){
-            $(".login_all").css({
+            $(".main2").css({
                 "position":"static",
-                "margin-top":"0"
+                "margin":"0 auto"
             });
         } else {
-            $(".login_all").css({
+            $(".main2").css({
                 "position":"absolute",
-                "margin-top":"-291px"
+                "margin":"-350px 0 0 -490px"             
             });
         }
     };

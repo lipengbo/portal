@@ -1,7 +1,9 @@
+# coding:utf-8
 import urllib2
 import json
 import re
 from etc.config import flowvisor_disable
+from slice.slice_exception import FlowvisorError
 
 
 def toInt(val):
@@ -65,7 +67,11 @@ def parseResponse(data):
     j = json.loads(data)
     if 'error' in j:
         print "%s -> %s" % (getError(j['error']['code']), j['error']['message'])
-        if getError(j['error']['code']) == "Invalid Params":
+        error_str = ""+str(getError(j['error']['code']))+" -> "+str(j['error']['message'])
+        error_str_sp = error_str.split(":")
+        if (len(error_str_sp) == 3 and error_str_sp[0] == "Internal Error -> remove-flowspace" \
+            and error_str_sp[1] == " unable to find flow entry ") \
+            or getError(j['error']['code']) == "Invalid Params":
             return "Invalid Params remove"
         else:
             return ""
@@ -94,6 +100,7 @@ def makeMatch(matchStr):
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
     if flowvisor_disable:
+        print data
         return "success"
     try:
 #         flowvisor_url = "https://192.168.5.123:8181"
@@ -215,7 +222,7 @@ def do_addFlowSpace(args, passwd, flowvisor_url, flowvisor_ps):
     req['slice-action'] = acts
     ret = connect("add-flowspace", data=[req], flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     print ret
-    if ret:
+    if ret==0 or ret:
         print "Flowspace %s has been created." % args[0]
         return "success"
     else:
@@ -283,9 +290,9 @@ def do_listFlowSpace(flowvisor_url, flowvisor_ps):
         return ret
 
 
-def do_listDatapathStats(dpid, flowviser_url, flowviser_ps):
+def do_listDatapathStats(dpid, flowvisor_url, flowvisor_ps):
     req = {"dpid": dpid}
-    ret = connect("list-datapath-stats", data=req, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+    ret = connect("list-datapath-stats", data=req, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
@@ -294,24 +301,24 @@ def do_listDatapathStats(dpid, flowviser_url, flowviser_ps):
         return ret
 
 
-def do_list_links(flowviser_url, flowviser_ps):
-    ret = connect("list-links", data={}, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+def do_list_links(flowvisor_url, flowvisor_ps):
+    ret = connect("list-links", data={}, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
         return ret
 
 
-def do_list_datapaths(flowviser_url, flowviser_ps):
-    ret = connect("list-datapaths", data={}, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+def do_list_datapaths(flowvisor_url, flowvisor_ps):
+    ret = connect("list-datapaths", data={}, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
         return ret
 
 
-def do_list_datapath_info(dpid, flowviser_url, flowviser_ps):
-    ret = connect("list-datapath-info", data={'dpid': dpid}, flowviser_url=flowviser_url, flowviser_ps=flowviser_ps)
+def do_list_datapath_info(dpid, flowvisor_url, flowvisor_ps):
+    ret = connect("list-datapath-info", data={'dpid': dpid}, flowvisor_url=flowvisor_url, flowvisor_ps=flowvisor_ps)
     if len(ret) == 0:
         print "  None"
     else:
@@ -324,6 +331,79 @@ class FlowvisorClient(object):
         self.port = port
         self.password = password
         self.url = 'https://{}:{}'.format(self.ip, self.port)
+
+    def add_slice(self, slice_name, controller_ip, controller_port, user_email, pwd):
+        try:
+            controllerAdd = 'tcp:' + str(controller_ip) + ':' + str(controller_port) + ''
+            args = [str(slice_name), controllerAdd, user_email]
+            adslice = do_addSlice(args, pwd, False, self.url, self.password)
+            if adslice == 'error':
+                raise FlowvisorError("虚网创建失败!")
+        except:
+            raise FlowvisorError("虚网创建失败!")
+
+    def show_slice(self):
+        try:
+            lislice = do_listSlices(self.url, self.password)
+            if lislice == 'error':
+                raise FlowvisorError("虚网信息获取失败!")
+            else:
+                return lislice
+        except:
+            raise FlowvisorError("虚网信息获取失败!")
+
+    def change_slice_controller(self, slice_name, controller_ip, controller_port):
+        try:
+            args = [str(slice_name)]
+            opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
+            upslice = do_updateSlice(args, opts, self.url, self.password)
+            if upslice == 'error':
+                raise FlowvisorError("控制器更新失败!")
+        except:
+            raise FlowvisorError("控制器更新失败!")
+
+    def start_or_stop_slice(self, slice_name, status):
+        try:
+            args = [str(slice_name)]
+            opts = {'status': status}
+            upslice = do_updateSlice(args, opts, self.url, self.password)
+            if upslice == 'error':
+                raise FlowvisorError("虚网状态更新失败!")
+        except:
+            raise FlowvisorError("虚网状态更新失败!")
+
+    def delete_slice(self, slice_name):
+        try:
+            args = [str(slice_name)]
+            rm_slice = do_removeSlice(args, self.url, self.password)
+            if rm_slice == 'error':
+                raise FlowvisorError("虚网删除失败!")
+        except:
+            raise FlowvisorError("虚网删除失败!")
+
+    def add_flowspace(self, slice_name, slice_action, pwd, name, dpid, priority, arg_match):
+        try:
+            fsaction = '' + str(slice_name) + '=' + str(slice_action) + ''
+            pwd = str(pwd)
+            dpid = str(dpid)
+            name = str(name)
+            priority = str(priority)
+            arg_match = str(arg_match)
+            args = [name, dpid, priority, arg_match, fsaction]
+            adflowspace = do_addFlowSpace(args, pwd, self.url, self.password)
+            if adflowspace == 'error':
+                raise FlowvisorError("流规则添加失败!")
+        except:
+            raise FlowvisorError("流规则添加失败！")
+
+    def delete_flowspace(self, flowspace_name):
+        try:
+            args = [flowspace_name]
+            delflowspace = do_removeFlowSpace(args, self.url, self.password)
+            if delflowspace == 'error':
+                raise FlowvisorError("流规则删除失败!")
+        except:
+            raise FlowvisorError("流规则删除失败！")
 
     def get_switches(self):
         datapaths = do_list_datapaths(self.url, self.password)

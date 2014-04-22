@@ -7,6 +7,7 @@ from etc.config import flowvisor_disable
 
 
 def parseResponse(data):
+    print 1
     print data[0]["resultcode"]
     print data[0]["resultmsg"]
     return data
@@ -19,7 +20,7 @@ def parseResponse(data):
 #         if data[0]["resultcode"] == 3758125059 and data[0]["resultmsg"] == "slice name is NOT exist!":
 #             return []
 #         if data[0]["resultcode"] == 3758120963 and data[0]["resultmsg"] == "no port in this slice!":
-#             return [] 
+#             return []
 #         return None
 
 
@@ -33,8 +34,11 @@ def buildRequest(method, cmd):
 
 
 def cnvp_service(cnvp_ip, cnvp_port, cmd):
+    import traceback
 #     cnvp_ip = "192.168.5.36"
     if flowvisor_disable:
+        cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
+        print cmdline
         return [{"resultcode": 0, "resultmsg": "flowvisor_disable"}]
     try:
         cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
@@ -44,7 +48,10 @@ def cnvp_service(cnvp_ip, cnvp_port, cmd):
         resp = server.cnvp_jsonrpc_service(cmdline)
         return parseResponse(resp)
     except Exception, e:
+        print 2
         print str(e)
+        traceback.print_stack()
+#         traceback.print_exc()
         raise
 
 
@@ -61,7 +68,6 @@ class CnvpClient(object):
             if ret[0]["resultcode"] != 0:
                 raise FlowvisorError("虚网创建失败!")
         except:
-            print "a6"
             raise FlowvisorError("虚网创建失败!")
 
     def show_slice(self, slice_name):

@@ -1,6 +1,7 @@
 function update_list(url){
-    //alert("ok");
-    check_url = "http://" + window.location.host + url;
+    //alert(url);
+    //check_url = "http://" + window.location.host + url;
+    check_url = url;
     //alert(check_url);
     var ret = false;
     $.ajax({
@@ -28,6 +29,6 @@ function update_list(url){
 
 $('a.endless_page_link').live("click", function(){
     var href = $(this).attr('href');
-    update_list(href);
+    update_list("http://" + window.location.host + href);
     return false;
 });

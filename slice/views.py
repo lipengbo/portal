@@ -228,6 +228,7 @@ def edit_controller(request, slice_id):
                                                           'host_state': controller.host.state, 'host_id': controller.host.id,
                                                           'host_uuid': controller.host.uuid}}))
         else:
+            print 2
             return HttpResponse(json.dumps({'result': 2,
                                             'controller': {'name': controller.name, 'ip': controller.ip,
                                                           'port': controller.port}}))
@@ -259,15 +260,53 @@ def detail(request, slice_id):
                 return redirect('forbidden')
     context['slice_obj'] = slice_obj
     context['island'] = slice_obj.get_island()
-    context['controller'] = slice_obj.get_controller()
+    controller = slice_obj.get_controller()
+    gw = slice_obj.get_gw()
+    vms = slice_obj.get_common_vms()
+    show_vms = []
+    if controller:
+        show_vm = {}
+        if controller.host:
+            show_vm['id'] = controller.host.id
+            show_vm['host_ip'] = controller.host.server.ip
+            show_vm['state'] = controller.host.state
+            show_vm['uuid'] = controller.host.uuid
+            show_vm['type_id'] = 2
+        else:
+            show_vm['id'] = 0
+            show_vm['host_ip'] = ""
+            show_vm['state'] = ""
+            show_vm['uuid'] = ""
+            show_vm['type_id'] = 1
+        if controller.name == 'user_define':
+            show_vm['name'] = "自定义控制器"
+        else:
+            show_vm['name'] = controller.name
+        
+        show_vm['type'] = "控制器"
+        show_vm['ip'] = controller.ip + ":" + str(controller.port)
+        show_vms.append(show_vm)
+    if gw:
+        show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+                         'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state})
+    for vm in vms:
+        if vm.enable_dhcp:
+            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
+                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+        else:
+            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
+                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+        
+    context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
-    context['gw'] = slice_obj.get_gw()
     context['dhcp'] = slice_obj.get_dhcp()
-    context['vms'] = slice_obj.get_common_vms()
+    context['checkband'] = slice_obj.checkband()
     print "get slice subnet"
     subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
     context['start_ip'] = subnet.get_ip_range()[0]
     context['end_ip'] = subnet.get_ip_range()[1]
+    if request.is_ajax():
+        return render(request, 'slice/vm_list_page.html', context)
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -432,6 +471,7 @@ def topology_d3(request):
     context['width'] = request.GET.get('width')
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
+    context['band'] = request.GET.get('band')
     if int(context['slice_id']) == 0:
         context['switch_port_ids'] = request.GET.get('switch_port_ids')
     user = request.user
@@ -477,7 +517,7 @@ def countiframe(request):
 
 
 def get_count_show(request):
-    print "------------------------------------========================================="
+    print 'get_count_show'
     target = request.GET.get('target')
     type = request.GET.get('type')
     total_num = request.GET.get('total_num')
@@ -497,6 +537,26 @@ def dhcp_switch(request, slice_id, flag):
     else:
         return HttpResponse(json.dumps({'result': 1}))
 
+
+@login_required
+def get_slice_state(request, slice_id):
+    """
+    获取slice状态
+    return:
+        value:
+          slice状态获取失败:value = 1
+          slice状态获取成功：value = 0
+    """
+    try:
+        slice_obj = Slice.objects.get(id=int(slice_id))
+    except:
+        print 1
+        return HttpResponse(json.dumps({'value': 1}))
+    else:
+        print 2
+        return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state}))
+
+
 def test_cnvp():
     from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
         flowvisor_del_flowspace, flowvisor_add_flowspace,\
@@ -504,6 +564,19 @@ def test_cnvp():
         flowvisor_del_port, flowvisor_add_port, flowvisor_update_sice_controller,\
         flowvisor_get_switches, flowvisor_get_links, flowvisor_show_slice
     from plugins.openflow.models import Flowvisor, Controller
+#     from resources.models import SwitchPort
+#     from plugins.vt.models import VirtualMachine
+#     vm = VirtualMachine.objects.get(mac='FA:16:0A:00:00:0A')
+#     vm.state = 8
+#     vm.switch_port = None
+#     vm.save()
+#     slice = Slice.objects.get(id=1)
+#     switch_port = SwitchPort.objects.get(port=678)
+#     slice.remove_resource(switch_port)
+#     vm.switch_port = switch_port
+#     vm.save()
+#     print 'vm change ok'
+#     slice.add_resource(switch_port)
     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp"
     flowvisor = Flowvisor.objects.all()[0]
     controller = Controller.objects.filter(ip = "172.16.0.5")[0]

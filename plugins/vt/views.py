@@ -29,8 +29,8 @@ LOG = logging.getLogger('plugins')
 
 
 def vm_list(request, sliceid):
-    vms = get_object_or_404(Slice, id=sliceid).virtualmachine_set.all()
     slice_obj = get_object_or_404(Slice, id=sliceid)
+    vms = slice_obj.get_common_vms()
     context = {}
     user = request.user
     if user.is_superuser:
@@ -75,6 +75,10 @@ def create_vm(request, sliceid, from_link):
                 vm.ram = request.POST.get("ram")
                 vm.cpu = request.POST.get("cpu")
                 vm.hdd = request.POST.get("hdd")
+                if request.POST.get("enable_dhcp") == '0':
+                    vm.enable_dhcp = False
+                else:
+                    vm.enable_dhcp = True
                 flavor = Flavor.objects.filter(id=request.POST.get("flavor"))
                 if flavor.count() == 0:
                     vm.flavor = None
@@ -84,16 +88,20 @@ def create_vm(request, sliceid, from_link):
                 if not function_test:
                     hostlist = [(vm.server.id, vm.server.ip)]
                     serverid = VTClient().schedul(vm.cpu, vm.ram, vm.hdd, hostlist)
-                    if not serverid:
-                        raise ResourceNotEnough()
+                    #if not serverid:
+                    #raise ResourceNotEnough('resource not enough')
                     vm.server = Server.objects.get(id=serverid)
                 vm.type = 1
                 vm.save()
+                vm.slice.flowspace_changed(2)
                 return HttpResponse(json.dumps({'result': 0}))
             except socket_error as serr:
                 if serr.errno == errno.ECONNREFUSED:
                     return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
+                vm.state = 11
+                vm.type =1
+                vm.save()
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except StopIteration, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
@@ -150,6 +158,7 @@ def delete_vm(request, vmid, flag):
         #if flag == '1':
             #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         #else:
+        vm.slice.flowspace_changed(3)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())
@@ -162,7 +171,16 @@ def get_vms_state_by_sliceid(request, sliceid):
     slice_obj = get_object_or_404(Slice, id=sliceid)
     vms = slice_obj.virtualmachine_set.all()
     context = {}
-    context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+#     context['vms'] = [vm.__dict__ for vm in vms if vm.__dict__.pop('_state')]
+    context['vms'] = []
+    for vm in vms:
+        if vm.switch_port:
+            info = {'id': vm.id, 'state': vm.state,
+                'switch_id': vm.switch_port.switch.id,
+                'port': vm.switch_port.port, 'port_name':vm.switch_port.name}
+        else:
+            info = {'id': vm.id, 'state': vm.state}
+        context['vms'].append(info)
     context['sliceid'] = sliceid
     return HttpResponse(json.dumps(context))
 
@@ -215,5 +233,5 @@ def download_keypair(request):
     slice_obj = get_object_or_404(Slice, id=request.POST.get("slice_id"))
     sshkey = SSHKey.objects.get(slice=slice_obj)
     response = HttpResponse(sshkey.private_key, content_type='plain/text')
-    response['Content-Disposition'] = 'attachment; filename="private_key"'
+    response['Content-Disposition'] = 'attachment; filename="id_rsa"'
     return response

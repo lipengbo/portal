@@ -125,4 +125,9 @@ ul {
     font-weight: bold;
     color: #000;
 }
-
+.tooltip h6 {
+    font-weight:bold;
+}
+.tooltip .table {
+    font-size:12px;
+}

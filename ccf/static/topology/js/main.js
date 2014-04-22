@@ -27,7 +27,10 @@ if (size == 'small') {
     width = 500;
     height = 300;
 } else if (size == 'big') {
-    width = 950;
+    width = $('#topology-svg').width();
+    if (width == 0) {
+        width = 960;
+    }
     height = 450;
 }
 
@@ -139,9 +142,9 @@ var svg = svg_obj.append('g')
     .on("mousedown", mousedown);
     var rect_color = 'white';
     if (size == 'big') {
-        rect_color = 'transparent';
+        rect_color = '#CCC';
     }
-initboard2();
+//initboard2();
 svg.append('rect')
     .attr('width', "100%")
     .attr('height', "100%")
@@ -457,7 +460,7 @@ function init_svg () {
         })
         .style("stroke-width", function (d) { 
             var width = 1;
-            if (d.type) {
+            if (d.type && d.source.id != d.target.id) {
                 width = 3;
             }
             return width; 
@@ -541,6 +544,13 @@ function init_svg () {
                     }
                     var content = "";
                     $.each(origin_data.ports, function(index, port){
+                        content +=  
+                            "<div class='checkbox'><label class='lael-control'><input class='checkbox' type='checkbox' ";
+                        if (port.db_id in parent.selected_ports) {
+                            content += "checked ";
+                        }
+                        content += "value='" + port.db_id+ "'/> " + 
+                            d.db_name + ":" + port.name;
                         var port_pairs = {};
                         $.each(g_links_map[d.island_id], function(index, link) {
                             var port_pair_key = [port.portNumber, link.info['dst-port-name']].sort().join('');
@@ -549,14 +559,7 @@ function init_svg () {
                             }
                             if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content +=  
-                                    "<label><input class='checkbox' type='checkbox' ";
-                                if (port.db_id in parent.selected_ports) {
-                                    content += "checked ";
-                                }
-                                content += "value='" + port.db_id+ "'/> " + d.db_name + ":" + port.name;
                                 content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'];
-                                content += "</label>";
                             }
                             port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
                             if (port_pair_key in port_pairs) {
@@ -564,16 +567,10 @@ function init_svg () {
                             }
                             if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
-                                content +=  
-                                    "<label><input class='checkbox' type='checkbox' ";
-                                if (port.db_id in parent.selected_ports) {
-                                    content += "checked ";
-                                }
-                                content += "value='" + port.db_id+ "'/> " + d.db_name + ":" + port.name;
                                 content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
-                                content += "</label>";
                             }
                         });
+                        content += "</label></div>";
                     });
                     $('.port-modal .confirm-port').unbind("click");
                     $('.port-modal .confirm-port').click(function () {

@@ -2,7 +2,7 @@ $(document).ready(function() {
 	//help页面滑动到顶部效果
 	$(".bs-docs-sidenav li a").click(function() {
 		var navHeight = $(".navbar").height();
-		aa = $($(this).attr("href")).offset().top - navHeight + "px";
+		//aa = $($(this).attr("href")).offset().top - navHeight + "px";
 		$("html, body").animate({
 			scrollTop: $($(this).attr("href")).offset().top - navHeight + "px"
 			}, {
@@ -74,24 +74,6 @@ $(document).ready(function() {
         $(".tab_radio4").parent("td").siblings("td").children("input").removeAttr("disabled");
     });
     
-    //slice详情启动停止按钮
-/*    $(".start_btn").click(function(){
-        if($(this).hasClass("btn-success")){
-            $(this).removeClass("btn-success").addClass("btn-danger");
-            if($(this).hasClass("btn-large")){            
-                $(this).text("停止虚网");
-            } else {              
-                $(this).text("停止");
-            }           
-        } else {
-            $(this).removeClass("btn-danger").addClass("btn-success");
-            if($(this).hasClass("btn-large")){
-                $(this).text("启动虚网");
-            } else {
-                $(this).text("启动");
-            }           
-        }
-    });      */
     
     // show topology
     $('.btn-step1').click(function () {
@@ -121,7 +103,7 @@ $(document).ready(function() {
                 }
             }
             if (!has_virtual_switch) {
-                $('.no-virtual-switch').show();
+                $('.no-virtual-switch').removeClass('hide').show();
                 return false;
             }
         }
@@ -164,12 +146,10 @@ $(document).ready(function() {
        }
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
-       $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
        if(nowIndex == 0){
-       		$(".nav-pills .span2").removeClass("visit");
+       		$(".nav-pills .col-md-2").removeClass("visit");
        }
-       $(".nav-pills .span2").eq(nowIndex).addClass("visit");
-       $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
+       $(".nav-pills .col-md-2").eq(nowIndex).addClass("visit");
     });
     $(".prev_btn").click(function(){
        $("html, body").scrollTop(0);
@@ -178,10 +158,8 @@ $(document).ready(function() {
        //alert(vm_info_flag);
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
-       $(".nav-pills .span2").eq(thisIndex).removeClass("visit");
-       $(".nav-pills .span2").eq(thisIndex).children(".step").children(".desc").removeClass("active");
-       $(".nav-pills .span2").eq(nowIndex).addClass("visit");
-       $(".nav-pills .span2").eq(nowIndex).children(".step").children(".desc").addClass("active");
+       $(".nav-pills .col-md-2").eq(thisIndex).removeClass("visit");
+       $(".nav-pills .col-md-2").eq(nowIndex).addClass("visit");
     });
     
     //通过复选框控制表单显示和隐藏
@@ -272,12 +250,6 @@ $(document).ready(function() {
 			set_value("ram", ui.value);
 		}
 	});
-	$( "#disk_slider" ).slider({
-		stop:function(event, ui){
-			$(".type_chose a").removeClass("vm_active");
-			set_value("hdd", ui.value);
-		}
-	})
 	
 });
 
@@ -293,7 +265,8 @@ function page_function0(){
 	ret1 = check_slice_name('slice_name',2);
 	ret2 = check_slice_description('slice_description',2);
 	ret3 = check_island_id('island_id')
-	if (ret1 && ret2 && ret3){
+	ret4 = check_nw_num();
+	if (ret1 && ret2 && ret3 && ret4){
 		return true;
 	}
 	else{
@@ -303,8 +276,7 @@ function page_function0(){
 function page_function1(){
 	
 	//ret1 = check_switch_port();
-	var ret2 = check_nw_num();
-	//alert(ret1);
+	var ret2 = true;
 	//alert(ret2);
 	if (ret2){
 		
@@ -315,12 +287,6 @@ function page_function1(){
     	fetch_gw_ip(slice_uuid);
 
         
-    /*if(check_ovs_gw()){
-			$('#gw_setting').show();
-		}else{
-			$('#gw_setting').hide();
-		}
-    */
 		return true;
 	}
 	else{
@@ -329,21 +295,17 @@ function page_function1(){
 }
 function page_function2(){
     fetch_serverinfo("id_server");
-	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&switch_port_ids=" + get_select_ports())
+	$('#topologyiframe').attr("src", "/slice/topology_d3/?slice_id=0&width=530&height=305&top=0&band=0&switch_port_ids=" + get_select_ports())
 	ret1 = check_slice_controller('controller_type') && check_gw_select();
-
-	if(!document.getElementById('dhcp_selected').checked){
-		var objs = document.getElementsByName("dhcp");
-		$('[name="enable_dhcp"]').iCheck('uncheck');
-		for(var i=0; i<objs.length; i++){
-			objs[i].style.display = "none";
-		}
+	if($('.switch_btn.dhcp').hasClass("checked")){
+		var obj = $('.switch_btn.dhcp.vm');
+		obj.addClass("checked");
+        obj.children(".switch_content").html("是");
 	}else{
-		var objs = document.getElementsByName("dhcp");
-		$('[name="enable_dhcp"]').iCheck('check');		
-		for(var i=0; i<objs.length; i++){
-			objs[i].style.display = "block";
+		if($('.switch_btn.dhcp.vm').hasClass("checked")){
+			$('.switch_btn.dhcp.vm').removeClass("checked");
 		}
+		$("#dhcp_vm").hide();
 	}
 	if (ret1){
 		//
@@ -365,9 +327,9 @@ function page_function3(){
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
 	//DHCP
-	var dhcp_selected_obj = document.getElementById("dhcp_selected");
+	//var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	var list_slice_dhcp = document.getElementById("list_slice_dhcp");
-	if(dhcp_selected_obj.checked){
+	if($('.switch_btn.dhcp').hasClass("checked")){
        list_slice_dhcp.innerHTML = "已配置";
     }else{
        list_slice_dhcp.innerHTML = "未配置";
@@ -381,14 +343,14 @@ function page_function3(){
 				var controller_sys_obj = document.getElementById("controller_sys");
 				var controller_sys = controller_sys_obj.options[controller_sys_obj.selectedIndex].value;
 				var str = "";
-				str = str + "<table class=\"table\">"
+				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
-			        + "<td width=\"100\">创建方式：</td>"
+			        + "<td width=\"120\">创建方式：</td>"
 			        + "<td>默认创建</td>"
 			        + "</tr>"
 			        + "<tr>"
-			        + "<td width=\"100\">控制器类型：</td>"
+			        + "<td width=\"120\">控制器类型：</td>"
 			        + "<td>" + controller_sys + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
@@ -399,19 +361,17 @@ function page_function3(){
                 cip1_obj = document.getElementById("cip1");
                 cip2_obj = document.getElementById("cip2");
                 cip3_obj = document.getElementById("cip3");
-                //controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
                 controller_port_obj = document.getElementById("controller_port");
-				//var controller_ip_port_obj = document.getElementById("controller_ip_port");
 				var controller_ip_port = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value+':'+controller_port_obj.value;
 				var str = "";
-				str = str + "<table class=\"table\">"
+				str = str + "<table class=\"table_base\">"
 			        + "<tbody>"
 			        + "<tr>"
-			        + "<td width=\"100\">创建方式：</td>"
+			        + "<td width=\"120\">创建方式：</td>"
 			        + "<td>自定义</td>"
 			        + "</tr>"
 			        + "<tr>"
-			        + "<td width=\"100\">控制器IP端口：</td>"
+			        + "<td width=\"120\">控制器IP端口：</td>"
 			        + "<td>" + controller_ip_port + "</td>"
 			        + "</tr>"                     
 			        + "</tbody>"
@@ -431,38 +391,23 @@ function page_function3(){
     var str = "";
     if(id_server_gw_obj && gateway_ip_obj && id_server_gw_obj.value && gateway_ip_obj.value){  
         
-        str = str + "<table class=\"table\">"
+        str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
-                        +"<td width=\"100\">网关宿主机：</td>"
+                        +"<td width=\"120\">网关宿主机：</td>"
                         +"<td>"+ id_server_gw_obj.options[id_server_gw_index].text +"</td></tr>"
                     +"<tr><td>网关IP地址：</td>"
                         +"<td>"+ gateway_ip_obj.value +"</td></tr>";
-        
-        //if(dhcp_selected_obj.checked){
-        //   str = str + "<tr><td colspan=2>"
-        //   +"已配置DHCP服务器</td></tr>";
-           
-       // }else{
-       //    str = str + "<tr><td colspan=2>"
-       //    +"未配置DHCP服务器</td></tr>";
-       // }
         str = str + "</tbody></table>";  
     }else{
-        str = str + "<table class=\"table\">"
+        str = str + "<table class=\"table_base\">"
                 + "<tbody><tr>"
                         +"<td>未配置</td>"                 
         str = str + "</tr></tbody></table>"; 
     }  
 
     $("div#list_gw").append(str); 
-    //$("#dhcp_show").iCheck({
-    //        checkboxClass: 'icheckbox_square-blue',
-    //        radioClass: 'iradio_square-blue',
-    //        increaseArea: '20%' // optional
-   // });
         //虚拟机
         return fetch_vminfo();
-        //return check_vminfo()
 }
 function page_function4(){
 	var project_id = $("#project_id").text();
@@ -523,8 +468,9 @@ function submit_slice_info(project_id){
 	  		}  
 		}   
 	}
-    if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
-       // alert(1); 
+    //if(dhcp_selected_obj && dhcp_selected_obj.checked){ 
+	if($('.switch_btn.dhcp').hasClass("checked")){
+        //alert(1000); 
         dhcp_selected = 1; 
     }   
 	//var controller_ip_port = controller_ip_port_obj.value.split(":");

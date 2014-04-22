@@ -9,7 +9,7 @@ logger = logging.getLogger("plugins")
 from django.db import models
 from django.db import transaction
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
 from django.conf import settings
@@ -21,6 +21,11 @@ from django.utils.translation import ugettext as _
 from resources.models import ServiceResource, Resource, \
         SwitchPort, Switch, Server, VirtualSwitch
 from slice.models import Slice
+
+FLOWVISOR = 0
+CNVP = 1
+FLOWVISOR_TYPES = ((FLOWVISOR, 'flowvisor'),
+               (CNVP, 'cnvp'),)
 
 
 class Controller(ServiceResource):
@@ -52,6 +57,8 @@ class Flowvisor(ServiceResource):
         super(Flowvisor, self).__init__(*args, **kwargs)
 
     http_port = models.IntegerField(verbose_name=_("Http Port"))
+    type = models.IntegerField(choices=FLOWVISOR_TYPES,
+                               default=FLOWVISOR)
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
@@ -170,11 +177,11 @@ def update_links(sender, instance, created, **kwargs):
         try:
             src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
         except KeyError:
-            src_port_name = 'eth' + src_port
+            src_port_name = 'eth' + str(src_port)
         try:
             dst_port_name = port_name_dict[target_switch.dpid][int(dst_port)]
         except KeyError:
-            dst_port_name = 'eth' + dst_port
+            dst_port_name = 'eth' + str(dst_port)
         source_port, created = SwitchPort.objects.get_or_create(
                 switch=source_switch,
                 port=src_port,
@@ -214,5 +221,8 @@ def create_virtualswitch(island, datapaths):
                 logger.error('============= IP: ' + ip + '=============')
                 raise Exception(u"IP为" + ip + u"的服务器没有录入")
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
-                    ip=ip, defaults={'name': "v-ovs" + str(VirtualSwitch.objects.count() + 1), 'island': island, 'password': '123', 'username': 'admin', 'server': server})
+                    ip=ip, defaults={'name': "v-ovs" + ip.split('.')[-1], 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
+@receiver(pre_delete, sender=Flowvisor)
+def delete_slice(sender, instance, **kwargs):
+    instance.slices.all().delete()

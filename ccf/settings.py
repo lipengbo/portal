@@ -1,5 +1,6 @@
 import os
-
+import djcelery
+djcelery.setup_loader()
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -18,20 +19,20 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": "dev.db",
         'TEST_CHARSET': 'UTF8',
-    }
+   }
 }
 
 
-# DATABASES = {
+#DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
 #         'NAME': 'ceni',
 #         'USER': 'root',
-#         'PASSWORD': 'cdn%nf',
-#         'HOST': '192.168.5.120',
-#         'PORT': '3306',
+#         'PASSWORD': 'root',
+#        'HOST': '127.0.0.1',
+#      'PORT': '3306',
 #     }
-# }
+#}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -177,8 +178,13 @@ INSTALLED_APPS = [
     "django_cron",
     "nexus",
     "monitor",
-    "guardian"
+    "guardian",
+    'djcelery'
 ]
+
+# Celery settings
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
 
@@ -248,8 +254,6 @@ FIXTURE_DIRS = [
     os.path.join(PROJECT_ROOT, "fixtures"),
 ]
 
-#EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 ACCOUNT_OPEN_SIGNUP = True
 ACCOUNT_USE_OPENID = False
@@ -263,9 +267,9 @@ ACCOUNT_EMAIL_UNIQUE = True
 ACCOUNT_EMAIL_CONFIRMATION_REQUIRED = True
 ACCOUNT_EMAIL_CONFIRMATION_EMAIL = False
 
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
+EMAIL_PORT = 465
 EMAIL_HOST = 'mail.fnic.cn'
-EMAIL_PORT = '465'
-EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'ccf@fnic.cn'
 FROM_EMAIL = 'ccf@fnic.cn'
 DEFAULT_FROM_EMAIL = FROM_EMAIL
@@ -276,7 +280,7 @@ AUTHENTICATION_BACKENDS = [
     'guardian.backends.ObjectPermissionBackend',
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap'
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 

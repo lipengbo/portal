@@ -23,7 +23,9 @@ def generate_glance_url():
 #[plugin-advance]
 #高级配置项，用于配置文件锁的位置
 lock_path = '/var/run/'
-default_flavor_id = 1
+#控制器和网关模板
+controller_flavor_id = 1
+gateway_flavor_id = 1
 rpc_connection_timeout = 150
 domain_count_infinity = 10000
 #配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。
@@ -33,12 +35,10 @@ slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
 function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
-flowvisor_disable = True
-#配置系统虚网划分使用flowvisor还是cnvp
-flowvisor_or_cnvp = "cnvp"
-#本期可以不用部署vt_manager；当use_vt_manager_to_schedul = False不需部署vt_manager；当use_vt_manager_to_schedul = True需要部署vt_manager；
-use_vt_manager_to_schedul = True
+flowvisor_disable = False
+#直接调度底层资源判断，发布时设置为True
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效
+use_vt_manager_to_schedul = True
 #单台机器最多允许创建的虚拟机的数量
 unique_hosts_per_alloc = 100
 #可以创建虚拟机的主机，cpu、mem的最大负载，取值为百分必的形式，如下代表百分之80
@@ -51,3 +51,7 @@ vt_manager_ip = '127.0.0.1'
 vt_manager_port = 8891
 #aes字符长度必须为16位
 aes_key = 'fnic123456789012'
+try:
+    from etc.local_config import *
+except ImportError:
+    pass

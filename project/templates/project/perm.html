@@ -6,8 +6,10 @@
 {% load staticfiles %}
 {% load endless %}
 {% block breadcrumb %}
-<a href="{% url "project_detail" project.id %}">项目详情</a><span class="divider">/</span>
-项目权限
+<li><a href="/project/">项目</a></li>
+<li><a href="{% url "project_detail" project.id %}">项目详情</a></li>
+<li><a href="{% url "project_member_manage" project.id %}">成员管理</a></li>
+<li>项目权限</li>
 {% endblock %}
 {% block body %}
         <form class="fill_form" action="" method="post" accept-charset="utf-8">
@@ -35,10 +37,16 @@
             </fieldset>
             <div class="text-center form-actions">
                 <button class="btn btn-success" type="submit">保存</button>
-                <a class="btn" href="{% url "project_detail" project.id  %}">取消</a>
+                <a class="btn btn-default" href="{% url "project_member_manage" project.id  %}">取消</a>
             </div>
         </form>
 {% endblock %}
 {% block extra_script %}
+<script type="text/javascript" charset="utf-8">
+    var all_perm_count = {{ perms|length }};
+    if(all_perm_count == $('.checkboxs input[type="checkbox"]:checked').length) {
+        $('.checkall input').prop('checked', true);
+    }
+</script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 {% endblock %}

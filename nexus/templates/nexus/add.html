@@ -12,28 +12,28 @@
 {% block breadcrumb %}
     {% with ModelClass|get_class_name as class_name  %}
     {% with ModelClass|get_class_verbose_name as class_verbose_name %}
-    <a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a>
-    <span class="divider">/</span>
-    {% if formset.instance.id %}{% trans "Edit"%}{% else %}{% trans "Add" %}{% endif %}{{ class_verbose_name }}
+    <li><a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a></li>
+    <li>{% if formset.instance.id %}{% trans "Edit"%}{% else %}{% trans "Add" %}{% endif %}{{ class_verbose_name }}</li>
     {% endwith %}
     {% endwith %}
 {% endblock %}
 
 {% block body %}
 {% with ModelClass|get_class_name as class_name  %}
-    <form class="form-horizontal" method="post" action="">
+<div class="row">
+    <form class="col-md-5" method="post" action="">
         {% csrf_token %}
         {{ formset|crispy }}
         <div class="form-actions">
             {% if class_name == 'User' and formset.instance.get_profile.state == 0 %}
             <button type="submit" class="btn btn-info">{% trans "Accept" %}</button>
-            <a href="{% url profiles_reject formset.instance.id %}" class="btn">{% trans "Reject" %}</a>
+            <a href="{% url profiles_reject formset.instance.id %}" class="btn btn-default">{% trans "Reject" %}</a>
             {% else %}
             <button type="submit" class="btn btn-info">{% trans "Save" %}</button>
             {% endif %}
         </div>
-
     </form>
+</div>
 {% endwith %}
 {% endblock %}
 

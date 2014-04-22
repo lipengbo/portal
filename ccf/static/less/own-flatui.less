@@ -1,16 +1,25 @@
-
-
 .login_bg {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background:#fff;
 	min-width:980px;
+	padding-top:0;
 	.main {
-	    padding-top:0px;
+	    padding:0px;
+	    .main2 {
+	        width:980px;
+	        position:absolute;
+	        top:50%;
+	        left:50%;
+	        margin-top:-350px;
+	        margin-left:-490px;	        
+	    }
 	}
 	.login_logo {
-		margin-top:-20px;
 		margin-bottom:20px;
 		width:700px;
+		img {
+		    width:100%;
+		}
 	}
 	.login_title {
 		background:#3da2f7 url(../img/banner.png) center top;
@@ -25,11 +34,21 @@
 	    background:#666;
 	    border-radius:0 0 6px 6px;
 	    padding:10px;
+	    .alert {
+	        margin-bottom:10px;
+	    }
+	    .form-group {
+	        margin-bottom:10px;
+	    }
 		input {
 			height:auto;
-			width:284px;		
-			height:30px;	
+			height:40px;	
 		}	
+		.btn {
+		    height:40px;
+		    line-height:40px;
+		    padding:0;
+		}
 	}
 	.login-form:before {
 	    border-color: transparent #666 transparent transparent;
@@ -41,11 +60,8 @@
 	    padding-left:50px;
 	    padding-right:50px;
 	}
-	.login_all {
-        top: 50%;
-        position: absolute;
-        width: 980px;
-        margin-top: -291px;
+	.login_all {       
+        width: 980px;   
     }
 }
 

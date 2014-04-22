@@ -845,7 +845,7 @@ if hasattr(socket, 'AF_UNSPEC'):
 class TransportTcpIp(TransportSocket):
     """Transport via TCP/IP.
     """
-    def __init__(self, addr=None, limit=4096, timeout=1.0, logfunc=log_dummy):
+    def __init__(self, addr=None, limit=4096, timeout=5.0, logfunc=log_dummy):
         """
         :Parameters:
             - addr: ("host",port)
