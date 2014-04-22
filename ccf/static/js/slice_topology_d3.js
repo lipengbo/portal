@@ -803,7 +803,22 @@ function restart() {
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
         }else{
-            
+            $.ajax({
+                url : "/plugins/vt/get_switch_port/",
+                type : "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType : "json",
+                error : function(e){
+			        //document.getElementById('alert_info').innerHTML = "获取网关IP出错！";
+			       // $('#alert_modal').modal('show');
+                    // alert("获取网关IP出错！");
+                },
+                success : function(ports){
+                    $.each(ports, function(i, port){
+                        //alert(i+":"+port["exclusive"]);
+                    });
+                }
+            });
         }
     })
     .on('mouseover', function(d) {

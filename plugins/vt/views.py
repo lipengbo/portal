@@ -131,6 +131,10 @@ def create_device(request, sliceid):
         context['slice_obj'] = Slice.objects.get(id=sliceid)
         return render(request, 'vt/custom_device.html', context)
 
+def get_switch_port(request):
+    return HttpResponse(json.dumps([{"port" : "eth1", "exclusive": "1"},\
+                                    {"port" : "eth2", "exclusive": "0"}]))
+
 def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
     if action in operator:
