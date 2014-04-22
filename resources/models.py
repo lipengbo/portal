@@ -212,8 +212,8 @@ class SwitchPort(Resource):
 class SlicePort(models.Model):
     slice = models.ForeignKey(Slice)
     switch_port = models.ForeignKey(SwitchPort)
-#     type = models.IntegerField(choices=PORT_TYPES,
-#                                default=PORT_SHARE)
+    type = models.IntegerField(choices=PORT_TYPES,
+                               default=PORT_SHARE)
 
     class Meta:
         unique_together = (("slice", "switch_port"), )
