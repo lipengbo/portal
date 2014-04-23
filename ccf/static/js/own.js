@@ -239,7 +239,7 @@ $(document).ready(function() {
 		
 	});
 	$(".cpu_chose a").click(function(){
-        $(".cpu_chose a").removeClass("vm_active");
+       $(this).siblings().removeClass("vm_active");
 		$(".type_chose a").removeClass("vm_active");
         $(this).addClass("vm_active");
 		set_value("cpu", $(this).attr("value"));
