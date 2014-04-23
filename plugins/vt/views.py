@@ -132,8 +132,10 @@ def create_device(request, sliceid):
         return render(request, 'vt/custom_device.html', context)
 
 def get_switch_port(request):
-    return HttpResponse(json.dumps([{"port" : "eth1", "exclusive": "1"},\
-                                    {"port" : "eth2", "exclusive": "0"}]))
+    return HttpResponse(json.dumps([{"id": 1, "dpid": "00:00:a0:36:9f:02:e4:18", "ports": [{"name": "eth1", "port": 1, "type": 0}, \
+                                                                    {"name": "eht2", "port": 2, "type": 1}]},\
+                                    {"id": 2, "dpid": "00:ee:00:00:00:00:01:13", "ports": [{"name": "eht3", "port": 3, "type": 1},\
+                                                                    {"name": "eth4", "port": 4, "type": 0}]}]))
 
 def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')

@@ -296,7 +296,7 @@ def detail(request, slice_id):
             show_vm['name'] = "自定义控制器"
         else:
             show_vm['name'] = controller.name
-        
+
         show_vm['type'] = "控制器"
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
@@ -310,7 +310,7 @@ def detail(request, slice_id):
         else:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
                          'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
-        
+
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
@@ -486,6 +486,7 @@ def topology_d3(request):
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
     context['band'] = request.GET.get('band')
+    context['own_device'] = request.GET.get("own_device")
     if int(context['slice_id']) == 0:
         context['tp_mod'] = request.GET.get('tp_mod')
         if int(context['tp_mod']) == 2:

@@ -1,9 +1,12 @@
+var switch_ports_info = TAFFY();
+
 // set up SVG for D3
 var mode = "design";
 
 var admin = $("#admin").text();
 var width  = $("#width").text(),
     height = $("#height").text(),
+    own_device = $("#own_device").text(),
     colors = d3.scale.category10();
 
 function initboard(){
@@ -804,7 +807,8 @@ function restart() {
             else{
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
-        }else{
+        }else if(own_device == 1){
+            
             $.ajax({
                 url : "/plugins/vt/get_switch_port/",
                 type : "GET",
@@ -815,9 +819,10 @@ function restart() {
 			       // $('#alert_modal').modal('show');
                     // alert("获取网关IP出错！");
                 },
-                success : function(ports){
-                    $.each(ports, function(i, port){
-                        //alert(i+":"+port["exclusive"]);
+                success : function(switchs){
+                    $.each(switchs, function(i, _switch){
+                        alert(_switch[i]);
+                        
                     });
                 }
             });
