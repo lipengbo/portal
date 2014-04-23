@@ -157,6 +157,17 @@ class Switch(SwitchResource):
         else:
             return OVS_TYPE['RELATED']
 
+    def get_edge_ports(self):
+        from plugins.openflow.models import Link
+        edge_ports = []
+        ports = self.switchport_set.all()
+        for port in ports:
+            links_src_c = Link.objects.filter(source=port).count()
+            links_tag_c = Link.objects.filter(target=port).count()
+            if links_src_c + links_tag_c == 0:
+                edge_ports.append(port)
+        return edge_ports
+
     @staticmethod
     def admin_options():
         options = {
@@ -203,6 +214,14 @@ class SwitchPort(Resource):
             slice_port.delete()
             if not slice_obj.get_switch_ports().filter(switch=switch):
                 slice_obj.remove_resource(switch)
+
+    def can_monopolize(self):
+        slice_ports_c = SlicePort.objects.filter(
+            switch_port=self, type=PORT_MONOPOLIZE).count()
+        if slice_ports_c > 0:
+            return False
+        else:
+            return True
 
     class Meta:
         unique_together = (("switch", "port"), )

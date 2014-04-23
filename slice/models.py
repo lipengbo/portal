@@ -108,16 +108,24 @@ class Slice(models.Model):
             return None
 
     def get_switches(self):
-        controller_vms = self.get_controller_vms()
-        swich_ids = []
-        for controller_vm in controller_vms:
-            if controller_vm.switch_port:
-                if self.switchport_set.filter(switch=controller_vm.switch_port.switch).count() == 1:
-                    swich_ids.append(controller_vm.switch_port.switch.id)
-        return self.switch_set.exclude(id__in=swich_ids)
+        return self.switch_set.all()
+#         controller_vms = self.get_controller_vms()
+#         swich_ids = []
+#         for controller_vm in controller_vms:
+#             if controller_vm.switch_port:
+#                 if self.switchport_set.filter(switch=controller_vm.switch_port.switch).count() == 1:
+#                     swich_ids.append(controller_vm.switch_port.switch.id)
+#         return self.switch_set.exclude(id__in=swich_ids)
+
+    def get_normal_switches(self):
+        switches = self.get_switches()
+        normal_switches = []
+        for switch in switches:
+            if not switch.is_virtual():
+                normal_switches.append(switch)
+        return normal_switches
 
     def get_virtual_switches(self):
-        from resources.models import VirtualSwitch
         switches = self.get_switches()
         virtual_switches = []
         for switch in switches:
@@ -125,17 +133,15 @@ class Slice(models.Model):
                 virtual_switches.append(switch.virtualswitch)
         return virtual_switches
 
-    def get_virtual_switches_gre(self):
-        from resources.models import VirtualSwitch
+    def get_gre_switches(self):
         switches = self.get_switches()
-        virtual_switches = []
+        gre_switches = []
         for switch in switches:
-            if switch.is_virtual() and switch.has_gre_tunnel:
-                virtual_switches.append(switch.virtualswitch)
-        return virtual_switches
+            if switch.has_gre_tunnel:
+                gre_switches.append(switch)
+        return gre_switches
 
     def get_virtual_switches_server(self):
-        from resources.models import VirtualSwitch
         switches = self.get_switches()
         virtual_switches = []
         for switch in switches:
@@ -259,6 +265,12 @@ class Slice(models.Model):
 #             for switch_port_dst in switch_ports:
 #                 if Link.objects.filter(source=switch_port_src, target=switch_port_dst).count() > 0:
 #                     return 1
+
+    def port_added(self, switch_port):
+        if self.sliceport_set.filter(switch_port=switch_port).count() == 0:
+            return False
+        else:
+            return True
 
     def delete(self, *args, **kwargs):
         import traceback
