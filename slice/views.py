@@ -257,9 +257,6 @@ def detail(request, slice_id):
     print "slice_detail"
 #     test_cnvp()
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    from resources.ovs_api import get_edge_ports
-    rs = get_edge_ports(slice_obj)
-    print rs
     user = request.user
     context = {}
     if user.is_superuser:
