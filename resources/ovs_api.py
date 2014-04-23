@@ -1,13 +1,12 @@
 # coding:utf-8
 from slice.models import Slice
-from resources.models import Switch, VirtualSwitch, OVS_TYPE, SwitchPort
+from resources.models import Switch, VirtualSwitch, OVS_TYPE, SwitchPort, SlicePort
 from slice.slice_exception import DbError
 from plugins.openflow.flowspace_api import flowspace_gw_add, flowspace_gw_del
 from django.db import transaction
 from plugins.openflow.models import Link
 import logging
 LOG = logging.getLogger("CENI")
-OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
 
 
 def slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod):
@@ -262,20 +261,45 @@ def get_edge_ports(slice_obj):
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex)
-    normal_switches = slice_obj.get_normal_switches()
-    for normal_switch in normal_switches:
-        edge_ports = normal_switch.get_edge_ports()
-        ports = []
-        for edge_port in edge_ports:
-            if not slice_obj.port_added(edge_port):
-                if edge_port.can_monopolize():
-                    can_monopolize = 1
-                else:
-                    can_monopolize = 0
-                port = {'id': edge_port.id, 'name': edge_port.name,
-                        'port': edge_port.port, 'can_monopolize': can_monopolize}
-                ports.append(port)
-        switch_edge_ports = {'id': normal_switch.id, 'dpid': normal_switch.dpid,
-                             'name': normal_switch.name, 'ports': ports}
-        switches_edge_ports.append(switch_edge_ports)
-    return switches_edge_ports
+    try:
+        normal_switches = slice_obj.get_normal_switches()
+        for normal_switch in normal_switches:
+            edge_ports = normal_switch.get_edge_ports()
+            ports = []
+            for edge_port in edge_ports:
+                if not slice_obj.port_added(edge_port):
+                    if edge_port.can_monopolize():
+                        can_monopolize = 1
+                    else:
+                        can_monopolize = 0
+                    port = {'id': edge_port.id, 'name': edge_port.name,
+                            'port': edge_port.port, 'can_monopolize': can_monopolize}
+                    ports.append(port)
+            switch_edge_ports = {'id': normal_switch.id, 'dpid': normal_switch.dpid,
+                                 'name': normal_switch.name, 'ports': ports}
+            switches_edge_ports.append(switch_edge_ports)
+        return switches_edge_ports
+    except Exception:
+        raise DbError("边缘端口获取失败！")
+
+
+def slice_add_port(slice_obj, port_id, add_type):
+    """slice添加交换端口，外接设备。
+    """
+    LOG.debug('slice_add_port')
+    try:
+        Slice.objects.get(id=slice_obj.id)
+        port = SwitchPort.objects.get(id=int(port_id))
+        if slice_obj.switch_added(port.switch):
+            if not slice_obj.port_added(port):
+                if int(add_type) == 0:
+                    if not port.can_monopolize():
+                        raise DbError("端口已被占用！")
+                SlicePort.objects.get_or_create(
+                    switch_port=port, slice=slice_obj, type=int(add_type))
+        else:
+            raise DbError("端口添加失败！")
+    except DbError:
+        raise
+    except Exception:
+        raise DbError("端口添加失败！")
