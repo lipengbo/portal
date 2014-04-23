@@ -5802,6 +5802,9 @@ textarea {
   clear: both;
 }
 /* bootstrap defined */
+.alert {
+  border-radius: 0;
+}
 .container-fluid {
   padding-left: 30px;
   padding-right: 30px;
@@ -6665,9 +6668,15 @@ fieldset legend {
   margin-bottom: 10px;
 }
 .banner {
+  position: relative;
   padding-top: 60px;
   padding-bottom: 60px;
   text-align: center;
+}
+.banner .ps_btn {
+  position: absolute;
+  right: 55px;
+  top: 30px;
 }
 .banner h1 {
   font-size: 48px;
@@ -6966,6 +6975,9 @@ fieldset legend {
 }
 .create_vm_form {
   width: 100%;
+}
+.create_vm_form tbody tr td {
+  padding: 0 8px 16px 8px;
 }
 .create_vm_form tbody tr td img {
   margin-right: 20px;
@@ -7286,4 +7298,8 @@ span[name="serverInfo"] {
 .device_access .device_access_form .device_access_savebtn {
   margin-top: 50px;
   text-align: center;
+}
+.check_quota_table tbody tr td span {
+  font-size: 12px;
+  color: #999;
 }
