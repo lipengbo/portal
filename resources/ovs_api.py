@@ -247,3 +247,35 @@ def get_select_topology(tp_mod, switch_ids, switch_port_ids):
         print 2
         print topology
         return topology
+
+
+def get_edge_ports(slice_obj):
+    """获取边缘端口
+    result:[{'id':交换机id,
+        'dpid':交换机dpid,
+        'name':交换机的name,
+        'ports':[{'id':port的id,'name':port的name,'port':port号, 'can_monopolize':1表示可独占、0表示否},...]},...]
+    """
+    LOG.debug('get_edge_ports')
+    switches_edge_ports = []
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex)
+    normal_switches = slice_obj.get_normal_switches()
+    for normal_switch in normal_switches:
+        edge_ports = normal_switch.get_edge_ports()
+        ports = []
+        for edge_port in edge_ports:
+            if not slice_obj.port_added(edge_port):
+                if edge_port.can_monopolize():
+                    can_monopolize = 1
+                else:
+                    can_monopolize = 0
+                port = {'id': edge_port.id, 'name': edge_port.name,
+                        'port': edge_port.port, 'can_monopolize': can_monopolize}
+                ports.append(port)
+        switch_edge_ports = {'id': normal_switch.id, 'dpid': normal_switch.dpid,
+                             'name': normal_switch.name, 'ports': ports}
+        switches_edge_ports.append(switch_edge_ports)
+    return switches_edge_ports
