@@ -35,24 +35,27 @@
     </div> 
     <div class="col-md-3">
         <div class="device_access_form form-inline">
-            <p><strong>名称1xxxxhhhh</strong></p>
-            <div class="form-group">
+            <p id="_switch_port"><strong>ovs交换机</strong></p>
+            <div class="form-group switch_port">
                 <label class="control-label" for="">可选端口</label>
-                <select class="form-control">
-                    <option>端口1</option>
-                    <option>端口2</option>
-                    <option>端口3</option>
-                    <option>端口4</option>
-                    <option>端口55555</option>
+                <select class="form-control " id="enable_switch_port">
+                    
                  </select> 
+                <span id="port_err_msg" style="color:red"></span>
             </div>                         
-            <div class="device_access_btn">
+            <div class="device_access_btn disable">
                  <label class="control-label" for="">是否独占</label>         
-                 <div class="tuopu_btn">
-                        <span class="switch_btn dk">
-                            <span class="switch_content">停止</span>
+                 <div class="tuopu_btn dk">
+                        <span class="switch_btn dk " style="cursor:pointer">
+                            <span class="switch_content">否</span>
                         </span>
                  </div>             
+            </div>
+            <div class="mac_addrs">
+            <lable>MAC 地址列表：</lable>
+            <textarea id="mac_addrs" style="color:black">
+            </textarea>
+            <span id="mac_err_msg" style="color:red"></span>
             </div>
             <p class="device_access_savebtn">
                 <button type="button" class="btn btn_info">保存</button>
@@ -67,14 +70,18 @@
 <table class="table_defined">
     <thead>
         <tr>
-            <th>名称</th>
-            <th>名称</th>
-            <th>名称</th>
-            <th>名称</th>
+            <th>交换机</th>
+            <th>dpid</th>
+            <th>所选端口</th>
+            <th>是否独占</th>
+            <th>MAC地址</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody>
         <tr>
+            <td>名称</td>
+            <td>名称</td>
             <td>名称</td>
             <td>名称</td>
             <td>名称</td>
@@ -101,8 +108,8 @@
 <script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/flat_slider.js"></script>
-<script src="{{ STATIC_URL}}js/slice_topology_d3.js"></script>
 <script src="{{ STATIC_URL}}js/own_device.js"></script>
+<script src="{{ STATIC_URL}}js/slice_topology_d3.js"></script>
 <script>
 	var STATIC_URL = "{{ STATIC_URL}}";
 	$("#alert_close_sure").on("click", function(){

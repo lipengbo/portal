@@ -1,4 +1,4 @@
-var switch_ports_info = TAFFY();
+
 
 // set up SVG for D3
 var mode = "design";
@@ -808,24 +808,8 @@ function restart() {
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
         }else if(own_device == 1){
+            show_switch_port(d.key);
             
-            $.ajax({
-                url : "/plugins/vt/get_switch_port/",
-                type : "GET",
-                contentType: "application/json; charset=utf-8",
-                dataType : "json",
-                error : function(e){
-			        //document.getElementById('alert_info').innerHTML = "获取网关IP出错！";
-			       // $('#alert_modal').modal('show');
-                    // alert("获取网关IP出错！");
-                },
-                success : function(switchs){
-                    $.each(switchs, function(i, _switch){
-                        alert(_switch[i]);
-                        
-                    });
-                }
-            });
         }
     })
     .on('mouseover', function(d) {
