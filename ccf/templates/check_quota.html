@@ -1,0 +1,109 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load crispy_forms_field %}
+{% load i18n %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load project_tags %}
+
+{% block head_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">配额</li>
+{% endblock %}
+{% block body %}
+<h4 class="block_title show-dhcp">    
+    <div class="pull-right">       
+        <a class="btn btn_info" href="#">申请扩大配额</a>        
+    </div>
+</h4>
+<table class="table_defined check_quota_table">
+    <thead>
+        <tr>
+            <th width="15%">资源</th>
+            <th width="35%">使用情况</th>
+            <th width="15%">资源</th>
+            <th width="35%">使用情况</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>项目<span>（个）</span></td>
+            <td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="progress progress_defined">
+                            1.90%
+                            <div class="progress-bar progress-bar-success" style="width: 1.9%;"></div>
+                        </div>
+                    </div>
+                </div>  
+            </td>
+            <td>Slice<span>（个）</span></td>
+            <td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="progress progress_defined">
+                            1.90%
+                            <div class="progress-bar progress-bar-success" style="width: 1.9%;"></div>
+                        </div>
+                    </div>
+                </div>               
+            </td>
+        </tr>
+        <tr>
+            <td>VM<span>（个）</span></td>
+            <td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="progress progress_defined">
+                            1.90%
+                            <div class="progress-bar progress-bar-success" style="width: 1.9%;"></div>
+                        </div>
+                    </div>
+                </div>  
+            </td>
+            <td>CPU<span>（核）</span></td>
+            <td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="progress progress_defined">
+                            1.90%
+                            <div class="progress-bar progress-bar-success" style="width: 1.9%;"></div>
+                        </div>
+                    </div>
+                </div>               
+            </td>
+        </tr>
+        <tr>
+            <td>Disk<span>（G）</span></td>
+            <td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="progress progress_defined">
+                            1.90%
+                            <div class="progress-bar progress-bar-success" style="width: 1.9%;"></div>
+                        </div>
+                    </div>
+                </div>  
+            </td>
+            <td>Mem<span>（G）</span></td>
+            <td>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="progress progress_defined">
+                            1.90%
+                            <div class="progress-bar progress-bar-success" style="width: 1.9%;"></div>
+                        </div>
+                    </div>
+                </div>               
+            </td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}
+
+{% block extra_script %}
+{% endblock %}
