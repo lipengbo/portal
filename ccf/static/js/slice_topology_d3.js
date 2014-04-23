@@ -113,7 +113,7 @@ var gre_ovs_capacity = [];
 board.append('svg:rect')
     .attr('width', width)
     .attr('height', height)
-    .attr('fill', 'white');
+    .attr('fill', 'transparent');
 
 function rescale() {
     
@@ -802,6 +802,8 @@ function restart() {
             else{
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
+        }else{
+            
         }
     })
     .on('mouseover', function(d) {

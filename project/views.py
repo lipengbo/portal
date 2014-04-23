@@ -349,6 +349,7 @@ def delete_member(request, id):
     return redirect("project_detail", id=project.id)
 
 @login_required
+@transaction.commit_on_success
 def delete_project(request, id):
     project = get_object_or_404(Project, id=id)
     if request.user.has_perm('project.delete_project', project):

@@ -30,7 +30,7 @@
         </div></td>
       <td class="slice_state"><div>
         {% if vm.state != "" %}
-            {% if vm.state == 8 %}
+            {% if vm.state == 8 or vm.state == 12 or vm.state == 13%}
                 <i class="icon-spinner icon-spin check_vm" id="icon_state{{vm.id}}"></i>
             {% elif vm.state == 9 or vm.state == 10 %}
                 <i class="icon-remove-sign" id="icon_state{{vm.id}}"></i>

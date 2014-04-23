@@ -1,0 +1,113 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+{% block breadcrumb %}
+    <li><a href="/project/">项目</a></li>
+	<li><a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a></li>
+	<li><a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a></li>
+    <li class="active">接入自有设备</li>
+{% endblock %}
+{% block body %}
+<!--警告框-->
+<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal-dialog">
+<div class="modal-content">    
+<div class="modal-body" id="slice_alert_info">
+      <p class="text-center"></p>
+    </div> 
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>
+    </div>          
+</div>
+</div>
+</div>
+
+<!-- 拓扑图 -->
+<div class="alert alert-info">
+      <strong>提示：</strong>
+      点击拓扑上节点，可显示详细信息。
+</div>
+<div class="device_access clearfix">
+    <div class="col-md-9">
+        <iframe scrolling="no" id="topologyiframe" width="100%" height="400" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=700&height=400&top=0&band=0" frameborder="0"></iframe>
+    </div> 
+    <div class="col-md-3">
+        <div class="device_access_form form-inline">
+            <p><strong>名称1xxxxhhhh</strong></p>
+            <div class="form-group">
+                <label class="control-label" for="">可选端口</label>
+                <select class="form-control">
+                    <option>端口1</option>
+                    <option>端口2</option>
+                    <option>端口3</option>
+                    <option>端口4</option>
+                    <option>端口55555</option>
+                 </select> 
+            </div>                         
+            <div class="device_access_btn">
+                 <label class="control-label" for="">是否独占</label>         
+                 <div class="tuopu_btn">
+                        <span class="switch_btn dk">
+                            <span class="switch_content">停止</span>
+                        </span>
+                 </div>             
+            </div>
+            <p class="device_access_savebtn">
+                <button type="button" class="btn btn_info">保存</button>
+            </p>
+        </div>
+    </div> 
+</div>
+
+<h4 class="block_title show-dhcp">
+            <img src="/site_media/static/img/ic_slice.png">端口列表
+</h4>
+<table class="table_defined">
+    <thead>
+        <tr>
+            <th>名称</th>
+            <th>名称</th>
+            <th>名称</th>
+            <th>名称</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>名称</td>
+            <td>名称</td>
+            <td>名称</td>
+            <td>名称</td>
+        </tr>
+    </tbody>
+</table>
+
+<form class="form-horizontal" action="" method="post" accept-charset="utf-8">
+                
+         <div class="form-actions">
+            <div class="row buttons_margin">
+                <div class="col-md-4"></div>
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" >{% trans "Cancel" %}</button></div>
+                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" >{% trans "Submit" %}</button></div>
+                <div class="col-md-4"></div>
+            </div>
+        </div>
+    
+</form>
+{% endblock %}
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+<script>
+	var STATIC_URL = "{{ STATIC_URL}}";
+	$("#alert_close_sure").on("click", function(){
+		window.location.href='/slice/detail/' + {{sliceid}} + '/';
+	})
+	
+</script>
+
+{% endblock %}

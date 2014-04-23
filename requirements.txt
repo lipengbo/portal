@@ -22,3 +22,4 @@ South==0.8.1
 django-smtp-ssl==1.0
 django-celery-with-redis==3.0
 django-feedback==0.4.1
+pycrypto==2.6.1

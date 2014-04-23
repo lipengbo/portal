@@ -17,7 +17,7 @@ function update_vm_status(){
     //alert(check_vm_id_objs.length);
     if(check_vm_id_objs.length > 0){
         slice_id = $("#slice_id").text();
-        check_vm_time_id = setTimeout("check_vm_status("+slice_id+")",5000);
+        check_vm_time_id = setTimeout("check_vm_status("+slice_id+")",1000);
     }else{
         //check_vm_time_id = setTimeout("update_vm_status()",5000);
     }
@@ -82,19 +82,27 @@ function check_vm_status(slice_id){
                                 .removeClass("check_vm")
                                 .addClass("icon-remove-sign");   
                         }else if(status == 1){
-                            vm_obj.removeClass("icon-spinner")
+							vm_obj.removeClass("icon-spinner")
                                 .removeClass("icon-spin")
                                 .removeClass("check_vm")
                                 .addClass("icon-ok-sign")
-                                .addClass("icon_state"); 
+                                .addClass("icon_state");
                             //启停虚拟机按钮
                             a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
                             img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
+							if(img_obj.title == "停止中"){
+								$("div#slice_alert_info").empty();
+                            	var str = "" + "<p class=\"text-center\">虚拟机停止失败！</p>";
+                            	$("div#slice_alert_info").append(str);
+                            	$('#slicealertModal').modal('show');
+							}
                             if(a_obj){
-                            a_obj.style.cursor = "pointer";}
+                            	a_obj.style.cursor = "pointer";
+							}
                             if(img_obj){
-                            img_obj.src = STATIC_URL + "img/btn_tz.png";       
-                            img_obj.title = "停止";}
+                            	img_obj.src = STATIC_URL + "img/btn_tz.png";       
+                            	img_obj.title = "停止";
+							}
                             //虚拟机登录按钮
                             a_obj = $("#"+check_nodes[j].cur_vm_id+"_dl")[0];
                             img_obj = $("#"+check_nodes[j].cur_vm_id+"_dl").children("img")[0];
@@ -108,20 +116,28 @@ function check_vm_status(slice_id){
                             if(a_obj){
                             a_obj.style.cursor = "pointer";}
                             if(img_obj){
-                            img_obj.src = STATIC_URL + "img/btn_jk.png"; }    
-                        }else{
-                            vm_obj.removeClass("icon-spinner")
+                            img_obj.src = STATIC_URL + "img/btn_jk.png"; } 
+							document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(check_nodes[j].cur_vm_id, 1);   
+                        }else if(status == 5  || status == 0){
+							vm_obj.removeClass("icon-spinner")
                                 .removeClass("icon-spin")
                                 .removeClass("check_vm")
                                 .addClass("icon-minus-sign")
                                 .addClass("icon_state"); 
                             a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
                             img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
+							if(img_obj.title == "启动中"){
+								$("div#slice_alert_info").empty();
+                            	var str = "" + "<p class=\"text-center\">虚拟机启动失败！</p>";
+                            	$("div#slice_alert_info").append(str);
+                            	$('#slicealertModal').modal('show');
+							}
                             if(a_obj){
                             a_obj.style.cursor = "pointer";}
                             if(img_obj){
                             img_obj.src = STATIC_URL + "img/btn_qd.png";       
                             img_obj.title = "启动"; }
+							document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(check_nodes[j].cur_vm_id, 5);
                         }
                     }
                 }

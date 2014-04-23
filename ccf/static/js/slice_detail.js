@@ -11,14 +11,21 @@ function start_stop_vm(vm_id, vm_type){
         //alert(1);
         ret = start_or_stop_vm(vm_id, "create");
         if(ret){
-            img_obj.src = STATIC_URL + "img/btn_tz.png";       
-            img_obj.title = "停止";
-            $("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
-            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
-            a_obj = $("#"+vm_id+"_dl")[0];
-            img_obj = $("#"+vm_id+"_dl").children("img")[0];
-            a_obj.style.cursor = "pointer";
-            img_obj.src = STATIC_URL + "img/btn_dl.png"; 
+            img_obj.src = STATIC_URL + "img/btn_qd_gray.png";//"img/btn_tz.png";       
+            img_obj.title = "启动中";//"停止";
+            //$("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
+			$("#icon_state"+vm_id)
+				.removeClass("icon-minus-sign")
+                .removeClass("icon_state")
+                .addClass("icon-spinner")
+                .addClass("icon-spin")
+				.addClass("check_vm");
+            //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
+            //a_obj = $("#"+vm_id+"_dl")[0];
+            //img_obj = $("#"+vm_id+"_dl").children("img")[0];
+            //a_obj.style.cursor = "pointer";
+            //img_obj.src = STATIC_URL + "img/btn_dl.png";
+			update_vm_status(); 
         }else{
             //alert(1);
         }
@@ -26,14 +33,17 @@ function start_stop_vm(vm_id, vm_type){
         //alert(2);
         ret = start_or_stop_vm(vm_id, "destroy");
         if(ret){
-            img_obj.src = STATIC_URL + "img/btn_qd.png";       
-            img_obj.title = "启动";
-            $("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
-            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+            img_obj.src = STATIC_URL + "img/btn_qd_gray.png";       
+            img_obj.title = "停止中";//"启动";
+            //$("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
+			$("#icon_state"+vm_id).removeClass("icon-ok-sign").removeClass("icon_state")
+								  .addClass("icon-spinner").addClass("icon-spin").addClass("check_vm");
+            //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
             a_obj = $("#"+vm_id+"_dl")[0];
             img_obj = $("#"+vm_id+"_dl").children("img")[0];
             a_obj.style.cursor = "not-allowed";
             img_obj.src = STATIC_URL + "img/btn_dl_gray.png"; 
+			update_vm_status();
         }else{
             //alert(2);
         }
@@ -329,8 +339,8 @@ function set_dhcp(slice_id, flag){
 }
 
 
-//添加虚拟机click事件
-function add_vm(slice_id){
+//添加设备
+function select_to_add_device(slice_id){
     var a_obj = $("#vm_add")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
@@ -338,10 +348,25 @@ function add_vm(slice_id){
         return;
     }else{
         //alert(1);
-        location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+        //location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+		$("#adddevicetModal").modal('show');
     }
+	//
 }
 
+function add_device(slice_id){
+	var device_type = document.getElementsByName("device");
+	 for(var i=0; i<device_type.length; i++){  
+            if(device_type[i].checked){  
+                if(device_type[i].value == "customdevice"){
+					location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";  
+                }  
+                if(device_type[i].value == "vmdevice"){
+					location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+                }  
+            }   
+        }
+}
 
  //编辑slice描述信息
  function edit_description(slice_id){
