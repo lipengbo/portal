@@ -113,7 +113,7 @@ var gre_ovs_capacity = [];
 board.append('svg:rect')
     .attr('width', width)
     .attr('height', height)
-    .attr('fill', 'white');
+    .attr('fill', 'transparent');
 
 function rescale() {
     
