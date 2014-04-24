@@ -29,12 +29,16 @@ $(document).ready(function(){
             document.getElementById("enable_switch_port").innerHTML = port_content;
        }
     });
+    $('.mac_addrs').hide();
     $('.device_access_savebtn').on("click", function(){
         if(!check_port()) return;
-        if(check_macs()){
-            $('.mac_addrs').removeClass('has-error');
-            document.getElementById('mac_err_msg').innerHTML = '';
+        if(!$('.switch_btn.dk').hasClass("checked")){
+            if(check_macs()){
+                $('.mac_addrs').removeClass('has-error');
+                document.getElementById('mac_err_msg').innerHTML = '';
+            }
         }
+        
         _port_id = parseInt($("#enable_switch_port").find("option:selected").attr("id"));
         _port_name = $("#enable_switch_port").find("option:selected").text();
         if ($('.switch_btn.dk').hasClass("checked")){
@@ -82,9 +86,11 @@ $(document).ready(function(){
 			if($(this).hasClass("checked")) {
                 $(this).removeClass("checked");
                 $(this).children(".switch_content").html("否");
+                $('.mac_addrs').show();
             }else{
 				$(this).addClass("checked");
                 $(this).children(".switch_content").html("是");
+                $('.mac_addrs').hide();
 			}
 		});
     
@@ -110,7 +116,7 @@ function check_macs(){
         document.getElementById('mac_err_msg').innerHTML = '该项为必填项';
         return false;
     }
-    var mac_addrs = $('#mac_addrs').val().trim().split(";");
+    var mac_addrs = $('#mac_addrs').val().trim().split(",");
     for(var i=0; i<mac_addrs.length; i++){
         if(!isMac(mac_addrs[i])){
             $('.mac_addr').addClass('has-error');
@@ -161,7 +167,7 @@ function show_err_msg(msg){
 }
 
 function commit_ports(sliceid){
-    var ports_data = JSON.stringify(selected_switch_ports().select("port_id", "port_type"));    
+    var ports_data = JSON.stringify(selected_switch_ports().select("port_id", "port_type", "macs"));    
     $.ajax({
         url: '/plugins/vt/add_own_ports/'+sliceid+'/',
         type: 'POST',
@@ -169,10 +175,11 @@ function commit_ports(sliceid){
         dataType : "json",
         async: false,
         success:function(data){
-            /*if(data.result == 0){
-                alert('add success');
-            }*/
-            alert(data.result);
+            if(data.result == 0){
+                window.location.href='/slice/detail/' + sliceid + '/';
+            }else{
+                show_err_msg('添加端口失败，请重新选择');
+            }
         }
         
     });

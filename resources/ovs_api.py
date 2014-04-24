@@ -304,7 +304,7 @@ def slice_add_port(slice_obj, port_id, add_type):
                 if int(add_type) == 0:
                     if not port.can_monopolize():
                         raise DbError("端口已被占用！")
-                slice_port = SlicePort.objects.get_or_create(
+                slice_port = SlicePort.objects.create(
                     switch_port=port, slice=slice_obj, type=int(add_type))
             slice_obj.flowspace_changed(2)
             return slice_port
@@ -339,4 +339,5 @@ def slice_add_owner_device(slice_port, mac_list):
     except DbError:
         raise
     except Exception:
+        traceback.print_exc()
         raise DbError("自接入设备添加失败！")
