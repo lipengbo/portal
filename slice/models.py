@@ -272,6 +272,12 @@ class Slice(models.Model):
         else:
             return True
 
+    def switch_added(self, switch):
+        if self.sliceswitch_set.filter(switch=switch).count() == 0:
+            return False
+        else:
+            return True
+
     def delete(self, *args, **kwargs):
         import traceback
         try:
