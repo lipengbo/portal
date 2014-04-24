@@ -295,6 +295,8 @@ def slice_add_port(slice_obj, port_id, add_type):
             if slice_ports:
                 slice_port = slice_ports[0]
                 if slice_port.type != int(add_type):
+                    if slice_port.type == 1:
+                        slice_port.ownerdevice_set.all().delete()
                     slice_port.type = int(add_type)
                     slice_port.save()
             else:
