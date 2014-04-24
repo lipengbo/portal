@@ -284,7 +284,7 @@ def get_edge_ports(slice_obj):
 
 
 def slice_add_port(slice_obj, port_id, add_type):
-    """slice添加交换端口，外接设备。
+    """slice添加外接设备接入的交换端口。
     """
     LOG.debug('slice_add_port')
     try:
@@ -338,3 +338,19 @@ def slice_add_owner_device(slice_port, mac_list):
         raise
     except Exception:
         raise DbError("自接入设备添加失败！")
+
+
+@transaction.commit_manually
+def slice_add_port_device(slice_obj, port_id, add_type, mac_list=None):
+    """slice添加用户自接入设备。
+    mac_list为字符串类型，最长1024，格式为“mac1,mac2,...”
+    """
+    LOG.debug('slice_add_port_device')
+    try:
+        slice_port = slice_add_port(slice_obj, port_id, add_type)
+        if int(add_type) == 1:
+            slice_add_owner_device(slice_port, mac_list)
+        transaction.commit()
+    except:
+        transaction.rollback()
+        raise
