@@ -7037,6 +7037,15 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
+.create_vm_form td.cpu_chose a.disabled {
+  border-color: #bebebe;
+  background: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+.create_vm_form td.cpu_chose a.disabled:hover {
+  border-color: #bebebe;
+}
 .create_vm_form td.type_chose a:hover,
 .create_vm_form td.cpu_chose a:hover {
   border-color: #2b8fcd;
