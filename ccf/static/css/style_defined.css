@@ -5801,6 +5801,11 @@ textarea {
 .clear {
   clear: both;
 }
+a:active,
+a:hover,
+a:focus {
+  outline: none;
+}
 /* bootstrap defined */
 .alert {
   border-radius: 0;
