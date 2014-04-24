@@ -305,6 +305,7 @@ def slice_add_port(slice_obj, port_id, add_type):
                         raise DbError("端口已被占用！")
                 slice_port = SlicePort.objects.get_or_create(
                     switch_port=port, slice=slice_obj, type=int(add_type))
+            slice_obj.flowspace_changed(2)
             return slice_port
         else:
             raise DbError("端口添加失败！")

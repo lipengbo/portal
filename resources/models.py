@@ -222,6 +222,15 @@ class SwitchPort(Resource):
         else:
             return True
 
+    def is_edge(self):
+        from plugins.openflow.models import Link
+        links_src_c = Link.objects.filter(source=self).count()
+        links_tag_c = Link.objects.filter(target=self).count()
+        if links_src_c + links_tag_c == 0:
+            return True
+        else:
+            return False
+
     class Meta:
         unique_together = (("switch", "port"), )
         verbose_name = _("Switch Port")
