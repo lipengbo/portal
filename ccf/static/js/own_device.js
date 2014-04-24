@@ -36,6 +36,8 @@ $(document).ready(function(){
             if(check_macs()){
                 $('.mac_addrs').removeClass('has-error');
                 document.getElementById('mac_err_msg').innerHTML = '';
+            }else{
+                return;
             }
         }
         
@@ -178,7 +180,7 @@ function commit_ports(sliceid){
             if(data.result == 0){
                 window.location.href='/slice/detail/' + sliceid + '/';
             }else{
-                show_err_msg('添加端口失败，请重新选择');
+                
             }
         }
         

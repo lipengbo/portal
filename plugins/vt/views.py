@@ -24,7 +24,7 @@ from plugins.common.aes import *
 from plugins.ipam.models import Subnet
 from models import Image, Flavor, SSHKey
 from resources.models import Server, SwitchPort
-from resources.ovs_api import get_edge_ports, slice_add_port, slice_add_owner_device
+from resources.ovs_api import get_edge_ports, slice_add_port_device
 from plugins.vt import api
 import logging
 from django.utils.translation import ugettext as _
@@ -131,10 +131,8 @@ def create_device(request, sliceid):
             slice_obj = Slice.objects.get(id=sliceid)
             for port in ports_data:
                 #print port[0], "===", port[1]
-                slice_port = slice_add_port(slice_obj, port[0], port[1])
+                slice_add_port_device(slice_obj, port[0], port[1], port[2])
                 #print "-------", port[2], ":", slice_port
-                if int(port[1]) == 1:
-                    slice_add_owner_device(slice_port, port[2])
 
 
             return HttpResponse(json.dumps({'result':0}))
