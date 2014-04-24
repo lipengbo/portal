@@ -1,7 +1,7 @@
 # coding:utf-8
 from communication.flowvisor_client import  do_updateFlowSpace, FlowvisorClient
 from slice.slice_exception import FlowvisorError, DbError
-from communication.cnvp_client import CnvpClient
+from communication.cnvp_http_client import CnvpClient
 
 import logging
 LOG = logging.getLogger("CENI")

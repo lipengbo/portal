@@ -1,6 +1,6 @@
 # coding:utf-8
 from slice.models import Slice
-from resources.models import Switch, VirtualSwitch, OVS_TYPE, SwitchPort, SlicePort
+from resources.models import Switch, VirtualSwitch, OVS_TYPE, SwitchPort, SlicePort, OwnerDevice
 from slice.slice_exception import DbError
 from plugins.openflow.flowspace_api import flowspace_gw_add, flowspace_gw_del
 from django.db import transaction
@@ -291,15 +291,47 @@ def slice_add_port(slice_obj, port_id, add_type):
         Slice.objects.get(id=slice_obj.id)
         port = SwitchPort.objects.get(id=int(port_id))
         if slice_obj.switch_added(port.switch):
-            if not slice_obj.port_added(port):
+            slice_ports = slice_obj.sliceport_set.filter(switch_port=port)
+            if slice_ports:
+                slice_port = slice_ports[0]
+                if slice_port.type != int(add_type):
+                    slice_port.type = int(add_type)
+                    slice_port.save()
+            else:
                 if int(add_type) == 0:
                     if not port.can_monopolize():
                         raise DbError("端口已被占用！")
-                SlicePort.objects.get_or_create(
+                slice_port = SlicePort.objects.get_or_create(
                     switch_port=port, slice=slice_obj, type=int(add_type))
+            return slice_port
         else:
             raise DbError("端口添加失败！")
     except DbError:
         raise
     except Exception:
         raise DbError("端口添加失败！")
+
+
+def slice_add_owner_device(slice_port, mac_list):
+    """slice添加用户自接入设备。
+    mac_list为字符串类型，最长1024，格式为“mac1,mac2,...”
+    """
+    LOG.debug('slice_add_owner_device')
+    try:
+        if slice_port and mac_list:
+            owner_devices = OwnerDevice.objects.filter(slice_port=slice_port)
+            if owner_devices:
+                owner_device = owner_devices[0]
+                if owner_device.mac_list != mac_list:
+                    owner_device.mac_list = mac_list
+                    owner_device.save()
+            else:
+                owner_device = OwnerDevice.objects.get_or_create(
+                    mac_list=mac_list, slice_port=slice_port)
+            return owner_device
+        else:
+            raise DbError("参数错误！")
+    except DbError:
+        raise
+    except Exception:
+        raise DbError("自接入设备添加失败！")
