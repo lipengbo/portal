@@ -4,6 +4,7 @@ from django import forms
 from django.conf import settings
 
 class ApplyForm(forms.Form):
+
     project = forms.ChoiceField(choices=())
     slice = forms.ChoiceField(choices=())
     vm = forms.ChoiceField(choices=())
@@ -11,8 +12,10 @@ class ApplyForm(forms.Form):
     mem = forms.ChoiceField(choices=())
     disk = forms.ChoiceField(choices=())
 
+    description = forms.CharField(max_length=1024)
+
     def __init__(self, *args, **kwargs):
-        super(ApplyForm, self).__init__(self, *args, **kwargs)
+        super(ApplyForm, self).__init__(*args, **kwargs)
         cpu_quotas = settings.QUOTAS['cpu']
         project_quotas = settings.QUOTAS['project']
         vm_quotas = settings.QUOTAS['vm']

@@ -1,0 +1,54 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load crispy_forms_field %}
+{% load i18n %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load project_tags %}
+
+{% block head_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="#">配额</a></li>
+<li class="active">申请扩大配额</li>
+{% endblock %}
+{% block body %}
+<form action="" method="post" accept-charset="utf-8">
+<div class="row">
+    <div class="col-md-6">
+        {% include "quota_admin/_quota_selector.html" %}
+    </div>
+    <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+            <label for="" class="control-label col-md-2 requiredField">申请原因</label>
+            <div class="controls col-md-10">
+                <textarea id="" rows="15" cols="40" name="description" class="textarea form-control"></textarea>              
+                <div class="text-danger">
+                {{ form.description.errors }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% csrf_token %}
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><a href="{% url quota_admin_quota  %}" class="btn btn-lg btn-block btn_info">取消</a></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-lg btn-block btn_info">申请</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+</form>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var current_mem = {{ user.quotas.mem }};
+    var current_disk = {{ user.quotas.disk }};
+    {% include "quota_admin/_selector.js" %}
+</script>
+{% endblock %}

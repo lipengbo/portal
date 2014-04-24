@@ -16,22 +16,28 @@ from quota_admin.forms import ApplyForm
 from notifications import notify
 
 def index(request):
-    QUOATS = settings.QUOTAS
+    QUOTAS = settings.QUOTAS
     context = {}
     context['quotas'] = QUOTAS
     if request.method == 'POST':
         form = ApplyForm(request.POST)
+        context['form'] = form
         if form.is_valid():
             resources = {'project': None, 'slice': None, 'vm': None, 'cpu': None, 'mem': None, 'disk': None}
             for resource in resources.keys():
                 quota = form.cleaned_data.get(resource)
                 resources[resource] = quota
-            desc = "申请配额：项目个数-{project}，虚网个数-{slice}，虚拟机个数-{vm}，CPU个数-{cpu}，内存-{mem}MB，磁盘容量-{disk}G".format(resources)
+            desc = u"申请配额：项目个数-{project}，虚网个数-{slice}，虚拟机个数-{vm}，CPU个数-{cpu}，内存-{mem}MB，磁盘容量-{disk}G。申请理由：".format(**resources)
+            desc += form.cleaned_data.get('description')
             admins = User.objects.filter(is_superuser=True)
             if len(admins) > 0:
                 admin = admins[0]
-                notify.send(request.user, recipient=admin, verb='申请升级配额', action_object=request.user.get_profile(),
+                notify.send(request.user, recipient=admin, verb=u'申请升级配额', action_object=request.user.get_profile(),
                     description=desc)
+                #return redirect('')
 
-    return render(request, 'quota_admin/index.html', context)
+    return render(request, 'quota_admin/apply_expanding_quota.html', context)
 
+def quota(request):
+    context = {}
+    return render(request, 'quota_admin/user_quota.html', context)

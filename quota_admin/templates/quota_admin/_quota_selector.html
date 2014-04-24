@@ -1,0 +1,80 @@
+        <table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
+             <tbody>
+                 <tr>
+                     <td><b>项目</b></td>
+                     <td class="cpu_chose">
+                         {% for quota in quotas.project %}
+                         <a href="javascript:void(0);" name="project" class="{% if user.quotas.project == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
+                         {% endfor %}
+                         <ul class="list-unstyled text-danger">
+                             {{ form.project.errors }}
+                         </ul>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>Slice</b></td>
+                     <td class="cpu_chose">
+                         {% for quota in quotas.slice %}
+                         <a href="javascript:void(0);" name="slice" class="{% if user.quotas.slice == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
+                         {% endfor %}
+                         <ul class="list-unstyled text-danger">
+                             {{ form.slice.errors }}
+                         </ul>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>VM</b></td>
+                     <td class="cpu_chose">
+                         {% for quota in quotas.vm %}
+                         <a href="javascript:void(0);" name="vm" class="{% if user.quotas.vm == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
+                         {% endfor %}
+                         <ul class="list-unstyled text-danger">
+                             {{ form.vm.errors }}
+                         </ul>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>CPU</b></td>
+                     <td class="cpu_chose">
+                         {% for quota in quotas.cpu %}
+                         <a href="javascript:void(0);" name="cpu" class="{% if user.quotas.cpu == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 核</a>
+                         {% endfor %}
+                         <ul class="list-unstyled text-danger">
+                             {{ form.cpu.errors }}
+                         </ul>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>内存</b></td>
+                     <td class="slider_td">
+                         <div id="mem_slider" name="mem" class="ui-slider">                 
+                         </div>
+                         <span class="value_s">{{ quotas.mem|first }}MB</span>
+                         <span class="value_e">{{ quotas.mem|last }}MB</span>
+                         <ul class="list-unstyled text-danger">
+                             {{ form.mem.errors }}
+                         </ul>
+                     </td>
+                 </tr>  
+                 <tr>
+                     <td><b>磁盘</b></td>
+                     <td class="slider_td">
+
+                         <div id="disk_slider" name="disk" class="ui-slider">                 
+                         </div>
+                         <span class="value_s">{{ quotas.disk|first }}GB</span>
+                         <span class="value_e">{{ quotas.disk|last }}GB</span>
+                         <ul class="list-unstyled text-danger">
+                             {{ form.disk.errors }}
+                         </ul>
+                     </td>
+                 </tr>
+             </tbody>
+         </table>
+
+<input type="hidden" name="project" value="{{ user.quotas.project }}">
+<input type="hidden" name="slice" value="{{ user.quotas.slice}}">
+<input type="hidden" name="vm" value="{{ user.quotas.vm }}">
+<input type="hidden" name="cpu" value="{{ user.quotas.cpu }}">
+<input type="hidden" name="mem" value="{{ user.quotas.mem }}">
+<input type="hidden" name="disk" value="{{ user.quotas.disk }}">

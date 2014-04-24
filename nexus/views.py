@@ -12,6 +12,8 @@ from django.db.models import get_model
 from django.forms.models import modelform_factory
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.contrib.auth.models import Permission
+
 
 
 from nexus.templatetags.nexus_tags import get_fields
@@ -106,6 +108,14 @@ def add_or_edit(request, app_label, model_class, id=None):
         context['formset'] = ModelForm(instance=instance, initial=defaults)
     else:
         formset = ModelForm(request.POST, instance=instance)
+        #: quota perm
+        if model_class == 'user':
+            resources = {'project': None, 'slice': None, 'vm': None, 'cpu': None, 'mem': None, 'disk': None}
+            for resource in resources.keys():
+                quota = request.POST.get(resource)
+                instance.user_permissions.remove(*list(Permission.objects.filter(codename__contains='quota_{}_'.format(resource))))
+                instance.user_permissions.add(Permission.objects.get(codename='quota_{}_{}'.format(resource, quota)))
+        #: save
         if formset.is_valid():
                 instances = formset.save()
                 return redirect('nexus_list', app_label=app_label, model_class=model_class)

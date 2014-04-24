@@ -4,6 +4,7 @@
 {% load common_tags %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+{% load quota_admin_tags %}
 
 {% block extra_style %}
     <link rel="stylesheet" type="text/css" href="{% static "css/citySelector.css" %}" />       
@@ -30,6 +31,10 @@
                 <button type="submit" class="btn btn-info">{% trans "Accept" %}</button>
                 <a href="{% url profiles_reject formset.instance.id %}" class="btn btn-default">{% trans "Reject" %}</a>
                 {% else %}
+                    {% if class_name == 'User' %}
+                        {% quotas %}
+                        {% include "quota_admin/_quota_selector.html" with user=formset.instance %}
+                    {% endif %}
                 <button type="submit" class="btn btn-info">{% trans "Save" %}</button>
                 {% endif %}
             </div>
@@ -40,8 +45,16 @@
 {% endblock %}
 
 {% block extra_script %}
-<script src="{{ STATIC_URL}}js/citySelector.js"></script>
 {% with ModelClass|get_class_name as class_name  %}
+{% if class_name == 'User' %}
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var current_mem = {{ formset.instance.quotas.mem }};
+    var current_disk = {{ formset.instance.quotas.disk }};
+    {% include "quota_admin/_selector.js" %}
+</script>
+{% endif %}
+<script src="{{ STATIC_URL}}js/citySelector.js"></script>
 <script type="text/javascript" charset="utf-8">
     {% if class_name == 'Flowvisor' %}
         $('#id_island').change(function(){
