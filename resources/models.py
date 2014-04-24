@@ -216,12 +216,20 @@ class SwitchPort(Resource):
                 slice_obj.remove_resource(switch)
 
     def can_monopolize(self):
-        slice_ports_c = SlicePort.objects.filter(
-            switch_port=self, type=PORT_MONOPOLIZE).count()
+        slice_ports_c = SlicePort.objects.filter(switch_port=self).count()
         if slice_ports_c > 0:
             return False
         else:
             return True
+
+    def is_edge(self):
+        from plugins.openflow.models import Link
+        links_src_c = Link.objects.filter(source=self).count()
+        links_tag_c = Link.objects.filter(target=self).count()
+        if links_src_c + links_tag_c == 0:
+            return True
+        else:
+            return False
 
     class Meta:
         unique_together = (("switch", "port"), )
@@ -237,6 +245,14 @@ class SlicePort(models.Model):
     class Meta:
         unique_together = (("slice", "switch_port"), )
         verbose_name = _("Slice Port")
+
+
+class OwnerDevice(models.Model):
+    mac_list = models.CharField(max_length=1024)
+    slice_port = models.ForeignKey(SlicePort)
+
+    class Meta:
+        verbose_name = _("Owner Device")
 
 
 class VirtualSwitch(Switch):

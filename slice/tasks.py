@@ -1,3 +1,4 @@
+# coding:utf-8
 from celery import task
 from slice.models import Slice
 from plugins.openflow.flowvisor_api import flowvisor_update_slice_status
@@ -54,7 +55,8 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
             slice_obj.start()
     except Slice.DoesNotExist:
         pass
-    except:
+    except Exception, ex:
+        print ex
         try:
             slice_obj.stop()
             if flag:
