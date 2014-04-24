@@ -11,14 +11,14 @@
 {% endblock %}
 {% block body %}
 <!--警告框-->
-<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="portalertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 <div class="modal-dialog">
 <div class="modal-content">    
-<div class="modal-body" id="slice_alert_info">
+<div class="modal-body" id="port_alert_info">
       <p class="text-center"></p>
     </div> 
     <div class="modal-footer">
-      <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>
+      <button class="btn delete-confirm btn_info" data-dismiss="modal">确定</button>
     </div>          
 </div>
 </div>
@@ -35,7 +35,7 @@
     </div> 
     <div class="col-md-3">
         <div class="device_access_form form-inline">
-            <p id="_switch_port"><strong>ovs交换机</strong></p>
+            <p><strong><span id="_switch_port">ovs交换机</span></strong></p>
             <div class="form-group switch_port">
                 <label class="control-label" for="">可选端口</label>
                 <select class="form-control " id="enable_switch_port">
@@ -67,7 +67,7 @@
 <h4 class="block_title show-dhcp">
             <img src="/site_media/static/img/ic_slice.png">端口列表
 </h4>
-<table class="table_defined">
+<table class="table_defined" id="port_info_table">
     <thead>
         <tr>
             <th>交换机</th>
@@ -79,14 +79,6 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>名称</td>
-            <td>名称</td>
-            <td>名称</td>
-            <td>名称</td>
-            <td>名称</td>
-            <td>名称</td>
-        </tr>
     </tbody>
 </table>
 
@@ -107,13 +99,13 @@
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
-<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
-<script src="{{ STATIC_URL}}js/own_device.js"></script>
-<script src="{{ STATIC_URL}}js/slice_topology_d3.js"></script>
 <script>
 	var STATIC_URL = "{{ STATIC_URL}}";
-	$("#alert_close_sure").on("click", function(){
-		window.location.href='/slice/detail/' + {{sliceid}} + '/';
-	})
+    var sliceid = "{{slice_obj.id }}";
 </script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+<script src="{{ STATIC_URL}}js/own_device.js"></script>
+<script src="{{ STATIC_URL}}js/own_device_common.js"></script>
+
+
 {% endblock %}

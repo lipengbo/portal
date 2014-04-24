@@ -809,7 +809,7 @@ function restart() {
             }  
         }else if(own_device == 1){
             show_switch_port(d.key);
-            
+            //alert(parent.document.getElementById("_switch_port"));
         }
     })
     .on('mouseover', function(d) {
