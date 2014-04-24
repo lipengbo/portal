@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
+import datetime
 from south.db import db
 from south.v2 import SchemaMigration
 from django.db import models
@@ -16,14 +16,8 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('resources', ['OwnerDevice'])
 
-        # Adding unique constraint on 'OwnerDevice', fields ['mac_list', 'slice_port']
-        db.create_unique('resources_ownerdevice', ['mac_list', 'slice_port_id'])
-
 
     def backwards(self, orm):
-        # Removing unique constraint on 'OwnerDevice', fields ['mac_list', 'slice_port']
-        db.delete_unique('resources_ownerdevice', ['mac_list', 'slice_port_id'])
-
         # Deleting model 'OwnerDevice'
         db.delete_table('resources_ownerdevice')
 
@@ -104,7 +98,7 @@ class Migration(SchemaMigration):
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'resources.ownerdevice': {
-            'Meta': {'unique_together': "(('mac_list', 'slice_port'),)", 'object_name': 'OwnerDevice'},
+            'Meta': {'object_name': 'OwnerDevice'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mac_list': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
             'slice_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.SlicePort']"})
