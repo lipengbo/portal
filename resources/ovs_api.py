@@ -354,3 +354,26 @@ def slice_add_port_device(slice_obj, port_id, add_type, mac_list=None):
     except:
         transaction.rollback()
         raise
+
+
+@transaction.commit_manually
+def slice_delete_port_device(slice_obj, port_id):
+    """slice添加用户自接入设备。
+    mac_list为字符串类型，最长1024，格式为“mac1,mac2,...”
+    """
+    LOG.debug('slice_add_port_device')
+    try:
+        Slice.objects.get(id=slice_obj.id)
+        switch_ports = SwitchPort.objects.filter(id=port_id)
+        if switch_ports:
+            switch_port = switch_ports[0]
+            slice_ports = switch_port.sliceport_set.filter(slice=slice_obj)
+            for slice_port in slice_ports:
+                if slice_port.type == 1:
+                    owner_devices = slice_port.ownerdevice_set.all()
+                    owner_devices.delete()
+                slice_port.delete()
+        transaction.commit()
+    except:
+        transaction.rollback()
+        raise
