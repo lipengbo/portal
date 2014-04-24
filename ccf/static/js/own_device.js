@@ -153,3 +153,27 @@ function delete_portinfo(portid){
     selected_switch_ports({port_id:portid}).remove();
     show_port_info_table();
 }
+
+function show_err_msg(msg){
+    var str = "<p class=\"text-center\">"+msg+"</p>";
+    $("#port_alert_info").empty().append(str);
+    $('#portalertModal').modal('show');
+}
+
+function commit_ports(sliceid){
+    var ports_data = JSON.stringify(selected_switch_ports().select("port_id", "port_type"));    
+    $.ajax({
+        url: '/plugins/vt/add_own_ports/'+sliceid+'/',
+        type: 'POST',
+        data: {"ports_data" : ports_data},
+        dataType : "json",
+        async: false,
+        success:function(data){
+            /*if(data.result == 0){
+                alert('add success');
+            }*/
+            alert(data.result);
+        }
+        
+    });
+}

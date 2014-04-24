@@ -368,6 +368,28 @@ function set_dhcp(slice_id, flag){
 
 //添加设备
 function select_to_add_device(slice_id){
+    //判断是否有可用的边缘端口
+    var ports = 0;
+    $.ajax({
+        url : "/plugins/vt/get_switch_port/"+slice_id+"/",
+        type : "GET",
+        dataType : "json",
+        async : false,
+        success : function(switchs){
+            $.each(switchs, function(i, _switch){
+                $.each(_switch['ports'], function(j, _port){
+                   ports++;
+                });
+                        
+            });
+            if(ports == 0){
+                $("#customdevice").attr("disabled", "disabled");
+                document.getElementById("customdevice_msg").innerHTML = '*没有可用的边缘节点端口';
+                document.getElementById("customdevice_msg").style.color = "red";
+            }
+       }
+    });
+
     var a_obj = $("#vm_add")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
