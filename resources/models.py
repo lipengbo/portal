@@ -243,7 +243,6 @@ class OwnerDevice(models.Model):
     slice_port = models.ForeignKey(SlicePort)
 
     class Meta:
-        unique_together = (("mac_list", "SlicePort"), )
         verbose_name = _("Owner Device")
 
 
