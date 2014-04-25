@@ -19,9 +19,17 @@ def buildRequest(url, cmd):
 def parseResponse(data):
     print data
     j = json.loads(data)
-    result = j["result"]
+    if "error" in j:
+        result = j["error"]
+        print result["code"]
+        print result["message"]
+        return [{"resultcode": 1, "resultmsg": "json foam error"}]
+    if "result" in j:
+        result = j["result"]
+    else:
+        return [{"resultcode": 2, "resultmsg": "json foam error"}]
     print 1
-    print j
+#     print j
     print result
     print result[0]["resultcode"]
     print result[0]["resultmsg"]
