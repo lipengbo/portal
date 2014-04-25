@@ -17,6 +17,7 @@ def buildRequest(url, cmd):
 
 
 def parseResponse(data):
+    print data
     j = json.loads(data)
     result = j["result"]
     print 1
@@ -41,7 +42,7 @@ def cnvp_service(cmd, cnvp_url):
         print 11
         print e
         import traceback
-        traceback.print_stack()
+        #traceback.print_stack()
         traceback.print_exc()
         if str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
             return cnvp_service(cmd, cnvp_url)
