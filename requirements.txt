@@ -22,4 +22,4 @@ South==0.8.1
 django-smtp-ssl==1.0
 django-celery-with-redis==3.0
 pycrypto==2.6.1
-django-quotas==0.1
+git+https://github.com/mpasternacki/django-quotas
