@@ -436,7 +436,11 @@ def topology(request):
     city_id = int(request.GET.get('city_id', 0))
     island_id = int(island_id)
     total_facility = 4
-
+    tp_mod = request.GET.get('tp_mod')
+    try:
+        tp_mod = int(tp_mod)
+    except:
+        tp_mod = 1
     #slices = get_slices()
     return render(request, 'topology/index.html', {
         'node_infos': node_infos,
@@ -454,6 +458,7 @@ def topology(request):
         'hide_filter': hide_filter,
         'size': size,
         'show_virtual_switch':show_virtual_switch,
+        'tp_mod':tp_mod,
         #'slices': slices,
         'root_controllers': json.dumps(flowvisors)})
 

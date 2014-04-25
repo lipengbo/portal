@@ -34,16 +34,16 @@
                         <i class="icon-caret-right"></i> 
                     </a>
                 </li>
-                <li class="col-md-2">
+                <!--<li class="col-md-2">
                     <a href="#tab4" class="step">
                         <span class="number">4</span>
                         <span class="desc">虚拟机创建</span> 
                         <i class="icon-caret-right"></i>  
                     </a> 
-                </li>
+                </li>-->
                 <li class="col-md-2">
                     <a href="#tab4" class="step">
-                    <span class="number">5</span>
+                    <span class="number">4</span>
                     <span class="desc">虚网清单</span>   
                     <i class="icon-caret-right"></i>
                     </a> 
@@ -123,9 +123,7 @@
 
                          <tr>
                              <td class="text-right title_padding">
-                                 
-                                 虚拟机数
-                                 
+                                 虚拟机数                      
                              </td>
                              <td class="td_tooltip_padding">
                                  <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量" data-original-title="请根据实际需求选择最大虚拟机数量"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
@@ -142,6 +140,22 @@
                                 <span id="nw_numInfo" style="display:inline;float:none;"></span>
                              </td>
                          </tr>  
+                         
+                         <tr>
+                             <td class="text-right title_padding">
+                                 拓扑构建模式
+                             </td>
+                             <td></td>
+                             <td>
+                                <select name="tp_mod" id="tp_mod" class="form-control">
+                                  <option value="2">选择交换机</option>
+                                  <option value="1">选择交换机端口</option>
+                                </select>
+                             </td>
+                             <td>
+                                <span id="tp_modInfo" style="display:inline;float:none;"></span>
+                             </td>
+                         </tr>
                          
                      </tbody>
                  </table>                                             
@@ -162,6 +176,9 @@
                    <small>点击拓扑图中网络节点选择需要的实验拓扑，可以点击灰色区域拖动整个拓扑</small>
                 </h4>              
                 <div class="alert alert-info">
+                  <!--<img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网络出口节点，用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
+                  <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点；<br />
+                  <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点，提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />-->
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
                 </div>
@@ -184,13 +201,18 @@
                             </div>
                        </div>
                        <div class="frame_tip">
+                           <img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网络出口节点&nbsp
+                           <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点&nbsp
+                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点
+                       </div>
+                       <!--<div class="frame_tip">
                            <span class="frame_tip_r"></span>网络出口节点
                            <span class="frame_tip_b"></span>普通交换节点
                            <span class="frame_tip_g"></span>虚拟机关联节点
-                       </div>
+                       </div>-->
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
                   </div>
-                  <table class="switch-table table_defined">
+                  <table class="switch-table table_defined" style="display:none">
                     <thead>
                         <tr>
                             <th>序号</th>
@@ -202,24 +224,33 @@
                     <tbody>
                     	{%for ovs_port in ovs_ports%}
                     		<tr class="hide switch-data">
-                                    <td>{{ovs_port.switch.name}}</td>
+                                <td>
+                                    <input name="switch{{ovs_port.switch.dpid}}" type="hidden" disabled value="{{ ovs_port.switch.id }}" 
+                                    {%if ovs_port.switch_type == 3%}
+                                    serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" 
+                                    {%endif%}
+                                    switchtype="{{ovs_port.switch_type}}" 
+                                    switchname="{{ovs_port.switch.name}}" />
+                                    {{ovs_port.switch.name}}
+                                </td>
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
-	                            {% if ovs_port.switch_type == 1 %}
-	                            	交换节点
-	                            {%endif%}
-	                            {% if ovs_port.switch_type == 2 %}
-	                            	网络出口节点
-	                            {%endif%}
-	                            {% if ovs_port.switch_type == 3 %}
-	                            	虚拟机关联节点
-	                            {%endif%}
+    	                            {% if ovs_port.switch_type == 1 %}
+    	                            	交换节点
+    	                            {%endif%}
+    	                            {% if ovs_port.switch_type == 2 %}
+    	                            	网络出口节点
+    	                            {%endif%}
+    	                            {% if ovs_port.switch_type == 3 %}
+    	                            	虚拟机关联节点
+    	                            {%endif%}
 	                            </td>
 	                            <td>
 	                            	{%for port in ovs_port.switch_ports%}
                                             <label class="hide inline">
 		                            {% if ovs_port.switch_type == 3 %}
-                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{ port.name }}
+                                    <input type="hidden" disabled class="port-checkbox" data-dpid="{{ ovs_port.switch.dpid }}" name="switch_port_ids" value="{{port.id}}" 
+                                    serverid="{{ ovs_port.switch.virtualswitch.server.id }}" servername="{{ ovs_port.switch.virtualswitch.server.name }}" switchtype="{{ovs_port.switch_type}}" />{{ port.name }}
 					    {%else%}
                         <input type="hidden" disabled class="port-checkbox" name="switch_port_ids" value="{{port.id}}" data-dpid="{{ ovs_port.switch.dpid }}" switchtype="{{ovs_port.switch_type}}"/>{{ port.name }}
 		                            {%endif%}
@@ -406,14 +437,14 @@
               </div>
              </div>     
              
-             <div class="tab_part">
+             <!--<div class="tab_part">
 
                 <h4 class="title_word_bg block_title">
                                  <img src="{% static "img/ic_41.png" %}" />虚拟机配置                                        
                 </h4>  
                          
                           
-				<!-- 拓扑图 -->
+				
 				<div id="topologyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 				<div class="modal-dialog">
                 <div class="modal-content">
@@ -463,22 +494,12 @@
                          <tr>
                              <td><b>镜像</b></td>
                              <td>
-								<!--
-                                  <select onblur="check_vm_select('image')" name="image" id="id_image">
-                                    <option value="" selected="selected">---------</option>
-                                    <option value="51">1</option>
-                                  </select> <span name="imageInfo"></span-->
 							 	<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
                              </td>
                          </tr>
                          <tr>
                              <td><b>宿主机</b></td>
                              <td>
-								<!--
-                                 <select onblur="check_vminfo()" name="server" id="id_server">
-                                     <option value="" selected="selected">---------</option>
-                                     <option value="1">server1</option>
-                                 </select-->
 							 	<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div>
 								<span name="serverInfo"></span>
                                  <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
@@ -487,11 +508,6 @@
                          </tr>
                          <tr>
                              <td colspan="2">
-                                 
-									                            
-                                     <!--label class="inline tab_checkbox">
-                                                    {{ vm_form.enable_dhcp }} {{vm_form.enable_dhcp.errors}}
-	                                     </label>-->
 								<label class="pull-left control-label">启动DHCP</label>
 								<div id="dhcp_vm" class="pull-left"> 
                                      <div class="tuopu_btn">
@@ -535,7 +551,7 @@
                     <div class="col-md-4"></div>
                   </div>
                  </div>             
-             </div>
+             </div>-->
              
              <div class="tab_part">
 
@@ -585,7 +601,7 @@
 
                  <div id="list_gw"></div>
 
-                    <h4 class="title_word_bg block_title">
+                 <!--   <h4 class="title_word_bg block_title">
                                         <img src="{% static "img/ic_11.png" %}" />虚拟机列表      
                     </h4>               
                  </legend>
@@ -599,22 +615,15 @@
                         </tr>
                     </thead>
                     <tbody id="id_vm_tbody">
-                   <!-- <tr>
+                        <tr>
                             <td>VM1</td>
                             <td>small</td>
                             <td>ubuntu</td>
                             <td>DPID</td>
                             <td>是</td>
                         </tr>
-                        <tr>
-                            <td>VM2</td>
-                            <td>small</td>
-                            <td>ubuntu</td>
-                            <td>DPID</td>
-                            <td>否</td>
-                        </tr>-->
                     </tbody>
-                 </table>   
+                 </table>--> 
               
               <div class="form-actions">
                   <div class="row buttons_margin">
@@ -650,6 +659,17 @@
     $(document).ready(function() {
         window.selected_ports = {};
         window.selected_dpids = {};
+        window.add_dpid = function(dpid, is_delete) {
+            if(dpid in selected_dpids) {
+                if(is_delete) {
+                    delete selected_dpids[dpid];
+                }
+            } else {
+                if(!is_delete) {
+                    selected_dpids[dpid] = true;
+                }
+            }
+        };
         window.add_port = function(port_id, is_delete) {
             var checkbox = $('input[name="switch_port_ids"][value="' + port_id + '"]');
             if(port_id in selected_ports) {
@@ -688,8 +708,6 @@
 			window.location.href = window.location.href;
 			
 		});
-		
-		
 		flavor_init();
 
     });

@@ -1,9 +1,12 @@
+
+
 // set up SVG for D3
 var mode = "design";
 
 var admin = $("#admin").text();
 var width  = $("#width").text(),
     height = $("#height").text(),
+    own_device = $("#own_device").text(),
     colors = d3.scale.category10();
 
 function initboard(){
@@ -319,11 +322,11 @@ function inittpdata(){
                     nodes_data[node_id].type_id = switches[i].type;
                     nodes_data[node_id].ports = switches[i].ports;
                     if(switches[i].type == 1){
-                        nodes_data[node_id].icon = 'img/ovs.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_normal.png';
                     }else if(switches[i].type == 2){
-                        nodes_data[node_id].icon = 'img/ovs-red.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_external.png';
                     }else{
-                        nodes_data[node_id].icon = 'img/ovs-green.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_related.png';
                     }
                 }
             }
@@ -410,12 +413,14 @@ function inittpdata(){
 function inittpdata2(){
     //获取数据库中该slice的拓扑信息 
     var topology_url = "http://" + window.location.host + "/resources/topology_select/";
+    var tp_mod = $("#tp_mod").text();
+    var switch_ids = $("#switch_ids").text();
     var switch_port_ids = $("#switch_port_ids").text();
     $.ajax({
         type: "POST",
         url: topology_url,
         dataType: "json",
-        data: {"switch_port_ids": switch_port_ids},
+        data: {"tp_mod": tp_mod, "switch_port_ids": switch_port_ids, "switch_ids": switch_ids},
         async: false, 
         success: function(data) {
             switches = data.switches;
@@ -457,11 +462,11 @@ function inittpdata2(){
                     nodes_data[node_id].type_id = switches[i].type;
                     nodes_data[node_id].ports = switches[i].ports;
                     if(switches[i].type == 1){
-                        nodes_data[node_id].icon = 'img/ovs.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_normal.png';
                     }else if(switches[i].type == 2){
-                        nodes_data[node_id].icon = 'img/ovs-red.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_external.png';
                     }else{
-                        nodes_data[node_id].icon = 'img/ovs-green.png';
+                        nodes_data[node_id].icon = 'topology/img/ovs_related.png';
                     }
                 }
             }
@@ -802,8 +807,10 @@ function restart() {
             else{
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
-        }else{
-            
+        }else if(own_device == 1){
+            //show_switch_port(d.key);
+            //this.attr("href", "")
+            //alert(parent.document.getElementById("_switch_port"));
         }
     })
     .on('mouseover', function(d) {

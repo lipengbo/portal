@@ -20,9 +20,12 @@
     <p id="height">{{height}}</p>
     <p id="top">{{top}}</p>
     <p id="band">{{band}}</p>
+    <p id="own_device">{{own_device}}</p>
     <p id="STATIC_URL">{{STATIC_URL}}</p>
     <p id="admin">{{admin}}</p>
     {%if slice_id == '0' %}
+        <p id="tp_mod">{{tp_mod}}</p>
+        <p id="switch_ids">{{switch_ids}}</p>
         <p id="switch_port_ids">{{switch_port_ids}}</p>
     {%endif%}
 </div>
@@ -37,4 +40,6 @@
 <script src="{{ STATIC_URL }}pinax/js/theme.js"></script>
 <script src="{{ STATIC_URL }}js/d3.v3.min.js"></script>
 <script src="{{ STATIC_URL }}topology/lib/custom-tooltip.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
+<script src="{{ STATIC_URL}}js/own_device_common.js"></script>
 <script src="{{ STATIC_URL }}js/slice_topology_d3.js"></script> 

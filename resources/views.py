@@ -22,8 +22,12 @@ def index(request):
 
 def topology_select(request):
     """ajax获取选择交换机端口的拓扑。"""
+    print "topology_select"
+    tp_mod = request.POST.get("tp_mod")
+    switch_ids = request.POST.get("switch_ids")
     switch_port_ids = request.POST.get("switch_port_ids")
-    jsondatas = get_select_topology(switch_port_ids)
+    print tp_mod, switch_ids, switch_port_ids
+    jsondatas = get_select_topology(tp_mod, switch_ids, switch_port_ids)
 #     print jsondatas
     result = json.dumps(jsondatas)
     return HttpResponse(result, mimetype='text/plain')

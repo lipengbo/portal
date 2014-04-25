@@ -11,7 +11,7 @@ from plugins.openflow.flowspace_api import matches_to_arg_match,\
 from plugins.openflow.controller_api import slice_change_controller,\
     delete_controller, create_add_controller
 from plugins.vt.api import create_vm_for_gateway
-from resources.ovs_api import slice_add_ovs_ports
+from resources.ovs_api import slice_add_ovs_or_ports
 from plugins.ipam.models import IPUsage
 from plugins.common.ovs_client import get_switch_stat, get_sFlow_metric
 from resources.models import Switch
@@ -31,15 +31,15 @@ from etc import config
 # from etc.config import slice_expiration_days
 
 
-def create_slice_step(project, slice_uuid, name, description, island, user, ovs_ports,
-                      controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected):
+def create_slice_step(project, slice_uuid, name, description, island, user, ovs_or_ports,
+                      controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected, tp_mod):
     print "create_slice_step"
     slice_obj = None
     try:
         print "1:create slice record, add island, add flowvisor"
         slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
-        print "2:add ovs ports"
-        slice_add_ovs_ports(slice_obj, ovs_ports)
+        print "2:add ovses or ports"
+        slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod)
         print "3:scheduler for resources"
         schedul_for_controller_and_gw(controller_info, gw_host_id, island)
         print "4:create and add controller"
@@ -173,7 +173,7 @@ def delete_slice_api(slice_obj):
 
 
 @transaction.commit_on_success
-def start_slice_api(slice_obj):
+def start_slice_api1(slice_obj):
     """启动slice
     """
     print 'start_slice_api'
@@ -196,18 +196,69 @@ def start_slice_api(slice_obj):
             try:
                 slice_obj.starting()
                 start_slice_sync.delay(slice_obj.id)
-#                 if flowvisor.type == 1:
-#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-#                                                   slice_obj.id, False)
-#                     update_slice_virtual_network_cnvp(slice_obj)
-#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-#                                                   slice_obj.id, True)
-#                 else:
-#                     flowvisor_update_slice_status(slice_obj.get_flowvisor(),
-#                                                   slice_obj.id, True)
-#                     update_slice_virtual_network_flowvisor(slice_obj)
-#                 slice_obj.start()
             except Exception, ex:
+                raise DbError("虚网启动失败！")
+    except Exception, ex:
+        transaction.rollback()
+        raise
+
+
+@transaction.commit_on_success
+def start_slice_api(slice_obj):
+    """启动slice
+    """
+    print 'start_slice_api'
+    from slice.tasks import start_slice_sync
+    try:
+        controller_flag = False
+        gw_flag = False
+        if slice_obj and slice_obj.state == SLICE_STATE_STOPPED:
+            all_vms = slice_obj.get_vms()
+            for vm in all_vms:
+                if vm.state == 8:
+                    raise DbError("资源分配中，请稍后启动！")
+            controller = slice_obj.get_controller()
+            if controller.host and controller.host.state != 1:
+                if controller.host.state == 0 or controller.host.state == 5:
+                    controller_flag = True
+                else:
+                    if controller.state == 12:
+                        pass
+                    if controller.host.state == 13:
+                        raise DbError("操作失败，请稍后再试！")
+                    else:
+                        raise DbError("请确保控制器可用！")
+            gw = slice_obj.get_gw()
+            if gw and gw.enable_dhcp and gw.state != 1:
+                if gw.state == 0 or gw.state == 5:
+                    gw_flag = True
+                else:
+                    if gw.state == 12:
+                        pass
+                    if gw.state == 13:
+                        raise DbError("操作失败，请稍后再试！")
+                    else:
+                        raise DbError("请确保gateway可用！")
+            flowvisor = slice_obj.get_flowvisor()
+            if flowvisor == None:
+                raise DbError("虚网启动失败！")
+            if slice_obj.state == 0:
+                slice_flag = True
+            if slice_obj.state == 4:
+                raise DbError("操作失败，请稍后再试！")
+            try:
+                if slice_flag:
+                    slice_obj.starting()
+                    if controller_flag:
+                        controller.host.state = 12
+                        controller.host.save()
+                    if gw_flag:
+                        gw.state = 12
+                        gw.save()
+                    start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag)
+            except Exception, ex:
+                import traceback
+                traceback.print_exc()
                 raise DbError("虚网启动失败！")
     except Exception, ex:
         transaction.rollback()
@@ -231,7 +282,7 @@ def stop_slice_api(slice_obj):
                 stop_slice_sync.delay(slice_obj.id)
             except Exception:
                 transaction.rollback()
-                raise
+                raise DbError("虚网停止失败！")
 
 
 def add_flowspace(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
@@ -247,7 +298,7 @@ def add_flowspace(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
         raise
 
 
-def update_slice_virtual_network_cnvp(slice_obj):
+def update_slice_virtual_network_cnvp_nt(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -313,6 +364,75 @@ def update_slice_virtual_network_cnvp(slice_obj):
                                         4, 'cdn%nf',
                                         dhcp_mac['dpid'],
                                         100, arg_match)
+    except:
+        raise
+
+
+def update_slice_virtual_network_cnvp(slice_obj):
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex.message)
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
+        return
+    if slice_obj.get_dhcp() == None:
+        dhcp_flag = False
+    else:
+        dhcp_flag = True
+    add_port_flag = False
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 4:
+        if slice_obj.virtualmachine_set.filter(type=1, enable_dhcp=True).count() == 0:
+            return
+        else:
+            add_port_flag = True
+    try:
+        flowvisor = slice_obj.get_flowvisor()
+        flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
+        if add_port_flag:
+            flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+        slice_ports = slice_obj.sliceport_set.all()
+        slice_nw = slice_obj.get_nw()
+        for slice_port in slice_ports:
+            switch_port = slice_port.switch_port
+            if add_port_flag:
+                flowvisor_add_port(flowvisor, slice_obj.id, switch_port.switch.dpid, switch_port.port)
+            if slice_port.type == 0:
+                arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "",
+                                                 "", "", "", "", "", "", flowvisor.type)
+                flowvisor_add_flowspace(flowvisor, None,
+                                        slice_obj.id,
+                                        4, 'cdn%nf',
+                                        switch_port.switch.dpid,
+                                        100, arg_match)
+            else:
+                if switch_port.switch.type() == 3:
+                    vms = switch_port.virtualmachine_set.all()
+                    if vms:
+                        vm = vms[0]
+                        if vm.type == 1 and ((not dhcp_flag) or (dhcp_flag and (not vm.enable_dhcp))):
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "",
+                                                             slice_nw, "", "", "", "", "", flowvisor.type)
+                        else:
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "",
+                                                             "", "", "", "", "", "", flowvisor.type)
+                        flowvisor_add_flowspace(flowvisor, None,
+                                                slice_obj.id,
+                                                4, 'cdn%nf',
+                                                switch_port.switch.dpid,
+                                                100, arg_match)
+                else:
+                    if switch_port.is_edge():
+                        owner_devices = slice_port.ownerdevice_set.all()
+                        if owner_devices:
+                            macs = owner_devices[0].mac_list.split(",")
+                            for mac in macs:
+                                arg_match = matches_to_arg_match(switch_port.port, "", "", mac, "", "",
+                                                                 "", "", "", "", "", "", flowvisor.type)
+                                flowvisor_add_flowspace(flowvisor, None,
+                                                        slice_obj.id,
+                                                        4, 'cdn%nf',
+                                                        switch_port.switch.dpid,
+                                                        100, arg_match)
     except:
         raise
 
@@ -702,3 +822,10 @@ def get_count_show_data(target, type, total_num, stype):
 #     show_nums.reverse()
     ret = {"show_dates": show_dates, "show_nums": show_nums}
     return ret
+
+
+def topology_mapping(slice_obj):
+    """拓扑映射
+    """
+    LOG.debug('topology_mapping')
+    

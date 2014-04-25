@@ -73,73 +73,25 @@ function check_vm_status(slice_id){
                     }
                 }
                 for(var j=0;j<check_nodes.length;j++){
-                    vm_obj = $("#icon_state"+check_nodes[j].cur_vm_id);
-                    if(vm_obj){
-                        status = check_nodes[j].status;
-                        if(status == 9 || status == 10){
-                            vm_obj.removeClass("icon-spinner")
-                                .removeClass("icon-spin")
-                                .removeClass("check_vm")
-                                .addClass("icon-remove-sign");   
-                        }else if(status == 1){
-							vm_obj.removeClass("icon-spinner")
-                                .removeClass("icon-spin")
-                                .removeClass("check_vm")
-                                .addClass("icon-ok-sign")
-                                .addClass("icon_state");
-                            //启停虚拟机按钮
-                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
-                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
-							if(img_obj.title == "停止中"){
-								$("div#slice_alert_info").empty();
-                            	var str = "" + "<p class=\"text-center\">虚拟机停止失败！</p>";
-                            	$("div#slice_alert_info").append(str);
-                            	$('#slicealertModal').modal('show');
-							}
-                            if(a_obj){
-                            	a_obj.style.cursor = "pointer";
-							}
-                            if(img_obj){
-                            	img_obj.src = STATIC_URL + "img/btn_tz.png";       
-                            	img_obj.title = "停止";
-							}
-                            //虚拟机登录按钮
-                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_dl")[0];
-                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_dl").children("img")[0];
-                            if(a_obj){
-                            a_obj.style.cursor = "pointer";}
-                            if(img_obj){
-                            img_obj.src = STATIC_URL + "img/btn_dl.png"; }
-                            //虚拟机监控按钮
-                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_jk")[0];
-                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_jk").children("img")[0];
-                            if(a_obj){
-                            a_obj.style.cursor = "pointer";}
-                            if(img_obj){
-                            img_obj.src = STATIC_URL + "img/btn_jk.png"; } 
-							document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(check_nodes[j].cur_vm_id, 1);   
-                        }else if(status == 5  || status == 0){
-							vm_obj.removeClass("icon-spinner")
-                                .removeClass("icon-spin")
-                                .removeClass("check_vm")
-                                .addClass("icon-minus-sign")
-                                .addClass("icon_state"); 
-                            a_obj = $("#"+check_nodes[j].cur_vm_id+"_qt")[0];
-                            img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
-							if(img_obj.title == "启动中"){
-								$("div#slice_alert_info").empty();
-                            	var str = "" + "<p class=\"text-center\">虚拟机启动失败！</p>";
-                            	$("div#slice_alert_info").append(str);
-                            	$('#slicealertModal').modal('show');
-							}
-                            if(a_obj){
-                            a_obj.style.cursor = "pointer";}
-                            if(img_obj){
-                            img_obj.src = STATIC_URL + "img/btn_qd.png";       
-                            img_obj.title = "启动"; }
-							document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(check_nodes[j].cur_vm_id, 5);
+                    if(check_nodes[j].status == 1){
+                        img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
+                        if(img_obj.title == "停止中"){
+                            $("div#slice_alert_info").empty();
+                            var str = "" + "<p class=\"text-center\">虚拟机停止失败！</p>";
+                            $("div#slice_alert_info").append(str);
+                            $('#slicealertModal').modal('show');
                         }
                     }
+                    if(check_nodes[j].status == 5){
+                        img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
+                        if(img_obj.title == "启动中"){
+                            $("div#slice_alert_info").empty();
+                            var str = "" + "<p class=\"text-center\">虚拟机启动失败！</p>";
+                            $("div#slice_alert_info").append(str);
+                            $('#slicealertModal').modal('show');
+                        }
+                    }
+                    change_vm_status(check_nodes[j].cur_vm_id, check_nodes[j].status)
                 }
                     //alert(i);
             }
@@ -150,6 +102,66 @@ function check_vm_status(slice_id){
         }
     });
     
+}
+
+
+//更新vm状态
+function change_vm_status(vm_id, status){
+    var STATIC_URL = $("#STATIC_URL").text();
+    vm_obj = $("#icon_state"+vm_id);
+    if(vm_obj && vm_obj.hasClass("icon-spinner")){
+        if(status == 9 || status == 10){
+            vm_obj.removeClass("icon-spinner")
+                .removeClass("icon-spin")
+                .removeClass("check_vm")
+                .addClass("icon-remove-sign");   
+        }else if(status == 1){
+            vm_obj.removeClass("icon-spinner")
+                .removeClass("icon-spin")
+                .removeClass("check_vm")
+                .addClass("icon-ok-sign")
+                .addClass("icon_state");
+            //启停虚拟机按钮
+            a_obj = $("#"+vm_id+"_qt")[0];
+            img_obj = $("#"+vm_id+"_qt").children("img")[0];
+            if(a_obj){
+                a_obj.style.cursor = "pointer";
+            }
+            if(img_obj){
+                img_obj.src = STATIC_URL + "img/ic-tz.png";       
+                img_obj.title = "停止";
+            }
+            //虚拟机登录按钮
+            a_obj = $("#"+vm_id+"_dl")[0];
+            img_obj = $("#"+vm_id+"_dl").children("img")[0];
+            if(a_obj){
+            a_obj.style.cursor = "pointer";}
+            if(img_obj){
+            img_obj.src = STATIC_URL + "img/btn_dl.png"; }
+            //虚拟机监控按钮
+            a_obj = $("#"+vm_id+"_jk")[0];
+            img_obj = $("#"+vm_id+"_jk").children("img")[0];
+            if(a_obj){
+                a_obj.style.cursor = "pointer";}
+            if(img_obj){
+                img_obj.src = STATIC_URL + "img/btn_jk.png"; } 
+            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);   
+        }else if(status == 5 || status == 0){
+            vm_obj.removeClass("icon-spinner")
+                .removeClass("icon-spin")
+                .removeClass("check_vm")
+                .addClass("icon-minus-sign")
+                .addClass("icon_state"); 
+            a_obj = $("#"+vm_id+"_qt")[0];
+            img_obj = $("#"+vm_id+"_qt").children("img")[0];
+            if(a_obj){
+                a_obj.style.cursor = "pointer";}
+            if(img_obj){
+                img_obj.src = STATIC_URL + "img/ic-ks.png";       
+                img_obj.title = "启动"; }
+            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+        }
+    }
 }
 
 
@@ -206,14 +218,23 @@ function check_slice_status(slice_id){
                         if(a_obj){
                         a_obj.style.cursor = "pointer";}
                         if(img_obj){
-                        img_obj.src = STATIC_URL + "img/btn_qd.png";
-                        if(img_obj.title == "启动中"){
-                            $("div#slice_alert_info").empty();
-                            var str = "" + "<p class=\"text-center\">虚网启动失败！</p>";
-                            $("div#slice_alert_info").append(str);
-                            $('#slicealertModal').modal('show');
-                        }    
-                        img_obj.title = "启动"; }
+                            img_obj.src = STATIC_URL + "img/ic-ks.png";
+                            if(img_obj.title == "启动中"){
+                                $("div#slice_alert_info").empty();
+                                var str = "" + "<p class=\"text-center\">虚网启动失败！</p>";
+                                $("div#slice_alert_info").append(str);
+                                $('#slicealertModal').modal('show');
+                            }
+                            if ($(".default_create").length > 0){
+                                vm_id = $(".default_create")[0].getAttribute("vm_id");
+                                change_vm_status(vm_id, data.c_state)
+                            }
+                            if ($(".gw").length > 0){
+                                vm_id = $(".gw")[0].getAttribute("vm_id");
+                                change_vm_status(vm_id, data.g_state)
+                            } 
+                            img_obj.title = "启动"; 
+                        }
                         //控制器编辑、slice编辑按钮变化
                         $(".bianji").attr("style","cursor:pointer");
                         $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj.png");
@@ -235,13 +256,21 @@ function check_slice_status(slice_id){
                         if(a_obj){
                         a_obj.style.cursor = "pointer";}
                         if(a_obj){
-                        img_obj.src = STATIC_URL + "img/btn_tz.png";
+                        img_obj.src = STATIC_URL + "img/ic-tz.png";
                         if(img_obj.title == "停止中"){
                             $("div#slice_alert_info").empty();
                             var str = "" + "<p class=\"text-center\">虚网停止失败！</p>";
                             $("div#slice_alert_info").append(str);
                             $('#slicealertModal').modal('show');
-                        }       
+                        }
+                        if ($(".default_create").length > 0){
+                            vm_id = $(".default_create")[0].getAttribute("vm_id");
+                            change_vm_status(vm_id, data.c_state)
+                        }
+                        if ($(".gw").length > 0){
+                            vm_id = $(".gw")[0].getAttribute("vm_id");
+                            change_vm_status(vm_id, data.g_state)
+                        }
                         img_obj.title = "停止";  }
                     }   
                 }

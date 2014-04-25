@@ -15,7 +15,10 @@
   <tbody>
     {% for vm in vms %}
     <tr>
-      <td><div>
+      <td><div {%if vm.type_id == 1%}class="user_define"{%endif%}
+      {%if vm.type_id == 2%}class="default_create"{%endif%}
+      {%if vm.type_id == 3%}class="gw"{%endif%}
+      {%if vm.type_id == 4%}class="vm"{%endif%} vm_id="{{vm.id}}">
         {{vm.name}}</div></td>
       <td><div>
         <a id="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{vm.uuid}}">
@@ -48,14 +51,14 @@
                 {%if vm.type_id != 1%}
                 {%if vm.state == 8 or vm.state == 9 or vm.state == 10 or vm.state == 11 %}
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启动" />
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
                         </a>
                     {%else%}
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:pointer">
                         {%if vm.state == 1 %}
-                            <img src="{{ STATIC_URL}}img/btn_tz.png" title="停止" />
+                            <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
                         {%else%}
-                            <img src="{{ STATIC_URL}}img/btn_qd.png" title="启动" />
+                            <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
                         {%endif%}
                         </a>
                     {%endif%}
