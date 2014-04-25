@@ -146,7 +146,7 @@ function change_vm_status(vm_id, status){
             if(img_obj){
                 img_obj.src = STATIC_URL + "img/btn_jk.png"; } 
             document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);   
-        }else if(status == 5){
+        }else if(status == 5 || status == 0){
             vm_obj.removeClass("icon-spinner")
                 .removeClass("icon-spin")
                 .removeClass("check_vm")

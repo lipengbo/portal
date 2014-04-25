@@ -6507,7 +6507,7 @@ a.tuopu_sign_block:focus {
   margin-bottom: 15px;
 }
 .tuopu .tuopu_sign_l {
-  left: 20px;
+  left: 0px;
   top: 0;
 }
 .none_tip {
@@ -6613,7 +6613,7 @@ a.tuopu_sign_block:focus {
   color: #666;
   position: absolute;
   top: 0;
-  right: 20px;
+  right: 0px;
 }
 .switch_btn {
   display: inline-block;
@@ -6719,6 +6719,7 @@ fieldset legend {
 .help_main section h4 {
   font-weight: bold;
   padding-bottom: 5px;
+  padding-top: 20px;
 }
 .help_main section h4 i {
   color: #2489c5;
@@ -7241,12 +7242,48 @@ span[name="imageInfo"] {
 span[name="serverInfo"] {
   margin-left: 5px;
 }
-.dhcp_div .switch_btn {
-  margin-right: 40px;
-}
 .table_base tbody tr td.title_padding {
   padding-right: 4px;
 }
 .table_base tbody tr td.td_tooltip_padding {
   padding-left: 0;
+}
+.device_access {
+  margin-bottom: 20px;
+}
+.device_access .col-md-9 {
+  background: #f1f1f1;
+}
+.device_access .col-md-9 .topology {
+  background: #f1f1f1;
+}
+.device_access .col-md-3 {
+  padding-right: 0px;
+}
+.device_access .device_access_form {
+  background: #9b999a;
+  border-radius: 5px;
+  height: 404px;
+  padding: 15px;
+  color: #fff;
+}
+.device_access .device_access_form p {
+  margin-bottom: 20px;
+}
+.device_access .device_access_form .form-group {
+  display: block;
+  margin-bottom: 20px;
+}
+.device_access .device_access_form .form-group label {
+  margin-right: 15px;
+}
+.device_access .device_access_form .device_access_btn label {
+  margin-right: 15px;
+}
+.device_access .device_access_form .device_access_btn .tuopu_btn {
+  display: inline-block;
+}
+.device_access .device_access_form .device_access_savebtn {
+  margin-top: 50px;
+  text-align: center;
 }

@@ -366,8 +366,30 @@ function set_dhcp(slice_id, flag){
 }
 
 
-//添加虚拟机click事件
-function add_vm(slice_id){
+//添加设备
+function select_to_add_device(slice_id){
+    //判断是否有可用的边缘端口
+    var ports = 0;
+    $.ajax({
+        url : "/plugins/vt/get_switch_port/"+slice_id+"/",
+        type : "GET",
+        dataType : "json",
+        async : false,
+        success : function(switchs){
+            $.each(switchs, function(i, _switch){
+                $.each(_switch['ports'], function(j, _port){
+                   ports++;
+                });
+                        
+            });
+            if(ports == 0){
+                $("#customdevice").attr("disabled", "disabled");
+                document.getElementById("customdevice_msg").innerHTML = '*没有可用的边缘节点端口';
+                document.getElementById("customdevice_msg").style.color = "red";
+            }
+       }
+    });
+
     var a_obj = $("#vm_add")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
@@ -375,10 +397,25 @@ function add_vm(slice_id){
         return;
     }else{
         //alert(1);
-        location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+        //location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+		$("#adddevicetModal").modal('show');
     }
+	//
 }
 
+function add_device(slice_id){
+	var device_type = document.getElementsByName("device");
+	 for(var i=0; i<device_type.length; i++){  
+            if(device_type[i].checked){  
+                if(device_type[i].value == "customdevice"){
+					location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";  
+                }  
+                if(device_type[i].value == "vmdevice"){
+					location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+                }  
+            }   
+        }
+}
 
  //编辑slice描述信息
  function edit_description(slice_id){

@@ -24,6 +24,7 @@ from plugins.common.aes import *
 from plugins.ipam.models import Subnet
 from models import Image, Flavor, SSHKey
 from resources.models import Server, SwitchPort
+from resources.ovs_api import get_edge_ports, slice_add_port_device
 from plugins.vt import api
 import logging
 from django.utils.translation import ugettext as _
@@ -121,6 +122,37 @@ def create_vm(request, sliceid, from_link):
         context['slice_obj'] = Slice.objects.get(id=sliceid)
         context['from_link'] = from_link
         return render(request, 'vt/create_vm.html', context)
+
+
+def create_device(request, sliceid):
+    if request.method == 'POST':
+        try:
+            ports_data = json.loads(request.POST.get('ports_data'))
+            slice_obj = Slice.objects.get(id=sliceid)
+            for port in ports_data:
+                #print port[0], "===", port[1]
+                slice_add_port_device(slice_obj, port[0], port[1], port[2])
+                #print "-------", port[2], ":", slice_port
+
+
+            return HttpResponse(json.dumps({'result':0}))
+        except:
+            traceback.print_exc()
+            return HttpResponse(json.dumps({'result':1}))
+    else:
+        context = {}
+        context['slice_obj'] = Slice.objects.get(id=sliceid)
+        return render(request, 'vt/custom_device.html', context)
+
+def get_switch_port(request, sliceid):
+    port_info = get_edge_ports(Slice.objects.get(id=sliceid))
+    #return HttpResponse(json.dumps([{"id": 1, "name": "ovs-113", "dpid": "00:00:a0:36:9f:02:e4:18", \
+    #                                 "ports": [{"id": 40, "name": "eth1", "port": 1, "type": 0}, \
+    #                                        {"id": 41, "name": "eht2", "port": 2, "type": 1}]},\
+    #                               {"id": 2, "name": "vovs-113", "dpid": "00:ee:00:00:00:00:01:13",\
+    #                                 "ports": [{"id": 42, "name": "eht3", "port": 3, "type": 1},\
+    return HttpResponse(json.dumps(port_info))
+
 
 
 def do_vm_action(request, vmid, action):

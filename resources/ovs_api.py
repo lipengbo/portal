@@ -6,6 +6,7 @@ from plugins.openflow.flowspace_api import flowspace_gw_add, flowspace_gw_del
 from django.db import transaction
 from plugins.openflow.models import Link
 import logging
+import traceback
 LOG = logging.getLogger("CENI")
 
 
@@ -238,7 +239,7 @@ def get_select_topology(tp_mod, switch_ids, switch_port_ids):
                     'bandwidth': [], 'maclist': []}
     except Exception, ex:
         print 1
-        import traceback
+        #import traceback
         traceback.print_stack()
         traceback.print_exc()
         return []
@@ -312,6 +313,7 @@ def slice_add_port(slice_obj, port_id, add_type):
     except DbError:
         raise
     except Exception:
+        traceback.print_exc()
         raise DbError("端口添加失败！")
 
 
@@ -337,6 +339,7 @@ def slice_add_owner_device(slice_port, mac_list):
     except DbError:
         raise
     except Exception:
+        traceback.print_exc()
         raise DbError("自接入设备添加失败！")
 
 
