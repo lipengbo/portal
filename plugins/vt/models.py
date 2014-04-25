@@ -99,7 +99,9 @@ class VirtualMachineManager(models.Manager):
     def user_stat_sum(self, user, kind):
         total = 0
         for slice in user.slice_set.all():
-            total += slice.get_vms().aggregate(Sum(kind))[kind+'__sum']
+            num =slice.get_vms().aggregate(Sum(kind))[kind+'__sum'] 
+            if num:
+                total += num
         return total
 
     def total_vms(self, user):
