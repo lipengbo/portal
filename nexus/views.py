@@ -118,9 +118,11 @@ def add_or_edit(request, app_label, model_class, id=None):
             quota_changed = False
             for resource in resources.keys():
                 quota = request.POST.get(resource)
-                if quota != getattr(request.user.quotas, resource):
+                if int(quota) != getattr(instance.quotas, resource):
                     quota_changed = True
                     instance.user_permissions.remove(*list(Permission.objects.filter(codename__contains='quota_{}_'.format(resource))))
+                    if not quota:
+                        quota = settings.QUOTAS[resource][0]
                     instance.user_permissions.add(Permission.objects.get(codename='quota_{}_{}'.format(resource, quota)))
             if quota_changed:
                 notify.send(request.user, recipient=instance, verb=u'调整配额', action_object=instance.get_profile())

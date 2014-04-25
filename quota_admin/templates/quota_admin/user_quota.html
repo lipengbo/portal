@@ -37,7 +37,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="progress progress_defined">
-                            {{ user|user_project_count}} / {{ user.quotas.project }}
+                            {{ user|user_project_count}} / {{ user.quotas.project|default:"0" }}
                             <div class="progress-bar progress-bar-success" style="width: {% divide user|user_project_count user.quotas.project %}%"></div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="progress progress_defined">
-                            {{ user|user_slice_count}} / {{ user.quotas.slice }}
+                            {{ user|user_slice_count}} / {{ user.quotas.slice|default:"0" }}
                             <div class="progress-bar progress-bar-success" style="width: {% divide user|user_slice_count user.quotas.slice %}%;"></div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="progress progress_defined">
-                            {{ user|user_vm_count}} / {{ user.quotas.vm }}
+                            {{ user|user_vm_count}} / {{ user.quotas.vm|default:"0" }}
                             <div class="progress-bar progress-bar-success" style="width: {% divide   user|user_vm_count user.quotas.vm %}%;"></div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="progress progress_defined">
-                            {{ user|user_cpu_count}} / {{ user.quotas.cpu }}
+                            {{ user|user_cpu_count}} / {{ user.quotas.cpu|default:"0" }}
                             <div class="progress-bar progress-bar-success" style="width: {% divide  user|user_cpu_count user.quotas.cpu %}%;"></div>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="progress progress_defined">
-                            {{ user|user_disk_count}} / {{ user.quotas.disk }}
+                            {{ user|user_disk_count}} / {{ user.quotas.disk|default:"0" }}
                             <div class="progress-bar progress-bar-success" style="width: {% divide  user|user_disk_count user.quotas.disk %}%;"></div>
                         </div>
                     </div>
@@ -96,7 +96,7 @@
                 <div class="row">
                     <div class="col-md-8">
                         <div class="progress progress_defined">
-                            {{ user|user_mem_count}} / {{ user.quotas.mem }}
+                            {{ user|user_mem_count}} / {{ user.quotas.mem|default:"0" }}
                             <div class="progress-bar progress-bar-success" style="width: {% divide  user|user_mem_count user.quotas.mem %}%;"></div>
                         </div>
                     </div>

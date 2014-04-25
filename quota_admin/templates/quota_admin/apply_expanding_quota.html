@@ -47,8 +47,8 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var current_mem = {{ user.quotas.mem }};
-    var current_disk = {{ user.quotas.disk }};
+    var current_mem = {{ user.quotas.mem|default:"0" }};
+    var current_disk = {{ user.quotas.disk|default:"0" }};
     {% include "quota_admin/_selector.js" %}
 </script>
 {% endblock %}

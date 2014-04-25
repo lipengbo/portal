@@ -49,8 +49,8 @@
 {% if class_name == 'User' %}
 <script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var current_mem = {{ formset.instance.quotas.mem }};
-    var current_disk = {{ formset.instance.quotas.disk }};
+    var current_mem = {{ formset.instance.quotas.mem|default:"0" }};
+    var current_disk = {{ formset.instance.quotas.disk|default:"0" }};
     {% include "quota_admin/_selector.js" %}
 </script>
 {% endif %}
