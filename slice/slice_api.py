@@ -368,7 +368,7 @@ def update_slice_virtual_network_cnvp_nt(slice_obj):
         raise
 
 
-def update_slice_virtual_network_cnvp(slice_obj):
+def update_slice_virtual_network_cnvp_pt(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -433,6 +433,108 @@ def update_slice_virtual_network_cnvp(slice_obj):
                                                         4, 'cdn%nf',
                                                         switch_port.switch.dpid,
                                                         100, arg_match)
+    except:
+        raise
+
+
+def update_slice_virtual_network_cnvp(slice_obj):
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex.message)
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
+        return
+    if slice_obj.get_dhcp() == None:
+        dhcp_flag = False
+    else:
+        dhcp_flag = True
+    add_port_flag = True
+    only_start_dhcp = False
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 4:
+        if slice_obj.virtualmachine_set.filter(type=1, enable_dhcp=True).count() == 0:
+            return
+        else:
+            add_port_flag = False
+        if slice_obj.changed & 0b1101 == 4:
+            only_start_dhcp = True
+    try:
+        flowvisor = slice_obj.get_flowvisor()
+        slice_ports = slice_obj.sliceport_set.all()
+        slice_nw = slice_obj.get_nw()
+        if only_start_dhcp:
+#只启动了dhcp，添加虚拟机有dhcp功能的flowspace
+            for slice_port in slice_ports:
+                switch_port = slice_port.switch_port
+                if switch_port.switch.type() == 3:
+                    vms = switch_port.virtualmachine_set.all()
+                    if vms:
+                        vm = vms[0]
+                        if vm.type == 2:
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "0x800",
+                                                             "other", slice_nw, "", "", "", "", flowvisor.type)
+                            flowvisor_add_flowspace(flowvisor, None,
+                                                    slice_obj.id,
+                                                    4, 'cdn%nf',
+                                                    switch_port.switch.dpid,
+                                                    100, arg_match)
+        else:
+            flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
+            if add_port_flag:
+                flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+            for slice_port in slice_ports:
+                arg_matches = []
+                switch_port = slice_port.switch_port
+                if add_port_flag:
+                    flowvisor_add_port(flowvisor, slice_obj.id, switch_port.switch.dpid, switch_port.port)
+                if not switch_port.is_edge():
+                    continue
+                if switch_port.switch.type() != 3 and slice_port.type == 1:
+                    print "++++++++++++++",2
+        #用户自接入设备，且共享
+                    owner_devices = slice_port.ownerdevice_set.all()
+                    if owner_devices:
+                        macs = owner_devices[0].mac_list.split(",")
+                        for mac in macs:
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", mac, "", "0x800",
+                                                             slice_nw, slice_nw, "", "", "", "", flowvisor.type)
+                            arg_matches.append(arg_match)
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", mac, "", "0x806",
+                                                             slice_nw, slice_nw, "", "", "", "", flowvisor.type)
+                            arg_matches.append(arg_match)
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", mac, "", "0x800",
+                                                             slice_nw, "other", "", "", "", "", flowvisor.type)
+                            arg_matches.append(arg_match)
+                else:
+                    print "++++++++++++++",3
+                    arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "0x800",
+                                                     slice_nw, slice_nw, "", "", "", "", flowvisor.type)
+                    arg_matches.append(arg_match)
+                    arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "0x806",
+                                                     slice_nw, slice_nw, "", "", "", "", flowvisor.type)
+                    arg_matches.append(arg_match)
+                    vms = switch_port.virtualmachine_set.all()
+                    if vms and vms[0].type == 2:
+#网关
+                        arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "0x800",
+                                                         "other", slice_nw, "", "", "", "", flowvisor.type)
+                        arg_matches.append(arg_match)
+                    else:
+                        arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "0x800",
+                                                         slice_nw, "other", "", "", "", "", flowvisor.type)
+                        arg_matches.append(arg_match)
+                        if dhcp_flag and vms and vms[0].enable_dhcp:
+#虚拟机且有dhcp服务
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", vms[0].mac, "", "0x800",
+                                                             "0.0.0.0", "255.255.255.255", "", "", "", "", flowvisor.type)
+                            arg_matches.append(arg_match)
+                print "++++++++++++++",arg_matches
+                for arg_match in arg_matches:
+                    print "++++++++++++++",1
+                    flowvisor_add_flowspace(flowvisor, None,
+                                            slice_obj.id,
+                                            4, 'cdn%nf',
+                                            switch_port.switch.dpid,
+                                            100, arg_match)
     except:
         raise
 

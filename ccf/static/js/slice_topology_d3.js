@@ -716,7 +716,8 @@ function highlight( data, element ) {
     }
 }
 
-
+var pre_red_obj = 0;
+var pre_type_id = 0;
 // update graph (called when needed)
 function restart() {
   // path (link) group
@@ -792,7 +793,27 @@ function restart() {
   // add new nodes
   var g = circle.enter().append('svg:g');
   g.append('svg:image')
-    .attr("xlink:href", function(d){ return static_url + d.icon})
+    .attr("xlink:href", function(d){ 
+        //alert(d.key);
+        //alert(parent._dpid);
+        
+        if(admin != 1 && own_device == 1 && d.type == 'switch'){
+            if(d.key == parent._dpid){
+                //alert(1);
+                //alert(d.type_id);
+                if(d.type_id == 1){
+                    pre_type_id = d.type_id;
+                    pre_red_obj = d3.select(this);
+                    return static_url + 'topology/img/ovs_normal_red.png';
+                }else if(d.type_id == 2){
+                    pre_type_id = d.type_id;
+                    pre_red_obj = d3.select(this);
+                    return static_url + 'topology/img/ovs_external_red.png';
+                }
+            }
+        }
+        return static_url + d.icon;
+    })
     .attr("target", "_blank")
     .attr('x', function(d){ return d.x; })
     .attr('y', function(d){ return d.y; })
@@ -808,9 +829,41 @@ function restart() {
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
         }else if(own_device == 1){
-            //show_switch_port(d.key);
-            //this.attr("href", "")
-            //alert(parent.document.getElementById("_switch_port"));
+            if(d.type == 'switch'){
+                if (switch_ports_info({dpid:d.key}).count() == 0){
+                    window.parent.show_err_msg('该交换机上没有可选的边缘端口');
+                    return;
+                }else{
+                    cur_red_obj = d3.select(this);
+                    if(d.type_id == 1){
+                        //nodes_data[node_id].icon = 'topology/img/ovs_normal.png';
+                        if(pre_red_obj != 0){
+                            if(pre_type_id == 1){
+                                pre_red_obj.attr("xlink:href", function(d){ return static_url + 'topology/img/ovs_normal.png'});
+                            }else if(pre_type_id == 2){
+                                pre_red_obj.attr("xlink:href", function(d){ return static_url + 'topology/img/ovs_external.png'});
+                            }
+                        }
+                        cur_red_obj.attr("xlink:href", function(d){ return static_url + 'topology/img/ovs_normal_red.png'});
+                        pre_type_id = d.type_id;
+                        pre_red_obj = cur_red_obj;
+                    }else if(d.type_id == 2){
+                        //nodes_data[node_id].icon = 'topology/img/ovs_external.png';
+                        if(pre_red_obj != 0){
+                            if(pre_type_id == 1){
+                                pre_red_obj.attr("xlink:href", function(d){ return static_url + 'topology/img/ovs_normal.png'});
+                            }else if(pre_type_id == 2){
+                                pre_red_obj.attr("xlink:href", function(d){ return static_url + 'topology/img/ovs_external.png'});
+                            }
+                        }
+                        cur_red_obj.attr("xlink:href", function(d){ return static_url + 'topology/img/ovs_external_red.png'});
+                        pre_type_id = d.type_id;
+                        pre_red_obj = cur_red_obj;
+                    }
+                    show_switch_port(d.key);
+                }
+                
+            }
         }
     })
     .on('mouseover', function(d) {
@@ -873,6 +926,21 @@ function restart() {
   // set the graph in motion
   force.start();
 }
+
+function topology_update_switch_icon(vm_id, state){
+    var nid = get_node_by_yid(vm_id, 'host');
+    if(nid>=0){
+        nodes_data[nid].type_id = state;
+        if(state == 1){
+            nodes_data[nid].icon = 'img/host.png';
+        }else{
+            nodes_data[nid].icon = 'img/host_down.png';
+        }
+    }
+    var host = circle.selectAll('.host-node-icon');
+    host.attr("xlink:href", function(d){ return static_url + d.icon});
+ }
+
 
 function mousedown() {
   // prevent I-bar on drag

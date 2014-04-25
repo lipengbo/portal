@@ -29,12 +29,16 @@ $(document).ready(function(){
             document.getElementById("enable_switch_port").innerHTML = port_content;
        }
     });
+    $("#topologyiframe").attr("src", "/slice/topology_d3/?slice_id="+sliceid+"&width=700&height=400&top=0&band=0&own_device=1");
     $('.mac_addrs').hide();
     $('.device_access_savebtn').on("click", function(){
+        if(selected_switch_ports().count() != 0){
+            show_err_msg('请先提交已保存的端口，或删除后重新选择');
+            return;
+        }
         if(!check_port()) return;
         if(!$('.switch_btn.dk').hasClass("checked")){
             if(check_macs()){
-                $('.mac_addrs').removeClass('has-error');
                 document.getElementById('mac_err_msg').innerHTML = '';
             }else{
                 return;
@@ -78,7 +82,6 @@ $(document).ready(function(){
     $('#enable_switch_port').on("blur", function(){
         check_port();
         if(check_macs()){
-            $('.mac_addrs').removeClass('has-error');
             document.getElementById('mac_err_msg').innerHTML = '';
         return true;
         }
@@ -92,6 +95,7 @@ $(document).ready(function(){
             }else{
 				$(this).addClass("checked");
                 $(this).children(".switch_content").html("是");
+                $('#mac_addrs').val('');
                 $('.mac_addrs').hide();
 			}
 		});
@@ -102,27 +106,23 @@ $(document).ready(function(){
 
 function check_port(){
     if($("#enable_switch_port").find("option:selected").val() == ''){
-        $('.form-group.switch_port').addClass('has-error');
-        document.getElementById('port_err_msg').innerHTML = '该项为必填项';
+        $('#port_err_msg').html('该项为必填项');
         return false;
     }else{
-        $('.form-group.switch_port').removeClass('has-error');
-            document.getElementById('port_err_msg').innerHTML = '';
+        $('#port_err_msg').html('');
         return true;
     }
 }
 
 function check_macs(){
     if($('#mac_addrs').val().trim() == ""){
-        $('.mac_addr').addClass('has-error');
-        document.getElementById('mac_err_msg').innerHTML = '该项为必填项';
+        $('#mac_err_msg').html('该项为必填项');
         return false;
     }
     var mac_addrs = $('#mac_addrs').val().trim().split(",");
     for(var i=0; i<mac_addrs.length; i++){
         if(!isMac(mac_addrs[i])){
-            $('.mac_addr').addClass('has-error');
-            document.getElementById('mac_err_msg').innerHTML = 'mac地址格式不正确';
+            $('#mac_err_msg').html('mac地址格式不正确');
             return false;
         }
     }
@@ -177,11 +177,14 @@ function commit_ports(sliceid){
         dataType : "json",
         async: false,
         success:function(data){
-            if(data.result == 0){
-                window.location.href='/slice/detail/' + sliceid + '/';
+            if(data.result == 1){
+                var str = '/slice/detail/' + sliceid + '/';
+                $(".modal-footer").html("<button class='btn delete-confirm btn_info' data-dismiss='modal' onclick='document.location=&quot;"+str+"&quot;'>确定</button>");
+                show_err_msg('添加端口失败，请稍后重试');
             }else{
-                
+                window.location.href='/slice/detail/' + sliceid + '/';
             }
+            
         }
         
     });
