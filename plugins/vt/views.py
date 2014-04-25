@@ -86,17 +86,17 @@ def create_vm(request, sliceid, from_link):
                 #: test ram quota
                 if user.quotas.mem < (vm.ram + VirtualMachine.objects.user_stat_sum(user, 'ram')):
                     messages.add_message(request, messages.INFO, "您已分配的内存大小已经超过配额")
-                    return redirect('forbidden')
+                    return redirect("quota_admin_apply")
 
                 #: test cpu quota
                 if user.quotas.cpu < (vm.cpu + VirtualMachine.objects.user_stat_sum(user, 'cpu')):
                     messages.add_message(request, messages.INFO, "您的CPU数量已经超过配额")
-                    return redirect('forbidden')
+                    return redirect("quota_admin_apply")
 
                 #: test disk quota
                 if user.quotas.disk < (vm.hdd + VirtualMachine.objects.user_stat_sum(user, 'hdd')):
                     messages.add_message(request, messages.INFO, "您的磁盘容量已经超过配额")
-                    return redirect('forbidden')
+                    return redirect("quota_admin_apply")
 
                 if request.POST.get("enable_dhcp") == '0':
                     vm.enable_dhcp = False
@@ -132,21 +132,21 @@ def create_vm(request, sliceid, from_link):
     else:
         if user.quotas.vm <= vm_count:
             messages.add_message(request, messages.INFO, "您的虚拟机数量已经超过配额")
-            return redirect('forbidden')
+            return redirect("quota_admin_apply")
         #: test ram quota
         if user.quotas.mem <= VirtualMachine.objects.user_stat_sum(user, 'ram'):
             messages.add_message(request, messages.INFO, "您已分配的内存大小已经超过配额")
-            return redirect('forbidden')
+            return redirect("quota_admin_apply")
 
         #: test cpu quota
         if user.quotas.cpu <= VirtualMachine.objects.user_stat_sum(user, 'cpu'):
             messages.add_message(request, messages.INFO, "您的CPU数量已经超过配额")
-            return redirect('forbidden')
+            return redirect("quota_admin_apply")
 
         #: test disk quota
         if user.quotas.disk <= VirtualMachine.objects.user_stat_sum(user, 'hdd'):
             messages.add_message(request, messages.INFO, "您的磁盘容量已经超过配额")
-            return redirect('forbidden')
+            return redirect("quota_admin_apply")
 
         vm_form = VmForm()
         slice = get_object_or_404(Slice, id=sliceid)

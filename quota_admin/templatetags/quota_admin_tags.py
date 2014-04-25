@@ -5,6 +5,8 @@ from plugins.vt.models import VirtualMachine
 
 @register.simple_tag
 def divide(value, arg):
+    if not arg:
+        return 0
     return float(value) * 100 / float(arg)
 
 @register.simple_tag(takes_context=True)
@@ -34,10 +36,10 @@ def user_cpu_count(user):
 
 @register.filter
 def user_mem_count(user):
-    count = VirtualMachine.objects.user_stat_sum(user, 'mem')
+    count = VirtualMachine.objects.user_stat_sum(user, 'ram')
     return count
 
 @register.filter
 def user_disk_count(user):
-    count = VirtualMachine.objects.user_stat_sum(user, 'disk')
+    count = VirtualMachine.objects.user_stat_sum(user, 'hdd')
     return count

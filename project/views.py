@@ -1,3 +1,4 @@
+#coding: utf-8
 import json
 import datetime
 import logging
@@ -306,13 +307,15 @@ def create_or_edit(request, id=None):
         if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
         if user.quotas.project < project_count:
-            return redirect('forbidden')
+            messages.add_message(request, messages.INFO, "项目个数已经超过配额")
+            return redirect('quota_admin_apply')
         context['slice_islands'] = set(list(island_ids))
     else:
         if not user.has_perm('project.add_project'):
             return redirect('forbidden')
         if user.quotas.project <= project_count:
-            return redirect('forbidden')
+            messages.add_message(request, messages.INFO, "项目个数已经超过配额")
+            return redirect('quota_admin_apply')
 
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
@@ -323,10 +326,12 @@ def create_or_edit(request, id=None):
             if not id:
                 project.owner = user
                 if user.quotas.project < project_count:
-                    return redirect('forbidden')
+                    messages.add_message(request, messages.INFO, "项目个数已经超过配额")
+                    return redirect('quota_admin_apply')
             else:
                 if user.quotas.project <= project_count:
-                    return redirect('forbidden')
+                    messages.add_message(request, messages.INFO, "项目个数已经超过配额")
+                    return redirect('quota_admin_apply')
 
             project.save()
             form.save_m2m()

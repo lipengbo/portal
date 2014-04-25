@@ -41,7 +41,7 @@ def create(request, proj_id):
     slice_count = request.user.slice_set.all().count()
     if request.user.quotas.slice <= slice_count:
         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
-        return redirect("forbidden")
+        return redirect('quota_admin_apply')
     error_info = None
     islands = project.islands.all()
     if not islands:
@@ -75,7 +75,7 @@ def create_first(request, proj_id):
     slice_count = request.user.slice_set.all().count()
     if request.user.quotas.slice <= slice_count:
         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
-        return redirect("forbidden")
+        return redirect('quota_admin_apply')
     if request.method == 'POST':
         try:
             user = request.user
