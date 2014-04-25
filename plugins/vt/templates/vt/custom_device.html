@@ -35,7 +35,7 @@
     </div> 
     <div class="col-md-3">
         <div class="device_access_form form-inline">
-            <p><strong><span id="_switch_port">ovs交换机</span></strong></p>
+            <h4 class="form-group"><strong><span id="_switch_port">ovs交换机</span></strong></h4>
             <div class="form-group switch_port">
                 <label class="control-label" for="">可选端口</label>
                 <select class="form-control " id="enable_switch_port">
@@ -43,7 +43,7 @@
                  </select> 
                 <span id="port_err_msg" style="color:red"></span>
             </div>                         
-            <div class="device_access_btn disable">
+            <div class="form-group device_access_btn disable">
                  <label class="control-label" for="">是否独占</label>         
                  <div class="tuopu_btn dk">
                         <span class="switch_btn dk " style="cursor:pointer">
@@ -51,14 +51,13 @@
                         </span>
                  </div>             
             </div>
-            <div class="mac_addrs">
-            <lable>MAC 地址列表：</lable>
-            <textarea id="mac_addrs" style="color:black">
-            </textarea>
+            <div class="form-group mac_addrs">
+                <label class="control-label">MAC 地址列表：</label>
+                <textarea id="mac_addrs" style="color:black" rows="3"></textarea>
             <span id="mac_err_msg" style="color:red"></span>
             </div>
             <p class="device_access_savebtn">
-                <button type="button" class="btn btn_info">保存</button>
+                <button type="button" class="btn btn-default">保存</button>
             </p>
         </div>
     </div> 

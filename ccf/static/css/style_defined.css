@@ -5801,7 +5801,19 @@ textarea {
 .clear {
   clear: both;
 }
+a:active,
+a:hover,
+a:focus {
+  outline: none;
+}
+.btn.btn_info:hover,
+.btn.btn_info:focus {
+  color: #fff;
+}
 /* bootstrap defined */
+.alert {
+  border-radius: 0;
+}
 .container-fluid {
   padding-left: 30px;
   padding-right: 30px;
@@ -6665,9 +6677,15 @@ fieldset legend {
   margin-bottom: 10px;
 }
 .banner {
+  position: relative;
   padding-top: 60px;
   padding-bottom: 60px;
   text-align: center;
+}
+.banner .ps_btn {
+  position: absolute;
+  right: 55px;
+  top: 30px;
 }
 .banner h1 {
   font-size: 48px;
@@ -6967,6 +6985,9 @@ fieldset legend {
 .create_vm_form {
   width: 100%;
 }
+.create_vm_form tbody tr td {
+  padding: 0 8px 16px 8px;
+}
 .create_vm_form tbody tr td img {
   margin-right: 20px;
 }
@@ -7024,6 +7045,15 @@ fieldset legend {
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+}
+.create_vm_form td.cpu_chose a.disabled {
+  border-color: #bebebe;
+  background: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+.create_vm_form td.cpu_chose a.disabled:hover {
+  border-color: #bebebe;
 }
 .create_vm_form td.type_chose a:hover,
 .create_vm_form td.cpu_chose a:hover {
@@ -7261,14 +7291,11 @@ span[name="serverInfo"] {
   padding-right: 0px;
 }
 .device_access .device_access_form {
-  background: #9b999a;
+  background: #777;
   border-radius: 5px;
   height: 404px;
   padding: 15px;
   color: #fff;
-}
-.device_access .device_access_form p {
-  margin-bottom: 20px;
 }
 .device_access .device_access_form .form-group {
   display: block;
@@ -7277,6 +7304,15 @@ span[name="serverInfo"] {
 .device_access .device_access_form .form-group label {
   margin-right: 15px;
 }
+.device_access .device_access_form .form-group select,
+.device_access .device_access_form .form-group textarea,
+.device_access .device_access_form .form-group input[type="text"] {
+  width: 100%;
+}
+.device_access .device_access_form .form-group textarea {
+  height: 66px;
+  overflow-y: auto;
+}
 .device_access .device_access_form .device_access_btn label {
   margin-right: 15px;
 }
@@ -7284,6 +7320,10 @@ span[name="serverInfo"] {
   display: inline-block;
 }
 .device_access .device_access_form .device_access_savebtn {
-  margin-top: 50px;
+  padding-top: 20px;
   text-align: center;
+}
+.check_quota_table tbody tr td span {
+  font-size: 12px;
+  color: #999;
 }

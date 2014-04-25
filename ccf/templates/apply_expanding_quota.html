@@ -1,0 +1,101 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load crispy_forms_field %}
+{% load i18n %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load project_tags %}
+
+{% block head_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+<li><a href="#">配额</a></li>
+<li class="active">申请扩大配额</li>
+{% endblock %}
+{% block body %}
+<div class="row">
+    <div class="col-md-6">
+        <table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
+             <tbody>
+                 <tr>
+                     <td><b>项目</b></td>
+                     <td class="cpu_chose">
+                         <a href="javascript:void(0);" class="vm_active" value="1">1 个</a>
+                         <a href="javascript:void(0);" value="2">2 个</a>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>Slice</b></td>
+                     <td class="cpu_chose">
+                         <a href="javascript:void(0);" class="vm_active" value="1">1 个</a>
+                         <a href="javascript:void(0);" class="disabled" value="2">2 个</a>
+                         <a href="javascript:void(0);" value="3">3 个</a>
+                         <a href="javascript:void(0);" value="4">4 个</a>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>VM</b></td>
+                     <td class="cpu_chose">
+                         <a href="javascript:void(0);" class="vm_active" value="1">1 个</a>
+                         <a href="javascript:void(0);" value="2">2 个</a>
+                         <a href="javascript:void(0);" value="3">3 个</a>
+                         <a href="javascript:void(0);" value="4">4 个</a>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>CPU</b></td>
+                     <td class="cpu_chose">
+                         <a href="javascript:void(0);" class="vm_active" value="1">1 核</a>
+                         <a href="javascript:void(0);" value="2">2 核</a>
+                         <a href="javascript:void(0);" value="4">4 核</a>
+                         <a href="javascript:void(0);" value="8">8 核</a>
+                     </td>
+                 </tr>
+                 <tr>
+                     <td><b>内存</b></td>
+                     <td class="slider_td">
+
+                         <div id="ram_slider" class="ui-slider">                 
+                         </div>
+                         <span class="value_s">128 MB</span>
+                         <span class="value_e">8 GB</span>
+                     </td>
+                 </tr>  
+                 <tr>
+                     <td><b>内存</b></td>
+                     <td class="slider_td">
+
+                         <div id="ram_slider2" class="ui-slider">                 
+                         </div>
+                         <span class="value_s">128 MB</span>
+                         <span class="value_e">8 GB</span>
+                     </td>
+                 </tr>                
+             </tbody>
+         </table>
+    </div>
+    <div class="col-md-6 form-horizontal">
+        <div class="form-group">
+            <label for="" class="control-label col-md-2 requiredField">申请原因</label>
+            <div class="controls col-md-10">
+                <textarea id="" rows="15" cols="40" name="description" class="textarea form-control"></textarea>              
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info">取消</button></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info">申请</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+{% endblock %}
