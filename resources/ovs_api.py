@@ -126,7 +126,7 @@ def get_ports_by_switchs(switch_ids):
     """根据选择的交换机获取链路端口
     """
     print 'get_ports_by_switchs'
-    print switch_ids
+#     print switch_ids
 #     交换机
     try:
         add_ports = []
@@ -140,19 +140,19 @@ def get_ports_by_switchs(switch_ids):
                     pass
                 else:
                     switch_objs.append(switch)
-            print switch_objs
+#             print switch_objs
             ports = []
             for switch_obj in switch_objs:
                 s_ports = switch_obj.switchport_set.all()
                 ports.extend(s_ports)
             links = Link.objects.filter(source__in=ports, target__in=ports)
-            print links
+#             print links
             for link in links:
                 if link.source not in add_ports:
                     add_ports.append(link.source)
                 if link.target not in add_ports:
                     add_ports.append(link.target)
-        print add_ports
+#         print add_ports
         return add_ports
     except Exception, ex:
         print ex
@@ -240,12 +240,12 @@ def get_select_topology(tp_mod, switch_ids, switch_port_ids):
     except Exception, ex:
         print 1
         #import traceback
-        traceback.print_stack()
-        traceback.print_exc()
+#         traceback.print_stack()
+#         traceback.print_exc()
         return []
     else:
         print 2
-        print topology
+#         print topology
         return topology
 
 
@@ -313,7 +313,7 @@ def slice_add_port(slice_obj, port_id, add_type):
     except DbError:
         raise
     except Exception:
-        traceback.print_exc()
+#         traceback.print_exc()
         raise DbError("端口添加失败！")
 
 
@@ -339,7 +339,7 @@ def slice_add_owner_device(slice_port, mac_list):
     except DbError:
         raise
     except Exception:
-        traceback.print_exc()
+#         traceback.print_exc()
         raise DbError("自接入设备添加失败！")
 
 

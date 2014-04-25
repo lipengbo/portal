@@ -226,7 +226,7 @@ class SwitchPort(Resource):
         from plugins.openflow.models import Link
         links_src_c = Link.objects.filter(source=self).count()
         links_tag_c = Link.objects.filter(target=self).count()
-        print self, links_src_c, links_tag_c
+#         print self, links_src_c, links_tag_c
         if links_src_c + links_tag_c == 0:
             return True
         else:

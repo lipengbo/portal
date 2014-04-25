@@ -17,7 +17,7 @@ def buildRequest(url, cmd):
 
 
 def parseResponse(data):
-    print data
+#     print data
     j = json.loads(data)
     if "error" in j:
         result = j["error"]
@@ -48,10 +48,10 @@ def cnvp_service(cmd, cnvp_url):
         return parseResponse(ph.read())
     except Exception, e:
         print 11
-        print e
-        import traceback
-        #traceback.print_stack()
-        traceback.print_exc()
+#         print e
+#         import traceback
+#         #traceback.print_stack()
+#         traceback.print_exc()
         if str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
             return cnvp_service(cmd, cnvp_url)
         else:
@@ -210,7 +210,7 @@ class CnvpClient(object):
                         else:
                             switch['target_switch'] = ()
                         switches.append(switch)
-                print switches
+#                 print switches
                 return switches
         except:
             raise FlowvisorError("物理交换机信息获取失败!")

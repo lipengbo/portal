@@ -257,8 +257,8 @@ def start_slice_api(slice_obj):
                         gw.save()
                     start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag)
             except Exception, ex:
-                import traceback
-                traceback.print_exc()
+#                 import traceback
+#                 traceback.print_exc()
                 raise DbError("虚网启动失败！")
     except Exception, ex:
         transaction.rollback()
@@ -489,7 +489,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
                 if not switch_port.is_edge():
                     continue
                 if switch_port.switch.type() != 3 and slice_port.type == 1:
-                    print "++++++++++++++",2
+#                     print "++++++++++++++",2
         #用户自接入设备，且共享
                     owner_devices = slice_port.ownerdevice_set.all()
                     if owner_devices:
@@ -505,7 +505,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
                                                              slice_nw, "other", "", "", "", "", flowvisor.type)
                             arg_matches.append(arg_match)
                 else:
-                    print "++++++++++++++",3
+#                     print "++++++++++++++",3
                     arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "0x800",
                                                      slice_nw, slice_nw, "", "", "", "", flowvisor.type)
                     arg_matches.append(arg_match)
@@ -527,9 +527,9 @@ def update_slice_virtual_network_cnvp(slice_obj):
                             arg_match = matches_to_arg_match(switch_port.port, "", "", vms[0].mac, "", "0x800",
                                                              "0.0.0.0", "255.255.255.255", "", "", "", "", flowvisor.type)
                             arg_matches.append(arg_match)
-                print "++++++++++++++",arg_matches
+#                 print "++++++++++++++",arg_matches
                 for arg_match in arg_matches:
-                    print "++++++++++++++",1
+#                     print "++++++++++++++",1
                     flowvisor_add_flowspace(flowvisor, None,
                                             slice_obj.id,
                                             4, 'cdn%nf',
