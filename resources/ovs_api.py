@@ -358,10 +358,9 @@ def slice_add_port_device(slice_obj, port_id, add_type, mac_list=None):
 
 @transaction.commit_manually
 def slice_delete_port_device(slice_obj, port_id):
-    """slice添加用户自接入设备。
-    mac_list为字符串类型，最长1024，格式为“mac1,mac2,...”
+    """slice删除用户自接入设备端口。
     """
-    LOG.debug('slice_add_port_device')
+    LOG.debug('slice_delete_port_device')
     try:
         Slice.objects.get(id=slice_obj.id)
         switch_ports = SwitchPort.objects.filter(id=port_id)
