@@ -21,6 +21,7 @@ class Profile(ProfileBase):
     #def __unicode__(self):
     #    return self.realm and (self.realm[:10] + "...") or ""
 
+    @property
     def action_url(self):
         return reverse('nexus_edit', args=('auth', 'user', self.user.id))
 

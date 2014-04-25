@@ -553,13 +553,13 @@ function init_svg () {
                             if ((link.source.id == d.id) && (link.info['src-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
                                 content +=  
-                                    "<label><input class='checkbox' type='checkbox' ";
+                                    "<div class='checkbox'><label><input class='checkbox' type='checkbox' ";
                                 if (port.db_id in parent.selected_ports) {
                                     content += "checked ";
                                 }
                                 content += "value='" + port.db_id+ "'/> " + d.db_name + ":" + port.name;
                                 content += ' <-----> ' + link.target.db_name + ":" + link.info['dst-port-name'];
-                                content += "</label>";
+                                content += "</label></div>";
                             }
                             port_pair_key = [port.portNumber, link.info['src-port-name']].sort().join('');
                             if (port_pair_key in port_pairs) {
@@ -568,13 +568,13 @@ function init_svg () {
                             if ((link.target.id == d.id) && (link.info['dst-port'] == port.portNumber)) {
                                 port_pairs[port_pair_key] = '';
                                 content +=  
-                                    "<label><input class='checkbox' type='checkbox' ";
+                                    "<div class='checkbox'><label><input class='checkbox' type='checkbox' ";
                                 if (port.db_id in parent.selected_ports) {
                                     content += "checked ";
                                 }
                                 content += "value='" + port.db_id+ "'/> " + d.db_name + ":" + port.name;
                                 content += ' <-----> ' + link.source.db_name + ":" + link.info['src-port-name'];
-                                content += "</label>";
+                                content += "</label></div>";
                             }
                         });
                     });

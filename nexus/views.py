@@ -15,6 +15,7 @@ from django.forms.models import modelform_factory
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.contrib.auth.models import Permission
+from django.conf import settings
 
 
 
@@ -55,7 +56,7 @@ def list_objects(request, app_label, model_class):
     if model_class == 'switch':
         objects = objects.exclude(dpid__istartswith='00:ff')
     if model_class == 'user':
-        objects = objects.exclude(is_superuser=True)
+        objects = objects.exclude(is_superuser=True).exclude(id=settings.ANONYMOUS_USER_ID)
     objects = NexusFilter(request.GET, queryset=objects.order_by('-id'))
     cities = City.objects.all()
     islands = Island.objects.all()

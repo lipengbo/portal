@@ -15,6 +15,7 @@ from django.conf import settings
 from quota_admin.forms import ApplyForm
 from notifications import notify
 
+@login_required
 def index(request):
     QUOTAS = settings.QUOTAS
     context = {}
@@ -38,6 +39,9 @@ def index(request):
 
     return render(request, 'quota_admin/apply_expanding_quota.html', context)
 
+@login_required
 def quota(request):
+    if request.user.is_superuser:
+        return redirect('/')
     context = {}
     return render(request, 'quota_admin/user_quota.html', context)
