@@ -1022,10 +1022,22 @@ fieldset {
     }
 }
 .progress_defined {
+    position:relative;
     text-align:center;
     background:#eee;
     margin-bottom:0;
     border-radius: 10px;
+    span {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        top: 0;
+        display: block;
+        height: 20px;
+        line-height: 20px;
+        color:#333!important;
+    }
     .progress-bar-info {
         background:#2291fe;
         border-radius:10px;
