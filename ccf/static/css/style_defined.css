@@ -7297,9 +7297,6 @@ span[name="serverInfo"] {
   padding: 15px;
   color: #fff;
 }
-.device_access .device_access_form p {
-  margin-bottom: 20px;
-}
 .device_access .device_access_form .form-group {
   display: block;
   margin-bottom: 20px;
@@ -7311,6 +7308,10 @@ span[name="serverInfo"] {
 .device_access .device_access_form .form-group textarea,
 .device_access .device_access_form .form-group input[type="text"] {
   width: 100%;
+}
+.device_access .device_access_form .form-group textarea {
+  height: 66px;
+  overflow-y: auto;
 }
 .device_access .device_access_form .device_access_btn label {
   margin-right: 15px;
