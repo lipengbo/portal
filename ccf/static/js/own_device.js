@@ -29,6 +29,7 @@ $(document).ready(function(){
             document.getElementById("enable_switch_port").innerHTML = port_content;
        }
     });
+    $("#topologyiframe").attr("src", "/slice/topology_d3/?slice_id="+sliceid+"&width=700&height=400&top=0&band=0&own_device=1");
     $('.mac_addrs').hide();
     $('.device_access_savebtn').on("click", function(){
         if(selected_switch_ports().count() != 0){

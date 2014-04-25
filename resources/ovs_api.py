@@ -361,6 +361,8 @@ def slice_add_port_device(slice_obj, port_id, add_type, mac_list=None):
 
 @transaction.commit_manually
 def slice_delete_port_device(slice_obj, port_id):
+    """slice删除用户自接入设备端口。
+    """
     LOG.debug('slice_delete_port_device')
     try:
         Slice.objects.get(id=slice_obj.id)
