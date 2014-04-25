@@ -34,7 +34,7 @@ def index(request):
                 admin = admins[0]
                 notify.send(request.user, recipient=admin, verb=u'申请升级配额', action_object=request.user.get_profile(),
                     description=desc)
-                #return redirect('')
+            return redirect('quota_admin_quota')
 
     return render(request, 'quota_admin/apply_expanding_quota.html', context)
 

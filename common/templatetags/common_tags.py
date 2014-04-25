@@ -1,5 +1,8 @@
+#coding: utf-8
+
 from django.template.defaultfilters import register
 from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from account.models import EmailAddress, EmailConfirmation
 
@@ -19,3 +22,11 @@ def has_perm(context, user, perm, obj):
         perm = "{}.{}".format(perm.content_type.app_label, perm.codename)
     context['has_perm'] = user.has_perm(perm, obj)
     return ""
+
+@register.simple_tag()
+def action_url(notification):
+    if notification.verb == u'调整配额':
+        return reverse('quota_admin_quota')
+    else:
+        return notification.action_object.action_url()
+

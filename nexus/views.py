@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -22,6 +24,7 @@ from project.models import City, Island
 from profiles.forms import UserForm
 from resources.models import Server
 import django_filters
+from notifications import notify
 
 
 @login_required
@@ -111,10 +114,15 @@ def add_or_edit(request, app_label, model_class, id=None):
         #: quota perm
         if model_class == 'user':
             resources = {'project': None, 'slice': None, 'vm': None, 'cpu': None, 'mem': None, 'disk': None}
+            quota_changed = False
             for resource in resources.keys():
                 quota = request.POST.get(resource)
-                instance.user_permissions.remove(*list(Permission.objects.filter(codename__contains='quota_{}_'.format(resource))))
-                instance.user_permissions.add(Permission.objects.get(codename='quota_{}_{}'.format(resource, quota)))
+                if quota != getattr(request.user.quotas, resource):
+                    quota_changed = True
+                    instance.user_permissions.remove(*list(Permission.objects.filter(codename__contains='quota_{}_'.format(resource))))
+                    instance.user_permissions.add(Permission.objects.get(codename='quota_{}_{}'.format(resource, quota)))
+            if quota_changed:
+                notify.send(request.user, recipient=instance, verb=u'调整配额', action_object=instance.get_profile())
         #: save
         if formset.is_valid():
                 instances = formset.save()
