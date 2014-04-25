@@ -28,7 +28,7 @@ def parseResponse(data):
     else:
         return [{"resultcode": 2, "resultmsg": "json foam error"}]
     print 1
-    print j
+#     print j
     print result
     print result[0]["resultcode"]
     print result[0]["resultmsg"]
