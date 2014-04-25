@@ -178,24 +178,36 @@ function assign_node_icon(d) {
     } else if(d.group == 2) { 
         ovs_image = STATIC_URL + "topology/img/server-phy";
     } else {
-        if (d.id.indexOf('00:ee:') == 0) {
-            // gre switch
-            ovs_image = STATIC_URL + 'topology/img/ovs-red';
-            if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
-            }
-        } else if (d.id.indexOf('00:ff:') == 0) {
-            // virtual switch
-            ovs_image = STATIC_URL + 'topology/img/ovs-green';
-            if (!show_logical) {
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
-            }
-        } else {
-            if (!show_logical) {
-                // physical
-                ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+        if(d.selected && d.selected == 1) {
+            if (d.id.indexOf('00:ee:') == 0) {
+                // gre switch
+                ovs_image = STATIC_URL + 'topology/img/ovs_external_red';
+            } else if (d.id.indexOf('00:00:') == 0) {
+                // virtual switch
+                ovs_image = STATIC_URL + 'topology/img/ovs_normal_red';
             } else {
-                ovs_image = STATIC_URL + 'topology/img/ovs';
+                ovs_image = STATIC_URL + 'topology/img/ovs_related_red';
+            }
+        }else{
+            if (d.id.indexOf('00:ee:') == 0) {
+                // gre switch
+                ovs_image = STATIC_URL + 'topology/img/ovs_external';
+                if (!show_logical) {
+                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
+                }
+            } else if (d.id.indexOf('00:00:') == 0) {
+                // virtual switch
+                ovs_image = STATIC_URL + 'topology/img/ovs_normal';
+                if (!show_logical) {
+                    ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+                }
+            } else {
+                if (!show_logical) {
+                    // physical
+                    ovs_image = STATIC_URL + 'topology/img/ovs-phy';
+                } else {
+                    ovs_image = STATIC_URL + 'topology/img/ovs_related';
+                }
             }
         }
 
@@ -538,7 +550,22 @@ function init_svg () {
 
                 var data = d;
                 if (data.id in origin_nodes_map) {
+                    var tp_mod = $("#tp_mod").text();
                     var origin_data = origin_nodes_map[data.id];
+                    if(tp_mod == 2){
+                        if (origin_data.dpid in parent.selected_dpids) {
+                            parent.add_dpid(origin_data.dpid, true);
+                            d.selected = 0;
+                            svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
+                            //d.attr("xlink:href", assign_node_icon(d));
+                        }else{
+                            parent.add_dpid(origin_data.dpid, false);
+                            d.selected = 1;
+                            svg.selectAll(".node image").attr("xlink:href", assign_node_icon);
+                            //d.attr("xlink:href", STATIC_URL + 'topology/img/ovs-red');
+                        } 
+                        return;  
+                    }
                     if (!origin_data.ports) {
                         return;
                     }

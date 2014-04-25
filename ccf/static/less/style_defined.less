@@ -16,6 +16,12 @@ textarea {
 .clear {
     clear:both;
 }
+a:active, a:hover, a:focus {
+    outline:none;
+}
+.btn.btn_info:hover, .btn.btn_info:focus {
+    color:#fff;
+}
 /* bootstrap defined */
 .alert {
     border-radius:0;
@@ -1255,6 +1261,15 @@ fieldset {
         -o-transition: all .2s ease-in-out;
         transition: all .2s ease-in-out;
     }
+    td.cpu_chose a.disabled {
+        border-color: #bebebe;
+        background: #eee;
+        color: #999;
+        cursor: not-allowed;
+    }
+    td.cpu_chose a.disabled:hover {
+        border-color:#bebebe;
+    }
     td.type_chose a:hover, td.cpu_chose a:hover {
         border-color:#2b8fcd;        
     }
@@ -1522,19 +1537,23 @@ span[name="serverInfo"] {
         padding-right:0px;
     }
     .device_access_form {
-        background:#9b999a;
+        background:#777;
         border-radius:5px;
         height:404px;
         padding:15px;
         color:#fff;
-        p {
-            margin-bottom:20px;
-        }
         .form-group {
             display:block;
             margin-bottom:20px;
             label {
                 margin-right:15px;
+            }
+            select, textarea, input[type="text"] {
+                width:100%;
+            }
+            textarea {
+                height:66px;
+                overflow-y:auto;
             }
         }
         .device_access_btn {      
@@ -1546,7 +1565,7 @@ span[name="serverInfo"] {
             }          
         }      
         .device_access_savebtn {
-            margin-top:50px;
+            padding-top:20px;
             text-align:center;
         }
     }

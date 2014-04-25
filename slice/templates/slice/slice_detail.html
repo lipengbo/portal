@@ -12,9 +12,9 @@
 
 {% block body %}
 
-        <div class="alert alert-info alert_defined">
+        <!--<div class="alert alert-info alert_defined">
             启动步骤：1.启动控制器 <i class="glyphicon glyphicon-arrow-right"></i> 2.启动虚拟网关 <i class="glyphicon glyphicon-arrow-right"></i> 3.启动虚网 <i class="glyphicon glyphicon-arrow-right"></i> 4.启动虚拟机
-        </div>
+        </div>-->
         <table class="table_defined">
             <thead>
                 <tr>
@@ -30,7 +30,7 @@
                   <td>{{slice_obj.get_show_name}}</td>
                   <td id = "slice_description_old">{{slice_obj.description}}</td>
                   <td>{{slice_obj.get_island}}</td>
-                  <td class="slice_state"><div>
+                  <td class="slice_state">
                     {% if slice_obj.state == 0 %}
                         <i class="icon-minus-sign icon_state" id="slice_state"></i>
                     {% elif slice_obj.state == 1 %}
@@ -38,23 +38,24 @@
                     {%else%}
                         <i class="icon-spinner icon-spin" id="slice_state"></i>  
                     {%endif%}
+                  </td>
                   <td class="btn_operation">
                     {%if extent_html == "site_base.html" and permission == "edit" %}
                         {%if slice_obj.state == 1 %}
                         <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:pointer">
-                            <img src="{{ STATIC_URL}}img/btn_tz.png" title="停止" />
+                            <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
                         </a>
                         {% elif slice_obj.state == 0 %}
                         <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:pointer">
-                            <img src="{{ STATIC_URL}}img/btn_qd.png" title="启动" />
+                            <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
                         </a>
                         {% elif slice_obj.state == 3 %}
                         <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="停止中" />
+                            <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止中" />
                         </a>
                         {%else%}
                         <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启动中" />
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动中" />
                         </a>
                         {%endif%}
                         
@@ -69,7 +70,11 @@
                         {%endif%}
                     {%else%}
                         <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_qd_gray.png" title="启停" />
+                            {%if slice_obj.state == 0 or slice_obj.state == 4 %}
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
+                            {%else%}
+                            <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止" />
+                            {%endif%}
                         </a>
                         <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
@@ -114,7 +119,7 @@
 			<div class="pull-right tuopu_btn dhcp_div
 			    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
                 {%else%}disabled{%endif%}">
-        DHCP服务：                
+            DHCP服务：                
                 {%if slice_obj.get_dhcp != None %}
                 <span class="switch_btn dhcp checked" 
                 {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
@@ -146,17 +151,17 @@
             {% include "slice/vm_list_page.html" %}
         </div>   
  
-    <div class="clear" style="display: none" >
-        <p id="STATIC_URL">{{STATIC_URL}}</p>
-        <p id="slice_id">{{slice_obj.id}}</p>
-        {%if extent_html == "site_base.html" and permission == "edit" %}
-        <p id="edit">1</p>
-        {%else%}
-        <p id="edit">0</p>
-        {%endif%}
-        <p id="controller_ip_port_old">{{vms.0.ip}}</p>
-        <p id="controller_type">{{vms.0.type_id}}</p>
-    </div>
+        <div class="clear" style="display: none" >
+            <p id="STATIC_URL">{{STATIC_URL}}</p>
+            <p id="slice_id">{{slice_obj.id}}</p>
+            {%if extent_html == "site_base.html" and permission == "edit" %}
+            <p id="edit">1</p>
+            {%else%}
+            <p id="edit">0</p>
+            {%endif%}
+            <p id="controller_ip_port_old">{{vms.0.ip}}</p>
+            <p id="controller_type">{{vms.0.type_id}}</p>
+        </div>
     
     
     <div id="editInfoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -190,9 +195,9 @@
               <button class="btn btn-default" data-dismiss="modal">取消</button>
               <button type="button" onclick="edit_description('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
             </div>
-      </form>
-      </div>
-      </div>
+        </form>
+        </div>
+        </div>
     </div>
     
     <div id="editSliceModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
@@ -266,6 +271,7 @@
         </div>
         </div>
     </div>
+    
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -279,6 +285,7 @@
         </div>
       </div>
     </div>
+    
     <div class="modal fade" id="slicealertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -303,10 +310,10 @@
                 <tbody>
                     <tr>
                         <td width="120">
-            				<label class="tab_radio1 control-label">
-            					<input type="radio" name="device" id="customdevice" value="customdevice"/>
+            				<label class="tab_radio1 control-label" >
+            					<input type="radio" name="device" id="customdevice" value="customdevice" />
                 				接入自有设备             
-            				</label>
+            				</label><span id="customdevice_msg"></span>
 						</td>
 					</tr>
 					<tr>

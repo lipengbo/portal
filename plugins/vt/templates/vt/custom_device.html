@@ -11,14 +11,14 @@
 {% endblock %}
 {% block body %}
 <!--警告框-->
-<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div id="portalertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 <div class="modal-dialog">
 <div class="modal-content">    
-<div class="modal-body" id="slice_alert_info">
+<div class="modal-body" id="port_alert_info">
       <p class="text-center"></p>
     </div> 
     <div class="modal-footer">
-      <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>
+      <button class="btn delete-confirm btn_info" data-dismiss="modal">确定</button>
     </div>          
 </div>
 </div>
@@ -31,31 +31,33 @@
 </div>
 <div class="device_access clearfix">
     <div class="col-md-9">
-        <iframe scrolling="no" id="topologyiframe" width="100%" height="400" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=700&height=400&top=0&band=0" frameborder="0"></iframe>
+        <iframe scrolling="no" id="topologyiframe" width="100%" height="400" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=700&height=400&top=0&band=0&own_device=1" frameborder="0"></iframe>
     </div> 
     <div class="col-md-3">
         <div class="device_access_form form-inline">
-            <p><strong>名称1xxxxhhhh</strong></p>
-            <div class="form-group">
+            <h4 class="form-group"><strong><span id="_switch_port">ovs交换机</span></strong></h4>
+            <div class="form-group switch_port">
                 <label class="control-label" for="">可选端口</label>
-                <select class="form-control">
-                    <option>端口1</option>
-                    <option>端口2</option>
-                    <option>端口3</option>
-                    <option>端口4</option>
-                    <option>端口55555</option>
+                <select class="form-control " id="enable_switch_port">
+                    
                  </select> 
+                <span id="port_err_msg" style="color:red"></span>
             </div>                         
-            <div class="device_access_btn">
+            <div class="form-group device_access_btn disable">
                  <label class="control-label" for="">是否独占</label>         
-                 <div class="tuopu_btn">
-                        <span class="switch_btn dk">
-                            <span class="switch_content">停止</span>
+                 <div class="tuopu_btn dk">
+                        <span class="switch_btn dk " style="cursor:pointer">
+                            <span class="switch_content">否</span>
                         </span>
                  </div>             
             </div>
+            <div class="form-group mac_addrs">
+                <label class="control-label">MAC 地址列表：</label>
+                <textarea id="mac_addrs" style="color:black" rows="3"></textarea>
+            <span id="mac_err_msg" style="color:red"></span>
+            </div>
             <p class="device_access_savebtn">
-                <button type="button" class="btn btn_info">保存</button>
+                <button type="button" class="btn btn-default">保存</button>
             </p>
         </div>
     </div> 
@@ -64,22 +66,18 @@
 <h4 class="block_title show-dhcp">
             <img src="/site_media/static/img/ic_slice.png">端口列表
 </h4>
-<table class="table_defined">
+<table class="table_defined" id="port_info_table">
     <thead>
         <tr>
-            <th>名称</th>
-            <th>名称</th>
-            <th>名称</th>
-            <th>名称</th>
+            <th>交换机</th>
+            <th>dpid</th>
+            <th>所选端口</th>
+            <th>是否独占</th>
+            <th>MAC地址</th>
+            <th>操作</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>名称</td>
-            <td>名称</td>
-            <td>名称</td>
-            <td>名称</td>
-        </tr>
     </tbody>
 </table>
 
@@ -88,8 +86,8 @@
          <div class="form-actions">
             <div class="row buttons_margin">
                 <div class="col-md-4"></div>
-                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" >{% trans "Cancel" %}</button></div>
-                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" >{% trans "Submit" %}</button></div>
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail slice_obj.id %}'">{% trans "Cancel" %}</button></div>
+                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="commit_ports({{slice_obj.id}})">{% trans "Submit" %}</button></div>
                 <div class="col-md-4"></div>
             </div>
         </div>
@@ -100,14 +98,13 @@
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script src="{{ STATIC_URL}}js/taffy.js"></script>
 <script src="{{ STATIC_URL}}js/own.js"></script>
-<script src="{{ STATIC_URL}}js/vm.js"></script>
-<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script>
 	var STATIC_URL = "{{ STATIC_URL}}";
-	$("#alert_close_sure").on("click", function(){
-		window.location.href='/slice/detail/' + {{sliceid}} + '/';
-	})
-	
+    var sliceid = "{{slice_obj.id }}";
 </script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+<script src="{{ STATIC_URL}}js/own_device.js"></script>
+<script src="{{ STATIC_URL}}js/own_device_common.js"></script>
+
 
 {% endblock %}

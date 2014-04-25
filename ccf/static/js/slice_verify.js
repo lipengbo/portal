@@ -139,8 +139,8 @@ function check_port(port,flag){
 	}
 	var reg = /^[0-9]*$/;
 	if(port.length > 0){
-		if(port >= 65535 || port < 0 || !reg.test(port)){
-			showInfo(info," * (0-65535)","red");
+		if(!reg.test(port) || port > 65535 || port < 1){
+			showInfo(info," * (1~65535)","red");
 			return false;
 		}
 		else{
@@ -574,7 +574,7 @@ function trans(mask){
             cip1_obj = document.getElementById("cip1");
             cip2_obj = document.getElementById("cip2");
             cip3_obj = document.getElementById("cip3");
-            controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+            controller_ip = ''+parseInt(cip0_obj.value)+'.'+parseInt(cip1_obj.value)+'.'+parseInt(cip2_obj.value)+'.'+parseInt(cip3_obj.value);
             controller_port_obj = document.getElementById("controller_port");
             //var controller_ip_port = controller_ip_port_obj.value.split(":");
             submit_data = {"controller_type": controller_type,

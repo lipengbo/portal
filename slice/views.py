@@ -19,7 +19,7 @@ from slice.slice_api import create_slice_step, start_slice_api,\
     get_slice_links_bandwidths, get_count_show_data
 from plugins.openflow.controller_api import slice_change_controller
 from project.models import Project, Island
-from resources.models import SwitchPort
+from resources.models import Switch, SwitchPort
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
@@ -55,6 +55,10 @@ def create(request, proj_id):
                 ovs_ports.append({'switch_type': switch.type(),
                                   'switch': switch,
                                   'switch_ports': switch_ports})
+            else:
+                ovs_ports.append({'switch_type': switch.type(),
+                                  'switch': switch,
+                                  'switch_ports': []})
     vm_form = VmForm()
     context = {}
     context['project'] = project
@@ -95,21 +99,31 @@ def create_first(request, proj_id):
                 controller_info = {'controller_type': controller_type,
                                    'controller_ip': controller_ip,
                                    'controller_port': controller_port}
-            port_ids = []
-            switch_port_ids_str = request.POST.get("switch_port_ids")
-#             print switch_port_ids_str
-            switch_port_ids = switch_port_ids_str.split(',')
-            for switch_port_id in switch_port_ids:
-                port_ids.append(int(switch_port_id))
-            ovs_ports = SwitchPort.objects.filter(id__in=port_ids)
+            tp_mod = request.POST.get('tp_mod')
+            if int(tp_mod) == 2:
+                switch_ids = []
+                switch_ids_str = request.POST.get("switch_ids")
+    #             print switch_port_ids_str
+                switch_ids_sp = switch_ids_str.split(',')
+                for switch_id_sp in switch_ids_sp:
+                    switch_ids.append(int(switch_id_sp))
+                ovs_or_ports = Switch.objects.filter(id__in=switch_ids)
+            else:
+                port_ids = []
+                switch_port_ids_str = request.POST.get("switch_port_ids")
+    #             print switch_port_ids_str
+                switch_port_ids = switch_port_ids_str.split(',')
+                for switch_port_id in switch_port_ids:
+                    port_ids.append(int(switch_port_id))
+                ovs_or_ports = SwitchPort.objects.filter(id__in=port_ids)
             slice_nw = request.POST.get("slice_nw")
             gw_host_id = request.POST.get("gw_host_id")
             gw_ip = request.POST.get("gw_ip")
             dhcp_selected = request.POST.get("dhcp_selected")
             slice_obj = create_slice_step(project, slice_uuid, slice_name,
                                           slice_description, island, user,
-                                          ovs_ports, controller_info, slice_nw,
-                                          gw_host_id, gw_ip, dhcp_selected)
+                                          ovs_or_ports, controller_info, slice_nw,
+                                          gw_host_id, gw_ip, dhcp_selected, tp_mod)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
@@ -290,7 +304,7 @@ def detail(request, slice_id):
             show_vm['name'] = "自定义控制器"
         else:
             show_vm['name'] = controller.name
-        
+
         show_vm['type'] = "控制器"
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
@@ -304,7 +318,7 @@ def detail(request, slice_id):
         else:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
                          'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
-        
+
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
@@ -480,8 +494,15 @@ def topology_d3(request):
     context['height'] = request.GET.get('height')
     context['top'] = request.GET.get('top')
     context['band'] = request.GET.get('band')
+    context['own_device'] = request.GET.get("own_device")
     if int(context['slice_id']) == 0:
-        context['switch_port_ids'] = request.GET.get('switch_port_ids')
+        context['tp_mod'] = request.GET.get('tp_mod')
+        if int(context['tp_mod']) == 2:
+            context['switch_ids'] = request.GET.get('switch_ids')
+            context['switch_port_ids'] = ""
+        else:
+            context['switch_ids'] = ""
+            context['switch_port_ids'] = request.GET.get('switch_port_ids')
     user = request.user
     if user and user.is_superuser:
         context['admin'] = 1
@@ -556,13 +577,22 @@ def get_slice_state(request, slice_id):
           slice状态获取成功：value = 0
     """
     try:
+        c_state = -1
+        g_state = -1
         slice_obj = Slice.objects.get(id=int(slice_id))
+        controller = slice_obj.get_controller()
+        if controller and controller.host:
+            c_state = controller.host.state
+        gw = slice_obj.get_gw()
+        if gw:
+            g_state = gw.state
     except:
         print 1
         return HttpResponse(json.dumps({'value': 1}))
     else:
         print 2
-        return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state}))
+        return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
+                                        'c_state': c_state, 'g_state': g_state}))
 
 
 def test_cnvp():

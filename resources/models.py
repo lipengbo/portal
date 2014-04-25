@@ -15,7 +15,10 @@ from project.models import Island
 from slice.models import Slice
 
 OVS_TYPE = {'NOMAL': 1, 'EXTERNAL': 2, 'RELATED': 3}
-
+PORT_MONOPOLIZE = 0
+PORT_SHARE = 1
+PORT_TYPES = ((PORT_MONOPOLIZE, 'port_monopolize'),
+              (PORT_SHARE, 'port_share'),)
 
 class ResourceBase(ModelBase):
 
@@ -154,6 +157,17 @@ class Switch(SwitchResource):
         else:
             return OVS_TYPE['RELATED']
 
+    def get_edge_ports(self):
+        from plugins.openflow.models import Link
+        edge_ports = []
+        ports = self.switchport_set.all()
+        for port in ports:
+            links_src_c = Link.objects.filter(source=port).count()
+            links_tag_c = Link.objects.filter(target=port).count()
+            if links_src_c + links_tag_c == 0:
+                edge_ports.append(port)
+        return edge_ports
+
     @staticmethod
     def admin_options():
         options = {
@@ -201,6 +215,22 @@ class SwitchPort(Resource):
             if not slice_obj.get_switch_ports().filter(switch=switch):
                 slice_obj.remove_resource(switch)
 
+    def can_monopolize(self):
+        slice_ports_c = SlicePort.objects.filter(switch_port=self).count()
+        if slice_ports_c > 0:
+            return False
+        else:
+            return True
+
+    def is_edge(self):
+        from plugins.openflow.models import Link
+        links_src_c = Link.objects.filter(source=self).count()
+        links_tag_c = Link.objects.filter(target=self).count()
+        if links_src_c + links_tag_c == 0:
+            return True
+        else:
+            return False
+
     class Meta:
         unique_together = (("switch", "port"), )
         verbose_name = _("Switch Port")
@@ -209,10 +239,20 @@ class SwitchPort(Resource):
 class SlicePort(models.Model):
     slice = models.ForeignKey(Slice)
     switch_port = models.ForeignKey(SwitchPort)
+    type = models.IntegerField(choices=PORT_TYPES,
+                               default=PORT_SHARE)
 
     class Meta:
         unique_together = (("slice", "switch_port"), )
         verbose_name = _("Slice Port")
+
+
+class OwnerDevice(models.Model):
+    mac_list = models.CharField(max_length=1024)
+    slice_port = models.ForeignKey(SlicePort)
+
+    class Meta:
+        verbose_name = _("Owner Device")
 
 
 class VirtualSwitch(Switch):
