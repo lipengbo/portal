@@ -808,9 +808,7 @@ function restart() {
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
             }  
         }else if(own_device == 1){
-            //show_switch_port(d.key);
-            //this.attr("href", "")
-            //alert(parent.document.getElementById("_switch_port"));
+            show_switch_port(d.key);
         }
     })
     .on('mouseover', function(d) {
