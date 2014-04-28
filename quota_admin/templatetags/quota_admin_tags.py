@@ -21,7 +21,7 @@ def user_project_count(user):
 
 @register.filter
 def user_slice_count(user):
-    count = user.slice_set.all().count()
+    count = user.slice_set.filter(type=0).count()
     return count
 
 @register.filter
