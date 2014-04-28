@@ -4,6 +4,7 @@ from slice.models import Slice
 from plugins.openflow.flowvisor_api import flowvisor_update_slice_status
 from slice.slice_api import update_slice_virtual_network_cnvp, update_slice_virtual_network_flowvisor
 from plugins.vt.models import DOMAIN_STATE_DIC
+from slice.slice_exception import DbError
 
 
 @task()
@@ -23,23 +24,33 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
         if controller_flag:
             controller = slice_obj.get_controller()
             if controller.host:
-                action_result = controller.host.do_action("create")
-                if action_result:
-                    controller.host.state = DOMAIN_STATE_DIC['running']
-                else:
+                try:
+                    action_result = controller.host.do_action("create")
+                except Exception:
                     controller.host.state = DOMAIN_STATE_DIC['shutoff']
                     ct_op = False
+                else:
+                    if action_result:
+                        controller.host.state = DOMAIN_STATE_DIC['running']
+                    else:
+                        controller.host.state = DOMAIN_STATE_DIC['shutoff']
+                        ct_op = False
                 controller.host.save()
         print "start gw"
         if gw_flag:
             gw = slice_obj.get_gw()
             if gw and gw.enable_dhcp:
-                action_result = gw.do_action("create")
-                if action_result:
-                    gw.state = DOMAIN_STATE_DIC['running']
-                else:
+                try:
+                    action_result = gw.do_action("create")
+                except Exception:
                     gw.state = DOMAIN_STATE_DIC['shutoff']
                     gw_op = False
+                else:
+                    if action_result:
+                        gw.state = DOMAIN_STATE_DIC['running']
+                    else:
+                        gw.state = DOMAIN_STATE_DIC['shutoff']
+                        gw_op = False
                 gw.save()
         print "stop slice, update flowspace, start slice"
         if ct_op and gw_op:
@@ -60,6 +71,11 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
                 flag = True
                 update_slice_virtual_network_flowvisor(slice_obj)
             slice_obj.start()
+        else:
+            if not ct_op:
+                raise DbError("控制器启动失败!")
+            if not gw_op:
+                raise DbError("网关启动失败!")
         print "start success"
     except Slice.DoesNotExist:
         pass
