@@ -118,6 +118,10 @@ def add_or_edit(request, app_label, model_class, id=None):
             quota_changed = False
             for resource in resources.keys():
                 quota = request.POST.get(resource)
+                if not quota or quota == u'None':
+                    if not quota or quota == u'None':
+                        quota = 0
+                    quota = 0
                 if int(quota) != getattr(instance.quotas, resource):
                     quota_changed = True
                     instance.user_permissions.remove(*list(Permission.objects.filter(codename__contains='quota_{}_'.format(resource))))
