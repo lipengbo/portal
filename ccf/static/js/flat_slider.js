@@ -46,6 +46,19 @@ String.prototype.repeat = function(num) {
       }).addSliderSegments("ram_slider", $slider.slider("option").max);
     }    
     
+  /*/ for quota
+  $(function() {
+    // jQuery UI Sliders
+    var $slider = $("#mem_slider");
+    if ($slider.length) {
+      $slider.slider({
+        min: 1,
+        max: 7,
+        value: 2,
+        orientation: "horizontal",
+        range: "min"
+      }).addSliderSegments("mem_slider", $slider.slider("option").max);
+    }  
    /* var $slider2 = $("#disk_slider");
     if ($slider2.length) {
       $slider2.slider({
@@ -59,5 +72,7 @@ String.prototype.repeat = function(num) {
     
     
   });
+
+
   
 })(jQuery);
