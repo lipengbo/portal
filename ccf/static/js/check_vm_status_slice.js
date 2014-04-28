@@ -221,7 +221,14 @@ function check_slice_status(slice_id){
                             img_obj.src = STATIC_URL + "img/ic-ks.png";
                             if(img_obj.title == "启动中"){
                                 $("div#slice_alert_info").empty();
-                                var str = "" + "<p class=\"text-center\">虚网启动失败！</p>";
+                                if(data.c_state != 1){
+                                    var str = "" + "<p class=\"text-center\">虚网启动失败(控制器启动失败)！</p>";
+                                }else if(data.g_state != 1){
+                                    var str = "" + "<p class=\"text-center\">虚网启动失败(网关启动失败)！</p>";
+                                }else{
+                                    var str = "" + "<p class=\"text-center\">虚网启动失败！</p>";
+                                }
+                                
                                 $("div#slice_alert_info").append(str);
                                 $('#slicealertModal').modal('show');
                             }
