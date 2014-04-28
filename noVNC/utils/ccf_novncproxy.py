@@ -69,14 +69,18 @@ class CCFWebSocketProxy(websockify.WebSocketProxy):
         cryptor = AES.new(aes_key, AES.MODE_ECB)
         return cryptor.decrypt(decode_base64_str).strip()
 
-if __name__ == '__main__':
+def start_novnc(web='./'):
     # Create and start the NovaWebSockets proxy
     server = CCFWebSocketProxy(listen_host='0.0.0.0',
                                listen_port=6080,
                                daemon=True,
-                               web='./',
+                               web=web,
                                target_host='ignore',
                                target_port='ignore',
                                wrap_mode='exit',
                                wrap_cmd=None)
     server.start_server()
+
+
+if __name__ == '__main__':
+    start_novnc()
