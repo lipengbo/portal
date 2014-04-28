@@ -35,7 +35,7 @@ slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
 function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
-flowvisor_disable = False
+flowvisor_disable = True
 #直接调度底层资源判断，发布时设置为True
 #[scheduler]只有在use_vt_manager_to_schedul = False时才生效
 use_vt_manager_to_schedul = True
