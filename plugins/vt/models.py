@@ -209,7 +209,7 @@ class VirtualMachine(IslandResource):
     def do_action(self, action):
         if function_test:
             print '----------------------vm action=%s-------------------------' % action
-            result = True
+            result = False
         else:
             agent_client = AgentClient(self.server.ip)
             switch_port = self.switch_port

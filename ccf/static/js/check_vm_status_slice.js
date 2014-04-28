@@ -56,7 +56,7 @@ function check_vm_status(slice_id){
                             break;
                         }
                     }
-                    if(status!=8){
+                    if(status!=8 && status!=12 && status!=13){
                         var check_node = {};
                         check_node.status = status;
                         check_node.cur_vm_id = cur_vm_id;
