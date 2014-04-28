@@ -13,42 +13,42 @@
 {% block body %}
         <div class="fill_form form-wizard">
             <ul class="row nav nav-pills">                
-                <li class="col-md-1"></li>
-                <li class="col-md-2 visit">
+                <li class="col-md-2"></li>
+                <li class="col-md-2 jump_step visit">
                     <a href="#tab1" class="step">
                         <span class="number">1</span>
                         <span class="desc">基本信息</span>                           
                     </a>                   
                 </li>
-                <li class="col-md-2">
+                <li class="col-md-2 jump_step">
                     <a href="#tab2" class="step">
                         <span class="number">2</span>
                         <span class="desc">网络配置</span>  
                         <i class="icon-caret-right"></i> 
                     </a>
                 </li>
-                <li class="col-md-2">
+                <li class="col-md-2 jump_step">
                     <a href="#tab3" class="step">
                         <span class="number">3</span>
                         <span class="desc">服务配置</span>  
                         <i class="icon-caret-right"></i> 
                     </a>
                 </li>
-                <!--<li class="col-md-2">
+                <!--<li class="col-md-2 jump_step">
                     <a href="#tab4" class="step">
                         <span class="number">4</span>
                         <span class="desc">虚拟机创建</span> 
                         <i class="icon-caret-right"></i>  
                     </a> 
                 </li>-->
-                <li class="col-md-2">
+                <li class="col-md-2 jump_step">
                     <a href="#tab4" class="step">
                     <span class="number">4</span>
                     <span class="desc">虚网清单</span>   
                     <i class="icon-caret-right"></i>
                     </a> 
                 </li>
-                <li class="col-md-1"></li>
+                <li class="col-md-2"></li>
             </ul>
           <form class="form-horizontal" action="" method="post" accept-charset="utf-8">{% csrf_token %}
             <div class="tab_part tab_1">
