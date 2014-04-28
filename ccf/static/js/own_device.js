@@ -77,6 +77,9 @@ $(document).ready(function(){
         }else{
             $('.switch_btn.dk').addClass("checked");
             $('.switch_btn.dk').children(".switch_content").html("是");
+            $("#mac_addrs").val('');
+            $(".mac_addrs").hide();
+            
         }
     });
     $('#enable_switch_port').on("blur", function(){
@@ -91,6 +94,7 @@ $(document).ready(function(){
 			if($(this).hasClass("checked")) {
                 $(this).removeClass("checked");
                 $(this).children(".switch_content").html("否");
+                $("#mac_addrs").val('示例：a4:1f:72:50:78:9a,a4:1f:72:50:78:9b');
                 $('.mac_addrs').show();
             }else{
 				$(this).addClass("checked");
