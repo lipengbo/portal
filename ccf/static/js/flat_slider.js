@@ -28,8 +28,12 @@ String.prototype.repeat = function(num) {
 	if(slider_name == 'ram_slider'){
 		return set_segment(this, amount, rams, 'MB');
     }else if(slider_name == 'disk_slider'){
+        var disks = [20, 40, 80, 160];
 		return set_segment(this, amount, disks, 'GB');
-	}
+	}else if (slider_name == 'mem_slider'){
+        var rams = [512, 1024, 2048, 4096];
+        return set_segment(this, amount, rams, 'MB');
+    }
    
   };
 
@@ -46,18 +50,32 @@ String.prototype.repeat = function(num) {
       }).addSliderSegments("ram_slider", $slider.slider("option").max);
     }    
     
-   /* var $slider2 = $("#disk_slider");
+  // for quota
+    // jQuery UI Sliders
+    var $slider = $("#mem_slider");
+    if ($slider.length) {
+      $slider.slider({
+        min: 1,
+        max: 4,
+        value: 2,
+        orientation: "horizontal",
+        range: "min"
+      }).addSliderSegments("mem_slider", $slider.slider("option").max);
+    }  
+    var $slider2 = $("#disk_slider");
     if ($slider2.length) {
       $slider2.slider({
         min: 1,
-        max: 6,
+        max: 4,
         value: 1,
         orientation: "horizontal",
         range: "min"
       }).addSliderSegments("disk_slider", $slider2.slider("option").max);
-    }    */
+    }  
     
     
   });
+
+
   
 })(jQuery);

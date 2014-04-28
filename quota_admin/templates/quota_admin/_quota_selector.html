@@ -50,7 +50,7 @@
                          <div id="mem_slider" name="mem" class="ui-slider">                 
                          </div>
                          <span class="value_s">{{ quotas.mem|first }}MB</span>
-                         <span class="value_e">{{ quotas.mem|last }}MB</span>
+                         <span class="value_e">4 GB</span>
                          <ul class="list-unstyled text-danger">
                              {{ form.mem.errors }}
                          </ul>
@@ -62,8 +62,8 @@
 
                          <div id="disk_slider" name="disk" class="ui-slider">                 
                          </div>
-                         <span class="value_s">{{ quotas.disk|first }}GB</span>
-                         <span class="value_e">{{ quotas.disk|last }}GB</span>
+                         <span class="value_s">20 GB</span>
+                         <span class="value_e">160 GB</span>
                          <ul class="list-unstyled text-danger">
                              {{ form.disk.errors }}
                          </ul>
