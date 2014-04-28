@@ -99,7 +99,7 @@ class VirtualMachineManager(models.Manager):
     def user_stat_sum(self, user, kind):
         total = 0
         for slice in user.slice_set.filter(type=0):
-            num =slice.get_vms().aggregate(Sum(kind))[kind+'__sum'] 
+            num =slice.get_vms().aggregate(Sum(kind))[kind+'__sum']
             if num:
                 total += num
         return total
@@ -218,6 +218,7 @@ class VirtualMachine(IslandResource):
             else:
                 ofport = None
             result = agent_client.do_domain_action(self.uuid, action, ofport)
+            print action, "**************", result
         return result
 
     def add_sshkeys(self, key):
