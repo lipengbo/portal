@@ -222,6 +222,13 @@ class SwitchPort(Resource):
         else:
             return True
 
+    def monopolized(self):
+        slice_ports_c = SlicePort.objects.filter(switch_port=self, type=0).count()
+        if slice_ports_c > 0:
+            return True
+        else:
+            return False
+
     def is_edge(self):
         from plugins.openflow.models import Link
         links_src_c = Link.objects.filter(source=self).count()
