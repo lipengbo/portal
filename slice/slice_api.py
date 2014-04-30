@@ -73,6 +73,31 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
         raise DbError(ex.message)
 
 
+def create_slice_step_n(project, slice_uuid, name, description, island, user, ovs_or_ports,
+                      slice_nw, tp_mod):
+    print "create_slice_step"
+    slice_obj = None
+    try:
+        print "1:create slice record, add island, add flowvisor"
+        slice_obj = create_slice_api(project, slice_uuid, name, description, island, user)
+        print "2:add ovses or ports"
+        slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod)
+        print "3:create subnet"
+        IPUsage.objects.subnet_create_success(slice_obj.uuid)
+        print "4:add nw flowspace in database"
+        flowspace_nw_add(slice_obj, [], slice_nw)
+        print "5:assign slice permission"
+        assign_perm("slice.change_slice", user, slice_obj)
+        assign_perm("slice.view_slice", user, slice_obj)
+        assign_perm("slice.delete_slice", user, slice_obj)
+        print "6:create slice success and return"
+        return slice_obj
+    except Exception, ex:
+        LOG.debug(traceback.print_exc())
+        print "7:create slice failed and raise exception"
+        raise DbError(ex.message)
+
+
 def create_slice_api(project, slice_uuid, name, description, island, user):
     """slice创建
     """

@@ -73,6 +73,44 @@ def create(request, proj_id):
 
 
 @login_required
+def create_n(request, proj_id):
+    """创建slice。"""
+    project = get_object_or_404(Project, id=proj_id)
+    if not request.user.has_perm('project.create_slice', project):
+        return redirect('forbidden')
+    slice_count = request.user.slice_set.filter(type=0).count()
+    if request.user.quotas.slice <= slice_count:
+        messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+        return redirect('quota_admin_apply')
+    error_info = None
+    islands = project.islands.all()
+    if not islands:
+        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
+    ovs_ports = []
+    for island in islands:
+        switches = island.switch_set.all()
+        for switch in switches:
+            switch_ports = switch.switchport_set.all()
+            if switch_ports:
+                ovs_ports.append({'switch_type': switch.type(),
+                                  'switch': switch,
+                                  'switch_ports': switch_ports})
+            else:
+                ovs_ports.append({'switch_type': switch.type(),
+                                  'switch': switch,
+                                  'switch_ports': []})
+    vm_form = VmForm()
+    context = {}
+    context['project'] = project
+    context['islands'] = islands
+    context['ovs_ports'] = ovs_ports
+    context['error_info'] = error_info
+#     uuid = utils.gen_uuid()
+#     context['uuid'] = ''.join(uuid.split('-'))
+    return render(request, 'slice/create_slice.html', context)
+
+
+@login_required
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
     project = get_object_or_404(Project, id=proj_id)
@@ -124,6 +162,54 @@ def create_first(request, proj_id):
                                           slice_description, island, user,
                                           ovs_or_ports, controller_info, slice_nw,
                                           gw_host_id, gw_ip, dhcp_selected, tp_mod)
+        except Exception, ex:
+            jsondatas = {'result': 0, 'error_info': ex.message}
+        else:
+            assign_perm("slice.change_slice", user, slice_obj)
+            assign_perm("slice.view_slice", user, slice_obj)
+            assign_perm("slice.delete_slice", user, slice_obj)
+            jsondatas = {'result': 1, 'slice_id': slice_obj.id}
+        result = json.dumps(jsondatas)
+        return HttpResponse(result, mimetype='text/plain')
+
+
+@login_required
+def create_first_n(request, proj_id):
+    """创建slice不含虚拟机创建。"""
+    project = get_object_or_404(Project, id=proj_id)
+    slice_count = request.user.slice_set.filter(type=0).count()
+    if request.user.quotas.slice <= slice_count:
+        messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+        return redirect('quota_admin_apply')
+    if request.method == 'POST':
+        try:
+            user = request.user
+            slice_uuid = request.POST.get("slice_uuid")
+            slice_name = request.POST.get("slice_name")
+            slice_description = request.POST.get("slice_description")
+            island_id = request.POST.get("island_id")
+            island = get_object_or_404(Island, id=island_id)
+            tp_mod = request.POST.get('tp_mod')
+            if int(tp_mod) == 2:
+                switch_ids = []
+                switch_ids_str = request.POST.get("switch_ids")
+    #             print switch_port_ids_str
+                switch_ids_sp = switch_ids_str.split(',')
+                for switch_id_sp in switch_ids_sp:
+                    switch_ids.append(int(switch_id_sp))
+                ovs_or_ports = Switch.objects.filter(id__in=switch_ids)
+            else:
+                port_ids = []
+                switch_port_ids_str = request.POST.get("switch_port_ids")
+    #             print switch_port_ids_str
+                switch_port_ids = switch_port_ids_str.split(',')
+                for switch_port_id in switch_port_ids:
+                    port_ids.append(int(switch_port_id))
+                ovs_or_ports = SwitchPort.objects.filter(id__in=port_ids)
+            slice_nw = request.POST.get("slice_nw")
+            slice_obj = create_slice_step_n(project, slice_uuid, slice_name,
+                                          slice_description, island, user,
+                                          ovs_or_ports, slice_nw ,tp_mod)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
