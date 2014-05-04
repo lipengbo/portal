@@ -19,7 +19,7 @@ from slice.slice_api import create_slice_step, start_slice_api,\
     get_slice_links_bandwidths, get_count_show_data
 from plugins.openflow.controller_api import slice_change_controller
 from project.models import Project, Island
-from resources.models import Switch, SwitchPort
+from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
@@ -593,6 +593,32 @@ def get_slice_state(request, slice_id):
         print 2
         return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
                                         'c_state': c_state, 'g_state': g_state}))
+
+def list_own_devices(request, slice_id):
+    own_devices = []
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    slice_ports = SlicePort.objects.filter(slice = slice_obj)
+    for port in slice_ports:
+        port_info = {}
+        switch_port = port.switch_port
+        if port.type == 0:
+            port_info['port_name'] = switch_port.name
+            port_info['is_monopo'] = 0
+            port_info['mac_list'] = ''
+            port_info['switch_name'] = switch_port.switch.name
+            port_info['dpid'] = switch_port.switch.dpid
+            own_devices.append(port_info)
+        else:
+            owner_device = OwnerDevice.objects.filter(slice_port = port)
+            if owner_device.count() > 0:
+                port_info['port_name'] = switch_port.name
+                port_info['is_monopo'] = 1
+                port_info['mac_list'] = owner_device[0].mac_list
+                port_info['switch_name'] = switch_port.switch.name
+                port_info['dpid'] = switch_port.switch.dpid
+                own_devices.append(port_info)
+    return HttpResponse(json.dumps(own_devices))
+
 
 
 def test_cnvp():

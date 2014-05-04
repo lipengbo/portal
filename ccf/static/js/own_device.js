@@ -89,7 +89,9 @@ $(document).ready(function(){
         return true;
         }
     })
-
+    $("#mac_addrs").on("focus", function(){
+        $("#mac_addrs").val('');
+    });
     $('.switch_btn.dk').on("click", function(){
 			if($(this).hasClass("checked")) {
                 $(this).removeClass("checked");

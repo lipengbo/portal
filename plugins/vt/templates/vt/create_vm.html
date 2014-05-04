@@ -17,7 +17,7 @@
 <div class="modal-body" id="slice_alert_info">
       <p class="text-center"></p>
     </div> 
-    <div class="modal-footer">
+    <div class="modal-footer" id="modal-footer">
       <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>
     </div>          
 </div>
@@ -165,7 +165,7 @@
 	var STATIC_URL = "{{ STATIC_URL}}";
 	$("#alert_close_sure").on("click", function(){
 		window.location.href='/slice/detail/' + {{sliceid}} + '/';
-	})
+	});
 	flavor_init();
 	
 </script>

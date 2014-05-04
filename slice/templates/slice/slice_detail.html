@@ -19,7 +19,8 @@
             <thead>
                 <tr>
                     <th width="16%">虚网名称</th>
-                    <th width="48%">描述</th>
+                    <th width="28%">描述</th>
+                    <th width="20%">网段</th>
                     <th width="16%">所属节点</th>
                     <th width="8%">状态</th>
                     <th width="12%">操作</th>
@@ -29,6 +30,7 @@
              <tr>
                   <td>{{slice_obj.get_show_name}}</td>
                   <td id = "slice_description_old">{{slice_obj.description}}</td>
+                  <td>{{ start_ip }}-{{ end_ip }}</td>
                   <td>{{slice_obj.get_island}}</td>
                   <td class="slice_state">
                     {% if slice_obj.state == 0 %}
@@ -112,7 +114,8 @@
         </div>
         
         <h4 class="block_title show-dhcp">
-            <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{{ start_ip }}-{{ end_ip }}】
+            <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>
+            <a href="/slice/list_own_devices/{{slice_obj.id}}/">外接设备详情</a>
 			{%if extent_html == "site_base.html" and permission == "edit"%}
 			<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
 			{%endif%}
@@ -149,7 +152,8 @@
         
         <div id="list_show">
             {% include "slice/vm_list_page.html" %}
-        </div>   
+        </div> 
+          
  
         <div class="clear" style="display: none" >
             <p id="STATIC_URL">{{STATIC_URL}}</p>

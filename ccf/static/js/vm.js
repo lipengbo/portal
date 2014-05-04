@@ -248,6 +248,7 @@ function insert_content_to_obj1(obj, content)
 
 //逐一提交vm的创建请求
 var post_vm_result = true;
+var quota = true;
 function submit_vms(sliceid)
 {
 		/*var result;
@@ -298,6 +299,14 @@ function post_vminfo(sliceid, vm)
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
+            }else if(data.result == -1){
+                quota = false;
+                post_vm_result = false;
+                /*$("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">" + data.error + "</p>";
+                $("div#slice_alert_info").append(str);
+                $("#modal-footer").html('<button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_quota_sure">确定</button>');
+                $('#slicealertModal').modal('show');*/
             }
         }
         });
@@ -479,6 +488,10 @@ function create_vms(sliceid, flag, from_link)
     if(check_vminfo())
     {
 		submit_vms(sliceid)
+        if (!quota) {
+            //window.location.href='/quota_admin/apply/'
+            return;
+        };
 		if(flag != 1 || post_vm_result){
 			if(from_link == 0){
 				window.location.href='/slice/detail/' + sliceid + '/';
