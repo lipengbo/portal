@@ -256,7 +256,7 @@ def get_edge_ports(slice_obj):
         'name':交换机的name,
         'ports':[{'id':port的id,'name':port的name,'port':port号, 'can_monopolize':1表示可独占、0表示否},...]},...]
     """
-    LOG.debug('get_edge_ports')
+    print 'get_edge_ports'
     switches_edge_ports = []
     try:
         Slice.objects.get(id=slice_obj.id)
@@ -269,16 +269,18 @@ def get_edge_ports(slice_obj):
             ports = []
             for edge_port in edge_ports:
                 if not slice_obj.port_added(edge_port):
-                    if edge_port.can_monopolize():
-                        can_monopolize = 1
-                    else:
-                        can_monopolize = 0
-                    port = {'id': edge_port.id, 'name': edge_port.name,
-                            'port': edge_port.port, 'can_monopolize': can_monopolize}
-                    ports.append(port)
+                    if not edge_port.monopolized():
+                        if edge_port.can_monopolize():
+                            can_monopolize = 1
+                        else:
+                            can_monopolize = 0
+                        port = {'id': edge_port.id, 'name': edge_port.name,
+                                'port': edge_port.port, 'can_monopolize': can_monopolize}
+                        ports.append(port)
             switch_edge_ports = {'id': normal_switch.id, 'dpid': normal_switch.dpid,
                                  'name': normal_switch.name, 'ports': ports}
             switches_edge_ports.append(switch_edge_ports)
+#         print switches_edge_ports
         return switches_edge_ports
     except Exception:
         raise DbError("边缘端口获取失败！")

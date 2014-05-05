@@ -222,12 +222,13 @@ def start_slice_api(slice_obj):
                 if controller.host.state == 0 or controller.host.state == 5:
                     controller_flag = True
                 else:
-                    if controller.state == 12:
+                    if controller.host.state == 12:
                         pass
-                    if controller.host.state == 13:
-                        raise DbError("操作失败，请稍后再试！")
                     else:
-                        raise DbError("请确保控制器可用！")
+                        if controller.host.state == 13:
+                            raise DbError("操作失败，请稍后再试！")
+                        else:
+                            raise DbError("请确保控制器可用！")
             gw = slice_obj.get_gw()
             if gw and gw.enable_dhcp and gw.state != 1:
                 if gw.state == 0 or gw.state == 5:
@@ -235,10 +236,11 @@ def start_slice_api(slice_obj):
                 else:
                     if gw.state == 12:
                         pass
-                    if gw.state == 13:
-                        raise DbError("操作失败，请稍后再试！")
                     else:
-                        raise DbError("请确保gateway可用！")
+                        if gw.state == 13:
+                            raise DbError("操作失败，请稍后再试！")
+                        else:
+                            raise DbError("请确保gateway可用！")
             flowvisor = slice_obj.get_flowvisor()
             if flowvisor == None:
                 raise DbError("虚网启动失败！")
@@ -261,6 +263,9 @@ def start_slice_api(slice_obj):
 #                 traceback.print_exc()
                 raise DbError("虚网启动失败！")
     except Exception, ex:
+#         import traceback
+#         traceback.print_exc()
+#         print ex
         transaction.rollback()
         raise
 
