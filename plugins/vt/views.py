@@ -86,19 +86,17 @@ def create_vm(request, sliceid, from_link):
 
                 #: test ram quota
                 if user.quotas.mem < (int(vm.ram) + VirtualMachine.objects.user_stat_sum(user, 'ram')):
-                    messages.add_message(request, messages.INFO, "您已分配的内存大小已经超过配额")
-                    #return redirect("quota_admin_apply")
+                    message = "您已分配的内存大小已经超过配额"
+                    return HttpResponse(json.dumps({'result': -1, 'error': message}))
 
                 #: test cpu quota
                 if user.quotas.cpu < (int(vm.cpu) + VirtualMachine.objects.user_stat_sum(user, 'cpu')):
-                    messages.add_message(request, messages.INFO, "您的CPU数量已经超过配额")
                     return HttpResponse(json.dumps({'result': -1, 'error': "您的CPU数量已经超过配额"}))
-                    #return redirect("quota_admin_apply")
 
                 #: test disk quota
                 if user.quotas.disk < (int(vm.hdd) + VirtualMachine.objects.user_stat_sum(user, 'hdd')):
-                    messages.add_message(request, messages.INFO, "您的磁盘容量已经超过配额")
-                    #return redirect("quota_admin_apply")
+                    message = "您的磁盘容量已经超过配额"
+                    return HttpResponse(json.dumps({'result': -1, 'error': message}))
 
                 if request.POST.get("enable_dhcp") == '0':
                     vm.enable_dhcp = False

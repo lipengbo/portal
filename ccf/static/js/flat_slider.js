@@ -31,9 +31,10 @@ String.prototype.repeat = function(num) {
     }else if(slider_name == 'disk_slider'){
         var disks = [20, 40, 80, 160];
 		return set_segment(this, amount, disks, 'GB');
-	}else if (slider_name == 'mem_slider'){
-        var rams = [512, 1024, 2048, 4096];
-        return set_segment(this, amount, rams, 'MB');
+    }else if(slider_name == 'quota_disk_slider'){
+		return set_segment(this, amount, disk_range, 'GB');
+	}else if (slider_name == 'quota_mem_slider'){
+        return set_segment(this, amount, mem_range, 'MB');
     }
    
   };
@@ -49,20 +50,8 @@ String.prototype.repeat = function(num) {
         orientation: "horizontal",
         range: "min"
       }).addSliderSegments("ram_slider", $slider.slider("option").max);
-    }    
-    
-  // for quota
-    // jQuery UI Sliders
-    var $slider = $("#mem_slider");
-    if ($slider.length) {
-      $slider.slider({
-        min: 1,
-        max: 4,
-        value: 2,
-        orientation: "horizontal",
-        range: "min"
-      }).addSliderSegments("mem_slider", $slider.slider("option").max);
-    }  
+    }
+/*
     var $slider2 = $("#disk_slider");
     if ($slider2.length) {
       $slider2.slider({
@@ -72,11 +61,9 @@ String.prototype.repeat = function(num) {
         orientation: "horizontal",
         range: "min"
       }).addSliderSegments("disk_slider", $slider2.slider("option").max);
-    }  
-    
-    
+    }
+
   });
 
-
-  
+*/
 })(jQuery);
