@@ -63,7 +63,7 @@ String.prototype.repeat = function(num) {
       }).addSliderSegments("disk_slider", $slider2.slider("option").max);
     }
 
+*/
   });
 
-*/
 })(jQuery);
