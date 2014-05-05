@@ -58,7 +58,7 @@ class Flowvisor(ServiceResource):
 
     http_port = models.IntegerField(verbose_name=_("Http Port"))
     type = models.IntegerField(choices=FLOWVISOR_TYPES,
-                               default=FLOWVISOR)
+                               default=FLOWVISOR, verbose_name=u"类型")
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)

@@ -28,5 +28,8 @@ def action_url(notification):
     if notification.verb == u'调整配额':
         return reverse('quota_admin_quota')
     else:
-        return notification.action_object.action_url
+        try:
+            return notification.action_object.action_url
+        except:
+            return ""
 

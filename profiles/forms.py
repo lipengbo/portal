@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 from django.conf import settings
+from django.contrib.auth.models import Permission
 
 import account.forms
 from profiles.models import Profile
@@ -35,7 +36,11 @@ class UserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         can_create_project_field = self.fields['can_create_project']
-        can_create_project_field.initial = self.instance.has_perm('project.add_project')
+        try:
+            self.instance.user_permissions.get(codename='add_project')
+            can_create_project_field.initial = True
+        except Permission.DoesNotExist:
+            pass
         self.fields['username'].help_text = ''
 
     def clean_username(self):
