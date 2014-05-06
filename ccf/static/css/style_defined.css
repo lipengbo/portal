@@ -5801,9 +5801,8 @@ textarea {
 .clear {
   clear: both;
 }
-a:active,
-a:hover,
-a:focus {
+body a:active,
+body a:focus {
   outline: none;
 }
 .btn.btn_info:hover,
@@ -5811,6 +5810,11 @@ a:focus {
   color: #fff;
 }
 /* bootstrap defined */
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: none;
+}
 .alert {
   border-radius: 0;
 }
@@ -6595,6 +6599,9 @@ a.tuopu_sign_block:focus {
 }
 .news_list_top {
   overflow: hidden;
+}
+.news_list_top img {
+  vertical-align: baseline;
 }
 .news_list_top .checkbox {
   float: left;
