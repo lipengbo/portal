@@ -126,7 +126,7 @@ def add_or_edit(request, app_label, model_class, id=None):
                     if not quota:
                         quota = settings.QUOTAS[resource][0]
                     instance.user_permissions.add(Permission.objects.get(codename='quota_{}_{}'.format(resource, quota)))
-            if quota_changed:
+            if quota_changed and instance.get_profile().state == 2:
                 notify.send(request.user, recipient=instance, verb=u'调整配额', action_object=instance.get_profile())
         #: save
         if formset.is_valid():

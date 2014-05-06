@@ -23,6 +23,7 @@ urlpatterns = patterns("",
     url(r"^help/", TemplateView.as_view(template_name="help.html"), name="demo"),
 
 
+    url(r"^manage_index/", 'project.views.manage_index', name="manage_index"),
     url(r"^password_change_success/$", TemplateView.as_view(template_name="account/password_change_success.html"), name="password_change_success"),
     url(r"^signup_confirmation_complete/$", TemplateView.as_view(template_name="account/signup_confirmation_complete.html"), name="signup_confirmation_complete"),
     url(r"^password_reset_success/$", TemplateView.as_view(template_name="account/password_reset_success.html"), name="password_reset_success"),
