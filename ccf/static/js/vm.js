@@ -251,18 +251,6 @@ var post_vm_result = true;
 var quota = true;
 function submit_vms(sliceid)
 {
-		/*var result;
-        var objs = document.getElementsByName('name');
-        name_value = get_value_from_obj('name');
-        flavor_text = get_value_from_select('flavor');
-        image_text = get_value_from_select('image');
-        server_text = get_value_from_select('server');
-        enable_dhcp_value = get_checked_value_from_checkbox('enable_dhcp');
-		//var vm_record = vms_info.get();
-        //for(var i=0; i < objs.length; i++)
-       // {
-                 post_vminfo(sliceid, name_value[0], flavor_text[0], image_text[0], server_text[0], enable_dhcp_value[0]);
-       // }*/
 		vms_info().each(function(vm){
 			post_vminfo(sliceid, vm);
 		});
@@ -270,7 +258,6 @@ function submit_vms(sliceid)
 }
 
 
-//function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp, vm_info_record)
 function post_vminfo(sliceid, vm)
 {
         url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
