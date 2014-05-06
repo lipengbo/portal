@@ -161,7 +161,7 @@ INSTALLED_APPS = [
     "south",
     "quotas",
     "quota_admin",
-    #"feedback",
+    "helpdesk",
 
     #xmlrpc
     'django_xmlrpc',
