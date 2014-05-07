@@ -119,8 +119,8 @@ def create_vm(request, sliceid, from_link):
                 vm.slice.flowspace_changed(2)
                 return HttpResponse(json.dumps({'result': 0}))
             except socket_error as serr:
-                if serr.errno == errno.ECONNREFUSED:
-                    return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
+                #if serr.errno == errno.ECONNREFUSED:
+                return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
                 vm.state = 11
                 vm.type =1
@@ -128,7 +128,10 @@ def create_vm(request, sliceid, from_link):
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except StopIteration, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
-        return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
+            except:
+                return HttpResponse(json.dumps({'result' : 1, 'error': _('server error')}))
+        else:
+            return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
         if user.quotas.vm <= vm_count:
             messages.add_message(request, messages.INFO, "您的虚拟机数量已经超过配额")

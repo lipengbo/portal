@@ -126,7 +126,7 @@ msgid "resource not enough"
 msgstr "本节点资源不足，请更换节点或等待一段时间后重试"
 
 msgid "server error"
-msgstr "服务器出错"
+msgstr "服务器处理出错, 请稍后重试"
 
 msgid "micro"
 msgstr "微型"
