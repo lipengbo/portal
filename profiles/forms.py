@@ -56,6 +56,9 @@ class UserForm(forms.ModelForm):
             remove_perm('project.add_project', self.instance)
 
         ea = EmailAddress.objects.get_primary(self.instance)
+        email = self.cleaned_data.get('email')
+        if ea.email != email:
+            EmailAddress.objects.get_or_create(user=self.instance, email=email)
         try:
             ec = EmailConfirmation.objects.get(email_address=ea)
         except EmailConfirmation.DoesNotExist:

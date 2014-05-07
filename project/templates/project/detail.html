@@ -15,7 +15,7 @@
 {% block body %}
 {% if invitation.actions %}
     <div class="alert alert-success">
-        您已经被邀请加入该项目，请选择“拒绝”或者“接受”：
+        您已经被邀请加入该项目，请选择“接受”或者“拒绝”：
         {% for action in invitation.actions %}
         <a class="btn btn-{{ action.action_level }}" href="{{ action.action_url }}?next={{ request.path|urlencode }}">{{ action.action_title }}</a>
         {% endfor %}

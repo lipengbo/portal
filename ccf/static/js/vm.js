@@ -490,6 +490,7 @@ function create_vms(sliceid, flag)
     {
 		submit_vms(sliceid)
         if (!quota) {
+            window.location.href='/quota_admin/apply/'
             return;
         };
 		if(flag != 1 || post_vm_result){

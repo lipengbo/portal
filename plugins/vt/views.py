@@ -128,7 +128,7 @@ def create_vm(request, sliceid):
             except StopIteration, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
-                return HttpResponse(json.dumps({'result': 1, 'error': _('server error') }))
+                return HttpResponse(json.dumps({'result' : 1, 'error': _('server error')}))
         else:
             return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:

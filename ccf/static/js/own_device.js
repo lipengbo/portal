@@ -86,10 +86,6 @@ $(document).ready(function(){
     });
     $('#enable_switch_port').on("blur", function(){
         check_port();
-        if(check_macs()){
-            document.getElementById('mac_err_msg').innerHTML = '';
-        return true;
-        }
     })
     $("#mac_addrs").on("focus", function(){
         $("#mac_addrs").val('');
