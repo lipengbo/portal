@@ -62,7 +62,12 @@
                                                         基础设施
                                                     </a>
                                                 </li>
-                                                <li class="{% if '/nexus/auth/user/' in request.path  %}{% if request.current_app == 'nexus' %}active{% endif %} user_menu{% endif %}"><a href="{% url "nexus_list" "auth" "user" %}">用户管理</a></li>
+                                             <li class="{% if '/nexus/auth/user/' not in request.path %}{% if request.current_app == 'nexus' %}active{% endif %} device_menu{% endif %}">
+                                                    <a href="">
+                                                        基础虚网
+                                                    </a>
+                                             </li>
+                                             <li class="{% if '/nexus/auth/user/' in request.path  %}{% if request.current_app == 'nexus' %}active{% endif %} user_menu{% endif %}"><a href="{% url "nexus_list" "auth" "user" %}">用户管理</a></li>
                                             {% endif %}
                                                 <li class="news_menu {% if request.current_app == 'notifications' %}active{% endif %}"><a href="{% url "notifications:all" %}">消息{% if unread_count > 0%} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
 

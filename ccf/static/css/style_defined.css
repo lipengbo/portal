@@ -7252,7 +7252,7 @@ fieldset legend {
 .show_dhcp .tuopu_btn {
   margin-top: 10px;
 }
-body.nexus-body .action_box {
+.action_box {
   margin-bottom: 15px;
 }
 #div_id_image.form-group {

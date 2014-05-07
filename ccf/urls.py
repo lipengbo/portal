@@ -46,6 +46,8 @@ urlpatterns = patterns("",
     url(r"^manage_index/", 'project.views.manage_index', name="manage_index"),
     url(r"^check_quota/", TemplateView.as_view(template_name="check_quota.html"), name="demo"),
     url(r"^apply_expanding_quota/", TemplateView.as_view(template_name="apply_expanding_quota.html"), name="demo"),
+    url(r"^basenet/", TemplateView.as_view(template_name="basenet.html"), name="demo"),
+
 
 
     url(r"^map/$", TemplateView.as_view(template_name="index.html"), name="map"),
