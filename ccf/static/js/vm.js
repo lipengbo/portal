@@ -13,6 +13,18 @@ var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6};
 var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
 var disks = [10, 20, 40, 80, 160, 320];
 
+
+$(document).ready(function(){
+    $.ajax({
+		url : '/plugins/vt/get_flavor_msg/',
+		type : 'POST',
+		data: data,
+		dataType: 'json',
+		success:function(data){
+		}
+	});
+});
+
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
         //var name = check_vm_name('name');
@@ -109,12 +121,12 @@ function check_vm_select(ele){
 					   
 					   if(field == 'flavor'){
 							//$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
-							desc_msg('flavor', obj.value, i);
+							//desc_msg('flavor', obj.value, i);
 							
 						}
 						else if(field == 'image'){
 							//$('[name="image_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
-							desc_msg('image', obj.value, i);				
+							//desc_msg('image', obj.value, i);				
 						}
 						else if(field == 'server'){
 							//$('[name="server_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
