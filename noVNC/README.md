@@ -1,4 +1,4 @@
-agent
+noVNC
 =====
 getting started
 ---------------
