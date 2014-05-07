@@ -64,12 +64,11 @@ def vm_list(request, sliceid):
     return render(request, 'vt/vm_list.html', context)
 
 
-def create_vm(request, sliceid, from_link):
-    """
-    from_link : 记录链接跳转的入口，以便返回原来的页面。 0 为从slic详情页面转入， 1为从虚拟机列表页面转入
-    """
+def create_vm(request, sliceid):
     user = request.user
     vm_count = VirtualMachine.objects.total_vms(user)
+    import pdb
+    pdb.set_trace()
     if request.method == 'POST':
         if user.quotas.vm <= vm_count:
             return redirect('forbidden')
@@ -161,7 +160,6 @@ def create_vm(request, sliceid, from_link):
         context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
-        context['from_link'] = from_link
         return render(request, 'vt/create_vm.html', context)
 
 

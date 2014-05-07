@@ -260,7 +260,7 @@ function submit_vms(sliceid)
 
 function post_vminfo(sliceid, vm)
 {
-        url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
+        url = "/plugins/vt/create/vm/"+sliceid+"/";
         $.ajax({
         type: "POST",
         url: url,
@@ -465,27 +465,35 @@ function not_contains(a, obj) {
     return true;
 }
 
-function create_vms(sliceid, flag, from_link)
+function create_vms(sliceid, flag)
 {
-	if(vms_info().count() == 0){
+	/*if(vms_info().count() == 0){
 		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置信息！";
 		$('#alert_modal').modal('show');
 		return;
+	}*/
+    var enable_dhcp_checked;
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
+		enable_dhcp_checked = 1;
+		dhcp_checked = "是";
+	}else{
+		enable_dhcp_checked = 0;
+		dhcp_checked = "否";
 	}
+    vms_info.insert({id:vm_id, flavor:flavor_selected, cpu:cpu_selected, 
+						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
+						 image_text:$("#id_image").find("option:selected").text(),
+						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
+						 enable_dhcp:enable_dhcp_checked,
+						 show_dhcp:dhcp_checked})
     if(check_vminfo())
     {
 		submit_vms(sliceid)
         if (!quota) {
-            //window.location.href='/quota_admin/apply/'
             return;
         };
 		if(flag != 1 || post_vm_result){
-			if(from_link == 0){
-				window.location.href='/slice/detail/' + sliceid + '/';
-			}else{
-				window.location.href='/plugins/vt/vm/list/' + sliceid + '/';
-			}
-			
+			window.location.href='/slice/detail/' + sliceid + '/';
 		}        
     }
 }
@@ -564,7 +572,7 @@ function flavor_init(){
 	$(".micro").addClass("vm_active");
 }
 
-
+/*
 function update_vms_info(){
 	var enable_dhcp_checked;
 	if(!check_vminfo()){
@@ -644,7 +652,7 @@ function show_vm_info_table(){
                           +"</tr> ");
 	});
 }
-
+*/
 function select_flavor(flavor_id){
 	var data = "name=flavor" + "&obj_id="+flavor_id;
 

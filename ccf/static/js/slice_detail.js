@@ -411,7 +411,7 @@ function add_device(slice_id){
 					location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";  
                 }  
                 if(device_type[i].value == "vmdevice"){
-					location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/0/";
+					location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/";
                 }  
             }   
         }
