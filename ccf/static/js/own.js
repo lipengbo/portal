@@ -117,15 +117,14 @@ $(document).ready(function() {
            }
        }
        if(thisIndex == 1){
-       	   ret = page_function1();
+           ret = page_function3();
        	   if (!ret){
            		return;
            }
        }
        if(thisIndex == 2){
-           ret1 = page_function2();
-           ret2 = page_function3();
-           if (!ret1 || !ret2){
+           ret = page_function4();
+           if (ret){
            		return;
            }
        }
@@ -134,7 +133,7 @@ $(document).ready(function() {
            if (!ret){
            		return;
            }
-       }*/
+       }
        if(thisIndex == 3){
            ret = page_function4();
            if (!ret){
@@ -144,7 +143,7 @@ $(document).ready(function() {
     	   else{
 				return;
     	   }
-       }
+       }*/
        $(".tab_part").hide();
        $(".tab_part").eq(nowIndex).show();
        if(nowIndex == 0){
@@ -269,7 +268,8 @@ function page_function0(){
 	ret2 = check_slice_description('slice_description',2);
 	ret3 = check_island_id('island_id')
 	ret4 = check_nw_num();
-	if (ret1 && ret2 && ret3 && ret4){
+	ret5 = check_vm_num('vm_num',1);
+	if (ret1 && ret2 && ret3 && ret4 && ret5){
 		return true;
 	}
 	else{
@@ -341,14 +341,14 @@ function page_function3(){
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
 	//DHCP
 	//var dhcp_selected_obj = document.getElementById("dhcp_selected");
-	var list_slice_dhcp = document.getElementById("list_slice_dhcp");
+	/*var list_slice_dhcp = document.getElementById("list_slice_dhcp");
 	if($('.switch_btn.dhcp').hasClass("checked")){
        list_slice_dhcp.innerHTML = "已配置";
     }else{
        list_slice_dhcp.innerHTML = "未配置";
-    }
+    }*/
 	//控制器
-	var controller_type_obj = document.getElementsByName("controller_type");
+	/*var controller_type_obj = document.getElementsByName("controller_type");
 	$("div#list_controller").empty();
 	for(var i=0;i<controller_type_obj.length;i++){  
 		if(controller_type_obj[i].checked){  
@@ -392,9 +392,9 @@ function page_function3(){
 	  		}  
 		}   
 	}
-	$("div#list_controller").append(str); 
+	$("div#list_controller").append(str);*/ 
 	//网关
-	var id_server_gw_obj = document.getElementById("id_server_gw");
+	/*var id_server_gw_obj = document.getElementById("id_server_gw");
     var gateway_ip_obj = document.getElementById("gateway_ip");
     var id_server_gw_index;
     if(id_server_gw_obj){
@@ -418,7 +418,7 @@ function page_function3(){
         str = str + "</tr></tbody></table>"; 
     }  
 
-    $("div#list_gw").append(str); 
+    $("div#list_gw").append(str); */
     return true;
         //虚拟机
         //return fetch_vminfo();
@@ -482,7 +482,7 @@ function page_function4(){
 
 
 //提交slice信息创建slice
-function submit_slice_info(project_id){
+function submit_slice_info_old(project_id){
 	//alert("here");
 	var slice_name_obj = document.getElementById("slice_name");
 	var slice_description_obj = document.getElementById("slice_description");
@@ -617,5 +617,107 @@ function submit_slice_info(project_id){
     	old_nw_owner_obj.value = "";
     	old_nw_num_obj.value = "";
     	return false;
+    }
+}
+
+
+//提交slice信息创建slice
+function submit_slice_info(project_id){
+    //alert("here");
+    var slice_name_obj = document.getElementById("slice_name");
+    var slice_description_obj = document.getElementById("slice_description");
+    var island_id_obj = document.getElementById("island_id");
+    //var controller_ip_port_obj = document.getElementById("controller_ip_port");
+    var switch_port_ids_obj = document.getElementsByName("switch_port_ids");
+    var old_slice_nw_obj = document.getElementById("old_slice_nw");
+    var switch_port_ids = "";
+    var j = 0;
+    var switch_ids = "";
+    var tp_mod = $('select[name="tp_mod"]').val();
+    if(tp_mod == 2){
+        switch_ids = get_select_switches();
+    }else{
+        for(var i=0;i<switch_port_ids_obj.length;i++){
+            if(!switch_port_ids_obj[i].disabled){
+                //alert(switch_port_ids_obj[i].value);
+                if(j==0){
+                    switch_port_ids = switch_port_ids_obj[i].value;
+                }
+                else{
+                    switch_port_ids = switch_port_ids + "," + switch_port_ids_obj[i].value;
+                }
+                j++;
+            }
+        }  
+    }    
+   
+    var user_id_obj = document.getElementById("user_id");
+
+    var slice_uuid_obj = document.getElementById("slice_uuid");
+    var vm_num_obj = document.getElementById("vm_num");
+    var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
+                        "slice_description": slice_description_obj.value,
+                        "island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
+                        "tp_mod": tp_mod,
+                        "switch_port_ids": switch_port_ids,
+                        "switch_ids": switch_ids,
+                        "vm_num": parseInt(vm_num_obj.value),
+                        "slice_nw": old_slice_nw_obj.value,
+                        "slice_uuid": slice_uuid_obj.value
+        };
+
+    check_url = "http://" + window.location.host + "/slice/create_first/"+project_id+"/";
+    var ajax_ret = true;
+    $.ajax({
+            type: "POST",
+            url: check_url,
+            dataType: "json",
+            data: submit_data,
+            async: false, 
+            success: function(data) {
+                if (data.result == 1){
+                    location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+                    //alert(data.slice_id);
+                    /*submit_vms(data.slice_id);
+                    if(!post_vm_result){
+                        $("div#slice_alert_info").empty();
+                        str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                        $("div#slice_alert_info").append(str);
+                        $('#slicealertModal').modal('show');
+                        $('#alert_closed').on("click", function(){
+                          location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+                        });
+                    }else{
+                        location.href = "http://" + window.location.host + "/slice/detail/"+data.slice_id+"/";
+                    }*/
+
+                }
+                else{
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                    ajax_ret = false;
+                }
+            },
+            error: function(data) {
+                $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">" + "创建虚网异常！" + "</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+                ajax_ret = false;
+            }
+    });
+    if(ajax_ret){
+        return true;
+    }
+    else{
+        var old_slice_nw_obj = document.getElementById("old_slice_nw");
+        var old_nw_owner_obj = document.getElementById("old_nw_owner");
+        var old_nw_num_obj = document.getElementById("old_nw_num");
+        old_slice_nw_obj.value = "";
+        old_nw_owner_obj.value = "";
+        old_nw_num_obj.value = "";
+        return false;
     }
 }

@@ -48,6 +48,29 @@ function check_slice_description(obj_id,flag){
         return true;
 	}
 }
+//验证虚拟机数量
+function check_vm_num(obj_id,flag){
+    var obj = document.getElementById(obj_id);
+    var info = document.getElementById(obj_id+"Info"); 
+    var text = obj.value;
+    var reg = /^[0-9]*$/;
+    var nw_num_obj = document.getElementById("nw_num");
+    var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
+    if(text.length > 0){
+        if(!reg.test(text) || text > (nw_num-3) || text < 0){
+            showInfo(info," * (0~"+(nw_num-3)+")","red");
+            return false;
+        }
+        else{
+            showInfo(info," ","green");
+            return true;
+        }   
+    }
+    else{
+        showInfo(info," * 必填","red");
+        return false;
+    }
+}
 //验证节点的选择
 function check_island_id(obj_id){
 	var obj = document.getElementById(obj_id);
