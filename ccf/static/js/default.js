@@ -61,4 +61,11 @@ $(function(){
             }
         }
     });
+    
+    //slice_detail
+    $(".slice_detail_tab a").click(function(){
+        var tabIndex = $(this).parent(".col-md-4").index();
+        $(".slice_detail_tab .col-md-4").removeClass("on").eq(tabIndex).addClass("on");
+        $(".slice_detail_block").children(".slice_detail_content").hide().eq(tabIndex).show();
+    });
 });
