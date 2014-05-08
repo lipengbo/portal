@@ -11,7 +11,9 @@
 {% endblock %}
 
 {% block body %}
-
+<div class="alert alert-danger">
+    <strong>提示：</strong>您当前还未进行服务配置
+</div>
         <!--<div class="alert alert-info alert_defined">
             启动步骤：1.启动控制器 <i class="glyphicon glyphicon-arrow-right"></i> 2.启动虚拟网关 <i class="glyphicon glyphicon-arrow-right"></i> 3.启动虚网 <i class="glyphicon glyphicon-arrow-right"></i> 4.启动虚拟机
         </div>-->
@@ -109,6 +111,150 @@
             </div>
             {%endif%}
             <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=1140&height=300&top=0&band=1" frameborder="0"></iframe>
+        </div>
+        
+        <div class="slice_detail_tab">
+            <div class="row">
+                <div class="col-md-4 fw on">
+                    <a href="javascript:;">服务配置</a>
+                </div>
+                <div class="col-md-4 xnj">
+                     <a href="javascript:;" class="fw">虚拟机资源</a>
+                </div>
+                <div class="col-md-4 zjr">
+                     <a href="javascript:;" class="fw">自接入资源</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slice_detail_block">
+            <div class="slice_detail_content" style="display:block;">
+                    <h4 class="block_title">
+                        <img src="/site_media/static/img/ic_41.png">控制器配置
+                        <div class="pull-right">
+                             <a href="" class="edit" title="创建控制器"><i class="icon-plus"></i></a>
+                             <a href="javascript:;"><img src="/site_media/static/img/ic-ks.png" title="启动"></a>
+                             <a href="javascript:;"><img src="/site_media/static/img/btn_bj.png" title="编辑"></a>
+                             <a href="javascript:;"><img src="/site_media/static/img/btn_sc.png" title="删除"></a>
+                        </div>                                            
+                    </h4>
+                    <p class="help-block">当前未添加控制器</p> 
+                    <table class="table_base">
+                        <tbody>
+                            <tr>
+                                <td width="120">创建方式：</td>
+                                <td>默认创建</td>
+                            </tr>
+                            <tr>
+                                <td>控制器类型：</td>
+                                <td>FloodLight</td>
+                            </tr>
+                            <tr>
+                                <td>控制器地址：</td>
+                                <td>192.168.5.131</td>
+                            </tr>
+                            <tr>
+                                <td>状态：</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                    <h4 class="block_title">
+                        <img src="/site_media/static/img/ic_01.png">虚拟网关配置
+                        <div class="pull-right">
+                             <a href="" class="edit" title="创建虚拟网关"><i class="icon-plus"></i></a>
+                             <a href="javascript:;"><img src="/site_media/static/img/ic-ks.png" title="启动"></a>
+                             <a href="javascript:;"><img src="/site_media/static/img/btn_bj.png" title="编辑"></a>
+                             <a href="javascript:;"><img src="/site_media/static/img/btn_sc.png" title="删除"></a>
+                        </div>                                            
+                    </h4>
+                    <p class="help-block">当前未添加控制器</p> 
+                    <table class="table_base">
+                        <tbody>
+                            <tr>
+                                <td width="120">网关IP地址：</td>
+                                <td>默认创建</td>
+                            </tr>
+                            <tr>
+                                <td>宿主机IP地址：</td>
+                                <td>FloodLight</td>
+                            </tr>
+                            <tr>
+                                <td>状态：</td>
+                                <td>192.168.5.131</td>
+                            </tr>
+                            <tr>
+                                <td>DHCP服务：</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table> 
+                </div>
+            
+                <div class="slice_detail_content">
+                        <h4 class="block_title">
+                            <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【网段：{{ start_ip }}-{{ end_ip }}】
+                            <a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
+                            <div class="pull-right">
+                                 <a href="" class="edit" title="创建虚拟机"><i class="icon-plus"></i></a>                               
+                            </div>                                            
+                        </h4>
+                       <table class="table_defined">
+                           <thead>
+                               <tr>
+                                   <th width="17%">名称</th>
+                                   <th width="15%">UUID</th>
+                                   <th width="15%">DHCP</th>
+                                   <th width="15%">IP地址</th>
+                                   <th width="15%">宿主机</th>
+                                   <th width="8%">状态</th>
+                                   <th width="15%">操作</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               <tr>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td></td>
+                                   <td></td>
+                               </tr>
+                           </tbody>
+                       </table>
+               </div>
+               <div class="slice_detail_content">
+                        <h4 class="block_title">
+                            <img src="{{ STATIC_URL}}img/ic_lb.png" />自接入设备端口列表<span>【网段：{{ start_ip }}-{{ end_ip }}】</span>
+                            <div class="pull-right">
+                                 <a href="" class="edit" title="创建端口"><i class="icon-plus"></i></a>                               
+                            </div>                                            
+                        </h4>
+                       <table class="table_defined">
+                           <thead>
+                               <tr>
+                                   <th width="20%">名称</th>
+                                   <th width="15%">端口号</th>
+                                   <th width="15%">所在交换机</th>
+                                   <th width="15%">类型</th>
+                                   <th width="20%">Mac列表</th>
+                                   <th width="15%">操作</th>
+                               </tr>
+                           </thead>
+                           <tbody>
+                               <tr>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td>xxx</td>
+                                   <td></td>
+                               </tr>
+                           </tbody>
+                       </table>
+               </div>
+               
         </div>
         
         <h4 class="block_title show-dhcp">
