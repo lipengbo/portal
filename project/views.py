@@ -306,9 +306,6 @@ def create_or_edit(request, id=None):
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
         if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
-        if user.quotas.project < project_count:
-            messages.add_message(request, messages.INFO, "项目个数已经超过配额")
-            return redirect('quota_admin_apply')
         context['slice_islands'] = set(list(island_ids))
     else:
         if not user.has_perm('project.add_project'):
@@ -328,11 +325,6 @@ def create_or_edit(request, id=None):
                 if user.quotas.project < project_count:
                     messages.add_message(request, messages.INFO, "项目个数已经超过配额")
                     return redirect('quota_admin_apply')
-            else:
-                if user.quotas.project <= project_count:
-                    messages.add_message(request, messages.INFO, "项目个数已经超过配额")
-                    return redirect('quota_admin_apply')
-
             project.save()
             form.save_m2m()
             return redirect('project_detail', id=project.id)

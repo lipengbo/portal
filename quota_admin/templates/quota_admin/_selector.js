@@ -21,7 +21,7 @@
             $('input[name="' + $(this).attr('name') + '"]').val(value);
         },
         range: "min"
-      });
+      }).addSliderSegments("quota_mem_slider", $slider.slider("option").max);
     }    
     var $slider = $("#disk_slider");
     if ($slider.length) {
@@ -35,5 +35,5 @@
             $('input[name="' + $(this).attr('name') + '"]').val(value);
         },
         range: "min"
-      });
+      }).addSliderSegments("quota_disk_slider", $slider.slider("option").max);
     }

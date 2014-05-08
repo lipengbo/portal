@@ -33,7 +33,6 @@
              <tr>
                   <td>{{slice_obj.get_show_name}}</td>
                   <td id = "slice_description_old">{{slice_obj.description}}</td>
-                  
                   <td>{{slice_obj.get_island}}</td>
                   <td>
                   {%if start_ip == "" %}
@@ -153,7 +152,11 @@
             
             <div class="slice_detail_content">
                 <div id="list_vm">
-                    {% include "slice/vm_list_page.html" %}
+                    {%if slice_type == "mixslice" %}
+                        {% include "slice/vm_list_page.html" %}
+                    {%else%}
+                        <p class="help-block">基础虚网无虚拟机资源！</p>
+                    {%endif%}
                 </div>          
             </div>
             
@@ -164,72 +167,11 @@
            </div>      
         </div>
         
-        <h4 class="block_title show-dhcp">
-            <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>【网段：{%if start_ip == "" %}
-                  无
-                  {%else%}
-                  {{ start_ip }}-{{ end_ip }}
-                  {%endif%}】
-			{%if extent_html == "site_base.html" and permission == "edit"%}
-			<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
-			{%endif%}
-			<div class="pull-right tuopu_btn dhcp_div
-			    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                {%else%}disabled{%endif%}">
-            DHCP服务：                
-                {%if slice_obj.get_dhcp != None %}
-                <span class="switch_btn dhcp checked" 
-                {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
-                    <span class="switch_content">启动</span>
-                </span>
-                {%else%}
-                <span class="switch_btn dhcp" 
-                {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
-                    <span class="switch_content">停止</span>
-                </span>
-                {%endif%}
-                
-                {%if extent_html == "site_base.html" and permission == "edit"%}
-                <a class="btn btn_info {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="select_to_add_device({{slice_obj.id}});"
-                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
-                添加
-                </a>
-                {%endif%}
-                
-                {%if extent_html == "site_base.html" and permission == "edit"%}
-                    {%if slice_obj.get_controller %}
-                        {%if slice_obj.state == 0 %}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="bj_ct" onclick="return bj_ct();" style="cursor:pointer">
-                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
-                            </a>
-                        {%else%}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="bj_ct" onclick="return bj_ct();" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
-                            </a>
-                        {%endif%}
-                    {%else%}
-                    {%if slice_obj.state == 0 %}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="add_ct" onclick="return add_ct();" style="cursor:pointer">
-                        添加控制器
-                        </a>
-                    {%else%}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="add_ct" onclick="return add_ct();" style="cursor:not-allowed">
-                        添加控制器
-                        </a>
-                    {%endif%}
-                    {%endif%}
-                {%endif%}
-                
-                
-            </div>
-        </h4>
+        
         <form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
             <input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
         </form>
         
-           
  
         <div class="clear" style="display: none" >
             <p id="STATIC_URL">{{STATIC_URL}}</p>
@@ -382,7 +324,7 @@
                             <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                         </td>
                         <td class="text-right" width="100">控制器IP</td>
-                        <td width="230">
+                        <td width="250">
                             <div id="ipInput_base" class=""></div>
                         </td>
                         <td width="50" class="text-right">端口</td>

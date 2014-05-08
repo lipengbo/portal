@@ -35,7 +35,7 @@ $(function(){
     
     //全选全不选
     $(".checkall input").click(function(){
-        $(".checkboxs input[type='checkbox']").prop("checked",$(this).prop("checked")).trigger('change');
+        $(".checkboxs input[type='checkbox']:not(:disabled)").prop("checked",$(this).prop("checked")).trigger('change');
     });
     $(".checkboxs input[type='checkbox']").each(function(){
         $(this).click(function(){

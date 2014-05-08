@@ -6952,7 +6952,8 @@ fieldset legend {
   text-align: center;
   height: 100%;
 }
-#ipInput {
+#ipInput,
+#ipInput_base {
   height: 34px;
   width: 100%;
   display: inline-block;
@@ -6965,7 +6966,8 @@ fieldset legend {
   background-color: #ebebe4;
   border: 1px solid #cccccc;
 }
-#ipInput input.ipInput-cell {
+#ipInput input.ipInput-cell,
+#ipInput_base input.ipInput-cell {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -7348,10 +7350,9 @@ span[name="serverInfo"] {
 }
 .slice_detail_tab {
   background: #2291fe;
-  height: 50px;
-  line-height: 50px;
 }
 .slice_detail_tab .row .col-md-4 {
+  padding: 15px 0;
   text-align: center;
 }
 .slice_detail_tab .row .col-md-4 a {

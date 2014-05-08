@@ -15,7 +15,7 @@ $(document).ready(function(){
             $.each(switchs, function(i, _switch){
                 $.each(_switch['ports'], function(j, _port){
                     switch_ports_info.insert({id:_switch['id'], dpid:_switch['dpid'], switch_name:_switch['name'],
-                            port_name:_port['name'], port_num:_port['port'], port_id:_port['id'], port_type:_port['type']});
+                            port_name:_port['name'], port_num:_port['port'], port_id:_port['id'], port_type:_port['can_monopolize']});
                 });
                         
             });
@@ -84,12 +84,10 @@ $(document).ready(function(){
     });
     $('#enable_switch_port').on("blur", function(){
         check_port();
-        if(check_macs()){
-            document.getElementById('mac_err_msg').innerHTML = '';
-        return true;
-        }
     })
-
+    $("#mac_addrs").on("focus", function(){
+        $("#mac_addrs").val('');
+    });
     $('.switch_btn.dk').on("click", function(){
 			if($(this).hasClass("checked")) {
                 $(this).removeClass("checked");
@@ -126,7 +124,7 @@ function check_macs(){
     var mac_addrs = $('#mac_addrs').val().trim().split(",");
     for(var i=0; i<mac_addrs.length; i++){
         if(!isMac(mac_addrs[i])){
-            $('#mac_err_msg').html('mac地址格式不正确');
+            $('#mac_err_msg').html('MAC地址格式不正确');
             return false;
         }
     }

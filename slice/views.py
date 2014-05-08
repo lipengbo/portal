@@ -18,7 +18,7 @@ from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
     get_slice_links_bandwidths, get_count_show_data, slice_edit_controller, slice_edit_gw
 from project.models import Project, Island
-from resources.models import Switch, SwitchPort
+from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
@@ -438,30 +438,39 @@ def detail(request, slice_id):
             show_vm['name'] = controller.name
 
         show_vm['type'] = "控制器"
+        show_vm['dhcp'] = "无"
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
     if gw:
-        show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-                         'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state})
+        if vm.enable_dhcp:
+            show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+                             'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
+        else:
+            show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+                             'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"无"})
     for vm in vms:
         if vm.enable_dhcp:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"有"})
         else:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"无"})
 
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = slice_obj.checkband()
+    context['controller'] = controller
+    context['gw'] = gw
     print "get slice subnet"
     try:
         subnet = Subnet.objects.get(owner=slice_obj.uuid)
     except:
+        context['slice_type'] = "baseslice"
         context['start_ip'] = ""
         context['end_ip'] = ""
     else:
+        context['slice_type'] = "mixslice"
         context['start_ip'] = subnet.get_ip_range()[0]
         context['end_ip'] = subnet.get_ip_range()[1]
     if request.is_ajax():
@@ -715,6 +724,32 @@ def get_slice_state(request, slice_id):
         print 2
         return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
                                         'c_state': c_state, 'g_state': g_state}))
+
+def list_own_devices(request, slice_id):
+    own_devices = []
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    slice_ports = SlicePort.objects.filter(slice = slice_obj)
+    for port in slice_ports:
+        port_info = {}
+        switch_port = port.switch_port
+        if port.type == 0:
+            port_info['port_name'] = switch_port.name
+            port_info['is_monopo'] = 0
+            port_info['mac_list'] = ''
+            port_info['switch_name'] = switch_port.switch.name
+            port_info['dpid'] = switch_port.switch.dpid
+            own_devices.append(port_info)
+        else:
+            owner_device = OwnerDevice.objects.filter(slice_port = port)
+            if owner_device.count() > 0:
+                port_info['port_name'] = switch_port.name
+                port_info['is_monopo'] = 1
+                port_info['mac_list'] = owner_device[0].mac_list
+                port_info['switch_name'] = switch_port.switch.name
+                port_info['dpid'] = switch_port.switch.dpid
+                own_devices.append(port_info)
+    return HttpResponse(json.dumps(own_devices))
+
 
 
 def test_cnvp():

@@ -99,7 +99,7 @@ class VirtualMachineManager(models.Manager):
     def user_stat_sum(self, user, kind):
         total = 0
         for slice in user.slice_set.filter(type=0):
-            num =slice.get_vms().aggregate(Sum(kind))[kind+'__sum']
+            num = slice.virtualmachine_set.filter(type=1).exclude(state__in=(9,10,11)).aggregate(Sum(kind))[kind+'__sum']
             if num:
                 total += num
         return total
@@ -107,7 +107,7 @@ class VirtualMachineManager(models.Manager):
     def total_vms(self, user):
         total = 0
         for slice in user.slice_set.filter(type=0):
-            total += slice.get_vms().count()
+            total += slice.virtualmachine_set.filter(type=1).exclude(state__in=(9,10,11)).count()
         return total
 
 class VirtualMachine(IslandResource):

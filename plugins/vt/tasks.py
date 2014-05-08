@@ -6,14 +6,16 @@ def do_vm_action(vm, action):
     print "cerlry .............", action
     try:
         action_result = vm.do_action(action)
-        reset_state(vm, action, action_result)
+        reset_state(vm, action, action_result, False)
     except:
-        reset_state(vm, action, False)
+        reset_state(vm, action, False, True)
     finally:
         print "---------------vm state : ", vm.state
 
 
-def reset_state(vm, action, result):
+def reset_state(vm, action, result, is_except):
+    print "********vm action", vm.state, result, action
+    print "******** is_except:", is_except
     if result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
@@ -21,8 +23,10 @@ def reset_state(vm, action, result):
             vm.state = DOMAIN_STATE_DIC['running']
     else:
         if action == "destroy":
-            vm.state = DOMAIN_STATE_DIC['running']
+            if is_except:
+                vm.state = DOMAIN_STATE_DIC['running']
         else:
-            vm.state = DOMAIN_STATE_DIC['shutoff']
+            if is_except:
+                vm.state = DOMAIN_STATE_DIC['shutoff']
     vm.save()
 
