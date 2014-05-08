@@ -27,6 +27,37 @@ function update_list(url){
     return false;
 }
 
+function update_list_content(url, div_name){
+    //alert(url);
+    //check_url = "http://" + window.location.host + url;
+    check_url = url;
+    //alert(check_url);
+    var ret = false;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "html",
+        cache: false,
+        async: false,  
+        success: function(data) {
+            if (data)
+             {
+                //alert("ok");
+                $("div#"+div_name).empty();
+                $("div#"+div_name).append(data);
+             } 
+             else
+             {
+                //alert("false");
+             }
+        }
+    });
+    //alert('ju');
+    return false;
+}
+
+
+
 $('a.endless_page_link').live("click", function(){
     var href = $(this).attr('href');
     update_list("http://" + window.location.host + href);
