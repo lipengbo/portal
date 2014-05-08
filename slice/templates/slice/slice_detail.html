@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block body %}
+{%if extent_html == "site_base.html" %}
 {%if slice_type == "baseslice" and controller == None%}
 <div class="alert alert-danger">
     <strong>提示：</strong>您当前还未进行服务配置
@@ -25,6 +26,7 @@
 <div class="alert alert-danger">
     <strong>提示：</strong>您当前还未添加网关
 </div>
+{%endif%}
 {%endif%}
         <table class="table_defined">
             <thead>
@@ -200,7 +202,7 @@
             {%else%}
             <p id="controller_type">1</p>
             {%endif%}
-            <p id="slice_type">slice_type</p>
+            <p id="slice_type">{{slice_type}}</p>
             
         </div>
     
@@ -241,7 +243,7 @@
         </div>
     </div>
     
-    <div id="editSliceModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div id="editmixctModal" class="modal fade editcontrollermode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -313,7 +315,7 @@
         </div>
     </div>
     
-    <div id="addbasectModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div id="editbasectModal" class="modal fade editcontrollermode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -340,7 +342,7 @@
                         <td width="100">
                             <input type="text" maxlength="5" id="base_controller_port" class="dk_pull form-control" onblur="check_port('port',1)"/>                                                       
                         </td>
-                        <td><span id="base_controller_ip_portInfo" style="display:inline;float:none;"></span></td>
+                        <td width="100"><span id="base_controller_ip_portInfo" style="display:inline;float:none;"></span></td>
                     </tr>
                 </tbody>
             </table>

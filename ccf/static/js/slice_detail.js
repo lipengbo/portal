@@ -120,13 +120,18 @@ function bj_vm(vm_id){
 //控制器添加click事件
 function add_ct(){
     var a_obj = $("#add_ct")[0];
+    var slice_type = $("#slice_type").text();
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
-        //alert(1);
-        $('#addbasectModal').modal('show');
+        alert(slice_type);
+        if(slice_type == "baseslice"){
+            $('#editbasectModal').modal('show');
+        }else{
+            $('#editmixctModal').modal('show');
+        }
         return true;
     }
 }
