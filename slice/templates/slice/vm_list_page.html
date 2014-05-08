@@ -80,11 +80,11 @@
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
                     {%if vm.state == 1 %}
-                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}}, '{{island.name}}');" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}}, '{{island.name}}');" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}

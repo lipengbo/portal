@@ -54,3 +54,5 @@ try:
     from etc.local_config import *
 except ImportError:
     pass
+#配置每个节点的novnc server， 格式为{u'节点名1':'ip1', u'节点名2': 'ip2', ...}
+novnc_server = {u'无线谷' : '192.168.5.45'}

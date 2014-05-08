@@ -17,7 +17,7 @@ from forms import VmForm
 from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
 from django.core.urlresolvers import reverse
-from etc.config import function_test
+from etc.config import function_test, novnc_server
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 from plugins.common.aes import *
@@ -67,8 +67,6 @@ def vm_list(request, sliceid):
 def create_vm(request, sliceid):
     user = request.user
     vm_count = VirtualMachine.objects.total_vms(user)
-    import pdb
-    pdb.set_trace()
     if request.method == 'POST':
         if user.quotas.vm <= vm_count:
             return redirect('forbidden')
@@ -218,7 +216,7 @@ def do_vm_action(request, vmid, action):
     return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
 
 
-def vnc(request, vmid):
+def vnc(request, vmid, island_name):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
@@ -227,14 +225,7 @@ def vnc(request, vmid):
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
-            % (request.META.get('HTTP_HOST').split(':')[0], token)
-    #context = {}
-    #context['host_ip'] = host_ip
-    #context['vnc_port'] = vnc_port
-    #context['tunnel_host'] = '192.168.5.9'
-    #context['vm'] = vm
-    #return render(request, 'vt/vnc.html', context)
-    #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+            % (novnc_server[island_name], token)
     return HttpResponseRedirect(novnc_url)
 
 

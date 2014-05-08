@@ -14,16 +14,6 @@ var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
 var disks = [10, 20, 40, 80, 160, 320];
 
 
-$(document).ready(function(){
-    $.ajax({
-		url : '/plugins/vt/get_flavor_msg/',
-		type : 'POST',
-		data: data,
-		dataType: 'json',
-		success:function(data){
-		}
-	});
-});
 
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
