@@ -1,15 +1,18 @@
+# coding:utf-8
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_delete, pre_delete
 from django.db.models import F
 from django.dispatch import receiver
 from django.utils.translation import ugettext as _
+from django.db import transaction
 
 
 from project.models import Project, Island
-from plugins.ipam.models import Subnet
+from plugins.ipam.models import Subnet, IPUsage
 from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
 from plugins.openflow.flowvisor_api import flowvisor_del_slice
+from slice.slice_exception import DbError
 
 import datetime
 
@@ -51,6 +54,8 @@ class Slice(models.Model):
     islands = models.ManyToManyField(Island, through="SliceIsland")
     uuid = models.CharField(max_length=36, null=True, unique=True)
     changed = models.IntegerField(null=True)
+    ct_changed = models.NullBooleanField(null=True)
+    vm_num = models.IntegerField(default=0)
 
     def created_date(self):
         return self.date_created
@@ -94,7 +99,7 @@ class Slice(models.Model):
             return None
 
     def get_controller(self):
-        controllers = self.controller_set.all()
+        controllers = self.controller_set.all().order_by("-id")
         if controllers:
             return controllers[0]
         else:
@@ -242,18 +247,6 @@ class Slice(models.Model):
     def get_show_name(self):
         return self.show_name
 
-    def be_count(self):
-        sc = SliceCount.objects.filter(date_created__year=self.date_created.strftime('%Y'),
-                                  date_created__month=self.date_created.strftime('%m'),
-                                  date_created__day=self.date_created.strftime('%d'))
-        if sc:
-            sc[0].num = sc[0].num + 1
-            sc[0].save()
-        else:
-            nsc = SliceCount(date_created=self.date_created,
-                             num=1)
-            nsc.save()
-
     def checkband(self):
         from plugins.openflow.models import Link
         switch_ports = self.get_switch_ports
@@ -278,29 +271,79 @@ class Slice(models.Model):
         else:
             return True
 
+    @transaction.commit_manually
     def delete(self, *args, **kwargs):
+        from plugins.openflow.controller_api import delete_controller
         import traceback
         try:
+            print "0:get user"
+            user = kwargs.get("user")
             print "1:delete slice on flowvisor"
-            flowvisor_del_slice(self.get_flowvisor(), self.id)
-            print "2:delete slice record"
-            super(self.__class__, self).delete(*args, **kwargs)
-            print "3:delete slice record success"
-        except Exception, ex:
-            print "4:delete slice failed and change slice record"
-            print traceback.print_exc()
-            self.failure_reason = ex.message
-            if self.type == 0:
-                self.type = 1
-                increase_failed_counter("slice")
-                decrease_counter_api("slice", self)
+            if self.ct_changed != None:
+                try:
+                    flowvisor_del_slice(self.get_flowvisor(), self.id)
+                except:
+                    raise
+                else:
+                    self.ct_changed = None
+                    self.state = SLICE_STATE_STOPPED
+                    self.save()
+                    transaction.commit()
+            print "2:delete subnet"
+            if self.get_nw():
+                IPUsage.objects.delete_subnet(self.uuid)
+            print "3:delete controller"
+            delete_controller(self.get_controller(), False)
+            print "4:delete slice record"
+            slice_deleted = SliceDeleted(name=self.name,
+                show_name=self.show_name,
+                owner_name=self.owner.username,
+                description=self.description,
+                project_name=self.project.name,
+                date_created=self.date_created,
+                date_expired=self.date_expired)
+            if user == None:
+                slice_deleted.type = 2
             else:
-                decrease_failed_counter("slice", self)
-                increase_failed_counter("slice")
-            self.date_expired = datetime.datetime.now()
-            self.save()
-            print "5:raise exception"
-            raise
+                if user.is_superuser:
+                    slice_deleted.type = 1
+                else:
+                    slice_deleted.type = 0
+            del kwargs['user']
+            super(self.__class__, self).delete(*args, **kwargs)
+        except Exception, ex:
+            print "5:delete slice failed and change slice record"
+            traceback.print_exc()
+            transaction.rollback()
+            try:
+                self.failure_reason = ex.message
+                if self.type == 0:
+                    self.type = 1
+                    increase_failed_counter("slice")
+                    decrease_counter_api("slice", self)
+                else:
+                    decrease_failed_counter("slice", self)
+                    increase_failed_counter("slice")
+                self.date_expired = datetime.datetime.now()
+                self.save()
+            except:
+                print "6:change slice record failed! raise exception"
+                transaction.rollback()
+                raise DbError("虚网删除失败！")
+            else:
+                transaction.commit()
+                print "6:change slice record success"
+        else:
+            print "5:delete slice success and create SliceDeleted record "
+            try:
+                slice_deleted.save()
+            except:
+                print "6:create SliceDeleted record failed! raise exception"
+                transaction.rollback()
+                raise DbError("虚网删除失败！")
+            else:
+                transaction.commit()
+                print "6:create SliceDeleted record success!"
 
     def flowspace_changed(self, flag):
         a = self.changed
@@ -324,6 +367,11 @@ class Slice(models.Model):
                 a = a | 0b1010
         self.changed = a
         self.save()
+
+    def ct_changed(self):
+        if self.ct_changed == False:
+            self.ct_changed = True
+            self.save()
 
     def __unicode__(self):
         return self.name
@@ -365,25 +413,12 @@ class SliceCount(models.Model):
         verbose_name = ("slice count")
 
 
-@receiver(pre_delete, sender=Slice)
-def pre_delete_slice(sender, instance, **kwargs):
-    print "pre delete slice"
-    from slice.slice_api import delete_slice_api
-    delete_slice_api(instance)
-
-
+# @receiver(pre_delete, sender=Slice)
+# def pre_delete_slice(sender, instance, **kwargs):
+#     print "pre delete slice"
+# 
+# 
 # @receiver(post_delete, sender=Slice)
 # def post_delete_slice(sender, instance, **kwargs):
+#     user = kwargs.get("user")
 #     print "post delete slice"
-#     if instance.id:
-#         print "s1"
-#     else:
-#         print "s2"
-#     if instance.project:
-#         print "s3"
-#     else:
-#         print "s4"
-#     try:
-#         flowvisor_del_slice(instance.get_flowvisor(), instance.id)
-#     except:
-#         raise

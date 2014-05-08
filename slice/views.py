@@ -16,8 +16,7 @@ from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
-    get_slice_links_bandwidths, get_count_show_data
-from plugins.openflow.controller_api import slice_change_controller
+    get_slice_links_bandwidths, get_count_show_data, slice_edit_controller, slice_edit_gw
 from project.models import Project, Island
 from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from slice.slice_exception import *
@@ -33,7 +32,7 @@ import datetime
 
 
 @login_required
-def create(request, proj_id):
+def create(request, proj_id, flag):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
     if not request.user.has_perm('project.create_slice', project):
@@ -59,17 +58,115 @@ def create(request, proj_id):
                 ovs_ports.append({'switch_type': switch.type(),
                                   'switch': switch,
                                   'switch_ports': []})
-    vm_form = VmForm()
     context = {}
     context['project'] = project
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
-    context['vm_form'] = vm_form
-    context['flavors'] = Flavor.objects.all()
-#     uuid = utils.gen_uuid()
-#     context['uuid'] = ''.join(uuid.split('-'))
+    if int(flag) == 0:
+        context['slice_type'] = "mixslice"
+    else:
+        context['slice_type'] = "baseslice"
     return render(request, 'slice/create_slice.html', context)
+
+
+# @login_required
+# def create_n(request, proj_id):
+#     """创建slice。"""
+#     project = get_object_or_404(Project, id=proj_id)
+#     if not request.user.has_perm('project.create_slice', project):
+#         return redirect('forbidden')
+#     slice_count = request.user.slice_set.filter(type=0).count()
+#     if request.user.quotas.slice <= slice_count:
+#         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+#         return redirect('quota_admin_apply')
+#     error_info = None
+#     islands = project.islands.all()
+#     if not islands:
+#         return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
+#     ovs_ports = []
+#     for island in islands:
+#         switches = island.switch_set.all()
+#         for switch in switches:
+#             switch_ports = switch.switchport_set.all()
+#             if switch_ports:
+#                 ovs_ports.append({'switch_type': switch.type(),
+#                                   'switch': switch,
+#                                   'switch_ports': switch_ports})
+#             else:
+#                 ovs_ports.append({'switch_type': switch.type(),
+#                                   'switch': switch,
+#                                   'switch_ports': []})
+#     vm_form = VmForm()
+#     context = {}
+#     context['project'] = project
+#     context['islands'] = islands
+#     context['ovs_ports'] = ovs_ports
+#     context['error_info'] = error_info
+#     return render(request, 'slice/create_slice.html', context)
+
+
+# @login_required
+# def create_first(request, proj_id):
+#     """创建slice不含虚拟机创建。"""
+#     project = get_object_or_404(Project, id=proj_id)
+#     slice_count = request.user.slice_set.filter(type=0).count()
+#     if request.user.quotas.slice <= slice_count:
+#         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+#         return redirect('quota_admin_apply')
+#     if request.method == 'POST':
+#         try:
+#             user = request.user
+#             slice_uuid = request.POST.get("slice_uuid")
+#             slice_name = request.POST.get("slice_name")
+#             slice_description = request.POST.get("slice_description")
+#             island_id = request.POST.get("island_id")
+#             island = get_object_or_404(Island, id=island_id)
+#             controller_type = request.POST.get("controller_type")
+#             if controller_type == 'default_create':
+#                 controller_sys = request.POST.get("controller_sys")
+#                 controller_info = {'controller_type': controller_type,
+#                                    'controller_sys': controller_sys}
+#             else:
+#                 controller_ip = request.POST.get("controller_ip")
+#                 controller_port = request.POST.get("controller_port")
+#                 controller_info = {'controller_type': controller_type,
+#                                    'controller_ip': controller_ip,
+#                                    'controller_port': controller_port}
+#             tp_mod = request.POST.get('tp_mod')
+#             if int(tp_mod) == 2:
+#                 switch_ids = []
+#                 switch_ids_str = request.POST.get("switch_ids")
+#     #             print switch_port_ids_str
+#                 switch_ids_sp = switch_ids_str.split(',')
+#                 for switch_id_sp in switch_ids_sp:
+#                     switch_ids.append(int(switch_id_sp))
+#                 ovs_or_ports = Switch.objects.filter(id__in=switch_ids)
+#             else:
+#                 port_ids = []
+#                 switch_port_ids_str = request.POST.get("switch_port_ids")
+#     #             print switch_port_ids_str
+#                 switch_port_ids = switch_port_ids_str.split(',')
+#                 for switch_port_id in switch_port_ids:
+#                     port_ids.append(int(switch_port_id))
+#                 ovs_or_ports = SwitchPort.objects.filter(id__in=port_ids)
+#             slice_nw = request.POST.get("slice_nw")
+#             gw_host_id = request.POST.get("gw_host_id")
+#             gw_ip = request.POST.get("gw_ip")
+#             dhcp_selected = request.POST.get("dhcp_selected")
+#             slice_obj = create_slice_step(project, slice_uuid, slice_name,
+#                                           slice_description, island, user,
+#                                           ovs_or_ports, controller_info, slice_nw,
+#                                           gw_host_id, gw_ip, dhcp_selected, tp_mod)
+#         except Exception, ex:
+#             jsondatas = {'result': 0, 'error_info': ex.message}
+#         else:
+#             assign_perm("slice.change_slice", user, slice_obj)
+#             assign_perm("slice.view_slice", user, slice_obj)
+#             assign_perm("slice.delete_slice", user, slice_obj)
+#             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
+#         result = json.dumps(jsondatas)
+#         return HttpResponse(result, mimetype='text/plain')
 
 
 @login_required
@@ -88,17 +185,6 @@ def create_first(request, proj_id):
             slice_description = request.POST.get("slice_description")
             island_id = request.POST.get("island_id")
             island = get_object_or_404(Island, id=island_id)
-            controller_type = request.POST.get("controller_type")
-            if controller_type == 'default_create':
-                controller_sys = request.POST.get("controller_sys")
-                controller_info = {'controller_type': controller_type,
-                                   'controller_sys': controller_sys}
-            else:
-                controller_ip = request.POST.get("controller_ip")
-                controller_port = request.POST.get("controller_port")
-                controller_info = {'controller_type': controller_type,
-                                   'controller_ip': controller_ip,
-                                   'controller_port': controller_port}
             tp_mod = request.POST.get('tp_mod')
             if int(tp_mod) == 2:
                 switch_ids = []
@@ -117,22 +203,71 @@ def create_first(request, proj_id):
                     port_ids.append(int(switch_port_id))
                 ovs_or_ports = SwitchPort.objects.filter(id__in=port_ids)
             slice_nw = request.POST.get("slice_nw")
-            gw_host_id = request.POST.get("gw_host_id")
-            gw_ip = request.POST.get("gw_ip")
-            dhcp_selected = request.POST.get("dhcp_selected")
+            vm_num = int(request.POST.get("vm_num"))
             slice_obj = create_slice_step(project, slice_uuid, slice_name,
                                           slice_description, island, user,
-                                          ovs_or_ports, controller_info, slice_nw,
-                                          gw_host_id, gw_ip, dhcp_selected, tp_mod)
+                                          ovs_or_ports, slice_nw, tp_mod, vm_num)
         except Exception, ex:
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
-            assign_perm("slice.change_slice", user, slice_obj)
-            assign_perm("slice.view_slice", user, slice_obj)
-            assign_perm("slice.delete_slice", user, slice_obj)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
+
+
+@login_required
+def create_or_edit_controller(request, slice_id):
+    """创建或编辑slice控制器。"""
+    print "create_or_edit_controller"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    controller_type = request.POST.get("controller_type")
+    if controller_type == 'default_create':
+        controller_sys = request.POST.get("controller_sys")
+        controller_info = {'controller_type': controller_type,
+                           'controller_sys': controller_sys}
+    else:
+        controller_ip = request.POST.get("controller_ip")
+        controller_port = request.POST.get("controller_port")
+        controller_info = {'controller_type': controller_type,
+                           'controller_ip': controller_ip,
+                           'controller_port': controller_port}
+    try:
+        slice_edit_controller(slice_obj, controller_info)
+    except Exception, ex:
+        return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
+    else:
+        controller = slice_obj.get_controller()
+        if controller.host:
+            return HttpResponse(json.dumps({'result': 1,
+                                            'controller': {'name': controller.name, 'ip': controller.ip,
+                                                          'port': controller.port, 'server_ip': controller.host.server.ip,
+                                                          'host_state': controller.host.state, 'host_id': controller.host.id,
+                                                          'host_uuid': controller.host.uuid}}))
+        else:
+            print 2
+            return HttpResponse(json.dumps({'result': 2,
+                                            'controller': {'name': controller.name, 'ip': controller.ip,
+                                                          'port': controller.port}}))
+
+
+@login_required
+def create_gw(request, slice_id):
+    """创建slice网关。"""
+    print "create_gw_n"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    gw_host_id = request.POST.get("gw_host_id")
+    gw_ip = request.POST.get("gw_ip")
+    dhcp_selected = request.POST.get("dhcp_selected")
+    try:
+        gw = slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected)
+    except Exception, ex:
+        return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
+    else:
+        return HttpResponse(json.dumps({'result': 1}))
 
 
 @login_required
@@ -219,44 +354,41 @@ def edit_description(request, slice_id):
 #         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
-@login_required
-def edit_controller(request, slice_id):
-    """编辑slice控制器。"""
-    print "edit_controller"
-    slice_obj = get_object_or_404(Slice, id=slice_id)
-    if not request.user.has_perm('slice.change_slice', slice_obj):
-        return redirect('forbidden')
-    controller_type = request.POST.get("controller_type")
-    if controller_type == 'default_create':
-        controller_sys = request.POST.get("controller_sys")
-        controller_info = {'controller_type': controller_type,
-                           'controller_sys': controller_sys}
-    else:
-        controller_ip = request.POST.get("controller_ip")
-        controller_port = request.POST.get("controller_port")
-        controller_info = {'controller_type': controller_type,
-                           'controller_ip': controller_ip,
-                           'controller_port': controller_port}
-    try:
-        slice_change_controller(slice_obj, controller_info)
-    except Exception, ex:
-        return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
-    else:
-        controller = slice_obj.get_controller()
-        if controller.host:
-            return HttpResponse(json.dumps({'result': 1,
-                                            'controller': {'name': controller.name, 'ip': controller.ip,
-                                                          'port': controller.port, 'server_ip': controller.host.server.ip,
-                                                          'host_state': controller.host.state, 'host_id': controller.host.id,
-                                                          'host_uuid': controller.host.uuid}}))
-        else:
-            print 2
-            return HttpResponse(json.dumps({'result': 2,
-                                            'controller': {'name': controller.name, 'ip': controller.ip,
-                                                          'port': controller.port}}))
-#             messages.add_message(request, messages.ERROR, ex)
-#     return HttpResponseRedirect(
-#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
+# @login_required
+# def edit_controller(request, slice_id):
+#     """编辑slice控制器。"""
+#     print "edit_controller"
+#     slice_obj = get_object_or_404(Slice, id=slice_id)
+#     if not request.user.has_perm('slice.change_slice', slice_obj):
+#         return redirect('forbidden')
+#     controller_type = request.POST.get("controller_type")
+#     if controller_type == 'default_create':
+#         controller_sys = request.POST.get("controller_sys")
+#         controller_info = {'controller_type': controller_type,
+#                            'controller_sys': controller_sys}
+#     else:
+#         controller_ip = request.POST.get("controller_ip")
+#         controller_port = request.POST.get("controller_port")
+#         controller_info = {'controller_type': controller_type,
+#                            'controller_ip': controller_ip,
+#                            'controller_port': controller_port}
+#     try:
+#         slice_edit_controller(slice_obj, controller_info)
+#     except Exception, ex:
+#         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
+#     else:
+#         controller = slice_obj.get_controller()
+#         if controller.host:
+#             return HttpResponse(json.dumps({'result': 1,
+#                                             'controller': {'name': controller.name, 'ip': controller.ip,
+#                                                           'port': controller.port, 'server_ip': controller.host.server.ip,
+#                                                           'host_state': controller.host.state, 'host_id': controller.host.id,
+#                                                           'host_uuid': controller.host.uuid}}))
+#         else:
+#             print 2
+#             return HttpResponse(json.dumps({'result': 2,
+#                                             'controller': {'name': controller.name, 'ip': controller.ip,
+#                                                           'port': controller.port}}))
 
 
 @login_required
@@ -306,27 +438,41 @@ def detail(request, slice_id):
             show_vm['name'] = controller.name
 
         show_vm['type'] = "控制器"
+        show_vm['dhcp'] = "无"
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
     if gw:
-        show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-                         'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state})
+        if vm.enable_dhcp:
+            show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+                             'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
+        else:
+            show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+                             'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"无"})
     for vm in vms:
         if vm.enable_dhcp:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"有"})
         else:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state})
+                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"无"})
 
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = slice_obj.checkband()
+    context['controller'] = controller
+    context['gw'] = gw
     print "get slice subnet"
-    subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
-    context['start_ip'] = subnet.get_ip_range()[0]
-    context['end_ip'] = subnet.get_ip_range()[1]
+    try:
+        subnet = Subnet.objects.get(owner=slice_obj.uuid)
+    except:
+        context['slice_type'] = "baseslice"
+        context['start_ip'] = ""
+        context['end_ip'] = ""
+    else:
+        context['slice_type'] = "mixslice"
+        context['start_ip'] = subnet.get_ip_range()[0]
+        context['end_ip'] = subnet.get_ip_range()[1]
     if request.is_ajax():
         return render(request, 'slice/vm_list_page.html', context)
     return render(request, 'slice/slice_detail.html', context)
@@ -342,24 +488,9 @@ def delete(request, slice_id):
         if not user.has_perm('slice.delete_slice', slice_obj):
             return redirect('forbidden')
     try:
-        slice_deleted = SliceDeleted(name = slice_obj.name,
-            show_name = slice_obj.show_name,
-            owner_name = slice_obj.owner.username,
-            description = slice_obj.description,
-            project_name = slice_obj.project.name,
-            date_created = slice_obj.date_created,
-            date_expired = slice_obj.date_expired)
-        if request.user.is_superuser:
-            slice_deleted.type = 1
-        else:
-            slice_deleted.type = 0
-        slice_obj.delete()
-    except Exception, ex:
-        pass
-#             if request.user.is_superuser:
-#                 messages.add_message(request, messages.ERROR, ex)
-    else:
-        slice_deleted.save()
+        slice_obj.delete(user=request.user)
+    except:
+        messages.add_message(request, messages.ERROR, "虚网删除失败！")
     if 'next' in request.GET:
         if 'type' in request.GET:
             return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))

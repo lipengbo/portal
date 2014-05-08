@@ -16,13 +16,19 @@ textarea {
 .clear {
     clear:both;
 }
-a:active, a:hover, a:focus {
-    outline:none;
+body a:active, body a:focus {
+    outline:none;   
 }
 .btn.btn_info:hover, .btn.btn_info:focus {
     color:#fff;
 }
 /* bootstrap defined */
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: none;
+}
+
 .alert {
     border-radius:0;
 }
@@ -810,6 +816,9 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
 }
 .news_list_top {
     overflow:hidden;
+    img {
+        vertical-align: baseline;
+    }
 }
 .news_list_top .checkbox {
     float:left;
@@ -1168,7 +1177,7 @@ fieldset {
     height:100%;
 }
 
-#ipInput {
+#ipInput, #ipInput_base{
     height:34px;
     width:100%;
     display: inline-block;
@@ -1483,7 +1492,7 @@ transition: background 0.25s;
         margin-top:10px;        
     }
 }
-body.nexus-body .action_box {
+.action_box {
     margin-bottom:15px;
 }
 #div_id_image.form-group {
@@ -1587,4 +1596,55 @@ span[name="serverInfo"] {
         font-size:12px;
         color:#999;
     }
+}
+.slice_detail_tab {
+    background:#2291fe;
+    .row {
+        .col-md-4 {
+            padding:15px 0;
+            text-align:center;
+            a {
+                padding:5px 0 5px 35px;
+                height:25px;
+                color:#bfdaff;
+            }
+            a:hover, a:active, a:focus {
+                text-decoration:none;
+            }
+        } 
+        .col-md-4.on a {
+            color:#fff;           
+        }
+        .col-md-4.on {
+            background: url(../img/sj.png) no-repeat bottom center;
+        }
+        .fw a {
+            background:url(../img/fw2.png) no-repeat left center;
+        }      
+        .xnj a {
+            background:url(../img/xnj2.png) no-repeat left center;
+        }
+        .zjr a {
+            background:url(../img/zjr2.png) no-repeat left center;
+        }
+        .fw.on a {
+            background:url(../img/fw1.png) no-repeat left center;           
+        }
+        .xnj.on a {
+            background:url(../img/xnj1.png) no-repeat left center;           
+        }
+        .zjr.on a {
+            background:url(../img/zjr1.png) no-repeat left center;           
+        }
+    }
+}
+.slice_detail_block {
+        .help-block {
+            margin-bottom:40px;
+            text-align:center;
+        }
+        .slice_detail_content {
+            padding:10px 20px;
+            display:none;
+        }
 }

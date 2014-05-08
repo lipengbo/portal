@@ -117,6 +117,20 @@ function bj_vm(vm_id){
 }
 
 
+//控制器添加click事件
+function add_ct(){
+    var a_obj = $("#add_ct")[0];
+    //alert(a_obj.attr("style"));
+    if(a_obj.style.cursor == "not-allowed"){
+        //alert(0);
+        return false;
+    }else{
+        //alert(1);
+        $('#addbasectModal').modal('show');
+        return true;
+    }
+}
+
 //虚拟机删除click事件
 function sc_vm(vm_id){
     var a_obj = $("#"+vm_id+"_sc")[0];

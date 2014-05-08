@@ -1,3 +1,5 @@
+#coding: utf-8
+
 from hashlib import md5
 
 from django.db import models
@@ -174,6 +176,7 @@ def send_notification_email(sender, instance, created, **kwargs):
     if not created:
         return
     site = Site.objects.get_current()
+    notice_link= "http://" + site.domain + reverse("notifications:all")
     content = render_to_string('notifications/notice.txt', {'notice': instance,
         'notification_link': "http://" + site.domain + reverse("notifications:all")})
     site_name = site.name
@@ -184,6 +187,9 @@ def send_notification_email(sender, instance, created, **kwargs):
         content = instance.action_object.content
     else:
         subject = _('[%(site_name)s] You have new notification messages') % {'site_name': site_name}
+    if instance.verb == u'调整配额':
+        subject = u'SDN创新实验平台用户配额调整通知'
+        content = u"亲爱的用户，您好：\n您在SDN创新实验平台中的配额已经调整，您可以单击以下链接查看详情。\n" + notice_link
     if content:
         send_mail(subject, content,
                   settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)
