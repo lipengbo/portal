@@ -442,7 +442,7 @@ def detail(request, slice_id):
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
     if gw:
-        if vm.enable_dhcp:
+        if gw.enable_dhcp:
             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
         else:
@@ -459,7 +459,7 @@ def detail(request, slice_id):
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
-    context['checkband'] = slice_obj.checkband()
+    context['checkband'] = 0
     context['controller'] = controller
     context['gw'] = gw
     print "get slice subnet"
