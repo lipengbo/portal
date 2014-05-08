@@ -94,6 +94,8 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
         pass
     except Exception, ex:
         print ex
+        import traceback
+        traceback.print_exc()
         try:
             slice_obj.stop()
             if flag:

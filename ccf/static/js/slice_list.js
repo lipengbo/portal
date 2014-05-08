@@ -122,3 +122,23 @@ $(function() {
         context.fillStyle="#000000";    
         context.fillText(canvasTitle,55,13);        
     });
+
+    
+//添加虚网
+function select_to_add_slice(project_id){
+     $("#addSliceModal").modal('show');
+}
+
+function add_slice(project_id){
+    var slice_type = document.getElementsByName("slice");
+     for(var i=0; i<slice_type.length; i++){  
+            if(slice_type[i].checked){  
+                if(slice_type[i].value == "mixslice"){
+                    location.href = "http://" + window.location.host + "/slice/create/"+project_id+"/0/";  
+                }  
+                if(slice_type[i].value == "baseslice"){
+                    location.href = "http://" + window.location.host + "/slice/create/"+project_id+"/1/";
+                }  
+            }   
+        }
+}

@@ -56,6 +56,10 @@ function check_vm_num(obj_id,flag){
     var reg = /^[0-9]*$/;
     var nw_num_obj = document.getElementById("nw_num");
     var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
+    if(nw_num == 0){
+        showInfo(info," ","green");
+        return true;
+    }
     if(text.length > 0){
         if(!reg.test(text) || text > (nw_num-3) || text < 0){
             showInfo(info," * (0~"+(nw_num-3)+")","red");
@@ -186,6 +190,9 @@ function check_port(port,flag){
 function check_nw_num(){
     var nw_num_obj = document.getElementById("nw_num");
     var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
+    if(nw_num == 0){
+        return true;
+    }
     var old_nw_num_obj = document.getElementById("old_nw_num");
     var old_nw_num = old_nw_num_obj.value;
     var old_slice_nw_obj = document.getElementById("old_slice_nw");
@@ -568,9 +575,14 @@ function trans(mask){
  
   //编辑slice控制器
  function edit_controller(slice_id){
+    var slice_type = $("#slice_type").text();
     var ret;
-    ret = check_slice_controller('controller_type');
     var STATIC_URL = $("#STATIC_URL").text();
+    if(slice_type == "mixslice"){
+        ret = check_slice_controller('controller_type');
+    }else{
+        ret = check_slice_controller('controller_type');
+    }
     if(ret){
         var controller_type_objs = document.getElementsByName("controller_type");
         var controller_sys_obj = document.getElementById("controller_sys");

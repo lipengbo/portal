@@ -22,26 +22,31 @@
 		//初始化input元素			
 		
 		for(var i=0;i<4;i++){
-			var input = $("<input type='text' id='cip"+i+"' maxlength='3' disabled />")
-				.addClass("ipInput-cell")
-				.blur(function(event){
-					var $input = $(this);
-					var text = $input.val();
-					if(text.length==0){
-						$input.val("");
-					}
-					
-					
-				})
-				.focus(function(event){
-				if($.browser.msie) 
-					this.createTextRange().select();
-				else {
-					this.selectionStart = 0;
-					this.selectionEnd = this.value.length;
-				}
-
-			})
+		    var slice_type = $("#slice_type").text();
+		    if(slice_type == "mixslice"){
+    			var input = $("<input type='text' id='cip"+i+"' maxlength='3' disabled />");
+			}else{
+			    var input = $("<input type='text' id='bip"+i+"' maxlength='3' />");  
+			}
+			    input.addClass("ipInput-cell")
+                    .blur(function(event){
+                        var $input = $(this);
+                        var text = $input.val();
+                        if(text.length==0){
+                            $input.val("");
+                        }
+                        
+                        
+                    })
+                 .focus(function(event){
+                    if($.browser.msie) 
+                        this.createTextRange().select();
+                    else {
+                        this.selectionStart = 0;
+                        this.selectionEnd = this.value.length;
+                    }
+    
+                })
 				.keyup(function(event){
 					//获取keyCode值
 					var keyCode = event.which;
@@ -110,7 +115,7 @@ function init_ipinput(){
             cip1_obj = document.getElementById("cip1");
             cip2_obj = document.getElementById("cip2");
             cip3_obj = document.getElementById("cip3");
-            controller_port_obj = document.getElementById("controller_port");
+            //controller_port_obj = document.getElementById("controller_port");
             cip0_obj.value = ips[0];
             cip1_obj.value = ips[1];
             cip2_obj.value = ips[2];
@@ -123,4 +128,29 @@ function init_ipinput(){
         }   
     }
 }
-               
+
+function init_ipinput_base(){
+    var slice_id = $("#slice_id").text();
+    if(slice_id>=0){
+        controller_ip_port = $("#controller_ip_port_old").text();
+        controller_ip = controller_ip_port.split(":")[0];
+        controller_port = controller_ip_port.split(":")[1];
+        if(controller_ip && controller_port){
+            ips = controller_ip.split(".");
+            bip0_obj = document.getElementById("bip0");
+            bip1_obj = document.getElementById("bip1");
+            bip2_obj = document.getElementById("bip2");
+            bip3_obj = document.getElementById("bip3");
+            //controller_port_obj = document.getElementById("controller_port");
+            bip0_obj.value = ips[0];
+            bip1_obj.value = ips[1];
+            bip2_obj.value = ips[2];
+            bip3_obj.value = ips[3];
+            controller_port_obj.value = controller_port;
+            $(".tab_radio2").parent("td").siblings("td").children("#ipInput").css({"background":"#fff"}).removeClass("disabled");        
+            $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").removeAttr("disabled");
+            $(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
+            $(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");
+        }   
+    }
+}            

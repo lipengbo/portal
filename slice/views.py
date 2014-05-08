@@ -32,7 +32,7 @@ import datetime
 
 
 @login_required
-def create(request, proj_id):
+def create(request, proj_id, flag):
     """创建slice。"""
     project = get_object_or_404(Project, id=proj_id)
     if not request.user.has_perm('project.create_slice', project):
@@ -63,6 +63,10 @@ def create(request, proj_id):
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
+    if int(flag) == 0:
+        context['slice_type'] = "mixslice"
+    else:
+        context['slice_type'] = "baseslice"
     return render(request, 'slice/create_slice.html', context)
 
 
@@ -452,9 +456,14 @@ def detail(request, slice_id):
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = slice_obj.checkband()
     print "get slice subnet"
-    subnet = get_object_or_404(Subnet, owner=slice_obj.uuid)
-    context['start_ip'] = subnet.get_ip_range()[0]
-    context['end_ip'] = subnet.get_ip_range()[1]
+    try:
+        subnet = Subnet.objects.get(owner=slice_obj.uuid)
+    except:
+        context['start_ip'] = ""
+        context['end_ip'] = ""
+    else:
+        context['start_ip'] = subnet.get_ip_range()[0]
+        context['end_ip'] = subnet.get_ip_range()[1]
     if request.is_ajax():
         return render(request, 'slice/vm_list_page.html', context)
     return render(request, 'slice/slice_detail.html', context)

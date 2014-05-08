@@ -109,7 +109,8 @@
             <h4 class="block_title">
                 <img src="{% static "img/ic_slice.png" %}">
                                             虚网
-                <a href="{% url create_slice project.id %}" class="edit pull-right" title="新建"><i class="icon-plus"></i></a>
+                <a class="edit pull-right" id="slice_add" href="javascript:void(0);" onclick="select_to_add_slice({{project.id}});" title="新建">
+                <i class="icon-plus"></i></a>
             </h4>           
            
           {% endif %}
@@ -131,6 +132,42 @@
 		<a class="enter_link pull-right" href="/slice/list/{{ project.id }}/0/"><i class="glyphicon glyphicon-circle-arrow-right"></i> 更多</a>
         {%endif%}
   </div>
+<div class="modal fade" id="addSliceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h4 class="modal-title">请选择添加虚网的类型</h4>      
+        </div>
+          <div class="modal-body">
+            <table class="table_base">
+                <tbody>
+                    <tr>
+                        <td width="120">
+                            <label class="tab_radio1 control-label" >
+                                <input type="radio" name="slice" id="mixslice" value="mixslice" />
+                                混合虚网（包括虚拟机和用户自接入设备）             
+                            </label><span id="customdevice_msg"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="tab_radio1 control-label">
+                                <input type="radio" name="slice" id="baseslice" value="baseslice"/>
+                                基础虚网（只包括用户自接入设备）             
+                             </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn_info" onclick="add_slice('{{ project.id }}')">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/jquery.knob.js"></script>
