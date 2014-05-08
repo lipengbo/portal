@@ -1,0 +1,7 @@
+{% extends 'site_base.html' %}
+
+{% block body %}
+    {% for log in logs %}
+    <p>{{ log.user }} {{ log.change_message }}</p>
+    {% endfor %}
+{% endblock %}
