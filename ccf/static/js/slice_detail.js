@@ -621,6 +621,7 @@ function submit_gw(slice_id){
         });
         $('#addgwModal').modal('hide');
         $("div#ts").empty();
+        update_vm_status();
     } 
 }
 

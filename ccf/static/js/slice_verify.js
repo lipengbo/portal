@@ -664,6 +664,7 @@ function trans(mask){
                         }else{
                             $('#mixcttitle')[0].innerHTML = "虚网控制器编辑";
                         }
+                        update_vm_status();
                     }
                     else{
                         //alert("failed");
@@ -686,7 +687,6 @@ function trans(mask){
             $('#editmixctModal').modal('hide');
         }
         $("div#ts").empty();
-        
     }
  }
 
