@@ -33,9 +33,9 @@ gw_controller = False
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 5
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = True
+function_test = False
 #配置系统是否使用flowvisor，当系统发布的时候该值必须为False
-flowvisor_disable = True
+flowvisor_disable = False
 #直接调度底层资源判断，发布时设置为True
 use_vt_manager_to_schedul = True
 #单台机器最多允许创建的虚拟机的数量
@@ -54,5 +54,3 @@ try:
     from etc.local_config import *
 except ImportError:
     pass
-#配置每个节点的novnc server， 格式为{u'节点名1':'ip1', u'节点名2': 'ip2', ...}
-novnc_server = {u'无线谷' : '192.168.5.45'}

@@ -115,7 +115,7 @@ function init_ipinput(){
             cip1_obj = document.getElementById("cip1");
             cip2_obj = document.getElementById("cip2");
             cip3_obj = document.getElementById("cip3");
-            //controller_port_obj = document.getElementById("controller_port");
+            controller_port_obj = document.getElementById("controller_port");
             cip0_obj.value = ips[0];
             cip1_obj.value = ips[1];
             cip2_obj.value = ips[2];
@@ -141,7 +141,7 @@ function init_ipinput_base(){
             bip1_obj = document.getElementById("bip1");
             bip2_obj = document.getElementById("bip2");
             bip3_obj = document.getElementById("bip3");
-            //controller_port_obj = document.getElementById("controller_port");
+            controller_port_obj = document.getElementById("controller_port");
             bip0_obj.value = ips[0];
             bip1_obj.value = ips[1];
             bip2_obj.value = ips[2];

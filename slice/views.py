@@ -23,6 +23,7 @@ from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
 from guardian.shortcuts import assign_perm, remove_perm, get_perms
+from resources.ovs_api import slice_delete_port_device
 
 from slice.models import Slice, SliceDeleted
 
@@ -442,7 +443,7 @@ def detail(request, slice_id):
         show_vm['ip'] = controller.ip + ":" + str(controller.port)
         show_vms.append(show_vm)
     if gw:
-        if vm.enable_dhcp:
+        if gw.enable_dhcp:
             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
         else:
@@ -462,6 +463,7 @@ def detail(request, slice_id):
     context['checkband'] = slice_obj.checkband()
     context['controller'] = controller
     context['gw'] = gw
+    context['devices'] = list_own_devices(slice_id)
     print "get slice subnet"
     try:
         subnet = Subnet.objects.get(owner=slice_obj.uuid)
@@ -725,7 +727,8 @@ def get_slice_state(request, slice_id):
         return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
                                         'c_state': c_state, 'g_state': g_state}))
 
-def list_own_devices(request, slice_id):
+#def list_own_devices(request, slice_id):
+def list_own_devices(slice_id):
     own_devices = []
     slice_obj = get_object_or_404(Slice, id=slice_id)
     slice_ports = SlicePort.objects.filter(slice = slice_obj)
@@ -734,6 +737,9 @@ def list_own_devices(request, slice_id):
         switch_port = port.switch_port
         if port.type == 0:
             port_info['port_name'] = switch_port.name
+            port_info['port'] = switch_port.port
+            port_info['port_id'] = switch_port.id
+            port_info['port'] = switch_port.port
             port_info['is_monopo'] = 0
             port_info['mac_list'] = ''
             port_info['switch_name'] = switch_port.switch.name
@@ -743,12 +749,25 @@ def list_own_devices(request, slice_id):
             owner_device = OwnerDevice.objects.filter(slice_port = port)
             if owner_device.count() > 0:
                 port_info['port_name'] = switch_port.name
+                port_info['port'] = switch_port.port
+                port_info['port_id'] = switch_port.id
                 port_info['is_monopo'] = 1
                 port_info['mac_list'] = owner_device[0].mac_list
                 port_info['switch_name'] = switch_port.switch.name
                 port_info['dpid'] = switch_port.switch.dpid
                 own_devices.append(port_info)
-    return HttpResponse(json.dumps(own_devices))
+    print "--------------------------->", own_devices
+    return own_devices
+   # return HttpResponse(json.dumps(own_devices))
+
+def delete_switch_port(request, slice_id, portid):
+    try:
+        slice_obj = get_object_or_404(Slice, id=slice_id)
+        slice_delete_port_device(slice_obj, portid)
+        return HttpResponse(json.dumps({'result':'0'}))
+    except:
+        return HttpResponse(json.dumps({'result':'1'}))
+
 
 
 

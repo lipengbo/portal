@@ -91,14 +91,14 @@ function jk_vm(vm_id){
 }
 
 //虚拟机登录click事件
-function dl_vm(vm_id, island){
+function dl_vm(vm_id){
     var a_obj = $("#"+vm_id+"_dl")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }
-    window.open("http://" + window.location.host + "/plugins/vt/vm/vnc/"+vm_id+"/"+island+"/");
+    window.open("http://" + window.location.host + "/plugins/vt/vm/vnc/"+vm_id+"/");
 }
 
 
@@ -417,6 +417,79 @@ function select_to_add_device(slice_id){
 	//
 }
 
+function can_create_vm(slice_id){
+    $.ajax({
+        url: '/plugins/vt/can_create_vm/'+slice_id+'/',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data){
+            if(data.result == 0){
+                location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/";
+            }else{
+                $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">虚拟机个数已达上限！</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+            }
+
+        }
+    });
+}
+
+function can_add_port(slice_id){
+    //判断是否有可用的边缘端口
+    var ports = 0;
+    $.ajax({
+        url : "/plugins/vt/get_switch_port/"+slice_id+"/",
+        type : "GET",
+        dataType : "json",
+        async : false,
+        success : function(switchs){
+            $.each(switchs, function(i, _switch){
+                $.each(_switch['ports'], function(j, _port){
+                   ports++;
+                });
+                        
+            });
+            if(ports == 0){
+                $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">没有可用的边缘节点端口！</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+            }else{
+                location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";
+            }
+       }
+    });
+}
+
+function delete_switch_port(sliceid, portid){
+    $('#alertModal').modal();
+    $('.delete-confirm').unbind('click');
+    $('.delete-confirm').click(function(){
+        $.ajax({
+            url: '/slice/delete_switch_port/' + sliceid + "/" + portid + "/",
+            type: 'GET',
+            dataType: 'json',
+            success:function(data){
+                if(data.result == 1){
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">删除端口失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }else{
+                    if($('.endless_page_current')[0]){
+                        c_p = $('.endless_page_current')[0].innerHTML;
+                        var url = document.location + "?port_page=" + c_p + "#topsection";
+                        update_list(url);
+                    }else{
+                        update_list(document.location);
+                    }
+                }
+            }
+        });
+    });
+}
 function add_device(slice_id){
 	var device_type = document.getElementsByName("device");
 	 for(var i=0; i<device_type.length; i++){  

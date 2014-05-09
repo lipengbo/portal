@@ -17,7 +17,7 @@ from forms import VmForm
 from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
 from django.core.urlresolvers import reverse
-from etc.config import function_test, novnc_server
+from etc.config import function_test
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 from plugins.common.aes import *
@@ -121,8 +121,11 @@ def create_vm(request, sliceid):
             except ResourceNotEnough, e:
                 vm.state = 11
                 vm.type =1
-                vm.save()
-                return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+                try:
+                    vm.save()
+                    return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+                except:
+                    raise
             except StopIteration, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
@@ -216,7 +219,7 @@ def do_vm_action(request, vmid, action):
     return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
 
 
-def vnc(request, vmid, island_name):
+def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
@@ -225,7 +228,7 @@ def vnc(request, vmid, island_name):
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
-            % (novnc_server[island_name], token)
+                        % (request.META.get('HTTP_HOST').split(':')[0], token)
     return HttpResponseRedirect(novnc_url)
 
 
@@ -313,3 +316,13 @@ def download_keypair(request):
     response = HttpResponse(sshkey.private_key, content_type='plain/text')
     response['Content-Disposition'] = 'attachment; filename="id_rsa"'
     return response
+
+def can_create_vm(request, sliceid):
+    import pdb
+    pdb.set_trace()
+    slice = get_object_or_404(Slice, id=sliceid)
+    vms_num = slice.get_common_vms().count()
+    if vms_num < slice.vm_num:
+        return HttpResponse(json.dumps({'result': '0'}))
+    else:
+        return HttpResponse(json.dumps({'result': '1'}))

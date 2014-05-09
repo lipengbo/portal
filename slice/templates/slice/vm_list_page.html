@@ -5,7 +5,7 @@
     <a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
     <div class="pull-right">
          {%if extent_html == "site_base.html" and permission == "edit" and slice_type == "mixslice" %}
-                <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="select_to_add_device({{slice_obj.id}});"
+                <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="can_create_vm({{slice_obj.id}});"
                  {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%} title="创建虚拟机">
                 <i class="icon-plus"></i>
                 </a>
@@ -92,11 +92,11 @@
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
                     {%if vm.state == 1 %}
-                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}}, '{{island.name}}');" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}}, '{{island.name}}');" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{vm.id}}_dl" onclick="dl_vm({{vm.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}

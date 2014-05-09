@@ -416,8 +416,8 @@ class SliceCount(models.Model):
 # @receiver(pre_delete, sender=Slice)
 # def pre_delete_slice(sender, instance, **kwargs):
 #     print "pre delete slice"
-# 
-# 
+#
+#
 # @receiver(post_delete, sender=Slice)
 # def post_delete_slice(sender, instance, **kwargs):
 #     user = kwargs.get("user")
