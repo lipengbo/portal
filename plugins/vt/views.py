@@ -318,8 +318,6 @@ def download_keypair(request):
     return response
 
 def can_create_vm(request, sliceid):
-    import pdb
-    pdb.set_trace()
     slice = get_object_or_404(Slice, id=sliceid)
     vms_num = slice.get_common_vms().count()
     if vms_num < slice.vm_num:
