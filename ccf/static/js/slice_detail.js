@@ -160,7 +160,8 @@ function sc_vm(vm_id){
                     url = document.location + "?page=" + c_p + "#topsection";
                     update_list(url);
                 }else{
-                    update_list(document.location);
+                    url = document.location + "?";
+                    update_list(url);
                 }
             }
         });
@@ -502,7 +503,8 @@ function delete_switch_port(sliceid, portid){
                         var url = document.location + "?port_page=" + c_p + "#topsection";
                         update_list(url);
                     }else{
-                        update_list(document.location);
+                        var url = document.location + "?";
+                        update_list(url);
                     }
                 }
             }

@@ -28,6 +28,7 @@ function update_list(url){
     }
     //check_url = "http://" + window.location.host + url;
     check_url = url;
+    //alert(check_url);
     var ret = false;
     $.ajax({
         type: "GET",
