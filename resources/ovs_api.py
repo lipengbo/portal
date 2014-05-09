@@ -344,14 +344,14 @@ def check_macs(slice_port, mac_list):
     if slice_port.slice.get_nw() == None:
         for cur_mac in cur_macs:
             if cur_mac in base_macs:
-                error_macs.count(cur_mac)
+                error_macs.append(cur_mac)
             else:
                 if cur_mac in mix_macs:
-                    error_macs.count(cur_mac)
+                    error_macs.append(cur_mac)
     else:
         for cur_mac in cur_macs:
             if cur_mac in base_macs:
-                error_macs.count(cur_mac)
+                error_macs.append(cur_mac)
     return ','.join(error_macs)
 
 

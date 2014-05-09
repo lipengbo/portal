@@ -80,6 +80,8 @@ def create_vm(request, sliceid):
                 vm.ram = request.POST.get("ram")
                 vm.cpu = request.POST.get("cpu")
                 vm.hdd = request.POST.get("hdd")
+                import pdb
+                pdb.set_trace()
 
                 #: test ram quota
                 if user.quotas.mem < (int(vm.ram) + VirtualMachine.objects.user_stat_sum(user, 'ram')):
