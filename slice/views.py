@@ -257,6 +257,8 @@ def create_gw(request, slice_id):
         dhcp_selected = request.POST.get("dhcp_selected")
         slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected)
     except Exception, ex:
+        #import traceback
+        #traceback.print_exc()
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         return HttpResponse(json.dumps({'result': 1}))
