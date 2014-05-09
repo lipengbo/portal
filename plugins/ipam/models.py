@@ -234,6 +234,7 @@ class Subnet(models.Model):
         return gateway_mac
 
     def get_ip_range(self):
+        print "get_network:-----", self.get_network()
         return [na.IPAddress(self.get_network().first).ipv4(),
                 na.IPAddress(self.get_network().last).ipv4()]
 
