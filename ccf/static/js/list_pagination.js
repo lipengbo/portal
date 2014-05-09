@@ -1,8 +1,33 @@
 function update_list(url){
-    //alert(url);
+    var list_show = "list_show"
+    urls = url.split("?");
+    if(urls.length == 2){
+        f_urls = urls[0].split("/");
+        //alert(f_urls);
+        //alert(f_urls.length);
+        if(f_urls.length == 7){
+            //alert(f_urls[3]);
+            //alert(f_urls[4]);
+            if(f_urls[3]=="slice" && f_urls[4]=="detail"){
+                objs = $(".col-md-4");
+                for(var i=0;i<objs.length;i++){
+                    if($(objs[i]).hasClass("on")){
+                        if($(objs[i]).hasClass("xnj")){
+                            list_show = "list_vm";
+                            urls[1] = "div_name=list_vm&" + urls[1];
+                        }
+                        if($(objs[i]).hasClass("zjr")){
+                            list_show = "list_port";
+                            urls[1] = "div_name=list_port&" + urls[1];
+                        }
+                    }
+                }
+                url = urls[0] + "?" + urls[1];
+            }
+        }
+    }
     //check_url = "http://" + window.location.host + url;
     check_url = url;
-    //alert(check_url);
     var ret = false;
     $.ajax({
         type: "GET",
@@ -14,8 +39,8 @@ function update_list(url){
             if (data)
              {
                 //alert("ok");
-                $("div#list_show").empty();
-                $("div#list_show").append(data);
+                $("div#"+list_show).empty();
+                $("div#"+list_show).append(data);
              } 
              else
              {
@@ -28,10 +53,7 @@ function update_list(url){
 }
 
 function update_list_content(url, div_name){
-    //alert(url);
-    //check_url = "http://" + window.location.host + url + "?div_name=" + div_name;
     check_url = url + "?div_name=" + div_name;
-    //alert(check_url);
     var ret = false;
     $.ajax({
         type: "GET",

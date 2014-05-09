@@ -664,6 +664,7 @@ function trans(mask){
                         }else{
                             $('#mixcttitle')[0].innerHTML = "虚网控制器编辑";
                         }
+                        update_vm_status();
                     }
                     else{
                         //alert("failed");
@@ -675,7 +676,7 @@ function trans(mask){
                 },
                 error: function(data) {
                     $("div#slice_alert_info").empty();
-                    str = "" + "<p class=\"text-center\">编辑失败！</p>";
+                    str = "" + "<p class=\"text-center\">请求失败！</p>";
                     $("div#slice_alert_info").append(str);
                     $('#slicealertModal').modal('show');
                 }
@@ -686,7 +687,6 @@ function trans(mask){
             $('#editmixctModal').modal('hide');
         }
         $("div#ts").empty();
-        
     }
  }
 
