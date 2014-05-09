@@ -85,7 +85,12 @@
         <tbody>
             <tr>
                 <td width="100">创建方式：</td>
-                <td width="120">{%if controller.name == 'user_define'%}自定义{%else%}默认创建{%endif%}</td>
+                <td width="120">
+                <div {%if controller.name == 'user_define'%}class="user_define" vm_id="{{0}}"{%else%}
+                      class="default_create" vm_id="{{controller.host.id}}"{%endif%}>
+                {%if controller.name == 'user_define'%}自定义{%else%}默认创建{%endif%}
+                </div>
+                </td>
                 {%if controller.name == 'user_define'%}
                     <td width="100"></td>
                     <td></td>
@@ -178,7 +183,7 @@
         <tbody>
             <tr>
                 <td width="100">网关IP地址：</td>
-                <td width="120">{{gw.ip}}</td>
+                <td width="120"><div class="gw" vm_id="{{gw.id}}">{{gw.ip}}</div></td>
                 <td width="120">宿主机IP地址：</td>
                 <td>{{gw.server.ip}}</td>
             </tr>
