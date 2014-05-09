@@ -11,6 +11,7 @@
 {% endblock %}
 
 {% block body %}
+<div id="ts">
 {%if extent_html == "site_base.html" %}
 {%if slice_type == "baseslice" and controller == None%}
 <div class="alert alert-danger">
@@ -28,6 +29,7 @@
 </div>
 {%endif%}
 {%endif%}
+</div>
         <table class="table_defined">
             <thead>
                 <tr>
@@ -193,7 +195,7 @@
             <p id="edit">0</p>
             {%endif%}
             {%if slice_obj.get_controller%}
-            <p id="controller_ip_port_old">{{slice_obj.get_controller.ip}}+":"+{{slice_obj.get_controller.port}}</p>
+            <p id="controller_ip_port_old">{{slice_obj.get_controller.ip}}:{{slice_obj.get_controller.port}}</p>
             {%else%}
             <p id="controller_ip_port_old">""</p>
             {%endif%}
@@ -203,6 +205,7 @@
             <p id="controller_type">1</p>
             {%endif%}
             <p id="slice_type">{{slice_type}}</p>
+            <p id="slice_uuid">{{slice_obj.uuid}}</p>
             
         </div>
     
@@ -243,12 +246,18 @@
         </div>
     </div>
     
-    <div id="editmixctModal" class="modal fade editcontrollermode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div id="editmixctModal" class="modal fade edit_controller_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-          <h4 class="modal-title">虚网控制器编辑</h4>      
+          <h4 class="modal-title" id="mixcttitle">
+          {%if controller%}
+          虚网控制器编辑
+          {%else%}
+          虚网控制器添加
+          {%endif%}
+          </h4>      
         </div>
         <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
             <div class="modal-body base_info">
@@ -315,12 +324,18 @@
         </div>
     </div>
     
-    <div id="editbasectModal" class="modal fade editcontrollermode" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div id="editbasectModal" class="modal fade edit_controller_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-          <h4 class="modal-title">虚网控制器添加</h4>      
+          <h4 class="modal-title" id="basecttitle">
+          {%if controller%}
+          虚网控制器编辑
+          {%else%}
+          虚网控制器添加
+          {%endif%}
+          </h4>      
         </div>
         <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
             <div class="modal-body base_info">
@@ -349,12 +364,79 @@
           </div>
           <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button type="button" onclick="edit_base_controller('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
+              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
           </div>
         </form>
         </div>
         </div>
     </div>
+    
+    <div id="addgwModal" class="modal fade edit_controller_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h4 class="modal-title">虚拟网关添加</h4>      
+        </div>
+        <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
+            <div class="modal-body base_info">
+                <table class="table_base tooltip-demo">
+                    <tbody>
+                        <tr>
+                            <td width="150" class="text-right">
+                                网关宿主机
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            </td>
+                            <td width="30%">
+                                <div class="gw_ip">
+                                <select id="id_server_gw" class="form-control" onblur="check_gw_select()">
+                              
+                                </select>                   
+                                </div>                                          
+                            </td>
+                            <td>                               
+                                <span id="gwInfo"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                网关IP地址
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" id="gateway_ip" disabled/>                               
+                            </td>
+                            <td>
+                                
+                                <span id="gw_ipInfo" style="display:inline;float:none;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                配置DHCP服务
+                            </td>
+                            <td colspan=2>
+                                <div class="tuopu_btn">
+                                    <span class="switch_btn add_dhcp checked">
+                                        <span class="switch_content">是</span>
+                                    </span>
+                                </div>
+
+                            </td>
+                          
+                        </tr>  
+                    </tbody>
+                </table>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" onclick="submit_gw('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
+          </div>
+        </form>
+        </div>
+        </div>
+    </div>
+    
     
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">

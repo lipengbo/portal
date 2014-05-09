@@ -22,4 +22,6 @@ urlpatterns = patterns('slice.views',
     url(r'^dhcp_switch/(?P<slice_id>\d+)/(?P<flag>[0-1])/$', "dhcp_switch", name='dhcp_switch'),
     url(r'^get_slice_state/(?P<slice_id>\d+)/$', "get_slice_state", name='get_slice_state'),
     url(r'^list_own_devices/(?P<slice_id>\d+)/$', "list_own_devices", name="list_own_devices"),
+    url(r'^get_select_server/(?P<slice_id>\d+)/$', "get_select_server", name="get_select_server"),
+    url(r'^create_gw/(?P<slice_id>\d+)/$', "create_gw", name="create_gw"),
 )

@@ -56,15 +56,16 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
         if ct_op and gw_op:
             flowvisor = slice_obj.get_flowvisor()
             if flowvisor:
-                if slice_obj.ct_changed == None:
+                print "++++++++++++++++++",slice_obj.ct_change
+                if slice_obj.ct_change == None:
                     flowvisor_add_slice(flowvisor, slice_obj.id,
                                         slice_obj.get_controller(), slice_obj.owner.email)
                 else:
-                    if slice_obj.ct_changed:
+                    if slice_obj.ct_change:
                         controller = slice_obj.get_controller()
                         flowvisor_update_sice_controller(flowvisor, slice_obj.id,
                                                          controller.ip, controller.port)
-                slice_obj.ct_changed = False
+                slice_obj.ct_change = False
                 slice_obj.save()
                 if flowvisor.type == 1:
                     print 1

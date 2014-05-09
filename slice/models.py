@@ -54,7 +54,7 @@ class Slice(models.Model):
     islands = models.ManyToManyField(Island, through="SliceIsland")
     uuid = models.CharField(max_length=36, null=True, unique=True)
     changed = models.IntegerField(null=True)
-    ct_changed = models.NullBooleanField(null=True)
+    ct_change = models.NullBooleanField(null=True)
     vm_num = models.IntegerField(default=0)
 
     def created_date(self):
@@ -137,6 +137,14 @@ class Slice(models.Model):
             if switch.is_virtual():
                 virtual_switches.append(switch.virtualswitch)
         return virtual_switches
+
+    def get_servers(self):
+        switches = self.get_switches()
+        servers = []
+        for switch in switches:
+            if switch.is_virtual():
+                servers.append(switch.virtualswitch.server)
+        return servers
 
     def get_gre_switches(self):
         switches = self.get_switches()
@@ -279,13 +287,13 @@ class Slice(models.Model):
             print "0:get user"
             user = kwargs.get("user")
             print "1:delete slice on flowvisor"
-            if self.ct_changed != None:
+            if self.ct_change != None:
                 try:
                     flowvisor_del_slice(self.get_flowvisor(), self.id)
                 except:
                     raise
                 else:
-                    self.ct_changed = None
+                    self.ct_change = None
                     self.state = SLICE_STATE_STOPPED
                     self.save()
                     transaction.commit()
@@ -369,8 +377,8 @@ class Slice(models.Model):
         self.save()
 
     def ct_changed(self):
-        if self.ct_changed == False:
-            self.ct_changed = True
+        if self.ct_change == False:
+            self.ct_change = True
             self.save()
 
     def __unicode__(self):

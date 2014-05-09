@@ -29,8 +29,8 @@ function update_list(url){
 
 function update_list_content(url, div_name){
     //alert(url);
-    //check_url = "http://" + window.location.host + url;
-    check_url = url;
+    //check_url = "http://" + window.location.host + url + "?div_name=" + div_name;
+    check_url = url + "?div_name=" + div_name;
     //alert(check_url);
     var ret = false;
     $.ajax({

@@ -353,6 +353,7 @@ function fetch_serverinfo(id){
 }
 
 function fetch_gw_ip(slice_name){
+    var ret = false;
     $.ajax({
         url : "/plugins/vt/get_slice_gateway_ip/" + slice_name + "/",
         type : "GET",
@@ -361,12 +362,13 @@ function fetch_gw_ip(slice_name){
         error : function(e){
 			document.getElementById('alert_info').innerHTML = "获取网关IP出错！";
 			$('#alert_modal').modal('show');
-           // alert("获取网关IP出错！");
         },
         success : function(gw_ips){
             document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
+            ret = true;
         }
     });
+    return ret;
 }
 var ovs_check_flag = false;
 function check_ovs_gw(){

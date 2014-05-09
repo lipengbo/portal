@@ -125,7 +125,7 @@ def slice_edit_controller(slice_obj, controller_info):
             if haved_controller:
                 slice_obj.remove_resource(haved_controller)
             new_controller = create_add_controller(slice_obj, controller_info)
-            if new_controller.ip != haved_controller.ip or new_controller.port != haved_controller.port:
+            if haved_controller and (new_controller.ip != haved_controller.ip or new_controller.port != haved_controller.port):
                 slice_obj.ct_changed()
     except Exception:
         try:
@@ -155,7 +155,6 @@ def slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected):
                                        image_name='gateway',
                                        enable_dhcp=enabled_dhcp)
             flowspace_gw_add(slice_obj, gw.mac)
-            return gw
         else:
             raise DbError("网关添加失败!")
     except Exception:
@@ -246,13 +245,13 @@ def slice_change_description(slice_obj, new_description):
 def delete_slice_api_n(slice_obj, user):
     try:
         print "1:delete slice on flowvisor"
-        if slice_obj.ct_changed != None:
+        if slice_obj.ct_change != None:
             try:
                 flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
             except:
                 raise
             else:
-                slice_obj.ct_changed = None
+                slice_obj.ct_change = None
                 slice_obj.save()
                 transaction.commit()
         print "2:delete subnet"
