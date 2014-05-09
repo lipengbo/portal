@@ -1,0 +1,32 @@
+{% extends "forum_base.html" %}
+
+{% load endless %}
+{% load url from future %}
+
+{% block head_title %}
+{{ forum }}
+{% endblock %}
+
+{% block forum_body %}
+{% include "agora/_forum_breadcrumb.html" with thread=thread %}
+<div class="">
+    <h1>{{ forum }}</h1>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        {% paginate 20 threads %}
+        {% for thread in threads %}
+            <hr>
+            {% include "agora/_thread.html" %}
+        {% endfor %}
+        <ul class="pagination">
+            {% show_pages %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<a href="{% url "agora_post_create" forum.id %}" class="btn btn-danger btn-block btn-lg">发表话题</a>
+{% endblock %}
+

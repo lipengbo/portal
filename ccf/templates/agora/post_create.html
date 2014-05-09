@@ -1,0 +1,83 @@
+{% extends "forum_base.html" %}
+
+{% load bootstrap %}
+
+{% block forum_body %}
+    {% include "agora/_forum_breadcrumb.html" %}
+    
+    <h3>发表话题</h3>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div class="wmd-panel">
+                <form role="form" action="{% url "agora_post_create" forum.pk %}" method="POST" class="">
+                    {% csrf_token %}
+                    <fieldset>
+                        <input id="id_subscribe" name="subscribe" type="hidden">
+                        <div class="form-group">
+                            <label class="control-label  " for="id_title">标题</label>
+                            <div class=" ">
+                                <input class=" form-control" id="id_title" maxlength="100" name="title" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label  " for="id_content">内容</label>
+                            <p><div id="wmd-button-bar-second"></div></p>
+                            <div class=" ">
+                                <textarea class="wmd-input form-control" cols="40" id="wmd-input-second" name="content" rows="10"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                        <div id="wmd-preview-second" class="wmd-panel wmd-preview"></div>
+                        </div>
+                    </div>
+                    <div class="form-actions pull-right">
+                        <a class="btn" href="{% url "agora_forum" forum.pk %}">取消</a>
+                        <button class="btn btn-primary" type="submit">发表</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/Markdown.Editor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/i18n/Markdown.i18n.zh_cn.js"></script>
+     <script type="text/javascript">
+        (function () {
+         var imgPath = '{{ STATIC_URL }}js/md-editor/img/';
+            var emotions = [['cool', 'arrow', 'biggrin', 'confused', 'cry', 'eek','neutral'],
+                            ['evil', 'exclaim', 'idea', 'lol', 'mad', 'mrgreen','question'],
+                            ['razz', 'redface', 'rolleyes', 'sad','smile','surprised', 'twisted'],
+                            ['wink']]
+            for (var i=0;i<emotions.length; i++)
+                for (j=0;j<emotions[i].length; j++)
+                    emotions[i][j] = 'icon_' + emotions[i][j] + '.gif'
+                                               
+            Markdown.SupportEmotions(imgPath,emotions);
+            var converter2 = new Markdown.Converter();
+
+            converter2.hooks.chain("preConversion", function (text) {
+                return text.replace(/\b(a\w*)/gi, "*$1*");
+            });
+
+            converter2.hooks.chain("plainLinkText", function (url) {
+                return "This is a link to " + url.replace(/^https?:\/\//, "");
+            });
+            
+            var help = function () { alert("Do you need help?"); }
+            
+            var editor2 = new Markdown.Editor(converter2, "-second", { handler: help },'zh-CN');
+            
+            editor2.run();
+            $('.wmd-panel').tooltip({
+              selector: "[data-toggle=tooltip]",
+              container: "body"
+            })
+        })();
+    </script>
+{% endblock %}

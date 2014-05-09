@@ -29,6 +29,7 @@ urlpatterns = patterns("",
     url(r"^password_reset_success/$", TemplateView.as_view(template_name="account/password_reset_success.html"), name="password_reset_success"),
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
     #url(r'^ticket/', include('helpdesk.urls')),
+    url(r'^ticket/', include('agora.urls')),
 
 
 

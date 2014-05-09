@@ -1,0 +1,16 @@
+                <div class="media">
+                  <div class="media-body">
+                    <h4 class="media-heading">
+                        <a href="{% url "agora_thread" thread.id %}" class="thread-link">
+                            {{ thread }}
+                        </a>
+                    </h4>
+                    <div class="meta text-muted">
+                        <a href="{% url 'profile_detail' thread.author.username %}"><b>{{ thread.author }}</b></a> · 
+                        <a href="{% url "agora_forum" thread.forum.id %}" class="">{{ thread.forum }}</a> · 
+                        <span>发表于 {{ thread.created|timesince }}</span>前 ·
+                        {{ thread.reply_count }} 条回复
+                    </div>
+                  </div>
+                </div>
+

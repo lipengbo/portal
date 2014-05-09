@@ -1,0 +1,189 @@
+{% extends "forum_base.html" %}
+
+{% load humanize %}
+{% load thumbnail %}
+{% load agora_tags %}
+{% load bootstrap %}
+{% load endless %}
+
+{% block head_title %}
+{{ thread.title }}
+{% endblock %}
+
+{% block forum_body %}
+    {% include "agora/_thread_breadcrumbs.html" with thread=thread %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="media">
+                <a class="pull-right" href="{% url 'profile_detail' thread.author.username %}">
+                    {% thumbnail thread.author.get_profile.avatar "64x64" crop="center" as im %}
+                        <img class="pull-right media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                    {% endthumbnail %}
+                </a>
+                <div class="media-body">
+                    <h3 class="media-heading">
+                        {{ thread.title }}
+                        {% if thread.sticky %}<span class="label notice">sticky</span>{% endif %}
+                        {% if thread.closed %}<span class="label">closed</span>{% endif %}
+                    </h3>
+                    <div class="text-muted">
+                        <a href="{% url 'profile_detail' thread.author.username %}"><b>{{ thread.author }}</b></a> · 
+                        发表于 {{ thread.created|timesince }}前
+                        <str> · </str>
+                        {{ thread.view_count }} 次浏览
+                        <str> · </str>
+                        {{ thread.reply_count }} 条回复
+                        {% if user.is_authenticated %}
+                            {% if thread|post_editable:request.user %}
+                                <str> · </str>
+                                <a class="btn btn-default btn-primary btn-xs" href="{% url "agora_post_edit" thread.kind thread.id %}">编辑</a>
+                            {% endif %}
+                            {% endif %}
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="media-body post col-md-12">
+                    {{ thread.content_html|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hidden row">
+        <div class="span4"><a href="?order_type={% ifequal order_type "asc" %}desc{% else %}asc{% endifequal %}">Reverse Reply Order</a></div>
+    </div>
+    
+    {% paginate 10 posts %}
+    {% if posts %}
+    <div class="panel panel-default">
+        <div class="panel-body">
+        {% for post in posts %}
+                <div id="post-{{ post.id }}" class="post media">
+                    <a class="pull-left" href="#">
+                        {% thumbnail post.author.get_profile.avatar "48x48" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        {% endthumbnail %}
+                    </a>
+                    <div class="pull-right">
+                        {% if user.is_authenticated %}
+                            {% if post|post_editable:request.user %}
+                                <a class="btn btn-default btn-xs" href="{% url "agora_post_edit" post.kind post.id %}">编辑</a>
+                            {% endif %}
+                            {% if can_create_reply %}
+                            <a class="btn btn-xs btn-primary reply-btn" data-username="{{ post.author }}" href="#reply-form">回复</a>
+                            {% endif %}
+                        {% endif %}
+                        <span class="text-muted"><b>#{{ forloop.counter0 }}</b></span>
+                    </div>
+                    <div class="media-body">
+                        <p class="media-heading text-muted">
+                            <a href="">{{ post.author }}</a> · 
+                            发表于 <span>{{ post.created|timesince }}</span>前
+                        </p>
+                        <div class="meta">
+                            {{ post.content_html|safe }}
+                        </div>
+                    </div>
+                </div>
+                <hr />
+        {% endfor %}
+        <ul class="pagination">
+            {% show_pages %}
+        </ul>
+        </div>
+    </div>
+    {% endif %}
+    {% if reply_form %}
+        <div class="panel panel-default" id="reply-form">
+            <div class="panel-heading">
+                <h3 class="panel-title">添加一条新回复：</h3>
+            </div>
+            <div class="panel-body">
+                <div class="media">
+                    <a class="pull-left" href="#">
+                        {% thumbnail user.get_profile.avatar "48x48" crop="center" as im %}
+                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                        {% endthumbnail %}
+                    </a>
+                    <div class="media-body">
+                        <div class="wmd-panel">
+                            <form action="" method="POST" class="">
+                                {% csrf_token %}
+                                <fieldset>
+                                    <input id="id_subscribe" name="subscribe" type="hidden">
+                                    <div class="form-group">
+                                        <p><div id="wmd-button-bar-second"></div></p>
+                                        <div class=" ">
+                                            <textarea class="wmd-input form-control" cols="40" id="wmd-input-second" name="content" rows="10"></textarea>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                    <div id="wmd-preview-second" class="wmd-panel wmd-preview"></div>
+                                    </div>
+                                </div>
+                                <div class="form-actions pull-right">
+                                    <button class="btn btn-success" type="submit">发表回复</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+{% block sidebar %}
+        {% if can_create_reply %}
+            <a class="btn btn-danger btn-block btn-lg" href="#reply-form">回复</a>
+        {% endif %}
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/Markdown.Converter.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/Markdown.Sanitizer.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/Markdown.Editor.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/md-editor/i18n/Markdown.i18n.zh_cn.js"></script>
+     <script type="text/javascript">
+        (function () {
+            var imgPath = '{{ STATIC_URL }}js/md-editor/img/';
+            var emotions = [['cool', 'arrow', 'biggrin', 'confused', 'cry', 'eek','neutral'],
+                            ['evil', 'exclaim', 'idea', 'lol', 'mad', 'mrgreen','question'],
+                            ['razz', 'redface', 'rolleyes', 'sad','smile','surprised', 'twisted'],
+                            ['wink']]
+            for (var i=0;i<emotions.length; i++)
+                for (j=0;j<emotions[i].length; j++)
+                    emotions[i][j] = 'icon_' + emotions[i][j] + '.gif'
+                                               
+            Markdown.SupportEmotions(imgPath,emotions);
+            var converter2 = new Markdown.Converter();
+
+            converter2.hooks.chain("preConversion", function (text) {
+                return text.replace(/\b(a\w*)/gi, "*$1*");
+            });
+
+            converter2.hooks.chain("plainLinkText", function (url) {
+                return "This is a link to " + url.replace(/^https?:\/\//, "");
+            });
+            
+            var help = function () { alert("Do you need help?"); }
+            
+            var editor2 = new Markdown.Editor(converter2, "-second", { handler: help },'zh-CN');
+            
+            editor2.run();
+            $('.wmd-panel').tooltip({
+              selector: "[data-toggle=tooltip]",
+              container: "body"
+            })
+        })();
+            $('.reply-btn').click(function(){
+                var origin = $('#wmd-input-second').val();
+                if(origin && origin.lastIndexOf(" ") != (origin.length - 1)) {
+                    origin += ' ';
+                }
+                $('#wmd-input-second').val(origin + '@' + $(this).data('username') + " ");
+            });
+    </script>
+{% endblock %}

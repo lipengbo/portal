@@ -142,6 +142,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
 
     # theme
     "pinax_theme_bootstrap",
@@ -162,6 +163,8 @@ INSTALLED_APPS = [
     "quotas",
     "quota_admin",
     #"helpdesk",
+    "agora",
+    "bootstrapform",
 
     #xmlrpc
     'django_xmlrpc',
@@ -182,7 +185,7 @@ INSTALLED_APPS = [
     "nexus",
     "monitor",
     "guardian",
-    'djcelery'
+    'djcelery',
 ]
 
 # Celery settings

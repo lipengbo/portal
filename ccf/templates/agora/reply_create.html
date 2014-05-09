@@ -1,0 +1,20 @@
+{% extends "agora/base.html" %}
+
+{% load bootstrap %}
+
+{% block body %}
+    {% include "agora/_thread_breadcrumbs.html" with thread=thread %}
+    
+    <h3>Post a Reply</h3>
+    
+    <form method="POST" class="form form-horizontal" action="{% url "agora_reply_create" thread.pk %}">
+        {% csrf_token %}
+        <fieldset>
+            {{ form|bootstrap }}
+        </fieldset>
+        <div class="form-actions">
+            <a href="{% url "agora_thread" thread.pk %}" class="btn">Cancel</a>
+            <button type="submit" class="btn btn-primary">Post</button>
+        </div>
+    </form>
+{% endblock %}

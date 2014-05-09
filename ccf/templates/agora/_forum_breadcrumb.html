@@ -1,0 +1,33 @@
+{% load humanize %}
+{% load url from future %}
+<ol class="breadcrumb">
+    <li><a href="{% url "agora_forums" %}">{{ SITE_NAME }}</a></li>
+    {% if forum.category %}
+        {% if forum.category.parent %}
+            <a href="{% url "agora_category" forum.category.parent.id %}">{{ forum.category.parent.title }}</a>
+        {% endif %}
+        <a href="{% url "agora_category" forum.category.id %}">{{ forum.category.title }}</a>
+    {% else %}
+        {% if forum.parent %}
+            {% if forum.parent.category %}
+                {% if forum.parent.category.parent %}
+                    <a href="{% url agora_category forum.parent.category.parent.id %}">{{ forum.parent.category.parent.title }}</a>
+                {% endif %}
+                <a href="{% url agora_category forum.parent.category.id %}">{{ forum.parent.category.title }}</a>
+            {% else %}
+                {% if forum.parent.parent %}
+                    <a href="{% url agora_forum forum.parent.parent.id %}">{{ forum.parent.parent.title }}</a>
+                {% endif %}
+            {% endif %}
+            <a href="{% url agora_forum forum.parent.id %}">{{ forum.parent.title }}</a>
+        {% endif %}
+    {% endif %}
+    <li class="active">{{ forum.title }}</li>
+    <span class="pull-right text-muted">
+        {{ forum.last_modified|date:"Y年m月d日" }}
+        <str> &bull; </str>
+        {{ forum.threads.all.count|intcomma }} 话题
+        <str> &bull; </str>
+        {{ forum.post_count|intcomma }} 条回复
+    </span>
+</ol>
