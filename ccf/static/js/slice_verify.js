@@ -676,7 +676,7 @@ function trans(mask){
                 },
                 error: function(data) {
                     $("div#slice_alert_info").empty();
-                    str = "" + "<p class=\"text-center\">编辑失败！</p>";
+                    str = "" + "<p class=\"text-center\">请求失败！</p>";
                     $("div#slice_alert_info").append(str);
                     $('#slicealertModal').modal('show');
                 }

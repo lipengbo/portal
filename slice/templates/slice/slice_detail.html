@@ -148,10 +148,10 @@
                     <a href="javascript:;">服务配置</a>
                 </div>
                 <div class="col-md-4 xnj">
-                     <a href="javascript:;" class="fw">虚拟机资源</a>
+                     <a href="javascript:;">虚拟机资源</a>
                 </div>
                 <div class="col-md-4 zjr">
-                     <a href="javascript:;" class="fw">自接入资源</a>
+                     <a href="javascript:;">自接入资源</a>
                 </div>
             </div>
         </div>
@@ -507,14 +507,10 @@
 <script src="{{ STATIC_URL}}js/slice_detail.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
-<script>
-    $(function(){
-        show_uuid($("[id='uuid']"));
-    })
-</script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
+        show_uuid($("[id='uuid']"));
         var slice_type = $("#slice_type").text();
         var controller_type = $("#controller_type").text();
         if(slice_type == "mixslice"){

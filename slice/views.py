@@ -241,18 +241,7 @@ def create_or_edit_controller(request, slice_id):
         traceback.print_exc()
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
-        controller = slice_obj.get_controller()
-        if controller.host:
-            return HttpResponse(json.dumps({'result': 1,
-                                            'controller': {'name': controller.name, 'ip': controller.ip,
-                                                          'port': controller.port, 'server_ip': controller.host.server.ip,
-                                                          'host_state': controller.host.state, 'host_id': controller.host.id,
-                                                          'host_uuid': controller.host.uuid}}))
-        else:
-            print 2
-            return HttpResponse(json.dumps({'result': 2,
-                                            'controller': {'name': controller.name, 'ip': controller.ip,
-                                                          'port': controller.port}}))
+        return HttpResponse(json.dumps({'result': 1}))
 
 
 @login_required
@@ -477,8 +466,10 @@ def detail(request, slice_id):
         context['start_ip'] = subnet.get_ip_range()[0]
         context['end_ip'] = subnet.get_ip_range()[1]
     if request.is_ajax():
+        print "++++++++++++++++++++++++++ajax"
         if 'div_name' in request.GET:
             div_name = request.GET.get('div_name')
+            print "++++++++++++++++++++++++++div_name", div_name
             if div_name == 'list_fw':
                 return render(request, 'slice/fw_list_page.html', context)
             if div_name == 'list_vm':
