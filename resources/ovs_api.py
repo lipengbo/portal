@@ -319,6 +319,42 @@ def slice_add_port(slice_obj, port_id, add_type):
         raise DbError("端口添加失败！")
 
 
+
+def check_macs(slice_port, mac_list):
+    mix_macs = []
+    base_macs = []
+    slice_ports = slice_port.switch_port.sliceport_set.all()
+    for slice_port_obj in slice_ports:
+        if slice_port_obj.type == 1 and slice_port_obj.slice != slice_port.slice:
+            owner_devices = OwnerDevice.objects.filter(slice_port=slice_port_obj)
+            if slice_port_obj.slice.get_nw() == None:
+                for owner_device in owner_devices:
+                    macs = owner_device.mac_list.split(',')
+                    for mac in macs:
+                        if mac not in base_macs:
+                            base_macs.append(mac)
+            else:
+                for owner_device in owner_devices:
+                    macs = owner_device.mac_list.split(',')
+                    for mac in macs:
+                        if mac not in base_macs:
+                            mix_macs.append(mac)
+    error_macs = []
+    cur_macs = mac_list.split(',')
+    if slice_port.slice.get_nw() == None:
+        for cur_mac in cur_macs:
+            if cur_mac in base_macs:
+                error_macs.count(cur_mac)
+            else:
+                if cur_mac in mix_macs:
+                    error_macs.count(cur_mac)
+    else:
+        for cur_mac in cur_macs:
+            if cur_mac in base_macs:
+                error_macs.count(cur_mac)
+    return ','.join(error_macs)
+
+
 def slice_add_owner_device(slice_port, mac_list):
     """slice添加用户自接入设备。
     mac_list为字符串类型，最长1024，格式为“mac1,mac2,...”
@@ -326,6 +362,9 @@ def slice_add_owner_device(slice_port, mac_list):
     LOG.debug('slice_add_owner_device')
     try:
         if slice_port and mac_list:
+            error_macs = check_macs(slice_port, mac_list)
+            if error_macs != "":
+                raise DbError("mac地址冲突（" + error_macs + "）！")
             owner_devices = OwnerDevice.objects.filter(slice_port=slice_port)
             if owner_devices:
                 owner_device = owner_devices[0]
