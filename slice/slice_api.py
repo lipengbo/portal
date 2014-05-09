@@ -159,13 +159,13 @@ def slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected):
             flowspace_gw_add(slice_obj, gw.mac)
         else:
             raise DbError("网关添加失败!")
-    except Exception:
+    except Exception, ex:
         try:
             gw.delete()
         except:
             pass
         transaction.rollback()
-        raise
+        raise DbError(ex.message)
     else:
         transaction.commit()
 
