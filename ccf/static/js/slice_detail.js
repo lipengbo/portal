@@ -438,49 +438,65 @@ function select_to_add_device(slice_id){
 }
 
 function can_create_vm(slice_id){
-    $.ajax({
-        url: '/plugins/vt/can_create_vm/'+slice_id+'/',
-        type: 'GET',
-        dataType: 'json',
-        success: function(data){
-            if(data.result == 0){
-                location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/";
-            }else{
-                $("div#slice_alert_info").empty();
-                str = "" + "<p class=\"text-center\">虚拟机个数已达上限！</p>";
-                $("div#slice_alert_info").append(str);
-                $('#slicealertModal').modal('show');
+    var a_obj = $("#vm_add")[0];
+    if(a_obj.style.cursor == "not-allowed"){
+        $("div#slice_alert_info").empty();
+        str = "" + "<p class=\"text-center\">请确保虚网已停止！</p>";
+        $("div#slice_alert_info").append(str);
+        $('#slicealertModal').modal('show');
+    }else{
+        $.ajax({
+            url: '/plugins/vt/can_create_vm/'+slice_id+'/',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data){
+                if(data.result == 0){
+                    location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/";
+                }else{
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">虚拟机个数已达上限！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }
+    
             }
-
-        }
-    });
+        });
+    }
 }
 
 function can_add_port(slice_id){
     //判断是否有可用的边缘端口
-    var ports = 0;
-    $.ajax({
-        url : "/plugins/vt/get_switch_port/"+slice_id+"/",
-        type : "GET",
-        dataType : "json",
-        async : false,
-        success : function(switchs){
-            $.each(switchs, function(i, _switch){
-                $.each(_switch['ports'], function(j, _port){
-                   ports++;
+    var a_obj = $("#port_add")[0];
+    if(a_obj.style.cursor == "not-allowed"){
+        $("div#slice_alert_info").empty();
+        str = "" + "<p class=\"text-center\">请确保虚网已停止！</p>";
+        $("div#slice_alert_info").append(str);
+        $('#slicealertModal').modal('show');
+    }else{
+        var ports = 0;
+        $.ajax({
+            url : "/plugins/vt/get_switch_port/"+slice_id+"/",
+            type : "GET",
+            dataType : "json",
+            async : false,
+            success : function(switchs){
+                $.each(switchs, function(i, _switch){
+                    $.each(_switch['ports'], function(j, _port){
+                       ports++;
+                    });
+                            
                 });
-                        
-            });
-            if(ports == 0){
-                $("div#slice_alert_info").empty();
-                str = "" + "<p class=\"text-center\">没有可用的边缘节点端口！</p>";
-                $("div#slice_alert_info").append(str);
-                $('#slicealertModal').modal('show');
-            }else{
-                location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";
-            }
-       }
-    });
+                if(ports == 0){
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">没有可用的边缘节点端口！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }else{
+                    location.href = "http://" + window.location.host + "/plugins/vt/create/device/"+slice_id+"/";
+                }
+           }
+        });
+    }
 }
 
 function delete_switch_port(sliceid, portid){
