@@ -91,25 +91,34 @@ function check_island_id(obj_id){
 }
 //验证控制器的选择
 function check_slice_controller(obj_name){
-	var objs = document.getElementsByName(obj_name);
+    var slice_type = $("#slice_type").text();
+    if(slice_type == "baseslice"){
+        var objs = document.getElementsByName("base_controller_type");
+    }else{
+        var objs = document.getElementsByName("controller_type");
+    }
 	for(var i=0;i<objs.length;i++){  
 		if(objs[i].checked){  
 			if(objs[i].value=="default_create"){  
 				return true; 
 			}  
 			if(objs[i].value=="user_define"){
-				cip0_obj = document.getElementById("cip0");
-				cip1_obj = document.getElementById("cip1");
-				cip2_obj = document.getElementById("cip2");
-				cip3_obj = document.getElementById("cip3");
-				controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
-				//controller_ip_port = controller_ip_port_obj.value.split(":")
-				var info = document.getElementById("controller_ip_portInfo");
-				//if(controller_ip_port.length != 2){
-				//	showInfo(info," * 格式错误(ip:port)","red");
-				//	return false;
-				//}
-				//else{
+			    if(slice_type == "baseslice"){
+                    bip0_obj = document.getElementById("bip0");
+                    bip1_obj = document.getElementById("bip1");
+                    bip2_obj = document.getElementById("bip2");
+                    bip3_obj = document.getElementById("bip3");
+                    controller_ip = ''+bip0_obj.value+'.'+bip1_obj.value+'.'+bip2_obj.value+'.'+bip3_obj.value;
+                    var info = document.getElementById("base_controller_ip_portInfo");
+                }else{
+                    cip0_obj = document.getElementById("cip0");
+                    cip1_obj = document.getElementById("cip1");
+                    cip2_obj = document.getElementById("cip2");
+                    cip3_obj = document.getElementById("cip3");
+                    controller_ip = ''+cip0_obj.value+'.'+cip1_obj.value+'.'+cip2_obj.value+'.'+cip3_obj.value;
+                    var info = document.getElementById("controller_ip_portInfo");
+                }
+				
 				ret1 = check_ip(controller_ip,1);
 				if(!ret1){
 					return false;
@@ -131,7 +140,12 @@ function check_slice_controller(obj_name){
 
 //验证IP地址格式
 function check_ip(ip,flag){
-	var info = document.getElementById("controller_ip_portInfo");
+    var slice_type = $("#slice_type").text();
+    if(slice_type == "baseslice"){
+	   var info = document.getElementById("base_controller_ip_portInfo");
+	}else{
+	   var info = document.getElementById("controller_ip_portInfo");
+	}
 	var reg=/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/;//正则表达式
 
 	if(ip.length > 0){
@@ -159,9 +173,15 @@ function check_ip(ip,flag){
 
 //校验端口值
 function check_port(port,flag){
-	var info = document.getElementById("controller_ip_portInfo");
 	if(port == 'port'){
-	   var controller_port = document.getElementById("controller_port");
+	   var slice_type = $("#slice_type").text();
+        if(slice_type == "baseslice"){
+            var info = document.getElementById("base_controller_ip_portInfo");
+            var controller_port = document.getElementById("base_controller_port");
+        }else{
+            var info = document.getElementById("controller_ip_portInfo");
+            var controller_port = document.getElementById("controller_port");
+        }
 	   port = controller_port.value;
 	}
 	var reg = /^[0-9]*$/;
@@ -578,15 +598,16 @@ function trans(mask){
     var slice_type = $("#slice_type").text();
     var ret;
     var STATIC_URL = $("#STATIC_URL").text();
-    if(slice_type == "mixslice"){
-        ret = check_slice_controller('controller_type');
-    }else{
-        ret = check_slice_controller('controller_type');
-    }
+    ret = check_slice_controller('controller_type');
+
     if(ret){
-        var controller_type_objs = document.getElementsByName("controller_type");
-        var controller_sys_obj = document.getElementById("controller_sys");
-        //var controller_ip_port_obj = document.getElementById("controller_ip_port");
+        if(slice_type == "baseslice"){
+            var controller_type_objs = document.getElementsByName("base_controller_type");
+        }else{
+            var controller_type_objs = document.getElementsByName("controller_type");
+            var controller_sys_obj = document.getElementById("controller_sys");
+        }
+        
         var controller_type;
         for(var i=0;i<controller_type_objs.length;i++){  
             if(controller_type_objs[i].checked){  
@@ -605,15 +626,25 @@ function trans(mask){
                         "controller_ip": "",
                         "controller_port": ""};
         }else{
-            cip0_obj = document.getElementById("cip0");
-            cip1_obj = document.getElementById("cip1");
-            cip2_obj = document.getElementById("cip2");
-            cip3_obj = document.getElementById("cip3");
-            controller_ip = ''+parseInt(cip0_obj.value)+'.'+parseInt(cip1_obj.value)+'.'+parseInt(cip2_obj.value)+'.'+parseInt(cip3_obj.value);
-            controller_port_obj = document.getElementById("controller_port");
+            if(slice_type=="baseslice"){
+                bip0_obj = document.getElementById("bip0");
+                bip1_obj = document.getElementById("bip1");
+                bip2_obj = document.getElementById("bip2");
+                bip3_obj = document.getElementById("bip3");
+                controller_ip = ''+parseInt(bip0_obj.value)+'.'+parseInt(bip1_obj.value)+'.'+parseInt(bip2_obj.value)+'.'+parseInt(bip3_obj.value);
+                controller_port_obj = document.getElementById("base_controller_port");
+            
+            }else{
+                cip0_obj = document.getElementById("cip0");
+                cip1_obj = document.getElementById("cip1");
+                cip2_obj = document.getElementById("cip2");
+                cip3_obj = document.getElementById("cip3");
+                controller_ip = ''+parseInt(cip0_obj.value)+'.'+parseInt(cip1_obj.value)+'.'+parseInt(cip2_obj.value)+'.'+parseInt(cip3_obj.value);
+                controller_port_obj = document.getElementById("controller_port");
+            }
             //var controller_ip_port = controller_ip_port_obj.value.split(":");
             submit_data = {"controller_type": controller_type,
-                            "controller_sys": controller_sys_obj.value,
+                            "controller_sys": "",
                             "controller_ip": controller_ip,
                             "controller_port": controller_port_obj.value};
         }
@@ -626,10 +657,16 @@ function trans(mask){
                 async: false, 
                 success: function(data) {
                     if (data.result == 1 || data.result == 2){
-                        update_list(document.location);
+                        //alert("ok");
+                        update_list_content(document.location, "list_fw");
+                        if(slice_type == "baseslice"){
+                            $('#basecttitle')[0].innerHTML = "虚网控制器编辑";
+                        }else{
+                            $('#mixcttitle')[0].innerHTML = "虚网控制器编辑";
+                        }
                     }
                     else{
-                        //alert(failed);
+                        //alert("failed");
                         $("div#slice_alert_info").empty();
                         str = "" + "<p class=\"text-center\">"+data.error_info+"</p>";
                         $("div#slice_alert_info").append(str);
@@ -643,7 +680,13 @@ function trans(mask){
                     $('#slicealertModal').modal('show');
                 }
         });
-        $('#editSliceModal').modal('hide');
+        if(slice_type == "baseslice"){
+            $('#editbasectModal').modal('hide');
+        }else{
+            $('#editmixctModal').modal('hide');
+        }
+        $("div#ts").empty();
+        
     }
  }
 

@@ -237,6 +237,8 @@ def create_or_edit_controller(request, slice_id):
     try:
         slice_edit_controller(slice_obj, controller_info)
     except Exception, ex:
+        import traceback
+        traceback.print_exc()
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         controller = slice_obj.get_controller()
@@ -256,15 +258,15 @@ def create_or_edit_controller(request, slice_id):
 @login_required
 def create_gw(request, slice_id):
     """创建slice网关。"""
-    print "create_gw_n"
+    print "create_gw"
     slice_obj = get_object_or_404(Slice, id=slice_id)
     if not request.user.has_perm('slice.change_slice', slice_obj):
         return redirect('forbidden')
-    gw_host_id = request.POST.get("gw_host_id")
-    gw_ip = request.POST.get("gw_ip")
-    dhcp_selected = request.POST.get("dhcp_selected")
     try:
-        gw = slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected)
+        gw_host_id = request.POST.get("gw_host_id")
+        gw_ip = request.POST.get("gw_ip")
+        dhcp_selected = request.POST.get("dhcp_selected")
+        slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected)
     except Exception, ex:
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
@@ -419,36 +421,35 @@ def detail(request, slice_id):
     gw = slice_obj.get_gw()
     vms = slice_obj.get_common_vms()
     show_vms = []
-    if controller:
-        show_vm = {}
-        if controller.host:
-            show_vm['id'] = controller.host.id
-            show_vm['host_ip'] = controller.host.server.ip
-            show_vm['state'] = controller.host.state
-            show_vm['uuid'] = controller.host.uuid
-            show_vm['type_id'] = 2
-        else:
-            show_vm['id'] = 0
-            show_vm['host_ip'] = ""
-            show_vm['state'] = ""
-            show_vm['uuid'] = ""
-            show_vm['type_id'] = 1
-        if controller.name == 'user_define':
-            show_vm['name'] = "自定义控制器"
-        else:
-            show_vm['name'] = controller.name
-
-        show_vm['type'] = "控制器"
-        show_vm['dhcp'] = "无"
-        show_vm['ip'] = controller.ip + ":" + str(controller.port)
-        show_vms.append(show_vm)
-    if gw:
-        if gw.enable_dhcp:
-            show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-                             'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
-        else:
-            show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-                             'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"无"})
+#         show_vm = {}
+#         if controller.host:
+#             show_vm['id'] = controller.host.id
+#             show_vm['host_ip'] = controller.host.server.ip
+#             show_vm['state'] = controller.host.state
+#             show_vm['uuid'] = controller.host.uuid
+#             show_vm['type_id'] = 2
+#         else:
+#             show_vm['id'] = 0
+#             show_vm['host_ip'] = ""
+#             show_vm['state'] = ""
+#             show_vm['uuid'] = ""
+#             show_vm['type_id'] = 1
+#         if controller.name == 'user_define':
+#             show_vm['name'] = "自定义控制器"
+#         else:
+#             show_vm['name'] = controller.name
+#
+#         show_vm['type'] = "控制器"
+#         show_vm['dhcp'] = "无"
+#         show_vm['ip'] = controller.ip + ":" + str(controller.port)
+#         show_vms.append(show_vm)
+#     if gw:
+#         if gw.enable_dhcp:
+#             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+#                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
+#         else:
+#             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
+#                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"无"})
     for vm in vms:
         if vm.enable_dhcp:
             show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
@@ -460,7 +461,7 @@ def detail(request, slice_id):
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
     context['dhcp'] = slice_obj.get_dhcp()
-    context['checkband'] = slice_obj.checkband()
+    context['checkband'] = 0
     context['controller'] = controller
     context['gw'] = gw
     context['devices'] = list_own_devices(slice_id)
@@ -476,7 +477,14 @@ def detail(request, slice_id):
         context['start_ip'] = subnet.get_ip_range()[0]
         context['end_ip'] = subnet.get_ip_range()[1]
     if request.is_ajax():
-        return render(request, 'slice/vm_list_page.html', context)
+        if 'div_name' in request.GET:
+            div_name = request.GET.get('div_name')
+            if div_name == 'list_fw':
+                return render(request, 'slice/fw_list_page.html', context)
+            if div_name == 'list_vm':
+                return render(request, 'slice/vm_list_page.html', context)
+            if div_name == 'list_port':
+                return render(request, 'slice/port_list_page.html', context)
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -769,6 +777,18 @@ def delete_switch_port(request, slice_id, portid):
         return HttpResponse(json.dumps({'result':'1'}))
 
 
+
+def get_select_server(request, slice_id):
+    print "get_select_server"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    servers = []
+    try:
+        server_objs = slice_obj.get_servers()
+        for server_obj in server_objs:
+            servers.append({'id':server_obj.id, 'name':server_obj.name})
+    except:
+        servers = []
+    return HttpResponse(json.dumps(servers))
 
 
 def test_cnvp():

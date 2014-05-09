@@ -12,11 +12,11 @@
          {%if extent_html == "site_base.html"%}
                 {%if controller.host %}
                 {%if controller.host.state == 8 or controller.host.state == 9 or controller.host.state == 10 or controller.host.state == 12 or controller.host.state == 13 %}
-                        <a href="javascript:void(0);" id="0_qt" onclick="start_stop_vm(0, 2);" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="0_qt" onclick="start_stop_vm(0, 2);" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:pointer">
                         {%if controller.host.state == 1 %}
                             <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
                         {%else%}
@@ -29,11 +29,11 @@
             {%if extent_html == "admin_base.html"%}
                 {%if controller.host%}
                     {%if controller.host.state == 1 %}
-                        <a href="javascript:void(0);" id="0_jk" onclick="jk_vm(0);" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_jk" onclick="jk_vm({{controller.host.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_jk.png" title="监控" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="0_jk" onclick="jk_vm(0);" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_jk" onclick="jk_vm({{controller.host.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_jk_gray.png" title="监控" />
                         </a>
                     {%endif%}
@@ -42,11 +42,11 @@
             {%if extent_html == "site_base.html"%}
                 {%if controller.host%}
                     {%if controller.host.state == 1 %}
-                        <a href="javascript:void(0);" id="0_dl" onclick="dl_vm(0);" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_dl" onclick="dl_vm({{controller.host.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="0_dl" onclick="dl_vm(0);" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_dl" onclick="dl_vm({{controller.host.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}
@@ -54,14 +54,26 @@
             {%endif%}
             {%if extent_html == "site_base.html" and permission == "edit" %}
                 {%if controller %}
-                    {%if slice_obj.state == 0 %}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
-                        <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
-                        </a>
+                    {%if controller.host%}
+                        {%if slice_obj.state == 0 %}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
+                            </a>
+                        {%else%}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                            </a>
+                        {%endif%}
                     {%else%}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
-                        <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
-                        </a>
+                        {%if slice_obj.state == 0 %}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
+                            </a>
+                        {%else%}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                            </a>
+                        {%endif%}
                     {%endif%}
                 {%endif%}
             {%endif%}
@@ -72,14 +84,14 @@
     <table class="table_base">
         <tbody>
             <tr>
-                <td width="120">创建方式：</td>
+                <td width="100">创建方式：</td>
                 <td width="120">{%if controller.name == 'user_define'%}自定义{%else%}默认创建{%endif%}</td>
                 {%if controller.name == 'user_define'%}
-                    <td width="120"></td>
-                    <td width="120"></td>
+                    <td width="100"></td>
+                    <td></td>
                 {%else%}
-                    <td width="120">控制器类型：</td>
-                    <td width="120">FloodLight</td>
+                    <td width="100">控制器类型：</td>
+                    <td>{{controller.name}}</td>
                 {%endif%}
             </tr>
             <tr>
@@ -87,15 +99,15 @@
                 <td class="slice_state">
                 {% if controller.host and controller.host.state != "" %}
                     {% if controller.host.state == 8 or controller.host.state == 12 or controller.host.state == 13%}
-                        <i class="icon-spinner icon-spin check_vm" id="icon_state0"></i>
+                        <i class="icon-spinner icon-spin check_vm" id="icon_state{{controller.host.id}}"></i>
                     {% elif controller.host.state == 9 or controller.host.state == 10 %}
-                        <i class="icon-remove-sign" id="icon_state0"></i>
+                        <i class="icon-remove-sign" id="icon_state{{controller.host.id}}"></i>
                     {% elif controller.host.state == 11 %}
-                        <i class="icon-warning-sign" id="icon_state0" title="资源不足"></i>
+                        <i class="icon-warning-sign" id="icon_state{{controller.host.id}}" title="资源不足"></i>
                     {% elif controller.host.state == 1 %}
-                        <i class="icon-ok-sign icon_state" id="icon_state0"></i>
+                        <i class="icon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                     {%else%}
-                        <i class="icon-minus-sign icon_state" id="icon_state0"></i>
+                        <i class="icon-minus-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                     {%endif%}
               {%else%}
               无
@@ -165,7 +177,7 @@
     <table class="table_base">
         <tbody>
             <tr>
-                <td width="120">网关IP地址：</td>
+                <td width="100">网关IP地址：</td>
                 <td width="120">{{gw.ip}}</td>
                 <td width="120">宿主机IP地址：</td>
                 <td>{{gw.server.ip}}</td>
@@ -194,7 +206,9 @@
             </tr>
             <tr> 
                 <td>DHCP服务：</td>
-                <td>{%if slice_obj.get_dhcp != None %}
+                <td>
+                <div class="tuopu_btn">
+                {%if slice_obj.get_dhcp != None %}
                     <span class="switch_btn dhcp checked" 
                     {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
                     style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
@@ -206,7 +220,9 @@
                     style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
                         <span class="switch_content">停止</span>
                     </span>
-                {%endif%}</td>
+                {%endif%}
+                </div>
+                </td>
                 <td></td>
                 <td></td>
             </tr>

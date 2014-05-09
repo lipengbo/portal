@@ -105,13 +105,18 @@ function dl_vm(vm_id){
 //控制器编辑click事件
 function bj_vm(vm_id){
     var a_obj = $("#"+vm_id+"_bj")[0];
+    var slice_type = $("#slice_type").text();
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
         //alert(1);
-        $('#editSliceModal').modal('show');
+        if(slice_type == "baseslice"){
+            $('#editbasectModal').modal('show');
+        }else{
+            $('#editmixctModal').modal('show');
+        }
         return true;
     }
 }
@@ -120,13 +125,17 @@ function bj_vm(vm_id){
 //控制器添加click事件
 function add_ct(){
     var a_obj = $("#add_ct")[0];
+    var slice_type = $("#slice_type").text();
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
-        //alert(1);
-        $('#addbasectModal').modal('show');
+        if(slice_type == "baseslice"){
+            $('#editbasectModal').modal('show');
+        }else{
+            $('#editmixctModal').modal('show');
+        }
         return true;
     }
 }
@@ -333,9 +342,14 @@ $(".switch_btn").click(function(){
                 $(this).children(".switch_content").html("停止");
             }
         }else{
-            document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);
-            $(this).removeClass("checked");
-            $(this).children(".switch_content").html("停止");
+            if($(this).hasClass("add_dhcp")){
+                $(this).removeClass("checked");
+                $(this).children(".switch_content").html("否");
+            }else{
+                document.getElementById('topologyiframe').contentWindow.random_refresh2 (0);
+                $(this).removeClass("checked");
+                $(this).children(".switch_content").html("停止");
+            }
         }
     }else {
         //alert(4);
@@ -348,9 +362,14 @@ $(".switch_btn").click(function(){
                 $(this).children(".switch_content").html("启动");
             }
         }else{
-            document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);
-            $(this).addClass("checked");
-            $(this).children(".switch_content").html("启动"); 
+            if($(this).hasClass("add_dhcp")){
+                $(this).addClass("checked");
+                $(this).children(".switch_content").html("是");
+            }else{
+                document.getElementById('topologyiframe').contentWindow.random_refresh2 (1);
+                $(this).addClass("checked");
+                $(this).children(".switch_content").html("启动"); 
+            }
         }
     }
 });
@@ -547,5 +566,144 @@ function add_device(slice_id){
 function show_uuid(objs){
     for (var i=0; i<objs.length; i++){
         objs[i].innerHTML = objs[i].innerHTML.split("-")[0] + "...";
+    }
+}
+
+
+//提交虚拟网关信息
+function submit_gw(slice_id){
+    ret = check_gw_select();
+    if(ret){
+        var id_server_gw_obj = document.getElementById("id_server_gw");
+        var gateway_ip_obj = document.getElementById("gateway_ip");
+        var dhcp_selected = 0;
+        if($('.switch_btn.add_dhcp').hasClass("checked")){
+            dhcp_selected = 1; 
+        }
+        var id_server_gw_obj_value = 0;
+        var gateway_ip_obj_value = '';
+        if(id_server_gw_obj && gateway_ip_obj && id_server_gw_obj.value && gateway_ip_obj.value){
+            id_server_gw_obj_value = id_server_gw_obj.value;
+            gateway_ip_obj_value = gateway_ip_obj.value;
+        }
+        var submit_data = {"gw_host_id": id_server_gw_obj_value,
+                    "gw_ip": gateway_ip_obj_value,
+                    "dhcp_selected": dhcp_selected  
+        };
+
+        check_url = "http://" + window.location.host + "/slice/create_gw/"+slice_id+"/";
+        var ajax_ret = true;
+        $.ajax({
+                type: "POST",
+                url: check_url,
+                dataType: "json",
+                data: submit_data,
+                async: false, 
+                success: function(data) {
+                    if (data.result == 1){
+                        update_list_content(document.location, "list_fw");
+    
+                    }else{
+                        $("div#slice_alert_info").empty();
+                        str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                        $("div#slice_alert_info").append(str);
+                        $('#slicealertModal').modal('show');
+                        ajax_ret = false;
+                    }
+                },
+                error: function(data) {
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">添加网关异常！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                    ajax_ret = false;
+                }
+        });
+        $('#addgwModal').modal('hide');
+        $("div#ts").empty();
+    } 
+}
+
+//添加虚拟网关
+function add_gw(){
+    var a_obj = $("#add_gw")[0];
+    var slice_uuid = $("#slice_uuid").text();
+    var slice_id = $("#slice_id").text();
+    if(a_obj.style.cursor == "not-allowed"){
+        //alert(0);
+        return false;
+    }else{
+        ret1 = fetch_gw_select_server(slice_id)
+        ret2 = fetch_gateway_ip(slice_uuid);
+        if(ret1 && ret2){
+            $('#addgwModal').modal('show');
+            return true;
+        }else{
+            $("div#slice_alert_info").empty();
+            str = "" + "<p class=\"text-center\">添加网关异常！</p>";
+            $("div#slice_alert_info").append(str);
+            $('#editSliceModal').modal('show');
+            return false;
+        }
+    }
+}
+
+//获取被用户选择的server
+function fetch_gateway_ip(slice_name){
+    var ret = false;
+    $.ajax({
+        url : "/plugins/vt/get_slice_gateway_ip/" + slice_name + "/",
+        type : "GET",
+        contentType: "application/json; charset=utf-8",
+        dataType : "json",
+        async: false,
+        success : function(gw_ips){
+            document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
+            ret = true;
+        }
+    });
+    return ret;
+}
+
+//获取被用户选择的server
+function fetch_gw_select_server(slice_id){
+    check_url = "http://" + window.location.host + "/slice/get_select_server/"+slice_id+"/";
+    //alert(check_url)
+    var ret = false;
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: false,  
+        success: function(data) {
+                servers = data;
+                content = '<option value="" selected="selected">---------</option>';
+                for(var i=0; i < servers.length; i++)
+                {
+                    content = content + '<option value="' + servers[i].id;
+                    content = content +  '">';
+                    content = content + servers[i].name;
+                    content = content + '</option>';
+                }
+                var obj = $("#id_server_gw")[0];
+                obj.innerHTML = "" + content;
+                ret = true;
+        }
+    });
+    return ret;  
+}
+
+//验证是否选择了gw的server
+function check_gw_select(){
+    var info = document.getElementById('gwInfo');
+    if($('#id_server_gw').get(0).selectedIndex == 0){
+        $(".gw_ip").addClass("has-error");
+        showInfo(info," * 该项为必填项","red");
+        return false;
+    }else{
+        info.innerHTML = '';
+        $(".gw_ip").removeClass("has-error");
+        return true;
     }
 }
