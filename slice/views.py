@@ -463,9 +463,13 @@ def detail(request, slice_id):
         context['end_ip'] = ""
     else:
         context['slice_type'] = "mixslice"
-        print "ip range == ", subnet.get_ip_range()
-        context['start_ip'] = subnet.get_ip_range()[0]
-        context['end_ip'] = subnet.get_ip_range()[1]
+        ip_range = subnet.get_ip_range(slice_obj.vm_num)
+        context['vm_start_ip'] = ip_range[0]
+        context['vm_end_ip'] = ip_range[1]
+        context['device_start_ip'] = ip_range[2]
+        context['device_end_ip'] = ip_range[3]
+        context['start_ip'] = ip_range[4]
+        context['end_ip'] = ip_range[5]
     if request.is_ajax():
         print "++++++++++++++++++++++++++ajax"
         if 'div_name' in request.GET:
