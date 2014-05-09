@@ -3,7 +3,7 @@
 <h4 class="block_title">
     <img src="{{ STATIC_URL}}img/ic_lb.png" />自接入设备端口列表<span>【网段：{{ device_start_ip }}-{{ device_end_ip }}】</span>
         <div class="pull-right">
-            <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="can_add_port({{slice_obj.id}});"
+            <a class="bianji" id="port_add" href="javascript:void(0);" onclick="can_add_port({{slice_obj.id}});"
                  {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%} title="创建端口">
                 <i class="icon-plus"></i>
             </a>
