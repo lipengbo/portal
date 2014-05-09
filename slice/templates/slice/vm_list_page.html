@@ -129,12 +129,17 @@
     {%endfor%}
   </tbody>
 </table>
+
 <div class="text-center">
     <ul class="pagination">
         {% show_pages %}
     </ul>
 </div>
+
+
 <script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
+            <script src="{% static "js/bootstrap.min.js" %}"></script>
+
 <script>
     $(document).ready(function(){
         show_uuid($("[id='uuid']"));
