@@ -1,7 +1,7 @@
 # coding:utf-8
 from celery import task
 from slice.models import Slice
-from plugins.openflow.flowvisor_api import flowvisor_update_slice_status, flowvisor_add_slice, flowvisor_update_sice_controller
+from plugins.openflow.flowvisor_api import flowvisor_del_slice, flowvisor_update_slice_status, flowvisor_add_slice, flowvisor_update_sice_controller
 from slice.slice_api import update_slice_virtual_network_cnvp, update_slice_virtual_network_flowvisor
 from plugins.vt.models import DOMAIN_STATE_DIC
 from slice.slice_exception import DbError
@@ -102,6 +102,8 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
             if flag:
                 flowvisor_update_slice_status(flowvisor,
                                               slice_obj.id, False)
+            if slice_obj.ct_change == None:
+                flowvisor_del_slice(flowvisor, slice_obj.id)
         except:
             pass
 
