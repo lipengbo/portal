@@ -64,10 +64,7 @@ def vm_list(request, sliceid):
     return render(request, 'vt/vm_list.html', context)
 
 
-def create_vm(request, sliceid, from_link):
-    """
-    from_link : 记录链接跳转的入口，以便返回原来的页面。 0 为从slic详情页面转入， 1为从虚拟机列表页面转入
-    """
+def create_vm(request, sliceid):
     user = request.user
     vm_count = VirtualMachine.objects.total_vms(user)
     if request.method == 'POST':
@@ -124,8 +121,11 @@ def create_vm(request, sliceid, from_link):
             except ResourceNotEnough, e:
                 vm.state = 11
                 vm.type =1
-                vm.save()
-                return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+                try:
+                    vm.save()
+                    return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+                except:
+                    raise
             except StopIteration, e:
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
@@ -161,7 +161,6 @@ def create_vm(request, sliceid, from_link):
         context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
-        context['from_link'] = from_link
         return render(request, 'vt/create_vm.html', context)
 
 
@@ -177,9 +176,9 @@ def create_device(request, sliceid):
 
 
             return HttpResponse(json.dumps({'result':0}))
-        except:
+        except Exception, e:
             traceback.print_exc()
-            return HttpResponse(json.dumps({'result':1}))
+            return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
         context['slice_obj'] = Slice.objects.get(id=sliceid)
@@ -229,14 +228,7 @@ def vnc(request, vmid):
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
-            % (request.META.get('HTTP_HOST').split(':')[0], token)
-    #context = {}
-    #context['host_ip'] = host_ip
-    #context['vnc_port'] = vnc_port
-    #context['tunnel_host'] = '192.168.5.9'
-    #context['vm'] = vm
-    #return render(request, 'vt/vnc.html', context)
-    #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+                        % (request.META.get('HTTP_HOST').split(':')[0], token)
     return HttpResponseRedirect(novnc_url)
 
 
@@ -324,3 +316,11 @@ def download_keypair(request):
     response = HttpResponse(sshkey.private_key, content_type='plain/text')
     response['Content-Disposition'] = 'attachment; filename="id_rsa"'
     return response
+
+def can_create_vm(request, sliceid):
+    slice = get_object_or_404(Slice, id=sliceid)
+    vms_num = slice.get_common_vms().count()
+    if vms_num < slice.vm_num:
+        return HttpResponse(json.dumps({'result': '0'}))
+    else:
+        return HttpResponse(json.dumps({'result': '1'}))

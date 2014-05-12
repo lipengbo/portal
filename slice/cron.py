@@ -37,29 +37,15 @@ class Checkslice(Job):
             print slice_obj.date_expired
             date = datetime.datetime.now() - slice_obj.date_expired
             if date > time_delta:
-#                 print "_____________________________________________________________time manage 2"
                 try:
-                    print 1
-                    email = slice_obj.owner.email
-                    slice_deleted = SliceDeleted(name = slice_obj.name,
-                        show_name = slice_obj.show_name,
-                        owner_name = slice_obj.owner.username,
-                        description = slice_obj.description,
-                        project_name = slice_obj.project.name,
-                        date_created = slice_obj.date_created,
-                        date_expired = slice_obj.date_expired,
-                        type = 2)
-                    print 2
-                    slice_obj.delete()
-                    print 3
-                except Exception, ex:
-                    print 4
+#                     email = slice_obj.owner.email
+#                     slice_name = slice_obj.name
+                    slice_obj.delete(user=None)
+                except:
                     pass
-                else:
-                    print 5
-                    slice_deleted.save()
+#                 else:
 #                     if email:
-#                         send_mail("slice 已过期 ", 'slice('+slice_deleted.show_name+')已过期！', 'chenjunxia@fnic.cn', [email], fail_silently=False)
+#                         send_mail("slice 已过期 ", 'slice('+slice_name+')已过期！', 'chenjunxia@fnic.cn', [email], fail_silently=False)
             else:
                 pass
 

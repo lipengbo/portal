@@ -1,0 +1,47 @@
+{% load endless %}
+{% paginate 4 devices using "port_page" %}
+<h4 class="block_title">
+    <img src="{{ STATIC_URL}}img/ic_lb.png" />自接入设备端口列表<span>【可用IP：{{ device_start_ip }}-{{ device_end_ip }}】</span>
+        <div class="pull-right">
+            <a class="bianji" id="port_add" href="javascript:void(0);" onclick="can_add_port({{slice_obj.id}});"
+                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%} title="创建端口">
+                <i class="icon-plus"></i>
+            </a>
+        </div>                                            
+</h4>
+<table class="table_defined">
+    <thead>
+        <tr>
+            <th width="20%">名称</th>
+            <th width="15%">端口号</th>
+            <th width="15%">所在交换机</th>
+            <th width="15%">类型</th>
+            <th width="20%">Mac列表</th>
+            <th width="15%">操作</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for device in devices %}
+        <tr>
+            <td>{{device.port_name}}</td>
+            <td>{{device.port}}</td>
+            <td>{{device.switch_name}}</td>
+            <td>{% if device.is_monopo == 1 %}共享{%else%}独占{%endif%}</td>
+            <td>{% if device.mac_list == '' %}无{%else%}{{device.mac_list}}{%endif%}</td>
+            <td class="btn_operation"> 
+                {%if extent_html == "admin_base.html" or permission == "edit" %}
+                <a href="javascript:void(0);" id="" onclick="delete_switch_port({{slice_obj.id}},  {{device.port_id}})" style="cursor:pointer">
+                    <img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" />
+                </a>
+
+                {%endif%}
+            </td>
+        </tr>
+    {%endfor%}
+    </tbody>
+</table>
+<div class="text-center">
+    <ul class="pagination">
+        {% show_pages %}
+    </ul>
+</div>

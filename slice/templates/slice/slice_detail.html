@@ -11,19 +11,33 @@
 {% endblock %}
 
 {% block body %}
+<div id="ts">
+{%if extent_html == "site_base.html" %}
+{%if slice_type == "baseslice" and controller == None%}
 <div class="alert alert-danger">
     <strong>提示：</strong>您当前还未进行服务配置
 </div>
-        <!--<div class="alert alert-info alert_defined">
-            启动步骤：1.启动控制器 <i class="glyphicon glyphicon-arrow-right"></i> 2.启动虚拟网关 <i class="glyphicon glyphicon-arrow-right"></i> 3.启动虚网 <i class="glyphicon glyphicon-arrow-right"></i> 4.启动虚拟机
-        </div>-->
+{%endif%}
+{%if slice_type == "mixslice" and controller == None and gw == None%}
+<div class="alert alert-danger">
+    <strong>提示：</strong>您当前还未进行服务配置
+</div>
+{%endif%}
+{%if slice_type == "mixslice" and controller == None and gw%}
+<div class="alert alert-danger">
+    <strong>提示：</strong>您当前还未添加网关
+</div>
+{%endif%}
+{%endif%}
+</div>
         <table class="table_defined">
             <thead>
                 <tr>
                     <th width="16%">虚网名称</th>
                     <th width="28%">描述</th>
-                    <th width="20%">网段</th>
-                    <th width="16%">所属节点</th>
+                    <th width="12%">所属节点</th>
+                    <th width="12%">类型</th>
+                    <th width="12%">网段</th>
                     <th width="8%">状态</th>
                     <th width="12%">操作</th>
                 </tr>
@@ -32,8 +46,21 @@
              <tr>
                   <td>{{slice_obj.get_show_name}}</td>
                   <td id = "slice_description_old">{{slice_obj.description}}</td>
-                  <td>{{ start_ip }}-{{ end_ip }}</td>
                   <td>{{slice_obj.get_island}}</td>
+                  <td>
+                  {%if start_ip == "" %}
+                  基础虚网
+                  {%else%}
+                  混合虚网
+                  {%endif%}
+                  </td>
+                  <td>
+                  {%if start_ip == "" %}
+                  无
+                  {%else%}
+                  {{ start_ip }}-{{ end_ip }}
+                  {%endif%}
+                  </td>
                   <td class="slice_state">
                     {% if slice_obj.state == 0 %}
                         <i class="icon-minus-sign icon_state" id="slice_state"></i>
@@ -112,194 +139,52 @@
                 </span>
             </div>
             {%endif%}
-            <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=1140&height=300&top=0&band=1" frameborder="0"></iframe>
+            <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=1140&height=300&top=0&band=0" frameborder="0"></iframe>
         </div>
         
         <div class="slice_detail_tab">
             <div class="row">
-                <div class="col-md-4 fw on">
+                <div class="col-md-4 fw {%if div_name == "list_fw" %}on{%endif%}">
                     <a href="javascript:;">服务配置</a>
                 </div>
-                <div class="col-md-4 xnj">
-                     <a href="javascript:;" class="fw">虚拟机资源</a>
+                <div class="col-md-4 xnj {%if div_name == "list_vm" %}on{%endif%}">
+                     <a href="javascript:;">虚拟机资源</a>
                 </div>
-                <div class="col-md-4 zjr">
-                     <a href="javascript:;" class="fw">自接入资源</a>
+                <div class="col-md-4 zjr {%if div_name == "list_port" %}on{%endif%}">
+                     <a href="javascript:;">自接入资源</a>
                 </div>
             </div>
         </div>
         
         <div class="slice_detail_block">
-            <div class="slice_detail_content" style="display:block;">
-                    <h4 class="block_title">
-                        <img src="/site_media/static/img/ic_41.png">控制器配置
-                        <div class="pull-right">
-                             <a href="" class="edit" title="创建控制器"><i class="icon-plus"></i></a>
-                             <a href="javascript:;"><img src="/site_media/static/img/ic-ks.png" title="启动"></a>
-                             <a href="javascript:;"><img src="/site_media/static/img/btn_bj.png" title="编辑"></a>
-                             <a href="javascript:;"><img src="/site_media/static/img/btn_sc.png" title="删除"></a>
-                        </div>                                            
-                    </h4>
-                    <p class="help-block">当前未添加控制器</p> 
-                    <table class="table_base">
-                        <tbody>
-                            <tr>
-                                <td width="120">创建方式：</td>
-                                <td>默认创建</td>
-                            </tr>
-                            <tr>
-                                <td>控制器类型：</td>
-                                <td>FloodLight</td>
-                            </tr>
-                            <tr>
-                                <td>控制器地址：</td>
-                                <td>192.168.5.131</td>
-                            </tr>
-                            <tr>
-                                <td>状态：</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> 
-                    <h4 class="block_title">
-                        <img src="/site_media/static/img/ic_01.png">虚拟网关配置
-                        <div class="pull-right">
-                             <a href="" class="edit" title="创建虚拟网关"><i class="icon-plus"></i></a>
-                             <a href="javascript:;"><img src="/site_media/static/img/ic-ks.png" title="启动"></a>
-                             <a href="javascript:;"><img src="/site_media/static/img/btn_bj.png" title="编辑"></a>
-                             <a href="javascript:;"><img src="/site_media/static/img/btn_sc.png" title="删除"></a>
-                        </div>                                            
-                    </h4>
-                    <p class="help-block">当前未添加控制器</p> 
-                    <table class="table_base">
-                        <tbody>
-                            <tr>
-                                <td width="120">网关IP地址：</td>
-                                <td>默认创建</td>
-                            </tr>
-                            <tr>
-                                <td>宿主机IP地址：</td>
-                                <td>FloodLight</td>
-                            </tr>
-                            <tr>
-                                <td>状态：</td>
-                                <td>192.168.5.131</td>
-                            </tr>
-                            <tr>
-                                <td>DHCP服务：</td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table> 
-                </div>
+            <div class="slice_detail_content" {%if div_name == "list_fw" %}style="display:block;"{%endif%}>
+                <div id="list_fw">
+                    {% include "slice/fw_list_page.html" %}
+                </div>      
+            </div>
             
-                <div class="slice_detail_content">
-                        <h4 class="block_title">
-                            <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【网段：{{ start_ip }}-{{ end_ip }}】
-                            <a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
-                            <div class="pull-right">
-                                 <a href="" class="edit" title="创建虚拟机"><i class="icon-plus"></i></a>                               
-                            </div>                                            
-                        </h4>
-                       <table class="table_defined">
-                           <thead>
-                               <tr>
-                                   <th width="17%">名称</th>
-                                   <th width="15%">UUID</th>
-                                   <th width="15%">DHCP</th>
-                                   <th width="15%">IP地址</th>
-                                   <th width="15%">宿主机</th>
-                                   <th width="8%">状态</th>
-                                   <th width="15%">操作</th>
-                               </tr>
-                           </thead>
-                           <tbody>
-                               <tr>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td></td>
-                                   <td></td>
-                               </tr>
-                           </tbody>
-                       </table>
-               </div>
-               <div class="slice_detail_content">
-                        <h4 class="block_title">
-                            <img src="{{ STATIC_URL}}img/ic_lb.png" />自接入设备端口列表<span>【网段：{{ start_ip }}-{{ end_ip }}】</span>
-                            <div class="pull-right">
-                                 <a href="" class="edit" title="创建端口"><i class="icon-plus"></i></a>                               
-                            </div>                                            
-                        </h4>
-                       <table class="table_defined">
-                           <thead>
-                               <tr>
-                                   <th width="20%">名称</th>
-                                   <th width="15%">端口号</th>
-                                   <th width="15%">所在交换机</th>
-                                   <th width="15%">类型</th>
-                                   <th width="20%">Mac列表</th>
-                                   <th width="15%">操作</th>
-                               </tr>
-                           </thead>
-                           <tbody>
-                               <tr>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td>xxx</td>
-                                   <td></td>
-                               </tr>
-                           </tbody>
-                       </table>
-               </div>
-               
+            <div class="slice_detail_content" {%if div_name == "list_vm" %}style="display:block;"{%endif%}>
+                <div id="list_vm">
+                    {%if slice_type == "mixslice" %}
+                        {% include "slice/vm_list_page.html" %}
+                    {%else%}
+                        <p class="help-block">基础虚网无虚拟机资源！</p>
+                    {%endif%}
+                </div>          
+            </div>
+            
+           <div class="slice_detail_content" {%if div_name == "list_port" %}style="display:block;"{%endif%}>
+                <div id="list_port">
+                    {% include "slice/port_list_page.html" %}
+                </div>  
+           </div>      
         </div>
         
-        <h4 class="block_title show-dhcp">
-            <img src="{{ STATIC_URL}}img/ic_slice.png" />虚网资源<span>
-            <!--a href="/slice/list_own_devices/{{slice_obj.id}}/">外接设备详情</a-->
-			{%if extent_html == "site_base.html" and permission == "edit"%}
-			<a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
-			{%endif%}
-			<div class="pull-right tuopu_btn dhcp_div
-			    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                {%else%}disabled{%endif%}">
-            DHCP服务：                
-                {%if slice_obj.get_dhcp != None %}
-                <span class="switch_btn dhcp checked" 
-                {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
-                    <span class="switch_content">启动</span>
-                </span>
-                {%else%}
-                <span class="switch_btn dhcp" 
-                {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
-                style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
-                    <span class="switch_content">停止</span>
-                </span>
-                {%endif%}
-                
-                {%if extent_html == "site_base.html" and permission == "edit"%}
-                <a class="btn btn_info {% if slice_obj.state != 0 %}disabled{%endif%}" id="vm_add" href="javascript:void(0);" onclick="select_to_add_device({{slice_obj.id}});"
-                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
-                添加
-                </a>
-                {%endif%}
-                
-            </div>
-        </h4>
+        
         <form name="downloadkey" action="/plugins/vt/download_keypair/" method="POST">{% csrf_token %}
             <input type="hidden" name="slice_id" value="{{slice_obj.id}}"/>
         </form>
         
-        <div id="list_show">
-            {% include "slice/vm_list_page.html" %}
-        </div> 
-          
  
         <div class="clear" style="display: none" >
             <p id="STATIC_URL">{{STATIC_URL}}</p>
@@ -309,8 +194,19 @@
             {%else%}
             <p id="edit">0</p>
             {%endif%}
-            <p id="controller_ip_port_old">{{vms.0.ip}}</p>
+            {%if slice_obj.get_controller%}
+            <p id="controller_ip_port_old">{{slice_obj.get_controller.ip}}:{{slice_obj.get_controller.port}}</p>
+            {%else%}
+            <p id="controller_ip_port_old">""</p>
+            {%endif%}
+            {%if slice_obj.get_nw %}
             <p id="controller_type">{{vms.0.type_id}}</p>
+            {%else%}
+            <p id="controller_type">1</p>
+            {%endif%}
+            <p id="slice_type">{{slice_type}}</p>
+            <p id="slice_uuid">{{slice_obj.uuid}}</p>
+            
         </div>
     
     
@@ -350,12 +246,18 @@
         </div>
     </div>
     
-    <div id="editSliceModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div id="editmixctModal" class="modal fade edit_controller_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-          <h4 class="modal-title">虚网控制器编辑</h4>      
+          <h4 class="modal-title" id="mixcttitle">
+          {%if controller%}
+          虚网控制器编辑
+          {%else%}
+          虚网控制器添加
+          {%endif%}
+          </h4>      
         </div>
         <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
             <div class="modal-body base_info">
@@ -421,6 +323,120 @@
         </div>
         </div>
     </div>
+    
+    <div id="editbasectModal" class="modal fade edit_controller_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h4 class="modal-title" id="basecttitle">
+          {%if controller%}
+          虚网控制器编辑
+          {%else%}
+          虚网控制器添加
+          {%endif%}
+          </h4>      
+        </div>
+        <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
+            <div class="modal-body base_info">
+              <table class="table_base tooltip-demo">
+                <tbody>
+                    <tr>
+                        <td width="120">
+                            <label class="tab_radio2">
+                              <input type="radio" name="base_controller_type" id="optionsRadios3" value="user_define" checked>
+                              自定义
+                            </label>
+                            <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                        </td>
+                        <td class="text-right" width="100">控制器IP</td>
+                        <td width="250">
+                            <div id="ipInput_base" class=""></div>
+                        </td>
+                        <td width="50" class="text-right">端口</td>
+                        <td width="100">
+                            <input type="text" maxlength="5" id="base_controller_port" class="dk_pull form-control" onblur="check_port('port',1)"/>                                                       
+                        </td>
+                        <td width="100"><span id="base_controller_ip_portInfo" style="display:inline;float:none;"></span></td>
+                    </tr>
+                </tbody>
+            </table>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" onclick="edit_controller('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
+          </div>
+        </form>
+        </div>
+        </div>
+    </div>
+    
+    <div id="addgwModal" class="modal fade edit_controller_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h4 class="modal-title">虚拟网关添加</h4>      
+        </div>
+        <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
+            <div class="modal-body base_info">
+                <table class="table_base tooltip-demo">
+                    <tbody>
+                        <tr>
+                            <td width="150" class="text-right">
+                                网关宿主机
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            </td>
+                            <td width="30%">
+                                <div class="gw_ip">
+                                <select id="id_server_gw" class="form-control" onblur="check_gw_select()">
+                              
+                                </select>                   
+                                </div>                                          
+                            </td>
+                            <td>                               
+                                <span id="gwInfo"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                网关IP地址
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1" data-original-title="用户输入的网关IP必须在用户申请获取的网络地址范围内，如192.168.10.1"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" id="gateway_ip" disabled/>                               
+                            </td>
+                            <td>
+                                
+                                <span id="gw_ipInfo" style="display:inline;float:none;"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-right">
+                                配置DHCP服务
+                            </td>
+                            <td colspan=2>
+                                <div class="tuopu_btn">
+                                    <span class="switch_btn add_dhcp checked">
+                                        <span class="switch_content">是</span>
+                                    </span>
+                                </div>
+
+                            </td>
+                          
+                        </tr>  
+                    </tbody>
+                </table>
+          </div>
+          <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" onclick="submit_gw('{{ slice_obj.id }}')" class="btn btn_info">确定</button>
+          </div>
+        </form>
+        </div>
+        </div>
+    </div>
+    
     
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -491,19 +507,23 @@
 <script src="{{ STATIC_URL}}js/slice_detail.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
-<script>
-    $(function(){
-        show_uuid($("[id='uuid']"));
-    })
-</script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-        $("#ipInput").ipInput();
+        show_uuid($("[id='uuid']"));
+        var slice_type = $("#slice_type").text();
         var controller_type = $("#controller_type").text();
-        if(controller_type == 1){
-            init_ipinput();
+        if(slice_type == "mixslice"){
+            $("#ipInput").ipInput();
+            if(controller_type == 1){
+                init_ipinput();
+            }
+        }else{
+            $("#ipInput_base").ipInput();
+            init_ipinput_base();
         }
+        
+
     });
 </script>
 {% endblock %}

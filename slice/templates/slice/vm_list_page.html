@@ -1,11 +1,24 @@
+{% load staticfiles %}
 {% load endless %}
 {% paginate 4 vms %}
+<h4 class="block_title">
+    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{{ vm_start_ip }}-{{ vm_end_ip }}】
+    <a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
+    <div class="pull-right">
+         {%if extent_html == "site_base.html" and permission == "edit" and slice_type == "mixslice" %}
+                <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="can_create_vm({{slice_obj.id}});"
+                 {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%} title="创建虚拟机">
+                <i class="icon-plus"></i>
+                </a>
+         {%endif%}                              
+    </div>
+</h4>
 <table class="table_defined tooltip-demo">
   <thead>
     <tr>
       <th width="17%">名称</th>
       <th width="15%">UUID</th>
-      <th width="15%">资源类型</th>
+      <th width="15%">DHCP</th>
       <th width="15%">IP地址</th>
       <th width="15%">宿主机</th>
       <th width="8%">状态</th>
@@ -24,7 +37,7 @@
         <a id="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{vm.uuid}}">
         {{vm.uuid}}
         </a></div></td>
-      <td>{{vm.type}}</td>
+      <td>{{vm.dhcp}}</td>
       <td><div>
         {{vm.ip}}
         </div></td>
@@ -116,13 +129,19 @@
     {%endfor%}
   </tbody>
 </table>
+
 <div class="text-center">
     <ul class="pagination">
         {% show_pages %}
     </ul>
 </div>
+
+
+<script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
+            <script src="{% static "js/bootstrap.min.js" %}"></script>
+
 <script>
-    $(function(){
+    $(document).ready(function(){
         show_uuid($("[id='uuid']"));
         update_vm_status();
     })

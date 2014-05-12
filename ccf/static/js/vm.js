@@ -13,6 +13,9 @@ var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6};
 var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
 var disks = [10, 20, 40, 80, 160, 320];
 
+
+
+
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
         //var name = check_vm_name('name');
@@ -109,12 +112,12 @@ function check_vm_select(ele){
 					   
 					   if(field == 'flavor'){
 							//$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
-							desc_msg('flavor', obj.value, i);
+							//desc_msg('flavor', obj.value, i);
 							
 						}
 						else if(field == 'image'){
 							//$('[name="image_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
-							desc_msg('image', obj.value, i);				
+							//desc_msg('image', obj.value, i);				
 						}
 						else if(field == 'server'){
 							//$('[name="server_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
@@ -251,18 +254,6 @@ var post_vm_result = true;
 var quota = true;
 function submit_vms(sliceid)
 {
-		/*var result;
-        var objs = document.getElementsByName('name');
-        name_value = get_value_from_obj('name');
-        flavor_text = get_value_from_select('flavor');
-        image_text = get_value_from_select('image');
-        server_text = get_value_from_select('server');
-        enable_dhcp_value = get_checked_value_from_checkbox('enable_dhcp');
-		//var vm_record = vms_info.get();
-        //for(var i=0; i < objs.length; i++)
-       // {
-                 post_vminfo(sliceid, name_value[0], flavor_text[0], image_text[0], server_text[0], enable_dhcp_value[0]);
-       // }*/
 		vms_info().each(function(vm){
 			post_vminfo(sliceid, vm);
 		});
@@ -270,10 +261,9 @@ function submit_vms(sliceid)
 }
 
 
-//function post_vminfo(sliceid, name, flavor, image, server, enable_dhcp, vm_info_record)
 function post_vminfo(sliceid, vm)
 {
-        url = "/plugins/vt/create/vm/"+sliceid+"/0"+"/";
+        url = "/plugins/vt/create/vm/"+sliceid+"/";
         $.ajax({
         type: "POST",
         url: url,
@@ -305,8 +295,11 @@ function post_vminfo(sliceid, vm)
                 /*$("div#slice_alert_info").empty();
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
-                $("#modal-footer").html('<button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_quota_sure">确定</button>');
+                $("#alert_close_sure").addClass('quota');
+                //$("#modal-footer").html('<button class="quota btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>');
                 $('#slicealertModal').modal('show');*/
+                $("#quota_info").html(data.error);
+                $(".alert_quota").show();
             }
         }
         });
@@ -353,6 +346,7 @@ function fetch_serverinfo(id){
 }
 
 function fetch_gw_ip(slice_name){
+    var ret = false;
     $.ajax({
         url : "/plugins/vt/get_slice_gateway_ip/" + slice_name + "/",
         type : "GET",
@@ -361,12 +355,13 @@ function fetch_gw_ip(slice_name){
         error : function(e){
 			document.getElementById('alert_info').innerHTML = "获取网关IP出错！";
 			$('#alert_modal').modal('show');
-           // alert("获取网关IP出错！");
         },
         success : function(gw_ips){
             document.getElementById("gateway_ip").value = gw_ips["ipaddr"];
+            ret = true;
         }
     });
+    return ret;
 }
 var ovs_check_flag = false;
 function check_ovs_gw(){
@@ -478,27 +473,36 @@ function not_contains(a, obj) {
     return true;
 }
 
-function create_vms(sliceid, flag, from_link)
+function create_vms(sliceid, flag)
 {
-	if(vms_info().count() == 0){
+	/*if(vms_info().count() == 0){
 		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置信息！";
 		$('#alert_modal').modal('show');
 		return;
+	}*/
+    var enable_dhcp_checked;
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
+		enable_dhcp_checked = 1;
+		dhcp_checked = "是";
+	}else{
+		enable_dhcp_checked = 0;
+		dhcp_checked = "否";
 	}
+    vms_info.insert({id:vm_id, flavor:flavor_selected, cpu:cpu_selected, 
+						 ram:ram_selected, hdd:hdd_selected, image_id:$("#id_image").val(),
+						 image_text:$("#id_image").find("option:selected").text(),
+						 server_id:$("#id_server").val(), server_text:$("#id_server").find("option:selected").text(),
+						 enable_dhcp:enable_dhcp_checked,
+						 show_dhcp:dhcp_checked})
     if(check_vminfo())
     {
 		submit_vms(sliceid)
         if (!quota) {
-            window.location.href='/quota_admin/apply/'
+            //window.location.href='/quota_admin/apply/'
             return;
         };
 		if(flag != 1 || post_vm_result){
-			if(from_link == 0){
-				window.location.href='/slice/detail/' + sliceid + '/';
-			}else{
-				window.location.href='/plugins/vt/vm/list/' + sliceid + '/';
-			}
-			
+			window.location.href='/slice/detail/' + sliceid + '/1/';
 		}        
     }
 }
@@ -577,7 +581,7 @@ function flavor_init(){
 	$(".micro").addClass("vm_active");
 }
 
-
+/*
 function update_vms_info(){
 	var enable_dhcp_checked;
 	if(!check_vminfo()){
@@ -657,7 +661,7 @@ function show_vm_info_table(){
                           +"</tr> ");
 	});
 }
-
+*/
 function select_flavor(flavor_id){
 	var data = "name=flavor" + "&obj_id="+flavor_id;
 

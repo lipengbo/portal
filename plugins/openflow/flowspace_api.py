@@ -15,10 +15,7 @@ def flowspace_nw_add(slice_obj, old_nws, new_nw):
     LOG.debug('flowspace_nw_add')
     try:
         Slice.objects.get(id=slice_obj.id)
-    except Exception, ex:
-        raise DbError(ex)
-    if new_nw and (new_nw not in slice_obj.get_nws()):
-        try:
+        if new_nw and (new_nw not in slice_obj.get_nws()):
             name = str(slice_obj.id) + '_df'
             nw_num = len(old_nws)
             if nw_num > 0:
@@ -43,8 +40,8 @@ def flowspace_nw_add(slice_obj, old_nws, new_nw):
                 create_default_flowspace(slice_obj, name, '100', '', '', '',
                                          gw.mac, '', '0x800', '', new_nw, '',
                                          '', '', '')
-        except Exception, ex:
-            raise DbError(ex)
+    except Exception, ex:
+        raise DbError(ex)
 
 
 def flowspace_nw_del(slice_obj, del_nw):
@@ -53,13 +50,12 @@ def flowspace_nw_del(slice_obj, del_nw):
     LOG.debug('flowspace_nw_del')
     try:
         Slice.objects.get(id=slice_obj.id)
-    except Slice.DoesNotExist:
-        return False
-    if del_nw and (del_nw in slice_obj.get_nws()):
-        name = str(slice_obj.id) + '_df'
-        delete_default_flowspace(slice_obj, name, '', '', del_nw, '', '')
-        delete_default_flowspace(slice_obj, name, '', '', '', del_nw, '')
-    return True
+        if del_nw and (del_nw in slice_obj.get_nws()):
+            name = str(slice_obj.id) + '_df'
+            delete_default_flowspace(slice_obj, name, '', '', del_nw, '', '')
+            delete_default_flowspace(slice_obj, name, '', '', '', del_nw, '')
+    except Exception, ex:
+        raise DbError(ex)
 
 
 def flowspace_gw_add(slice_obj, new_gateway):
@@ -68,40 +64,33 @@ def flowspace_gw_add(slice_obj, new_gateway):
     LOG.debug('flowspace_gw_add')
     try:
         Slice.objects.get(id=slice_obj.id)
-    except Slice.DoesNotExist:
-        return False
-    if new_gateway and (new_gateway not in slice_obj.get_gws()):
-        name = str(slice_obj.id) + '_df'
-        haved_nw = slice_obj.get_nw()
-        if haved_nw:
-            create_default_flowspace(slice_obj, name, '100', '', '', '', '',
-                                     new_gateway, '0x800', haved_nw, '', '',
-                                     '', '', '')
-            create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                     new_gateway, '', '0x800', '', haved_nw,
-                                     '', '', '', '')
-        if gw_controller:
-            slice_gw = get_slice_gw_mac(slice_obj)
-            phy_gw = get_phydata_gw_mac(slice_obj.get_island())
-            create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                     phy_gw, slice_gw, '0x800', '', '', '',
-                                     '', '', '')
-            create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                     slice_gw, phy_gw, '0x800', '', '',
-                                     '', '', '', '')
-            create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                     slice_gw, '', '0x806', '', '',
-                                     '', '', '', '')
-            create_default_flowspace(slice_obj, name, '100', '', '', '',
-                                     phy_gw, slice_gw, '0x806', '', '',
-                                     '', '', '', '')
-#         haved_nws = slice_obj.get_nws()
-#         for haved_nw in haved_nws:
-#             create_default_flowspace(slice_obj, name, '100', '', '',
-#                 '', '', new_gateway, '0x800', haved_nw, '', '', '', '', '')
-#             create_default_flowspace(slice_obj, name, '100', '', '',
-#                 '', new_gateway, '', '0x800', '', haved_nw, '', '', '', '')
-    return True
+        if new_gateway and (new_gateway not in slice_obj.get_gws()):
+            name = str(slice_obj.id) + '_df'
+            haved_nw = slice_obj.get_nw()
+            if haved_nw:
+                create_default_flowspace(slice_obj, name, '100', '', '', '', '',
+                                         new_gateway, '0x800', haved_nw, '', '',
+                                         '', '', '')
+                create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                         new_gateway, '', '0x800', '', haved_nw,
+                                         '', '', '', '')
+            if gw_controller:
+                slice_gw = get_slice_gw_mac(slice_obj)
+                phy_gw = get_phydata_gw_mac(slice_obj.get_island())
+                create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                         phy_gw, slice_gw, '0x800', '', '', '',
+                                         '', '', '')
+                create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                         slice_gw, phy_gw, '0x800', '', '',
+                                         '', '', '', '')
+                create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                         slice_gw, '', '0x806', '', '',
+                                         '', '', '', '')
+                create_default_flowspace(slice_obj, name, '100', '', '', '',
+                                         phy_gw, slice_gw, '0x806', '', '',
+                                         '', '', '', '')
+    except Exception, ex:
+        raise DbError(ex)
 
 
 def flowspace_gw_del(slice_obj, del_gateway):
@@ -308,7 +297,6 @@ def get_flowspace_topology(slice_obj):
     LOG.debug('get_flowspace_topology')
 
 
-@transaction.commit_on_success
 def create_user_flowspace(slice_obj, name, dpid, priority, in_port, dl_vlan,
                           dl_vpcp, dl_src, dl_dst, dl_type, nw_src, nw_dst,
                           nw_proto, nw_tos, tp_src, tp_dst):
@@ -332,5 +320,4 @@ def delete_user_flowspace(flowspace_obj):
     try:
         flowspace_obj.delete()
     except Exception, ex:
-        transaction.rollback()
         raise DbError(ex)

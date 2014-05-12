@@ -98,6 +98,7 @@ def flowvisor_del_slice(flowvisor, slice_name):
     """
     print 'flowvisor_del_slice'
     try:
+        print flowvisor, slice_name
         if flowvisor and slice_name:
             slice_name = "slice" + str(slice_name)
             if flowvisor.type == 1:

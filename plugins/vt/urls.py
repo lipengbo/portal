@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 
 urlpatterns = patterns('plugins.vt.views',
-    url(r'^create/vm/(?P<sliceid>\d+)/(?P<from_link>\d+)/$', "create_vm", name='create_vm'),
+    url(r'^create/vm/(?P<sliceid>\d+)/$', "create_vm", name='create_vm'),
     url(r'^create/device/(?P<sliceid>\d+)/$', "create_device", name='create_device'),
     url(r'^add_own_ports/(?P<sliceid>\d+)/$', "create_device", name="create_device"),
     url(r'^vm/list/(?P<sliceid>\d+)/$', "vm_list", name='vm_list'),
@@ -12,5 +12,6 @@ urlpatterns = patterns('plugins.vt.views',
     url(r'^get_slice_gateway_ip/(?P<slice_name>\w+)/$', "get_slice_gateway_ip", name='get_slice_gateway_ip'),
     url(r'^get_switch_port/(?P<sliceid>\d+)/$', "get_switch_port", name = 'get_switch_port'),
     url(r'^get_flavor_msg/$', "get_flavor_msg", name ='get_flavor_msg'),
-	url(r'^download_keypair/$', "download_keypair", name = "download_keypair"),
+    url(r'^download_keypair/$', "download_keypair", name = "download_keypair"),
+    url(r'^can_create_vm/(?P<sliceid>\d+)/$', "can_create_vm", name="can_create_vm"),
 )
