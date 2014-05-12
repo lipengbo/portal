@@ -96,11 +96,20 @@ $(document).ready(function() {
         $('.no-virtual-switch').hide();
         if ($(this).hasClass('btn-step2')) {
             var has_virtual_switch = false;
-            for(dpid in window.selected_dpids) {
-                if (dpid.indexOf('00:ff:') == 0) {
-                    has_virtual_switch = true;
+            var slice_type = $("#slice_type").text();
+            if(slice_type == "baseslice"){
+                for(dpid in window.selected_dpids) {
+                    if (dpid.indexOf('00:ff:') != 0) {
+                        has_virtual_switch = true;
+                    }
                 }
-            }
+            }else{
+                for(dpid in window.selected_dpids) {
+                    if (dpid.indexOf('00:ff:') == 0) {
+                        has_virtual_switch = true;
+                    }
+                }
+            } 
             if (!has_virtual_switch) {
                 $('.no-virtual-switch').removeClass('hide').show();
                 return false;
