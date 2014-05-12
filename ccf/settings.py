@@ -310,6 +310,8 @@ QUOTAS = {
     'vm': [2, 4, 8, 16],
 }
 
+AGORA_EDIT_TIMEOUT = {"minutes": 60}
+
 try:
     from ccf.local_settings import *
 except ImportError:

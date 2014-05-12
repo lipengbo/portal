@@ -12,11 +12,19 @@ from common.models import FailedCounter, DeletedCounter, Counter
 import datetime
 from django.db.models import F
 
+from agora.models import ForumThread
+
 # Create your views here.
 
 def index(request):
     context = {}
     return render(request, 'common/index.html', context)
+
+def close_thread(request, thread_id):
+    thread = get_object_or_404(ForumThread, id=thread_id)
+    thread.closed = datetime.datetime.now()
+    thread.save()
+    return redirect('agora_thread', thread_id)
 
 
 def decrease_counter_api(sender, instance):

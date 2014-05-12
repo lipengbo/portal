@@ -30,6 +30,7 @@ urlpatterns = patterns("",
     url(r"^forbidden/", TemplateView.as_view(template_name="forbidden.html"), name="forbidden"),
     #url(r'^ticket/', include('helpdesk.urls')),
     url(r'^ticket/', include('agora.urls')),
+    url(r'^misc/', include('common.urls')),
 
 
 

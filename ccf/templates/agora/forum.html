@@ -32,7 +32,13 @@
               <td><a href="{% url "agora_thread" thread.id %}">{{ thread.title }}</a></td>
               <td>{{ thread.content }}</td>
               <td>{{ thread.created|date:"Y-m-d H:s:i" }}</td>
-              <td>{% if thread.closed %}已关闭{% else %}处理中{% endif %}</td>
+              <td>{% if thread.closed %}已关闭{% else %}
+                  {% if thread.last_post != thread %}
+                  已回复
+                  {% else %}
+                  尚无回复
+                  {% endif %}
+                  {% endif %}</td>
             </tr>
             {% endfor %}
           </tbody>
