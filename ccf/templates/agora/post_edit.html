@@ -13,6 +13,9 @@
         <p>
             <form method="POST" class="" action="{% url "agora_post_edit" post.kind post.id %}">
                 {% csrf_token %}
+                <fieldset id="name">
+                    <input type="text" name="title" value="{{ form.instance.title}}" class="form-control">
+                </fieldset>
                 <fieldset>
                     <textarea class="wmd-input  form-control" rows="10" id="wmd-input-second" name="content">{{ form.instance.content }}</textarea>
                 </fieldset>
