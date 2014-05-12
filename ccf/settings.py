@@ -186,6 +186,7 @@ INSTALLED_APPS = [
     "monitor",
     "guardian",
     'djcelery',
+    "adminlog",
 ]
 
 # Celery settings

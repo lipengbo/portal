@@ -39,6 +39,7 @@ urlpatterns = patterns("",
     url(r"^accounts/confirm_email/(?P<key>\w+)/$", ConfirmEmailView.as_view(), name="account_confirm_email"),
     url('^notifications/', include(notifications.urls)),
     url('^quota_admin/', include("quota_admin.urls")),
+    url('^log/', include("adminlog.urls")),
 
     url(r'^topology/$', 'project.views.topology', name="topology_view"),
     url(r'^(topology/.+\.html)$', direct_to_template, ),
