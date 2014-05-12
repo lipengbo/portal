@@ -207,9 +207,11 @@ function commit_ports(sliceid){
                 var str = '/slice/detail/' + sliceid + '/';
                 $(".modal-footer").html("<button class='btn delete-confirm btn_info' data-dismiss='modal' onclick='document.location=&quot;"+str+"&quot;'>确定</button>");
                 //show_err_msg('添加端口失败，请稍后重试');
-                show_err_msg(data.error);
+                //show_err_msg(data.error);
+                $("#device_info").html("警告："+data.error);
+                $(".alert_device").show();
             }else{
-                window.location.href='/slice/detail/' + sliceid + '/';
+                window.location.href='/slice/detail/' + sliceid + '/2/';
             }
             
         }

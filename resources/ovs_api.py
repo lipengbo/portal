@@ -364,7 +364,7 @@ def slice_add_owner_device(slice_port, mac_list):
         if slice_port and mac_list:
             error_macs = check_macs(slice_port, mac_list)
             if error_macs != "":
-                raise DbError("mac地址冲突（" + error_macs + "）！")
+                raise DbError(u"mac地址冲突（" + error_macs + u"）！")
             owner_devices = OwnerDevice.objects.filter(slice_port=slice_port)
             if owner_devices:
                 owner_device = owner_devices[0]
@@ -380,7 +380,7 @@ def slice_add_owner_device(slice_port, mac_list):
     except DbError:
         raise
     except Exception:
-#         traceback.print_exc()
+        traceback.print_exc()
         raise DbError("自接入设备添加失败！")
 
 
