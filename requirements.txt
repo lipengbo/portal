@@ -24,3 +24,4 @@ django-celery-with-redis==3.0
 pycrypto==2.6.1
 git+https://github.com/mpasternacki/django-quotas
 django-bootstrap-form==3.1
+git+https://github.com/fay/agora
