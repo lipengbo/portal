@@ -1,5 +1,4 @@
 # coding:utf-8
-from slice.models import Slice
 from plugins.openflow.models import Controller
 from slice.slice_exception import DbError, ControllerUsedError
 from flowvisor_api import flowvisor_update_sice_controller

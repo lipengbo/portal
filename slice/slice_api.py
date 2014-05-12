@@ -16,10 +16,12 @@ from plugins.ipam.models import IPUsage
 from plugins.common.ovs_client import get_switch_stat, get_sFlow_metric
 from resources.models import Switch
 from django.db import transaction
+from guardian.shortcuts import assign_perm
 import datetime
 import traceback
 import calendar
 from etc.config import gw_controller
+from plugins.common import utils
 
 from plugins.vt.api import get_slice_gw_mac, schedul_for_controller_and_gw
 
@@ -31,7 +33,7 @@ from etc import config
 # from etc.config import slice_expiration_days
 
 
-def create_slice_step(project, slice_uuid, name, description, island, user, ovs_or_ports,
+def create_slice_step_o(project, slice_uuid, name, description, island, user, ovs_or_ports,
                       controller_info, slice_nw, gw_host_id, gw_ip, dhcp_selected, tp_mod):
     print "create_slice_step"
     slice_obj = None
@@ -73,7 +75,103 @@ def create_slice_step(project, slice_uuid, name, description, island, user, ovs_
         raise DbError(ex.message)
 
 
-def create_slice_api(project, slice_uuid, name, description, island, user):
+@transaction.commit_manually
+def create_slice_step(project, slice_uuid, name, description, island, user, ovs_or_ports,
+                      slice_nw, tp_mod, vm_num):
+    print "create_slice_step"
+    slice_obj = None
+    try:
+        print "1:create slice record, add island, add flowvisor"
+        slice_obj = create_slice_api(project, slice_uuid, name, description, island, user, vm_num)
+        print "2:add ovses or ports"
+        slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod)
+        print "3:create subnet"
+        if slice_nw != "":
+            IPUsage.objects.subnet_create_success(slice_obj.uuid)
+        print "4:add nw flowspace in database"
+        flowspace_nw_add(slice_obj, [], slice_nw)
+        print "5:assign slice permission"
+        assign_perm("slice.change_slice", user, slice_obj)
+        assign_perm("slice.view_slice", user, slice_obj)
+        assign_perm("slice.delete_slice", user, slice_obj)
+        print "6:create slice success and return"
+        transaction.commit()
+        return slice_obj
+    except Exception, ex:
+        LOG.debug(traceback.print_exc())
+        transaction.rollback()
+        print "7:create slice failed and raise exception"
+        raise DbError(ex.message)
+
+
+@transaction.commit_manually
+def slice_edit_controller(slice_obj, controller_info):
+    """slice添加或更改控制器
+    """
+    LOG.debug('slice_edit_controller')
+    try:
+        haved_controller = slice_obj.get_controller()
+        create_flag = True
+        if haved_controller:
+            if controller_info['controller_type'] == 'default_create':
+                if haved_controller.name == controller_info['controller_sys']:
+                    if haved_controller.host.state != 9:
+                        create_flag = False
+            else:
+                if haved_controller.name == 'user_define' and\
+                        haved_controller.ip == controller_info['controller_ip'] and\
+                        haved_controller.port == int(controller_info['controller_port']):
+                    create_flag = False
+        if create_flag:
+            if haved_controller:
+                slice_obj.remove_resource(haved_controller)
+            new_controller = create_add_controller(slice_obj, controller_info)
+            if haved_controller and (new_controller.ip != haved_controller.ip or new_controller.port != haved_controller.port):
+                slice_obj.ct_changed()
+    except Exception:
+        print 1
+        try:
+            delete_controller(new_controller, True)
+        except:
+            pass
+        transaction.rollback()
+        raise
+    else:
+        print 2
+        if haved_controller:
+            try:
+                delete_controller(haved_controller, True)
+            except:
+                pass
+        transaction.commit()
+
+
+@transaction.commit_manually
+def slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected):
+    """slice添加或更改控制器
+    """
+    LOG.debug('slice_edit_gw')
+    try:
+        enabled_dhcp = (int(dhcp_selected) == 1)
+        if gw_host_id and int(gw_host_id) > 0:
+            gw = create_vm_for_gateway(slice_obj.get_island(), slice_obj, int(gw_host_id),
+                                       image_name='gateway',
+                                       enable_dhcp=enabled_dhcp)
+            flowspace_gw_add(slice_obj, gw.mac)
+        else:
+            raise DbError("网关添加失败!")
+    except Exception, ex:
+        try:
+            gw.delete()
+        except:
+            pass
+        transaction.rollback()
+        raise DbError(ex.message)
+    else:
+        transaction.commit()
+
+
+def create_slice_api(project, slice_uuid, name, description, island, user, vm_num):
     """slice创建
     """
     print 'create_slice_api'
@@ -100,23 +198,31 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
                     if len(slice_names) > 1:
                         del slice_names[-1]
                     show_name = ('_').join(slice_names)
+                    if slice_uuid == '0':
+                        uuid = utils.gen_uuid()
+                        slice_uuid = ''.join(uuid.split('-'))
+                        slice_objs = Slice.objects.filter(uuid=slice_uuid)
+                        for i in range(10):
+                            if slice_objs:
+                                print "uuid used"
+                                uuid = utils.gen_uuid()
+                                slice_uuid = ''.join(uuid.split('-'))
+                                slice_objs = Slice.objects.filter(uuid=slice_uuid)
+                            else:
+                                break
                     slice_obj = Slice(owner=user,
                                       name=name,
                                       show_name=show_name,
                                       description=description,
                                       project=project,
                                       date_expired=expiration_date,
-                                      uuid=slice_uuid)
+                                      uuid=slice_uuid,
+                                      vm_num=vm_num)
                     slice_obj.save()
                     slice_obj.add_island(island)
                     slice_obj.add_resource(flowvisors[0])
                     return slice_obj
                 except Exception, ex:
-                    if slice_obj:
-                        try:
-                            slice_obj.delete()
-                        except:
-                            pass
                     raise DbError("虚网创建失败!")
             else:
                 raise IslandError("所选节点无可用flowvisor！")
@@ -126,7 +232,6 @@ def create_slice_api(project, slice_uuid, name, description, island, user):
         raise NameExistError("slice名称已存在!")
 
 
-@transaction.commit_on_success
 def edit_slice_api(slice_obj, new_description, new_controller):
     """编辑slice，编辑描述信息、控制器、交换机端口
     """
@@ -151,25 +256,69 @@ def slice_change_description(slice_obj, new_description):
         raise DbError("编辑失败！")
 
 
-@transaction.commit_on_success
-def delete_slice_api(slice_obj):
-    """删除slice
-    """
-    print 'delete_slice_api'
-    if slice_obj:
-        try:
-            print "p1:delete subnet"
+@transaction.commit_manually
+def delete_slice_api_n(slice_obj, user):
+    try:
+        print "1:delete slice on flowvisor"
+        if slice_obj.ct_change != None:
             try:
-                IPUsage.objects.delete_subnet(slice_obj.uuid)
+                flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
             except:
-                pass
-            print "p2:delete controller"
-            delete_controller(slice_obj.get_controller(), False)
-            print "p3:pre delete slice success"
-        except Exception, ex:
-            print "p4:pre delete slice failed and raise exception"
+                raise
+            else:
+                slice_obj.ct_change = None
+                slice_obj.save()
+                transaction.commit()
+        print "2:delete subnet"
+        if slice_obj.get_nw():
+            IPUsage.objects.delete_subnet(slice_obj.uuid)
+        print "3:delete controller"
+        delete_controller(slice_obj.get_controller(), False)
+        print "4:delete slice record"
+        slice_deleted = SliceDeleted(name = slice_obj.name,
+            show_name = slice_obj.show_name,
+            owner_name = slice_obj.owner.username,
+            description = slice_obj.description,
+            project_name = slice_obj.project.name,
+            date_created = slice_obj.date_created,
+            date_expired = slice_obj.date_expired)
+        if user.is_superuser:
+            slice_deleted.type = 1
+        else:
+            slice_deleted.type = 0
+        slice_obj.delete(user=user)
+    except Exception, ex:
+        print "5:delete slice failed and change slice record"
+        transaction.rollback()
+        try:
+            slice_obj.failure_reason = ex.message
+            if slice_obj.type == 0:
+                slice_obj.type = 1
+                increase_failed_counter("slice")
+                decrease_counter_api("slice", slice_obj)
+            else:
+                decrease_failed_counter("slice", slice_obj)
+                increase_failed_counter("slice")
+            slice_obj.date_expired = datetime.datetime.now()
+            slice_obj.save()
+        except:
+            print "6:change slice record failed! raise exception"
             transaction.rollback()
-            raise DbError(ex.message)
+            raise DbError("虚网删除失败！")
+        else:
+            transaction.commit()
+            print "6:change slice record success"
+    else:
+        print "5:delete slice success and create SliceDeleted record "
+        try:
+            slice_deleted.save()
+        except:
+            print "6:create SliceDeleted record failed! raise exception"
+            transaction.rollback()
+            raise DbError("虚网删除失败！")
+        else:
+            transaction.commit()
+            print "6:create SliceDeleted record success!"
 
 
 @transaction.commit_on_success
@@ -212,12 +361,21 @@ def start_slice_api(slice_obj):
     try:
         controller_flag = False
         gw_flag = False
-        if slice_obj and slice_obj.state == SLICE_STATE_STOPPED:
+        flowvisor = slice_obj.get_flowvisor()
+        if flowvisor == None:
+            raise DbError("虚网启动失败！")
+        if slice_obj.state == 0:
+            slice_flag = True
+        if slice_obj.state == 4:
+            raise DbError("操作失败，请稍后再试！")
+        if slice_obj.get_nw():
             all_vms = slice_obj.get_vms()
             for vm in all_vms:
                 if vm.state == 8:
                     raise DbError("资源分配中，请稍后启动！")
             controller = slice_obj.get_controller()
+            if controller == None:
+                raise DbError("请先添加控制器！")
             if controller.host and controller.host.state != 1:
                 if controller.host.state == 0 or controller.host.state == 5:
                     controller_flag = True
@@ -241,27 +399,21 @@ def start_slice_api(slice_obj):
                             raise DbError("操作失败，请稍后再试！")
                         else:
                             raise DbError("请确保gateway可用！")
-            flowvisor = slice_obj.get_flowvisor()
-            if flowvisor == None:
-                raise DbError("虚网启动失败！")
-            if slice_obj.state == 0:
-                slice_flag = True
-            if slice_obj.state == 4:
-                raise DbError("操作失败，请稍后再试！")
-            try:
-                if slice_flag:
-                    slice_obj.starting()
-                    if controller_flag:
-                        controller.host.state = 12
-                        controller.host.save()
-                    if gw_flag:
-                        gw.state = 12
-                        gw.save()
-                    start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag)
-            except Exception, ex:
-#                 import traceback
-#                 traceback.print_exc()
-                raise DbError("虚网启动失败！")
+        else:
+            if slice_obj.get_controller() == None:
+                raise DbError("请先添加控制器！")
+        try:
+            if slice_flag:
+                slice_obj.starting()
+                if controller_flag:
+                    controller.host.state = 12
+                    controller.host.save()
+                if gw_flag:
+                    gw.state = 12
+                    gw.save()
+                start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag)
+        except Exception, ex:
+            raise DbError("虚网启动失败！")
     except Exception, ex:
 #         import traceback
 #         traceback.print_exc()
@@ -373,7 +525,53 @@ def update_slice_virtual_network_cnvp_nt(slice_obj):
         raise
 
 
+def update_null_slice_virtual_network_cnvp(slice_obj):
+    """更新空slice的虚网，按端口划分
+    """
+    LOG.debug('update_null_slice_virtual_network_cnvp')
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex.message)
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
+        return
+    try:
+        flowvisor = slice_obj.get_flowvisor()
+        flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
+        flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+        slice_ports = slice_obj.sliceport_set.all()
+        for slice_port in slice_ports:
+            switch_port = slice_port.switch_port
+            flowvisor_add_port(flowvisor, slice_obj.id, switch_port.switch.dpid, switch_port.port)
+            if switch_port.is_edge():
+                if slice_port.type == 0:
+                    arg_match = matches_to_arg_match(switch_port.port, "", "", "", "", "",
+                                                     "", "", "", "", "", "", flowvisor.type)
+                    flowvisor_add_flowspace(flowvisor, None,
+                                            slice_obj.id,
+                                            4, 'cdn%nf',
+                                            switch_port.switch.dpid,
+                                            100, arg_match)
+                else:
+                    owner_devices = slice_port.ownerdevice_set.all()
+                    if owner_devices:
+                        macs = owner_devices[0].mac_list.split(",")
+                        for mac in macs:
+                            arg_match = matches_to_arg_match(switch_port.port, "", "", mac, "", "",
+                                                             "", "", "", "", "", "", flowvisor.type)
+                            flowvisor_add_flowspace(flowvisor, None,
+                                                    slice_obj.id,
+                                                    4, 'cdn%nf',
+                                                    switch_port.switch.dpid,
+                                                    100, arg_match)
+    except:
+        raise
+
+
 def update_slice_virtual_network_cnvp_pt(slice_obj):
+    """更新slice的虚网，按端口划分
+    """
+    LOG.debug('update_slice_virtual_network_cnvp_pt')
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -447,6 +645,9 @@ def update_slice_virtual_network_cnvp(slice_obj):
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex.message)
+    if slice_obj.get_nw() == None:
+        update_null_slice_virtual_network_cnvp(slice_obj)
+        return
     if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
         return
     if slice_obj.get_dhcp() == None:
@@ -935,4 +1136,4 @@ def topology_mapping(slice_obj):
     """拓扑映射
     """
     LOG.debug('topology_mapping')
-    
+

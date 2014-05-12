@@ -1,7 +1,7 @@
 # coding:utf-8
 from celery import task
 from slice.models import Slice
-from plugins.openflow.flowvisor_api import flowvisor_update_slice_status
+from plugins.openflow.flowvisor_api import flowvisor_del_slice, flowvisor_update_slice_status, flowvisor_add_slice, flowvisor_update_sice_controller
 from slice.slice_api import update_slice_virtual_network_cnvp, update_slice_virtual_network_flowvisor
 from plugins.vt.models import DOMAIN_STATE_DIC
 from slice.slice_exception import DbError
@@ -55,22 +55,36 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
         print "stop slice, update flowspace, start slice"
         if ct_op and gw_op:
             flowvisor = slice_obj.get_flowvisor()
-            if flowvisor.type == 1:
-                print 1
-                flowvisor_update_slice_status(flowvisor,
-                                              slice_obj.id, False)
-                print 2
-                update_slice_virtual_network_cnvp(slice_obj)
-                print 3
-                flowvisor_update_slice_status(flowvisor,
-                                              slice_obj.id, True)
-                flag = True
+            if flowvisor:
+                print "++++++++++++++++++",slice_obj.ct_change
+                if slice_obj.ct_change == None:
+                    flowvisor_add_slice(flowvisor, slice_obj.id,
+                                        slice_obj.get_controller(), slice_obj.owner.email)
+                else:
+                    if slice_obj.ct_change:
+                        controller = slice_obj.get_controller()
+                        flowvisor_update_sice_controller(flowvisor, slice_obj.id,
+                                                         controller.ip, controller.port)
+                slice_obj.ct_change = False
+                slice_obj.save()
+                if flowvisor.type == 1:
+                    print 1
+                    flowvisor_update_slice_status(flowvisor,
+                                                  slice_obj.id, False)
+                    print 2
+                    update_slice_virtual_network_cnvp(slice_obj)
+                    print 3
+                    flowvisor_update_slice_status(flowvisor,
+                                                  slice_obj.id, True)
+                    flag = True
+                else:
+                    flowvisor_update_slice_status(flowvisor,
+                                                  slice_obj.id, True)
+                    flag = True
+                    update_slice_virtual_network_flowvisor(slice_obj)
+                slice_obj.start()
             else:
-                flowvisor_update_slice_status(flowvisor,
-                                              slice_obj.id, True)
-                flag = True
-                update_slice_virtual_network_flowvisor(slice_obj)
-            slice_obj.start()
+                raise DbError("环境异常!")
         else:
             if not ct_op:
                 raise DbError("控制器启动失败!")
@@ -81,11 +95,15 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
         pass
     except Exception, ex:
         print ex
+        import traceback
+        traceback.print_exc()
         try:
             slice_obj.stop()
             if flag:
                 flowvisor_update_slice_status(flowvisor,
                                               slice_obj.id, False)
+            if slice_obj.ct_change == None:
+                flowvisor_del_slice(flowvisor, slice_obj.id)
         except:
             pass
 
