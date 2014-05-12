@@ -2,7 +2,7 @@
 import datetime
 
 from django.db import models
-from django.db import IntegrityError 
+from django.db import IntegrityError
 from django.contrib.auth.models import User, Group
 from django.db.models.signals import post_save, m2m_changed, post_delete, pre_delete
 from django.db.models import F
@@ -45,6 +45,8 @@ class Island(models.Model):
     name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
+    novnc_ip = models.IPAddressField(null=True, verbose_name=_("novnc_ip"))
+    vpn_ip = models.IPAddressField(null=True, verbose_name=_("vpn_ip"))
 
     @staticmethod
     def admin_options():
@@ -74,8 +76,8 @@ class Project(models.Model):
     name = models.CharField(max_length=255, verbose_name=_("Project Name"), unique=True, help_text="学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目")
     description = models.CharField(max_length=1024, verbose_name=_("Project Description"), help_text="如项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />项目支持：国家自然科学基金或863、973项目支持；")
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
-    memberships = models.ManyToManyField(User, through="Membership", 
-            related_name="project_belongs", verbose_name=_("Memberships")) 
+    memberships = models.ManyToManyField(User, through="Membership",
+            related_name="project_belongs", verbose_name=_("Memberships"))
     category = models.ForeignKey(Category, verbose_name=_("Category"))
     created_time = models.DateTimeField(auto_now_add=True)
 
