@@ -12,7 +12,7 @@ from common.models import FailedCounter, DeletedCounter, Counter
 import datetime
 from django.db.models import F
 
-from agora.models import ForumThread
+from agora.models import ForumThread, Forum
 
 # Create your views here.
 
@@ -25,6 +25,27 @@ def close_thread(request, thread_id):
     thread.closed = datetime.datetime.now()
     thread.save()
     return redirect('agora_thread', thread_id)
+
+@login_required
+def list_ticket(request):
+    user = request.user
+    forum = get_object_or_404(Forum, id=1)
+    threads = forum.threads.order_by("-sticky", "-last_modified")
+
+    if not user.is_superuser:
+        threads = threads.filter(author=user)
+
+    can_create_thread = all([
+        request.user.has_perm("agora.add_forumthread", obj=forum),
+        not forum.closed,
+    ])
+
+    return render(request, "agora/forum.html", {
+        "forum": forum,
+        "threads": threads,
+        "can_create_thread": can_create_thread,
+    })
+
 
 
 def decrease_counter_api(sender, instance):

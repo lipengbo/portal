@@ -285,6 +285,7 @@ EMAIL_HOST_PASSWORD = 'fnic123'
 AUTHENTICATION_BACKENDS = [
     "account.auth_backends.UsernameAuthenticationBackend",
     'guardian.backends.ObjectPermissionBackend',
+    "common.auth_backend.CcfBackend",
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
