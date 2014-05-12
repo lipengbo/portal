@@ -301,7 +301,11 @@
                     </tbody>
                   </table>              
                   <div class="hide no-virtual-switch alert alert-danger">
+                    {%if slice_type == "baseslice" %}
+                      请至少选择一个网络出口节点或普通交换节点
+                    {%else%}
                       请至少选择一个虚拟机关联节点
+                    {%endif%}
                   </div>
                 </div>                                                                                                                 
              
@@ -536,6 +540,7 @@
               
               <div class="clear" style="display: none" >
 					<p id="project_id">{{project.id}}</p>
+					<p id="slice_type">{{slice_type}}</p>
 			  </div>
              </div>
            </form>

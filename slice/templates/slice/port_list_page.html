@@ -28,7 +28,7 @@
             <td>{{device.switch_name}}</td>
             <td>{% if device.is_monopo == 1 %}共享{%else%}独占{%endif%}</td>
             <td>{% if device.mac_list == '' %}无{%else%}{{device.mac_list}}{%endif%}</td>
-            <td> 
+            <td class="btn_operation"> 
                 {%if extent_html == "admin_base.html" or permission == "edit" %}
                 <a href="javascript:void(0);" id="" onclick="delete_switch_port({{slice_obj.id}},  {{device.port_id}})" style="cursor:pointer">
                     <img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" />
