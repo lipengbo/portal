@@ -206,7 +206,8 @@ function commit_ports(sliceid){
             if(data.result == 1){
                 var str = '/slice/detail/' + sliceid + '/';
                 $(".modal-footer").html("<button class='btn delete-confirm btn_info' data-dismiss='modal' onclick='document.location=&quot;"+str+"&quot;'>确定</button>");
-                show_err_msg('添加端口失败，请稍后重试');
+                //show_err_msg('添加端口失败，请稍后重试');
+                show_err_msg(data.error);
             }else{
                 window.location.href='/slice/detail/' + sliceid + '/';
             }

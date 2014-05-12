@@ -80,8 +80,6 @@ def create_vm(request, sliceid):
                 vm.ram = request.POST.get("ram")
                 vm.cpu = request.POST.get("cpu")
                 vm.hdd = request.POST.get("hdd")
-                import pdb
-                pdb.set_trace()
 
                 #: test ram quota
                 if user.quotas.mem < (int(vm.ram) + VirtualMachine.objects.user_stat_sum(user, 'ram')):
@@ -178,9 +176,9 @@ def create_device(request, sliceid):
 
 
             return HttpResponse(json.dumps({'result':0}))
-        except:
+        except Exception, e:
             traceback.print_exc()
-            return HttpResponse(json.dumps({'result':1}))
+            return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
         context['slice_obj'] = Slice.objects.get(id=sliceid)

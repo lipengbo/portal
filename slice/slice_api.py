@@ -174,6 +174,8 @@ def create_slice_api(project, slice_uuid, name, description, island, user, vm_nu
     """slice创建
     """
     print 'create_slice_api'
+    import pdb
+    pdb.set_trace()
     try:
         Slice.objects.get(name=name)
     except Slice.DoesNotExist:
@@ -1123,4 +1125,4 @@ def topology_mapping(slice_obj):
     """拓扑映射
     """
     LOG.debug('topology_mapping')
-    
+

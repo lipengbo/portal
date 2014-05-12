@@ -292,12 +292,14 @@ function post_vminfo(sliceid, vm)
             }else if(data.result == -1){
                 quota = false;
                 post_vm_result = false;
-                $("div#slice_alert_info").empty();
+                /*$("div#slice_alert_info").empty();
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
                 $("#alert_close_sure").addClass('quota');
                 //$("#modal-footer").html('<button class="quota btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>');
-                $('#slicealertModal').modal('show');
+                $('#slicealertModal').modal('show');*/
+                $("#quota_info").html(data.error);
+                $(".alert_quota").show();
             }
         }
         });
