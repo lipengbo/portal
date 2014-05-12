@@ -13,12 +13,7 @@ var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6};
 var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
 var disks = [10, 20, 40, 80, 160, 320];
 
-$(document).ready(function(){
-    $("#alert_quota_sure").on("click", function(){
-        alert('hello')
-        window.location.href='/quota_admin/apply/';
-    })
-});
+
 
 
 //验证vm名称是否是字母数字下划线
@@ -300,7 +295,8 @@ function post_vminfo(sliceid, vm)
                 $("div#slice_alert_info").empty();
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
-                $("#modal-footer").html('<button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_quota_sure">确定</button>');
+                $("#alert_close_sure").addClass('quota');
+                //$("#modal-footer").html('<button class="quota btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>');
                 $('#slicealertModal').modal('show');
             }
         }

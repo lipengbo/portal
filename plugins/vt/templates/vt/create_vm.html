@@ -145,7 +145,7 @@
                     <div class="row buttons_margin">
                         <div class="col-md-4"></div>
                                 <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail sliceid %}'">{% trans "Cancel" %}</button></div>
-                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="create_vms({{ sliceid }}, 1)">{% trans "Submit" %}</button></div>
+                        <div class="col-md-2"><button type="button" class="quota btn btn-lg btn-block btn_info" onclick="create_vms({{ sliceid }}, 1)">{% trans "Submit" %}</button></div>
                         <div class="col-md-4"></div>
                     </div>
                 </div>
@@ -161,7 +161,12 @@
 <script>
 	var STATIC_URL = "{{ STATIC_URL}}";
 	$("#alert_close_sure").on("click", function(){
-		window.location.href='/slice/detail/' + {{sliceid}} + '/';
+        if($(this).hasClass("quota")){
+            window.location.href='/quota_admin/quota/';
+        }else{
+            window.location.href='/slice/detail/' + {{sliceid}} + '/';
+        }
+		
 	});
 	flavor_init();
 	
