@@ -1,3 +1,6 @@
+
+{% load url from future %}
+{% comment %}
 <ol class="breadcrumb">
     <li><a href="{% url "agora_forums" %}">{{ SITE_NAME }}</a></li>
     {% if thread.forum.category %}
@@ -35,3 +38,4 @@
         <a href="{% url "agora_forum" thread.forum.id %}">{{ thread.forum.title }}</a>
     </li>
 </ol>
+{% endcomment %}

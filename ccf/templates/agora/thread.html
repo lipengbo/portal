@@ -1,10 +1,10 @@
 {% extends "forum_base.html" %}
 
 {% load humanize %}
-{% load thumbnail %}
 {% load agora_tags %}
 {% load bootstrap %}
 {% load endless %}
+{% load url from future %}
 
 {% block head_title %}
 {{ thread.title }}
@@ -15,11 +15,6 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="media">
-                <a class="pull-right" href="{% url 'profile_detail' thread.author.username %}">
-                    {% thumbnail thread.author.get_profile.avatar "64x64" crop="center" as im %}
-                        <img class="pull-right media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                    {% endthumbnail %}
-                </a>
                 <div class="media-body">
                     <h3 class="media-heading">
                         {{ thread.title }}
@@ -27,7 +22,7 @@
                         {% if thread.closed %}<span class="label">closed</span>{% endif %}
                     </h3>
                     <div class="text-muted">
-                        <a href="{% url 'profile_detail' thread.author.username %}"><b>{{ thread.author }}</b></a> · 
+                        <b>{{ thread.author }}</b> ·
                         发表于 {{ thread.created|timesince }}前
                         <str> · </str>
                         {{ thread.view_count }} 次浏览
@@ -61,11 +56,6 @@
         <div class="panel-body">
         {% for post in posts %}
                 <div id="post-{{ post.id }}" class="post media">
-                    <a class="pull-left" href="#">
-                        {% thumbnail post.author.get_profile.avatar "48x48" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                        {% endthumbnail %}
-                    </a>
                     <div class="pull-right">
                         {% if user.is_authenticated %}
                             {% if post|post_editable:request.user %}
@@ -79,7 +69,7 @@
                     </div>
                     <div class="media-body">
                         <p class="media-heading text-muted">
-                            <a href="">{{ post.author }}</a> · 
+                            {{ post.author }} ·
                             发表于 <span>{{ post.created|timesince }}</span>前
                         </p>
                         <div class="meta">
@@ -102,11 +92,6 @@
             </div>
             <div class="panel-body">
                 <div class="media">
-                    <a class="pull-left" href="#">
-                        {% thumbnail user.get_profile.avatar "48x48" crop="center" as im %}
-                            <img class="media-object" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-                        {% endthumbnail %}
-                    </a>
                     <div class="media-body">
                         <div class="wmd-panel">
                             <form action="" method="POST" class="">

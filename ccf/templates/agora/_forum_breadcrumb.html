@@ -1,5 +1,6 @@
 {% load humanize %}
 {% load url from future %}
+{% comment %}
 <ol class="breadcrumb">
     <li><a href="{% url "agora_forums" %}">{{ SITE_NAME }}</a></li>
     {% if forum.category %}
@@ -31,3 +32,4 @@
         {{ forum.post_count|intcomma }} 条回复
     </span>
 </ol>
+{% endcomment %}

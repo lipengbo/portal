@@ -31,7 +31,6 @@
 {% endblock %}
 
 {% block sidebar %}
-<a href="javascript:;" class="post-btn btn btn-danger btn-block btn-lg" data-toggle="popover" data-content='{% for forum in forums %}<a class="well well-sm btn btn-default" href="{% url "agora_forum" forum.id %}">{{ forum }}</a> {% endfor %}' title="请选择一个主题">发表</a>
 {% endblock %}
 
 {% block extra_script %}

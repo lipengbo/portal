@@ -1,3 +1,5 @@
+{% load url from future %}
+
                 <div class="media">
                   <div class="media-body">
                     <h4 class="media-heading">
@@ -6,7 +8,7 @@
                         </a>
                     </h4>
                     <div class="meta text-muted">
-                        <a href="{% url 'profile_detail' thread.author.username %}"><b>{{ thread.author }}</b></a> · 
+                        <b>{{ thread.author }}</b> ·
                         <a href="{% url "agora_forum" thread.forum.id %}" class="">{{ thread.forum }}</a> · 
                         <span>发表于 {{ thread.created|timesince }}</span>前 ·
                         {{ thread.reply_count }} 条回复

@@ -15,10 +15,28 @@
 <div class="row">
     <div class="col-md-12">
         {% paginate 20 threads %}
-        {% for thread in threads %}
-            <hr>
-            {% include "agora/_thread.html" %}
-        {% endfor %}
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#工单号</th>
+              <th>标题</th>
+              <th>内容</th>
+              <th>创建时间</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for thread in threads %}
+            <tr>
+              <td>{{ thread.id }}</td>
+              <td><a href="{% url "agora_thread" thread.id %}">{{ thread.title }}</a></td>
+              <td>{{ thread.content }}</td>
+              <td>{{ thread.created|date:"Y-m-d H:s:i" }}</td>
+              <td>{% if thread.closed %}已关闭{% else %}处理中{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
         <ul class="pagination">
             {% show_pages %}
         </ul>
@@ -27,6 +45,6 @@
 {% endblock %}
 
 {% block sidebar %}
-<a href="{% url "agora_post_create" forum.id %}" class="btn btn-danger btn-block btn-lg">发表话题</a>
+<a href="{% url "agora_post_create" forum.id %}" class="btn btn-danger btn-block btn-lg">新建工单</a>
 {% endblock %}
 
