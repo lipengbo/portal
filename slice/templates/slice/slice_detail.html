@@ -144,26 +144,26 @@
         
         <div class="slice_detail_tab">
             <div class="row">
-                <div class="col-md-4 fw on">
+                <div class="col-md-4 fw {%if div_name == "list_fw" %}on{%endif%}">
                     <a href="javascript:;">服务配置</a>
                 </div>
-                <div class="col-md-4 xnj">
+                <div class="col-md-4 xnj {%if div_name == "list_vm" %}on{%endif%}">
                      <a href="javascript:;">虚拟机资源</a>
                 </div>
-                <div class="col-md-4 zjr">
+                <div class="col-md-4 zjr {%if div_name == "list_port" %}on{%endif%}">
                      <a href="javascript:;">自接入资源</a>
                 </div>
             </div>
         </div>
         
         <div class="slice_detail_block">
-            <div class="slice_detail_content" style="display:block;">
+            <div class="slice_detail_content" {%if div_name == "list_fw" %}style="display:block;"{%endif%}>
                 <div id="list_fw">
                     {% include "slice/fw_list_page.html" %}
                 </div>      
             </div>
             
-            <div class="slice_detail_content">
+            <div class="slice_detail_content" {%if div_name == "list_vm" %}style="display:block;"{%endif%}>
                 <div id="list_vm">
                     {%if slice_type == "mixslice" %}
                         {% include "slice/vm_list_page.html" %}
@@ -173,7 +173,7 @@
                 </div>          
             </div>
             
-           <div class="slice_detail_content">
+           <div class="slice_detail_content" {%if div_name == "list_port" %}style="display:block;"{%endif%}>
                 <div id="list_port">
                     {% include "slice/port_list_page.html" %}
                 </div>  
