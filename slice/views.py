@@ -386,7 +386,7 @@ def edit_description(request, slice_id):
 
 
 @login_required
-def detail(request, slice_id):
+def detail(request, slice_id, div_name=None):
     """编辑slice。"""
     print "slice_detail"
 #     test_cnvp()
@@ -483,6 +483,18 @@ def detail(request, slice_id):
                 return render(request, 'slice/vm_list_page.html', context)
             if div_name == 'list_port':
                 return render(request, 'slice/port_list_page.html', context)
+    else:
+        context['div_name'] = 'list_fw'
+        if div_name == None:
+            context['div_name'] = 'list_fw'
+        else:
+            if int(div_name) == 0:
+                context['div_name'] = 'list_fw'
+            if int(div_name) == 1:
+                context['div_name'] = 'list_vm'
+            if int(div_name) == 2:
+                context['div_name'] = 'list_port'
+    print context['div_name']
     return render(request, 'slice/slice_detail.html', context)
 
 

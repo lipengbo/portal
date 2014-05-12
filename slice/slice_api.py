@@ -21,6 +21,7 @@ import datetime
 import traceback
 import calendar
 from etc.config import gw_controller
+from plugins.common import utils
 
 from plugins.vt.api import get_slice_gw_mac, schedul_for_controller_and_gw
 
@@ -197,6 +198,18 @@ def create_slice_api(project, slice_uuid, name, description, island, user, vm_nu
                     if len(slice_names) > 1:
                         del slice_names[-1]
                     show_name = ('_').join(slice_names)
+                    if slice_uuid == '0':
+                        uuid = utils.gen_uuid()
+                        slice_uuid = ''.join(uuid.split('-'))
+                        slice_objs = Slice.objects.filter(uuid=slice_uuid)
+                        for i in range(10):
+                            if slice_objs:
+                                print "uuid used"
+                                uuid = utils.gen_uuid()
+                                slice_uuid = ''.join(uuid.split('-'))
+                                slice_objs = Slice.objects.filter(uuid=slice_uuid)
+                            else:
+                                break
                     slice_obj = Slice(owner=user,
                                       name=name,
                                       show_name=show_name,
