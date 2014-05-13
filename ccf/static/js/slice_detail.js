@@ -326,7 +326,7 @@ function bj_slice(vm_id){
 }
 
 //带宽监控与dhcp启停按钮点击事件
-$(".switch_btn").click(function(){
+$(".switch_btn").live("click", function(){
     if($(this)[0].style.cursor == "not-allowed"){
         //alert(1);
         return false;
@@ -373,6 +373,7 @@ $(".switch_btn").click(function(){
             }
         }
     }
+    return false;
 });
 
 //ajax设置dhcp服务启停

@@ -5,7 +5,7 @@ function update_list(url){
         f_urls = urls[0].split("/");
         //alert(f_urls);
         //alert(f_urls.length);
-        if(f_urls.length == 7){
+        if(f_urls.length >= 7){
             //alert(f_urls[3]);
             //alert(f_urls[4]);
             if(f_urls[3]=="slice" && f_urls[4]=="detail"){
