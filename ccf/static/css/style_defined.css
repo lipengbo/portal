@@ -5801,9 +5801,8 @@ textarea {
 .clear {
   clear: both;
 }
-a:active,
-a:hover,
-a:focus {
+body a:active,
+body a:focus {
   outline: none;
 }
 .btn.btn_info:hover,
@@ -5811,6 +5810,11 @@ a:focus {
   color: #fff;
 }
 /* bootstrap defined */
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: none;
+}
 .alert {
   border-radius: 0;
 }
@@ -5952,14 +5956,30 @@ a:focus {
   margin-bottom: 0;
 }
 #footer {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  height: 75px;
   border-top: 1px solid #e8e8e8;
   background: #f1f1f1;
   text-align: center;
   color: #666;
   font-size: 12px;
   margin-top: 20px;
+  padding-top: 16px;
+}
+#footer span {
+  display: inline-block;
+}
+#footer span.logo1 {
+  height: 24px;
+  line-height: 24px;
+  padding-left: 28px;
+  background: url(../img/logo-01.png) no-repeat;
+  padding-right: 20px;
+}
+#footer span.logo2 {
+  height: 24px;
+  line-height: 24px;
+  padding-left: 28px;
+  background: url(../img/logo-02.png) no-repeat;
 }
 .main {
   padding-top: 20px;
@@ -6596,6 +6616,9 @@ a.tuopu_sign_block:focus {
 .news_list_top {
   overflow: hidden;
 }
+.news_list_top img {
+  vertical-align: baseline;
+}
 .news_list_top .checkbox {
   float: left;
 }
@@ -6945,7 +6968,8 @@ fieldset legend {
   text-align: center;
   height: 100%;
 }
-#ipInput {
+#ipInput,
+#ipInput_base {
   height: 34px;
   width: 100%;
   display: inline-block;
@@ -6958,7 +6982,8 @@ fieldset legend {
   background-color: #ebebe4;
   border: 1px solid #cccccc;
 }
-#ipInput input.ipInput-cell {
+#ipInput input.ipInput-cell,
+#ipInput_base input.ipInput-cell {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -7238,14 +7263,15 @@ fieldset legend {
   padding-top: 40px;
 }
 @media (min-width: 768px) {
-  #editSliceModal .modal-dialog {
+  #editSliceModal .modal-dialog,
+  .edit_controller_modal .modal-dialog {
     width: 750px;
   }
 }
 .show_dhcp .tuopu_btn {
   margin-top: 10px;
 }
-body.nexus-body .action_box {
+.action_box {
   margin-bottom: 15px;
 }
 #div_id_image.form-group {
@@ -7338,4 +7364,53 @@ span[name="serverInfo"] {
 .check_quota_table tbody tr td span {
   font-size: 12px;
   color: #999;
+}
+.slice_detail_tab {
+  background: #2291fe;
+}
+.slice_detail_tab .row .col-md-4 {
+  padding: 15px 0;
+  text-align: center;
+}
+.slice_detail_tab .row .col-md-4 a {
+  padding: 5px 0 5px 35px;
+  height: 25px;
+  color: #bfdaff;
+}
+.slice_detail_tab .row .col-md-4 a:hover,
+.slice_detail_tab .row .col-md-4 a:active,
+.slice_detail_tab .row .col-md-4 a:focus {
+  text-decoration: none;
+}
+.slice_detail_tab .row .col-md-4.on a {
+  color: #fff;
+}
+.slice_detail_tab .row .col-md-4.on {
+  background: url(../img/sj.png) no-repeat bottom center;
+}
+.slice_detail_tab .row .fw a {
+  background: url(../img/fw2.png) no-repeat left center;
+}
+.slice_detail_tab .row .xnj a {
+  background: url(../img/xnj2.png) no-repeat left center;
+}
+.slice_detail_tab .row .zjr a {
+  background: url(../img/zjr2.png) no-repeat left center;
+}
+.slice_detail_tab .row .fw.on a {
+  background: url(../img/fw1.png) no-repeat left center;
+}
+.slice_detail_tab .row .xnj.on a {
+  background: url(../img/xnj1.png) no-repeat left center;
+}
+.slice_detail_tab .row .zjr.on a {
+  background: url(../img/zjr1.png) no-repeat left center;
+}
+.slice_detail_block .help-block {
+  margin-bottom: 40px;
+  text-align: center;
+}
+.slice_detail_block .slice_detail_content {
+  padding: 10px 20px;
+  display: none;
 }

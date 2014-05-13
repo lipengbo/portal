@@ -42,3 +42,6 @@ msgstr "网络虚拟工具"
 
 msgid ", %(number)d %(type)s"
 msgstr " %(number)d %(type)s"
+
+msgid "This field is required."
+msgstr "这个字段是必填项"

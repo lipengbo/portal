@@ -1,6 +1,6 @@
 .citySelector{  font:12px/1.5 tahoma,arial,\5b8b\4f53; background: #fff; }
 .cityslide {width:250px; list-style:none; margin:0;padding:0; border: 1px solid #85BEE5; border-right-color: #3485C0; border-bottom-color: #3485C0;box-shadow: 2px 2px 3px rgba(0,0,0,0.3);  margin-top:-2px;}
-.cityslide li { list-style:none; overflow:hidden;  height:16px; padding:4px 5px;}
+.cityslide li { list-style:none; overflow:hidden;  height:28px; padding:4px 5px;}
 .cityslide li.on{background:#9CD9FF; color:#fff;}
 .cityslide li b { font-weight:normal;}
 .cityslide li.empty{ background: #fff2e8; color: #666;}
