@@ -91,14 +91,14 @@ function jk_vm(vm_id){
 }
 
 //虚拟机登录click事件
-function dl_vm(vm_id){
+function dl_vm(vm_id, island_id){
     var a_obj = $("#"+vm_id+"_dl")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return;
     }
-    window.open("http://" + window.location.host + "/plugins/vt/vm/vnc/"+vm_id+"/");
+    window.open("http://" + window.location.host + "/plugins/vt/vm/vnc/"+vm_id+"/"+island_id+"/");
 }
 
 

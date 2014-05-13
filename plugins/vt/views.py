@@ -27,6 +27,7 @@ from models import Image, Flavor, SSHKey
 from resources.models import Server, SwitchPort
 from resources.ovs_api import get_edge_ports, slice_add_port_device
 from plugins.vt import api
+from project.models import Island
 import logging
 from django.utils.translation import ugettext as _
 LOG = logging.getLogger('plugins')
@@ -219,8 +220,9 @@ def do_vm_action(request, vmid, action):
     return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
 
 
-def vnc(request, vmid):
+def vnc(request, vmid, island_id):
     vm = VirtualMachine.objects.get(id=vmid)
+    island = get_object_or_404(Island, id=island_id)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
     private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
@@ -228,7 +230,8 @@ def vnc(request, vmid):
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
-                        % (request.META.get('HTTP_HOST').split(':')[0], token)
+                         %(island.novnc_ip, token)
+            #            % (request.META.get('HTTP_HOST').split(':')[0], token)
     return HttpResponseRedirect(novnc_url)
 
 
