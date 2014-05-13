@@ -70,12 +70,6 @@
                                             <li class="{% if request.current_app == 'help' %}active{% endif %}"><a href="/help/" class="help_menu">帮助</a></li>
                                             {% endif %}
 					                    </ul>
-                                        {% comment %}
-                                            <ul class="nav">
-                                                <li><a href="#tab_one">One</a></li>
-                                                <li><a href="#tab_two">Two</a></li>
-                                            </ul>
-                                        {% endcomment %}
                                     {% endblock %}
                                     {% block account_bar %}{% include "_account_bar.html" %}{% endblock %}
                                 </div>

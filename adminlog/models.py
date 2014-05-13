@@ -8,7 +8,6 @@ from django.contrib.contenttypes.models import ContentType
 SUCCESS = 200
 FAIL = 201
 
-# Create your models here.
 def log(user, target, message, result_code=SUCCESS):
     LogEntry.objects.log_action(user_id=user.id,
             content_type_id=ContentType.objects.get_for_model(target).pk,
