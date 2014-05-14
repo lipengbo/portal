@@ -416,6 +416,7 @@ def slice_delete_port_device(slice_obj, port_id):
                     owner_devices = slice_port.ownerdevice_set.all()
                     owner_devices.delete()
                 slice_port.delete()
+                slice_obj.flowspace_changed(3)
         transaction.commit()
     except:
         transaction.rollback()

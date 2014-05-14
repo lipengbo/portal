@@ -245,6 +245,9 @@ function check_slice_status(slice_id){
                         //控制器编辑、slice编辑按钮变化
                         $(".bianji").attr("style","cursor:pointer");
                         $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj.png");
+                        //vm删除、port删除
+                        $(".shanchu").attr("style","cursor:pointer");
+                        $(".shanchu").children("img").attr("src",STATIC_URL+"img/btn_sc.png");
                         //dhcp启停、vm添加
                         $(".dhcp_div").removeClass("disabled");
                         $(".dhcp").attr("style","cursor:pointer");
