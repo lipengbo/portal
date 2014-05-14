@@ -1,7 +1,59 @@
 {% extends 'site_base.html' %}
 
+{% block breadcrumb %}
+        <li>日志</li>
+{% endblock %}
+
+{% block extra_breadcrumb %}
+            <form class="navbar-form navbar-right search_defined">
+                <div class="form-group">
+                  <input placeholder="搜索" type="text" value="" name="" value="" class="form-control search-query">
+                 <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
+                </div>
+            </form>
+{% endblock %}
+
 {% block body %}
     {% for log in logs %}
     <p>{{ log.user }} {{ log.change_message }}</p>
     {% endfor %}
+    <div class="log_list">
+        <div class="log_detail clearfix">
+            <div class="col-md-4">创建项目</div>
+            <div class="col-md-4"><i class="glyphicon glyphicon-time"></i>2014-05-12 15:00</div>
+            <div class="col-md-4"><i class="glyphicon glyphicon-ok"></i>成功</div>
+        </div>
+        <div class="log_pop">
+            <span class="log_sj"></span>
+            <dl>
+                <dt>VM：</dt>
+                <dd>名称</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="log_list">
+        <div class="log_detail clearfix">
+            <div class="col-md-4">创建项目</div>
+            <div class="col-md-4"><i class="glyphicon glyphicon-time"></i>2014-05-12 15:00</div>
+            <div class="col-md-4"><i class="glyphicon glyphicon-remove"></i>失败</div>
+        </div>
+        <div class="log_pop">
+            <span class="log_sj"></span>
+            <dl>
+                <dt>VM：</dt>
+                <dd>名称</dd>
+            </dl>
+        </div>
+    </div>
+    <div class="text-center">
+        <ul class="pagination">
+          <li><a href="#">&laquo;</a></li>
+          <li><a href="#">1</a></li>
+          <li><a href="#">2</a></li>
+          <li><a href="#">3</a></li>
+          <li><a href="#">4</a></li>
+          <li><a href="#">5</a></li>
+          <li><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
 {% endblock %}

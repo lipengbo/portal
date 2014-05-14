@@ -61,4 +61,9 @@ $(function(){
             }
         }
     });
+    
+    //日志点击
+    $(".log_list").click(function(){
+        $(this).find(".log_pop").toggle();
+    });
 });

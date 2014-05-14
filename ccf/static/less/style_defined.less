@@ -1588,3 +1588,55 @@ span[name="serverInfo"] {
         color:#999;
     }
 }
+.log_list:nth-child(odd) {
+    .log_detail {
+        background:#f1f1f1;
+    }
+}
+.log_list:nth-child(even) {
+    .log_detail {
+        background:#fff;
+    }
+}
+.log_list {   
+    .log_detail {        
+        padding-top:10px;
+        padding-bottom:10px;
+        cursor:pointer;
+        i {
+            margin-right:10px;
+        }
+        i.glyphicon-time {
+            color:#999;
+        }
+        i.glyphicon-ok {
+            color:#009933;
+        }
+        i.glyphicon-remove {
+            color:#cc0000;
+        }
+    }
+    .log_pop {
+        display:none;
+        position:relative;
+        padding:15px;
+        background:#dadcdd;
+        dl {
+            color:#666;
+            margin-bottom:0;
+            dt {
+                float:left;    
+                font-weight:normal;                        
+            }
+        }
+        span.log_sj {
+            position:absolute;
+            left:36px;
+            top:-7px;
+            display:block;
+            background:url(../img/log_sj.png) no-repeat;
+            width:11px;
+            height:7px; 
+        }
+    }
+} 
