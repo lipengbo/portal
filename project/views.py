@@ -374,6 +374,7 @@ def delete_project(request, id):
             project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
+            transaction.rollback()
     else:
         project.dismiss(request.user)
     if 'next' in request.GET:

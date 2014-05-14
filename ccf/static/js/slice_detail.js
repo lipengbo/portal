@@ -117,7 +117,7 @@ function bj_vm(vm_id){
         }else{
             $('#editmixctModal').modal('show');
         }
-        return true;
+        return false;
     }
 }
 
@@ -224,6 +224,9 @@ function start_stop_slice(slice_id){
             //控制器编辑、slice编辑按钮变化
             $(".bianji").attr("style","cursor:not-allowed");
             $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj_gray.png");
+            //vm删除、port删除
+            $(".shanchu").attr("style","cursor:not-allowed");
+            $(".shanchu").children("img").attr("src",STATIC_URL+"img/btn_sc_gray.png");
             //dhcp启停、vm添加
             $(".dhcp_div").addClass("disabled");
             $(".dhcp").attr("style","cursor:not-allowed");
@@ -326,7 +329,7 @@ function bj_slice(vm_id){
 }
 
 //带宽监控与dhcp启停按钮点击事件
-$(".switch_btn").click(function(){
+$(".switch_btn").live("click", function(){
     if($(this)[0].style.cursor == "not-allowed"){
         //alert(1);
         return false;
@@ -373,6 +376,7 @@ $(".switch_btn").click(function(){
             }
         }
     }
+    return false;
 });
 
 //ajax设置dhcp服务启停
@@ -500,32 +504,37 @@ function can_add_port(slice_id){
 }
 
 function delete_switch_port(sliceid, portid){
-    $('#alertModal').modal();
-    $('.delete-confirm').unbind('click');
-    $('.delete-confirm').click(function(){
-        $.ajax({
-            url: '/slice/delete_switch_port/' + sliceid + "/" + portid + "/",
-            type: 'GET',
-            dataType: 'json',
-            success:function(data){
-                if(data.result == 1){
-                    $("div#slice_alert_info").empty();
-                    str = "" + "<p class=\"text-center\">删除端口失败！</p>";
-                    $("div#slice_alert_info").append(str);
-                    $('#slicealertModal').modal('show');
-                }else{
-                    if($('.endless_page_current')[0]){
-                        c_p = $('.endless_page_current')[0].innerHTML;
-                        var url = document.location + "?port_page=" + c_p + "#topsection";
-                        update_list(url);
+    var a_obj = $("#"+portid+"_sc_port")[0];
+    if(a_obj.style.cursor == "not-allowed"){
+        return false;
+    }else{
+        $('#alertModal').modal();
+        $('.delete-confirm').unbind('click');
+        $('.delete-confirm').click(function(){
+            $.ajax({
+                url: '/slice/delete_switch_port/' + sliceid + "/" + portid + "/",
+                type: 'GET',
+                dataType: 'json',
+                success:function(data){
+                    if(data.result == 1){
+                        $("div#slice_alert_info").empty();
+                        str = "" + "<p class=\"text-center\">删除端口失败！</p>";
+                        $("div#slice_alert_info").append(str);
+                        $('#slicealertModal').modal('show');
                     }else{
-                        var url = document.location + "?";
-                        update_list(url);
+                        if($('.endless_page_current')[0]){
+                            c_p = $('.endless_page_current')[0].innerHTML;
+                            var url = document.location + "?port_page=" + c_p + "#topsection";
+                            update_list(url);
+                        }else{
+                            var url = document.location + "?";
+                            update_list(url);
+                        }
                     }
                 }
-            }
+            });
         });
-    });
+    }
 }
 function add_device(slice_id){
 	var device_type = document.getElementsByName("device");

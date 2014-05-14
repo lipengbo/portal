@@ -473,29 +473,23 @@ def detail(request, slice_id, div_name=None):
         context['device_end_ip'] = ip_range[3]
         context['start_ip'] = ip_range[4]
         context['end_ip'] = ip_range[5]
-    if request.is_ajax():
-        print "++++++++++++++++++++++++++ajax"
-        if 'div_name' in request.GET:
-            div_name = request.GET.get('div_name')
-            print "++++++++++++++++++++++++++div_name", div_name
-            if div_name == 'list_fw':
-                return render(request, 'slice/fw_list_page.html', context)
-            if div_name == 'list_vm':
-                return render(request, 'slice/vm_list_page.html', context)
-            if div_name == 'list_port':
-                return render(request, 'slice/port_list_page.html', context)
-    else:
-        context['div_name'] = 'list_fw'
-        if div_name == None:
+    context['div_name'] = 'list_fw'
+    if div_name != None:
+        if int(div_name) == 0:
             context['div_name'] = 'list_fw'
-        else:
-            if int(div_name) == 0:
-                context['div_name'] = 'list_fw'
-            if int(div_name) == 1:
-                context['div_name'] = 'list_vm'
-            if int(div_name) == 2:
-                context['div_name'] = 'list_port'
-    print context['div_name']
+        if int(div_name) == 1:
+            context['div_name'] = 'list_vm'
+        if int(div_name) == 2:
+            context['div_name'] = 'list_port'
+    if request.is_ajax():
+        if 'div_name' in request.GET:
+            div_name_a = request.GET.get('div_name')
+            if div_name_a == 'list_fw':
+                return render(request, 'slice/fw_list_page.html', context)
+            if div_name_a == 'list_vm':
+                return render(request, 'slice/vm_list_page.html', context)
+            if div_name_a == 'list_port':
+                return render(request, 'slice/port_list_page.html', context)
     return render(request, 'slice/slice_detail.html', context)
 
 
@@ -733,11 +727,18 @@ def get_slice_state(request, slice_id):
         g_state = -1
         slice_obj = Slice.objects.get(id=int(slice_id))
         controller = slice_obj.get_controller()
-        if controller and controller.host:
-            c_state = controller.host.state
-        gw = slice_obj.get_gw()
-        if gw:
-            g_state = gw.state
+        try:
+            subnet = Subnet.objects.get(owner=slice_obj.uuid)
+        except:
+            if controller:
+                c_state = 1
+            g_state = 1
+        else:
+            if controller and controller.host:
+                c_state = controller.host.state
+            gw = slice_obj.get_gw()
+            if gw:
+                g_state = gw.state
     except:
         print 1
         return HttpResponse(json.dumps({'value': 1}))

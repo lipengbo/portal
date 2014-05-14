@@ -31,10 +31,15 @@
             <td>{% if device.mac_list == '' %}无{%else%}{{device.mac_list}}{%endif%}</td>
             <td class="btn_operation"> 
                 {%if extent_html == "admin_base.html" or permission == "edit" %}
-                <a href="javascript:void(0);" id="" onclick="delete_switch_port({{slice_obj.id}},  {{device.port_id}})" style="cursor:pointer">
+                {%if slice_obj.state == 0 %}
+                <a class="shanchu" href="javascript:void(0);" id="{{device.port_id}}_sc_port" onclick="delete_switch_port({{slice_obj.id}},  {{device.port_id}})" style="cursor:pointer">
                     <img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" />
                 </a>
-
+                {%else%}
+                <a class="shanchu" href="javascript:void(0);" id="{{device.port_id}}_sc_port" onclick="delete_switch_port({{slice_obj.id}},  {{device.port_id}})" style="cursor:not-allowed">
+                    <img src="{{ STATIC_URL}}img/btn_sc_gray.png" title="删除" />
+                </a>
+                {%endif%}
                 {%endif%}
             </td>
         </tr>

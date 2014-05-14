@@ -53,7 +53,7 @@ class Controller(ServiceResource):
 class Flowvisor(ServiceResource):
     def __init__(self, *args, **kwargs):
         password = self._meta.get_field('password')
-        password.help_text = '填写flowvisor密码'
+        password.help_text = '填写网络虚拟工具密码'
         super(Flowvisor, self).__init__(*args, **kwargs)
 
     http_port = models.IntegerField(verbose_name=_("Http Port"))

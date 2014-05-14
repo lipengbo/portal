@@ -187,10 +187,6 @@ def create_owner_membership(sender, instance, created, **kwargs):
 
 
 @receiver(pre_delete, sender=Membership)
-def delete_member_slice(sender, instance, **kwargs):
-    instance.user.slice_set.all().delete()
-
-@receiver(pre_delete, sender=Membership)
 def delete_permission(sender, instance, **kwargs):
     user_perms = get_perms(instance.user, instance.project)
     for perm in user_perms:

@@ -141,9 +141,6 @@ var svg = svg_obj.append('g')
     .on("mouseup", mouseup)
     .on("mousedown", mousedown);
     var rect_color = 'white';
-    if (size == 'big') {
-        rect_color = '#CCC';
-    }
 //initboard2();
 svg.append('rect')
     .attr('width', "100%")
@@ -193,7 +190,7 @@ function assign_node_icon(d) {
                 // gre switch
                 ovs_image = STATIC_URL + 'topology/img/ovs_external';
                 if (!show_logical) {
-                    ovs_image = STATIC_URL + 'topology/img/ovs-gateway';
+                    ovs_image = STATIC_URL + 'topology/img/ovs-phy';
                 }
             } else if (d.id.indexOf('00:00:') == 0) {
                 // virtual switch

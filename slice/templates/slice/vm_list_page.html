@@ -34,7 +34,7 @@
       {%if vm.type_id == 4%}class="vm"{%endif%} vm_id="{{vm.id}}">
         {{vm.name}}</div></td>
       <td><div>
-        <a id="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{vm.uuid}}">
+        <a id="uuid" class="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{vm.uuid}}">
         {{vm.uuid}}
         </a></div></td>
       <td>{{vm.dhcp}}</td>
@@ -106,11 +106,11 @@
             {%if extent_html == "site_base.html" and permission == "edit" %}
                 {%if vm.type_id == 1 or vm.type_id == 2 %}
                     {%if slice_obj.state == 0 %}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{vm.id}}_bj" onclick="return bj_vm({{vm.id}});" style="cursor:pointer">
+                        <a class="bianji" href="javascript:void(0);" id="{{vm.id}}_bj" onclick="return bj_vm({{vm.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                         </a>
                     {%else%}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{vm.id}}_bj" onclick="return bj_vm({{vm.id}});" style="cursor:not-allowed">
+                        <a class="bianji" href="javascript:void(0);" id="{{vm.id}}_bj" onclick="return bj_vm({{vm.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                     {%endif%}
@@ -118,10 +118,15 @@
             {%endif%}
             {%if extent_html == "admin_base.html" or permission == "edit" %}
                 {%if vm.type_id == 4%}
-                        <a href="javascript:void(0);" id="{{vm.id}}_sc" onclick="sc_vm({{vm.id}});" style="cursor:pointer">
+                    {%if slice_obj.state == 0 %}
+                        <a class="shanchu" href="javascript:void(0);" id="{{vm.id}}_sc" onclick="sc_vm({{vm.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" />
                         </a>
-
+                    {%else%}
+                        <a class="shanchu" href="javascript:void(0);" id="{{vm.id}}_sc" onclick="sc_vm({{vm.id}});" style="cursor:not-allowed">
+                        <img src="{{ STATIC_URL}}img/btn_sc_gray.png" title="删除" />
+                        </a>
+                    {%endif%}
                 {%endif%}
             {%endif%}
       </td>
@@ -135,14 +140,3 @@
         {% show_pages %}
     </ul>
 </div>
-
-
-<script src="{% block jquery_src %}{% static "pinax/js/jquery.js" %}{% endblock %}"></script>
-            <script src="{% static "js/bootstrap.min.js" %}"></script>
-
-<script>
-    $(document).ready(function(){
-        show_uuid($("[id='uuid']"));
-        update_vm_status();
-    })
-</script>

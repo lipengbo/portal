@@ -23,9 +23,9 @@
     <strong>提示：</strong>您当前还未进行服务配置
 </div>
 {%endif%}
-{%if slice_type == "mixslice" and controller == None and gw%}
+{%if slice_type == "mixslice" and controller == None and gw %}
 <div class="alert alert-danger">
-    <strong>提示：</strong>您当前还未添加网关
+    <strong>提示：</strong>您当前还未添加控制器
 </div>
 {%endif%}
 {%endif%}
@@ -34,10 +34,10 @@
             <thead>
                 <tr>
                     <th width="16%">虚网名称</th>
-                    <th width="28%">描述</th>
+                    <th width="20%">描述</th>
                     <th width="12%">所属节点</th>
                     <th width="12%">类型</th>
-                    <th width="12%">网段</th>
+                    <th width="20%">网段</th>
                     <th width="8%">状态</th>
                     <th width="12%">操作</th>
                 </tr>
@@ -194,15 +194,13 @@
             {%else%}
             <p id="edit">0</p>
             {%endif%}
-            {%if slice_obj.get_controller%}
-            <p id="controller_ip_port_old">{{slice_obj.get_controller.ip}}:{{slice_obj.get_controller.port}}</p>
+            {%if controller %}
+            <p id="controller_ip_port_old">{{controller.ip}}:{{controller.port}}</p>
             {%else%}
             <p id="controller_ip_port_old">""</p>
             {%endif%}
-            {%if slice_obj.get_nw %}
-            <p id="controller_type">{{vms.0.type_id}}</p>
-            {%else%}
-            <p id="controller_type">1</p>
+            {%if slice_type == "mixslice" and controller and controller.name == 'user_define'%}
+                <p id="controller_type">1</p>
             {%endif%}
             <p id="slice_type">{{slice_type}}</p>
             <p id="slice_uuid">{{slice_obj.uuid}}</p>
@@ -267,24 +265,34 @@
                         <td width="120">
                             <label class="tab_radio1 control-label">
                               <input type="radio" name="controller_type" id="optionsRadios1" value="default_create"
-                              {%if vms.0.type_id == 1 %}{%else%}checked{%endif%}>
+                              {%if controller %}
+                              {%if controller.name != 'user_define' %}checked{%endif%}
+                              {%else%}checked{%endif%}>
                               默认创建
                             </label>
                             <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                         </td>
                         <td width="100" class="text-right">控制器类型</td>
                         <td>
-                            {%if vms.0.type_id == 1 %}
-                                <select name="controller_sys" id="controller_sys" class="form-control" disabled>
-                                  <option value="Floodlight">Floodlight</option>
-                                  <option value="POX">POX</option>
-                                  <option value="OpenDaylight">OpenDaylight</option>
-                                </select>
+                            {%if controller %}
+                                {%if controller.name != 'user_define' %}
+                                    <select name="controller_sys" id="controller_sys" class="form-control">
+                                      <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
+                                      <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
+                                      <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
+                                    </select>
+                                {%else%}
+                                    <select name="controller_sys" id="controller_sys" class="form-control" disabled>
+                                      <option value="Floodlight">Floodlight</option>
+                                      <option value="POX">POX</option>
+                                      <option value="OpenDaylight">OpenDaylight</option>
+                                    </select>
+                                {%endif%}
                             {%else%}
                                 <select name="controller_sys" id="controller_sys" class="form-control">
-                                  <option value="Floodlight" {%if vms.0.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
-                                  <option value="POX" {%if vms.0.name == "POX" %}selected = "selected"{%endif%}>POX</option>
-                                  <option value="OpenDaylight" {%if vms.0.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
+                                  <option value="Floodlight" selected = "selected">Floodlight</option>
+                                  <option value="POX">POX</option>
+                                  <option value="OpenDaylight">OpenDaylight</option>
                                 </select>
                             {%endif%}
                             
@@ -297,7 +305,7 @@
                         <td>
                             <label class="tab_radio2">
                               <input type="radio" name="controller_type" id="optionsRadios2" value="user_define"
-                              {%if vms.0.type_id == 1 %}checked{%endif%}>
+                              {%if controller and controller.name == 'user_define' %}checked{%endif%}>
                               自定义
                             </label>
                             <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
