@@ -94,7 +94,6 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
     except Slice.DoesNotExist:
         pass
     except Exception, ex:
-        print ex
         import traceback
         traceback.print_exc()
         try:
