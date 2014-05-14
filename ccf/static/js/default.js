@@ -63,7 +63,7 @@ $(function(){
     });
     
     //日志点击
-    $(".log_list").click(function(){
-        $(this).find(".log_pop").toggle();
+    $(".log_detail").click(function(){
+        $(this).siblings(".log_pop").toggle();
     });
 });
