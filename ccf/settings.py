@@ -123,6 +123,7 @@ MIDDLEWARE_CLASSES = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "project.middleware.CurrentViewApplicationName",
+    "common.middleware.LocalUserMiddleware",
 ]
 
 ROOT_URLCONF = "ccf.urls"
