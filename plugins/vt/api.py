@@ -108,9 +108,9 @@ def delete_vm_for_gateway(vm):
     vm.delete()
 
 
-def do_vm_action(vm, action):
+def do_vm_actionf(user, vm, action):
     from tasks import do_vm_action
-    do_vm_action.delay(vm, action)
+    do_vm_action.delay(user, vm, action)
 
 
 def get_slice_gw_mac(slice):

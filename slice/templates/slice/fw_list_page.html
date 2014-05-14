@@ -42,11 +42,15 @@
             {%if extent_html == "site_base.html"%}
                 {%if controller.host%}
                     {%if controller.host.state == 1 %}
-                        <a href="javascript:void(0);" id="{{controller.host.id}}_dl" onclick="dl_vm({{controller.host.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);"
+                            id="{{controller.host.id}}_dl"
+                            onclick="dl_vm({{controller.host.id}}, {{island.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{controller.host.id}}_dl" onclick="dl_vm({{controller.host.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);"
+                            id="{{controller.host.id}}_dl"
+                            onclick="dl_vm({{controller.host.id}}, {{island.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}
@@ -166,11 +170,13 @@
                 {%endif%}
                 {%if extent_html == "site_base.html"%}
                     {%if gw.state == 1 %}
-                        <a href="javascript:void(0);" id="{{gw.id}}_dl" onclick="dl_vm({{gw.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{gw.id}}_dl"
+                            onclick="dl_vm({{gw.id}}, {{island.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{gw.id}}_dl" onclick="dl_vm({{gw.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{gw.id}}_dl"
+                            onclick="dl_vm({{gw.id}},{{island.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}

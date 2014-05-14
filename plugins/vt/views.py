@@ -30,6 +30,7 @@ from plugins.vt import api
 from project.models import Island
 import logging
 from django.utils.translation import ugettext as _
+from adminlog.models import log, SUCCESS, FAIL
 LOG = logging.getLogger('plugins')
 
 
@@ -115,11 +116,14 @@ def create_vm(request, sliceid):
                 vm.type = 1
                 vm.save()
                 vm.slice.flowspace_changed(2)
+                log(user, vm, u"创建虚拟机"+vm.name+u"成功", SUCCESS)
                 return HttpResponse(json.dumps({'result': 0}))
             except socket_error as serr:
                 #if serr.errno == errno.ECONNREFUSED:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 vm.state = 11
                 vm.type =1
                 try:
@@ -128,10 +132,13 @@ def create_vm(request, sliceid):
                 except:
                     raise
             except StopIteration, e:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result' : 1, 'error': _('server error')}))
         else:
+            log(user, vm, u"创建虚拟机失败", FAIL)
             return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
         if user.quotas.vm <= vm_count:
@@ -171,14 +178,16 @@ def create_device(request, sliceid):
             ports_data = json.loads(request.POST.get('ports_data'))
             slice_obj = Slice.objects.get(id=sliceid)
             for port in ports_data:
-                #print port[0], "===", port[1]
+                print port[0], "===", port[1]
+                switch_port = SwitchPort.objects.get(id=port[0])
                 slice_add_port_device(slice_obj, port[0], port[1], port[2])
-                #print "-------", port[2], ":", slice_port
-
+                print "-------", port[2]
+                log(request.user, switch_port, u"添加端口"+switch_port.name+u"成功", SUCCESS)
 
             return HttpResponse(json.dumps({'result':0}))
         except Exception, e:
             traceback.print_exc()
+            log(request.user, switch_port, u"添加端口失败", FAIL)
             return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
@@ -212,9 +221,15 @@ def do_vm_action(request, vmid, action):
                 vm.state = DOMAIN_STATE_DIC['stopping']
             print ">>>>>>>>>>>>>>>>vm state:", vm.state
             vm.save()
-            api.do_vm_action(vm, action)
+            api.do_vm_action(request.user, vm, action)
             return HttpResponse(json.dumps({'result': 0}))
         except socket_error as serr:
+            if action == 'create':
+                log(request.user, vm, u"虚拟机启动失败", FAIL)
+            elif action == 'destroy':
+                log(request.user, vm, u"虚拟机停止失败", FAIL)
+            else:
+                log(request.user, vm, u"虚拟机操作失败", FAIL)
             if serr.errno == errno.ECONNREFUSED:
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
     return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
@@ -243,9 +258,11 @@ def delete_vm(request, vmid, flag):
             #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         #else:
         vm.slice.flowspace_changed(3)
+        log(request.user, vm,  u"删除虚拟机成功", SUCCESS)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())
+        log(request.user, vm, u"删除虚拟机失败", FAIL)
         #if flag == '0':
         return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
     #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
