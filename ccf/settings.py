@@ -182,7 +182,8 @@ INSTALLED_APPS = [
     "nexus",
     "monitor",
     "guardian",
-    'djcelery'
+    'djcelery',
+    "adminlog",
 ]
 
 # Celery settings

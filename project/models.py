@@ -15,6 +15,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 from django.core.mail import send_mail
 
+from adminlog.models import log
 from guardian.shortcuts import assign_perm, remove_perm, get_perms
 
 from invite.models import Invitation, Application
@@ -180,13 +181,14 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.delete_project', owner, instance)
         assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
+        log(owner, instance, "成功创建项目")
 
 
 @receiver(pre_delete, sender=Membership)
 def delete_permission(sender, instance, **kwargs):
     user_perms = get_perms(instance.user, instance.project)
     for perm in user_perms:
-        if perm != 'project.add_proejct':
+        if perm != 'project.add_project':
             remove_perm(perm, instance.user, instance.project)
 
 @receiver(pre_delete, sender=Membership)
@@ -204,6 +206,10 @@ def delete_invitation_application(sender, instance, **kwargs):
     target_type = ContentType.objects.get_for_model(project)
     Invitation.objects.filter(target_id=project.id, target_type=target_type).delete()
     Application.objects.filter(target_id=project.id, target_type=target_type).delete()
+
+@receiver(post_delete, sender=Project)
+def log_project_delete(sender, instance, **kwargs):
+    log(instance.owner, instance, "删除了项目")
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
