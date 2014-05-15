@@ -12,7 +12,6 @@ from project.models import Project, Island
 from plugins.ipam.models import Subnet, IPUsage
 from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
 from plugins.openflow.flowvisor_api import flowvisor_del_slice
-from plugins.vt.api import slice_delete_route
 from slice.slice_exception import DbError
 from adminlog.models import log, SUCCESS, FAIL
 
@@ -286,6 +285,7 @@ class Slice(models.Model):
     @transaction.commit_manually
     def delete(self, *args, **kwargs):
         from plugins.openflow.controller_api import delete_controller
+        from plugins.vt.api import slice_delete_route
         import traceback
         try:
             print "0:get user"
