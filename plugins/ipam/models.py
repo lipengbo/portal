@@ -61,6 +61,8 @@ class IPManager(models.Manager):
             ip = unused_ips[0]
         else:
             ip_count = ips.count()
+            if ip_count == 0:
+                ip_count = ip_count + 1
             subnet_network = subnet.get_network()
             new_ipaddr = subnet_network.get_host(ip_count)
             ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
@@ -97,16 +99,19 @@ class IPManager(models.Manager):
     def allocate_ip_for_gw(self, island):
         owner = 'island_%s_2' % island.id
         subnet = Subnet.objects.get(owner=owner, is_used=True, is_owned=True)
-        ips = self.filter(supernet=subnet)
-        unused_ips = ips.filter(is_used=False)
-        if unused_ips:
-            ip = unused_ips[0]
-        else:
-            subnet_network = subnet.get_network()
-            subnet_start = na.IPAddress(subnet.netaddr.partition('/')[0]).value - subnet_network.first
-            ip_count = ips.count() + subnet_start
-            new_ipaddr = subnet_network.get_host(ip_count)
-            ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
+        subnet_network = subnet.get_network()
+        gw_ipaddr = subnet_network.ip + 1
+        ip = IPUsage(supernet=subnet, ipaddr=str(gw_ipaddr))
+        #ips = self.filter(supernet=subnet)
+        #unused_ips = ips.filter(is_used=False)
+        #if unused_ips:
+            #ip = unused_ips[0]
+        #else:
+            #subnet_network = subnet.get_network()
+            #subnet_start = na.IPAddress(subnet.netaddr.partition('/')[0]).value - subnet_network.first
+            #ip_count = ips.count() + subnet_start
+            #new_ipaddr = subnet_network.get_host(ip_count)
+            #ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
         ip.is_used = True
         ip.save()
         return ip
