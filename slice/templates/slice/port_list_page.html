@@ -1,7 +1,8 @@
 {% load endless %}
 {% paginate 4 devices using "port_page" %}
 <h4 class="block_title">
-    <img src="{{ STATIC_URL}}img/ic_lb.png" />自接入设备端口列表<span>【可用IP：{{ device_start_ip }}-{{ device_end_ip }}】</span>
+    <img src="{{ STATIC_URL}}img/ic_lb.png"
+    />{%if slice_type == "baseslice" %}可自行设置同网段ip地址{%else%}自接入设备端口列表<span>【可用IP：{% if device_start_ip == '' %}无{%else%}{{ device_start_ip }}-{{ device_end_ip }}{% endif %}】{%endif%}</span>
         <div class="pull-right">
             <a class="bianji" id="port_add" href="javascript:void(0);" onclick="can_add_port({{slice_obj.id}});"
                  {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%} title="创建端口">

@@ -6,6 +6,7 @@ from slice.slice_api import update_slice_virtual_network_cnvp, update_slice_virt
 from plugins.vt.models import DOMAIN_STATE_DIC
 from slice.slice_exception import DbError
 from adminlog.models import log, SUCCESS, FAIL
+from plugins.common.agent_client import AgentClient
 
 
 @task()
@@ -127,3 +128,37 @@ def stop_slice_sync(slice_id, user):
         slice_obj.start()
     else:
         log(user, slice_obj, u"停止虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
+
+
+@task()
+def start_or_stop_vpn(slice_obj, vpn_ip, network, gw_ip, start_or_stop):
+    try:
+        print "--------->do_action on vpn server", start_or_stop
+        agent = AgentClient(vpn_ip)
+        if start_or_stop == 'start':
+            print "1"
+            result = agent.add_route_to_vpnserver(network, gw_ip)
+        else:
+            print "2"
+            result = agent.del_route_from_vpnserver(network, gw_ip)
+        reset_state(slice_obj, start_or_stop, result)
+    except:
+        print 3
+        reset_state(slice_obj, start_or_stop, False)
+        import traceback
+        traceback.print_exc()
+
+
+def reset_state(slice_obj, start_or_stop, result):
+    print "==========> reset vpn state", result
+    if result:
+        if start_or_stop == 'start':
+            slice_obj.vpn_state = 1
+        else:
+            slice_obj.vpn_state = 0
+    else:
+        if start_or_stop == 'start':
+            slice_obj.vpn_state = 0
+        else:
+            slice_obj.vpn_state = 1
+    slice_obj.save()

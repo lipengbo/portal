@@ -12,6 +12,7 @@ from project.models import Project, Island
 from plugins.ipam.models import Subnet, IPUsage
 from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
 from plugins.openflow.flowvisor_api import flowvisor_del_slice
+from plugins.vt.api import slice_delete_route
 from slice.slice_exception import DbError
 from adminlog.models import log, SUCCESS, FAIL
 
@@ -31,6 +32,7 @@ SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
                 (SLICE_STATE_STARTED, 'started'),
                 (SLICE_STATE_STOPPING, 'stopping'),
                 (SLICE_STATE_STARTING, 'starting'),)
+VPN_STATES = SLICE_STATES
 SLICE_TYPES = ((SLICE_TYPE_USABLE, 'usable'),
                 (SLICE_TYPE_DELETE, 'delete'),)
 SLICE_DELETE_TYPE = ((USER_DELETE, 'usable'),
@@ -57,6 +59,7 @@ class Slice(models.Model):
     changed = models.IntegerField(null=True)
     ct_change = models.NullBooleanField(null=True)
     vm_num = models.IntegerField(default=0)
+    vpn_state = models.IntegerField(choices=VPN_STATES, default=0)
 
     def created_date(self):
         return self.date_created
@@ -298,13 +301,13 @@ class Slice(models.Model):
                     self.state = SLICE_STATE_STOPPED
                     self.save()
                     transaction.commit()
-            
             print "2:delete subnet and route"
             if self.get_nw():
                 print "delete subnet"
                 IPUsage.objects.delete_subnet(self.uuid)
                 print "delete route"
-#                 del_route(self)
+                if self.vpn_state == 1:
+                    slice_delete_route(self.id)
             print "3:delete controller"
             delete_controller(self.get_controller(), False)
             print "4:delete slice record"

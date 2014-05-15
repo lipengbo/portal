@@ -42,11 +42,15 @@
             {%if extent_html == "site_base.html"%}
                 {%if controller.host%}
                     {%if controller.host.state == 1 %}
-                        <a href="javascript:void(0);" id="{{controller.host.id}}_dl" onclick="dl_vm({{controller.host.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);"
+                            id="{{controller.host.id}}_dl"
+                            onclick="dl_vm({{controller.host.id}}, {{island.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{controller.host.id}}_dl" onclick="dl_vm({{controller.host.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);"
+                            id="{{controller.host.id}}_dl"
+                            onclick="dl_vm({{controller.host.id}}, {{island.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}
@@ -166,11 +170,13 @@
                 {%endif%}
                 {%if extent_html == "site_base.html"%}
                     {%if gw.state == 1 %}
-                        <a href="javascript:void(0);" id="{{gw.id}}_dl" onclick="dl_vm({{gw.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="{{gw.id}}_dl"
+                            onclick="dl_vm({{gw.id}}, {{island.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
                         </a>
                     {%else%}
-                        <a href="javascript:void(0);" id="{{gw.id}}_dl" onclick="dl_vm({{gw.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" id="{{gw.id}}_dl"
+                            onclick="dl_vm({{gw.id}},{{island.id}});" style="cursor:not-allowed">
                         <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
                         </a>
                     {%endif%}
@@ -236,4 +242,53 @@
     {%else%}
     <p class="help-block">当前未添加虚拟网关！</p> 
     {%endif%}
+
+    <h4 class="block_title">
+        <img src="/site_media/static/img/ic_01.png">VPN服务配置 
+        <div class="pull-right">
+            {%if extent_html == "site_base.html" and permission == "edit" %}
+                        {%if slice_obj.vpn_state == 1 %}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
+                        </a>
+                        {% elif slice_obj.vpn_state == 0 %}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
+                        </a>
+                        {% elif slice_obj.vpn_state == 3 %}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止中" />
+                        </a>
+                        {%else%}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动中" />
+                        </a>
+                        {%endif%}
+            {%endif%}
+         </div>                                            
+    </h4>
+                <table class="table_base">
+                    <tbody>
+                        <tr>
+                            <td width="150">VPN服务器IP地址：</td>
+                            <td width="120"><div>{{island.vpn_ip}}</div></td>
+                        </tr>
+                        <tr>
+                            <td>状态：</td>
+                            <td class="slice_state">
+                                {% if slice_obj.vpn_state == 0 %}
+                                    <i class="icon-minus-sign icon_state" id="vpn_state"></i>
+                                {% elif slice_obj.state == 1 %}
+                                    <i class="icon-ok-sign icon_state" id="vpn_state"></i>
+                                {%else%}
+                                    <i class="icon-spinner icon-spin" id="vpn_state"></i>  
+                                {%endif%}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+       
 {%endif%}
+
