@@ -5,10 +5,12 @@ from django.db.models import F
 from django.contrib.admin.models import LogEntry, ADDITION
 from django.contrib.contenttypes.models import ContentType
 
+from common.middleware import get_current_user
 SUCCESS = 200
 FAIL = 201
 
 def log(user, target, message, result_code=SUCCESS):
+    user = get_current_user()
     content_type_id = target and ContentType.objects.get_for_model(target).pk or None
     object_id = target and target.pk or None
     object_repr = target and target.__unicode__() or ''

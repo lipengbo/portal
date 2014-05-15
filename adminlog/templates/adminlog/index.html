@@ -1,7 +1,47 @@
 {% extends 'site_base.html' %}
 
+{% load i18n %}
+{% load endless %}
+
+{% block breadcrumb %}
+        <li>日志</li>
+{% endblock %}
+
+{% block extra_breadcrumb %}
+            <form class="navbar-form navbar-right search_defined">
+                <div class="form-group">
+                    <input placeholder="搜索" type="text" value="{{ query }}" name="query" class="form-control search-query">
+                 <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
+                </div>
+            </form>
+{% endblock %}
+
 {% block body %}
+    {% paginate 20 logs %}
     {% for log in logs %}
-    <p>{{ log.user }} {{ log.change_message }}</p>
+    <div class="log_list">
+        <div class="log_detail clearfix">
+            <div class="col-md-4">{{ log.change_message }}</div>
+            {% if user.is_superuser %}
+            <div class="col-md-2">{{ log.user }}</div>
+            {% endif %}
+            <div class="col-md-{%if user.is_superuser%}3{% else %}4{% endif %}"><i class="glyphicon glyphicon-time"></i>{{ log.action_time|date:"Y-m-d H:i" }}</div>
+            <div class="col-md-{%if user.is_superuser%}3{% else %}4{% endif %}">{% if log.action_flag == 200 %}<i class="glyphicon glyphicon-ok"></i>成功{% else %}
+                <i class="glyphicon glyphicon-remove"></i>失败
+                {% endif %}</div>
+        </div>
+        <div class="log_pop">
+            <span class="log_sj"></span>
+            <dl>
+                <dt>{% trans log.content_type.name %}：</dt>
+                <dd>{{ log.object_repr }}</dd>
+            </dl>
+        </div>
+    </div>
     {% endfor %}
+    <div class="text-center">
+        <ul class="pagination">
+            {% show_pages %}
+        </ul>
+    </div>
 {% endblock %}

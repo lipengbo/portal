@@ -7413,4 +7413,49 @@ span[name="serverInfo"] {
 .slice_detail_block .slice_detail_content {
   padding: 10px 20px;
   display: none;
+.log_list:nth-child(odd) .log_detail {
+  background: #f1f1f1;
+}
+.log_list:nth-child(even) .log_detail {
+  background: #fff;
+}
+.log_list .log_detail {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+.log_list .log_detail i {
+  margin-right: 10px;
+}
+.log_list .log_detail i.glyphicon-time {
+  color: #999;
+}
+.log_list .log_detail i.glyphicon-ok {
+  color: #009933;
+}
+.log_list .log_detail i.glyphicon-remove {
+  color: #cc0000;
+}
+.log_list .log_pop {
+  display: none;
+  position: relative;
+  padding: 15px;
+  background: #dadcdd;
+}
+.log_list .log_pop dl {
+  color: #666;
+  margin-bottom: 0;
+}
+.log_list .log_pop dl dt {
+  float: left;
+  font-weight: normal;
+}
+.log_list .log_pop span.log_sj {
+  position: absolute;
+  left: 36px;
+  top: -7px;
+  display: block;
+  background: url(../img/log_sj.png) no-repeat;
+  width: 11px;
+  height: 7px;
 }
