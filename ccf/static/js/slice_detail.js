@@ -735,3 +735,59 @@ function check_gw_select(){
         return true;
     }
 }
+
+function start_stop_vpn(slice_id, island_id){
+    var a_obj = $("#vpn_qt")[0];
+    var img_obj = $("#vpn_qt").children("img")[0];
+    var STATIC_URL = $("#STATIC_URL").text();
+    if(img_obj.title == "启动"){
+        ret = start_or_stop_vpn(slice_id, island_id, 1);
+        if(ret){
+            $("#vpn_state")
+                .removeClass("icon-minus-sign")
+                .removeClass("icon_state")
+                .addClass("icon-spinner")
+                .addClass("icon-spin");
+            a_obj.style.cursor = "not-allowed";
+            img_obj.src = STATIC_URL + "img/ic-ks-un.png";       
+            img_obj.title = "启动中"; 
+            update_vpn_status();
+        }
+    }else{
+        ret = start_or_stop_vpn(slice_id, island_id, 0);
+        if(ret){
+            $("#vpn_state")
+                .removeClass("icon-ok-sign")
+                .removeClass("icon_state")
+                .addClass("icon-spinner")
+                .addClass("icon-spin");
+            a_obj.style.cursor = "not-allowed";
+            img_obj.src = STATIC_URL + "img/ic-tz-un.png";       
+            img_obj.title = "停止中";
+            update_vpn_status();
+        }else{
+        }
+    }
+}
+
+function start_or_stop_vpn(slice_id, island_id, flag){
+    var ret = false;
+    $.ajax({
+        url: "/slice/start_or_stop_vpn/"+slice_id+"/"+island_id+"/"+flag+"/",
+        type: 'GET',
+        dataType: 'json',
+        async : false,
+        success: function(data){
+            if(data.result == 0){
+                ret = true;
+            }else{
+                $("#slice_alert_info").empty();
+                var str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
+                $("#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+                ret = false;
+            }
+        }
+    });
+    return ret;
+}

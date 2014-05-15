@@ -32,6 +32,8 @@ from plugins.vt.models import Flavor
 import datetime
 
 from adminlog.models import log, SUCCESS, FAIL
+from plugins.vt.models import VirtualMachine
+
 
 @login_required
 def create(request, proj_id, flag):
@@ -747,6 +749,10 @@ def get_slice_state(request, slice_id):
         return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
                                         'c_state': c_state, 'g_state': g_state}))
 
+def get_vpn_state(request, slice_id):
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    return HttpResponse(json.dumps({'vpn_state': slice_obj.vpn_state}))
+
 #def list_own_devices(request, slice_id):
 def list_own_devices(slice_id):
     own_devices = []
@@ -803,6 +809,30 @@ def get_select_server(request, slice_id):
     except:
         servers = []
     return HttpResponse(json.dumps(servers))
+
+def start_or_stop_vpn(request, slice_id, island_id, flag):
+    vm = None
+    try:
+        slice_obj = get_object_or_404(Slice, id=slice_id)
+        island = get_object_or_404(Island, id=island_id)
+        vm = VirtualMachine.objects.get(slice=slice_obj, type=2)
+        gw_ip = vm.gateway_public_ip.ipaddr
+        subnet = Subnet.objects.get(owner=slice_obj.uuid)
+        print flag, "=============:", subnet.netaddr
+        from slice.tasks import start_or_stop_vpn
+        if int(flag) == 0:
+            slice_obj.vpn_state = 3
+            slice_obj.save()
+            start_or_stop_vpn.delay(slice_obj, island.vpn_ip, subnet.netaddr, gw_ip, 'stop')
+        else:
+            slice_obj.vpn_state = 4
+            slice_obj.save()
+            start_or_stop_vpn.delay(slice_obj, island.vpn_ip, subnet.netaddr, gw_ip, 'start' )
+        return HttpResponse(json.dumps({'result': 0}))
+    except:
+        if vm == None:
+            return HttpResponse(json.dumps({'result':1, 'error_info': u'请先添加网关！'}))
+        return HttpResponse(json.dumps({'result': 1}))
 
 
 def test_cnvp():
