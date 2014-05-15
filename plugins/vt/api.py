@@ -169,12 +169,15 @@ def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
 
 def slice_delete_route(slice_obj):
     try:
-        island = slice_obj.get_island()
-        vm = VirtualMachine.objects.get(slice=slice_obj, type=2)
-        gw_ip = vm.gateway_public_ip.ipaddr
-        subnet = Subnet.objects.get(owner=slice_obj.uuid)
-        agent = AgentClient(island.vpn_ip)
-        agent.del_route_from_vpnserver(subnet.netaddr, gw_ip)
+        if function_test:
+            pass
+        else:
+            island = slice_obj.get_island()
+            vm = VirtualMachine.objects.get(slice=slice_obj, type=2)
+            gw_ip = vm.gateway_public_ip.ipaddr
+            subnet = Subnet.objects.get(owner=slice_obj.uuid)
+            agent = AgentClient(island.vpn_ip)
+            agent.del_route_from_vpnserver(subnet.netaddr, gw_ip)
     except:
         raise
 
