@@ -92,6 +92,19 @@ plugins/common:
   2、glance client：由于自有glanceclient安装问题比较多，所以重写了一个glance client（安装文档中可以吧所有有关glance client安装的步骤都去掉）
   3、vt_manager client：调用vt_manager实现虚拟机的管理
   4、undoManager：通用的事物管理工具，用于回滚（比如删除底层虚拟机时需要清除的资源比较多，为了保障整体的事务性需要提供一个类似RDB的事务管理工具）
+  5、Agent client中新增对vpn添加路由的方法，调用方式如下：
+  >>> from plugins.common.agent_client import AgentClient
+  >>> agent = AgentClient('192.168.5.9')
+  >>> agent.add_route_to_vpnserver('10.0.0.0/24', '192.168.5.1')
+  True
+  >>> agent.add_route_to_vpnserver('a.b.c.d/24', '192.168.5.1')
+  False
+  >>> agent.del_route_from_vpnserver('10.0.0.0/24', '192.168.5.1')
+  True
+  >>> agent.del_route_from_vpnserver('10.0.0.0/24', '192.168.5.1')
+  False
+  >>> 
+  6、注意：删除虚网时需要删除vpn上的路由
 =====================
 noVNC:
    新增noVNC功能用于远程桌面获取
