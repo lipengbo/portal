@@ -30,6 +30,7 @@ SLICE_STATES = ((SLICE_STATE_STOPPED, 'stopped'),
                 (SLICE_STATE_STARTED, 'started'),
                 (SLICE_STATE_STOPPING, 'stopping'),
                 (SLICE_STATE_STARTING, 'starting'),)
+VPN_STATES = SLICE_STATES
 SLICE_TYPES = ((SLICE_TYPE_USABLE, 'usable'),
                 (SLICE_TYPE_DELETE, 'delete'),)
 SLICE_DELETE_TYPE = ((USER_DELETE, 'usable'),
@@ -56,6 +57,7 @@ class Slice(models.Model):
     changed = models.IntegerField(null=True)
     ct_change = models.NullBooleanField(null=True)
     vm_num = models.IntegerField(default=0)
+    vpn_state = models.IntegerField(choices=VPN_STATES, default=0)
 
     def created_date(self):
         return self.date_created
