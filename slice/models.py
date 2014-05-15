@@ -13,6 +13,7 @@ from plugins.ipam.models import Subnet, IPUsage
 from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
 from plugins.openflow.flowvisor_api import flowvisor_del_slice
 from slice.slice_exception import DbError
+from adminlog.models import log, SUCCESS, FAIL
 
 import datetime
 
@@ -297,9 +298,13 @@ class Slice(models.Model):
                     self.state = SLICE_STATE_STOPPED
                     self.save()
                     transaction.commit()
-            print "2:delete subnet"
+            
+            print "2:delete subnet and route"
             if self.get_nw():
+                print "delete subnet"
                 IPUsage.objects.delete_subnet(self.uuid)
+                print "delete route"
+#                 del_route(self)
             print "3:delete controller"
             delete_controller(self.get_controller(), False)
             print "4:delete slice record"
@@ -321,8 +326,9 @@ class Slice(models.Model):
             super(self.__class__, self).delete(*args, **kwargs)
         except Exception, ex:
             print "5:delete slice failed and change slice record"
-            traceback.print_exc()
             transaction.rollback()
+            log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
+            transaction.commit()
             try:
                 self.failure_reason = ex.message
                 if self.type == 0:
@@ -348,8 +354,11 @@ class Slice(models.Model):
             except:
                 print "6:create SliceDeleted record failed! raise exception"
                 transaction.rollback()
+                log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
+                transaction.commit()
                 raise DbError("虚网删除失败！")
             else:
+                log(user, None, u"删除虚网(" + self.show_name + u")成功！", result_code=SUCCESS)
                 transaction.commit()
                 print "6:create SliceDeleted record success!"
 

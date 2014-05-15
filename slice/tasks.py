@@ -5,6 +5,7 @@ from plugins.openflow.flowvisor_api import flowvisor_del_slice, flowvisor_update
 from slice.slice_api import update_slice_virtual_network_cnvp, update_slice_virtual_network_flowvisor
 from plugins.vt.models import DOMAIN_STATE_DIC
 from slice.slice_exception import DbError
+from adminlog.models import log, SUCCESS, FAIL
 
 
 @task()
@@ -13,7 +14,7 @@ def add(x, y):
 
 
 @task()
-def start_slice_sync(slice_id, controller_flag, gw_flag):
+def start_slice_sync(slice_id, controller_flag, gw_flag, user):
     print "start_slice_sync"
     flag = False
     ct_op = True
@@ -97,6 +98,7 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
         import traceback
         traceback.print_exc()
         try:
+            log(user, slice_obj, u"启动虚网(" + slice_obj.show_name + u")失败！", result_code=FAIL)
             slice_obj.stop()
             if flag:
                 flowvisor_update_slice_status(flowvisor,
@@ -105,10 +107,12 @@ def start_slice_sync(slice_id, controller_flag, gw_flag):
                 flowvisor_del_slice(flowvisor, slice_obj.id)
         except:
             pass
+    else:
+        log(user, slice_obj, u"启动虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
 
 
 @task()
-def stop_slice_sync(slice_id):
+def stop_slice_sync(slice_id, user):
     print "stop_slice_sync"
     try:
         slice_obj = Slice.objects.get(id=slice_id)
@@ -119,4 +123,7 @@ def stop_slice_sync(slice_id):
     except Slice.DoesNotExist:
         pass
     except:
+        log(user, slice_obj, u"停止虚网(" + slice_obj.show_name + u")失败！", result_code=FAIL)
         slice_obj.start()
+    else:
+        log(user, slice_obj, u"停止虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)

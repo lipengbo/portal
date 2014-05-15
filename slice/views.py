@@ -24,11 +24,11 @@ from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
 from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from resources.ovs_api import slice_delete_port_device
-
 from slice.models import Slice, SliceDeleted
-
 from plugins.vt.forms import VmForm
 from plugins.vt.models import Flavor
+from adminlog.models import log, SUCCESS, FAIL
+
 import datetime
 
 
@@ -209,8 +209,10 @@ def create_first(request, proj_id):
                                           slice_description, island, user,
                                           ovs_or_ports, slice_nw, tp_mod, vm_num)
         except Exception, ex:
+            log(user,  None, "创建虚网失败！", result_code=FAIL)
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
+            log(user,  slice_obj, u"创建虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -234,13 +236,25 @@ def create_or_edit_controller(request, slice_id):
         controller_info = {'controller_type': controller_type,
                            'controller_ip': controller_ip,
                            'controller_port': controller_port}
+    if slice_obj.get_controller():
+        op = "edit"
+    else:
+        op = "create"
     try:
         slice_edit_controller(slice_obj, controller_info)
     except Exception, ex:
-        import traceback
-        traceback.print_exc()
+#         import traceback
+#         traceback.print_exc()
+        if op == "edit":
+            log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")控制器失败！", result_code=FAIL)
+        else:
+            log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")控制器失败！", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
+        if op == "edit":
+            log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")控制器成功！", result_code=SUCCESS)
+        else:
+            log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")控制器成功！", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
@@ -259,8 +273,10 @@ def create_gw(request, slice_id):
     except Exception, ex:
         #import traceback
         #traceback.print_exc()
+        log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")网关失败！", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
+        log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")网关成功！", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
@@ -340,8 +356,10 @@ def edit_description(request, slice_id):
     try:
         slice_change_description(slice_obj, slice_description)
     except Exception, ex:
+        log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息失败！", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0}))
     else:
+        log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息成功！", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 #             messages.add_message(request, messages.ERROR, ex)
 #     return HttpResponseRedirect(
@@ -501,6 +519,7 @@ def delete(request, slice_id):
     if not request.user.is_superuser:
         if not user.has_perm('slice.delete_slice', slice_obj):
             return redirect('forbidden')
+    slice_name = slice_obj.show_name
     try:
         slice_obj.delete(user=request.user)
     except:
@@ -522,9 +541,9 @@ def start_or_stop(request, slice_id, flag):
         return redirect('forbidden')
     try:
         if int(flag) == 1:
-            start_slice_api(slice_obj)
+            start_slice_api(slice_obj, request.user)
         else:
-            stop_slice_api(slice_obj)
+            stop_slice_api(slice_obj, request.user)
     except Exception, ex:
         return HttpResponse(json.dumps({'value': 0, 'error_info': str(ex)}))
 #         messages.add_message(request, messages.ERROR, ex)
