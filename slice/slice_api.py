@@ -128,14 +128,14 @@ def slice_edit_controller(slice_obj, controller_info):
             new_controller = create_add_controller(slice_obj, controller_info)
             if haved_controller and (new_controller.ip != haved_controller.ip or new_controller.port != haved_controller.port):
                 slice_obj.ct_changed()
-    except Exception:
+    except Exception, ex:
         print 1
         try:
             delete_controller(new_controller, True)
         except:
             pass
         transaction.rollback()
-        raise
+        raise DbError(ex.message)
     else:
         print 2
         if haved_controller:

@@ -164,7 +164,7 @@ class VirtualMachine(IslandResource):
             print '----------------------create a vm=%s -------------------------' % self.name
         else:
             vmInfo = {}
-            if self.flavor == None:
+            if self.flavor is None:
                 vmInfo['mem'] = self.ram
                 vmInfo['cpus'] = self.cpu
                 vmInfo['hdd'] = self.hdd
@@ -303,7 +303,7 @@ def vm_pre_save(sender, instance, **kwargs):
     #if instance.state == 11:
     #    return
     if not instance.ip:
-        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid)
+        instance.ip = IPUsage.objects.allocate_ip(instance.slice.uuid, instance.type)
     if not instance.mac:
         instance.mac = utils.generate_mac_address(instance.get_ipaddr())
     if not instance.state:

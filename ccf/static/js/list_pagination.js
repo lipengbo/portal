@@ -1,14 +1,16 @@
 function update_list(url){
     var list_show = "list_show"
+    var is_slice_detail = false;
     urls = url.split("?");
     if(urls.length == 2){
         f_urls = urls[0].split("/");
         //alert(f_urls);
         //alert(f_urls.length);
-        if(f_urls.length == 7){
+        if(f_urls.length >= 7){
             //alert(f_urls[3]);
             //alert(f_urls[4]);
             if(f_urls[3]=="slice" && f_urls[4]=="detail"){
+                is_slice_detail = true;
                 objs = $(".col-md-4");
                 for(var i=0;i<objs.length;i++){
                     if($(objs[i]).hasClass("on")){
@@ -42,6 +44,12 @@ function update_list(url){
                 //alert("ok");
                 $("div#"+list_show).empty();
                 $("div#"+list_show).append(data);
+                if(is_slice_detail) {
+                     show_uuid($("[id='uuid']"));
+                     update_vm_status();
+                     $('.uuid').tooltip();
+                }
+                
              } 
              else
              {
