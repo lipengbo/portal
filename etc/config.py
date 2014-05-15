@@ -13,6 +13,7 @@ sFlow_service = 'http://192.168.5.24:8008/'
 compute_service_port = 8886
 monitor_service_port = 8887
 ovs_service_port = 8889
+vpn_service_port = 8890
 
 
 def generate_glance_url():
