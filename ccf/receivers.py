@@ -1,3 +1,5 @@
+#coding: utf-8
+
 import datetime
 
 from django.dispatch import receiver
@@ -20,6 +22,7 @@ from notifications.models import Notification
 from profiles.models import Profile
 from invite.models import Invitation, Application
 from common.views import decrease_failed_counter, decrease_counter_api
+from agora.models import ForumThread
 
 @receiver(post_save, sender=Slice)
 @receiver(post_save, sender=Project)
@@ -164,3 +167,14 @@ def handle_user_signed_up(sender, **kwargs):
         profile = user.get_profile()
         notify.send(user, recipient=admin, verb=_(' signed up '), action_object=profile,
                 description=_("Please review this user %s") % profile.realm)
+
+@receiver(post_save, sender=ForumThread)
+def thread_notify(sender, instance, created, **kwargs):
+    if created:
+        admins = User.objects.filter(is_superuser=True)
+        if len(admins) > 0:
+            user = instance.author
+            admin = admins[0]
+            notify.send(user, recipient=admin, verb=u"提交了工单",
+                    description=instance.title)
+

@@ -23,10 +23,18 @@ def has_perm(context, user, perm, obj):
     context['has_perm'] = user.has_perm(perm, obj)
     return ""
 
+ACTION_URL_MAP = {
+    u'调整配额': reverse('quota_admin_quota'),
+    u'提交了工单': reverse('agora_forum', args=(1,))
+}
+
 @register.simple_tag()
 def action_url(notification):
-    if notification.verb == u'调整配额':
-        return reverse('quota_admin_quota')
+
+    verb = notification.verb
+    if verb in ACTION_URL_MAP:
+        return ACTION_URL_MAP[verb]
+
     else:
         try:
             return notification.action_object.action_url
