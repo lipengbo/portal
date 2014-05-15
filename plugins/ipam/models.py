@@ -54,23 +54,31 @@ class IPManager(models.Manager):
         return True
 
     def allocate_ip(self, owner, vm_type=1):
+        def real_allocate_ip(subnet, ips):
+            unused_ips = ips.filter(is_used=False)
+            if vm_type == 2:
+                subnet_network = subnet.get_network()
+                first_addr = na.IPAddress(subnet_network.first) + 1
+                ip = IPUsage(supernet=subnet, ipaddr=str(first_addr))
+            else:
+                if unused_ips:
+                    ip = unused_ips[0]
+                    supernet = ip.supernet.get_network()
+                    first_addr = str(na.IPAddress(supernet.first) + 1)
+                    if ip.ipaddr == first_addr:
+                        ip.delete()
+                        return real_allocate_ip(subnet, ips)
+                else:
+                    ip_count = ips.count()
+                    if ip_count == 0:
+                        ip_count = ip_count + 1
+                    subnet_network = subnet.get_network()
+                    new_ipaddr = subnet_network.get_host(ip_count)
+                    ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
+            return ip
         subnet = Subnet.objects.get(owner=owner, is_used=True, is_owned=True)
         ips = self.filter(supernet=subnet)
-        unused_ips = ips.filter(is_used=False)
-        if vm_type == 2:
-            subnet_network = subnet.get_network()
-            first_addr = na.IPAddress(subnet_network.first) + 1
-            ip = IPUsage(supernet=subnet, ipaddr=str(first_addr))
-        else:
-            if unused_ips:
-                ip = unused_ips[0]
-            else:
-                ip_count = ips.count()
-                if ip_count == 0:
-                    ip_count = ip_count + 1
-                subnet_network = subnet.get_network()
-                new_ipaddr = subnet_network.get_host(ip_count)
-                ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
+        ip = real_allocate_ip(subnet, ips)
         ip.is_used = True
         ip.save()
         return ip
