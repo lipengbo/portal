@@ -380,7 +380,7 @@ def slice_add_owner_device(slice_port, mac_list):
     except DbError:
         raise
     except Exception:
-        traceback.print_exc()
+#         traceback.print_exc()
         raise DbError("自接入设备添加失败！")
 
 
