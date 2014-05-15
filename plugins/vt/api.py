@@ -14,7 +14,6 @@ from etc.config import function_test
 import errno, traceback, logging
 from socket import error as socket_error
 from plugins.common.agent_client import AgentClient
-from slice.models import Slice
 from django.shortcuts import render, get_object_or_404
 LOG = logging.getLogger("plugins")
 
@@ -168,9 +167,8 @@ def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
             raise ConnectionRefused()
 
 
-def slice_delete_route(slice_id):
+def slice_delete_route(slice_obj):
     try:
-        slice_obj = get_object_or_404(Slice, id=slice_id)
         island = slice_obj.get_island()
         vm = VirtualMachine.objects.get(slice=slice_obj, type=2)
         gw_ip = vm.gateway_public_ip.ipaddr
