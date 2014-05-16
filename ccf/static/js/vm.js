@@ -502,7 +502,7 @@ function create_vms(sliceid, flag)
             return;
         };
 		//if(flag != 1 || post_vm_result){
-		window.location.href='/slice/detail/' + sliceid + '/1/';
+			window.location.href='/slice/detail/' + sliceid + '/1/';
 		//}        
     }
 }

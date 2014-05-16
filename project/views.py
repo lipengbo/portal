@@ -108,37 +108,6 @@ def perm_admin(request, id, user_id):
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
 
-def change_city_desc(city, new_desc):
-    city.description = new_desc
-    city.save()
-
-@transaction.commit_manually
-def test():
-    import traceback
-    try:
-        print 1
-        city = City.objects.get(id=1)
-        city.description = "change1"
-        city.save()
-        print 2
-        city.change_desc("change2")
-        print 3
-        change_city_desc(city,"change3")
-        print 4
-        city.description = "change4"
-        city.save()
-        print 5
-    except Exception:
-        print 11
-        print city.description
-        traceback.print_exc()
-        transaction.rollback()
-    else:
-        print 22
-        print city.description
-        city.description = "cjx"
-        city.save()
-        transaction.commit()
 
 @login_required
 def detail(request, id):

@@ -44,7 +44,7 @@ function update_list(url){
                 //alert("ok");
                 $("div#"+list_show).empty();
                 $("div#"+list_show).append(data);
-                if(is_slice_detail) {
+                if(is_slice_detail && list_show!="list_port") {
                      show_uuid($("[id='uuid']"));
                      update_vm_status();
                      $('.uuid').tooltip();

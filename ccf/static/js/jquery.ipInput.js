@@ -135,6 +135,7 @@ function init_ipinput_base(){
         controller_ip_port = $("#controller_ip_port_old").text();
         controller_ip = controller_ip_port.split(":")[0];
         controller_port = controller_ip_port.split(":")[1];
+        $("#ipInput_base").css({"background":"#fff"});  
         if(controller_ip && controller_port){
             ips = controller_ip.split(".");
             bip0_obj = document.getElementById("bip0");
@@ -147,10 +148,10 @@ function init_ipinput_base(){
             bip2_obj.value = ips[2];
             bip3_obj.value = ips[3];
             controller_port_obj.value = controller_port;
-            /*$(".tab_radio2").parent("td").siblings("td").children("#ipInput").css({"background":"#fff"}).removeClass("disabled");        
-            $(".tab_radio2").parent("td").siblings("td").children("#ipInput").children("input").removeAttr("disabled");
-            $(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
-            $(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");*/
+            //$("#ipInput_base").css({"background":"#fff"}).removeClass("disabled");        
+            //$.children("#ipInput_base").children("input").removeAttr("disabled");
+            //$(".tab_radio2").parent("td").siblings("td").children("input").removeAttr("disabled");
+            //$(".tab_radio1").parent("td").siblings("td").children("select").attr("disabled","disabled");
         }   
     }
 }            

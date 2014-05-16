@@ -9,7 +9,33 @@
          {%endif%}
      {%endif%}
      {%if controller%}
-         {%if extent_html == "site_base.html"%}
+     
+            {%if extent_html == "site_base.html" and permission == "edit" %}
+                {%if controller %}
+                    {%if controller.host%}
+                        {%if slice_obj.state == 0 %}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
+                            </a>
+                        {%else%}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                            </a>
+                        {%endif%}
+                    {%else%}
+                        {%if slice_obj.state == 0 %}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
+                            </a>
+                        {%else%}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                            </a>
+                        {%endif%}
+                    {%endif%}
+                {%endif%}
+            {%endif%}
+            {%if extent_html == "site_base.html"%}
                 {%if controller.host %}
                 {%if controller.host.state == 8 or controller.host.state == 9 or controller.host.state == 10 or controller.host.state == 12 or controller.host.state == 13 %}
                         <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:not-allowed">
@@ -56,31 +82,7 @@
                     {%endif%}
                 {%endif%}
             {%endif%}
-            {%if extent_html == "site_base.html" and permission == "edit" %}
-                {%if controller %}
-                    {%if controller.host%}
-                        {%if slice_obj.state == 0 %}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:pointer">
-                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
-                            </a>
-                        {%else%}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
-                            </a>
-                        {%endif%}
-                    {%else%}
-                        {%if slice_obj.state == 0 %}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
-                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
-                            </a>
-                        {%else%}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
-                            </a>
-                        {%endif%}
-                    {%endif%}
-                {%endif%}
-            {%endif%}
+            
         {%endif%}
     </div>                                            
 </h4>

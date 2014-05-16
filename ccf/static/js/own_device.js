@@ -8,7 +8,7 @@ $(document).ready(function(){
         url : "/plugins/vt/get_switch_port/"+sliceid+"/",
         type : "GET",
         dataType : "json",
-        //async : false,
+        async : false,
         error : function(e){
         },
         success : function(switchs){
@@ -210,6 +210,8 @@ function commit_ports(sliceid){
                 //show_err_msg(data.error);
                 $("#device_info").html("警告："+data.error);
                 $(".alert_device").show();
+                selected_switch_ports().remove();
+                
             }else{
                 window.location.href='/slice/detail/' + sliceid + '/2/';
             }
