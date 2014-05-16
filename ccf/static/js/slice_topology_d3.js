@@ -1099,7 +1099,7 @@ function random_refresh2 (update) {
                     random_refresh2();
                 },
                 error: function(data) {
-                    alert("here");
+                    //alert("here");
                     refresh_time = Math.floor(Math.random() * 10000 + 10000 );
                     random_refresh2();
                 }

@@ -29,6 +29,10 @@
       <strong>提示：</strong>
       点击拓扑上节点，在右侧选择所需端口。
 </div>
+<div class="alert_device alert alert-danger alert-dismissable" style="display:none">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <span id="device_info"></span>
+</div>
 <div class="device_access clearfix">
     <div class="col-md-9">
         <iframe scrolling="no" id="topologyiframe" width="100%" height="400" src="" frameborder="0"></iframe>
@@ -56,13 +60,13 @@
                 <textarea id="mac_addrs" style="color:black" rows="3"></textarea>
             <span id="mac_err_msg" style="color:red"></span>
             </div>
-            <p class="device_access_savebtn">
+            <!--p class="device_access_savebtn">
                 <button type="button" class="btn btn-default">保存</button>
-            </p>
+            </p-->
         </div>
     </div> 
 </div>
-
+<!--
 <h4 class="block_title show-dhcp">
             <img src="/site_media/static/img/ic_slice.png">端口列表
 </h4>
@@ -80,13 +84,13 @@
     <tbody>
     </tbody>
 </table>
-
+-->
 <form class="form-horizontal" action="" method="post" accept-charset="utf-8">
                 
          <div class="form-actions">
             <div class="row buttons_margin">
                 <div class="col-md-4"></div>
-                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail slice_obj.id %}'">{% trans "Cancel" %}</button></div>
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail_div slice_obj.id 2 %}'">{% trans "Cancel" %}</button></div>
                 <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="commit_ports({{slice_obj.id}})">{% trans "Submit" %}</button></div>
                 <div class="col-md-4"></div>
             </div>

@@ -354,23 +354,24 @@ def delete_project(request, id):
         try:
             slice_objs = project.slice_set.all()
             for slice_obj in slice_objs:
-                try:
-                    slice_deleted = SliceDeleted(name = slice_obj.name,
-                        show_name = slice_obj.show_name,
-                        owner_name = slice_obj.owner.username,
-                        description = slice_obj.description,
-                        project_name = slice_obj.project.name,
-                        date_created = slice_obj.date_created,
-                        date_expired = slice_obj.date_expired)
-                    if request.user.is_superuser:
-                        slice_deleted.type = 1
-                    else:
-                        slice_deleted.type = 0
-                    slice_obj.delete()
-                except Exception, ex:
-                    pass
-                else:
-                    slice_deleted.save()
+                slice_obj.delete(user=request.user)
+#                 try:
+#                     slice_deleted = SliceDeleted(name = slice_obj.name,
+#                         show_name = slice_obj.show_name,
+#                         owner_name = slice_obj.owner.username,
+#                         description = slice_obj.description,
+#                         project_name = slice_obj.project.name,
+#                         date_created = slice_obj.date_created,
+#                         date_expired = slice_obj.date_expired)
+#                     if request.user.is_superuser:
+#                         slice_deleted.type = 1
+#                     else:
+#                         slice_deleted.type = 0
+#                     slice_obj.delete()
+#                 except Exception, ex:
+#                     pass
+#                 else:
+#                     slice_deleted.save()
             project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)

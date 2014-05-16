@@ -1,11 +1,13 @@
 //入口,定期获取slice中虚拟机状态
 var check_vm_time_id;
 var check_slice_time_id;
+var check_vpn_time_id;
 
 $(document).ready(function() {
 	//alert("here");
 	update_vm_status();
 	update_slice_status();
+    update_vpn_status();
 });
 
 //监控虚拟机状态
@@ -245,6 +247,9 @@ function check_slice_status(slice_id){
                         //控制器编辑、slice编辑按钮变化
                         $(".bianji").attr("style","cursor:pointer");
                         $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj.png");
+                        //vm删除、port删除
+                        $(".shanchu").attr("style","cursor:pointer");
+                        $(".shanchu").children("img").attr("src",STATIC_URL+"img/btn_sc.png");
                         //dhcp启停、vm添加
                         $(".dhcp_div").removeClass("disabled");
                         $(".dhcp").attr("style","cursor:pointer");
@@ -290,3 +295,70 @@ function check_slice_status(slice_id){
     });
     
 }
+
+//监控VPN服务的状态
+function update_vpn_status(){
+    //alert("h1");
+    if(check_vpn_time_id){
+        clearTimeout(check_vpn_time_id);
+    }
+    var check_vpn_objs = $("#vpn_state");
+    if(check_vpn_objs.hasClass("icon-spin")){
+        //alert("h2");
+        slice_id = $("#slice_id").text();
+        check_vpn_time_id = setTimeout("check_vpn_status("+slice_id+")",1000);
+    }else{
+    }
+}
+
+function check_vpn_status(slice_id){
+    var img_obj;
+    $.ajax({
+        type: "GET",
+        url: "/slice/get_vpn_state/"+slice_id+"/",
+        dataType: "json",
+        cache: false,
+        async: true,  
+        success: function(data) {
+            var state = data.vpn_state;
+            var check_vpn_obj = $("#vpn_state");
+            var STATIC_URL = $("#STATIC_URL").text();
+            if(state == 0){
+                check_vpn_obj.removeClass("icon-spinner")
+                        .removeClass("icon-spin")
+                        .addClass("icon-minus-sign")
+                        .addClass("icon_state");
+                img_obj = $("#vpn_qt").children("img")[0];
+                if(img_obj){
+                    img_obj.src = STATIC_URL + "img/ic-ks.png";
+                            if(img_obj.title == "启动中"){
+                                $("div#slice_alert_info").empty();
+                                var str = "" + "<p class=\"text-center\">VPN服务启动失败！</p>";
+                                
+                                $("div#slice_alert_info").append(str);
+                                $('#slicealertModal').modal('show');
+                            }
+                    img_obj.title = "启动";
+                }
+            }else if(state == 1){
+                check_vpn_obj.removeClass("icon-spinner")
+                        .removeClass("icon-spin")
+                        .addClass("icon-ok-sign")
+                        .addClass("icon_state");
+                img_obj = $("#vpn_qt").children("img")[0];
+                if(img_obj){
+                    img_obj.src = STATIC_URL + "img/ic-tz.png";
+                            if(img_obj.title == "停止中"){
+                                $("div#slice_alert_info").empty();
+                                var str = "" + "<p class=\"text-center\">VPN服务停止失败！</p>";
+                                
+                                $("div#slice_alert_info").append(str);
+                                $('#slicealertModal').modal('show');
+                            }
+                    img_obj.title = "停止";
+                }
+            }
+        }
+    });
+}
+
