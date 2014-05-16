@@ -56,9 +56,10 @@ class IPManager(models.Manager):
     def allocate_ip(self, owner, vm_type=1):
         def real_allocate_ip(subnet, ips):
             unused_ips = ips.filter(is_used=False)
+            subnet_network = subnet.get_network()
+            first_addr = na.IPAddress(subnet_network.first) + 1
+            first_addr_count = ips.filter(ipaddr=str(first_addr)).count()
             if vm_type == 2:
-                subnet_network = subnet.get_network()
-                first_addr = na.IPAddress(subnet_network.first) + 1
                 ip = IPUsage(supernet=subnet, ipaddr=str(first_addr))
             else:
                 if unused_ips:
@@ -70,7 +71,7 @@ class IPManager(models.Manager):
                         return real_allocate_ip(subnet, ips)
                 else:
                     ip_count = ips.count()
-                    ip_count = ip_count + 1
+                    ip_count = ip_count + 1 - first_addr_count
                     subnet_network = subnet.get_network()
                     new_ipaddr = subnet_network.get_host(ip_count)
                     ip = IPUsage(supernet=subnet, ipaddr=str(new_ipaddr))
