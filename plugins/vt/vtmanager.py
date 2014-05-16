@@ -10,6 +10,7 @@ from resources.models import Server
 from etc import config
 import random
 import json
+import traceback
 
 
 class Filter(object):
@@ -66,10 +67,16 @@ class Filter(object):
         random.shuffle(host_list)
         for hostid, hostip in host_list:
             host = Server.objects.get(id=hostid)
-            if config.use_vt_manager_to_schedul:
-                if host.state and self.check_resource_by_monitor(hostid, hostip):
-                    return hostid
-            else:
-                if host.state and self.check_resource_by_db(host):
-                    return hostid
+            try:
+                if config.use_vt_manager_to_schedul:
+                    if host.state and self.check_resource_by_monitor(hostid, hostip):
+                        return hostid
+                else:
+                    if host.state and self.check_resource_by_db(host):
+                        return hostid
+            except:
+                print "Server", host, "got exception, continue try..."
+                traceback.print_exc()
+                continue
+        raise
         #return False

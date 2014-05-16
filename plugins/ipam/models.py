@@ -253,9 +253,23 @@ class Subnet(models.Model):
             gateway_mac = na.generate_mac_address(self.get_gateway_ip())
         return gateway_mac
 
-    def get_ip_range(self):
-        return [na.IPAddress(self.get_network().first).ipv4(),
+    def get_ip_range(self, vm_num):
+        available_ip_num = self.get_network().last - self.get_network().first
+        if available_ip_num -2  > vm_num:
+            ip_range = [na.IPAddress(self.get_network().first+2).ipv4(),\
+                na.IPAddress(self.get_network().first +1 + vm_num).ipv4(), \
+                na.IPAddress(self.get_network().first +1 + vm_num + 1).ipv4(), \
+                na.IPAddress(self.get_network().last - 1).ipv4(), \
+                na.IPAddress(self.get_network().first).ipv4(), \
                 na.IPAddress(self.get_network().last).ipv4()]
+        else:
+            ip_range = [na.IPAddress(self.get_network().first+2).ipv4(),\
+                na.IPAddress(self.get_network().first +1 + vm_num).ipv4(), \
+                '','',\
+                na.IPAddress(self.get_network().first).ipv4(), \
+                na.IPAddress(self.get_network().last).ipv4()]
+        return ip_range
+
 
     def __unicode__(self):
         return self.netaddr

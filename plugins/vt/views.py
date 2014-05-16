@@ -27,8 +27,10 @@ from models import Image, Flavor, SSHKey
 from resources.models import Server, SwitchPort
 from resources.ovs_api import get_edge_ports, slice_add_port_device
 from plugins.vt import api
+from project.models import Island
 import logging
 from django.utils.translation import ugettext as _
+from adminlog.models import log, SUCCESS, FAIL
 LOG = logging.getLogger('plugins')
 
 
@@ -64,10 +66,7 @@ def vm_list(request, sliceid):
     return render(request, 'vt/vm_list.html', context)
 
 
-def create_vm(request, sliceid, from_link):
-    """
-    from_link : 记录链接跳转的入口，以便返回原来的页面。 0 为从slic详情页面转入， 1为从虚拟机列表页面转入
-    """
+def create_vm(request, sliceid):
     user = request.user
     vm_count = VirtualMachine.objects.total_vms(user)
     if request.method == 'POST':
@@ -117,20 +116,29 @@ def create_vm(request, sliceid, from_link):
                 vm.type = 1
                 vm.save()
                 vm.slice.flowspace_changed(2)
+                log(user, vm, u"创建虚拟机"+vm.name+u"成功", SUCCESS)
                 return HttpResponse(json.dumps({'result': 0}))
             except socket_error as serr:
                 #if serr.errno == errno.ECONNREFUSED:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 vm.state = 11
                 vm.type =1
-                vm.save()
-                return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+                try:
+                    vm.save()
+                    return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
+                except:
+                    raise
             except StopIteration, e:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
+                log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result' : 1, 'error': _('server error')}))
         else:
+            log(user, vm, u"创建虚拟机失败", FAIL)
             return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
         if user.quotas.vm <= vm_count:
@@ -161,7 +169,6 @@ def create_vm(request, sliceid, from_link):
         context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
-        context['from_link'] = from_link
         return render(request, 'vt/create_vm.html', context)
 
 
@@ -171,15 +178,17 @@ def create_device(request, sliceid):
             ports_data = json.loads(request.POST.get('ports_data'))
             slice_obj = Slice.objects.get(id=sliceid)
             for port in ports_data:
-                #print port[0], "===", port[1]
+                print port[0], "===", port[1]
+                switch_port = SwitchPort.objects.get(id=port[0])
                 slice_add_port_device(slice_obj, port[0], port[1], port[2])
-                #print "-------", port[2], ":", slice_port
-
+                print "-------", port[2]
+                log(request.user, switch_port, u"添加端口"+switch_port.name+u"成功", SUCCESS)
 
             return HttpResponse(json.dumps({'result':0}))
-        except:
+        except Exception, e:
             traceback.print_exc()
-            return HttpResponse(json.dumps({'result':1}))
+            log(request.user, switch_port, u"添加端口失败", FAIL)
+            return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
         context['slice_obj'] = Slice.objects.get(id=sliceid)
@@ -212,16 +221,23 @@ def do_vm_action(request, vmid, action):
                 vm.state = DOMAIN_STATE_DIC['stopping']
             print ">>>>>>>>>>>>>>>>vm state:", vm.state
             vm.save()
-            api.do_vm_action(vm, action)
+            api.do_vm_action(request.user, vm, action)
             return HttpResponse(json.dumps({'result': 0}))
         except socket_error as serr:
+            if action == 'create':
+                log(request.user, vm, u"虚拟机启动失败", FAIL)
+            elif action == 'destroy':
+                log(request.user, vm, u"虚拟机停止失败", FAIL)
+            else:
+                log(request.user, vm, u"虚拟机操作失败", FAIL)
             if serr.errno == errno.ECONNREFUSED:
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
     return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
 
 
-def vnc(request, vmid):
+def vnc(request, vmid, island_id):
     vm = VirtualMachine.objects.get(id=vmid)
+    island = get_object_or_404(Island, id=island_id)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
     private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
@@ -229,14 +245,8 @@ def vnc(request, vmid):
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
-            % (request.META.get('HTTP_HOST').split(':')[0], token)
-    #context = {}
-    #context['host_ip'] = host_ip
-    #context['vnc_port'] = vnc_port
-    #context['tunnel_host'] = '192.168.5.9'
-    #context['vm'] = vm
-    #return render(request, 'vt/vnc.html', context)
-    #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
+                         %(island.novnc_ip, token)
+            #            % (request.META.get('HTTP_HOST').split(':')[0], token)
     return HttpResponseRedirect(novnc_url)
 
 
@@ -248,9 +258,11 @@ def delete_vm(request, vmid, flag):
             #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         #else:
         vm.slice.flowspace_changed(3)
+        log(request.user, vm,  u"删除虚拟机成功", SUCCESS)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())
+        log(request.user, vm, u"删除虚拟机失败", FAIL)
         #if flag == '0':
         return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
     #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
@@ -324,3 +336,11 @@ def download_keypair(request):
     response = HttpResponse(sshkey.private_key, content_type='plain/text')
     response['Content-Disposition'] = 'attachment; filename="id_rsa"'
     return response
+
+def can_create_vm(request, sliceid):
+    slice = get_object_or_404(Slice, id=sliceid)
+    vms_num = slice.get_common_vms().count()
+    if vms_num < slice.vm_num:
+        return HttpResponse(json.dumps({'result': '0'}))
+    else:
+        return HttpResponse(json.dumps({'result': '1'}))

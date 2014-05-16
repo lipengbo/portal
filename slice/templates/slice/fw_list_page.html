@@ -1,0 +1,294 @@
+<h4 class="block_title">
+    <img src="/site_media/static/img/ic_41.png">控制器配置
+    <div class="pull-right">
+     {%if extent_html == "site_base.html" and permission == "edit" %}
+         {%if not controller%}
+            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="add_ct" onclick="return add_ct();" style="cursor:pointer" title="创建控制器">
+            <i class="icon-plus"></i>
+            </a>
+         {%endif%}
+     {%endif%}
+     {%if controller%}
+         {%if extent_html == "site_base.html"%}
+                {%if controller.host %}
+                {%if controller.host.state == 8 or controller.host.state == 9 or controller.host.state == 10 or controller.host.state == 12 or controller.host.state == 13 %}
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
+                        </a>
+                    {%else%}
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:pointer">
+                        {%if controller.host.state == 1 %}
+                            <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
+                        {%else%}
+                            <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
+                        {%endif%}
+                        </a>
+                    {%endif%}
+                {%endif%}
+            {%endif%} 
+            {%if extent_html == "admin_base.html"%}
+                {%if controller.host%}
+                    {%if controller.host.state == 1 %}
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_jk" onclick="jk_vm({{controller.host.id}});" style="cursor:pointer">
+                        <img src="{{ STATIC_URL}}img/btn_jk.png" title="监控" />
+                        </a>
+                    {%else%}
+                        <a href="javascript:void(0);" id="{{controller.host.id}}_jk" onclick="jk_vm({{controller.host.id}});" style="cursor:not-allowed">
+                        <img src="{{ STATIC_URL}}img/btn_jk_gray.png" title="监控" />
+                        </a>
+                    {%endif%}
+                {%endif%}
+            {%endif%}
+            {%if extent_html == "site_base.html"%}
+                {%if controller.host%}
+                    {%if controller.host.state == 1 %}
+                        <a href="javascript:void(0);"
+                            id="{{controller.host.id}}_dl"
+                            onclick="dl_vm({{controller.host.id}}, {{island.id}});" style="cursor:pointer">
+                        <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
+                        </a>
+                    {%else%}
+                        <a href="javascript:void(0);"
+                            id="{{controller.host.id}}_dl"
+                            onclick="dl_vm({{controller.host.id}}, {{island.id}});" style="cursor:not-allowed">
+                        <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
+                        </a>
+                    {%endif%}
+                {%endif%}
+            {%endif%}
+            {%if extent_html == "site_base.html" and permission == "edit" %}
+                {%if controller %}
+                    {%if controller.host%}
+                        {%if slice_obj.state == 0 %}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
+                            </a>
+                        {%else%}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                            </a>
+                        {%endif%}
+                    {%else%}
+                        {%if slice_obj.state == 0 %}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
+                            </a>
+                        {%else%}
+                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                            </a>
+                        {%endif%}
+                    {%endif%}
+                {%endif%}
+            {%endif%}
+        {%endif%}
+    </div>                                            
+</h4>
+{%if controller%} 
+    <table class="table_base">
+        <tbody>
+            <tr>
+                <td width="100">创建方式：</td>
+                <td width="120">
+                <div {%if controller.name == 'user_define'%}class="user_define" vm_id="{{0}}"{%else%}
+                      class="default_create" vm_id="{{controller.host.id}}"{%endif%}>
+                {%if controller.name == 'user_define'%}自定义{%else%}默认创建{%endif%}
+                </div>
+                </td>
+                {%if controller.name == 'user_define'%}
+                    <td width="120"></td>
+                    <td></td>
+                {%else%}
+                    <td width="120">控制器类型：</td>
+                    <td>{{controller.name}}</td>
+                {%endif%}
+            </tr>
+            <tr>
+                <td>状态：</td>
+                <td class="slice_state">
+                {% if controller.host and controller.host.state != "" %}
+                    {% if controller.host.state == 8 or controller.host.state == 12 or controller.host.state == 13%}
+                        <i class="icon-spinner icon-spin check_vm" id="icon_state{{controller.host.id}}"></i>
+                    {% elif controller.host.state == 9 or controller.host.state == 10 %}
+                        <i class="icon-remove-sign" id="icon_state{{controller.host.id}}"></i>
+                    {% elif controller.host.state == 11 %}
+                        <i class="icon-warning-sign" id="icon_state{{controller.host.id}}" title="资源不足"></i>
+                    {% elif controller.host.state == 1 %}
+                        <i class="icon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
+                    {%else%}
+                        <i class="icon-minus-sign icon_state" id="icon_state{{controller.host.id}}"></i>
+                    {%endif%}
+              {%else%}
+              无
+              {%endif%}
+                </td>
+                <td>控制器地址：</td>
+                <td>{{controller.ip}}:{{controller.port}}</td>
+            </tr>
+        </tbody>
+    </table> 
+{%else%}
+<p class="help-block">当前未添加控制器！</p>
+{%endif%}
+{%if slice_type == "mixslice" %}
+    <h4 class="block_title">
+        <img src="/site_media/static/img/ic_01.png">虚拟网关配置
+        <div class="pull-right">
+             {%if extent_html == "site_base.html" and permission == "edit" %}
+             {%if not gw%}
+                <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="add_gw" onclick="return add_gw();" style="cursor:pointer" title="创建虚拟网关">
+                <i class="icon-plus"></i>
+                </a>
+             {%endif%}
+         {%endif%}
+         {%if gw%}
+             {%if extent_html == "site_base.html"%}
+                {%if gw.state == 8 or gw.state == 9 or gw.state == 10 or gw.state == 12 or gw.state == 13 %}
+                        <a href="javascript:void(0);" id="{{gw.id}}_qt" onclick="start_stop_vm({{gw.id}}, 3);" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
+                        </a>
+                    {%else%}
+                        <a href="javascript:void(0);" id="{{gw.id}}_qt" onclick="start_stop_vm({{gw.id}}, 3);" style="cursor:pointer">
+                        {%if gw.state == 1 %}
+                            <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
+                        {%else%}
+                            <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
+                        {%endif%}
+                        </a>
+                    {%endif%}
+                {%endif%}
+                {%if extent_html == "admin_base.html"%}
+                    {%if gw.state == 1 %}
+                        <a href="javascript:void(0);" id="{{gw.id}}_jk" onclick="jk_vm({{gw.id}});" style="cursor:pointer">
+                        <img src="{{ STATIC_URL}}img/btn_jk.png" title="监控" />
+                        </a>
+                    {%else%}
+                        <a href="javascript:void(0);" id="{{gw.id}}_jk" onclick="jk_vm({{gw.id}});" style="cursor:not-allowed">
+                        <img src="{{ STATIC_URL}}img/btn_jk_gray.png" title="监控" />
+                        </a>
+                    {%endif%}
+                {%endif%}
+                {%if extent_html == "site_base.html"%}
+                    {%if gw.state == 1 %}
+                        <a href="javascript:void(0);" id="{{gw.id}}_dl"
+                            onclick="dl_vm({{gw.id}}, {{island.id}});" style="cursor:pointer">
+                        <img src="{{ STATIC_URL}}img/btn_dl.png" title="登录" />
+                        </a>
+                    {%else%}
+                        <a href="javascript:void(0);" id="{{gw.id}}_dl"
+                            onclick="dl_vm({{gw.id}},{{island.id}});" style="cursor:not-allowed">
+                        <img src="{{ STATIC_URL}}img/btn_dl_gray.png" title="登录" />
+                        </a>
+                    {%endif%}
+                {%endif%}
+            {%endif%}
+        </div>                                            
+    </h4>
+    {%if gw %}
+    <table class="table_base">
+        <tbody>
+            <tr>
+                <td width="100">网关IP地址：</td>
+                <td width="120"><div class="gw" vm_id="{{gw.id}}">{{gw.ip}}</div></td>
+                <td width="120">宿主机IP地址：</td>
+                <td>{{gw.server.ip}}</td>
+            </tr>
+            <tr>
+                <td>状态：</td>
+                <td class="slice_state">
+                {% if gw.state != "" %}
+                    {% if gw.state == 8 or gw.state == 12 or gw.state == 13%}
+                        <i class="icon-spinner icon-spin check_vm" id="icon_state{{gw.id}}"></i>
+                    {% elif gw.state == 9 or gw.state == 10 %}
+                        <i class="icon-remove-sign" id="icon_state{{gw.id}}"></i>
+                    {% elif gw.state == 11 %}
+                        <i class="icon-warning-sign" id="icon_state{{gw.id}}" title="资源不足"></i>
+                    {% elif gw.state == 1 %}
+                        <i class="icon-ok-sign icon_state" id="icon_state{{gw.id}}"></i>
+                    {%else%}
+                        <i class="icon-minus-sign icon_state" id="icon_state{{gw.id}}"></i>
+                    {%endif%}
+              {%else%}
+              无
+              {%endif%}
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr> 
+                <td>DHCP服务：</td>
+                <td>
+                <div class="tuopu_btn">
+                {%if slice_obj.get_dhcp != None %}
+                    <span class="switch_btn dhcp checked" 
+                    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
+                    style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
+                        <span class="switch_content">启动</span>
+                    </span>
+                {%else%}
+                    <span class="switch_btn dhcp" 
+                    {%if extent_html == "site_base.html" and permission == "edit" and slice_obj.state == 0 %}
+                    style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%}>
+                        <span class="switch_content">停止</span>
+                    </span>
+                {%endif%}
+                </div>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    {%else%}
+    <p class="help-block">当前未添加虚拟网关！</p> 
+    {%endif%}
+
+    <h4 class="block_title">
+        <img src="/site_media/static/img/ic_01.png">VPN服务配置 
+        <div class="pull-right">
+            {%if extent_html == "site_base.html" and permission == "edit" %}
+                        {%if slice_obj.vpn_state == 1 %}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
+                        </a>
+                        {% elif slice_obj.vpn_state == 0 %}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
+                        </a>
+                        {% elif slice_obj.vpn_state == 3 %}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止中" />
+                        </a>
+                        {%else%}
+                        <a href="javascript:void(0);" id="vpn_qt" onclick="start_stop_vpn({{slice_obj.id}}, {{island.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动中" />
+                        </a>
+                        {%endif%}
+            {%endif%}
+         </div>                                            
+    </h4>
+                <table class="table_base">
+                    <tbody>
+                        <tr>
+                            <td width="150">VPN服务器IP地址：</td>
+                            <td width="120"><div>{{island.vpn_ip}}</div></td>
+                        </tr>
+                        <tr>
+                            <td>状态：</td>
+                            <td class="slice_state">
+                                {% if slice_obj.vpn_state == 0 %}
+                                    <i class="icon-minus-sign icon_state" id="vpn_state"></i>
+                                {% elif slice_obj.state == 1 %}
+                                    <i class="icon-ok-sign icon_state" id="vpn_state"></i>
+                                {%else%}
+                                    <i class="icon-spinner icon-spin" id="vpn_state"></i>  
+                                {%endif%}
+                            </td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+       
+{%endif%}
+

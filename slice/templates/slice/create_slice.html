@@ -13,7 +13,7 @@
 {% block body %}
         <div class="fill_form form-wizard">
             <ul class="row nav nav-pills">                
-                <li class="col-md-2"></li>
+                <li class="col-md-3"></li>
                 <li class="col-md-2 jump_step visit">
                     <a href="#tab1" class="step">
                         <span class="number">1</span>
@@ -28,27 +28,13 @@
                     </a>
                 </li>
                 <li class="col-md-2 jump_step">
-                    <a href="#tab3" class="step">
-                        <span class="number">3</span>
-                        <span class="desc">服务配置</span>  
-                        <i class="icon-caret-right"></i> 
-                    </a>
-                </li>
-                <!--<li class="col-md-2 jump_step">
                     <a href="#tab4" class="step">
-                        <span class="number">4</span>
-                        <span class="desc">虚拟机创建</span> 
-                        <i class="icon-caret-right"></i>  
-                    </a> 
-                </li>-->
-                <li class="col-md-2 jump_step">
-                    <a href="#tab4" class="step">
-                    <span class="number">4</span>
+                    <span class="number">3</span>
                     <span class="desc">虚网清单</span>   
                     <i class="icon-caret-right"></i>
                     </a> 
                 </li>
-                <li class="col-md-2"></li>
+                <li class="col-md-3"></li>
             </ul>
           <form class="form-horizontal" action="" method="post" accept-charset="utf-8">{% csrf_token %}
             <div class="tab_part tab_1">
@@ -119,28 +105,86 @@
                                  <span id="island_idInfo col-md-6" style="display:inline;float:none;"></span>
                              </td>
                          </tr>
+                         {%if slice_type == "mixslice" %}
+                         <tr>
+                             <td class="text-right title_padding">
+                                 IP数量                      
+                             </td>
+                             <td class="td_tooltip_padding">
+                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。" data-original-title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                             </td>
+                             <td>                                
+                               <select name="nw_num" id="nw_num" class="form-control">
+                                  <option value="8">8</option>
+                                  <option value="16">16</option>
+                                  <option value="32">32</option>
+                                  <option value="64">64</option>
+                                </select>  
+                             </td>
+                             <td>
+                                <span id="nw_numInfo" style="display:inline;float:none;"></span>
+                                <input type="text" id="slice_nw_input" style="display:none"/>
+                                <span id="slice_nw" style="display:none"></span>
+                                <input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
+                                <input type="text" value="" id="old_nw_num" style="display:none"/>
+                                <input type="text" value="" id="old_nw_owner" style="display:none"/>
+                             </td>
+                         </tr>  
                          
-
+                         
                          <tr>
                              <td class="text-right title_padding">
                                  虚拟机数                      
                              </td>
                              <td class="td_tooltip_padding">
-                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量" data-original-title="请根据实际需求选择最大虚拟机数量"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。" data-original-title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                             </td>
+                             <td>                                
+                               <input type="text" class="form-control" maxlength=30 id="vm_num" name="vm_num" value="0" onblur="check_vm_num('vm_num',1)">  
+                             </td>
+                             <td>
+                                <span id="vm_numInfo" style="display:inline;float:none;"></span>
+                             </td>
+                         </tr>  
+                         {%else%}
+                         <tr style="display:none">
+                             <td class="text-right title_padding">
+                                 IP数量                      
+                             </td>
+                             <td class="td_tooltip_padding">
+                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。" data-original-title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                              </td>
                              <td>                                
                                <select name="nw_num" id="nw_num" class="form-control">
-                                  <option value="8">5</option>
-                                  <option value="16">13</option>
-                                  <option value="32">29</option>
-                                  <option value="64">61</option>
+                                  <option value="0">0</option>
                                 </select>  
                              </td>
                              <td>
                                 <span id="nw_numInfo" style="display:inline;float:none;"></span>
+                                <input type="text" id="slice_nw_input" style="display:none"/>
+                                <span id="slice_nw" style="display:none"></span>
+                                <input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
+                                <input type="text" value="" id="old_nw_num" style="display:none"/>
+                                <input type="text" value="" id="old_nw_owner" style="display:none"/>
                              </td>
                          </tr>  
                          
+                         
+                         <tr style="display:none">
+                             <td class="text-right title_padding">
+                                 虚拟机数                      
+                             </td>
+                             <td class="td_tooltip_padding">
+                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。" data-original-title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                             </td>
+                             <td>                                
+                               <input type="text" class="form-control" maxlength=30 id="vm_num" name="vm_num" value="0" onblur="check_vm_num('vm_num',1)">  
+                             </td>
+                             <td>
+                                <span id="vm_numInfo" style="display:inline;float:none;"></span>
+                             </td>
+                         </tr> 
+                         {%endif%}
                          <tr style="display:none;">
                              <td class="text-right title_padding">
                                  拓扑构建模式
@@ -173,12 +217,10 @@
              <div class="tab_part">
                 <h4 class="title_word_bg block_title">
                    <img src="{% static "img/ic_37.png" %}" />网络节点选择
-                   <small>点击拓扑图中网络节点选择需要的实验拓扑，红色表示选中；点击灰色区域可拖动整个拓扑</small>
+                   <small>点击拓扑图中网络节点选择需要的实验拓扑，红色表示选中；点击灰色区域可拖动整个拓扑。</small>
                 </h4>              
                 <div class="alert alert-info">
-                  <!--<img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网络出口节点，用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
-                  <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点；<br />
-                  <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点，提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />-->
+                  
                   <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
                 </div>
@@ -205,11 +247,7 @@
                            <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点&nbsp
                            <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点
                        </div>
-                       <!--<div class="frame_tip">
-                           <span class="frame_tip_r"></span>网络出口节点
-                           <span class="frame_tip_b"></span>普通交换节点
-                           <span class="frame_tip_g"></span>虚拟机关联节点
-                       </div>-->
+                       
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
                   </div>
                   <table class="switch-table table_defined" style="display:none">
@@ -263,36 +301,13 @@
                     </tbody>
                   </table>              
                   <div class="hide no-virtual-switch alert alert-danger">
+                    {%if slice_type == "baseslice" %}
+                      请至少选择一个网络出口节点或普通交换节点
+                    {%else%}
                       请至少选择一个虚拟机关联节点
+                    {%endif%}
                   </div>
-                </div>       
-
-                <!--<h4 class="title_word_bg block_title">
-                   <img src="{% static "img/ic_31.png" %}" />网络地址
-                   <small>分配网段供虚网中的虚拟机、虚拟网关等使用，用户在未配置DHCP情况可根据网段为虚拟机手动分配地址。</small>
-                </h4>   
-                    
-                <table class="table_base tooltip-demo">
-                     <tbody>
-                         <tr>
-                             <td width="100" class="text-right">
-                                 IP数量
-                             </td>
-                             <td width="30%">                                
-                               <select name="nw_num" id="nw_num" class="form-control">
-                                  <option value="8">8</option>
-                                  <option value="16">16</option>
-                                  <option value="32">32</option>
-                                  <option value="64">64</option>
-                                </select>  
-                             </td>
-                             <td>
-                                <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择IP地址数量。" data-original-title="请根据实际需求选择IP地址数量。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
-                                <span id="nw_numInfo" style="display:inline;float:none;"></span>
-                             </td>
-                         </tr>                       
-                     </tbody>
-                 </table>  -->                                                                                                             
+                </div>                                                                                                                 
              
               <div class="form-actions">
                   <div class="row buttons_margin">
@@ -305,7 +320,7 @@
              </div>              
             
              
-             <div class="tab_part">  
+             <!--<div class="tab_part">  
                     <h4 class="title_word_bg block_title">
                          <img src="{% static "img/ic_33.png" %}" />网络地址配置                             
                     </h4>  
@@ -328,7 +343,6 @@
                                     
                                  </td>
                                  <td colspan="2">
-                                    <!--label class="inline tab_checkbox"><input type="checkbox" id="dhcp_selected" value="dhcp"></label>是否配置DHCP服务器  -->
 					<div class="tuopu_btn">配置DHCP服务
 					<span class="switch_btn dhcp checked" style="margin-left:10px;">
                     				<span class="switch_content">是</span>
@@ -337,11 +351,10 @@
                              </tr>                  
                          </tbody>
                      </table>                                           
-             
-			<!--div id="gw_setting" style="display:none"-->
+   
    
                 <h4 class="title_word_bg block_title">
-                                                    <img src="{% static "img/ic_31.png" %}" />虚拟网关配置                           
+                      <img src="{% static "img/ic_31.png" %}" />虚拟网关配置                           
                 </h4>                
                  <table class="table_base tooltip-demo">
                     <tbody>
@@ -382,49 +395,49 @@
                 </h4>                 
                 
                 <table class="table_base tooltip-demo">
-                         <tbody>
-                             <tr>
-                                 <td width="150" class="text-right">
-                                     <label class="tab_radio1 control-label" for="optionsRadios1">
-                                        <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
-                                        <span class="block_span"></span> 创建控制器                                                                                                                 
-                                    </label> 
-                                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>                  
-                                 </td>  
-                                 <td width="100" class="text-right">控制器类型</td>                              
-                                 <td width="30%">                                                                    
-                                    <select name="controller_sys" id="controller_sys" class="form-control">
-                                      <option value="Floodlight">Floodlight</option>
-                                      <option value="POX">POX</option>
-                                      <option value="OpenDaylight">OpenDaylight</option>
-                                    </select>                                    
-                                 </td>
-                                 <td colspan="3">
-                                   
-                                 </td>
-                             </tr>     
-                             <tr>
-                                 <td class="text-right">
-                                      <label class="tab_radio2 control-label" for="optionsRadios2">
-                                            <input type="radio" name="controller_type" id="optionsRadios2" value="user_define">
-                                                                                                                                   自定义控制器
-                                                                                                                                   <a href="javascript:void(0);" title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。" data-toggle="tooltip" data-placement="right" data-original-title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
-                                      </label>
-                                 </td>  
-                                 <td class="text-right">控制器IP</td>                              
-                                 <td width="30%">                                                                    
-                                    <div id="ipInput" class="disabled"></div>                                  
-                                 </td>
-                                 <td class="text-right" width="60">端口</td>
-                                 <td width="10%">
-                                     <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                                    
-                                 </td>
-                                 <td>                                     
-                                     <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
-                                 </td>
-                             </tr>                  
-                         </tbody>
-                     </table>  
+                     <tbody>
+                         <tr>
+                             <td width="150" class="text-right">
+                                 <label class="tab_radio1 control-label" for="optionsRadios1">
+                                    <input type="radio" name="controller_type" id="optionsRadios1" value="default_create" checked>
+                                    <span class="block_span"></span> 创建控制器                                                                                                                 
+                                </label> 
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="此处默认创建Floodlight控制器" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>                  
+                             </td>  
+                             <td width="100" class="text-right">控制器类型</td>                              
+                             <td width="30%">                                                                    
+                                <select name="controller_sys" id="controller_sys" class="form-control">
+                                  <option value="Floodlight">Floodlight</option>
+                                  <option value="POX">POX</option>
+                                  <option value="OpenDaylight">OpenDaylight</option>
+                                </select>                                    
+                             </td>
+                             <td colspan="3">
+                               
+                             </td>
+                         </tr>     
+                         <tr>
+                             <td class="text-right">
+                                  <label class="tab_radio2 control-label" for="optionsRadios2">
+                                        <input type="radio" name="controller_type" id="optionsRadios2" value="user_define">
+                                                                                                                               自定义控制器
+                                                                                                                               <a href="javascript:void(0);" title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。" data-toggle="tooltip" data-placement="right" data-original-title="自定义控制器特指用户提供自己开发或部署的控制器，需要用户为控制器提供公网IP，否则将无法与虚网连通。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                  </label>
+                             </td>  
+                             <td class="text-right">控制器IP</td>                              
+                             <td width="30%">                                                                    
+                                <div id="ipInput" class="disabled"></div>                                  
+                             </td>
+                             <td class="text-right" width="60">端口</td>
+                             <td width="10%">
+                                 <input type="text" maxlength="5" id="controller_port" class="dk_pull form-control" disabled onblur="check_port('port',1)"/>                                    
+                             </td>
+                             <td>                                     
+                                 <span id="controller_ip_portInfo" style="display:inline;float:none;"></span>
+                             </td>
+                        </tr>                  
+                   </tbody>
+              </table>  
  
         
               <div class="form-actions">
@@ -435,125 +448,28 @@
                     <div class="col-md-4"></div>
                   </div>
               </div>
-             </div>     
+             </div>   -->  
              
-             <!--<div class="tab_part">
-
-                <h4 class="title_word_bg block_title">
-                                 <img src="{% static "img/ic_41.png" %}" />虚拟机配置                                        
-                </h4>  
-                         
-                          
-				
-				<div id="topologyModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-				<div class="modal-dialog">
-                <div class="modal-content">
-					<div class="modal-header">
-        				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        				<h4 class="modal-title" >当前已选节点资源</h4>
-    				</div>
-    				<div class="modal-body" id="topology_info">
-    					<div class="row">
-            				<div class="col-md-8">
-            					<iframe scrolling="no" id="topologyiframe" width="530" height="305"  frameborder="0"></iframe>
-             				</div>
-             			</div>  
-				    </div> 
-				 </div>
-				 </div>               
-			     </div>
-			     <table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
-			         <tbody>
-			             <tr>
-			                 <td width="80"><b>类型</b></td>
-			                 <td class="type_chose">
-								{%for flavor in flavors%}
-									<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
-								{%endfor%}			                     
-			                 </td>
-			             </tr>
-			             <tr>
-                             <td><b>CPU</b></td>
-                             <td class="cpu_chose">
-                                 <a href="javascript:void(0);" class="vm_active" id="cpu_1" value="1">1 核</a>
-                                 <a href="javascript:void(0);" id="cpu_2" value="2">2 核</a>
-                                 <a href="javascript:void(0);" id="cpu_4" value="4">4 核</a>
-								 <a href="javascript:void(0);" id="cpu_6" value="8">8 核</a>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td><b>内存</b></td>
-                             <td class="slider_td">
-
-                                 <div id="ram_slider" class="ui-slider">                 
-                                 </div>
-                                 <span class="value_s">128 MB</span>
-                                 <span class="value_e">8 GB</span>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td><b>镜像</b></td>
-                             <td>
-							 	<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> <span name="imageInfo"></span>
-                             </td>
-                         </tr>
-                         <tr>
-                             <td><b>宿主机</b></td>
-                             <td>
-							 	<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div>
-								<span name="serverInfo"></span>
-                                 <a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</a>
-                                 
-                             </td>
-                         </tr>
-                         <tr>
-                             <td colspan="2">
-								<label class="pull-left control-label">启动DHCP</label>
-								<div id="dhcp_vm" class="pull-left"> 
-                                     <div class="tuopu_btn">
-                                        <span class="switch_btn dhcp vm" style="cursor:pointer">
-                                            <span class="switch_content">否</span>
-                                        </span>
-                                    </div>                                                                 
-                                 </div>
-                             </td>
-
-                         </tr>
-			         </tbody>
-			     </table>
-			     
-    			    <h4 class="title_word_bg block_title">
-                                                           <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表      
-                                                           <button type="button" class="btn btn_info  pull-right" onclick="javascript:update_vms_info()">添加</button>                                   
-                    </h4>
-                
-                 <table class="table_defined" id="vms_info_table">
-                      <thead>
-                          <tr>
-                            <th width="10%">类型</th>
-                            <th width="10%">CPU</th>
-                            <th width="10%">内存</th>
-                            <th width="20%">镜像</th>
-                            <th width="20%">宿主机</th>
-                            <th width="15%">是否启动DHCP</th>
-                            <th width="15%">操作</th>
-                          </tr>  
-                      </thead>
-                      <tbody>
-                      </tbody>
-                 </table>    
-                 
-                 <div class="form-actions">
-                  <div class="row buttons_margin">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info prev_btn">上一步</button></div>
-                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-step4 btn_info next_btn">下一步</button></div>
-                    <div class="col-md-4"></div>
-                  </div>
-                 </div>             
-             </div>-->
              
              <div class="tab_part">
+                    <!--<h4 class="title_word_bg block_title">
+                         <img src="{% static "img/ic_33.png" %}" />虚网类型
+                    </h4> 
+                 </legend>
+                 <table class="table_base">
+                    <tbody>
+                        <tr>
+                            <td width="120">虚网类型：</td>
+                            <td>
+                                {%if slice_type == "mixslice" %}
+                                混合虚网
+                                {%else%}
+                                基础虚网
+                                {%endif%}
+                            </td>
+                        </tr>
+                    </tbody>
+                 </table>  -->
 
                    <h4 class="title_word_bg block_title">
                                     <img src="{% static "img/ic_08.png" %}" />网络节点      
@@ -570,9 +486,9 @@
                     <tbody>
                     </tbody>
                  </table>   
-
+                {%if slice_type == "mixslice" %}
                     <h4 class="title_word_bg block_title">
-                                                            <img src="{% static "img/ic_33.png" %}" />网络地址                          
+                         <img src="{% static "img/ic_33.png" %}" />网络地址                          
                     </h4> 
                  </legend>
                  <table class="table_base">
@@ -581,28 +497,34 @@
                             <td width="120">网络地址：</td>
                             <td><span id="list_slice_nw"></span></td>
                         </tr>
+                    </tbody>
+                 </table>  
+                 {%else%}
+                 <table class="table_base" style="display: none">
+                    <tbody>
                         <tr>
-                            <td>DHCP服务器：</td>
-                            <td><span id="list_slice_dhcp">未配置</span></td>
+                            <td width="120">网络地址：</td>
+                            <td><span id="list_slice_nw"></span></td>
                         </tr>
                     </tbody>
-                 </table>   
+                 </table>
+                 {%endif%} 
 
-                    <h4 class="title_word_bg block_title">
-                                                            <img src="{% static "img/ic_41.png" %}" />控制器      
+                    <!-- <h4 class="title_word_bg block_title">
+                        <img src="{% static "img/ic_41.png" %}" />控制器      
                     </h4>               
 
                  <div id="list_controller"></div>
 
                    <h4 class="title_word_bg block_title">
-                                        <img src="{% static "img/ic_01.png" %}" />虚拟网关      
+                        <img src="{% static "img/ic_01.png" %}" />虚拟网关      
 
                     </h4> 
 
                  <div id="list_gw"></div>
 
-                 <!--   <h4 class="title_word_bg block_title">
-                                        <img src="{% static "img/ic_11.png" %}" />虚拟机列表      
+                    <h4 class="title_word_bg block_title">
+                        <img src="{% static "img/ic_11.png" %}" />虚拟机列表      
                     </h4>               
                  </legend>
                  <table class="table_defined">
@@ -636,6 +558,7 @@
               
               <div class="clear" style="display: none" >
 					<p id="project_id">{{project.id}}</p>
+					<p id="slice_type">{{slice_type}}</p>
 			  </div>
              </div>
            </form>
