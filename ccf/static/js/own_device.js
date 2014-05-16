@@ -210,6 +210,8 @@ function commit_ports(sliceid){
                 //show_err_msg(data.error);
                 $("#device_info").html("警告："+data.error);
                 $(".alert_device").show();
+                selected_switch_ports().remove();
+                
             }else{
                 window.location.href='/slice/detail/' + sliceid + '/2/';
             }
