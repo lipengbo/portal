@@ -8,7 +8,7 @@ $(document).ready(function(){
         url : "/plugins/vt/get_switch_port/"+sliceid+"/",
         type : "GET",
         dataType : "json",
-        //async : false,
+        async : false,
         error : function(e){
         },
         success : function(switchs){
