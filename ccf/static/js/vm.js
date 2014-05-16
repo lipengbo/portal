@@ -501,9 +501,9 @@ function create_vms(sliceid, flag)
             //window.location.href='/quota_admin/apply/'
             return;
         };
-		if(flag != 1 || post_vm_result){
+		//if(flag != 1 || post_vm_result){
 			window.location.href='/slice/detail/' + sliceid + '/1/';
-		}        
+		//}        
     }
 }
 
@@ -682,6 +682,8 @@ function select_flavor(flavor_id){
 }
 
 function set_value(obj, value){
+    vms_info().remove();
+    quota = true;
 	if(obj == "flavor"){
 		flavor_selected = value;
 	}else if(obj == "ram"){
