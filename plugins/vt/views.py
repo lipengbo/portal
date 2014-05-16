@@ -135,12 +135,9 @@ def create_vm(request, sliceid):
                 log(user, vm, u"创建虚拟机失败", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
-<<<<<<< HEAD
                 log(user, vm, u"创建虚拟机失败", FAIL)
-=======
                 import traceback
                 traceback.print_exc()
->>>>>>> 4966a8ce095c719ea02318dd5a6bd68d80f4a117
                 return HttpResponse(json.dumps({'result' : 1, 'error': _('server error')}))
         else:
             log(user, vm, u"创建虚拟机失败", FAIL)
