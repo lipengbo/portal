@@ -131,7 +131,7 @@ def stop_slice_sync(slice_id, user):
 
 
 @task()
-def start_or_stop_vpn(slice_obj, vpn_ip, network, gw_ip, start_or_stop):
+def start_or_stop_vpn(user, slice_obj, vpn_ip, network, gw_ip, start_or_stop):
     try:
         print "--------->do_action on vpn server", start_or_stop
         agent = AgentClient(vpn_ip)
@@ -141,24 +141,28 @@ def start_or_stop_vpn(slice_obj, vpn_ip, network, gw_ip, start_or_stop):
         else:
             print "2"
             result = agent.del_route_from_vpnserver(network, gw_ip)
-        reset_state(slice_obj, start_or_stop, result)
+        reset_state(user, slice_obj, start_or_stop, result)
     except:
         print 3
-        reset_state(slice_obj, start_or_stop, False)
+        reset_state(user, slice_obj, start_or_stop, False)
         import traceback
         traceback.print_exc()
 
 
-def reset_state(slice_obj, start_or_stop, result):
+def reset_state(user, slice_obj, start_or_stop, result):
     print "==========> reset vpn state", result
     if result:
         if start_or_stop == 'start':
             slice_obj.vpn_state = 1
+            log(user, slice_obj, u"启动VPN服务成功", SUCCESS)
         else:
             slice_obj.vpn_state = 0
+            log(user, slice_obj, u"停止VPN服务成功", SUCCESS)
     else:
         if start_or_stop == 'start':
             slice_obj.vpn_state = 0
+            log(user, slice_obj, u"启动VPN服务失败", SUCCESS)
         else:
             slice_obj.vpn_state = 1
+            log(user, slice_obj, u"停止VPN服务失败", SUCCESS)
     slice_obj.save()
