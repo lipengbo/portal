@@ -10,7 +10,6 @@ from etc import config
 
 
 class TimeoutTransport(xmlrpclib.Transport):
-    timeout = config.rpc_connection_timeout
 
     def set_timeout(self, timeout):
         self.timeout = timeout
@@ -20,7 +19,10 @@ class TimeoutTransport(xmlrpclib.Transport):
         return h
 
 
-def get_rpc_client(ip, port):
+def get_rpc_client(ip, port, timeout=None):
     t = TimeoutTransport()
-    t.set_timeout(config.rpc_connection_timeout)
+    if timeout:
+        t.set_timeout(config.rpc_connection_timeout)
+    else:
+        t.set_timeout(timeout)
     return xmlrpclib.ServerProxy("http://%s:%s/" % (ip, port), allow_none=True, transport=t)
