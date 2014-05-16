@@ -8,41 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Removing unique constraint on 'DailyCounter', fields ['target', 'date']
-        db.delete_unique('project_dailycounter', ['target', 'date'])
-
-        # Deleting model 'DailyCounter'
-        db.delete_table('project_dailycounter')
-
-        # Adding field 'Island.novnc_ip'
-        db.add_column('project_island', 'novnc_ip',
-                      self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True),
-                      keep_default=False)
-
-        # Adding field 'Island.vpn_ip'
-        db.add_column('project_island', 'vpn_ip',
-                      self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True),
+        # Adding field 'Project.created_time'
+        db.add_column('project_project', 'created_time',
+                      self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, default=datetime.datetime(2014, 5, 16, 0, 0), blank=True),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Adding model 'DailyCounter'
-        db.create_table('project_dailycounter', (
-            ('count', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
-            ('date', self.gf('django.db.models.fields.DateField')(auto_now_add=True, blank=True)),
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('target', self.gf('django.db.models.fields.IntegerField')()),
-        ))
-        db.send_create_signal('project', ['DailyCounter'])
-
-        # Adding unique constraint on 'DailyCounter', fields ['target', 'date']
-        db.create_unique('project_dailycounter', ['target', 'date'])
-
-        # Deleting field 'Island.novnc_ip'
-        db.delete_column('project_island', 'novnc_ip')
-
-        # Deleting field 'Island.vpn_ip'
-        db.delete_column('project_island', 'vpn_ip')
+        # Deleting field 'Project.created_time'
+        db.delete_column('project_project', 'created_time')
 
 
     models = {
@@ -99,9 +73,7 @@ class Migration(SchemaMigration):
             'city': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.City']"}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'}),
-            'novnc_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True'}),
-            'vpn_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
         },
         'project.membership': {
             'Meta': {'unique_together': "(('project', 'user'),)", 'object_name': 'Membership'},

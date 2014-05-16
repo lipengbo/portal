@@ -358,7 +358,12 @@ function check_vpn_status(slice_id){
                     img_obj.title = "停止";
                 }
             }
+            update_vpn_status();
+        },
+        error: function(data) {
+            update_vpn_status();
         }
+        
     });
 }
 
