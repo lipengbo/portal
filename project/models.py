@@ -224,3 +224,4 @@ def on_add_into_slice(sender, instance, action, pk_set, model, **kwargs):
     resource = instance
     if action == 'post_add': #: only handle post_add event
         resource.on_add_into_slice()
+

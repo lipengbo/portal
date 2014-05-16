@@ -32,8 +32,9 @@ from resources.models import Switch, Server, VirtualSwitch
 from plugins.openflow.models import Flowvisor
 from common.models import  Counter
 from notifications.models import Notification
+from project.tasks import check_resource_usage
 
-
+#check_resource_usage.delay()
 def home(request):
     user = request.user
     if user.is_authenticated():

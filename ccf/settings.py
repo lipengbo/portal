@@ -1,5 +1,6 @@
 import os
 import djcelery
+from celery.schedules import crontab
 djcelery.setup_loader()
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
@@ -193,6 +194,12 @@ INSTALLED_APPS = [
 # Celery settings
 BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERYBEAT_SCHEDULE = {
+    "resource_usage": {
+        "task": "project.tasks.check_resource_usage",
+        "schedule": crontab(minute='*/60'),
+    },
+}
 
 XMLRPC_METHODS = (('plugins.vt.views.set_domain_state', 'set_domain_state'),)
 
@@ -256,6 +263,23 @@ LOGGING = {
             "propagate": True,
         },
     }
+}
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'OPTIONS': {
+            'DB': 1,
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+            'CONNECTION_POOL_CLASS': 'redis.BlockingConnectionPool',
+            'CONNECTION_POOL_CLASS_KWARGS': {
+                'max_connections': 50,
+                'timeout': 20,
+            }
+        },
+    },
 }
 
 FIXTURE_DIRS = [

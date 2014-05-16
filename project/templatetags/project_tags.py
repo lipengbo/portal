@@ -3,6 +3,7 @@ import datetime
 
 from django.template.defaultfilters import register
 from django.conf import settings
+from django.core.cache import cache
 
 from plugins.common.agent_client import AgentClient
 from project.models import City
@@ -16,40 +17,13 @@ RESOURCE_USAGES = {}
 
 @register.simple_tag(takes_context=True)
 def resource_usage(context, island):
-    servers = island.server_set.all()
-    switches = island.switch_set.all()
-    print servers, switches
-    server_ratios = []
-    switch_ratios = []
-    now = datetime.datetime.now()
-    global RESOURCE_USAGES
-    if (island.id not in RESOURCE_USAGES) or ((now - RESOURCE_USAGES[island.id]['time']).total_seconds() > (60 * 60)):
 
-        for server in servers:
-            client = AgentClient(server.ip)
-            try:
-                host_status = json.loads(client.get_host_status())
-            except Exception:
-                pass
-            else:
-                ratio = (host_status['mem'][2] + host_status['cpu']) / 2
-                server_ratios.append(ratio)
-
-        for switch in switches:
-            client = AgentClient(switch.ip)
-            try:
-                host_status = json.loads(client.get_host_status())
-            except Exception:
-                pass
-            else:
-                ratio = (host_status['mem'][2] + host_status['cpu']) / 2
-                switch_ratios.append(ratio)
-
-        RESOURCE_USAGES[island.id] = {}
-        RESOURCE_USAGES[island.id]['usage'] = (switch_ratios, server_ratios)
-        RESOURCE_USAGES[island.id]['time'] = now
+    key = 'island_{}_usage'.format(island.id)
+    result = cache.get(key)
+    if result:
+        switch_ratios, server_ratios = result[0], result[1]
     else:
-        switch_ratios, server_ratios = RESOURCE_USAGES[island.id]['usage']
+        switch_ratios, server_ratios = [], []
 
     context['switch_ratio'] = sum(switch_ratios) / float(len(switch_ratios) or 1)
     context['server_ratio'] = sum(server_ratios) / float(len(server_ratios) or 1)
