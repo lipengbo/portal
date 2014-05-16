@@ -133,7 +133,7 @@ def stop_slice_sync(slice_id, user):
 @task()
 def start_or_stop_vpn(user, slice_obj, vpn_ip, network, gw_ip, start_or_stop):
     try:
-        print "--------->do_action on vpn server", start_or_stop
+        print user, "--------->do_action on vpn server", start_or_stop
         agent = AgentClient(vpn_ip)
         if start_or_stop == 'start':
             print "1"
