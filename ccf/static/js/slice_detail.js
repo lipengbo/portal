@@ -592,7 +592,7 @@ function add_device(slice_id){
 //缩写uuid
 function show_uuid(objs){
     for (var i=0; i<objs.length; i++){
-        objs[i].innerHTML = objs[i].innerHTML.split("-")[0].split(".") + "...";
+        objs[i].innerHTML = objs[i].innerHTML.split("-")[0].split(".")[0] + "...";
     }
 }
 
