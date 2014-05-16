@@ -23,10 +23,10 @@ def reset_state(vm, action, result, is_except):
             vm.state = DOMAIN_STATE_DIC['running']
     else:
         if action == "destroy":
-            if is_except:
-                vm.state = DOMAIN_STATE_DIC['running']
+#             if is_except:
+            vm.state = DOMAIN_STATE_DIC['running']
         else:
-            if is_except:
-                vm.state = DOMAIN_STATE_DIC['shutoff']
+#             if is_except:
+            vm.state = DOMAIN_STATE_DIC['shutoff']
     vm.save()
 

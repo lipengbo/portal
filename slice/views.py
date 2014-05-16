@@ -237,8 +237,8 @@ def create_or_edit_controller(request, slice_id):
     try:
         slice_edit_controller(slice_obj, controller_info)
     except Exception, ex:
-        import traceback
-        traceback.print_exc()
+#         import traceback
+#         traceback.print_exc()
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         return HttpResponse(json.dumps({'result': 1}))
