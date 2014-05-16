@@ -28,7 +28,7 @@ from slice.models import Slice, SliceDeleted
 from plugins.vt.forms import VmForm
 from plugins.vt.models import Flavor
 from adminlog.models import log, SUCCESS, FAIL
-
+from etc.config import function_test
 import datetime
 
 from adminlog.models import log, SUCCESS, FAIL
@@ -840,13 +840,23 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
         print flag, "=============:", subnet.netaddr
         from slice.tasks import start_or_stop_vpn
         if int(flag) == 0:
-            slice_obj.vpn_state = 3
-            slice_obj.save()
-            start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip, subnet.netaddr, gw_ip, 'stop')
+            if function_test:
+                slice_obj.vpn_state = 0
+                slice_obj.save()
+            else:
+                slice_obj.vpn_state = 3
+                slice_obj.save()
+                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,\
+                                    subnet.netaddr, gw_ip, 'stop')
         else:
-            slice_obj.vpn_state = 4
-            slice_obj.save()
-            start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip, subnet.netaddr, gw_ip, 'start' )
+            if function_test:
+                slice_obj.vpn_state = 1
+                slice_obj.save()
+            else:
+                slice_obj.vpn_state = 4
+                slice_obj.save()
+                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip, \
+                                    subnet.netaddr, gw_ip, 'start' )
         return HttpResponse(json.dumps({'result': 0}))
     except:
         if vm == None:
