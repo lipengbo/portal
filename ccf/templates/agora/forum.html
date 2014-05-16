@@ -9,13 +9,21 @@
 
 {% block forum_body %}
 {% include "agora/_forum_breadcrumb.html" with thread=thread %}
-<div class="">
-    <h1>{{ forum }}</h1>
-</div>
+
 <div class="row">
     <div class="col-md-12">
+        
+        <div class="action_box clearfix">
+                <div class="pull-right">
+                   <a href="{% url "agora_post_create" forum.id %}" class="btn btn-default">
+                       <i class="glyphicon glyphicon-plus"></i>
+                                                                                新建工单
+                   </a>
+                </div>
+        </div>
+        
         {% paginate 20 threads %}
-        <table class="table table-striped">
+        <table class="table_defined">
           <thead>
             <tr>
               <th>#工单号</th>
@@ -56,7 +64,4 @@
 </div>
 {% endblock %}
 
-{% block sidebar %}
-<a href="{% url "agora_post_create" forum.id %}" class="btn btn-danger btn-block btn-lg">新建工单</a>
-{% endblock %}
 

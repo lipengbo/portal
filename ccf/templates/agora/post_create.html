@@ -9,7 +9,7 @@
     <h3>新建工单</h3>
 
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
             <div class="wmd-panel">
                 <form role="form" action="{% url "agora_post_create" forum.pk %}" method="POST" class="">
                     {% csrf_token %}
@@ -29,8 +29,8 @@
                             </div>
                         </div>
                     </fieldset>
-                    <div class="form-actions pull-right">
-                        <a class="btn" href="{% url "agora_forum" forum.pk %}">取消</a>
+                    <div class="form-actions">
+                        <a class="btn btn-default" href="{% url "agora_forum" forum.pk %}">取消</a>
                         <button class="btn btn-primary" type="submit">创建</button>
                     </div>
                 </form>
