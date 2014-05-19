@@ -30,9 +30,10 @@ class CCFWebSocketProxy(websockify.WebSocketProxy):
         cookie = Cookie.SimpleCookie()
         cookie.load(self.headers.getheader('cookie'))
         token = cookie['token'].value
-        print '----------------------------------'
+        print '--------------token--------------------'
         print token
         token_msg = self.decrypt(token.strip().split('_')[4]).split('_')
+        print '------------token_msg----------------------'
         print token_msg
         print '----------------------------------'
         host = token_msg[0]

@@ -20,7 +20,7 @@
   width: 700px;
 }
 .login_bg .login_logo img {
-  width: 100%;
+  width: auto;
 }
 .login_bg .login_title {
   background: #3da2f7 url(../img/banner.png) center top;

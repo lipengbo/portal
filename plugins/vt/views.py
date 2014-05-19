@@ -242,6 +242,7 @@ def vnc(request, vmid, island_id):
     island = get_object_or_404(Island, id=island_id)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
+    print "-----------vnc_port-----------", vnc_port
     private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
     vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, vm.image.username, vm.image.password)
     mycrypt_tool = mycrypt()
