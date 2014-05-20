@@ -18,16 +18,15 @@ from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
     get_slice_links_bandwidths, get_count_show_data, slice_edit_controller,\
     slice_edit_gw
+from slice.models import Slice, SliceDeleted
 from project.models import Project, Island
 from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
-from slice.slice_exception import *
+from resources.ovs_api import slice_delete_port_device
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from resources.ovs_api import slice_delete_port_device
-from slice.models import Slice, SliceDeleted
+from plugins.vt.models import VirtualMachine
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
-from plugins.vt.models import VirtualMachine
 
 import datetime
 
@@ -45,7 +44,8 @@ def create(request, proj_id, flag):
     error_info = None
     islands = project.islands.all()
     if not islands:
-        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
+        return render(request, 'slice/warning.html',
+                      {'info': '无可用节点，无法创建slice！'})
     ovs_ports = []
     for island in islands:
         switches = island.switch_set.all()
@@ -156,7 +156,8 @@ def create_or_edit_controller(request, slice_id):
             log(request.user, slice_obj,
                 u"添加虚网(" + slice_obj.show_name + u")控制器失败！",
                 result_code=FAIL)
-        return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
+        return HttpResponse(json.dumps({'result': 0,
+                                        'error_info': ex.message}))
     else:
         if op == "edit":
             log(request.user, slice_obj,
@@ -187,7 +188,8 @@ def create_gw(request, slice_id):
         log(request.user, slice_obj,
             u"添加虚网(" + slice_obj.show_name + u")网关失败！",
             result_code=FAIL)
-        return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
+        return HttpResponse(json.dumps({'result': 0,
+                                        'error_info': ex.message}))
     else:
         log(request.user, slice_obj,
             u"添加虚网(" + slice_obj.show_name + u")网关成功！",
@@ -709,185 +711,6 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
         return HttpResponse(json.dumps({'result': 0}))
     except:
         if vm == None:
-            return HttpResponse(json.dumps({'result': 1, 'error_info': u'请先添加网关！'}))
+            return HttpResponse(json.dumps({'result': 1,
+                                            'error_info': u'请先添加网关！'}))
         return HttpResponse(json.dumps({'result': 1}))
-
-
-# def test_cnvp():
-#     from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
-#         flowvisor_del_flowspace, flowvisor_add_flowspace,\
-#         flowvisor_update_slice_status, flowvisor_add_slice,\
-#         flowvisor_del_port, flowvisor_add_port, flowvisor_update_sice_controller,\
-#         flowvisor_get_switches, flowvisor_get_links, flowvisor_show_slice
-#     from plugins.openflow.models import Flowvisor, Controller
-#     from resources.models import SwitchPort
-#     from plugins.vt.models import VirtualMachine
-#     vm = VirtualMachine.objects.get(mac='FA:16:0A:00:00:0A')
-#     vm.state = 8
-#     vm.switch_port = None
-#     vm.save()
-#     slice = Slice.objects.get(id=1)
-#     switch_port = SwitchPort.objects.get(port=678)
-#     slice.remove_resource(switch_port)
-#     vm.switch_port = switch_port
-#     vm.save()
-#     print 'vm change ok'
-#     slice.add_resource(switch_port)
-#     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp"
-#     flowvisor = Flowvisor.objects.all()[0]
-#     controller = Controller.objects.filter(ip = "172.16.0.5")[0]
-#     for i in range(0,125):
-#         try:
-#             flowvisor_del_slice(flowvisor, "slicet"+str(i))
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-#             print ex
-#     for i in range(0,125):
-#         try:
-#             flowvisor_del_slice(flowvisor, "slicet"+str(i))
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-#             print ex
-#     try:
-#         for i in range(125,130):
-#             try:
-#                 flowvisor_add_slice(flowvisor, "slicet"+str(i), controller, "cjx@qq.com")
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_slice error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_port(flowvisor, "slicet"+str(i), "00:ff:00:00:00:00:00:01", "64500")
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_port error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_port(flowvisor, "slicet"+str(i), "00:ff:00:00:00:00:00:01", "64501")
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_port error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_flowspace(flowvisor, "flcjx", "slicet"+str(i), 4,
-#                                     "cjx", "00:ff:00:00:00:00:00:01", 100, "nw_src=11.0.0."+str(i+1)+"),nw_dst=11.0.0."+str(i+1))
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_flowspace(flowvisor, "flcjx", "slicet"+str(i), 4,
-#                                     "cjx", "00:ff:00:00:00:00:00:01", 100, "nw_src=12.0.0."+str(i+1)+"),nw_dst=12.0.0."+str(i+1))
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_flowspace(flowvisor, "flcjx", "slicet"+str(i), 4,
-#                                     "cjx", "00:ff:00:00:00:00:00:01", 100, "nw_src=13.0.0."+str(i+1)+"),nw_dst=13.0.0."+str(i+1))
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_update_slice_status(flowvisor, "slicet"+str(i), True)
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp start slice error"
-#                 print ex
-#                 raise
-# #             try:
-# #                 flowvisor_update_slice_status(flowvisor, "slicet"+str(i), False)
-# #             except Exception, ex:
-# #                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp stop slice error"
-# #                 print ex
-# #                 raise
-#     except Exception, ex:
-#         pass
-#     for i in range(0,125):
-#         try:
-#             flowvisor_update_slice_status(flowvisor, "slicet"+str(i), True)
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp stop slice error"
-#             print ex
-#             raise
-#         try:
-#             flowvisor_update_slice_status(flowvisor, "slicet"+str(i), False)
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp stop slice error"
-#             print ex
-#             raise
-#     for i in range(0,125):
-#         try:
-#             flowvisor_del_slice(flowvisor, "slicet"+str(i))
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-#             print ex
-#     try:
-#         flowvisor_show_slice(flowvisor, None)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_show_slice error"
-#         print ex
-#     controller = Controller.objects.all()[0]
-#     try:
-#         flowvisor_add_slice(flowvisor, "cjxcnvptest", controller, "cjx@qq.com")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_slice error"
-#         print ex
-#     try:
-#         flowvisor_add_slice(flowvisor, "cjxcnvptest2", controller, "cjx@qq.com")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_slice error"
-#         print ex
-#     try:
-#         flowvisor_update_slice_status(flowvisor, "cjxcnvptest", True)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_update_slice_status error"
-#         print ex
-#     try:
-#         flowvisor_update_slice_status(flowvisor, "4", True)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_update_slice_status error"
-#         print ex
-#     try:
-#         flowvisor_update_sice_controller(flowvisor, "cjxcnvptest", "17.17.17.17", "988")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_update_sice_controller error"
-#         print ex
-#     try:
-#         flowvisor_add_port(flowvisor, "cjxcnvptest", "00:00:00:00:00:00:00:01", "2")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_port error"
-#         print ex
-#     try:
-#         flowvisor_del_port(flowvisor, "cjxcnvptest", None, None)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_port error"
-#         print ex
-#     try:
-#         flowvisor_add_flowspace(flowvisor, "flcjx", "cjxcnvptest4", 4,
-#                             "cjx", "00:00:00:00:00:00:00:09", 100, "nw_src=10.0.0.1/24,nw_dst=10.0.0.1/24")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#         print ex
-#     try:
-#         flowvisor_del_flowspace(flowvisor, "cjxcnvptest", None)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_flowspace error"
-#         print ex
-#     try:
-#         flowvisor_del_slice(flowvisor, "cjxcnvptest9")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-#         print ex
-#     try:
-#         switches = flowvisor_get_switches(flowvisor)
-#         print switches
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_get_switches error"
-#         print ex
-#     try:
-#         links = flowvisor_get_links(flowvisor)
-#         print links
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_get_links error"
-#         print ex
