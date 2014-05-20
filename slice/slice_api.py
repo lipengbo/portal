@@ -110,8 +110,8 @@ def slice_edit_controller(slice_obj, controller_info):
     """
     LOG.debug('slice_edit_controller')
     try:
-        haved_controller = slice_obj.get_controller()
         create_flag = True
+        haved_controller = slice_obj.get_controller()
         if haved_controller:
             if controller_info['controller_type'] == 'default_create':
                 if haved_controller.name == controller_info['controller_sys']:
@@ -123,6 +123,7 @@ def slice_edit_controller(slice_obj, controller_info):
                         haved_controller.port == int(controller_info['controller_port']):
                     create_flag = False
         if create_flag:
+            print "###################1"
             if haved_controller:
                 slice_obj.remove_resource(haved_controller)
             new_controller = create_add_controller(slice_obj, controller_info)
@@ -138,7 +139,7 @@ def slice_edit_controller(slice_obj, controller_info):
         raise DbError(ex.message)
     else:
         print 2
-        if haved_controller:
+        if create_flag and haved_controller:
             try:
                 delete_controller(haved_controller, True)
             except:
@@ -223,6 +224,8 @@ def create_slice_api(project, slice_uuid, name, description, island, user, vm_nu
                     slice_obj.add_resource(flowvisors[0])
                     return slice_obj
                 except Exception, ex:
+#                     import traceback
+#                     traceback.print_exc()
                     raise DbError("虚网创建失败!")
             else:
                 raise IslandError("所选节点无可用flowvisor！")
