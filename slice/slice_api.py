@@ -1,5 +1,5 @@
 # coding:utf-8
-from slice.models import *
+from slice.models import Slice, SliceDeleted
 from slice.slice_exception import DbError, IslandError, NameExistError
 from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
     flowvisor_del_flowspace, flowvisor_add_flowspace,\
@@ -1035,7 +1035,7 @@ def get_slice_resource(slice_obj):
     LOG.debug('get_slice_resource')
 
 
-def get_count_show_data(target, type, total_num, stype):
+def get_count_show_data(target, ct_type, total_num, stype):
     from common.models import Counter, FailedCounter, DeletedCounter
     print "get_slice_count_show"
     date_now = datetime.datetime.now()
@@ -1045,7 +1045,7 @@ def get_count_show_data(target, type, total_num, stype):
         target_id = 0
     else:
         target_id = 1
-    if type == "year":
+    if ct_type == "year":
         year = 2013
         if int(date_now.strftime('%Y')) - 10 >= year:
             year = int(date_now.strftime('%Y')) - 10 + 1
@@ -1070,7 +1070,7 @@ def get_count_show_data(target, type, total_num, stype):
                 num = 0
             show_nums.append(num)
     else:
-        if type == "month":
+        if ct_type == "month":
             year = int(date_now.strftime('%Y'))
             for i in range(0, 12):
                 if int(stype) == 0:

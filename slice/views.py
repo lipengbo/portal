@@ -16,23 +16,20 @@ from django.db.models import Q
 
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
-    get_slice_links_bandwidths, get_count_show_data, slice_edit_controller, slice_edit_gw
+    get_slice_links_bandwidths, get_count_show_data, slice_edit_controller,\
+    slice_edit_gw
 from project.models import Project, Island
 from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from slice.slice_exception import *
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from resources.ovs_api import slice_delete_port_device
 from slice.models import Slice, SliceDeleted
-from plugins.vt.forms import VmForm
-from plugins.vt.models import Flavor
-from adminlog.models import log, SUCCESS, FAIL
 from etc.config import function_test
-import datetime
-
 from adminlog.models import log, SUCCESS, FAIL
 from plugins.vt.models import VirtualMachine
+
+import datetime
 
 
 @login_required
@@ -74,105 +71,6 @@ def create(request, proj_id, flag):
     return render(request, 'slice/create_slice.html', context)
 
 
-# @login_required
-# def create_n(request, proj_id):
-#     """创建slice。"""
-#     project = get_object_or_404(Project, id=proj_id)
-#     if not request.user.has_perm('project.create_slice', project):
-#         return redirect('forbidden')
-#     slice_count = request.user.slice_set.filter(type=0).count()
-#     if request.user.quotas.slice <= slice_count:
-#         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
-#         return redirect('quota_admin_apply')
-#     error_info = None
-#     islands = project.islands.all()
-#     if not islands:
-#         return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
-#     ovs_ports = []
-#     for island in islands:
-#         switches = island.switch_set.all()
-#         for switch in switches:
-#             switch_ports = switch.switchport_set.all()
-#             if switch_ports:
-#                 ovs_ports.append({'switch_type': switch.type(),
-#                                   'switch': switch,
-#                                   'switch_ports': switch_ports})
-#             else:
-#                 ovs_ports.append({'switch_type': switch.type(),
-#                                   'switch': switch,
-#                                   'switch_ports': []})
-#     vm_form = VmForm()
-#     context = {}
-#     context['project'] = project
-#     context['islands'] = islands
-#     context['ovs_ports'] = ovs_ports
-#     context['error_info'] = error_info
-#     return render(request, 'slice/create_slice.html', context)
-
-
-# @login_required
-# def create_first(request, proj_id):
-#     """创建slice不含虚拟机创建。"""
-#     project = get_object_or_404(Project, id=proj_id)
-#     slice_count = request.user.slice_set.filter(type=0).count()
-#     if request.user.quotas.slice <= slice_count:
-#         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
-#         return redirect('quota_admin_apply')
-#     if request.method == 'POST':
-#         try:
-#             user = request.user
-#             slice_uuid = request.POST.get("slice_uuid")
-#             slice_name = request.POST.get("slice_name")
-#             slice_description = request.POST.get("slice_description")
-#             island_id = request.POST.get("island_id")
-#             island = get_object_or_404(Island, id=island_id)
-#             controller_type = request.POST.get("controller_type")
-#             if controller_type == 'default_create':
-#                 controller_sys = request.POST.get("controller_sys")
-#                 controller_info = {'controller_type': controller_type,
-#                                    'controller_sys': controller_sys}
-#             else:
-#                 controller_ip = request.POST.get("controller_ip")
-#                 controller_port = request.POST.get("controller_port")
-#                 controller_info = {'controller_type': controller_type,
-#                                    'controller_ip': controller_ip,
-#                                    'controller_port': controller_port}
-#             tp_mod = request.POST.get('tp_mod')
-#             if int(tp_mod) == 2:
-#                 switch_ids = []
-#                 switch_ids_str = request.POST.get("switch_ids")
-#     #             print switch_port_ids_str
-#                 switch_ids_sp = switch_ids_str.split(',')
-#                 for switch_id_sp in switch_ids_sp:
-#                     switch_ids.append(int(switch_id_sp))
-#                 ovs_or_ports = Switch.objects.filter(id__in=switch_ids)
-#             else:
-#                 port_ids = []
-#                 switch_port_ids_str = request.POST.get("switch_port_ids")
-#     #             print switch_port_ids_str
-#                 switch_port_ids = switch_port_ids_str.split(',')
-#                 for switch_port_id in switch_port_ids:
-#                     port_ids.append(int(switch_port_id))
-#                 ovs_or_ports = SwitchPort.objects.filter(id__in=port_ids)
-#             slice_nw = request.POST.get("slice_nw")
-#             gw_host_id = request.POST.get("gw_host_id")
-#             gw_ip = request.POST.get("gw_ip")
-#             dhcp_selected = request.POST.get("dhcp_selected")
-#             slice_obj = create_slice_step(project, slice_uuid, slice_name,
-#                                           slice_description, island, user,
-#                                           ovs_or_ports, controller_info, slice_nw,
-#                                           gw_host_id, gw_ip, dhcp_selected, tp_mod)
-#         except Exception, ex:
-#             jsondatas = {'result': 0, 'error_info': ex.message}
-#         else:
-#             assign_perm("slice.change_slice", user, slice_obj)
-#             assign_perm("slice.view_slice", user, slice_obj)
-#             assign_perm("slice.delete_slice", user, slice_obj)
-#             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
-#         result = json.dumps(jsondatas)
-#         return HttpResponse(result, mimetype='text/plain')
-
-
 @login_required
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
@@ -210,12 +108,14 @@ def create_first(request, proj_id):
             vm_num = int(request.POST.get("vm_num"))
             slice_obj = create_slice_step(project, slice_uuid, slice_name,
                                           slice_description, island, user,
-                                          ovs_or_ports, slice_nw, tp_mod, vm_num)
+                                          ovs_or_ports, slice_nw, tp_mod,
+                                          vm_num)
         except Exception, ex:
-            log(user,  None, "创建虚网失败！", result_code=FAIL)
+            log(user, None, "创建虚网失败！", result_code=FAIL)
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
-            log(user,  slice_obj, u"创建虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
+            log(user, slice_obj, u"创建虚网(" + slice_obj.show_name + u")成功！",
+                result_code=SUCCESS)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -249,15 +149,23 @@ def create_or_edit_controller(request, slice_id):
 #         import traceback
 #         traceback.print_exc()
         if op == "edit":
-            log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")控制器失败！", result_code=FAIL)
+            log(request.user, slice_obj,
+                u"编辑虚网(" + slice_obj.show_name + u")控制器失败！",
+                result_code=FAIL)
         else:
-            log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")控制器失败！", result_code=FAIL)
+            log(request.user, slice_obj,
+                u"添加虚网(" + slice_obj.show_name + u")控制器失败！",
+                result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         if op == "edit":
-            log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")控制器成功！", result_code=SUCCESS)
+            log(request.user, slice_obj,
+                u"编辑虚网(" + slice_obj.show_name + u")控制器成功！",
+                result_code=SUCCESS)
         else:
-            log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")控制器成功！", result_code=SUCCESS)
+            log(request.user, slice_obj,
+                u"添加虚网(" + slice_obj.show_name + u")控制器成功！",
+                result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
@@ -276,15 +184,19 @@ def create_gw(request, slice_id):
     except Exception, ex:
         #import traceback
         #traceback.print_exc()
-        log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")网关失败！", result_code=FAIL)
+        log(request.user, slice_obj,
+            u"添加虚网(" + slice_obj.show_name + u")网关失败！",
+            result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
-        log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")网关成功！", result_code=SUCCESS)
+        log(request.user, slice_obj,
+            u"添加虚网(" + slice_obj.show_name + u")网关成功！",
+            result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
 @login_required
-def list(request, proj_id, stype):
+def slice_list(request, proj_id, stype):
     """显示所有slice。"""
     from common.models import Counter, FailedCounter, DeletedCounter
     user = request.user
@@ -292,12 +204,12 @@ def list(request, proj_id, stype):
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
         if int(proj_id) == 0:
-            type = int(stype)
-            if type == 0 or type == 1:
-                slice_objs = Slice.objects.filter(type=type)
+            ct_type = int(stype)
+            if ct_type == 0 or ct_type == 1:
+                slice_objs = Slice.objects.filter(type=ct_type)
             else:
                 slice_objs = SliceDeleted.objects.order_by('-id')
-            context['type'] = type
+            context['type'] = ct_type
             date_now = datetime.datetime.now()
             if context['type'] == 0:
                 sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
@@ -354,56 +266,19 @@ def edit_description(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     if not request.user.has_perm('slice.change_slice', slice_obj):
         return redirect('forbidden')
-#     if request.method == 'POST':
     slice_description = request.POST.get("slice_description")
     try:
         slice_change_description(slice_obj, slice_description)
-    except Exception, ex:
-        log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息失败！", result_code=FAIL)
+    except Exception:
+        log(request.user,
+            slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息失败！",
+            result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0}))
     else:
-        log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息成功！", result_code=SUCCESS)
+        log(request.user,
+            slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息成功！",
+            result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
-#             messages.add_message(request, messages.ERROR, ex)
-#     return HttpResponseRedirect(
-#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-
-
-# @login_required
-# def edit_controller(request, slice_id):
-#     """编辑slice控制器。"""
-#     print "edit_controller"
-#     slice_obj = get_object_or_404(Slice, id=slice_id)
-#     if not request.user.has_perm('slice.change_slice', slice_obj):
-#         return redirect('forbidden')
-#     controller_type = request.POST.get("controller_type")
-#     if controller_type == 'default_create':
-#         controller_sys = request.POST.get("controller_sys")
-#         controller_info = {'controller_type': controller_type,
-#                            'controller_sys': controller_sys}
-#     else:
-#         controller_ip = request.POST.get("controller_ip")
-#         controller_port = request.POST.get("controller_port")
-#         controller_info = {'controller_type': controller_type,
-#                            'controller_ip': controller_ip,
-#                            'controller_port': controller_port}
-#     try:
-#         slice_edit_controller(slice_obj, controller_info)
-#     except Exception, ex:
-#         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
-#     else:
-#         controller = slice_obj.get_controller()
-#         if controller.host:
-#             return HttpResponse(json.dumps({'result': 1,
-#                                             'controller': {'name': controller.name, 'ip': controller.ip,
-#                                                           'port': controller.port, 'server_ip': controller.host.server.ip,
-#                                                           'host_state': controller.host.state, 'host_id': controller.host.id,
-#                                                           'host_uuid': controller.host.uuid}}))
-#         else:
-#             print 2
-#             return HttpResponse(json.dumps({'result': 2,
-#                                             'controller': {'name': controller.name, 'ip': controller.ip,
-#                                                           'port': controller.port}}))
 
 
 @login_required
@@ -433,42 +308,17 @@ def detail(request, slice_id, div_name=None):
     gw = slice_obj.get_gw()
     vms = slice_obj.get_common_vms()
     show_vms = []
-#         show_vm = {}
-#         if controller.host:
-#             show_vm['id'] = controller.host.id
-#             show_vm['host_ip'] = controller.host.server.ip
-#             show_vm['state'] = controller.host.state
-#             show_vm['uuid'] = controller.host.uuid
-#             show_vm['type_id'] = 2
-#         else:
-#             show_vm['id'] = 0
-#             show_vm['host_ip'] = ""
-#             show_vm['state'] = ""
-#             show_vm['uuid'] = ""
-#             show_vm['type_id'] = 1
-#         if controller.name == 'user_define':
-#             show_vm['name'] = "自定义控制器"
-#         else:
-#             show_vm['name'] = controller.name
-#
-#         show_vm['type'] = "控制器"
-#         show_vm['dhcp'] = "无"
-#         show_vm['ip'] = controller.ip + ":" + str(controller.port)
-#         show_vms.append(show_vm)
-#     if gw:
-#         if gw.enable_dhcp:
-#             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-#                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
-#         else:
-#             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-#                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"无"})
     for vm in vms:
         if vm.enable_dhcp:
-            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"有"})
+            show_vms.append({'id': vm.id, 'name': vm.name, 'uuid': vm.uuid,
+                             'type_id': 4, 'type': "虚拟机(DHCP)", 'ip': vm.ip,
+                             'host_ip': vm.server.ip, 'state': vm.state,
+                             'dhcp': "有"})
         else:
-            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"无"})
+            show_vms.append({'id': vm.id, 'name': vm.name, 'uuid': vm.uuid,
+                             'type_id': 4, 'type': "虚拟机", 'ip': vm.ip,
+                             'host_ip': vm.server.ip, 'state': vm.state,
+                             'dhcp': "无"})
 
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_flowvisor()
@@ -522,14 +372,13 @@ def delete(request, slice_id):
     if not request.user.is_superuser:
         if not user.has_perm('slice.delete_slice', slice_obj):
             return redirect('forbidden')
-    slice_name = slice_obj.show_name
     try:
         slice_obj.delete(user=request.user)
     except:
         messages.add_message(request, messages.ERROR, "虚网删除失败！")
     if 'next' in request.GET:
         if 'type' in request.GET:
-            return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))
+            return redirect(request.GET.get('next') + "?type=" + request.GET.get('type'))
         else:
             return redirect(request.GET.get('next'))
     return HttpResponseRedirect(
@@ -549,10 +398,7 @@ def start_or_stop(request, slice_id, flag):
             stop_slice_api(slice_obj, request.user)
     except Exception, ex:
         return HttpResponse(json.dumps({'value': 0, 'error_info': str(ex)}))
-#         messages.add_message(request, messages.ERROR, ex)
     return HttpResponse(json.dumps({'value': 1}))
-#     return HttpResponseRedirect(
-#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def topology(request, slice_id):
@@ -612,7 +458,7 @@ def create_nw(request, owner, nw_num):
             return HttpResponse(json.dumps({'value': nw, 'owner': owner}))
         else:
             return HttpResponse(json.dumps({'value': 0}))
-    except Exception, ex:
+    except Exception:
         return HttpResponse(json.dumps({'value': 0}))
 
 
@@ -715,15 +561,17 @@ def countiframe(request):
 def get_count_show(request):
     print 'get_count_show'
     target = request.GET.get('target')
-    type = request.GET.get('type')
+    ct_type = request.GET.get('type')
     total_num = request.GET.get('total_num')
     stype = request.GET.get('stype')
     try:
-        slice_count_show = get_count_show_data(target, type, total_num, stype)
-    except Exception, ex:
+        slice_count_show = get_count_show_data(target, ct_type, total_num, stype)
+    except Exception:
         return HttpResponse(json.dumps({'result': 0}))
     else:
-        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
+        return HttpResponse(json.dumps({'result': 1,
+                            'show_dates': slice_count_show["show_dates"],
+                            'show_nums': slice_count_show["show_nums"]}))
 
 
 def dhcp_switch(request, slice_id, flag):
@@ -766,17 +614,18 @@ def get_slice_state(request, slice_id):
     else:
         print 2
         return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
-                                        'c_state': c_state, 'g_state': g_state}))
+                            'c_state': c_state, 'g_state': g_state}))
+
 
 def get_vpn_state(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     return HttpResponse(json.dumps({'vpn_state': slice_obj.vpn_state}))
 
-#def list_own_devices(request, slice_id):
+
 def list_own_devices(slice_id):
     own_devices = []
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    slice_ports = SlicePort.objects.filter(slice = slice_obj)
+    slice_ports = SlicePort.objects.filter(slice=slice_obj)
     for port in slice_ports:
         port_info = {}
         switch_port = port.switch_port
@@ -791,7 +640,7 @@ def list_own_devices(slice_id):
             port_info['dpid'] = switch_port.switch.dpid
             own_devices.append(port_info)
         else:
-            owner_device = OwnerDevice.objects.filter(slice_port = port)
+            owner_device = OwnerDevice.objects.filter(slice_port=port)
             if owner_device.count() > 0:
                 port_info['port_name'] = switch_port.name
                 port_info['port'] = switch_port.port
@@ -803,18 +652,17 @@ def list_own_devices(slice_id):
                 own_devices.append(port_info)
     print "--------------------------->", own_devices
     return own_devices
-   # return HttpResponse(json.dumps(own_devices))
+
 
 def delete_switch_port(request, slice_id, portid):
     try:
         slice_obj = get_object_or_404(Slice, id=slice_id)
         slice_delete_port_device(slice_obj, portid)
         log(request.user, slice_obj, u"删除端口成功", SUCCESS)
-        return HttpResponse(json.dumps({'result':'0'}))
+        return HttpResponse(json.dumps({'result': '0'}))
     except:
         log(request.user, slice_obj, u"删除端口失败", FAIL)
-        return HttpResponse(json.dumps({'result':'1'}))
-
+        return HttpResponse(json.dumps({'result': '1'}))
 
 
 def get_select_server(request, slice_id):
@@ -824,10 +672,11 @@ def get_select_server(request, slice_id):
     try:
         server_objs = slice_obj.get_servers()
         for server_obj in server_objs:
-            servers.append({'id':server_obj.id, 'name':server_obj.name})
+            servers.append({'id': server_obj.id, 'name': server_obj.name})
     except:
         servers = []
     return HttpResponse(json.dumps(servers))
+
 
 def start_or_stop_vpn(request, slice_id, island_id, flag):
     vm = None
@@ -846,8 +695,8 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
             else:
                 slice_obj.vpn_state = 3
                 slice_obj.save()
-                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,\
-                                    subnet.netaddr, gw_ip, 'stop')
+                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,
+                                        subnet.netaddr, gw_ip, 'stop')
         else:
             if function_test:
                 slice_obj.vpn_state = 1
@@ -855,22 +704,22 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
             else:
                 slice_obj.vpn_state = 4
                 slice_obj.save()
-                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip, \
-                                    subnet.netaddr, gw_ip, 'start' )
+                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,
+                                        subnet.netaddr, gw_ip, 'start')
         return HttpResponse(json.dumps({'result': 0}))
     except:
         if vm == None:
-            return HttpResponse(json.dumps({'result':1, 'error_info': u'请先添加网关！'}))
+            return HttpResponse(json.dumps({'result': 1, 'error_info': u'请先添加网关！'}))
         return HttpResponse(json.dumps({'result': 1}))
 
 
-def test_cnvp():
-    from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
-        flowvisor_del_flowspace, flowvisor_add_flowspace,\
-        flowvisor_update_slice_status, flowvisor_add_slice,\
-        flowvisor_del_port, flowvisor_add_port, flowvisor_update_sice_controller,\
-        flowvisor_get_switches, flowvisor_get_links, flowvisor_show_slice
-    from plugins.openflow.models import Flowvisor, Controller
+# def test_cnvp():
+#     from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
+#         flowvisor_del_flowspace, flowvisor_add_flowspace,\
+#         flowvisor_update_slice_status, flowvisor_add_slice,\
+#         flowvisor_del_port, flowvisor_add_port, flowvisor_update_sice_controller,\
+#         flowvisor_get_switches, flowvisor_get_links, flowvisor_show_slice
+#     from plugins.openflow.models import Flowvisor, Controller
 #     from resources.models import SwitchPort
 #     from plugins.vt.models import VirtualMachine
 #     vm = VirtualMachine.objects.get(mac='FA:16:0A:00:00:0A')
@@ -884,21 +733,21 @@ def test_cnvp():
 #     vm.save()
 #     print 'vm change ok'
 #     slice.add_resource(switch_port)
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp"
-    flowvisor = Flowvisor.objects.all()[0]
-    controller = Controller.objects.filter(ip = "172.16.0.5")[0]
-    for i in range(0,125):
-        try:
-            flowvisor_del_slice(flowvisor, "slicet"+str(i))
-        except Exception, ex:
-            print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-            print ex
-    for i in range(0,125):
-        try:
-            flowvisor_del_slice(flowvisor, "slicet"+str(i))
-        except Exception, ex:
-            print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-            print ex
+#     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp"
+#     flowvisor = Flowvisor.objects.all()[0]
+#     controller = Controller.objects.filter(ip = "172.16.0.5")[0]
+#     for i in range(0,125):
+#         try:
+#             flowvisor_del_slice(flowvisor, "slicet"+str(i))
+#         except Exception, ex:
+#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
+#             print ex
+#     for i in range(0,125):
+#         try:
+#             flowvisor_del_slice(flowvisor, "slicet"+str(i))
+#         except Exception, ex:
+#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
+#             print ex
 #     try:
 #         for i in range(125,130):
 #             try:
