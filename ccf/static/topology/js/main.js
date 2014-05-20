@@ -719,16 +719,18 @@ function load_topology(callback) {
                     var rand_num = Math.random();
                     var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                     d.bandwidth = bandwidth.toFixed(2);
-                    if (rand_num < 0) {
-                        color = 'red';
-                    } else if (rand_num < 0) {
-                        color = 'orange';
-                    } else if (rand_num < 0) {
-                        color = 'yellow';
-                    } else if (rand_num < 0.7) {
-                        color = 'green';
+                    if (rand_num < 0.1) {
+                        color = '#99ff99';
+                    } else if (rand_num < 0.2) {
+                        color = '#33cc33';
+                    } else if (rand_num < 0.4) {
+                        color = '#339933';
+                    } else if (rand_num < 0.6) {
+                        color = '#006600';
+                    } else if (rand_num < 0.8) {
+                        color = '#154415';
                     } else {
-                        color = 'blue';
+                        color = '#050505';
                     }
                 }
                 return color;
