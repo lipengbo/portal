@@ -22,6 +22,11 @@
                         {% endif %}{{ thread.title }}
                         {% if thread.sticky %}<span class="label notice">sticky</span>{% endif %}
                         {% if thread.closed %}<span class="label">closed</span>{% endif %}
+                    <div class="pull-right">
+                    {% if can_create_reply %}
+                        <a class="btn btn-danger btn-lg" href="{% url "common_close_thread" thread.id %}">关闭</a>
+                    {% endif %}
+                    </div>
                     </h3>
                     <div class="text-muted">
                         <b>{{ thread.author }}</b> ·
@@ -117,9 +122,6 @@
     {% endif %}
 {% endblock %}
 {% block sidebar %}
-        {% if can_create_reply %}
-            <a class="btn btn-danger btn-block btn-lg" href="{% url "common_close_thread" thread.id %}">关闭</a>
-        {% endif %}
 {% endblock %}
 {% block extra_script %}
 {% endblock %}

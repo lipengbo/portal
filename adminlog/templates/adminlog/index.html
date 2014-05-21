@@ -17,6 +17,13 @@
 {% endblock %}
 
 {% block body %}
+    {% if not logs %}
+        {% if query %}
+            <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+        {% else %}
+            <p class="alert alert-info">暂无记录</p>
+        {% endif %}
+    {% endif %}
     {% paginate 20 logs %}
     {% for log in logs %}
     <div class="log_list">
