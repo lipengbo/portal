@@ -1,37 +1,74 @@
-var vms_info = TAFFY();
-var vm_id;
-var flavor_selected;
-var flavor_text = ['定制', '微型', '迷你型', '小型', '中型', '大型', '超大型'];
-var cpu_selected;
-var ram_selected;
-var hdd_selected;
-var vm_info_flag;
-var dhcp_checked;
-var update_vm;
-var ram_flavor = {"256":2, "512":3, "1024":4, "2048":5, "4096":6, "8192":7};
-var disk_flavor = {"10":1, "20":2, "40":3, "80":4, "160":5, "320":6};
-var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
-var disks = [10, 20, 40, 80, 160, 320];
+$(document).ready(function(){
+	$.ajax({
+		url : '/plugins/vt/get_flavor_msg/',
+		type : 'GET',
+		dataType: 'json',
+        async: false,
+		success:function(data){
+			var cpu_context = '';
+            $.each(data.cpus, function(i, val){
+                cpu_context += '<a href="javascript:void(0);" id="cpu_'+val+'" value="'+val+'">'+val+' 核</a>';
+            });
+            $(".cpu_chose").html(cpu_context);
+            $(".cpu_chose>:first-child").addClass("vm_active");
+            rams = data.rams;
+            var ram_json = '{';
+            $.each(rams, function(i, val){
+                var j = i + 1;
+                if(j == rams.length){
+                    ram_json += '"' + val + '":'+ j +"}"
+                }else{
+                    ram_json += '"' + val + '":'+ j +","
+                }    
+                
+            });
+            ram_flavor = $.parseJSON(ram_json);
+            $(".value_s").html(rams[0]+" MB");
+            var max_rams = rams[data.rams.length - 1];
+            if(max_rams >= 1024){
+                $(".value_e").html(max_rams/1024 +" GB");
+            }else{
+                $(".value_e").html(max_rams +" MB");
+            }
+            $(".micro").addClass("vm_active");
 
-
+		}
+	});
+    //创建虚拟机页面类型、cpu选择
+	$(".type_chose a").click(function(){
+	    $(".type_chose a").removeClass("vm_active");
+	    $(this).addClass("vm_active");
+		var flavor_id = $(this).attr("value");
+		$(".cpu_chose a").removeClass("vm_active");
+		select_flavor(flavor_id);
+		
+	});
+	$(".cpu_chose a").click(function(){
+	    if(!$(this).hasClass("disabled")){
+	        $(this).siblings().removeClass("vm_active");
+            $(".type_chose a").removeClass("vm_active");
+            $(this).addClass("vm_active");
+	    }        
+    });
+	$( "#ram_slider" ).slider({
+		stop:function(event, ui){
+			$(".type_chose a").removeClass("vm_active");
+		}
+	});
+});
 
 
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
-        //var name = check_vm_name('name');
-       // flavor = check_vm_select('flavor');
         image = check_vm_select('image');
         server = check_vm_select('server');
         return image && server
 }
 
-function check_vm_name(obj){
-	//var obj = document.getElementById(obj);
-	//var info = document.getElementById(obj+"Info"); 
+/*function check_vm_name(obj){
     var objs = document.getElementsByName(obj);
 	var infos = document.getElementsByName(obj+"Info"); 
 	var reg = /^[a-zA-Z_]\w*$/;
-	//alert(obj.value.length);
         var results = new Array();
         var result = true;
         for(var i=0; i < objs.length; i++)
@@ -63,35 +100,12 @@ function check_vm_name(obj){
                 result = result && results[i];
         }
         return result
-}
-
-function desc_msg(name, value, i){
-	var data = "name="+name+"&obj_id="+value;
-	$.ajax({
-		url : '/plugins/vt/get_flavor_msg/',
-		type : 'POST',
-		data: data,
-		dataType: 'json',
-		success:function(data){
-			/*if(name == 'flavor'){
-				$('[name="cpu"]')[i].innerHTML = data['cpu'] + "核";
-				$('[name="ram"]')[i].innerHTML = data['ram'] + "MB";
-				$('[name="hdd"]')[i].innerHTML = data['hdd'] + "GB";		
-			}else if(name == 'image'){
-				$('[name="username"]')[i].innerHTML = data['username'];
-				$('[name="password"]')[i].innerHTML = data['password'];
-			}*/
-		}
-	});
-	
-}
+}*/
 
 //验证vm的flavor,image,server等以select形式提供的选项不能为空
 function check_vm_select(ele){
 	var field = ele;
-	//var obj = document.getElementById(obj);
 	var objs = document.getElementsByName(ele);
-	//var info = document.getElementById(obj+"Info"); 
 	var infos = document.getElementsByName(ele+"Info"); 
         var results = new Array();
         var result = true;
@@ -111,16 +125,10 @@ function check_vm_select(ele){
                        results[i] = true
 					   
 					   if(field == 'flavor'){
-							//$('[name="flavor_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
-							//desc_msg('flavor', obj.value, i);
-							
 						}
 						else if(field == 'image'){
-							//$('[name="image_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
-							//desc_msg('image', obj.value, i);				
 						}
 						else if(field == 'server'){
-							//$('[name="server_msg"]')[i].innerHTML = obj.options[obj.selectedIndex].text;
 						}
                }	
         }
@@ -131,39 +139,8 @@ function check_vm_select(ele){
         return result
 }
 
-//获取vm form的内容并填入slice清单中
-function fetch_vminfo()
-{
-       // var objs = document.getElementsByName('name');
-        //name_value = get_value_from_obj('name');
-        //alert('name_value')
-        //flavor_text = get_text_from_select('flavor');
-        //alert(flavor_text)
-        image_text = get_text_from_select('image');
-        //alert(image_text)
-        server_text = get_text_from_select('server');
-        //alert(server_text)
-        enable_dhcp_value = get_checked_from_checkbox('enable_dhcp');
-        //alert(enable_dhcp_value)
-        content = ''
-        //for(var i=0; i < objs.length; i++)
-		vms_info().each(function(vm){
-			content = content + "<tr>"
-            //content = content + "<td>" + name_value[i] + "</td>"
-            content = content + "<td>" + flavor_text[vm.flavor] + "</td>"
-            content = content + "<td>" + vm.image_text + "</td>"
-            content = content + "<td>" + vm.server_text + "</td>"
-            content = content + "<td>" + vm.show_dhcp + "</td>"
-            content = content + "</tr>"
-		});
-       
-        //alert(content)
-        insert_content_to_obj('id_vm_tbody',content);
-		return true;
-		
-}
 
-function get_text_from_select(obj)
+/*function get_text_from_select(obj)
 {
 	var objs = document.getElementsByName(obj);
         //var obj = document.getElementById(obj);
@@ -248,61 +225,67 @@ function insert_content_to_obj1(obj, content)
         var obj = document.getElementById(obj);
         obj.innerHTML = obj.innerHTML + content;
 }
-
+*/
 //逐一提交vm的创建请求
-var post_vm_result = true;
+/*var post_vm_result = true;
 var quota = true;
 function submit_vms(sliceid)
 {
 		vms_info().each(function(vm){
-			post_vminfo(sliceid, vm);
+			post_vminfo(sliceid);
 		});
         
-}
+}*/
 
 
-function post_vminfo(sliceid, vm)
-{
-        url = "/plugins/vt/create/vm/"+sliceid+"/";
-        $.ajax({
+function post_vminfo(sliceid){
+    if(!check_vminfo()){
+        return;
+    }
+    var s_flavor = $(".type_chose").children("a.vm_active").attr("value");
+    if(s_flavor == undefined){
+        s_flavor = 0;
+    }
+    var s_cpu = $(".cpu_chose").children("a.vm_active").attr("value");
+    var s_ram = rams[$("#ram_slider").slider( "option", "value" ) - 1];
+
+    var enable_dhcp_checked;
+	if($('.switch_btn.dhcp.vm').hasClass("checked")){
+		enable_dhcp_checked = 1;
+	}else{
+		enable_dhcp_checked = 0;
+	}    
+    $.ajax({
         type: "POST",
-        url: url,
+        url: "/plugins/vt/create/vm/"+sliceid+"/",
         dataType: "json",
         cache: false,
         async: false,  
         data: {
-				flavor: vm.flavor,
-				cpu: vm.cpu,
-				ram: vm.ram,
-				hdd: vm.hdd,
-                image: vm.image_id,
-                server: vm.server_id,
-                enable_dhcp: vm.enable_dhcp
+				flavor: s_flavor,
+				cpu: s_cpu,
+				ram: s_ram,
+				hdd: 10,
+                image: $("#id_image").val(),
+                server: $("#id_server").val(),
+                enable_dhcp: enable_dhcp_checked
         },
         success: function(data) {
             if(data.result==1)
             {
-                //alert('Failed to operator vm!')
-                //alert(data.error)
-				//post_vm_result = false;
                 $("div#slice_alert_info").empty();
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
             }else if(data.result == -1){
-                quota = false;
-                //post_vm_result = false;
-                /*$("div#slice_alert_info").empty();
-                str = "" + "<p class=\"text-center\">" + data.error + "</p>";
-                $("div#slice_alert_info").append(str);
-                $("#alert_close_sure").addClass('quota');
-                //$("#modal-footer").html('<button class="quota btn delete-confirm btn_info" data-dismiss="modal" id="alert_close_sure">确定</button>');
-                $('#slicealertModal').modal('show');*/
+                //quota = false;
                 $("#quota_info").html(data.error);
                 $(".alert_quota").show();
+            }else{
+                window.location.href='/slice/detail/' + sliceid + '/1/';
             }
         }
-        });
+    });
 }
 
 //显示信息
@@ -315,11 +298,8 @@ function showInfo(_info,msg,color){
 function showMsg(_info, msg, state){
 	var info=_info;
 	if(state == 'ok'){
-		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title=""><i class="icon-ok"></i></a>';
 		info.innerHTML = "";
-		//info.style.color = "green";
 	}else{
-		//info.innerHTML = '<a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="'+msg+'" data-original-title=""><i class="error_icon icon-remove-sign icon-align-left"></i></a>'
 		info.innerHTML = msg;
 		info.style.color = "red";
 	}
@@ -340,7 +320,6 @@ function fetch_serverinfo(id){
     }
     var objs = $("[id='"+id+"']");
     for (var i=0; i<objs.length; i++){
-        //objs[i].innerHTML = obj.innerHTML + content;
         objs[i].innerHTML = "" + content;
     }
 }
@@ -363,10 +342,10 @@ function fetch_gw_ip(slice_name){
     });
     return ret;
 }
-var ovs_check_flag = false;
+/*var ovs_check_flag = false;
 function check_ovs_gw(){
 	return ovs_check_flag;
-}
+}*/
 
 function get_select_server_name(){
     var tp_mod = $('select[name="tp_mod"]').val();
@@ -464,22 +443,22 @@ function get_select_server_id(){
     return results; 
 }
 
-function not_contains(a, obj) {
+/*function not_contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
         if (a[i] === obj) {
             return false;
         }
     }
     return true;
-}
+}*/
 
-function create_vms(sliceid, flag)
+/*function create_vms(sliceid, flag)
 {
 	/*if(vms_info().count() == 0){
 		document.getElementById('alert_info').innerHTML = "请先添加虚拟机配置信息！";
 		$('#alert_modal').modal('show');
 		return;
-	}*/
+	}
     var enable_dhcp_checked;
 	if($('.switch_btn.dhcp.vm').hasClass("checked")){
 		enable_dhcp_checked = 1;
@@ -505,7 +484,7 @@ function create_vms(sliceid, flag)
 			window.location.href='/slice/detail/' + sliceid + '/1/';
 		//}        
     }
-}
+}*/
 
 function open_vnc(url)
 {
@@ -523,7 +502,6 @@ function do_vm_action(url)
         success: function(data) {
             if(data.result==1)
             {
-				//alert(data.error);
 				document.getElementById('alert_info').innerHTML = data.error;
 				$('#alert_modal').modal('show');
             }else{
@@ -533,7 +511,7 @@ function do_vm_action(url)
         });
 }
 
-function delete_vm_from_list(url) {
+/*function delete_vm_from_list(url) {
 	$.ajax({
 		type: 'GET',
 		url: url,
@@ -547,10 +525,9 @@ function delete_vm_from_list(url) {
 			}
 		}
 	});
-}
+}*/
 
 function show_topology(){
-	//alert(get_select_ports());
 	$('#topologyModal').modal('show');
 }
 
@@ -570,16 +547,16 @@ function check_gw_select(){
 
 
 
-function flavor_init(){
+/*function flavor_init(){
 	vm_id = 0;
 	flavor_selected = 1;
 	cpu_selected = 1;
 	ram_selected = 256;
 	hdd_selected = 10;
-	vm_info_flag = "save";
-	update_vm = null;
-	$(".micro").addClass("vm_active");
-}
+	//vm_info_flag = "save";
+	//update_vm = null;
+	
+}*/
 
 /*
 function update_vms_info(){
@@ -664,7 +641,6 @@ function show_vm_info_table(){
 */
 function select_flavor(flavor_id){
 	var data = "name=flavor" + "&obj_id="+flavor_id;
-
 	$.ajax({
 		url : '/plugins/vt/get_flavor_msg/',
 		type : 'POST',
@@ -673,15 +649,11 @@ function select_flavor(flavor_id){
 		success:function(data){
 			$("#cpu_"+data['cpu']).addClass("vm_active");
 			$("#ram_slider").slider("value", ram_flavor[data['ram']]);
-			//$("#disk_slider").slider("value", disk_flavor[data['hdd']]);
-			cpu_selected = data['cpu'];
-			ram_selected = data['ram'];
-			hdd_selected = data['hdd'];
 		}
 	});
 }
 
-function set_value(obj, value){
+/*function set_value(obj, value){
     vms_info().remove();
     quota = true;
 	if(obj == "flavor"){
@@ -696,7 +668,7 @@ function set_value(obj, value){
 		flavor_selected = 0;
 		cpu_selected = value;
 	}
-}
+}*/
 
 $('.switch_btn.dhcp').on("click", function(){
 			if($(this).hasClass("checked")) {

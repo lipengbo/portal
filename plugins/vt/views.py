@@ -323,15 +323,28 @@ def set_domain_state(vname, state):
 
 
 def get_flavor_msg(request):
-    name = request.POST.get("name")
-    obj_id = request.POST.get("obj_id")
-    if name == 'flavor':
-        flavor = get_object_or_404(Flavor, id=obj_id)
-        return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
-    if name == 'image':
-        image = get_object_or_404(Image, id=obj_id)
-        print image.username, image.password
-        return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
+    if request.method == 'GET':
+        print "===========flavor objects============="
+        cpus = Flavor.objects.values_list('cpu', flat=True).distinct()
+        rams = Flavor.objects.values_list('ram', flat=True).distinct()
+        print list(cpus)
+        try:
+            print json.dumps({'cpus': list(cpus), 'rams': list(rams)})
+        except:
+            import traceback
+            traceback.print_exc()
+            pass
+        return HttpResponse(json.dumps({'cpus': list(cpus), 'rams': list(rams)}))
+    else:
+        name = request.POST.get("name")
+        obj_id = request.POST.get("obj_id")
+        if name == 'flavor':
+            flavor = get_object_or_404(Flavor, id=obj_id)
+            return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
+        if name == 'image':
+            image = get_object_or_404(Image, id=obj_id)
+            print image.username, image.password
+            return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
 
 def download_keypair(request):
     slice_obj = get_object_or_404(Slice, id=request.POST.get("slice_id"))
