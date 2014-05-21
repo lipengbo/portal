@@ -112,10 +112,10 @@ def create_first(request, proj_id):
                                           ovs_or_ports, slice_nw, tp_mod,
                                           vm_num)
         except Exception, ex:
-            log(user,  None, "创建虚网失败！", result_code=FAIL)
+            log(user,  None, "创建虚网", result_code=FAIL)
             jsondatas = {'result': 0, 'error_info': ex.message}
         else:
-            log(user,  slice_obj, u"创建虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
+            log(user,  slice_obj, u"创建虚网", result_code=SUCCESS)
             jsondatas = {'result': 1, 'slice_id': slice_obj.id}
         result = json.dumps(jsondatas)
         return HttpResponse(result, mimetype='text/plain')
@@ -149,15 +149,15 @@ def create_or_edit_controller(request, slice_id):
 #         import traceback
 #         traceback.print_exc()
         if op == "edit":
-            log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")控制器失败！", result_code=FAIL)
+            log(request.user, slice_obj.get_controller(), u"编辑控制器", result_code=FAIL)
         else:
-            log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")控制器失败！", result_code=FAIL)
+            log(request.user, None, u"创建控制器", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         if op == "edit":
-            log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")控制器成功！", result_code=SUCCESS)
+            log(request.user, slice_obj.get_controller(), u"编辑控制器", result_code=SUCCESS)
         else:
-            log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")控制器成功！", result_code=SUCCESS)
+            log(request.user, slice_obj.get_controller(), u"创建控制器", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
@@ -176,10 +176,10 @@ def create_gw(request, slice_id):
     except Exception, ex:
         #import traceback
         #traceback.print_exc()
-        log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")网关失败！", result_code=FAIL)
+        log(request.user, None, u"创建网关", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
-        log(request.user,  slice_obj, u"添加虚网(" + slice_obj.show_name + u")网关成功！", result_code=SUCCESS)
+        log(request.user, slice_obj.get_gw(), u"创建网关", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
@@ -259,10 +259,10 @@ def edit_description(request, slice_id):
     try:
         slice_change_description(slice_obj, slice_description)
     except Exception, ex:
-        log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息失败！", result_code=FAIL)
+        log(request.user,  slice_obj, u"编辑虚网", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0}))
     else:
-        log(request.user,  slice_obj, u"编辑虚网(" + slice_obj.show_name + u")描述信息成功！", result_code=SUCCESS)
+        log(request.user,  slice_obj, u"编辑虚网", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 #             messages.add_message(request, messages.ERROR, ex)
 #     return HttpResponseRedirect(
@@ -427,6 +427,10 @@ def delete(request, slice_id):
         slice_obj.delete(user=request.user)
     except:
         messages.add_message(request, messages.ERROR, "虚网删除失败！")
+    if slice_obj:
+        log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
+    else:
+        log(user, None, u"删除虚网", result_code=FAIL)
     if 'next' in request.GET:
         if 'type' in request.GET:
             return redirect(request.GET.get('next')+"?type="+request.GET.get('type'))

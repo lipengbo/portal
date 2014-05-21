@@ -62,7 +62,9 @@ function update_list(url){
 }
 
 function update_list_content(url, div_name){
-    check_url = url + "?div_name=" + div_name;
+    url = "" + url + "";
+    urls = url.split("?");
+    check_url = urls[0] + "?div_name=" + div_name;
     var ret = false;
     $.ajax({
         type: "GET",

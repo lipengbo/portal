@@ -25,6 +25,10 @@
                         {{ slice.get_show_name }}
                     </p>
                     <p class="slice_detail">
+                        <i class="glyphicon glyphicon-th-large"></i>
+                        {% if slice.get_nw %}混合虚网{%else%}基础虚网{%endif%}
+                    </p>
+                    <p class="slice_detail">
                         <i class="glyphicon glyphicon-user"></i>
                         {{ slice.owner }}
                     </p>
@@ -57,7 +61,7 @@
                     </p>
                 </div>
             </div>
-            <div class="col-md-7"><iframe scrolling="no" id="topologyiframe" width="290" height="330" src="/slice/topology_d3/?slice_id={{slice.id}}&width=290&height=330&top=0&band=0" frameborder="0"></iframe></div>                             
+            <div class="col-md-7"><iframe scrolling="no" id="topologyiframe" width="290" height="365" src="/slice/topology_d3/?slice_id={{slice.id}}&width=290&height=365&top=0&band=0" frameborder="0"></iframe></div>                             
         </div>
         {% has_perm user 'slice.delete_slice' slice %}
         {% if has_perm %}

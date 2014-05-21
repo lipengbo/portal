@@ -99,7 +99,7 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
         import traceback
         traceback.print_exc()
         try:
-            log(user, slice_obj, u"启动虚网(" + slice_obj.show_name + u")失败！", result_code=FAIL)
+            log(user, slice_obj, u"启动虚网", result_code=FAIL)
             slice_obj.stop()
             if flag:
                 flowvisor_update_slice_status(flowvisor,
@@ -109,7 +109,7 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
         except:
             pass
     else:
-        log(user, slice_obj, u"启动虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
+        log(user, slice_obj, u"启动虚网", result_code=SUCCESS)
 
 
 @task()
@@ -124,10 +124,10 @@ def stop_slice_sync(slice_id, user):
     except Slice.DoesNotExist:
         pass
     except:
-        log(user, slice_obj, u"停止虚网(" + slice_obj.show_name + u")失败！", result_code=FAIL)
+        log(user, slice_obj, u"停止虚网", result_code=FAIL)
         slice_obj.start()
     else:
-        log(user, slice_obj, u"停止虚网(" + slice_obj.show_name + u")成功！", result_code=SUCCESS)
+        log(user, slice_obj, u"停止虚网", result_code=SUCCESS)
 
 
 @task()
