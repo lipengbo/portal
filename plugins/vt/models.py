@@ -1,3 +1,4 @@
+#coding: utf-8
 import os
 import tempfile
 from django.db import models
@@ -158,6 +159,14 @@ class VirtualMachine(IslandResource):
 
     def get_slice_id(self):
         return self.slice.id
+
+    def log_info(self):
+        if self.type == 0:
+            return "控制器类型："+ self.name + '\n'+ "控制器地址" + self.ip
+        elif self.type == 2:
+            return '网关地址：'+ self.ip
+        else:
+            return self.name
 
     def create_vm(self):
         if function_test:

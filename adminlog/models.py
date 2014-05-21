@@ -11,7 +11,7 @@ FAIL = 201
 
 def log(user, target, message, result_code=SUCCESS):
     current_user = get_current_user()
-    if current_user:
+    if current_user and current_user.id:
         user = current_user
     content_type_id = target and ContentType.objects.get_for_model(target).pk or None
     object_id = target and target.pk or None
