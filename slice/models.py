@@ -394,7 +394,8 @@ class Slice(models.Model):
             self.save()
 
     def log_info(self):
-        return self.show_name
+        ret = u"虚网名称：" + self.show_name
+        return ret
 
     def __unicode__(self):
         return self.name

@@ -52,7 +52,7 @@ class Controller(ServiceResource):
         else:
             type = self.name
         ip_port = "" + self.ip + ":" + str(self.port)
-        ret = "" + type + "\n" + ip_port
+        ret = u"控制器类型：" + type + u"\n控制器地址：" + ip_port
         return ret
 
     class Meta:
