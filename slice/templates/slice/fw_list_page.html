@@ -3,7 +3,7 @@
     <div class="pull-right">
      {%if extent_html == "site_base.html" and permission == "edit" %}
          {%if not controller%}
-            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="add_ct" onclick="return add_ct();" style="cursor:pointer" title="创建控制器">
+            <a class="bianji" href="javascript:void(0);" id="add_ct" onclick="return add_ct();" style="cursor:pointer" title="创建控制器">
             <i class="icon-plus"></i>
             </a>
          {%endif%}
@@ -14,21 +14,21 @@
                 {%if controller %}
                     {%if controller.host%}
                         {%if slice_obj.state == 0 %}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:pointer">
+                            <a class="bianji" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:pointer">
                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                             </a>
                         {%else%}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:not-allowed">
+                            <a class="bianji" href="javascript:void(0);" id="{{controller.host.id}}_bj" onclick="return bj_vm({{controller.host.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                             </a>
                         {%endif%}
                     {%else%}
                         {%if slice_obj.state == 0 %}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
+                            <a class="bianji" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:pointer">
                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                             </a>
                         {%else%}
-                            <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
+                            <a class="bianji" href="javascript:void(0);" id="0_bj" onclick="return bj_vm(0);" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                             </a>
                         {%endif%}
@@ -138,7 +138,7 @@
         <div class="pull-right">
              {%if extent_html == "site_base.html" and permission == "edit" %}
              {%if not gw%}
-                <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="add_gw" onclick="return add_gw();" style="cursor:pointer" title="创建虚拟网关">
+                <a class="bianji" href="javascript:void(0);" id="add_gw" onclick="return add_gw();" style="cursor:pointer" title="创建虚拟网关">
                 <i class="icon-plus"></i>
                 </a>
              {%endif%}

@@ -46,6 +46,15 @@ class Controller(ServiceResource):
     def is_used(self):
         return self.slices.all().count() > 0
 
+    def log_info(self):
+        if self.name == 'user_define':
+            type = u"用户自定义"
+        else:
+            type = self.name
+        ip_port = "" + self.ip + ":" + str(self.port)
+        ret = "" + type + "\n" + ip_port
+        return ret
+
     class Meta:
         verbose_name = _("Controller")
 
