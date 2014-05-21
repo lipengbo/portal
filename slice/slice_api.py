@@ -149,7 +149,7 @@ def slice_edit_controller(slice_obj, controller_info):
 
 @transaction.commit_manually
 def slice_edit_gw(slice_obj, gw_host_id, gw_ip, dhcp_selected):
-    """slice添加或更改控制器
+    """slice添加网关
     """
     LOG.debug('slice_edit_gw')
     try:
