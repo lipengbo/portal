@@ -330,8 +330,8 @@ class Slice(models.Model):
         except Exception, ex:
             print "5:delete slice failed and change slice record"
             transaction.rollback()
-            log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
-            transaction.commit()
+#             log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
+#             transaction.commit()
             try:
                 self.failure_reason = ex.message
                 if self.type == 0:
@@ -357,11 +357,11 @@ class Slice(models.Model):
             except:
                 print "6:create SliceDeleted record failed! raise exception"
                 transaction.rollback()
-                log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
-                transaction.commit()
+#                 log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
+#                 transaction.commit()
                 raise DbError("虚网删除失败！")
             else:
-                log(user, None, u"删除虚网(" + self.show_name + u")成功！", result_code=SUCCESS)
+#                 log(user, None, u"删除虚网(" + self.show_name + u")成功！", result_code=SUCCESS)
                 transaction.commit()
                 print "6:create SliceDeleted record success!"
 
@@ -392,6 +392,10 @@ class Slice(models.Model):
         if self.ct_change == False:
             self.ct_change = True
             self.save()
+
+    def log_info(self):
+        ret = u"虚网名称：" + self.show_name
+        return ret
 
     def __unicode__(self):
         return self.name
