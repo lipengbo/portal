@@ -118,6 +118,9 @@ class Project(models.Model):
     def member_ids(self):
         return self.memberships.all().values_list('id', flat=True)
 
+    def log_info(self):
+        return u"项目：{}".format(self.__unicode__())
+
     @property
     def get_content_type(self):
         project_type = ContentType.objects.get_for_model(self)
