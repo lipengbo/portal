@@ -154,15 +154,15 @@ def reset_state(user, slice_obj, start_or_stop, result):
     if result:
         if start_or_stop == 'start':
             slice_obj.vpn_state = 1
-            log(user, slice_obj, u"启动VPN服务成功", SUCCESS)
+            log(user, slice_obj, u"启动VPN服务", SUCCESS)
         else:
             slice_obj.vpn_state = 0
-            log(user, slice_obj, u"停止VPN服务成功", SUCCESS)
+            log(user, slice_obj, u"停止VPN服务", SUCCESS)
     else:
         if start_or_stop == 'start':
             slice_obj.vpn_state = 0
-            log(user, slice_obj, u"启动VPN服务失败", FAIL)
+            log(user, slice_obj, u"启动VPN服务", FAIL)
         else:
             slice_obj.vpn_state = 1
-            log(user, slice_obj, u"停止VPN服务失败", FAIL)
+            log(user, slice_obj, u"停止VPN服务", FAIL)
     slice_obj.save()

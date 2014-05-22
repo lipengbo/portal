@@ -3,6 +3,8 @@ from celery import task
 from models import DOMAIN_STATE_DIC
 from adminlog.models import log, SUCCESS, FAIL
 
+VM_TYPE = ((0, u'控制器'),(1, u'虚拟机'),(2, u'网关'))
+
 @task()
 def do_vm_action(user, vm, action):
     print "cerlry .............", action
@@ -21,16 +23,16 @@ def reset_state(user, vm, action, result, is_except):
     if result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
-            log(user, vm, u"停止虚拟机", SUCCESS)
+            log(user, vm, u"停止"+VM_TYPE[vm.type][1], SUCCESS)
         else:
             vm.state = DOMAIN_STATE_DIC['running']
-            log(user, vm, u"启动虚拟机", SUCCESS)
+            log(user, vm, u"启动"+ VM_TYPE[vm.type][1], SUCCESS)
     else:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['running']
-            log(user, vm, u"停止虚拟机", FAIL)
+            log(user, vm, u"停止" + VM_TYPE[vm.type][1], FAIL)
         else:
             vm.state = DOMAIN_STATE_DIC['shutoff']
-            log(user, vm, u"启动虚拟机", FAIL)
+            log(user, vm, u"启动" + VM_TYPE[vm.type][1], FAIL)
     vm.save()
 
