@@ -713,10 +713,10 @@ def delete_switch_port(request, slice_id, portid):
     try:
         slice_obj = get_object_or_404(Slice, id=slice_id)
         slice_delete_port_device(slice_obj, portid)
-        log(request.user, slice_obj, u"删除端口成功", SUCCESS)
+        log(request.user, slice_obj, u"删除端口", SUCCESS)
         return HttpResponse(json.dumps({'result':'0'}))
     except:
-        log(request.user, slice_obj, u"删除端口失败", FAIL)
+        log(request.user, slice_obj, u"删除端口", FAIL)
         return HttpResponse(json.dumps({'result':'1'}))
 
 

@@ -239,6 +239,9 @@ class SwitchPort(Resource):
         else:
             return False
 
+    def log_info(self):
+        return '交换机名称'+ self.switch.name
+
     class Meta:
         unique_together = (("switch", "port"), )
         verbose_name = _("Switch Port")

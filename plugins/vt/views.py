@@ -292,13 +292,6 @@ def get_slice_gateway_ip(request, slice_name):
     subnet = get_object_or_404(Subnet, owner=slice_name)
     return HttpResponse(json.dumps({'ipaddr': subnet.get_gateway_ip()}))
 
-def log_vm_type(type):
-    if type == 0:
-        return u'创建控制器'
-    elif type == 1:
-        return u'创建虚拟机'
-    else:
-        return u'创建网关'
 
 def set_domain_state(vname, state):
     try:
@@ -306,10 +299,10 @@ def set_domain_state(vname, state):
         vm_query = VirtualMachine.objects.filter(uuid=vname)
         vm = vm_query[0]
         user = vm.slice.owner
-        if state == 0:
-            log(user, vm, log_vm_type(vm.type), SUCCESS)
-        elif state == 9:
-            log(user, vm, log_vm_type(vm.type), FAIL)
+        if state == 0 and vm.type == 1:
+            log(user, vm, '创建虚拟机', SUCCESS)
+        elif state == 9 and vm.type == 1:
+            log(user, vm, '创建虚拟机', FAIL)
         switch_port = None
         if vm.type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
             host = vm.server
