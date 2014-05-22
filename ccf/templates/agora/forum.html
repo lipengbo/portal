@@ -20,6 +20,12 @@
                                                                                 新建工单
                    </a>
                 </div>
+                <form class="navbar-form pull-right navbar-right search_defined">
+                    <div class="form-group">
+                      <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
+                     <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
+                    </div>
+                </form>
         </div>
         
         {% paginate 20 threads %}
@@ -57,6 +63,13 @@
             {% endfor %}
           </tbody>
         </table>
+    {% if not threads %}
+        {% if query %}
+            <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
+        {% else %}
+            <p class="alert alert-info">暂无记录</p>
+        {% endif %}
+    {% endif %}
         <ul class="pagination">
             {% show_pages %}
         </ul>
