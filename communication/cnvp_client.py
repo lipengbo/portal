@@ -1,27 +1,17 @@
 # coding:utf-8
 import json
 import random
+import traceback
 from common import jsonrpc
 from slice.slice_exception import FlowvisorError
 from etc.config import flowvisor_disable
+from django.conf import settings
 
 
 def parseResponse(data):
-    print 1
     print data[0]["resultcode"]
     print data[0]["resultmsg"]
     return data
-#     if data[0]["resultcode"] == 0:
-#         if len(data) > 1:
-#             return data[1:]
-#         else:
-#             return []
-#     else:
-#         if data[0]["resultcode"] == 3758125059 and data[0]["resultmsg"] == "slice name is NOT exist!":
-#             return []
-#         if data[0]["resultcode"] == 3758120963 and data[0]["resultmsg"] == "no port in this slice!":
-#             return []
-#         return None
 
 
 def buildRequest(method, cmd):
@@ -34,24 +24,19 @@ def buildRequest(method, cmd):
 
 
 def cnvp_service(cnvp_ip, cnvp_port, cmd):
-    import traceback
-#     cnvp_ip = "192.168.5.36"
+#     import traceback
+    cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
+    print cmdline
     if flowvisor_disable:
-        cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
-        print cmdline
         return [{"resultcode": 0, "resultmsg": "flowvisor_disable"}]
     try:
-        cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
-        print cmdline
         server = jsonrpc.ServerProxy(jsonrpc.JsonRpc20(),
             jsonrpc.TransportTcpIp(addr=(cnvp_ip, cnvp_port)))
         resp = server.cnvp_jsonrpc_service(cmdline)
         return parseResponse(resp)
-    except Exception, e:
-        print 2
-        print str(e)
-        traceback.print_stack()
-#         traceback.print_exc()
+    except Exception:
+        if settings.SLICE_MODULE_DEBUG:
+            traceback.print_exc()
         raise
 
 
@@ -61,6 +46,7 @@ class CnvpClient(object):
         self.cnvp_port = port
 
     def add_slice(self, slice_name, controller_ip, controller_port):
+        """创建虚网"""
         try:
             cmd = "add slice -s " + str(slice_name) + " -t tcp -i " + \
                 controller_ip + " -p " + str(controller_port)
@@ -71,6 +57,7 @@ class CnvpClient(object):
             raise FlowvisorError("虚网创建失败!")
 
     def show_slice(self, slice_name):
+        """创建虚网"""
         try:
             if slice_name:
                 cmd = "show slice -s " + str(slice_name)

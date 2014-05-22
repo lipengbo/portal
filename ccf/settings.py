@@ -8,6 +8,7 @@ PACKAGE_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+SLICE_MODULE_DEBUG = True
 
 ADMINS = [
     # ("Your Name", "your_email@example.com"),

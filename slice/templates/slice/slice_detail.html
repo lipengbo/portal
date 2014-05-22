@@ -91,11 +91,11 @@
                         {%endif%}
                         
                         {%if slice_obj.state == 0 %}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:pointer">
                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                         </a>
                         {%else%}
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:;" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                         {%endif%}
@@ -107,7 +107,7 @@
                             <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止" />
                             {%endif%}
                         </a>
-                        <a class="bianji" data-toggle="modal" href="javascript:void(0);" id="slice_bj" onclick="bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                     {%endif%}
@@ -516,8 +516,10 @@
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<!--<script src="{{ STATIC_URL}}js/jquery-ui.js"></script>-->
 <script type="text/javascript">
     $(document).ready(function(){
+        //$( "#editInfoModal" ).draggable();
         show_uuid($("[id='uuid']"));
         var slice_type = $("#slice_type").text();
         var controller_type = $("#controller_type").text();

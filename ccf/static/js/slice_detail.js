@@ -324,7 +324,7 @@ function bj_slice(vm_id){
     }else{
         //alert(1);
         $('#editInfoModal').modal('show');
-        return true;
+        return false;
     }
 }
 
@@ -629,7 +629,13 @@ function submit_gw(slice_id){
                 success: function(data) {
                     if (data.result == 1){
                         update_list_content(document.location, "list_fw");
-    
+                        tsstr = $("div#ts")[0].innerHTML;
+                        if(tsstr != ""){
+                            tsstr = "" + "<div class=\"alert alert-danger\"><strong>提示：</strong>您当前还未添加控制器</div>";
+                            
+                        }
+                        $("div#ts").empty();
+                        $("div#ts").append(tsstr);
                     }else{
                         $("div#slice_alert_info").empty();
                         str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
@@ -647,7 +653,6 @@ function submit_gw(slice_id){
                 }
         });
         $('#addgwModal').modal('hide');
-        $("div#ts").empty();
         update_vm_status();
     } 
 }
@@ -790,4 +795,8 @@ function start_or_stop_vpn(slice_id, island_id, flag){
         }
     });
     return ret;
+}
+
+function qx_bj(){
+    $('#editInfoModal').modal('hide');
 }
