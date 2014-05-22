@@ -5815,6 +5815,9 @@ body a:focus {
 .btn.active:focus {
   outline: none;
 }
+.modal-open {
+  overflow: auto;
+}
 .alert {
   border-radius: 0;
 }
@@ -7440,16 +7443,17 @@ span[name="serverInfo"] {
 .log_list .log_pop {
   display: none;
   position: relative;
-  padding: 15px;
+  padding: 5px 10px;
   background: #dadcdd;
 }
-.log_list .log_pop dl {
-  color: #666;
-  margin-bottom: 0;
-}
-.log_list .log_pop dl dt {
-  float: left;
-  font-weight: normal;
+.log_list .log_pop pre {
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  background: none;
+  border: none;
+  font-family: "Microsoft YaHei";
+  line-height: 24px;
 }
 .log_list .log_pop span.log_sj {
   position: absolute;
