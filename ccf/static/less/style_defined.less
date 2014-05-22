@@ -28,6 +28,9 @@ body a:active, body a:focus {
 .btn.active:focus {
   outline: none;
 }
+.modal-open {
+    overflow:auto;
+}
 
 .alert {
     border-radius:0;
@@ -1695,15 +1698,16 @@ span[name="serverInfo"] {
     .log_pop {
         display:none;
         position:relative;
-        padding:15px;
+        padding:5px 10px;
         background:#dadcdd;
-        dl {
-            color:#666;
-            margin-bottom:0;
-            dt {
-                float:left;    
-                font-weight:normal;                        
-            }
+        pre {
+            margin:0;
+            padding:0;
+            font-size:14px;
+            background:none;
+            border:none;
+            font-family:"Microsoft YaHei";
+            line-height:24px;
         }
         span.log_sj {
             position:absolute;
