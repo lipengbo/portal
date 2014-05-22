@@ -301,7 +301,7 @@ def set_domain_state(vname, state):
         user = vm.slice.owner
         if state == 0 and vm.type == 1:
             log(user, vm, '创建虚拟机', SUCCESS)
-        elif state == 9 and vm.type == 1:
+        elif (state == 9 or state == 10) and vm.type == 1:
             log(user, vm, '创建虚拟机', FAIL)
         switch_port = None
         if vm.type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:

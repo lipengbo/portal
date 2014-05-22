@@ -2,7 +2,7 @@
 {% load endless %}
 {% paginate 4 vms %}
 <h4 class="block_title">
-    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{{ vm_start_ip }}-{{ vm_end_ip }}】
+    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】
     <a href="#" onclick="javascript:document.downloadkey.submit();">下载私钥</a></span>
     <div class="pull-right">
          {%if extent_html == "site_base.html" and permission == "edit" and slice_type == "mixslice" %}
