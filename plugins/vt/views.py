@@ -116,14 +116,13 @@ def create_vm(request, sliceid):
                 vm.type = 1
                 vm.save()
                 vm.slice.flowspace_changed(2)
-                log(user, vm, u"创建虚拟机"+vm.name+u"成功", SUCCESS)
                 return HttpResponse(json.dumps({'result': 0}))
             except socket_error as serr:
                 #if serr.errno == errno.ECONNREFUSED:
-                log(user, vm, u"创建虚拟机失败", FAIL)
+                log(user, vm, u"创建虚拟机", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
             except ResourceNotEnough, e:
-                log(user, vm, u"创建虚拟机失败", FAIL)
+                log(user, vm, u"创建虚拟机", FAIL)
                 vm.state = 11
                 vm.type =1
                 try:
@@ -132,15 +131,15 @@ def create_vm(request, sliceid):
                 except:
                     raise
             except StopIteration, e:
-                log(user, vm, u"创建虚拟机失败", FAIL)
+                log(user, vm, u"创建虚拟机", FAIL)
                 return HttpResponse(json.dumps({'result': 1, 'error': e.message}))
             except:
-                log(user, vm, u"创建虚拟机失败", FAIL)
+                log(user, vm, u"创建虚拟机", FAIL)
                 import traceback
                 traceback.print_exc()
                 return HttpResponse(json.dumps({'result' : 1, 'error': _('server error')}))
         else:
-            log(user, vm, u"创建虚拟机失败", FAIL)
+            log(user, vm, u"创建虚拟机", FAIL)
             return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
         if user.quotas.vm <= vm_count:
@@ -184,12 +183,12 @@ def create_device(request, sliceid):
                 switch_port = SwitchPort.objects.get(id=port[0])
                 slice_add_port_device(slice_obj, port[0], port[1], port[2])
                 print "-------", port[2]
-                log(request.user, switch_port, u"添加端口"+switch_port.name+u"成功", SUCCESS)
+                log(request.user, switch_port, u"添加端口", SUCCESS)
 
             return HttpResponse(json.dumps({'result':0}))
         except Exception, e:
             traceback.print_exc()
-            log(request.user, switch_port, u"添加端口失败", FAIL)
+            log(request.user, switch_port, u"添加端口", FAIL)
             return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
@@ -227,11 +226,11 @@ def do_vm_action(request, vmid, action):
             return HttpResponse(json.dumps({'result': 0}))
         except socket_error as serr:
             if action == 'create':
-                log(request.user, vm, u"虚拟机启动失败", FAIL)
+                log(request.user, vm, u"启动虚拟机", FAIL)
             elif action == 'destroy':
-                log(request.user, vm, u"虚拟机停止失败", FAIL)
+                log(request.user, vm, u"停止虚拟机", FAIL)
             else:
-                log(request.user, vm, u"虚拟机操作失败", FAIL)
+                log(request.user, vm, u"操作虚拟机", FAIL)
             if serr.errno == errno.ECONNREFUSED:
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
     return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
@@ -261,11 +260,11 @@ def delete_vm(request, vmid, flag):
             #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
         #else:
         vm.slice.flowspace_changed(3)
-        log(request.user, vm,  u"删除虚拟机成功", SUCCESS)
+        log(request.user, vm,  u"删除虚拟机", SUCCESS)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())
-        log(request.user, vm, u"删除虚拟机失败", FAIL)
+        log(request.user, vm, u"删除虚拟机", FAIL)
         #if flag == '0':
         return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
     #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
@@ -298,8 +297,13 @@ def set_domain_state(vname, state):
     try:
         result = 1
         vm_query = VirtualMachine.objects.filter(uuid=vname)
-        switch_port = None
         vm = vm_query[0]
+        user = vm.slice.owner
+        if state == 0 and vm.type == 1:
+            log(user, vm, '创建虚拟机', SUCCESS)
+        elif state == 9 and vm.type == 1:
+            log(user, vm, '创建虚拟机', FAIL)
+        switch_port = None
         if vm.type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
             host = vm.server
             slice = vm.slice
@@ -323,15 +327,28 @@ def set_domain_state(vname, state):
 
 
 def get_flavor_msg(request):
-    name = request.POST.get("name")
-    obj_id = request.POST.get("obj_id")
-    if name == 'flavor':
-        flavor = get_object_or_404(Flavor, id=obj_id)
-        return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
-    if name == 'image':
-        image = get_object_or_404(Image, id=obj_id)
-        print image.username, image.password
-        return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
+    if request.method == 'GET':
+        print "===========flavor objects============="
+        cpus = Flavor.objects.values_list('cpu', flat=True).distinct()
+        rams = Flavor.objects.values_list('ram', flat=True).distinct()
+        print list(cpus)
+        try:
+            print json.dumps({'cpus': list(cpus), 'rams': list(rams)})
+        except:
+            import traceback
+            traceback.print_exc()
+            pass
+        return HttpResponse(json.dumps({'cpus': list(cpus), 'rams': list(rams)}))
+    else:
+        name = request.POST.get("name")
+        obj_id = request.POST.get("obj_id")
+        if name == 'flavor':
+            flavor = get_object_or_404(Flavor, id=obj_id)
+            return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
+        if name == 'image':
+            image = get_object_or_404(Image, id=obj_id)
+            print image.username, image.password
+            return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
 
 def download_keypair(request):
     slice_obj = get_object_or_404(Slice, id=request.POST.get("slice_id"))
