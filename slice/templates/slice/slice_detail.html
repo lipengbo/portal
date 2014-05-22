@@ -516,8 +516,10 @@
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<!--<script src="{{ STATIC_URL}}js/jquery-ui.js"></script>-->
 <script type="text/javascript">
     $(document).ready(function(){
+        //$( "#editInfoModal" ).draggable();
         show_uuid($("[id='uuid']"));
         var slice_type = $("#slice_type").text();
         var controller_type = $("#controller_type").text();

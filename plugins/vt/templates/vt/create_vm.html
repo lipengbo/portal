@@ -65,18 +65,14 @@
 				<tr>
             		<td><b>CPU</b></td>
                 	<td class="cpu_chose">
-                    	<a href="javascript:void(0);" class="vm_active" id="cpu_1" value="1">1 核</a>
-                        <a href="javascript:void(0);" id="cpu_2" value="2">2 核</a>
-                        <a href="javascript:void(0);" id="cpu_4" value="4">4 核</a>
-						<a href="javascript:void(0);" id="cpu_6" value="8">8 核</a>
                   	</td>
                 </tr>
                 <tr>
                 	<td><b>内存</b></td>
                 	<td class="slider_td">
                     	<div id="ram_slider" class="ui-slider"></div>
-                    	<span class="value_s">128 MB</span>
-                    	<span class="value_e">8 GB</span>
+                    	<span class="value_s"></span>
+                    	<span class="value_e"></span>
                  	</td>
             	</tr>
                 <tr>
@@ -90,7 +86,7 @@
                 	<td><b>宿主机</b></td>
                  	<td>
 						<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div><span name="serverInfo"></span> 
-                    	<a href="javascript:void(0);" id="show_topo" class="view_topo">查看拓扑</button></a>
+                    	<a href="javascript:void(0);" id="show_topo" class="view_topo" onclick="show_topology()">查看拓扑</button></a>
 						
                 	</td>
        			</tr>
@@ -121,35 +117,12 @@
 				
 			</tbody>
 		</table>
-			     
-		<!-- 
-    	<h4 class="title_word_bg block_title">
-                        <img src="{% static "img/ic_11.png" %}" /> 虚拟机列表 
-                            
-                        <button type="button" class="btn btn_info" style="float:right;" onclick="javascript:update_vms_info()">添加</button>                      
-        </h4>
-			     
-			     <table class="table_defined" id="vms_info_table">
-                      <thead>
-                          <tr>
-                            <th width="10%">类型</th>
-                            <th width="10%">CPU</th>
-                            <th width="15%">内存</th>
-                            <th width="20%">镜像</th>
-                            <th width="15%">宿主机</th>
-							<th width="15%">是否启动DHCP</th>
-                            <th width="15%">操作</th>
-                          </tr>  
-                      </thead>
-                      <tbody>
-                      </tbody>
-                 </table-->
                  
                  <div class="form-actions">
                     <div class="row buttons_margin">
                         <div class="col-md-4"></div>
                                 <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail_div sliceid 1 %}'">{% trans "Cancel" %}</button></div>
-                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="create_vms({{ sliceid }}, 1)">{% trans "Submit" %}</button></div>
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="post_vminfo({{ sliceid }})">{% trans "Submit" %}</button></div>
                         <div class="col-md-4"></div>
                     </div>
                 </div>
@@ -158,8 +131,6 @@
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
-<script src="{{ STATIC_URL}}js/taffy.js"></script>
-<script src="{{ STATIC_URL}}js/own.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script src="{{ STATIC_URL}}js/flat_slider.js"></script>
 <script>
@@ -172,7 +143,6 @@
         }
 		
 	});
-	flavor_init();
 	
 </script>
 
