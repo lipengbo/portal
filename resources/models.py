@@ -240,7 +240,8 @@ class SwitchPort(Resource):
             return False
 
     def log_info(self):
-        return '交换机名称'+ self.switch.name
+        return u'交换机名称：'+ self.switch.name + '\n'+ \
+                u'接入端口：' + str(self.port)
 
     class Meta:
         unique_together = (("switch", "port"), )
