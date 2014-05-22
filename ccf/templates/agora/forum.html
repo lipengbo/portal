@@ -7,6 +7,15 @@
 {{ forum }}
 {% endblock %}
 
+{% block extra_breadcrumb %}
+            <form class="navbar-form navbar-right search_defined">
+                <div class="form-group">
+                  <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
+                 <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
+                </div>
+            </form>
+{% endblock %}
+
 {% block forum_body %}
 {% include "agora/_forum_breadcrumb.html" with thread=thread %}
 
@@ -20,12 +29,6 @@
                                                                                 新建工单
                    </a>
                 </div>
-                <form class="navbar-form pull-right navbar-right search_defined">
-                    <div class="form-group">
-                      <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
-                     <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
-                    </div>
-                </form>
         </div>
         
         {% paginate 20 threads %}
