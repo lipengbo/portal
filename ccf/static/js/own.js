@@ -238,7 +238,7 @@ $(document).ready(function() {
 	});
 	
 	//创建虚拟机页面类型、cpu选择
-	$(".type_chose a").click(function(){
+	/*$(".type_chose a").click(function(){
 	    $(".type_chose a").removeClass("vm_active");
 	    $(this).addClass("vm_active");
 		var flavor_id = $(this).attr("value");
@@ -260,7 +260,7 @@ $(document).ready(function() {
 			$(".type_chose a").removeClass("vm_active");
 			set_value("ram", ui.value);
 		}
-	});
+	});*/
 	
 		
 });

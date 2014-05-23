@@ -26,7 +26,6 @@ String.prototype.repeat = function(num) {
   // Add segments to a slider
   $.fn.addSliderSegments = function (slider_name, amount) {
 	if(slider_name == 'ram_slider'){
-        var rams = [128, 256, 512, 1024, 2048, 4096, 8192];
 		return set_segment(this, amount, rams, 'MB');
     }else if(slider_name == 'disk_slider'){
         var disks = [20, 40, 80, 160];
@@ -45,8 +44,8 @@ String.prototype.repeat = function(num) {
     if ($slider.length) {
       $slider.slider({
         min: 1,
-        max: 7,
-        value: 2,
+        max: rams.length,
+        value: 1,
         orientation: "horizontal",
         range: "min"
       }).addSliderSegments("ram_slider", $slider.slider("option").max);

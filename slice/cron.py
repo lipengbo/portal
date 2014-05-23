@@ -9,7 +9,7 @@ from django.core.mail import send_mail
 # This is a function I wrote to check a feedback email address and add it to our database. Replace with your own imports
 #from MyMailFunctions import check_feedback_mailbox
 from slice.models import Slice, SliceDeleted
-from plugins.openflow.flowvisor_api import flowvisor_del_slice
+from plugins.openflow.virttool_api import virttool_del_slice
 DEBUG = False
 
 

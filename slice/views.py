@@ -148,13 +148,15 @@ def create_or_edit_controller(request, slice_id):
 #         import traceback
 #         traceback.print_exc()
         if op == "edit":
-            log(request.user, slice_obj.get_controller(), u"编辑控制器", result_code=FAIL)
+            pass
+#             log(request.user, slice_obj.get_controller(), u"编辑控制器", result_code=FAIL)
         else:
             log(request.user, None, u"创建控制器", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
     else:
         if op == "edit":
-            log(request.user, slice_obj.get_controller(), u"编辑控制器", result_code=SUCCESS)
+            pass
+#             log(request.user, slice_obj.get_controller(), u"编辑控制器", result_code=SUCCESS)
         else:
             log(request.user, slice_obj.get_controller(), u"创建控制器", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
@@ -257,10 +259,10 @@ def edit_description(request, slice_id):
     try:
         slice_change_description(slice_obj, slice_description)
     except Exception, ex:
-        log(request.user,  slice_obj, u"编辑虚网", result_code=FAIL)
+#         log(request.user,  slice_obj, u"编辑虚网", result_code=FAIL)
         return HttpResponse(json.dumps({'result': 0}))
     else:
-        log(request.user,  slice_obj, u"编辑虚网", result_code=SUCCESS)
+#         log(request.user,  slice_obj, u"编辑虚网", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
 
 
@@ -304,7 +306,7 @@ def detail(request, slice_id, div_name=None):
                              'dhcp': "无"})
 
     context['vms'] = show_vms
-    context['flowvisor'] = slice_obj.get_flowvisor()
+    context['flowvisor'] = slice_obj.get_virttool()
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = 0
     context['controller'] = controller
@@ -642,12 +644,13 @@ def list_own_devices(slice_id):
 def delete_switch_port(request, slice_id, portid):
     try:
         slice_obj = get_object_or_404(Slice, id=slice_id)
+        switch_port = SwitchPort.objects.get(id=portid)
         slice_delete_port_device(slice_obj, portid)
-        log(request.user, slice_obj, u"删除端口成功", SUCCESS)
-        return HttpResponse(json.dumps({'result': '0'}))
+        log(request.user, switch_port, u"删除端口", SUCCESS)
+        return HttpResponse(json.dumps({'result':'0'}))
     except:
-        log(request.user, slice_obj, u"删除端口失败", FAIL)
-        return HttpResponse(json.dumps({'result': '1'}))
+        log(request.user, switch_port, u"删除端口", FAIL)
+        return HttpResponse(json.dumps({'result':'1'}))
 
 
 def get_select_server(request, slice_id):

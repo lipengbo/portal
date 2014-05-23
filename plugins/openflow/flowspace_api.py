@@ -248,7 +248,7 @@ def delete_default_flowspace(slice_obj, name, dl_src, dl_dst, nw_src, nw_dst, dl
 
 
 def matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
-                         nw_src, nw_dst, nw_proto, nw_tos, tp_src, tp_dst, flowvisor_type):
+                         nw_src, nw_dst, nw_proto, nw_tos, tp_src, tp_dst, virttool_type):
     """将12个匹配相转化为flowspace的arg_match参数格式
     """
     LOG.debug('matches_to_arg_match')
@@ -256,12 +256,12 @@ def matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
     if in_port:
         match += 'in_port=' + str(in_port) + ','
     if dl_vlan:
-        if flowvisor_type == 1:
+        if virttool_type == 1:
             match += 'dl_vlanid=' + dl_vlan + ','
         else:
             match += 'dl_vlan=' + dl_vlan + ','
     if dl_vpcp:
-        if flowvisor_type == 1:
+        if virttool_type == 1:
             match += 'dl_vlanpcp=' + dl_vpcp + ','
         else:
             match += 'dl_vpcp=' + dl_vpcp + ','

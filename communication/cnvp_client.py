@@ -3,8 +3,8 @@ import json
 import random
 import traceback
 from common import jsonrpc
-from slice.slice_exception import FlowvisorError
-from etc.config import flowvisor_disable
+from slice.slice_exception import VirttoolError
+from etc.config import virttool_disable
 from django.conf import settings
 
 
@@ -25,11 +25,11 @@ def buildRequest(method, cmd):
 
 def cnvp_service(cnvp_ip, cnvp_port, cmd):
 #     import traceback
-    cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
-    print cmdline
-    if flowvisor_disable:
-        return [{"resultcode": 0, "resultmsg": "flowvisor_disable"}]
+    print cmd
+    if virttool_disable:
+        return [{"resultcode": 0, "resultmsg": "virttool_disable"}]
     try:
+        cmdline = buildRequest('cnvp_jsonrpc_service', cmd)
         server = jsonrpc.ServerProxy(jsonrpc.JsonRpc20(),
             jsonrpc.TransportTcpIp(addr=(cnvp_ip, cnvp_port)))
         resp = server.cnvp_jsonrpc_service(cmdline)
@@ -52,12 +52,12 @@ class CnvpClient(object):
                 controller_ip + " -p " + str(controller_port)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("虚网创建失败!")
+                raise VirttoolError("虚网创建失败!")
         except:
-            raise FlowvisorError("虚网创建失败!")
+            raise VirttoolError("虚网创建失败!")
 
     def show_slice(self, slice_name):
-        """创建虚网"""
+        """获取虚网信息"""
         try:
             if slice_name:
                 cmd = "show slice -s " + str(slice_name)
@@ -65,7 +65,7 @@ class CnvpClient(object):
                 cmd = "show slice"
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("虚网信息获取失败!")
+                raise VirttoolError("虚网信息获取失败!")
             else:
                 slices = []
                 if len(ret) > 1:
@@ -75,22 +75,23 @@ class CnvpClient(object):
                         slice['controller_port'] = slice_ret["controller_port"]
                         slice['state'] = slice_ret["slice_state_value"]
                         slices.append(slice)
-                print slices
                 return slices
         except:
-            raise FlowvisorError("虚网信息获取失败!")
+            raise VirttoolError("虚网信息获取失败!")
 
     def change_slice_controller(self, slice_name, controller_ip, controller_port):
+        """更新虚网控制器"""
         try:
             cmd = "update slice -s " + str(slice_name) + " -t tcp -i " + \
                 controller_ip + " -p " + str(controller_port)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("控制器更新失败!")
+                raise VirttoolError("控制器更新失败!")
         except:
-            raise FlowvisorError("控制器更新失败!")
+            raise VirttoolError("控制器更新失败!")
 
     def start_slice(self, slice_name):
+        """启动虚网"""
         try:
             cmd = "start slice -s " + str(slice_name)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
@@ -98,11 +99,12 @@ class CnvpClient(object):
                 if ret[0]["resultcode"] == 3758125058 and ret[0]["resultmsg"] == "slice is running already!":
                     pass
                 else:
-                    raise FlowvisorError("虚网启动失败!")
+                    raise VirttoolError("虚网启动失败!")
         except:
-            raise FlowvisorError("虚网启动失败!")
+            raise VirttoolError("虚网启动失败!")
 
     def stop_slice(self, slice_name):
+        """停止虚网"""
         try:
             cmd = "stop slice -s " + str(slice_name)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
@@ -110,11 +112,12 @@ class CnvpClient(object):
                 if ret[0]["resultcode"] == 3758125057 and ret[0]["resultmsg"] == "slice is NOT running!":
                     pass
                 else:
-                    raise FlowvisorError("虚网停止失败!")
+                    raise VirttoolError("虚网停止失败!")
         except:
-            raise FlowvisorError("虚网停止失败!")
+            raise VirttoolError("虚网停止失败!")
 
     def delete_slice(self, slice_name):
+        """删除虚网"""
         try:
             cmd = "delete slice -s " + str(slice_name)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
@@ -122,20 +125,22 @@ class CnvpClient(object):
                 if ret[0]["resultcode"] == 3758125059 and ret[0]["resultmsg"] == "slice name is NOT exist!":
                     pass
                 else:
-                    raise FlowvisorError("虚网删除失败!")
+                    raise VirttoolError("虚网删除失败!")
         except:
-            raise FlowvisorError("虚网删除失败!")
+            raise VirttoolError("虚网删除失败!")
 
     def add_port(self, slice_name, dpid, port):
+        """添加端口"""
         try:
             cmd = "add port -s " + str(slice_name) + " -d " + dpid + " -p " + str(port)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("端口添加失败!")
+                raise VirttoolError("端口添加失败!")
         except:
-            raise FlowvisorError("端口添加失败!")
+            raise VirttoolError("端口添加失败!")
 
     def delete_port(self, slice_name, dpid, port):
+        """删除端口"""
         try:
             if dpid and port:
                 cmd = "delete port -s " + str(slice_name) + " -d " + dpid + " -p " + str(port)
@@ -146,21 +151,23 @@ class CnvpClient(object):
                 if ret[0]["resultcode"] == 3758120963 and ret[0]["resultmsg"] == "no port in this slice!":
                     pass
                 else:
-                    raise FlowvisorError("端口删除失败!")
+                    raise VirttoolError("端口删除失败!")
         except:
-            raise FlowvisorError("端口删除失败!")
+            raise VirttoolError("端口删除失败!")
 
     def add_flowspace(self, slice_name, slice_action, dpid, priority, arg_match):
+        """添加flowspace规则"""
         try:
             cmd = "add flowspace -p " + str(priority) + " -d " + dpid + " -m " + \
                 arg_match + " -a Slice:" + str(slice_name) + "=" + str(slice_action)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("流规则添加失败!")
+                raise VirttoolError("流规则添加失败!")
         except:
-            raise FlowvisorError("流规则添加失败！")
+            raise VirttoolError("流规则添加失败！")
 
     def delete_flowspace(self, slice_name, flowspace_id):
+        """删除flowspace规则"""
         try:
             if flowspace_id:
                 cmd = "delete flowspace -s " + str(slice_name) + " -r " + str(flowspace_id)
@@ -168,16 +175,17 @@ class CnvpClient(object):
                 cmd = "delete flowspace -s " + str(slice_name)
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("流规则删除失败!")
+                raise VirttoolError("流规则删除失败!")
         except:
-            raise FlowvisorError("流规则删除失败！")
+            raise VirttoolError("流规则删除失败！")
 
     def get_switches(self):
+        """获取交换机信息"""
         try:
             cmd = "show switch"
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("物理交换机信息获取失败!")
+                raise VirttoolError("物理交换机信息获取失败!")
             else:
                 switches = []
                 if len(ret) > 1 and ret[1]["switches"]:
@@ -193,14 +201,15 @@ class CnvpClient(object):
                 print switches
                 return switches
         except:
-            raise FlowvisorError("物理交换机信息获取失败!")
+            raise VirttoolError("物理交换机信息获取失败!")
 
     def get_links(self):
+        """获取链路信息"""
         try:
             cmd = "show links"
             ret = cnvp_service(self.cnvp_ip, self.cnvp_port, cmd)
             if ret[0]["resultcode"] != 0:
-                raise FlowvisorError("物理链接信息获取失败!")
+                raise VirttoolError("物理链接信息获取失败!")
             else:
                 links = []
                 if len(ret) > 1:
@@ -214,9 +223,10 @@ class CnvpClient(object):
                             links.append(link_dict)
                 return links
         except:
-            raise FlowvisorError("物理链接信息获取失败!")
+            raise VirttoolError("物理链接信息获取失败!")
 
     def _parse_ports(self, ports_info):
+        """解析交换机端口信息"""
         ports = []
         for port_info in ports_info:
             port_dict = {}

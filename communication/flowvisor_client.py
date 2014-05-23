@@ -2,8 +2,8 @@
 import urllib2
 import json
 import re
-from etc.config import flowvisor_disable
-from slice.slice_exception import FlowvisorError
+from etc.config import virttool_disable
+from slice.slice_exception import VirttoolError
 
 
 def toInt(val):
@@ -99,7 +99,7 @@ def makeMatch(matchStr):
 
 
 def connect(cmd, data=None, flowvisor_url=None, flowvisor_ps=None):
-    if flowvisor_disable:
+    if virttool_disable:
         print data
         return "success"
     try:
@@ -338,19 +338,19 @@ class FlowvisorClient(object):
             args = [str(slice_name), controllerAdd, user_email]
             adslice = do_addSlice(args, pwd, False, self.url, self.password)
             if adslice == 'error':
-                raise FlowvisorError("虚网创建失败!")
+                raise VirttoolError("虚网创建失败!")
         except:
-            raise FlowvisorError("虚网创建失败!")
+            raise VirttoolError("虚网创建失败!")
 
     def show_slice(self):
         try:
             lislice = do_listSlices(self.url, self.password)
             if lislice == 'error':
-                raise FlowvisorError("虚网信息获取失败!")
+                raise VirttoolError("虚网信息获取失败!")
             else:
                 return lislice
         except:
-            raise FlowvisorError("虚网信息获取失败!")
+            raise VirttoolError("虚网信息获取失败!")
 
     def change_slice_controller(self, slice_name, controller_ip, controller_port):
         try:
@@ -358,9 +358,9 @@ class FlowvisorClient(object):
             opts = {'chost': str(controller_ip), 'cport': int(controller_port)}
             upslice = do_updateSlice(args, opts, self.url, self.password)
             if upslice == 'error':
-                raise FlowvisorError("控制器更新失败!")
+                raise VirttoolError("控制器更新失败!")
         except:
-            raise FlowvisorError("控制器更新失败!")
+            raise VirttoolError("控制器更新失败!")
 
     def start_or_stop_slice(self, slice_name, status):
         try:
@@ -368,18 +368,18 @@ class FlowvisorClient(object):
             opts = {'status': status}
             upslice = do_updateSlice(args, opts, self.url, self.password)
             if upslice == 'error':
-                raise FlowvisorError("虚网状态更新失败!")
+                raise VirttoolError("虚网状态更新失败!")
         except:
-            raise FlowvisorError("虚网状态更新失败!")
+            raise VirttoolError("虚网状态更新失败!")
 
     def delete_slice(self, slice_name):
         try:
             args = [str(slice_name)]
             rm_slice = do_removeSlice(args, self.url, self.password)
             if rm_slice == 'error':
-                raise FlowvisorError("虚网删除失败!")
+                raise VirttoolError("虚网删除失败!")
         except:
-            raise FlowvisorError("虚网删除失败!")
+            raise VirttoolError("虚网删除失败!")
 
     def add_flowspace(self, slice_name, slice_action, pwd, name, dpid, priority, arg_match):
         try:
@@ -392,18 +392,18 @@ class FlowvisorClient(object):
             args = [name, dpid, priority, arg_match, fsaction]
             adflowspace = do_addFlowSpace(args, pwd, self.url, self.password)
             if adflowspace == 'error':
-                raise FlowvisorError("流规则添加失败!")
+                raise VirttoolError("流规则添加失败!")
         except:
-            raise FlowvisorError("流规则添加失败！")
+            raise VirttoolError("流规则添加失败！")
 
     def delete_flowspace(self, flowspace_name):
         try:
             args = [flowspace_name]
             delflowspace = do_removeFlowSpace(args, self.url, self.password)
             if delflowspace == 'error':
-                raise FlowvisorError("流规则删除失败!")
+                raise VirttoolError("流规则删除失败!")
         except:
-            raise FlowvisorError("流规则删除失败！")
+            raise VirttoolError("流规则删除失败！")
 
     def get_switches(self):
         datapaths = do_list_datapaths(self.url, self.password)

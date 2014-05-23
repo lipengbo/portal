@@ -11,7 +11,7 @@ from django.db import transaction
 from project.models import Project, Island
 from plugins.ipam.models import Subnet, IPUsage
 from common.views import increase_failed_counter, decrease_failed_counter, decrease_counter_api
-from plugins.openflow.flowvisor_api import flowvisor_del_slice
+from plugins.openflow.virttool_api import virttool_del_slice
 from slice.slice_exception import DbError
 from adminlog.models import log, SUCCESS, FAIL
 
@@ -94,10 +94,10 @@ class Slice(models.Model):
         self.state = SLICE_STATE_STOPPING
         self.save()
 
-    def get_flowvisor(self):
-        flowvisors = self.flowvisor_set.all()
-        if flowvisors:
-            return flowvisors[0]
+    def get_virttool(self):
+        virttools = self.virttool_set.all()
+        if virttools:
+            return virttools[0]
         else:
             return None
 
@@ -290,10 +290,10 @@ class Slice(models.Model):
         try:
             print "0:get user"
             user = kwargs.get("user")
-            print "1:delete slice on flowvisor"
+            print "1:delete slice on virttool"
             if self.ct_change != None:
                 try:
-                    flowvisor_del_slice(self.get_flowvisor(), self.id)
+                    virttool_del_slice(self.get_virttool(), self.id)
                 except:
                     raise
                 else:

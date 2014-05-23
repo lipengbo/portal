@@ -1,8 +1,11 @@
 # coding:utf-8
 from celery import task
 from slice.models import Slice
-from plugins.openflow.flowvisor_api import flowvisor_del_slice, flowvisor_update_slice_status, flowvisor_add_slice, flowvisor_update_sice_controller
-from slice.slice_api import update_slice_virtual_network_cnvp, update_slice_virtual_network_flowvisor
+from plugins.openflow.virttool_api import virttool_del_slice,\
+    virttool_update_slice_status, virttool_add_slice,\
+    virttool_update_sice_controller
+from slice.slice_api import update_slice_virtual_network_cnvp,\
+    update_slice_virtual_network_virttool
 from plugins.vt.models import DOMAIN_STATE_DIC
 from slice.slice_exception import DbError
 from adminlog.models import log, SUCCESS, FAIL
@@ -56,34 +59,34 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
                 gw.save()
         print "stop slice, update flowspace, start slice"
         if ct_op and gw_op:
-            flowvisor = slice_obj.get_flowvisor()
-            if flowvisor:
-                print "++++++++++++++++++",slice_obj.ct_change
+            virttool = slice_obj.get_virttool()
+            if virttool:
+                print "++++++++++++++++++", slice_obj.ct_change
                 if slice_obj.ct_change == None:
-                    flowvisor_add_slice(flowvisor, slice_obj.id,
-                                        slice_obj.get_controller(), slice_obj.owner.email)
+                    virttool_add_slice(virttool, slice_obj.id,
+                        slice_obj.get_controller(), slice_obj.owner.email)
                 else:
                     if slice_obj.ct_change:
                         controller = slice_obj.get_controller()
-                        flowvisor_update_sice_controller(flowvisor, slice_obj.id,
-                                                         controller.ip, controller.port)
+                        virttool_update_sice_controller(virttool, slice_obj.id,
+                                                controller.ip, controller.port)
                 slice_obj.ct_change = False
                 slice_obj.save()
-                if flowvisor.type == 1:
+                if virttool.type == 1:
                     print 1
-                    flowvisor_update_slice_status(flowvisor,
+                    virttool_update_slice_status(virttool,
                                                   slice_obj.id, False)
                     print 2
                     update_slice_virtual_network_cnvp(slice_obj)
                     print 3
-                    flowvisor_update_slice_status(flowvisor,
+                    virttool_update_slice_status(virttool,
                                                   slice_obj.id, True)
                     flag = True
                 else:
-                    flowvisor_update_slice_status(flowvisor,
+                    virttool_update_slice_status(virttool,
                                                   slice_obj.id, True)
                     flag = True
-                    update_slice_virtual_network_flowvisor(slice_obj)
+                    update_slice_virtual_network_virttool(slice_obj)
                 slice_obj.start()
             else:
                 raise DbError("环境异常!")
@@ -102,10 +105,10 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
             log(user, slice_obj, u"启动虚网", result_code=FAIL)
             slice_obj.stop()
             if flag:
-                flowvisor_update_slice_status(flowvisor,
+                virttool_update_slice_status(virttool,
                                               slice_obj.id, False)
             if slice_obj.ct_change == None:
-                flowvisor_del_slice(flowvisor, slice_obj.id)
+                virttool_del_slice(virttool, slice_obj.id)
         except:
             pass
     else:
@@ -118,7 +121,7 @@ def stop_slice_sync(slice_id, user):
     try:
         slice_obj = Slice.objects.get(id=slice_id)
         if slice_obj.state == 3:
-            flowvisor_update_slice_status(slice_obj.get_flowvisor(),
+            virttool_update_slice_status(slice_obj.get_virttool(),
                                                   slice_obj.id, False)
             slice_obj.stop()
     except Slice.DoesNotExist:

@@ -1,5 +1,4 @@
 #coding: utf-8
-
 import hashlib
 import json
 import logging
@@ -24,7 +23,7 @@ from slice.models import Slice
 
 FLOWVISOR = 0
 CNVP = 1
-FLOWVISOR_TYPES = ((FLOWVISOR, 'flowvisor'),
+VIRTTOOL_TYPES = ((FLOWVISOR, 'flowvisor'),
                (CNVP, 'cnvp'),)
 
 
@@ -59,14 +58,14 @@ class Controller(ServiceResource):
         verbose_name = _("Controller")
 
 
-class Flowvisor(ServiceResource):
+class Virttool(ServiceResource):
     def __init__(self, *args, **kwargs):
         password = self._meta.get_field('password')
         password.help_text = '填写网络虚拟工具密码'
-        super(Flowvisor, self).__init__(*args, **kwargs)
+        super(Virttool, self).__init__(*args, **kwargs)
 
     http_port = models.IntegerField(verbose_name=_("Http Port"))
-    type = models.IntegerField(choices=FLOWVISOR_TYPES,
+    type = models.IntegerField(choices=VIRTTOOL_TYPES,
                                default=FLOWVISOR, verbose_name=u"类型")
 
     def on_add_into_slice(self, slice_obj):
@@ -83,17 +82,17 @@ class Flowvisor(ServiceResource):
     def validate_unique(self, exclude=None):
         if not self.id:
             try:
-                Flowvisor.objects.get(name=self.name)
+                Virttool.objects.get(name=self.name)
                 e = ValidationError(_("%(model_name)s with this %(field_label)s already exists.") % {"field_label": self._meta.get_field('name').verbose_name, "model_name": self._meta.verbose_name})
                 e.message_dict = {}
                 e.message_dict["name"] = e.messages
                 raise e
-            except Flowvisor.DoesNotExist:
+            except Virttool.DoesNotExist:
                 return self.name
-        super(Flowvisor, self).validate_unique(exclude)
+        super(Virttool, self).validate_unique(exclude)
 
     class Meta:
-        verbose_name = _("Flowvisor")
+        verbose_name = _("Virttool")
 
 
 class FlowSpaceRule(Resource):
@@ -117,29 +116,29 @@ class FlowSpaceRule(Resource):
 
 class Link(models.Model):
 
-    flowvisor = models.ForeignKey(Flowvisor)
+    virttool = models.ForeignKey(Virttool)
     source = models.ForeignKey(SwitchPort, related_name="source_links")
     target = models.ForeignKey(SwitchPort, related_name="target_links")
 
     class Meta:
         verbose_name = _("Link")
 
-class FlowvisorLinksMd5(models.Model):
+class VirttoolLinksMd5(models.Model):
     md5 = models.CharField(max_length=32)
-    flowvisor = models.OneToOneField(Flowvisor)
+    virttool = models.OneToOneField(Virttool)
 
     class Meta:
-        verbose_name = _("Flowvisor link md5")
+        verbose_name = _("Virttool link md5")
 
-@receiver(post_save, sender=Flowvisor)
+@receiver(post_save, sender=Virttool)
 def update_links(sender, instance, created, **kwargs):
     if settings.DEBUG and not hasattr(settings, "CAN_FETCH_FLOWVISOR"):
         return
-    from plugins.openflow.flowvisor_api import flowvisor_get_switches, flowvisor_get_links
+    from plugins.openflow.virttool_api import virttool_get_switches, virttool_get_links
 #     import pdb;pdb.set_trace()
     port_name_dict = {}
     try:
-        switches = flowvisor_get_switches(instance)
+        switches = virttool_get_switches(instance)
     except Exception, e:
         print e
         return
@@ -151,21 +150,21 @@ def update_links(sender, instance, created, **kwargs):
                 port_name_dict[dpid][port['portNumber']] = port['name']
         create_virtualswitch(instance.island, switches)
     try:
-        links = flowvisor_get_links(instance)
+        links = virttool_get_links(instance)
     except Exception, e:
         print e
         return
     digest = hashlib.md5(json.dumps(links)).hexdigest()
     try:
-        md5_obj = instance.flowvisorlinksmd5
+        md5_obj = instance.virttoollinksmd5
         if md5_obj.md5 == digest: #: if the digests are the same, then no update
             return
         else: #: or update the md5 digest and do the updates and deletions
             md5_obj.md5 = digest
             md5_obj.save()
-    except FlowvisorLinksMd5.DoesNotExist:
+    except VirttoolLinksMd5.DoesNotExist:
         #: if it's the first time update, create a md5 record
-        FlowvisorLinksMd5(md5=digest, flowvisor=instance).save()
+        VirttoolLinksMd5(md5=digest, virttool=instance).save()
 
     #: delete all existing links and ports
     instance.link_set.all().delete()
@@ -205,7 +204,7 @@ def update_links(sender, instance, created, **kwargs):
         target_port.name = dst_port_name
         target_port.save()
 
-        link_obj = Link(flowvisor=instance,
+        link_obj = Link(virttool=instance,
                 source=source_port,
                 target=target_port)
         link_obj.save()
@@ -232,6 +231,6 @@ def create_virtualswitch(island, datapaths):
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
                     ip=ip, defaults={'name': "v-ovs" + ip.split('.')[-1], 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
-@receiver(pre_delete, sender=Flowvisor)
+@receiver(pre_delete, sender=Virttool)
 def delete_slice(sender, instance, **kwargs):
     instance.slices.all().delete()

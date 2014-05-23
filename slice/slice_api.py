@@ -5,9 +5,9 @@ from slice.models import Slice, SliceDeleted, SLICE_STATE_STOPPED,\
 from slice.slice_exception import DbError, IslandError, NameExistError
 from resources.ovs_api import slice_add_ovs_or_ports
 from resources.models import Switch
-from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
-    flowvisor_del_flowspace, flowvisor_add_flowspace,\
-    flowvisor_del_port, flowvisor_add_port
+from plugins.openflow.virttool_api import virttool_del_slice,\
+    virttool_del_flowspace, virttool_add_flowspace,\
+    virttool_del_port, virttool_add_port
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
     flowspace_nw_add, flowspace_gw_add, flowspace_dhcp_add,\
     flowspace_dhcp_del, flowspace_gw_del
@@ -38,7 +38,7 @@ def create_slice_step(project, slice_uuid, name, description, island, user,
     print "create_slice_step"
     slice_obj = None
     try:
-        print "1:create slice record, add island, add flowvisor"
+        print "1:create slice record, add island, add virttool"
         slice_obj = create_slice_api(project, slice_uuid, name, description,
                                      island, user, vm_num)
         print "2:add ovses or ports"
@@ -143,8 +143,8 @@ def create_slice_api(project, slice_uuid, name, description, island, user, vm_nu
             if slice_expiration_days <= 0:
                 slice_expiration_days = 30
         if project and island and user:
-            flowvisors = island.flowvisor_set.all()
-            if flowvisors:
+            virttools = island.virttool_set.all()
+            if virttools:
                 try:
                     slice_obj = None
                     date_now = datetime.datetime.now()
@@ -177,14 +177,14 @@ def create_slice_api(project, slice_uuid, name, description, island, user, vm_nu
                                       vm_num=vm_num)
                     slice_obj.save()
                     slice_obj.add_island(island)
-                    slice_obj.add_resource(flowvisors[0])
+                    slice_obj.add_resource(virttools[0])
                     return slice_obj
                 except Exception:
 #                     import traceback
 #                     traceback.print_exc()
                     raise DbError("虚网创建失败!")
             else:
-                raise IslandError("所选节点无可用flowvisor！")
+                raise IslandError("所选节点无可用virttool！")
         else:
             raise DbError("数据库异常!")
     else:
@@ -218,10 +218,10 @@ def slice_change_description(slice_obj, new_description):
 @transaction.commit_manually
 def delete_slice_api_n(slice_obj, user):
     try:
-        print "1:delete slice on flowvisor"
+        print "1:delete slice on virttool"
         if slice_obj.ct_change != None:
             try:
-                flowvisor_del_slice(slice_obj.get_flowvisor(), slice_obj.id)
+                virttool_del_slice(slice_obj.get_virttool(), slice_obj.id)
             except:
                 raise
             else:
@@ -298,8 +298,8 @@ def start_slice_api1(slice_obj, user):
             gw = slice_obj.get_gw()
             if gw and gw.enable_dhcp and gw.state != 1:
                 raise DbError("请确保gateway已启动！")
-            flowvisor = slice_obj.get_flowvisor()
-            if flowvisor == None:
+            virttool = slice_obj.get_virttool()
+            if virttool == None:
                 raise DbError("虚网启动异常！")
             try:
                 slice_obj.starting()
@@ -320,8 +320,8 @@ def start_slice_api(slice_obj, user):
     try:
         controller_flag = False
         gw_flag = False
-        flowvisor = slice_obj.get_flowvisor()
-        if flowvisor == None:
+        virttool = slice_obj.get_virttool()
+        if virttool == None:
             raise DbError("虚网启动失败！")
         if slice_obj.state == 0:
             slice_flag = True
@@ -402,14 +402,14 @@ def stop_slice_api(slice_obj, user):
 
 
 def add_flowspace(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
-    nw_src, nw_dst, nw_proto, nw_tos, tp_src, tp_dst, flowvisor, name,
+    nw_src, nw_dst, nw_proto, nw_tos, tp_src, tp_dst, virttool, name,
     slice_name, slice_action, pwd, dpid, priority):
     try:
         arg_match = matches_to_arg_match(in_port, dl_vlan, dl_vpcp, dl_src,
                                          dl_dst, dl_type, nw_src, nw_dst,
                                          nw_proto, nw_tos, tp_src, tp_dst,
-                                         flowvisor.type)
-        flowvisor_add_flowspace(flowvisor, name, slice_name, slice_action,
+                                         virttool.type)
+        virttool_add_flowspace(virttool, name, slice_name, slice_action,
                                 pwd, dpid, priority, arg_match)
     except:
         raise
@@ -422,7 +422,7 @@ def update_slice_virtual_network_cnvp_nt(slice_obj):
         raise DbError(ex.message)
     if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
         return
-    flowvisor = slice_obj.get_flowvisor()
+    virttool = slice_obj.get_virttool()
     switch_ports = slice_obj.get_switch_ports()
     dpids = []
     dhcp_macs = []
@@ -438,37 +438,37 @@ def update_slice_virtual_network_cnvp_nt(slice_obj):
 #delete flowspace port, add port flowspace
     try:
         if slice_obj.changed == None or (slice_obj.changed != None and slice_obj.changed & 0b1101 != 4):
-            flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
-            flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+            virttool_del_flowspace(virttool, slice_obj.id, None)
+            virttool_del_port(virttool, slice_obj.id, None, None)
             for switch_port in switch_ports:
-                flowvisor_add_port(flowvisor, slice_obj.id,
+                virttool_add_port(virttool, slice_obj.id,
                                    switch_port.switch.dpid, switch_port.port)
             slice_nw = slice_obj.get_nw()
             for dpid in dpids:
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                    slice_nw, slice_nw, "", "", "", "", flowvisor.type)
-                flowvisor_add_flowspace(flowvisor, None,
+                    slice_nw, slice_nw, "", "", "", "", virttool.type)
+                virttool_add_flowspace(virttool, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
                                         100, arg_match)
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x806",
-                    slice_nw, slice_nw, "", "", "", "", flowvisor.type)
-                flowvisor_add_flowspace(flowvisor, None,
+                    slice_nw, slice_nw, "", "", "", "", virttool.type)
+                virttool_add_flowspace(virttool, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
                                         100, arg_match)
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                    slice_nw, "other", "", "", "", "", flowvisor.type)
-                flowvisor_add_flowspace(flowvisor, None,
+                    slice_nw, "other", "", "", "", "", virttool.type)
+                virttool_add_flowspace(virttool, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
                                         100, arg_match)
                 arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                    "other", slice_nw, "", "", "", "", flowvisor.type)
-                flowvisor_add_flowspace(flowvisor, None,
+                    "other", slice_nw, "", "", "", "", virttool.type)
+                virttool_add_flowspace(virttool, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dpid,
@@ -478,8 +478,8 @@ def update_slice_virtual_network_cnvp_nt(slice_obj):
             for dhcp_mac in dhcp_macs:
                 arg_match = matches_to_arg_match("", "", "", dhcp_mac['mac'],
                     "", "0x800", "0.0.0.0", "255.255.255.255", "", "", "", "",
-                    flowvisor.type)
-                flowvisor_add_flowspace(flowvisor, None,
+                    virttool.type)
+                virttool_add_flowspace(virttool, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         dhcp_mac['dpid'],
@@ -499,19 +499,19 @@ def update_null_slice_virtual_network_cnvp(slice_obj):
     if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
         return
     try:
-        flowvisor = slice_obj.get_flowvisor()
-        flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
-        flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+        virttool = slice_obj.get_virttool()
+        virttool_del_flowspace(virttool, slice_obj.id, None)
+        virttool_del_port(virttool, slice_obj.id, None, None)
         slice_ports = slice_obj.sliceport_set.all()
         for slice_port in slice_ports:
             switch_port = slice_port.switch_port
-            flowvisor_add_port(flowvisor, slice_obj.id,
+            virttool_add_port(virttool, slice_obj.id,
                                switch_port.switch.dpid, switch_port.port)
             if switch_port.is_edge():
                 if slice_port.type == 0:
                     arg_match = matches_to_arg_match(switch_port.port, "", "",
-                        "", "", "", "", "", "", "", "", "", flowvisor.type)
-                    flowvisor_add_flowspace(flowvisor, None,
+                        "", "", "", "", "", "", "", "", "", virttool.type)
+                    virttool_add_flowspace(virttool, None,
                                             slice_obj.id,
                                             4, 'cdn%nf',
                                             switch_port.switch.dpid,
@@ -523,8 +523,8 @@ def update_null_slice_virtual_network_cnvp(slice_obj):
                         for mac in macs:
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", mac, "", "", "", "", "", "", "", "",
-                                flowvisor.type)
-                            flowvisor_add_flowspace(flowvisor, None,
+                                virttool.type)
+                            virttool_add_flowspace(virttool, None,
                                                     slice_obj.id,
                                                     4, 'cdn%nf',
                                                     switch_port.switch.dpid,
@@ -554,21 +554,21 @@ def update_slice_virtual_network_cnvp_pt(slice_obj):
         else:
             add_port_flag = True
     try:
-        flowvisor = slice_obj.get_flowvisor()
-        flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
+        virttool = slice_obj.get_virttool()
+        virttool_del_flowspace(virttool, slice_obj.id, None)
         if add_port_flag:
-            flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+            virttool_del_port(virttool, slice_obj.id, None, None)
         slice_ports = slice_obj.sliceport_set.all()
         slice_nw = slice_obj.get_nw()
         for slice_port in slice_ports:
             switch_port = slice_port.switch_port
             if add_port_flag:
-                flowvisor_add_port(flowvisor, slice_obj.id,
+                virttool_add_port(virttool, slice_obj.id,
                                    switch_port.switch.dpid, switch_port.port)
             if slice_port.type == 0:
                 arg_match = matches_to_arg_match(switch_port.port, "", "", "",
-                    "", "", "", "", "", "", "", "", flowvisor.type)
-                flowvisor_add_flowspace(flowvisor, None,
+                    "", "", "", "", "", "", "", "", virttool.type)
+                virttool_add_flowspace(virttool, None,
                                         slice_obj.id,
                                         4, 'cdn%nf',
                                         switch_port.switch.dpid,
@@ -582,12 +582,12 @@ def update_slice_virtual_network_cnvp_pt(slice_obj):
                             (dhcp_flag and (not vm.enable_dhcp))):
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", "", "", "", slice_nw, "", "", "", "",
-                                "", flowvisor.type)
+                                "", virttool.type)
                         else:
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", "", "", "", "", "", "", "", "", "",
-                                flowvisor.type)
-                        flowvisor_add_flowspace(flowvisor, None,
+                                virttool.type)
+                        virttool_add_flowspace(virttool, None,
                                                 slice_obj.id,
                                                 4, 'cdn%nf',
                                                 switch_port.switch.dpid,
@@ -600,8 +600,8 @@ def update_slice_virtual_network_cnvp_pt(slice_obj):
                             for mac in macs:
                                 arg_match = matches_to_arg_match(
                                     switch_port.port, "", "", mac, "", "", "",
-                                    "", "", "", "", "", flowvisor.type)
-                                flowvisor_add_flowspace(flowvisor, None,
+                                    "", "", "", "", "", virttool.type)
+                                virttool_add_flowspace(virttool, None,
                                                         slice_obj.id,
                                                         4, 'cdn%nf',
                                                         switch_port.switch.dpid,
@@ -634,7 +634,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
         if slice_obj.changed & 0b1101 == 4:
             only_start_dhcp = True
     try:
-        flowvisor = slice_obj.get_flowvisor()
+        virttool = slice_obj.get_virttool()
         slice_ports = slice_obj.sliceport_set.all()
         slice_nw = slice_obj.get_nw()
         if only_start_dhcp:
@@ -648,21 +648,21 @@ def update_slice_virtual_network_cnvp(slice_obj):
                         if vm.type == 2:
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", "", "", "0x800", "other", slice_nw, "",
-                                "", "", "", flowvisor.type)
-                            flowvisor_add_flowspace(flowvisor, None,
+                                "", "", "", virttool.type)
+                            virttool_add_flowspace(virttool, None,
                                                     slice_obj.id,
                                                     4, 'cdn%nf',
                                                     switch_port.switch.dpid,
                                                     100, arg_match)
         else:
-            flowvisor_del_flowspace(flowvisor, slice_obj.id, None)
+            virttool_del_flowspace(virttool, slice_obj.id, None)
             if add_port_flag:
-                flowvisor_del_port(flowvisor, slice_obj.id, None, None)
+                virttool_del_port(virttool, slice_obj.id, None, None)
             for slice_port in slice_ports:
                 arg_matches = []
                 switch_port = slice_port.switch_port
                 if add_port_flag:
-                    flowvisor_add_port(flowvisor, slice_obj.id,
+                    virttool_add_port(virttool, slice_obj.id,
                                        switch_port.switch.dpid, switch_port.port)
                 if not switch_port.is_edge():
                     continue
@@ -675,48 +675,48 @@ def update_slice_virtual_network_cnvp(slice_obj):
                         for mac in macs:
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", mac, "", "0x800", slice_nw, slice_nw,
-                                "", "", "", "", flowvisor.type)
+                                "", "", "", "", virttool.type)
                             arg_matches.append(arg_match)
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", mac, "", "0x806", slice_nw, slice_nw,
-                                "", "", "", "", flowvisor.type)
+                                "", "", "", "", virttool.type)
                             arg_matches.append(arg_match)
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", mac, "", "0x800", slice_nw, "other",
-                                "", "", "", "", flowvisor.type)
+                                "", "", "", "", virttool.type)
                             arg_matches.append(arg_match)
                 else:
 #                     print "++++++++++++++",3
                     arg_match = matches_to_arg_match(switch_port.port, "", "",
                         "", "", "0x800", slice_nw, slice_nw, "", "", "", "",
-                        flowvisor.type)
+                        virttool.type)
                     arg_matches.append(arg_match)
                     arg_match = matches_to_arg_match(switch_port.port, "", "",
                         "", "", "0x806", slice_nw, slice_nw, "", "", "", "",
-                        flowvisor.type)
+                        virttool.type)
                     arg_matches.append(arg_match)
                     vms = switch_port.virtualmachine_set.all()
                     if vms and vms[0].type == 2:
 #网关
                         arg_match = matches_to_arg_match(switch_port.port, "",
                             "", "", "", "0x800", "other", slice_nw, "", "", "",
-                            "", flowvisor.type)
+                            "", virttool.type)
                         arg_matches.append(arg_match)
                     else:
                         arg_match = matches_to_arg_match(switch_port.port, "",
                             "", "", "", "0x800", slice_nw, "other", "", "", "",
-                            "", flowvisor.type)
+                            "", virttool.type)
                         arg_matches.append(arg_match)
                         if dhcp_flag and vms and vms[0].enable_dhcp:
 #虚拟机且有dhcp服务
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", vms[0].mac, "", "0x800", "0.0.0.0",
-                                "255.255.255.255", "", "", "", "", flowvisor.type)
+                                "255.255.255.255", "", "", "", "", virttool.type)
                             arg_matches.append(arg_match)
 #                 print "++++++++++++++",arg_matches
                 for arg_match in arg_matches:
 #                     print "++++++++++++++",1
-                    flowvisor_add_flowspace(flowvisor, None,
+                    virttool_add_flowspace(virttool, None,
                                             slice_obj.id,
                                             4, 'cdn%nf',
                                             switch_port.switch.dpid,
@@ -725,14 +725,14 @@ def update_slice_virtual_network_cnvp(slice_obj):
         raise
 
 
-def update_slice_virtual_network_flowvisor(slice_obj):
+def update_slice_virtual_network_virttool(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
         raise DbError(ex.message)
     if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
         return
-    flowvisor = slice_obj.get_flowvisor()
+    virttool = slice_obj.get_virttool()
     flowspace_name = str(slice_obj.id) + '_df'
     switch_ports = slice_obj.get_switch_ports()
     default_flowspaces = slice_obj.get_default_flowspaces()
@@ -763,8 +763,8 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                             default_flowspace.nw_src, default_flowspace.nw_dst,
                             default_flowspace.nw_proto, default_flowspace.nw_tos,
                             default_flowspace.tp_src, default_flowspace.tp_dst,
-                            flowvisor.type)
-                        flowvisor_add_flowspace(flowvisor, flowspace_name,
+                            virttool.type)
+                        virttool_add_flowspace(virttool, flowspace_name,
                                                 slice_obj.id,
                                                 default_flowspace.actions,
                                                 'cdn%nf',
@@ -772,8 +772,8 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                                                 default_flowspace.priority,
                                                 arg_match)
             return
-        flowvisor_del_port(flowvisor, slice_obj.id, None, None)
-        flowvisor_del_flowspace(flowvisor, slice_obj.id, flowspace_name)
+        virttool_del_port(virttool, slice_obj.id, None, None)
+        virttool_del_flowspace(virttool, slice_obj.id, flowspace_name)
         for switch_port in switch_ports:
             for default_flowspace in default_flowspaces:
                 if not (default_flowspace.dl_src == slice_gw or\
@@ -786,8 +786,8 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                         default_flowspace.nw_src, default_flowspace.nw_dst,
                         default_flowspace.nw_proto, default_flowspace.nw_tos,
                         default_flowspace.tp_src, default_flowspace.tp_dst,
-                        flowvisor.type)
-                    flowvisor_add_flowspace(flowvisor, flowspace_name,
+                        virttool.type)
+                    virttool_add_flowspace(virttool, flowspace_name,
                                             slice_obj.id,
                                             default_flowspace.actions,
                                             'cdn%nf',
@@ -803,8 +803,8 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                             default_flowspace.nw_src, default_flowspace.nw_dst,
                             default_flowspace.nw_proto, default_flowspace.nw_tos,
                             default_flowspace.tp_src, default_flowspace.tp_dst,
-                            flowvisor.type)
-                        flowvisor_add_flowspace(flowvisor, flowspace_name,
+                            virttool.type)
+                        virttool_add_flowspace(virttool, flowspace_name,
                                                 slice_obj.id,
                                                 default_flowspace.actions,
                                                 'cdn%nf',
@@ -821,12 +821,12 @@ def update_slice_virtual_network(slice_obj):
     """更新slice的虚网，添加或删除交换机端口、网段、gateway、dhcp、vm后调用
     """
     print 'update_slice_virtual_network'
-    flowvisor = slice_obj.get_flowvisor()
-    if flowvisor:
-        if flowvisor.type == 1:
+    virttool = slice_obj.get_virttool()
+    if virttool:
+        if virttool.type == 1:
             update_slice_virtual_network_cnvp(slice_obj)
         else:
-            update_slice_virtual_network_flowvisor(slice_obj)
+            update_slice_virtual_network_virttool(slice_obj)
     else:
         raise DbError("数据库异常!")
 
@@ -865,9 +865,9 @@ def get_slice_topology(slice_obj):
         links = []
         switch_ids = []
         ports = {}
-        flowvisor = slice_obj.get_flowvisor()
-        if flowvisor:
-            link_objs = flowvisor.link_set.filter(
+        virttool = slice_obj.get_virttool()
+        if virttool:
+            link_objs = virttool.link_set.filter(
                 source__in=switch_ports, target__in=switch_ports)
         for link_obj in link_objs:
             if (link_obj.source.switch.dpid in dpids) and\
@@ -1020,7 +1020,7 @@ def get_slice_links_bandwidths(switchs_ports, maclist):
 
 
 def get_slice_resource(slice_obj):
-    """获取slice资源，包括节点、flowvisor、控制器、交换机端口
+    """获取slice资源，包括节点、virttool、控制器、交换机端口
     """
     LOG.debug('get_slice_resource')
 
