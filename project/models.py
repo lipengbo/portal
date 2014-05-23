@@ -74,7 +74,7 @@ class Category(models.Model):
 
 class Project(models.Model):
     owner = models.ForeignKey(User)
-    name = models.CharField(max_length=255, verbose_name=_("Project Name"), unique=True, help_text="学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目")
+    name = models.CharField(max_length=255, verbose_name=_("Project Name"), help_text="学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目")
     description = models.CharField(max_length=1024, verbose_name=_("Project Description"), help_text="如项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />项目支持：国家自然科学基金或863、973项目支持；")
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
     memberships = models.ManyToManyField(User, through="Membership",
@@ -154,6 +154,7 @@ class Project(models.Model):
 
     class Meta:
         verbose_name = _("Project")
+        unique_together = (("owner", "name"), )
         permissions = (
                 ('create_slice', _("Can add Slice")),
                 #('manage_project_member', _('Manage Project Member')),
