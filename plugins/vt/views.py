@@ -202,7 +202,6 @@ def do_vm_action(request, vmid, action):
             elif action == 'destroy' and vm.state not in (DOMAIN_STATE_DIC['stopping'],\
                                                           DOMAIN_STATE_DIC['shutoff']):
                 vm.state = DOMAIN_STATE_DIC['stopping']
-            print ">>>>>>>>>>>>>>>>vm state:", vm.state
             vm.save()
             api.do_vm_action(request.user, vm, action)
             return HttpResponse(json.dumps({'result': 0}))
@@ -215,7 +214,8 @@ def do_vm_action(request, vmid, action):
                 log(request.user, vm, u"操作虚拟机", FAIL)
             if serr.errno == errno.ECONNREFUSED:
                 return HttpResponse(json.dumps({'result': 1, 'error': _("connection refused")}))
-    return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
+        except:
+            return HttpResponse(json.dumps({'result': 1, 'error': _('vm operation failed')}))
 
 
 def vnc(request, vmid, island_id):
