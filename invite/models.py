@@ -148,7 +148,7 @@ class Application(Connection):
     @property
     def action_url(self):
         if self.state == 0:
-            return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
+            return reverse('project_detail', args=(self.target.id, )) + "?application={}".format(self.id)
         else:
             return ""
 
