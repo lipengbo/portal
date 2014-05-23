@@ -6,7 +6,7 @@ from django.conf import settings
 from django.core.cache import cache
 
 from plugins.common.agent_client import AgentClient
-from project.models import City
+from project.models import City, Island
 from resources.models import Resource
 @register.simple_tag(takes_context=True)
 def get_all_cities(context):
@@ -16,17 +16,31 @@ def get_all_cities(context):
 RESOURCE_USAGES = {}
 
 @register.simple_tag(takes_context=True)
-def resource_usage(context, island):
+def resource_usage(context, current_island):
 
-    key = 'island_{}_usage'.format(island.id)
-    result = cache.get(key)
-    if result:
-        switch_ratios, server_ratios = result[0], result[1]
-    else:
-        switch_ratios, server_ratios = [], []
 
-    context['switch_ratio'] = sum(switch_ratios) / float(len(switch_ratios) or 1)
-    context['server_ratio'] = sum(server_ratios) / float(len(server_ratios) or 1)
+    total_switch = 0
+    total_server = 0
+    island_switch_ratios = []
+    island_server_ratios = []
+
+    for island in Island.objects.all():
+        key = 'island_{}_usage'.format(island.id)
+        result = cache.get(key)
+        if result:
+            switch_ratios, server_ratios = result[0], result[1]
+        else:
+            switch_ratios, server_ratios = [], []
+
+        total_switch += len(switch_ratios)
+        total_server += len(server_ratios)
+        if current_island.id == island.id:
+            island_switch_ratios = switch_ratios
+            island_server_ratios = server_ratios
+
+
+    context['switch_ratio'] = sum(island_switch_ratios) / float(total_switch or 1)
+    context['server_ratio'] = sum(island_server_ratios) / float(total_server or 1)
     return ""
 
 
