@@ -72,6 +72,11 @@ class Category(models.Model):
     class Meta:
         verbose_name = _("Category")
 
+class ProjectManager(models.Manager):
+
+    def get_query_set(self, *args, **kwargs):
+        return super(ProjectManager, self).get_query_set(*args, **kwargs).filter(is_deleted=False)
+
 class Project(models.Model):
     owner = models.ForeignKey(User)
     name = models.CharField(max_length=255, verbose_name=_("Project Name"), help_text="学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目")
@@ -81,6 +86,10 @@ class Project(models.Model):
             related_name="project_belongs", verbose_name=_("Memberships"))
     category = models.ForeignKey(Category, verbose_name=_("Category"))
     created_time = models.DateTimeField(auto_now_add=True)
+    is_deleted = models.BooleanField(default=False)
+
+    objects = ProjectManager()
+    admin_objects = models.Manager()
 
     def created_date(self):
         return self.created_time
@@ -120,6 +129,11 @@ class Project(models.Model):
 
     def log_info(self):
         return u"项目：{}".format(self.__unicode__())
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.save()
+        post_delete(sender=Project, instance=self)
 
     @property
     def get_content_type(self):
