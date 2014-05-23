@@ -103,7 +103,7 @@ def perm_admin(request, id, user_id):
             remove_perm("{}.{}".format(perm.content_type.app_label, perm.codename), user, project)
         for perm in select_perms:
             assign_perm(perm, user, project)
-        messages.add_message(request, messages.INFO, _("Change permissions successfully"))
+        #messages.add_message(request, messages.INFO, _("Change permissions successfully"))
         return redirect('project_member_manage', id=id)
     context['member_user'] = user
     return render(request, 'project/perm.html', context)
@@ -123,6 +123,14 @@ def detail(request, id):
         pass
     else:
         context['invitation'] = invitation
+    if 'application' in request.GET:
+        application_id = request.GET.get('application')
+        try:
+            application = Application.objects.get(id=application_id)
+        except Application.DoesNotExist, e:
+            pass
+        else:
+            context['application'] = application
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
     else:

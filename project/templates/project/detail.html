@@ -21,6 +21,14 @@
         {% endfor %}
     </div>
 {% endif %}
+{% if application.actions %}
+    <div class="alert alert-success">
+        {{ application.from_user }}申请加入该项目，请选择“接受”或者“拒绝”：
+        {% for action in application.actions %}
+        <a class="btn btn-{{ action.action_level }}" href="{{ action.action_url }}?next={{ request.path|urlencode }}">{{ action.action_title }}</a>
+        {% endfor %}
+    </div>
+{% endif %}
 <div class="fill_form">
 
 

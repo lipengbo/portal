@@ -1,6 +1,8 @@
 #coding: utf-8
 from django import forms
 
+from django.core.exceptions import ValidationError
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, ButtonHolder
 from crispy_forms.bootstrap import AppendedText, PrependedText, FormActions
@@ -29,6 +31,15 @@ class ProjectForm(forms.ModelForm):
 
     def clean_name(self):
         return self.cleaned_data['name'].strip()
+
+    def clean_islands(self):
+        islands = self.cleaned_data.get('islands')
+        if self.instance.id:
+            for island in self.instance.islands.all():
+                if island not in islands and island.slice_set.filter(project=self.instance):
+                    raise ValidationError(u"如果需要取消节点，请先释放该节点下所有资源")
+
+        return islands
 
     class Meta:
         model = Project
