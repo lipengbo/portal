@@ -249,12 +249,12 @@ function post_vminfo(sliceid){
     var s_cpu = $(".cpu_chose").children("a.vm_active").attr("value");
     var s_ram = rams[$("#ram_slider").slider( "option", "value" ) - 1];
 
-    var enable_dhcp_checked;
+    /*var enable_dhcp_checked;
 	if($('.switch_btn.dhcp.vm').hasClass("checked")){
 		enable_dhcp_checked = 1;
 	}else{
 		enable_dhcp_checked = 0;
-	}    
+	} */   
     $.ajax({
         type: "POST",
         url: "/plugins/vt/create/vm/"+sliceid+"/",
@@ -268,7 +268,7 @@ function post_vminfo(sliceid){
 				hdd: 10,
                 image: $("#id_image").val(),
                 server: $("#id_server").val(),
-                enable_dhcp: enable_dhcp_checked
+                enable_dhcp: 1
         },
         success: function(data) {
             if(data.result==1)
@@ -669,7 +669,7 @@ function select_flavor(flavor_id){
 		cpu_selected = value;
 	}
 }*/
-
+/*
 $('.switch_btn.dhcp').on("click", function(){
 			if($(this).hasClass("checked")) {
                 $(this).removeClass("checked");
@@ -680,5 +680,5 @@ $('.switch_btn.dhcp').on("click", function(){
 			}
 		});
 
-
+*/
 

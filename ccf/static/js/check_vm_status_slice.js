@@ -329,6 +329,7 @@ function check_vpn_status(slice_id){
                         .addClass("icon-minus-sign")
                         .addClass("icon_state");
                 img_obj = $("#vpn_qt").children("img")[0];
+                $("#vpn_qt").attr("style", "cursor:pointer");
                 if(img_obj){
                     img_obj.src = STATIC_URL + "img/ic-ks.png";
                             if(img_obj.title == "启动中"){
@@ -346,6 +347,7 @@ function check_vpn_status(slice_id){
                         .addClass("icon-ok-sign")
                         .addClass("icon_state");
                 img_obj = $("#vpn_qt").children("img")[0];
+                $("#vpn_qt").attr("style", "cursor:pointer");
                 if(img_obj){
                     img_obj.src = STATIC_URL + "img/ic-tz.png";
                             if(img_obj.title == "停止中"){
