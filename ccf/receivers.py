@@ -103,8 +103,8 @@ def increase_deleted_counter(sender, instance, created, **kwargs):
         counter.save()
 
 
-@receiver(post_delete, sender=Invitation)
-@receiver(post_delete, sender=Application)
+#@receiver(post_delete, sender=Invitation)
+#@receiver(post_delete, sender=Application)
 @receiver(post_delete, sender=Project)
 def delete_notifications(sender, instance, **kwargs):
     target_type = ContentType.objects.get_for_model(instance)
