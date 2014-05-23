@@ -142,24 +142,6 @@ def create_vm(request, sliceid):
             log(user, vm, u"创建虚拟机", FAIL)
             return HttpResponse(json.dumps({'result': 1, 'error': _('vm invalide')}))
     else:
-        if user.quotas.vm <= vm_count:
-            messages.add_message(request, messages.INFO, "您的虚拟机数量已经超过配额")
-            return redirect("quota_admin_apply")
-        #: test ram quota
-        if user.quotas.mem <= VirtualMachine.objects.user_stat_sum(user, 'ram'):
-            messages.add_message(request, messages.INFO, "您已分配的内存大小已经超过配额")
-            return redirect("quota_admin_apply")
-
-        #: test cpu quota
-        if user.quotas.cpu <= VirtualMachine.objects.user_stat_sum(user, 'cpu'):
-            messages.add_message(request, messages.INFO, "您的CPU数量已经超过配额")
-            return redirect("quota_admin_apply")
-
-        #: test disk quota
-        if user.quotas.disk <= VirtualMachine.objects.user_stat_sum(user, 'hdd'):
-            messages.add_message(request, messages.INFO, "您的磁盘容量已经超过配额")
-            return redirect("quota_admin_apply")
-
         vm_form = VmForm()
         slice = get_object_or_404(Slice, id=sliceid)
         servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
@@ -360,7 +342,27 @@ def download_keypair(request):
 def can_create_vm(request, sliceid):
     slice = get_object_or_404(Slice, id=sliceid)
     vms_num = slice.get_common_vms().count()
+    user = request.user
+    vm_count = VirtualMachine.objects.total_vms(user)
     if vms_num < slice.vm_num:
+        if user.quotas.vm <= vm_count:
+            message = "您的虚拟机数量已经超过配额"
+            return HttpResponse(json.dumps({'result': -1, 'error': message}))
+        #: test ram quota
+        if user.quotas.mem <= VirtualMachine.objects.user_stat_sum(user, 'ram'):
+            message =  "您已分配的内存大小已经超过配额"
+            return HttpResponse(json.dumps({'result': -1, 'error': message}))
+
+        #: test cpu quota
+        if user.quotas.cpu <= VirtualMachine.objects.user_stat_sum(user, 'cpu'):
+            return HttpResponse(json.dumps({'result': -1, 'error': "您的CPU数量已经超过配额"}))
+
+        #: test disk quota
+        if user.quotas.disk <= VirtualMachine.objects.user_stat_sum(user, 'hdd'):
+            message =  "您的磁盘容量已经超过配额"
+            return HttpResponse(json.dumps({'result': -1, 'error': message}))
         return HttpResponse(json.dumps({'result': '0'}))
     else:
         return HttpResponse(json.dumps({'result': '1'}))
+
+
