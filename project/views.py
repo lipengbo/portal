@@ -29,7 +29,7 @@ from invite.models import Invitation, Application
 from slice.models import Slice, SliceDeleted
 
 from resources.models import Switch, Server, VirtualSwitch
-from plugins.openflow.models import Flowvisor
+from plugins.openflow.models import Virttool
 from common.models import  Counter
 from notifications.models import Notification
 from project.tasks import check_resource_usage
@@ -389,14 +389,14 @@ def applicant(request, id, user_id=None):
 
     return render(request, 'project/applicant.html', context)
 
-def get_island_flowvisors(island_id=None):
-    flowvisors = Flowvisor.objects.all()
+def get_island_virttools(island_id=None):
+    virttools = Virttool.objects.all()
     if island_id:
-        flowvisors = flowvisors.filter(island__id=island_id)
-    flowvisor_list = []
-    for flowvisor in flowvisors:
-        flowvisor_list.append({"host": flowvisor.ip + ":" + str(flowvisor.http_port), "id": flowvisor.id})
-    return flowvisor_list
+        virttools = virttools.filter(island__id=island_id)
+    virttool_list = []
+    for virttool in virttools:
+        virttool_list.append({"host": virttool.ip + ":" + str(virttool.http_port), "id": virttool.id})
+    return virttool_list
 
 def get_all_cities():
     return [], 2,2,2,2,2
@@ -414,7 +414,7 @@ def topology(request):
         island_id = int(island_id)
     except:
         island_id = 0
-    flowvisors = get_island_flowvisors(island_id)
+    virttools = get_island_virttools(island_id)
 
     all_gre_ovs = Switch.objects.filter(has_gre_tunnel=True)
     if island_id:
@@ -448,7 +448,7 @@ def topology(request):
         'show_virtual_switch':show_virtual_switch,
         'tp_mod':tp_mod,
         #'slices': slices,
-        'root_controllers': json.dumps(flowvisors)})
+        'root_controllers': json.dumps(virttools)})
 
 def swicth_desc(request, host, port, dpid):
     return HttpResponse(json.dumps({dpid:[]}), content_type="application/json")
@@ -460,13 +460,13 @@ def device_proxy(request, host, port):
     return HttpResponse(json.dumps([]), content_type="application/json")
 
 def links_proxy(request, host, port):
-    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
-    links = flowvisor.link_set.all()
+    virttool = Virttool.objects.get(ip=host, http_port=port)
+    links = virttool.link_set.all()
     link_data = []
     for link in links:
-        if link.source.switch.island != flowvisor.island:
+        if link.source.switch.island != virttool.island:
             continue
-        if link.target.switch.island != flowvisor.island:
+        if link.target.switch.island != virttool.island:
             continue
         link_data.append({
             "dst-port": link.target.port,
@@ -480,19 +480,19 @@ def links_proxy(request, host, port):
     return HttpResponse(json.dumps(link_data), content_type="application/json")
 
 def links_direct(request, host, port):
-    from plugins.openflow.flowvisor_api import flowvisor_get_links
-    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    from plugins.openflow.virttool_api import virttool_get_links
+    virttool = Virttool.objects.get(ip=host, http_port=port)
     try:
-        data = flowvisor_get_links(flowvisor)
+        data = virttool_get_links(virttool)
     except:
         data = []
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 def switch_direct(request, host, port):
-    from plugins.openflow.flowvisor_api import flowvisor_get_switches
-    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    from plugins.openflow.virttool_api import virttool_get_switches
+    virttool = Virttool.objects.get(ip=host, http_port=port)
     try:
-        json_data = flowvisor_get_switches(flowvisor)
+        json_data = virttool_get_switches(virttool)
     except:
         json_data = []
     for i in range(len(json_data)):
@@ -516,17 +516,17 @@ def switch_direct(request, host, port):
 
 #@cache_page(60 * 60 * 24 * 10)
 def switch_proxy(request, host, port):
-    flowvisor = Flowvisor.objects.get(ip=host, http_port=port)
+    virttool = Virttool.objects.get(ip=host, http_port=port)
     """
-    switch_ids_tuple = flowvisor.link_set.all().values_list(
+    switch_ids_tuple = virttool.link_set.all().values_list(
             'source__switch__id', 'target__switch__id')
     switch_ids = set()
     for switch_id_tuple in switch_ids_tuple:
         switch_ids.add(switch_id_tuple[0])
         switch_ids.add(switch_id_tuple[1])
-    switches = Switch.objects.filter(id__in=switch_ids, island=flowvisor.island)
+    switches = Switch.objects.filter(id__in=switch_ids, island=virttool.island)
     """
-    switches = Switch.objects.filter(island=flowvisor.island)
+    switches = Switch.objects.filter(island=virttool.island)
     switch_data = []
     for switch in switches:
         ports = switch.switchport_set.all()

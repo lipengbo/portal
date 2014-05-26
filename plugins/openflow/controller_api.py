@@ -1,7 +1,7 @@
 # coding:utf-8
 from plugins.openflow.models import Controller
 from slice.slice_exception import DbError, ControllerUsedError
-from flowvisor_api import flowvisor_update_sice_controller
+from virttool_api import virttool_update_sice_controller
 from django.db import transaction
 from plugins.vt.api import create_vm_for_controller, delete_vm_for_controller
 import logging
@@ -145,7 +145,7 @@ def slice_change_controller1(slice_obj, controller_info):
             slice_obj.remove_resource(haved_controller)
             controller = None
             controller = create_add_controller(slice_obj, controller_info)
-            flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+            virttool_update_sice_controller(slice_obj.get_virttool(),
                                              slice_obj.id, controller.ip,
                                              controller.port)
         except Exception, ex:
@@ -197,7 +197,7 @@ def slice_change_controller(slice_obj, controller_info):
     try:
         slice_obj.remove_resource(haved_controller)
         slice_add_controller(slice_obj, controller_n)
-        flowvisor_update_sice_controller(slice_obj.get_flowvisor(),
+        virttool_update_sice_controller(slice_obj.get_virttool(),
                                          slice_obj.id, controller_n.ip,
                                          controller_n.port)
     except Exception, ex:

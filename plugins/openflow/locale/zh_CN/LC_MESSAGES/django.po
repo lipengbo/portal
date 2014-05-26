@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-15 07:59+0000\n"
+"POT-Creation-Date: 2014-05-26 10:47+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
 
-#: models.py:30
+#: models.py:31
+msgid "username"
+msgstr ""
+
+#: models.py:58
 msgid "Controller"
 msgstr "控制器"
 
-#: models.py:39
-msgid "Flowvisor"
+#: models.py:67
+msgid "Http Port"
 msgstr ""
 
-#: models.py:68
+#: models.py:86
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#: models.py:95
+msgid "Virttool"
+msgstr "网络虚拟工具"
+
+#: models.py:124
 msgid "Link"
 msgstr "链路"
 
-#: models.py:75
-msgid "Flowvisor link md5"
-msgstr "Flowvisor链路信息摘要"
+#: models.py:131
+msgid "Virttool link md5"
+msgstr "链路信息摘要"

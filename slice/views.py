@@ -18,19 +18,17 @@ from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
     get_slice_links_bandwidths, get_count_show_data, slice_edit_controller,\
     slice_edit_gw
+from slice.models import Slice, SliceDeleted
 from project.models import Project, Island
 from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
-from slice.slice_exception import *
+from resources.ovs_api import slice_delete_port_device
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from resources.ovs_api import slice_delete_port_device
-from slice.models import Slice, SliceDeleted
+from plugins.vt.models import VirtualMachine
 from etc.config import function_test
+from adminlog.models import log, SUCCESS, FAIL
 
 import datetime
-
-from adminlog.models import log, SUCCESS, FAIL
-from plugins.vt.models import VirtualMachine
 
 
 @login_required
@@ -46,7 +44,8 @@ def create(request, proj_id, flag):
     error_info = None
     islands = project.islands.all()
     if not islands:
-        return render(request, 'slice/warning.html', {'info': '无可用节点，无法创建slice！'})
+        return render(request, 'slice/warning.html',
+                      {'info': '无可用节点，无法创建slice！'})
     ovs_ports = []
     for island in islands:
         switches = island.switch_set.all()
@@ -186,7 +185,7 @@ def create_gw(request, slice_id):
 
 
 @login_required
-def list(request, proj_id, stype):
+def slice_list(request, proj_id, stype):
     """显示所有slice。"""
     from common.models import Counter, FailedCounter, DeletedCounter
     user = request.user
@@ -194,12 +193,12 @@ def list(request, proj_id, stype):
     if user.is_superuser:
         context['extent_html'] = "admin_base.html"
         if int(proj_id) == 0:
-            type = int(stype)
-            if type == 0 or type == 1:
-                slice_objs = Slice.objects.filter(type=type)
+            ct_type = int(stype)
+            if ct_type == 0 or ct_type == 1:
+                slice_objs = Slice.objects.filter(type=ct_type)
             else:
                 slice_objs = SliceDeleted.objects.order_by('-id')
-            context['type'] = type
+            context['type'] = ct_type
             date_now = datetime.datetime.now()
             if context['type'] == 0:
                 sc = Counter.objects.filter(date__year=date_now.strftime('%Y'),
@@ -256,7 +255,6 @@ def edit_description(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     if not request.user.has_perm('slice.change_slice', slice_obj):
         return redirect('forbidden')
-#     if request.method == 'POST':
     slice_description = request.POST.get("slice_description")
     try:
         slice_change_description(slice_obj, slice_description)
@@ -266,46 +264,6 @@ def edit_description(request, slice_id):
     else:
 #         log(request.user,  slice_obj, u"编辑虚网", result_code=SUCCESS)
         return HttpResponse(json.dumps({'result': 1}))
-#             messages.add_message(request, messages.ERROR, ex)
-#     return HttpResponseRedirect(
-#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
-
-
-# @login_required
-# def edit_controller(request, slice_id):
-#     """编辑slice控制器。"""
-#     print "edit_controller"
-#     slice_obj = get_object_or_404(Slice, id=slice_id)
-#     if not request.user.has_perm('slice.change_slice', slice_obj):
-#         return redirect('forbidden')
-#     controller_type = request.POST.get("controller_type")
-#     if controller_type == 'default_create':
-#         controller_sys = request.POST.get("controller_sys")
-#         controller_info = {'controller_type': controller_type,
-#                            'controller_sys': controller_sys}
-#     else:
-#         controller_ip = request.POST.get("controller_ip")
-#         controller_port = request.POST.get("controller_port")
-#         controller_info = {'controller_type': controller_type,
-#                            'controller_ip': controller_ip,
-#                            'controller_port': controller_port}
-#     try:
-#         slice_edit_controller(slice_obj, controller_info)
-#     except Exception, ex:
-#         return HttpResponse(json.dumps({'result': 0, 'error_info': ex.message}))
-#     else:
-#         controller = slice_obj.get_controller()
-#         if controller.host:
-#             return HttpResponse(json.dumps({'result': 1,
-#                                             'controller': {'name': controller.name, 'ip': controller.ip,
-#                                                           'port': controller.port, 'server_ip': controller.host.server.ip,
-#                                                           'host_state': controller.host.state, 'host_id': controller.host.id,
-#                                                           'host_uuid': controller.host.uuid}}))
-#         else:
-#             print 2
-#             return HttpResponse(json.dumps({'result': 2,
-#                                             'controller': {'name': controller.name, 'ip': controller.ip,
-#                                                           'port': controller.port}}))
 
 
 @login_required
@@ -335,45 +293,20 @@ def detail(request, slice_id, div_name=None):
     gw = slice_obj.get_gw()
     vms = slice_obj.get_common_vms()
     show_vms = []
-#         show_vm = {}
-#         if controller.host:
-#             show_vm['id'] = controller.host.id
-#             show_vm['host_ip'] = controller.host.server.ip
-#             show_vm['state'] = controller.host.state
-#             show_vm['uuid'] = controller.host.uuid
-#             show_vm['type_id'] = 2
-#         else:
-#             show_vm['id'] = 0
-#             show_vm['host_ip'] = ""
-#             show_vm['state'] = ""
-#             show_vm['uuid'] = ""
-#             show_vm['type_id'] = 1
-#         if controller.name == 'user_define':
-#             show_vm['name'] = "自定义控制器"
-#         else:
-#             show_vm['name'] = controller.name
-#
-#         show_vm['type'] = "控制器"
-#         show_vm['dhcp'] = "无"
-#         show_vm['ip'] = controller.ip + ":" + str(controller.port)
-#         show_vms.append(show_vm)
-#     if gw:
-#         if gw.enable_dhcp:
-#             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-#                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"有"})
-#         else:
-#             show_vms.append({'id':gw.id, 'name':gw.name, 'uuid':gw.uuid, 'type_id':3,
-#                              'type':"虚拟网关", 'ip':gw.ip, 'host_ip':gw.server.ip, 'state':gw.state, 'dhcp':"无"})
     for vm in vms:
         if vm.enable_dhcp:
-            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机(DHCP)", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"有"})
+            show_vms.append({'id': vm.id, 'name': vm.name, 'uuid': vm.uuid,
+                             'type_id': 4, 'type': "虚拟机(DHCP)", 'ip': vm.ip,
+                             'host_ip': vm.server.ip, 'state': vm.state,
+                             'dhcp': "有"})
         else:
-            show_vms.append({'id':vm.id, 'name':vm.name, 'uuid':vm.uuid, 'type_id':4,
-                         'type':"虚拟机", 'ip':vm.ip, 'host_ip':vm.server.ip, 'state':vm.state, 'dhcp':"无"})
+            show_vms.append({'id': vm.id, 'name': vm.name, 'uuid': vm.uuid,
+                             'type_id': 4, 'type': "虚拟机", 'ip': vm.ip,
+                             'host_ip': vm.server.ip, 'state': vm.state,
+                             'dhcp': "无"})
 
     context['vms'] = show_vms
-    context['flowvisor'] = slice_obj.get_flowvisor()
+    context['flowvisor'] = slice_obj.get_virttool()
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = 0
     context['controller'] = controller
@@ -457,10 +390,7 @@ def start_or_stop(request, slice_id, flag):
             stop_slice_api(slice_obj, request.user)
     except Exception, ex:
         return HttpResponse(json.dumps({'value': 0, 'error_info': str(ex)}))
-#         messages.add_message(request, messages.ERROR, ex)
     return HttpResponse(json.dumps({'value': 1}))
-#     return HttpResponseRedirect(
-#         reverse("slice_detail", kwargs={"slice_id": slice_obj.id}))
 
 
 def topology(request, slice_id):
@@ -520,7 +450,7 @@ def create_nw(request, owner, nw_num):
             return HttpResponse(json.dumps({'value': nw, 'owner': owner}))
         else:
             return HttpResponse(json.dumps({'value': 0}))
-    except Exception, ex:
+    except Exception:
         return HttpResponse(json.dumps({'value': 0}))
 
 
@@ -623,15 +553,17 @@ def countiframe(request):
 def get_count_show(request):
     print 'get_count_show'
     target = request.GET.get('target')
-    type = request.GET.get('type')
+    ct_type = request.GET.get('type')
     total_num = request.GET.get('total_num')
     stype = request.GET.get('stype')
     try:
-        slice_count_show = get_count_show_data(target, type, total_num, stype)
-    except Exception, ex:
+        slice_count_show = get_count_show_data(target, ct_type, total_num, stype)
+    except Exception:
         return HttpResponse(json.dumps({'result': 0}))
     else:
-        return HttpResponse(json.dumps({'result': 1, 'show_dates': slice_count_show["show_dates"], 'show_nums': slice_count_show["show_nums"]}))
+        return HttpResponse(json.dumps({'result': 1,
+                            'show_dates': slice_count_show["show_dates"],
+                            'show_nums': slice_count_show["show_nums"]}))
 
 
 def dhcp_switch(request, slice_id, flag):
@@ -669,22 +601,21 @@ def get_slice_state(request, slice_id):
             if gw:
                 g_state = gw.state
     except:
-        print 1
         return HttpResponse(json.dumps({'value': 1}))
     else:
-        print 2
         return HttpResponse(json.dumps({'value': 0, 'state': slice_obj.state,
-                                        'c_state': c_state, 'g_state': g_state}))
+                            'c_state': c_state, 'g_state': g_state}))
+
 
 def get_vpn_state(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     return HttpResponse(json.dumps({'vpn_state': slice_obj.vpn_state}))
 
-#def list_own_devices(request, slice_id):
+
 def list_own_devices(slice_id):
     own_devices = []
     slice_obj = get_object_or_404(Slice, id=slice_id)
-    slice_ports = SlicePort.objects.filter(slice = slice_obj)
+    slice_ports = SlicePort.objects.filter(slice=slice_obj)
     for port in slice_ports:
         port_info = {}
         switch_port = port.switch_port
@@ -699,7 +630,7 @@ def list_own_devices(slice_id):
             port_info['dpid'] = switch_port.switch.dpid
             own_devices.append(port_info)
         else:
-            owner_device = OwnerDevice.objects.filter(slice_port = port)
+            owner_device = OwnerDevice.objects.filter(slice_port=port)
             if owner_device.count() > 0:
                 port_info['port_name'] = switch_port.name
                 port_info['port'] = switch_port.port
@@ -711,7 +642,7 @@ def list_own_devices(slice_id):
                 own_devices.append(port_info)
     print "--------------------------->", own_devices
     return own_devices
-   # return HttpResponse(json.dumps(own_devices))
+
 
 def delete_switch_port(request, slice_id, portid):
     try:
@@ -725,7 +656,6 @@ def delete_switch_port(request, slice_id, portid):
         return HttpResponse(json.dumps({'result':'1'}))
 
 
-
 def get_select_server(request, slice_id):
     print "get_select_server"
     slice_obj = get_object_or_404(Slice, id=slice_id)
@@ -733,10 +663,11 @@ def get_select_server(request, slice_id):
     try:
         server_objs = slice_obj.get_servers()
         for server_obj in server_objs:
-            servers.append({'id':server_obj.id, 'name':server_obj.name})
+            servers.append({'id': server_obj.id, 'name': server_obj.name})
     except:
         servers = []
     return HttpResponse(json.dumps(servers))
+
 
 def start_or_stop_vpn(request, slice_id, island_id, flag):
     vm = None
@@ -755,8 +686,8 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
             else:
                 slice_obj.vpn_state = 3
                 slice_obj.save()
-                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,\
-                                    subnet.netaddr, gw_ip, 'stop')
+                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,
+                                        subnet.netaddr, gw_ip, 'stop')
         else:
             if function_test:
                 slice_obj.vpn_state = 1
@@ -764,190 +695,11 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
             else:
                 slice_obj.vpn_state = 4
                 slice_obj.save()
-                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip, \
-                                    subnet.netaddr, gw_ip, 'start' )
+                start_or_stop_vpn.delay(request.user, slice_obj, island.vpn_ip,
+                                        subnet.netaddr, gw_ip, 'start')
         return HttpResponse(json.dumps({'result': 0}))
     except:
         if vm == None:
-            return HttpResponse(json.dumps({'result':1, 'error_info': u'请先添加网关！'}))
+            return HttpResponse(json.dumps({'result': 1,
+                                            'error_info': u'请先添加网关！'}))
         return HttpResponse(json.dumps({'result': 1}))
-
-
-def test_cnvp():
-    from plugins.openflow.flowvisor_api import flowvisor_del_slice,\
-        flowvisor_del_flowspace, flowvisor_add_flowspace,\
-        flowvisor_update_slice_status, flowvisor_add_slice,\
-        flowvisor_del_port, flowvisor_add_port, flowvisor_update_sice_controller,\
-        flowvisor_get_switches, flowvisor_get_links, flowvisor_show_slice
-    from plugins.openflow.models import Flowvisor, Controller
-#     from resources.models import SwitchPort
-#     from plugins.vt.models import VirtualMachine
-#     vm = VirtualMachine.objects.get(mac='FA:16:0A:00:00:0A')
-#     vm.state = 8
-#     vm.switch_port = None
-#     vm.save()
-#     slice = Slice.objects.get(id=1)
-#     switch_port = SwitchPort.objects.get(port=678)
-#     slice.remove_resource(switch_port)
-#     vm.switch_port = switch_port
-#     vm.save()
-#     print 'vm change ok'
-#     slice.add_resource(switch_port)
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp"
-    flowvisor = Flowvisor.objects.all()[0]
-    controller = Controller.objects.filter(ip = "172.16.0.5")[0]
-    for i in range(0,125):
-        try:
-            flowvisor_del_slice(flowvisor, "slicet"+str(i))
-        except Exception, ex:
-            print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-            print ex
-    for i in range(0,125):
-        try:
-            flowvisor_del_slice(flowvisor, "slicet"+str(i))
-        except Exception, ex:
-            print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-            print ex
-#     try:
-#         for i in range(125,130):
-#             try:
-#                 flowvisor_add_slice(flowvisor, "slicet"+str(i), controller, "cjx@qq.com")
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_slice error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_port(flowvisor, "slicet"+str(i), "00:ff:00:00:00:00:00:01", "64500")
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_port error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_port(flowvisor, "slicet"+str(i), "00:ff:00:00:00:00:00:01", "64501")
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_port error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_flowspace(flowvisor, "flcjx", "slicet"+str(i), 4,
-#                                     "cjx", "00:ff:00:00:00:00:00:01", 100, "nw_src=11.0.0."+str(i+1)+"),nw_dst=11.0.0."+str(i+1))
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_flowspace(flowvisor, "flcjx", "slicet"+str(i), 4,
-#                                     "cjx", "00:ff:00:00:00:00:00:01", 100, "nw_src=12.0.0."+str(i+1)+"),nw_dst=12.0.0."+str(i+1))
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_add_flowspace(flowvisor, "flcjx", "slicet"+str(i), 4,
-#                                     "cjx", "00:ff:00:00:00:00:00:01", 100, "nw_src=13.0.0."+str(i+1)+"),nw_dst=13.0.0."+str(i+1))
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#                 print ex
-#                 raise
-#             try:
-#                 flowvisor_update_slice_status(flowvisor, "slicet"+str(i), True)
-#             except Exception, ex:
-#                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp start slice error"
-#                 print ex
-#                 raise
-# #             try:
-# #                 flowvisor_update_slice_status(flowvisor, "slicet"+str(i), False)
-# #             except Exception, ex:
-# #                 print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp stop slice error"
-# #                 print ex
-# #                 raise
-#     except Exception, ex:
-#         pass
-#     for i in range(0,125):
-#         try:
-#             flowvisor_update_slice_status(flowvisor, "slicet"+str(i), True)
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp stop slice error"
-#             print ex
-#             raise
-#         try:
-#             flowvisor_update_slice_status(flowvisor, "slicet"+str(i), False)
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp stop slice error"
-#             print ex
-#             raise
-#     for i in range(0,125):
-#         try:
-#             flowvisor_del_slice(flowvisor, "slicet"+str(i))
-#         except Exception, ex:
-#             print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-#             print ex
-#     try:
-#         flowvisor_show_slice(flowvisor, None)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_show_slice error"
-#         print ex
-#     controller = Controller.objects.all()[0]
-#     try:
-#         flowvisor_add_slice(flowvisor, "cjxcnvptest", controller, "cjx@qq.com")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_slice error"
-#         print ex
-#     try:
-#         flowvisor_add_slice(flowvisor, "cjxcnvptest2", controller, "cjx@qq.com")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_slice error"
-#         print ex
-#     try:
-#         flowvisor_update_slice_status(flowvisor, "cjxcnvptest", True)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_update_slice_status error"
-#         print ex
-#     try:
-#         flowvisor_update_slice_status(flowvisor, "4", True)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_update_slice_status error"
-#         print ex
-#     try:
-#         flowvisor_update_sice_controller(flowvisor, "cjxcnvptest", "17.17.17.17", "988")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_update_sice_controller error"
-#         print ex
-#     try:
-#         flowvisor_add_port(flowvisor, "cjxcnvptest", "00:00:00:00:00:00:00:01", "2")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_port error"
-#         print ex
-#     try:
-#         flowvisor_del_port(flowvisor, "cjxcnvptest", None, None)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_port error"
-#         print ex
-#     try:
-#         flowvisor_add_flowspace(flowvisor, "flcjx", "cjxcnvptest4", 4,
-#                             "cjx", "00:00:00:00:00:00:00:09", 100, "nw_src=10.0.0.1/24,nw_dst=10.0.0.1/24")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_add_flowspace error"
-#         print ex
-#     try:
-#         flowvisor_del_flowspace(flowvisor, "cjxcnvptest", None)
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_flowspace error"
-#         print ex
-#     try:
-#         flowvisor_del_slice(flowvisor, "cjxcnvptest9")
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_del_slice error"
-#         print ex
-#     try:
-#         switches = flowvisor_get_switches(flowvisor)
-#         print switches
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_get_switches error"
-#         print ex
-#     try:
-#         links = flowvisor_get_links(flowvisor)
-#         print links
-#     except Exception, ex:
-#         print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%test cnvp flowvisor_get_links error"
-#         print ex

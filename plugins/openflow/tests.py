@@ -8,7 +8,7 @@ Replace this with more appropriate tests for your application.
 from django.test import TestCase
 from plugins.openflow.controller_api import slice_add_controller, slice_change_controller
 from plugins.openflow.models import FlowSpaceRule
-from plugins.openflow.flowvisor_api import flowvisor_add_slice, flowvisor_del_slice
+from plugins.openflow.virttool_api import virttool_add_slice, virttool_del_slice
 from project.models import Project
 from plugins.openflow.flowspace_api import create_default_flowspace, flowspace_nw_add
 from slice.slice_api import create_slice_api
@@ -44,15 +44,15 @@ class ControllerTest(TestCase):
                 'cjxunittestslice', 'description',
                 island, project.owner)
             slice_add_controller(slice_obj, island.controller_set.all()[0])
-            flowvisor_add_slice(island.flowvisor_set.all()[0], slice_obj.name,
+            virttool_add_slice(island.virttool_set.all()[0], slice_obj.name,
                 slice_obj.get_controller(), slice_obj.owner.email)
             slice_change_controller(slice_obj, '192.168.5.104', '6565')
         except Exception, ex:
             print ex
-            flowvisor_del_slice(island.flowvisor_set.all()[0], 'cjxunittestslice')
+            virttool_del_slice(island.virttool_set.all()[0], 'cjxunittestslice')
             self.assertFalse(True)
         else:
-            flowvisor_del_slice(island.flowvisor_set.all()[0], 'cjxunittestslice')
+            virttool_del_slice(island.virttool_set.all()[0], 'cjxunittestslice')
             controllers = slice_obj.controller_set.all()
             if controllers.count() == 1 and controllers[0].ip == '192.168.5.104' and controllers[0].port == 6565:
                 self.assertTrue(True)
