@@ -7472,9 +7472,6 @@ span[name="serverInfo"] {
   display: inline-block !important;
   width: auto;
 }
-.port_fill {
-  position: relative;
-}
 .port_fill .label {
   margin-right: 10px;
 }
