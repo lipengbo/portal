@@ -105,20 +105,20 @@
                                  <span id="island_idInfo col-md-6" style="display:inline;float:none;"></span>
                              </td>
                          </tr>
-                         {%if slice_type == "mixslice" %}
+                         
                          <tr>
                              <td class="text-right title_padding">
-                                 IP数量                      
+                                 虚拟机数                      
                              </td>
                              <td class="td_tooltip_padding">
-                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。" data-original-title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量" data-original-title="请根据实际需求选择最大虚拟机数量"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                              </td>
                              <td>                                
                                <select name="nw_num" id="nw_num" class="form-control">
-                                  <option value="8">8</option>
-                                  <option value="16">16</option>
-                                  <option value="32">32</option>
-                                  <option value="64">64</option>
+                                  <option value="8">5</option>
+                                  <option value="16">13</option>
+                                  <option value="32">29</option>
+                                  <option value="64">61</option>
                                 </select>  
                              </td>
                              <td>
@@ -128,63 +128,9 @@
                                 <input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
                                 <input type="text" value="" id="old_nw_num" style="display:none"/>
                                 <input type="text" value="" id="old_nw_owner" style="display:none"/>
-                             </td>
-                         </tr>  
-                         
-                         
-                         <tr>
-                             <td class="text-right title_padding">
-                                 虚拟机数                      
-                             </td>
-                             <td class="td_tooltip_padding">
-                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。" data-original-title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
-                             </td>
-                             <td>                                
-                               <input type="text" class="form-control" maxlength=30 id="vm_num" name="vm_num" value="0" onblur="check_vm_num('vm_num',1)">  
-                             </td>
-                             <td>
-                                <span id="vm_numInfo" style="display:inline;float:none;"></span>
-                             </td>
-                         </tr>  
-                         {%else%}
-                         <tr style="display:none">
-                             <td class="text-right title_padding">
-                                 IP数量                      
-                             </td>
-                             <td class="td_tooltip_padding">
-                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。" data-original-title="请根据实际需求选择IP地址数量，供虚拟机及自接入设备使用。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
-                             </td>
-                             <td>                                
-                               <select name="nw_num" id="nw_num" class="form-control">
-                                  <option value="0">0</option>
-                                </select>  
-                             </td>
-                             <td>
-                                <span id="nw_numInfo" style="display:inline;float:none;"></span>
-                                <input type="text" id="slice_nw_input" style="display:none"/>
-                                <span id="slice_nw" style="display:none"></span>
-                                <input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
-                                <input type="text" value="" id="old_nw_num" style="display:none"/>
-                                <input type="text" value="" id="old_nw_owner" style="display:none"/>
-                             </td>
-                         </tr>  
-                         
-                         
-                         <tr style="display:none">
-                             <td class="text-right title_padding">
-                                 虚拟机数                      
-                             </td>
-                             <td class="td_tooltip_padding">
-                                 <a class="tooltip_defined" href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。" data-original-title="请根据实际需求选择最大虚拟机数量，最大为ip数量减3。"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
-                             </td>
-                             <td>                                
-                               <input type="text" class="form-control" maxlength=30 id="vm_num" name="vm_num" value="0" onblur="check_vm_num('vm_num',1)">  
-                             </td>
-                             <td>
-                                <span id="vm_numInfo" style="display:inline;float:none;"></span>
                              </td>
                          </tr> 
-                         {%endif%}
+
                          <tr style="display:none;">
                              <td class="text-right title_padding">
                                  拓扑构建模式

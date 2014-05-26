@@ -34,9 +34,8 @@
             <thead>
                 <tr>
                     <th width="16%">虚网名称</th>
-                    <th width="20%">描述</th>
-                    <th width="12%">所属节点</th>
-                    <th width="12%">类型</th>
+                    <th width="32%">描述</th>
+                    <th width="16%">所属节点</th>
                     <th width="20%">网段</th>
                     <th width="8%">状态</th>
                     <th width="12%">操作</th>
@@ -47,13 +46,6 @@
                   <td>{{slice_obj.get_show_name}}</td>
                   <td id = "slice_description_old">{{slice_obj.description}}</td>
                   <td>{{slice_obj.get_island}}</td>
-                  <td>
-                  {%if start_ip == "" %}
-                  基础虚网
-                  {%else%}
-                  混合虚网
-                  {%endif%}
-                  </td>
                   <td>
                   {%if start_ip == "" %}
                   无
@@ -144,14 +136,11 @@
         
         <div class="slice_detail_tab">
             <div class="row">
-                <div class="col-md-4 fw {%if div_name == "list_fw" %}on{%endif%}">
+                <div class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}">
                     <a href="javascript:;">服务配置</a>
                 </div>
-                <div class="col-md-4 xnj {%if div_name == "list_vm" %}on{%endif%}">
+                <div class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}">
                      <a href="javascript:;">虚拟机资源</a>
-                </div>
-                <div class="col-md-4 zjr {%if div_name == "list_port" %}on{%endif%}">
-                     <a href="javascript:;">自接入资源</a>
                 </div>
             </div>
         </div>
@@ -172,12 +161,7 @@
                     {%endif%}
                 </div>          
             </div>
-            
-           <div class="slice_detail_content" {%if div_name == "list_port" %}style="display:block;"{%endif%}>
-                <div id="list_port">
-                    {% include "slice/port_list_page.html" %}
-                </div>  
-           </div>      
+                 
         </div>
         
         
