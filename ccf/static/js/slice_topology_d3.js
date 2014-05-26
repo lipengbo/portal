@@ -823,7 +823,7 @@ function restart() {
     .on('click', function(d) {
         if(admin == 1){
             if(d.type == 'host' && d.type_id == 1){
-                window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
+                //window.top.location.href = "http://" + window.location.host + "/monitor/vm/"+d.yid+"/";
             }
             else{
                 //window.top.location.href = "http://" + window.location.host + "/monitor/Switch/"+d.yid+"/";
