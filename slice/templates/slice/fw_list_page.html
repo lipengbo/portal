@@ -39,7 +39,9 @@
                 {%if controller.host %}
                 {%if controller.host.state == 8 or controller.host.state == 9 or controller.host.state == 10 or controller.host.state == 12 or controller.host.state == 13 %}
                         <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" 
+                            {%if controller.host.state == 12 %}title="启动中"{%else%}
+                            {%if controller.host.state == 13 %}title="停止中"{%else%}title="启动"{%endif%}{%endif%} />
                         </a>
                     {%else%}
                         <a href="javascript:void(0);" id="{{controller.host.id}}_qt" onclick="start_stop_vm({{controller.host.id}}, 2);" style="cursor:pointer">
@@ -52,7 +54,7 @@
                     {%endif%}
                 {%endif%}
             {%endif%} 
-            {%if extent_html == "admin_base.html"%}
+            <!--{%if extent_html == "admin_base.html"%}
                 {%if controller.host%}
                     {%if controller.host.state == 1 %}
                         <a href="javascript:void(0);" id="{{controller.host.id}}_jk" onclick="jk_vm({{controller.host.id}});" style="cursor:pointer">
@@ -64,7 +66,7 @@
                         </a>
                     {%endif%}
                 {%endif%}
-            {%endif%}
+            {%endif%}-->
             {%if extent_html == "site_base.html"%}
                 {%if controller.host%}
                     {%if controller.host.state == 1 %}
@@ -147,7 +149,9 @@
              {%if extent_html == "site_base.html"%}
                 {%if gw.state == 8 or gw.state == 9 or gw.state == 10 or gw.state == 12 or gw.state == 13 %}
                         <a href="javascript:void(0);" id="{{gw.id}}_qt" onclick="start_stop_vm({{gw.id}}, 3);" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" 
+                            {%if gw.state == 12 %}title="启动中"{%else%}
+                            {%if gw.state == 13 %}title="停止中"{%else%}title="启动"{%endif%}{%endif%} />
                         </a>
                     {%else%}
                         <a href="javascript:void(0);" id="{{gw.id}}_qt" onclick="start_stop_vm({{gw.id}}, 3);" style="cursor:pointer">
@@ -159,7 +163,7 @@
                         </a>
                     {%endif%}
                 {%endif%}
-                {%if extent_html == "admin_base.html"%}
+                <!--{%if extent_html == "admin_base.html"%}
                     {%if gw.state == 1 %}
                         <a href="javascript:void(0);" id="{{gw.id}}_jk" onclick="jk_vm({{gw.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_jk.png" title="监控" />
@@ -169,7 +173,7 @@
                         <img src="{{ STATIC_URL}}img/btn_jk_gray.png" title="监控" />
                         </a>
                     {%endif%}
-                {%endif%}
+                {%endif%}-->
                 {%if extent_html == "site_base.html"%}
                     {%if gw.state == 1 %}
                         <a href="javascript:void(0);" id="{{gw.id}}_dl"

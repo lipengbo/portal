@@ -350,6 +350,7 @@ class Slice(models.Model):
             else:
                 transaction.commit()
                 print "6:change slice record success"
+                return False
         else:
             print "5:delete slice success and create SliceDeleted record "
             try:
@@ -364,6 +365,7 @@ class Slice(models.Model):
 #                 log(user, None, u"删除虚网(" + self.show_name + u")成功！", result_code=SUCCESS)
                 transaction.commit()
                 print "6:create SliceDeleted record success!"
+                return True
 
     def flowspace_changed(self, flag):
         a = self.changed

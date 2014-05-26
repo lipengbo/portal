@@ -51,7 +51,7 @@ def index(request):
     user = request.user
     context = {}
     if user.is_superuser:
-        projects = Project.objects.all()
+        projects = Project.admin_objects.all()
         context['extent_html'] = "admin_base.html"
     else:
         project_ids = Membership.objects.filter(user=user).values_list(

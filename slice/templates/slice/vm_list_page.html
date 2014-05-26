@@ -64,7 +64,9 @@
                 {%if vm.type_id != 1%}
                 {%if vm.state == 8 or vm.state == 9 or vm.state == 10 or vm.state == 11 or vm.state == 12 or vm.state == 13 %}
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:not-allowed">
-                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" title="启动" />
+                            <img src="{{ STATIC_URL}}img/ic-ks-un.png" 
+                            {%if vm.state == 12 %}title="启动中"{%else%}
+                            {%if vm.state == 13 %}title="停止中"{%else%}title="启动"{%endif%}{%endif%} />
                         </a>
                     {%else%}
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:pointer">
@@ -77,7 +79,7 @@
                     {%endif%}
                 {%endif%}
             {%endif%} 
-            {%if extent_html == "admin_base.html"%}
+            <!--{%if extent_html == "admin_base.html"%}
                 {%if vm.type_id != 1%}
                     {%if vm.state == 1 %}
                         <a href="javascript:void(0);" id="{{vm.id}}_jk" onclick="jk_vm({{vm.id}});" style="cursor:pointer">
@@ -89,7 +91,7 @@
                         </a>
                     {%endif%}
                 {%endif%}
-            {%endif%}
+            {%endif%}-->
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
                     {%if vm.state == 1 %}
