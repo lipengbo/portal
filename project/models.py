@@ -47,7 +47,6 @@ class Island(models.Model):
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
     novnc_ip = models.IPAddressField(null=True, verbose_name=_("novnc_ip"))
-    vpn_ip = models.IPAddressField(null=True, verbose_name=_("vpn_ip"))
 
     @staticmethod
     def admin_options():
