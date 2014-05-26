@@ -20,8 +20,8 @@ for (var i=0; i<11; i++){
     cpu_values_x_lable[i] = "";
 }
 cpu_values_x_lable[10] = "0s";
-cpu_values_x_lable[5] = "5s";
-cpu_values_x_lable[0] = "10s";
+cpu_values_x_lable[5] = "15s";
+cpu_values_x_lable[0] = "30s";
 
 for (var i=0; i<11; i++){
 	mem_values[i] = 0 + "";
@@ -29,8 +29,8 @@ for (var i=0; i<11; i++){
 }
 
 mem_values_x_lable[10] = "0s";
-mem_values_x_lable[5] = "5s";
-mem_values_x_lable[0] = "10s";
+mem_values_x_lable[5] = "15s";
+mem_values_x_lable[0] = "30s";
 
 for (var i=0; i<11; i++){
 	net_values[i] = "";
@@ -40,8 +40,8 @@ for (var i=0; i<11; i++){
 }
 
 net_values[10] = "0s";
-net_values[5] = "5s";
-net_values[0] = "10s"
+net_values[5] = "15s";
+net_values[0] = "30s"
 
 var cpu_chart_data = {
     labels : cpu_values_x_lable,
