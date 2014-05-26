@@ -32,7 +32,7 @@ domain_count_infinity = 10000
 #配置slice的网关与物理网关的通信方式，True表示通过slice控制器控制（下相应flowspace），False表示不通过控制器控制。
 gw_controller = False
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
-slice_expiration_days = 5
+slice_expiration_days = 3650
 #单元测试的时候使用，当系统发布的时候该值必须为False
 function_test = True
 #配置系统是否使用网络虚拟化工具进行虚网划分，测试使用，系统发布时该值必须为False
@@ -41,7 +41,7 @@ virttool_disable = True
 use_vt_manager_to_schedul = True
 #单台机器最多允许创建的虚拟机的数量
 unique_hosts_per_alloc = 100
-#可以创建虚拟机的主机，cpu、mem的最大负载，取值为百分必的形式，如下代表百分之80
+#可以创建虚拟机的主机，cpu、mem的最大负载，取值为百分比的形式，如下代表百分之80
 max_cpu = 100
 max_mem = 100
 #可以创建虚拟机的主机，至少要有10G的磁盘剩余
