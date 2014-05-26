@@ -7,7 +7,24 @@
 
 {% endblock %}
 {% block body %}
-	<h4>交换机 {{ switch_name }}</h4>
+	<div class="port_control clearfix">
+	    <h4 class="pull-left">交换机 {{ switch_name }}</h4>
+	    <form class="form-inline">
+	        <div class="form-group pull-right">
+                端口
+                <select class="form-control">
+                    <option selected="">8000</option>
+                    <option>8001</option>
+                    <option>8002</option>          
+                </select>
+            </div>	        
+	    </form>
+	</div>
+	<div class="port_fill">
+	    <span class="label label-success">协 商</span>
+	    <span class="label label-danger">非 协 商</span>
+	    <span class="call_out">带宽：xxxMB</span>
+    </div>
 <!--
 	<p class="vm_chose">网桥 <select id="brs_info" onChange="change_br({{switch_id}}, this.options[this.options.selectedIndex].value, true)"></select></p>
     <p class="vm_chose">端口 <select id="ports_info" onChange="change_port({{switch_id}}, true)"></select></p>
@@ -48,7 +65,7 @@
 	<script>
 		$(function(){
 			//get_br_info({{ switch_id }}, true);
-			Initdata({{switch_id}});
+			//Initdata({{switch_id}});
 			$('#alert_close').on("click", function(){
 				window.location.href = "/nexus/resources/switch/";
 			})

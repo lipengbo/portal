@@ -7464,3 +7464,20 @@ span[name="serverInfo"] {
   width: 11px;
   height: 7px;
 }
+.port_control {
+  margin-bottom: 10px;
+}
+.port_control .form-control {
+  padding: 6px 25px;
+  display: inline-block !important;
+  width: auto;
+}
+.port_fill {
+  position: relative;
+}
+.port_fill .label {
+  margin-right: 10px;
+}
+.port_fill .call_out {
+  vertical-align: middle;
+}
