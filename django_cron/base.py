@@ -28,9 +28,7 @@ import datetime
 from signals import cron_done
 import models
 import cPickle
-import pdb
 
-DEBUG = False
 
 # how often to check if jobs are ready to be run (in seconds)
 # in reality if you have a multithreaded server, it may get checked
@@ -95,8 +93,6 @@ class CronScheduler(object):
         #        get killed off if they happen to check while another
         #        one is already executing a job (only occurs with
         #         multi-threaded servers)
-        if DEBUG == True:
-            pdb.set_trace()
         if status.executing:
 #             print "++++++++++1"
             return

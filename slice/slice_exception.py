@@ -34,18 +34,18 @@ class NameExistError(Error):
         super(NameExistError, self).__init__('%s' % (message))
 
 
-class FlowvisorError(Error):
+class VirttoolError(Error):
 
     def __init__(self, message='Unknown'):
         self.message = message
-        super(FlowvisorError, self).__init__('%s' % (message))
+        super(VirttoolError, self).__init__('%s' % (message))
 
 
 class IslandError(Error):
 
     def __init__(self, message='Unknown'):
         self.message = message
-        super(FlowvisorError, self).__init__('%s' % (message))
+        super(VirttoolError, self).__init__('%s' % (message))
 
 
 def wrap_exception(f):

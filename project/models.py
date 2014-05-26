@@ -238,7 +238,7 @@ def assign_membership_permission(sender, instance, created, **kwargs):
             assign_perm('project.create_slice', instance.user, instance.project)
 
 
-#@receiver(m2m_changed, sender=Flowvisor.slices.through)
+#@receiver(m2m_changed, sender=Virttool.slices.through)
 #@receiver(m2m_changed, sender=Controller.slices.through)
 def on_add_into_slice(sender, instance, action, pk_set, model, **kwargs):
     resource = instance
