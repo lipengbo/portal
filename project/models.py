@@ -133,7 +133,7 @@ class Project(models.Model):
     def delete(self, *args, **kwargs):
         self.is_deleted = True
         self.save()
-        post_delete(sender=Project, instance=self)
+        post_delete.send(sender=Project, instance=self)
 
     @property
     def get_content_type(self):
