@@ -7371,24 +7371,24 @@ span[name="serverInfo"] {
 .slice_detail_tab {
   background: #2291fe;
 }
-.slice_detail_tab .row .col-md-4 {
+.slice_detail_tab .row .slice_index {
   padding: 15px 0;
   text-align: center;
 }
-.slice_detail_tab .row .col-md-4 a {
+.slice_detail_tab .row .slice_index a {
   padding: 5px 0 5px 35px;
   height: 25px;
   color: #bfdaff;
 }
-.slice_detail_tab .row .col-md-4 a:hover,
-.slice_detail_tab .row .col-md-4 a:active,
-.slice_detail_tab .row .col-md-4 a:focus {
+.slice_detail_tab .row .slice_index a:hover,
+.slice_detail_tab .row .slice_index a:active,
+.slice_detail_tab .row .slice_index a:focus {
   text-decoration: none;
 }
-.slice_detail_tab .row .col-md-4.on a {
+.slice_detail_tab .row .slice_index.on a {
   color: #fff;
 }
-.slice_detail_tab .row .col-md-4.on {
+.slice_detail_tab .row .slice_index.on {
   background: url(../img/sj.png) no-repeat bottom center;
 }
 .slice_detail_tab .row .fw a {

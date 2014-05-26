@@ -278,8 +278,8 @@ function page_function0(){
 	ret2 = check_slice_description('slice_description',2);
 	ret3 = check_island_id('island_id')
 	ret4 = check_nw_num();
-	ret5 = check_vm_num('vm_num',1);
-	if (ret1 && ret2 && ret3 && ret4 && ret5){
+	//ret5 = check_vm_num('vm_num',1);
+	if (ret1 && ret2 && ret3 && ret4){
 		return true;
 	}
 	else{
@@ -664,14 +664,15 @@ function submit_slice_info(project_id){
     var user_id_obj = document.getElementById("user_id");
 
     var slice_uuid_obj = document.getElementById("slice_uuid");
-    var vm_num_obj = document.getElementById("vm_num");
+    var nw_num_obj = document.getElementById("nw_num");
+    var nw_num = nw_num_obj.options[nw_num_obj.selectedIndex].value;
     var submit_data = {"slice_name": slice_name_obj.value + "_" + user_id_obj.value,
                         "slice_description": slice_description_obj.value,
                         "island_id": island_id_obj.options[island_id_obj.selectedIndex].value,
                         "tp_mod": tp_mod,
                         "switch_port_ids": switch_port_ids,
                         "switch_ids": switch_ids,
-                        "vm_num": parseInt(vm_num_obj.value),
+                        "vm_num": parseInt(nw_num) - 3,
                         "slice_nw": old_slice_nw_obj.value,
                         "slice_uuid": slice_uuid_obj.value
         };

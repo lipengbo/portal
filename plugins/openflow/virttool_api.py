@@ -98,7 +98,6 @@ def virttool_del_slice(virttool, slice_name):
     """
     print 'virttool_del_slice'
     try:
-        print virttool, slice_name
         if virttool and slice_name:
             slice_name = "slice" + str(slice_name)
             if virttool.type == 1:
@@ -108,7 +107,7 @@ def virttool_del_slice(virttool, slice_name):
                 client = FlowvisorClient(virttool.ip, virttool.http_port, virttool.password)
             client.delete_slice(slice_name)
         else:
-            raise DbError("数据库异常！")
+            pass
     except:
         raise
 

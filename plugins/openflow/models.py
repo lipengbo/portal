@@ -23,8 +23,7 @@ from slice.models import Slice
 
 FLOWVISOR = 0
 CNVP = 1
-VIRTTOOL_TYPES = ((FLOWVISOR, 'flowvisor'),
-               (CNVP, 'cnvp'),)
+VIRTTOOL_TYPES = ((CNVP, 'cnvp'),)
 
 
 class Controller(ServiceResource):
@@ -66,7 +65,7 @@ class Virttool(ServiceResource):
 
     http_port = models.IntegerField(verbose_name=_("Http Port"))
     type = models.IntegerField(choices=VIRTTOOL_TYPES,
-                               default=FLOWVISOR, verbose_name=u"类型")
+                               default=CNVP, verbose_name=u"类型")
 
     def on_add_into_slice(self, slice_obj):
         self.slices.add(slice_obj)
