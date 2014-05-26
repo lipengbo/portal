@@ -64,10 +64,7 @@ def create(request, proj_id, flag):
     context['islands'] = islands
     context['ovs_ports'] = ovs_ports
     context['error_info'] = error_info
-    if int(flag) == 0:
-        context['slice_type'] = "mixslice"
-    else:
-        context['slice_type'] = "baseslice"
+    context['slice_type'] = "mixslice"
     return render(request, 'slice/create_slice.html', context)
 
 
