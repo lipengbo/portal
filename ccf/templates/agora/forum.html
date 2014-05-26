@@ -54,7 +54,7 @@
               {% if user.is_superuser %}
               <td>{{ thread.author }}</td>
               {% endif %}
-              <td>{{ thread.created|date:"Y-m-d H:s:i" }}</td>
+              <td>{{ thread.created|timesince }}前</td>
               <td>{% if thread.closed %}已关闭{% else %}
                   {% if thread.last_post != thread %}
                   已回复

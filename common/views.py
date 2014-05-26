@@ -30,7 +30,7 @@ def close_thread(request, thread_id):
 def list_ticket(request):
     user = request.user
     forum = get_object_or_404(Forum, id=1)
-    threads = forum.threads.order_by("-sticky", "-last_modified")
+    threads = forum.threads.order_by("-sticky", "-id")
 
     query = None
     if not user.is_superuser:
