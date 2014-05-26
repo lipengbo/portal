@@ -77,7 +77,7 @@ function check_vm_status(slice_id){
                 for(var j=0;j<check_nodes.length;j++){
                     if(check_nodes[j].status == 1){
                         img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
-                        if(img_obj.title == "停止中"){
+                        if(img_obj && img_obj.title == "停止中"){
                             $("div#slice_alert_info").empty();
                             var str = "" + "<p class=\"text-center\">虚拟机停止失败！</p>";
                             $("div#slice_alert_info").append(str);
@@ -86,7 +86,7 @@ function check_vm_status(slice_id){
                     }
                     if(check_nodes[j].status == 5){
                         img_obj = $("#"+check_nodes[j].cur_vm_id+"_qt").children("img")[0];
-                        if(img_obj.title == "启动中"){
+                        if(img_obj && img_obj.title == "启动中"){
                             $("div#slice_alert_info").empty();
                             var str = "" + "<p class=\"text-center\">虚拟机启动失败！</p>";
                             $("div#slice_alert_info").append(str);
@@ -329,6 +329,7 @@ function check_vpn_status(slice_id){
                         .addClass("icon-minus-sign")
                         .addClass("icon_state");
                 img_obj = $("#vpn_qt").children("img")[0];
+                $("#vpn_qt").attr("style", "cursor:pointer");
                 if(img_obj){
                     img_obj.src = STATIC_URL + "img/ic-ks.png";
                             if(img_obj.title == "启动中"){
@@ -346,6 +347,7 @@ function check_vpn_status(slice_id){
                         .addClass("icon-ok-sign")
                         .addClass("icon_state");
                 img_obj = $("#vpn_qt").children("img")[0];
+                $("#vpn_qt").attr("style", "cursor:pointer");
                 if(img_obj){
                     img_obj.src = STATIC_URL + "img/ic-tz.png";
                             if(img_obj.title == "停止中"){

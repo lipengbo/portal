@@ -10,7 +10,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
 from common.models import FailedCounter, DeletedCounter, Counter
 import datetime
-from django.db.models import F
+from django.db.models import F, Q
 
 from agora.models import ForumThread, Forum
 
@@ -30,10 +30,16 @@ def close_thread(request, thread_id):
 def list_ticket(request):
     user = request.user
     forum = get_object_or_404(Forum, id=1)
-    threads = forum.threads.order_by("-sticky", "-last_modified")
+    threads = forum.threads.order_by("-sticky", "-id")
 
+    query = None
     if not user.is_superuser:
         threads = threads.filter(author=user)
+
+    if 'query' in request.GET:
+        query = request.GET['query']
+        if query:
+            threads = threads.filter(Q(title__icontains=query)|Q(content__icontains=query))
 
     can_create_thread = all([
         request.user.has_perm("agora.add_forumthread", obj=forum),
@@ -43,6 +49,7 @@ def list_ticket(request):
     return render(request, "agora/forum.html", {
         "forum": forum,
         "threads": threads,
+        "query": query,
         "can_create_thread": can_create_thread,
     })
 

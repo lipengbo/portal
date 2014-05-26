@@ -87,7 +87,7 @@ class Server(IslandResource):
     state = models.IntegerField(null=True, verbose_name=_("state"), choices=((0, _("Not available")), (1, _("Available"))))
     cpu = models.CharField(max_length=256, null=True, default=0, verbose_name="CPU")
     mem = models.IntegerField(null=True, default=0, verbose_name=_("memory"))
-    bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
+    #bandwidth = models.IntegerField(null=True, default=0, verbose_name=_("bandwidth"))
     disk = models.IntegerField(null=True, default=0, verbose_name=_("disk"))
     ip = models.IPAddressField(null=False, unique=True, verbose_name="IP")
     #mac = models.CharField(max_length=256, null=True)

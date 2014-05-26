@@ -441,6 +441,13 @@ function select_to_add_device(slice_id){
 	//
 }
 
+function show_msg(msg){
+    $("div#slice_alert_info").empty();
+    str = "" + "<p class=\"text-center\">"+msg+"</p>";
+    $("div#slice_alert_info").append(str);
+    $('#slicealertModal').modal('show');
+}
+
 function can_create_vm(slice_id){
     var a_obj = $("#vm_add")[0];
     if(a_obj.style.cursor == "not-allowed"){
@@ -456,11 +463,10 @@ function can_create_vm(slice_id){
             success: function(data){
                 if(data.result == 0){
                     location.href = "http://" + window.location.host + "/plugins/vt/create/vm/"+slice_id+"/";
+                }else if(data.result == -1){
+                    show_msg(data.error);
                 }else{
-                    $("div#slice_alert_info").empty();
-                    str = "" + "<p class=\"text-center\">虚拟机个数已达上限！</p>";
-                    $("div#slice_alert_info").append(str);
-                    $('#slicealertModal').modal('show');
+                    show_msg("虚拟机个数已达上限！")
                 }
     
             }

@@ -161,10 +161,12 @@ class VirtualMachine(IslandResource):
         return self.slice.id
 
     def log_info(self):
-        if self.type == 1:
-            return self.name
+        if self.type == 2:
+            return u'网关名称：'+ self.name +'\n' + u'网关地址：' + self.ip.ipaddr
+        elif self.type == 0:
+            return u'控制器类型：' + self.name +'\n'+u'控制器地址：'+ self.ip.ipaddr
         else:
-            return ''
+            return self.name
 
     def create_vm(self):
         if function_test:

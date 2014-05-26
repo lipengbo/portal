@@ -358,13 +358,16 @@ def delete(request, slice_id):
         if not user.has_perm('slice.delete_slice', slice_obj):
             return redirect('forbidden')
     try:
-        slice_obj.delete(user=request.user)
+        ret = slice_obj.delete(user=request.user)
     except:
+        ret = False
+        log(user, slice_obj, u"删除虚网", result_code=FAIL)
         messages.add_message(request, messages.ERROR, "虚网删除失败！")
-    if slice_obj:
-        log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
-    else:
-        log(user, None, u"删除虚网", result_code=FAIL)
+#     if ret:
+#         log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
+#     else:
+#         log(user, slice_obj, u"删除虚网", result_code=FAIL)
+    log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
     if 'next' in request.GET:
         if 'type' in request.GET:
             return redirect(request.GET.get('next') + "?type=" + request.GET.get('type'))

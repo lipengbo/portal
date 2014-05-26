@@ -148,7 +148,7 @@ class Application(Connection):
     @property
     def action_url(self):
         if self.state == 0:
-            return reverse('project_applicant_single', args=(self.target.id, self.from_user.id))
+            return reverse('project_detail', args=(self.target.id, )) + "?application={}".format(self.id)
         else:
             return ""
 
@@ -190,6 +190,9 @@ def send_notification_email(sender, instance, created, **kwargs):
     if instance.verb == u'调整配额':
         subject = u'SDN创新实验平台用户配额调整通知'
         content = u"亲爱的用户，您好：\n您在SDN创新实验平台中的配额已经调整，您可以单击以下链接查看详情。\n" + notice_link
+    if instance.verb == u'虚网过期删除':
+        subject = u'SDN创新实验平台虚网过期删除通知'
+        content = u"亲爱的用户，您好：\n您创建的虚网“" + instance.action_object.show_name + u"”超过有效期已经被删除，您可以单击以下链接查看详情。\n" + notice_link
     if content:
         send_mail(subject, content,
                   settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)
