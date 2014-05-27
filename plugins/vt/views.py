@@ -196,7 +196,7 @@ def set_domain_state(vname, state):
         vm_query = VirtualMachine.objects.filter(uuid=vname)
         switch_port = None
         vm = vm_query[0]
-        if vm.type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
+        if vm.type != 0 and state == DOMAIN_STATE_DIC['nostate']:
             host = vm.server
             slice = vm.slice
             name = vm.name
@@ -212,7 +212,10 @@ def set_domain_state(vname, state):
     except:
         LOG.debug(traceback.print_exc())
     finally:
-        vm_query.update(state=state, switch_port=switch_port)
+        if switch_port:
+            vm_query.update(state=state, switch_port=switch_port)
+        else:
+            vm_query.update(state=state)
         #if not api.try_start_gw_and_ctr(vm):
             #LOG.error('try to start gw and controller failed')
         return result
