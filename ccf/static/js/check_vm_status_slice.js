@@ -1,14 +1,30 @@
 //入口,定期获取slice中虚拟机状态
 var check_vm_time_id;
 var check_slice_time_id;
+var check_start_vm_time_id;
 var check_vpn_time_id;
 
 $(document).ready(function() {
 	//alert("here");
 	update_vm_status();
 	update_slice_status();
-    update_vpn_status();
+	update_start_vm_status();
+    //update_vpn_status();
 });
+
+//监控已启动的虚拟机状态
+function update_start_vm_status(){
+    if(check_start_vm_time_id){
+        clearTimeout(check_start_vm_time_id);
+    }
+    var check_start_vm_id_objs = $(".check_start_vm");
+    if(check_start_vm_id_objs.length > 0){
+        slice_id = $("#slice_id").text();
+        check_start_vm_time_id = setTimeout("check_start_vm_status("+slice_id+")",12000);
+    }else{
+        check_start_vm_time_id = setTimeout("update_start_vm_status()",12000);
+    }
+}
 
 //监控虚拟机状态
 function update_vm_status(){
@@ -24,6 +40,71 @@ function update_vm_status(){
         //check_vm_time_id = setTimeout("update_vm_status()",5000);
     }
 }
+
+
+//ajax监控启动的虚拟机状态
+function check_start_vm_status(slice_id){
+    check_url = "http://" + window.location.host + "/plugins/vt/get_vms_state/"+slice_id+"/";
+    var check_start_vm_id_objs = $(".check_start_vm");
+    var check = false;
+    var status;
+    var cur_obj
+    var cur_vm_id;
+    var check_nodes = [];
+    var cur_obj;
+    var a_obj;
+    var img_obj;
+    var STATIC_URL = $("#STATIC_URL").text();
+    //alert(check_url)
+    $.ajax({
+        type: "GET",
+        url: check_url,
+        dataType: "json",
+        cache: false,
+        async: true,  
+        success: function(data) {
+            vms = data.vms;
+            if(vms){
+                for(var i=0;i<check_start_vm_id_objs.length;i++){
+                    status = 1;
+                    cur_obj = check_start_vm_id_objs[i].id;
+                    cur_vm_id = cur_obj.split("e")[1]
+                    for(var j=0;j<vms.length;j++){
+                        if(vms[j].id == cur_vm_id){
+                            status = vms[j].state;
+                            break;
+                        }
+                    }
+                    if(status!=1){
+                        var check_node = {};
+                        check_node.status = status;
+                        check_node.cur_vm_id = cur_vm_id;
+                        if(status==9 || status==10){
+                            check_node.switch_id = 0;
+                            check_node.port = 0;
+                            check_node.port_name = '';
+                        }else{
+                            check_node.switch_id = vms[j].switch_id;
+                            check_node.port = vms[j].port; 
+                            check_node.port_name = vms[j].port_name;
+                        }
+                        check_nodes.push(check_node);
+                    }
+                }
+                for(var j=0;j<check_nodes.length;j++){
+                    change_vm_status(check_nodes[j].cur_vm_id, check_nodes[j].status)
+                }
+                    //alert(i);
+            }
+            update_start_vm_status();   
+        },
+        error: function(data) {
+            update_start_vm_status();
+        }
+    });
+    
+}
+
 
 //ajax监控虚拟机状态
 function check_vm_status(slice_id){
@@ -122,7 +203,8 @@ function change_vm_status(vm_id, status){
                 .removeClass("icon-spin")
                 .removeClass("check_vm")
                 .addClass("icon-ok-sign")
-                .addClass("icon_state");
+                .addClass("icon_state")
+                .addClass("check_start_vm");
             //启停虚拟机按钮
             a_obj = $("#"+vm_id+"_qt")[0];
             img_obj = $("#"+vm_id+"_qt").children("img")[0];
@@ -161,6 +243,29 @@ function change_vm_status(vm_id, status){
             if(img_obj){
                 img_obj.src = STATIC_URL + "img/ic-ks.png";       
                 img_obj.title = "启动"; }
+            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+        }
+    }else if(vm_obj && vm_obj.hasClass("icon-ok-sign")){
+        if(status == 5 || status == 0){
+            vm_obj.removeClass("icon-ok-sign")
+                .removeClass("icon_state")
+                .removeClass("check_start_vm")
+                .addClass("icon-minus-sign")
+                .addClass("icon_state");
+            a_obj = $("#"+vm_id+"_qt")[0];
+            img_obj = $("#"+vm_id+"_qt").children("img")[0];
+            if(a_obj){
+                a_obj.style.cursor = "pointer";}
+            if(img_obj){
+                img_obj.src = STATIC_URL + "img/ic-ks.png";       
+                img_obj.title = "启动"; }
+            //登录不可用
+            a_obj = $("#"+vm_id+"_dl")[0];
+            img_obj = $("#"+vm_id+"_dl").children("img")[0];
+            if(a_obj){
+            a_obj.style.cursor = "not-allowed";}
+            if(img_obj){
+            img_obj.src = STATIC_URL + "img/btn_dl_gray.png"; }
             document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
         }
     }

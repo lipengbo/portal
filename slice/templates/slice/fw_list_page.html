@@ -118,7 +118,7 @@
                     {% elif controller.host.state == 11 %}
                         <i class="icon-warning-sign" id="icon_state{{controller.host.id}}" title="资源不足"></i>
                     {% elif controller.host.state == 1 %}
-                        <i class="icon-ok-sign icon_state" id="icon_state{{controller.host.id}}"></i>
+                        <i class="icon-ok-sign icon_state check_start_vm" id="icon_state{{controller.host.id}}"></i>
                     {%else%}
                         <i class="icon-minus-sign icon_state" id="icon_state{{controller.host.id}}"></i>
                     {%endif%}
@@ -210,7 +210,7 @@
                     {% elif gw.state == 11 %}
                         <i class="icon-warning-sign" id="icon_state{{gw.id}}" title="资源不足"></i>
                     {% elif gw.state == 1 %}
-                        <i class="icon-ok-sign icon_state" id="icon_state{{gw.id}}"></i>
+                        <i class="icon-ok-sign icon_state check_start_vm" id="icon_state{{gw.id}}"></i>
                     {%else%}
                         <i class="icon-minus-sign icon_state" id="icon_state{{gw.id}}"></i>
                     {%endif%}
