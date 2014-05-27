@@ -51,7 +51,13 @@ def index(request):
     user = request.user
     context = {}
     if user.is_superuser:
-        projects = Project.admin_objects.all()
+        is_deleted = request.GET.get('is_deleted')
+        if is_deleted and int(is_deleted) == 1:
+            projects = Project.admin_objects.filter(is_deleted=True)
+            context['is_deleted'] = True
+        else:
+            projects = Project.objects.all()
+
         context['extent_html'] = "admin_base.html"
     else:
         project_ids = Membership.objects.filter(user=user).values_list(
@@ -326,7 +332,10 @@ def delete_member(request, id):
 @login_required
 @transaction.commit_on_success
 def delete_project(request, id):
-    project = get_object_or_404(Project, id=id)
+    if request.user.is_superuser:
+        project = Project.admin_objects.get(id=id)
+    else:
+        project = get_object_or_404(Project, id=id)
     if request.user.has_perm('project.delete_project', project):
         try:
             slice_objs = project.slice_set.all()
@@ -349,7 +358,10 @@ def delete_project(request, id):
 #                     pass
 #                 else:
 #                     slice_deleted.save()
-            project.delete()
+            if request.user.is_superuser:
+                project.force_delete()
+            else:
+                project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
             transaction.rollback()
