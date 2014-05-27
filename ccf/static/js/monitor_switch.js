@@ -20,7 +20,7 @@ function draw_highchart(){
             chart: {
                 //type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 10,
+                //marginRight: 10,
                 events: {
                     load: function() {
                         // set up the updating of the chart each second
@@ -37,7 +37,7 @@ function draw_highchart(){
                 }
             },
             title: {
-                text: '网络流量监控(bit/s)'
+                text: ''
             },
             xAxis: {
                 type: 'datetime',

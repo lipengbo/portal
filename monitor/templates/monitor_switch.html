@@ -7,13 +7,25 @@
 
 {% endblock %}
 {% block body %}
-	<h4>交换机 {{ switch_name }}</h4>
-    <select class="form-control" id="switch_port" switch_name="{{switch_name}}">
-        <option value="-1">------</option> 
-        <option value="0">eth0</option>              
-        <option value="1">eth1</option>
-    </select>
 
+	<div class="port_control clearfix">
+	    <h4 class="pull-left">交换机 {{ switch_name }}网络流量监控</h4>
+	    <form class="form-inline">
+	        <div class="form-group pull-right">
+                端口
+                <select class="form-control" id="switch_port" switch_name="{{switch_name}}">
+                    <option value="-1">------</option> 
+                    <option value="0">eth0</option>              
+                    <option value="1">eth1</option>
+                </select>
+            </div>	        
+	    </form>
+	</div>
+	<div class="port_fill">
+	    <span class="label label-success">协 商</span>
+	    <span class="label label-danger">非 协 商</span>
+	    <span class="call_out">带宽：xxxMB</span>
+    </div>
  <div id="container" style="height: 400px"></div>
 {% endblock %}
 {% block extra_script %}
