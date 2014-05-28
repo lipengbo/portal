@@ -34,6 +34,7 @@ import datetime
 @login_required
 def create(request, proj_id, flag):
     """创建slice。"""
+    print request
     project = get_object_or_404(Project, id=proj_id)
     if not request.user.has_perm('project.create_slice', project):
         return redirect('forbidden')

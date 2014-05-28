@@ -326,6 +326,7 @@ class Slice(models.Model):
                 else:
                     slice_deleted.type = 0
             del kwargs['user']
+            tt
             super(self.__class__, self).delete(*args, **kwargs)
         except Exception, ex:
             print "5:delete slice failed and change slice record"
@@ -345,6 +346,7 @@ class Slice(models.Model):
                 self.save()
             except:
                 print "6:change slice record failed! raise exception"
+                print traceback.print_exc()
                 transaction.rollback()
                 raise DbError("虚网删除失败！")
             else:
