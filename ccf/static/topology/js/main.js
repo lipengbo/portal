@@ -278,11 +278,6 @@ var AppRouter = Backbone.Router.extend({
         });
     },
 
-    home:function () {
-        $('#content').html(new HomeView().render().el);
-        $('ul[class="nav"] > li').removeClass('active');
-        $('a[href="/"]').parent().addClass('active');
-    },
 
     topology:function (island) {
         //hackBase = "/" + controller_host;
@@ -713,7 +708,6 @@ function load_topology(callback) {
         setTimeout(function  () {
             refresh_time = Math.floor(Math.random() * 10000 + 2000 );
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
-                var color = 'black';
                 
                 if (d.capacity) {
                     var rand_num = Math.random();
