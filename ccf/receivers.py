@@ -62,12 +62,12 @@ def increase_counter(sender, instance, created, **kwargs):
 def decrease_counter(sender, instance, **kwargs):
     if sender == Slice:
         tg = "slice"
-        if instance.type == 1:
-            decrease_failed_counter(tg, instance)
-            return
+#         if instance.type == 1:
+#             decrease_failed_counter(tg, instance)
+#             return
     elif sender == Project:
         tg = "project"
-    decrease_counter_api(tg, instance)
+#     decrease_counter_api(tg, instance)
 
 
 @receiver(post_save, sender=SliceDeleted)

@@ -337,10 +337,10 @@ class Slice(models.Model):
                 if self.type == 0:
                     self.type = 1
                     increase_failed_counter("slice")
-                    decrease_counter_api("slice", self)
-                else:
-                    decrease_failed_counter("slice", self)
-                    increase_failed_counter("slice")
+#                     decrease_counter_api("slice", self)
+#                 else:
+#                     decrease_failed_counter("slice", self)
+#                     increase_failed_counter("slice")
                 self.date_expired = datetime.datetime.now()
                 self.save()
             except:
