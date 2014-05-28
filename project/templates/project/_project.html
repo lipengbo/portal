@@ -11,6 +11,6 @@
                             </div>
                         </a>
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <a href="{% url project_delete project.id %}?next={{ request.path }}" class="close btn-delete">×</a>
+                        <a href="{% url project_delete project.id %}?next={{ request.get_full_path }}" class="close btn-delete">×</a>
                     </div>
                 </div>

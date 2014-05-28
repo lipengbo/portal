@@ -9,7 +9,7 @@
     var $slider = $("#mem_slider");
     var mem_range = {{quotas.mem}};
     var disk_range = {{quotas.disk}};
-    var range_dict = {'disk': disk_range, 'mem': mem_range}
+    var range_dict = {'disk': disk_range, 'mem': mem_range};
     if ($slider.length) {
       $slider.slider({
         min: 1,

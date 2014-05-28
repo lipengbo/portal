@@ -78,7 +78,7 @@ class ProjectManager(models.Manager):
         return super(ProjectManager, self).get_query_set(*args, **kwargs).filter(is_deleted=False)
 
 class Project(models.Model):
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, verbose_name=u"用户")
     name = models.CharField(max_length=255, verbose_name=_("Project Name"), help_text="学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目")
     description = models.CharField(max_length=1024, verbose_name=_("Project Description"), help_text="如项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />项目支持：国家自然科学基金或863、973项目支持；")
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
@@ -133,7 +133,10 @@ class Project(models.Model):
     def delete(self, *args, **kwargs):
         self.is_deleted = True
         self.save()
-        post_delete(sender=Project, instance=self)
+        post_delete.send(sender=Project, instance=self)
+
+    def force_delete(self):
+        super(Project, self).delete()
 
     @property
     def get_content_type(self):

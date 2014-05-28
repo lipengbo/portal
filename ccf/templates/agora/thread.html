@@ -42,7 +42,7 @@
                         {% if user.is_authenticated %}
                             {% if thread|post_editable:request.user %}
                                 <str> · </str>
-                                <a class="btn btn-default btn-primary btn-xs" href="{% url "agora_post_edit" thread.kind thread.id %}">编辑</a>
+                                {% if not thread.closed %}<a class="btn btn-default btn-primary btn-xs" href="{% url "agora_post_edit" thread.kind thread.id %}">编辑</a>{% endif %}
                             {% endif %}
                             {% endif %}
                     </div>
