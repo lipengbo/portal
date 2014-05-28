@@ -7,7 +7,7 @@ VM_TYPE = ((0, u'控制器'),(1, u'虚拟机'),(2, u'网关'))
 
 @task()
 def do_vm_action(user, vm, action):
-    print "cerlry .............", action
+    print "action .. vm uuid...........", action, vm.uuid
     try:
         action_result = vm.do_action(action)
         reset_state(user, vm, action, action_result, False)
