@@ -154,7 +154,7 @@ for (var i = 0; i < gre_ovses.length; i++) {
 };
 
 function assign_node_icon(d) {
-    var show_logical = $('#show-logical').attr('checked');
+    var show_logical = $('#show-logical').prop('checked');
     if (d.id.indexOf('00:ff:') == 0 && !show_logical) {
         d.group = 2;
     }
@@ -278,11 +278,6 @@ var AppRouter = Backbone.Router.extend({
         });
     },
 
-    home:function () {
-        $('#content').html(new HomeView().render().el);
-        $('ul[class="nav"] > li').removeClass('active');
-        $('a[href="/"]').parent().addClass('active');
-    },
 
     topology:function (island) {
         //hackBase = "/" + controller_host;
@@ -713,7 +708,6 @@ function load_topology(callback) {
         setTimeout(function  () {
             refresh_time = Math.floor(Math.random() * 10000 + 2000 );
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
-                var color = 'black';
                 
                 if (d.capacity) {
                     var rand_num = Math.random();

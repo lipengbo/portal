@@ -28,6 +28,7 @@ window.Status = Backbone.Model.extend({
     
     initialize:function () {
         var self = this;
+        var hackBase = "";
         console.log("fetching controller status");
         $.ajax({
             url:hackBase + "/wm/core/health/json",

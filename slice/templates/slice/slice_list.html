@@ -41,7 +41,6 @@
         </div>
     </form>
 {% endblock %}
-
 {% block body %}
 {%if extent_html == "site_base.html" %}
     <div class="well intro_well">
@@ -64,7 +63,7 @@
                     <span class="s_num">{{new_num}}</span>
                 </div>
                 <div class="squares">
-                    <span class="s_name">{%if type == 0 %}虚网总数
+                    <span class="s_name">{%if type == 0 %}正常运行虚网总数
                                     {%else%}{% if type == 1 %}删除失败虚网总数
                                     {%else%}已删除虚网总数{%endif%}{%endif%}</span>
                     <span class="s_num">{{total_num}}</span>

@@ -253,13 +253,13 @@ def delete_slice_api_n(slice_obj, user):
             slice_obj.failure_reason = ex.message
             if slice_obj.type == 0:
                 slice_obj.type = 1
+                slice_obj.date_expired = datetime.datetime.now()
+                slice_obj.save()
                 increase_failed_counter("slice")
-                decrease_counter_api("slice", slice_obj)
-            else:
-                decrease_failed_counter("slice", slice_obj)
-                increase_failed_counter("slice")
-            slice_obj.date_expired = datetime.datetime.now()
-            slice_obj.save()
+#                 decrease_counter_api("slice", slice_obj)
+#             else:
+#                 decrease_failed_counter("slice", slice_obj)
+#                 increase_failed_counter("slice")
         except:
             print "6:change slice record failed! raise exception"
             transaction.rollback()

@@ -15,6 +15,15 @@
 
 {% block extra_breadcrumb %}
             <form class="navbar-form navbar-right search_defined">
+                {% if user.is_superuser %}
+                <div class="form-group">
+                    筛选
+                    <select class="form-control" name="is_deleted" id="project_type" onchange="project_type_change()">
+                        <option value="0" {%if not is_deleted  %}selected{%endif%}>正常运行</option>
+                        <option value="1" {%if is_deleted %}selected{%endif%}>已删除</option>          
+                    </select>
+                </div>
+                {% endif %}
                 <div class="form-group">
                   <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
                  <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
@@ -32,7 +41,7 @@
             </div>
             <div class="squares">
                 <span class="s_name">全部项目</span>
-                <span class="s_num">{{ total_projects}}</span>
+                <span class="s_num">{{ total_projects }}</span>
             </div>
             <a href="javascript:void(0);" class="chart_btn chart_year" onclick="refreshcountiframe('project', 'year');">
                 年<span class="color_blue"></span>
@@ -90,6 +99,9 @@
             }
         }
         document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype=0"; 
+    }
+    function project_type_change(){
+        $('form').submit();
     }
 </script>
 {% endblock %}
