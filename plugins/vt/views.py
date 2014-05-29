@@ -165,12 +165,12 @@ def create_device(request, sliceid):
                 switch_port = SwitchPort.objects.get(id=port[0])
                 slice_add_port_device(slice_obj, port[0], port[1], port[2])
                 print "-------", port[2]
-                log(request.user, switch_port, u"添加端口", SUCCESS)
+                log(request.user, switch_port, u"创建自接入设备(所属虚网："+slice_obj.name+")", SUCCESS)
 
             return HttpResponse(json.dumps({'result':0}))
         except Exception, e:
             traceback.print_exc()
-            log(request.user, switch_port, u"添加端口", FAIL)
+            log(request.user, switch_port, u"创建自接入设备(所属虚网："+slice_obj.name+")", FAIL)
             return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
