@@ -11,7 +11,7 @@ function update_list(url){
             //alert(f_urls[4]);
             if(f_urls[3]=="slice" && f_urls[4]=="detail"){
                 is_slice_detail = true;
-                objs = $(".col-md-4");
+                objs = $(".slice_index");
                 for(var i=0;i<objs.length;i++){
                     if($(objs[i]).hasClass("on")){
                         if($(objs[i]).hasClass("xnj")){
