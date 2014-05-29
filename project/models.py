@@ -204,7 +204,7 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.delete_project', owner, instance)
         assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
-        log(owner, instance, "成功创建项目")
+        log(owner, instance, "创建项目")
 
 
 @receiver(pre_delete, sender=Membership)
@@ -232,7 +232,7 @@ def delete_invitation_application(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Project)
 def log_project_delete(sender, instance, **kwargs):
-    log(instance.owner, instance, "删除了项目")
+    log(instance.owner, instance, "删除项目")
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
