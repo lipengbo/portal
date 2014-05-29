@@ -12,6 +12,52 @@ from plugins.common import utils
 class SFlow_Proxy(object):
 
     @staticmethod
+    def list_ports(switch_ip):
+        #get port status
+        url = sFlow_service + 'dump/' + switch_ip + '/ifoperstatus/json'
+        cmd = ["curl", url]
+        out = utils.execute(cmd)
+        out = json.loads(out)
+        ports_status = {}
+        for port_status in out:
+            ofport = int(port_status['dataSource']) - 4
+            ports_status[ofport] = port_status['metricValue']
+        #get port speed
+        url = sFlow_service + 'dump/' + switch_ip + '/ifspeed/json'
+        cmd = ["curl", url]
+        out = utils.execute(cmd)
+        out = json.loads(out)
+        ports_status_speed = {}
+        for port_speed in out:
+            ofport = int(port_speed['dataSource']) - 4
+            ports_status_speed[ofport] = (ports_status[ofport], port_speed['metricValue'])
+        return ports_status_speed
+
+    @staticmethod
+    def get_switch_port_bps(switch_ip, ofport):
+        #get port bandwidth
+        ifindex = ofport + 4
+        url = sFlow_service + 'metric/' + switch_ip + '/' + str(ifindex) + '.ifspeed/json'
+        cmd = ["curl", url]
+        out = utils.execute(cmd)
+        out = json.loads(out)
+        port_bandwidth = 0
+        port_bandwidth = out[0]['metricValue']
+        #get port in_bps
+        url = sFlow_service + 'metric/' + switch_ip + '/' + str(ifindex) + '.ifinutilization/json'
+        cmd = ["curl", url]
+        out = utils.execute(cmd)
+        out = json.loads(out)
+        port_in_bps = out[0]['metricValue'] * port_bandwidth / 100
+        #get port out_bps
+        url = sFlow_service + 'metric/' + switch_ip + '/' + str(ifindex) + '.ifoututilization/json'
+        cmd = ["curl", url]
+        out = utils.execute(cmd)
+        out = json.loads(out)
+        port_out_bps = out[0]['metricValue'] * port_bandwidth / 100
+        return port_in_bps, port_out_bps
+
+    @staticmethod
     def has_flow_event(name):
         url = sFlow_service + 'flow/json'
         cmd = "curl " + url
