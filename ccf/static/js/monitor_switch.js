@@ -58,6 +58,10 @@ function show_chart(switch_name){
     test_data.push({name:'接收', color: '#99CCFF', data: gen_data()});
     test_data.push({name:'发送', color: '#99CC66', data: gen_data()});
     draw_highchart();
+    
+     
+    $(".port_mean").html('<span class="port_green"><i class="glyphicon glyphicon-stop"></i>发送流量</span><span class="port_blue"><i class="glyphicon glyphicon-stop"></i>接收流量</span>');
+    $(".port_fill").html('<span class="call_out">单位：Kbps</span>');
    //alert(test_data);
 }
 
@@ -66,7 +70,7 @@ function draw_highchart(){
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 10,
+                marginRight: 1,
                 events: {
                     load: function() {
                         // set up the updating of the chart each second
@@ -84,8 +88,8 @@ function draw_highchart(){
                                 async: false,
                                 success:function(data){
                                     if(data.result == 0){
-                                        in_bps = data.in_bps;
-                                        out_bps = data.out_bps;
+                                        in_bps = data.in_bps/1024;
+                                        out_bps = data.out_bps/1024;
                                     }else{
                                         if(clock){
                                             clock = clearInterval(clock); 
