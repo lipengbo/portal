@@ -9,8 +9,10 @@ $(function(){
 
 });
 $(document).ready(function(){
+    var switch_name = $(this).attr('switch_name');
     $("#switch_port").change(function(){
-        show_chart($(this).attr('switch_name'));    
+        $(".none_tip").html('');
+        show_chart(switch_name);    
     });
     
 });
