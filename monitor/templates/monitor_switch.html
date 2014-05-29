@@ -7,16 +7,16 @@
 
 {% endblock %}
 {% block body %}
-
+<div class="alert_monitor alert alert-danger alert-dismissable" style="display:none">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <span id="monitor_info"></span>
+</div>
 	<div class="port_control clearfix">
 	    <h4 class="pull-left">交换机 {{ switch_name }}网络流量监控</h4>
 	    <form class="form-inline">
 	        <div class="form-group pull-right">
                 端口
-                <select class="form-control" id="switch_port" switch_name="{{switch_name}}">
-                    <option value="-1">------</option> 
-                    <option value="0">eth0</option>              
-                    <option value="1">eth1</option>
+                <select class="form-control" id="switch_port" switch_name="{{switch_name}}" switch_id="{{switch_id}}">
                 </select>
             </div>	        
 	    </form>

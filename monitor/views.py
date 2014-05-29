@@ -10,7 +10,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from resources.models import Server, Switch
 from plugins.vt.models import VirtualMachine
 from plugins.common.exception import ConnectionRefused
-
+import random
+#from plugins.common import slow_proxy
 
 
 
@@ -204,3 +205,20 @@ def update_index_performace_data(request):
     return HttpResponse(json.dumps({'cpu_use' : host_perf_data['cpu'],
                                     'mem_use' : host_perf_data['mem'][2]}))
 
+
+
+def sflow_list_ports(request, switch_id):
+    #print slow_proxy().list_ports('192.168.5.168')
+    switch = get_object_or_404(Switch, id=switch_id)
+    print "**********switch_id:", switch.ip
+    ports = {"1": ("up", 1000), "2": ("up", 2000), "3":("down", 0)}
+    return HttpResponse(json.dumps(ports))
+
+def sflow_get_bps(request, switch_id, port):
+    try:
+        print "*****************port is ", port
+        switch = get_object_or_404(Switch, id=switch_id)
+        return HttpResponse(json.dumps({'result':0, 'in_bps': int(random.random()*1000), \
+                                    'out_bps': int(random.random()*1000)}))
+    except:
+        return HttpResponse(json.dumps({'result': 1}))

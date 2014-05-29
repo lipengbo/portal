@@ -1,5 +1,6 @@
 var test_data;
 var clock = null;
+var switch_id;
 $(function(){
 	Highcharts.setOptions({
 		            global: {
@@ -9,10 +10,38 @@ $(function(){
 
 });
 $(document).ready(function(){
-    var switch_name = $(this).attr('switch_name');
+    var switch_name = $("#switch_port").attr('switch_name');
+    switch_id = $("#switch_port").attr('switch_id');
+    //alert(switch_id);
     $("#switch_port").change(function(){
-        $(".none_tip").html('');
-        show_chart(switch_name);    
+        if($(this).val() == -1){
+            if(clock){
+                clock = clearInterval(clock); 
+            }
+            $(".none_tip").html('当前无监控数据，请选择端口。');
+            $('#container').highcharts().destroy();
+        }else{
+            $(".none_tip").html('');
+            show_chart(switch_name); 
+        }       
+           
+    });
+    $.ajax({
+        url: '/monitor/sflow_list_ports/'+ switch_id +'/',
+        type: 'GET',
+        dataType: 'json',
+        async: false,
+        success:function(ports){
+            var context = '<option value="-1">------</option>';
+            $.each(ports, function(key, value){
+                if(value[0] == 'up'){
+                    var option = '<option value="'+ key +'">eth-0-'+key+'</option>';
+                    context += option;
+                }
+
+            });
+            $("#switch_port").html(context);
+        }
     });
     
 });
@@ -46,11 +75,28 @@ function draw_highchart(){
                         var series2 = this.series[1];
                         //series2.color = '#ff0000';
                         clock = setInterval(function() {
-                            var x = (new Date()).getTime(), // current time
-                                y = Math.random(),
-                                z = Math.random();
-                                series1.addPoint([x, y], true, true);
-                                series2.addPoint([x, z], true, true);
+                            var x = (new Date()).getTime(); // current time
+                            var in_bps = 0, out_bps = 0;
+                            $.ajax({
+                                url: '/monitor/sflow_get_bps/'+ switch_id +'/'+$("#switch_port").val()+'/',
+                                type: 'GET',
+                                dataType: 'json',
+                                async: false,
+                                success:function(data){
+                                    if(data.result == 0){
+                                        in_bps = data.in_bps;
+                                        out_bps = data.out_bps;
+                                    }else{
+                                        if(clock){
+                                            clock = clearInterval(clock); 
+                                        }
+                                        $("#monitor_info").html('交换机连接出错！');
+                                        $(".alert_monitor").show();    
+                                    }
+                                }
+                            });
+                                series1.addPoint([x, in_bps], true, true);
+                                series2.addPoint([x, out_bps], true, true);
                         }, 3000);
                     }
                 }
