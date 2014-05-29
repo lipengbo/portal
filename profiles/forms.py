@@ -24,6 +24,12 @@ class SignupForm(account.forms.SignupForm):
         self.helper.label_class = 'col-md-2'
         self.helper.field_class = 'col-md-7'
 
+    def clean_password_confirm(self):
+        if "password" in self.cleaned_data and "password_confirm" in self.cleaned_data:
+            if self.cleaned_data["password"] != self.cleaned_data["password_confirm"]:
+                raise forms.ValidationError(_("You must type the same password each time."))
+        return self.cleaned_data
+
 class RejectForm(forms.Form):
     reason = forms.CharField(widget=forms.Textarea, label=_("Reason"))
     user = forms.ModelChoiceField(queryset=User.objects.none, widget=forms.HiddenInput)
