@@ -1721,11 +1721,20 @@ span[name="serverInfo"] {
     }
 } 
 .port_control {
-    margin-bottom:10px;    
-    .form-control {
-        padding:6px 25px;
-        display: inline-block !important;
-        width:auto;
+    position:relative;
+    margin-bottom:10px;   
+    h4 {
+        text-align:center;
+    } 
+    .form-group {
+        position:absolute;
+        right:0;
+        top:2px;
+        .form-control {
+            padding:6px 25px;
+            display: inline-block !important;
+            width:auto;
+        }
     }
 }
 .port_fill {
@@ -1736,4 +1745,26 @@ span[name="serverInfo"] {
         vertical-align: middle;
     }
 }
-
+.port_mean {
+    margin-top:20px;
+    span {
+        padding:5px;       
+        border-radius: 5px;
+        i {
+            margin-right:5px;
+        }
+    }
+    .port_green {
+        border:1px solid #99cc66;
+        margin-right:40px;
+        i {            
+            color:#99cc66;
+        }
+    }
+    .port_blue {
+        border:1px solid #99ccff;
+        i {
+            color:#99ccff;
+        }
+    }
+}

@@ -12,9 +12,9 @@
   <span id="monitor_info"></span>
 </div>
 	<div class="port_control clearfix">
-	    <h4 class="pull-left">交换机 {{ switch_name }}网络流量监控</h4>
+	    <h4 class="">交换机 {{ switch_name }}网络流量监控</h4>
 	    <form class="form-inline">
-	        <div class="form-group pull-right">
+	        <div class="form-group">
                 端口
                 <select class="form-control" id="switch_port" switch_name="{{switch_name}}" switch_id="{{switch_id}}">
                 </select>
@@ -28,6 +28,10 @@
 	    <span class="call_out">带宽：xxxMB</span>
     </div-->
  <div id="container" style="height: 400px"></div>
+ <div class="text-center port_mean">
+     <span class="port_green"><i class="glyphicon glyphicon-stop"></i>绿色含义</span>
+     <span class="port_blue"><i class="glyphicon glyphicon-stop"></i>蓝色含义</span>
+ </div>
 {% endblock %}
 {% block extra_script %}
 	<script src="{{ STATIC_URL }}js/bootstrap-chart.js"></script>
