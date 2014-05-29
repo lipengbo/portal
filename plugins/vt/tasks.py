@@ -23,16 +23,18 @@ def reset_state(user, vm, action, result, is_except):
     if result:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['shutoff']
+            vm.save()
             log(user, vm, u"停止"+VM_TYPE[vm.type][1], SUCCESS)
         else:
             vm.state = DOMAIN_STATE_DIC['running']
+            vm.save()
             log(user, vm, u"启动"+ VM_TYPE[vm.type][1], SUCCESS)
     else:
         if action == "destroy":
             vm.state = DOMAIN_STATE_DIC['running']
+            vm.save()
             log(user, vm, u"停止" + VM_TYPE[vm.type][1], FAIL)
         else:
             vm.state = DOMAIN_STATE_DIC['shutoff']
+            vm.save()
             log(user, vm, u"启动" + VM_TYPE[vm.type][1], FAIL)
-    vm.save()
-

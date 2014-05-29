@@ -166,7 +166,7 @@ class VirtualMachine(IslandResource):
         elif self.type == 0:
             return u'控制器类型：' + self.name +'\n'+u'控制器地址：'+ self.ip.ipaddr
         else:
-            return self.name
+            return u"虚拟机名称："+ self.name
 
     def create_vm(self):
         if function_test:
