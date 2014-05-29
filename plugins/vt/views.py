@@ -190,7 +190,7 @@ def get_switch_port(request, sliceid):
     return HttpResponse(json.dumps(port_info))
 
 
-
+@login_required
 def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
     if action in operator:
