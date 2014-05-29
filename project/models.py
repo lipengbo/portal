@@ -52,7 +52,8 @@ class Island(models.Model):
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('name', ),
+            'exclude_fields': ('name', 'vpn_ip'),
+            'form_exclude_fields': ('vpn_ip'),
         }
         return options
 
