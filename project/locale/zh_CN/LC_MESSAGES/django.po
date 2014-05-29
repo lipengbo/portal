@@ -177,8 +177,8 @@ msgstr "删除"
 msgid "novnc_ip"
 msgstr "NOVNC 服务器IP"
 
-#msgid "vpn_ip"
-#msgstr "VPN 服务器IP"
+msgid "vpn_ip"
+msgstr "VPN 服务器IP"
 
 #~ msgid "approved your application to join"
 #~ msgstr "批准了你的申请加入"
