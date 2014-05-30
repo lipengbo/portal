@@ -32,7 +32,7 @@ def list_ticket(request):
     forum = get_object_or_404(Forum, id=1)
     threads = forum.threads.order_by("-sticky", "-id")
 
-    query = None
+    query = ''
     if not user.is_superuser:
         threads = threads.filter(author=user)
 

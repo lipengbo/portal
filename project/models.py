@@ -47,12 +47,13 @@ class Island(models.Model):
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
     novnc_ip = models.IPAddressField(null=True, verbose_name=_("novnc_ip"))
-    vpn_ip = models.IPAddressField(null=True, verbose_name=_("vpn_ip"))
+    vpn_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("vpn_ip"))
 
     @staticmethod
     def admin_options():
         options = {
-            'exclude_fields': ('name', ),
+            'exclude_fields': ('name', 'vpn_ip'),
+            'form_exclude_fields': ('vpn_ip',),
         }
         return options
 
@@ -78,7 +79,7 @@ class ProjectManager(models.Manager):
         return super(ProjectManager, self).get_query_set(*args, **kwargs).filter(is_deleted=False)
 
 class Project(models.Model):
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, verbose_name=u"用户")
     name = models.CharField(max_length=255, verbose_name=_("Project Name"), help_text="学校/单位名-实验室/部门名-项目名称，如北京邮电大学-未来网络实验室-SDN项目")
     description = models.CharField(max_length=1024, verbose_name=_("Project Description"), help_text="如项目内容：研究软件定义网络的关键技术如控制器北向接口；<br />项目目标：提出创新算法，研发具有自主知识产权的未来网络核心设备及创新应用；<br />项目支持：国家自然科学基金或863、973项目支持；")
     islands = models.ManyToManyField(Island, verbose_name=_("Island"))  # Usage: project.islands.add(island)
@@ -134,6 +135,9 @@ class Project(models.Model):
         self.is_deleted = True
         self.save()
         post_delete.send(sender=Project, instance=self)
+
+    def force_delete(self):
+        super(Project, self).delete()
 
     @property
     def get_content_type(self):
@@ -201,12 +205,15 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.delete_project', owner, instance)
         assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
-        log(owner, instance, "成功创建项目")
+        log(owner, instance, "创建项目")
 
 
 @receiver(pre_delete, sender=Membership)
 def delete_permission(sender, instance, **kwargs):
     user_perms = get_perms(instance.user, instance.project)
+    slices = instance.project.slice_set.filter(owner=instance.user)
+    for slice in slices:
+        slice.delete(user=instance.user)
     for perm in user_perms:
         if perm != 'project.add_project':
             remove_perm(perm, instance.user, instance.project)
@@ -229,7 +236,7 @@ def delete_invitation_application(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Project)
 def log_project_delete(sender, instance, **kwargs):
-    log(instance.owner, instance, "删除了项目")
+    log(instance.owner, instance, "删除项目")
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):

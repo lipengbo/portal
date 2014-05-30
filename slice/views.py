@@ -505,6 +505,7 @@ def topology_d3(request):
         else:
             context['switch_ids'] = ""
             context['switch_port_ids'] = request.GET.get('switch_port_ids')
+    print context
     user = request.user
     if user and user.is_superuser:
         context['admin'] = 1

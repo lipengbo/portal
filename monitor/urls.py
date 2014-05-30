@@ -12,4 +12,6 @@ urlpatterns = patterns('monitor.views',
     url(r'^update_index_data/$', "update_index_performace_data", name="update_index_performace_data"),
     #url(r'^update_performace_data/vm/(?P<host_id>\d+)/(?P<vm_id>\d+)/$', "update_vm_performace_data", name="update_vm_performace_data"),
     url(r'^update_performace_data/vm/$', "update_vm_performace_data", name="update_vm_performace_data"),
+    url(r'^sflow_list_ports/(?P<switch_id>\d+)/$', "sflow_list_ports", name="sflow_list_ports"),
+    url(r'^sflow_get_bps/(?P<switch_id>\d+)/(?P<port>\d+)/$', "sflow_get_bps", name="sflow_get_bps"),
 )

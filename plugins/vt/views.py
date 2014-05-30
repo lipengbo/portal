@@ -17,6 +17,7 @@ from forms import VmForm
 from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from etc.config import function_test
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
@@ -165,12 +166,12 @@ def create_device(request, sliceid):
                 switch_port = SwitchPort.objects.get(id=port[0])
                 slice_add_port_device(slice_obj, port[0], port[1], port[2])
                 print "-------", port[2]
-                log(request.user, switch_port, u"添加端口", SUCCESS)
+                log(request.user, switch_port, u"创建自接入设备(所属虚网："+slice_obj.name+")", SUCCESS)
 
             return HttpResponse(json.dumps({'result':0}))
         except Exception, e:
             traceback.print_exc()
-            log(request.user, switch_port, u"添加端口", FAIL)
+            log(request.user, switch_port, u"创建自接入设备(所属虚网："+slice_obj.name+")", FAIL)
             return HttpResponse(json.dumps({'result':1, 'error': e.message}))
     else:
         context = {}
@@ -190,7 +191,7 @@ def get_switch_port(request, sliceid):
     return HttpResponse(json.dumps(port_info))
 
 
-
+@login_required
 def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
     if action in operator:
@@ -286,7 +287,7 @@ def set_domain_state(vname, state):
         elif (state == 9 or state == 10) and vm.type == 1:
             log(user, vm, '创建虚拟机', FAIL)
         switch_port = None
-        if vm.type != 0 and state not in [DOMAIN_STATE_DIC['building'], DOMAIN_STATE_DIC['failed'], DOMAIN_STATE_DIC['notexist']]:
+        if vm.type != 0 and state == DOMAIN_STATE_DIC['nostate']:
             host = vm.server
             slice = vm.slice
             name = vm.name
@@ -302,7 +303,10 @@ def set_domain_state(vname, state):
     except:
         LOG.debug(traceback.print_exc())
     finally:
-        vm_query.update(state=state, switch_port=switch_port)
+        if switch_port:
+            vm_query.update(state=state, switch_port=switch_port)
+        else:
+            vm_query.update(state=state)
         #if not api.try_start_gw_and_ctr(vm):
             #LOG.error('try to start gw and controller failed')
         return result

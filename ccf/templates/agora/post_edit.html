@@ -7,7 +7,13 @@
 {% endblock %}
 {% block breadcrumb %}
 <li><a href="{% url "agora_forum" 1 %}">工单</a></li>
-<li>编辑工单</li>
+<li>
+{% if post.kind == 'thread' %}
+编辑工单
+{% else %}
+编辑回复
+{% endif %}
+</li>
 {% endblock %}
 
 {% block forum_body %}
@@ -27,7 +33,7 @@
                 </fieldset>
                 <div class="form-actions">
                     <a href="{% url "agora_thread" post.thread.pk %}" class="btn btn-default">取消</a>
-                    <button type="submit" class="btn btn-primary">编辑</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
                 </div>
             </form>
         </p>

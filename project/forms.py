@@ -16,6 +16,7 @@ class ProjectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget = forms.Textarea()
+        self.fields['owner'].widget = forms.HiddenInput()
 
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
@@ -27,6 +28,7 @@ class ProjectForm(forms.ModelForm):
                 "", "name", "description", "category"
             ),
             Field('islands', template="project/_create_project_islands.html"),
+            Field('owner', template="project/_owner_field.html"),
         )
 
     def clean_name(self):
@@ -43,4 +45,4 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ("name", "description", "category", "islands")
+        fields = ("name", "description", "category", "islands", "owner")

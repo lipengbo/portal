@@ -42,17 +42,15 @@ def cnvp_service(cmd, url):
         ph = urllib2.urlopen(req)
         return parseResponse(ph.read())
     except Exception, e:
-        print 11
-#         print e
-#         import traceback
-#         #traceback.print_stack()
-#         traceback.print_exc()
+        print "cnvp error1"
+        import traceback
+        traceback.print_exc()
         if str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
             return cnvp_service(cmd, url)
         else:
             raise
     except RuntimeError, e:
-        print 22
+        print "cnvp error2"
         raise
 
 

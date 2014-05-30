@@ -306,8 +306,8 @@ class Slice(models.Model):
                 print "delete subnet"
                 IPUsage.objects.delete_subnet(self.uuid)
                 print "delete route"
-                if self.vpn_state == 1:
-                    slice_delete_route(self)
+#                 if self.vpn_state == 1:
+#                     slice_delete_route(self)
             print "3:delete controller"
             delete_controller(self.get_controller(), False)
             print "4:delete slice record"
@@ -337,14 +337,15 @@ class Slice(models.Model):
                 if self.type == 0:
                     self.type = 1
                     increase_failed_counter("slice")
-                    decrease_counter_api("slice", self)
-                else:
-                    decrease_failed_counter("slice", self)
-                    increase_failed_counter("slice")
+#                     decrease_counter_api("slice", self)
+#                 else:
+#                     decrease_failed_counter("slice", self)
+#                     increase_failed_counter("slice")
                 self.date_expired = datetime.datetime.now()
                 self.save()
             except:
                 print "6:change slice record failed! raise exception"
+                print traceback.print_exc()
                 transaction.rollback()
                 raise DbError("虚网删除失败！")
             else:

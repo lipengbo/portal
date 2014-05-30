@@ -36,9 +36,10 @@ function start_stop_vm(vm_id, vm_type){
             img_obj.src = STATIC_URL + "img/ic-tz-un.png";       
             img_obj.title = "停止中";//"启动";
             //$("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
-			$("#icon_state"+vm_id).removeClass("icon-ok-sign").removeClass("icon_state")
+			$("#icon_state"+vm_id).removeClass("icon-ok-sign").removeClass("icon_state").removeClass("check_start_vm")
 								  .addClass("icon-spinner").addClass("icon-spin").addClass("check_vm");
             //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+            //登录不可用
             a_obj = $("#"+vm_id+"_dl")[0];
             img_obj = $("#"+vm_id+"_dl").children("img")[0];
             a_obj.style.cursor = "not-allowed";
@@ -636,6 +637,7 @@ function submit_gw(slice_id){
                     if (data.result == 1){
                         update_list_content(document.location, "list_fw");
                         tsstr = $("div#ts")[0].innerHTML;
+                        tsstr=tsstr.replace(/\s+/g, "");
                         if(tsstr != ""){
                             tsstr = "" + "<div class=\"alert alert-danger\"><strong>提示：</strong>您当前还未添加控制器</div>";
                             
@@ -770,6 +772,7 @@ function start_stop_vpn(slice_id, island_id){
             $("#vpn_state")
                 .removeClass("icon-ok-sign")
                 .removeClass("icon_state")
+                .removeClass("check_start_vm")
                 .addClass("icon-spinner")
                 .addClass("icon-spin");
             a_obj.style.cursor = "not-allowed";

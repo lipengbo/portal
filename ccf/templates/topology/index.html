@@ -113,7 +113,7 @@ common
                 </div>
             {% endif %}
             <input type="hidden" name="quanwang" id="quanwang" value="1" />
-            <input type="hidden" name="" id="show-logical" value="1" {% if show_virtual_switch %}checked{% endif %}/>
+            <input type="radio" name="" id="show-logical" value="1" {% if show_virtual_switch %}checked=checked{% endif %}/>
         {% endif %}
     </div>
 </div>
@@ -181,16 +181,13 @@ common
 
 <script src="{{ STATIC_URL }}topology/js/models/hostmodel.js"></script>
 <script src="{{ STATIC_URL }}topology/js/models/topologymodel.js"></script>
-<script src="{{ STATIC_URL }}topology/js/models/statusmodel.js"></script>
 <script src="{{ STATIC_URL }}topology/js/models/switchmodel.js"></script>
 <script src="{{ STATIC_URL }}topology/js/models/portmodel.js"></script>
 <script src="{{ STATIC_URL }}topology/js/models/flowmodel.js"></script>
 
 <script src="{{ STATIC_URL }}topology/js/views/header.js"></script>
-<script src="{{ STATIC_URL }}topology/js/views/home.js"></script>
 <script src="{{ STATIC_URL }}topology/js/views/status.js"></script>
 <script src="{{ STATIC_URL }}topology/js/views/host.js"></script>
-<script src="{{ STATIC_URL }}topology/js/views/switch.js"></script>
 <script src="{{ STATIC_URL }}topology/js/views/topology.js"></script>
 <script src="{{ STATIC_URL }}topology/js/views/port.js"></script>
 <script src="{{ STATIC_URL }}topology/js/views/flow.js"></script>

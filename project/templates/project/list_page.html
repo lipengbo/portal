@@ -13,3 +13,12 @@
         {% show_pages %}
     </ul>
 </div>
+{% if request.is_ajax %}
+    <script type="text/javascript" charset="utf-8">
+    $(".project_list_block").hover(function(){
+        $(this).children(".close").show();
+    },function(){
+        $(this).children(".close").hide();
+    });
+    </script>
+    {% endif %}
