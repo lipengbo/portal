@@ -72,7 +72,7 @@
         {% endif %}>{{ island.name }}</option>
         {% endfor %}
     </select>
-    <input type="submit" name="" value="筛选" class="btn btn-inverse">
+    <input type="submit" name="" value="筛选" class="btn btn_info">
 </form>
 </div>
 {% endif %}
@@ -83,12 +83,12 @@
         <div class="pull-right">
             <input type="hidden" name="action" id="action" value="">
             {% if class_name != 'User' %}
-                <a class="btn btn-default" href="{% url nexus_add app_label class_name|lower %}">
+                <a class="btn btn_info" href="{% url nexus_add app_label class_name|lower %}">
                     <i class="glyphicon glyphicon-plus"></i>
                     {% trans "Add" %}
                 </a>
             {% endif %}
-            <button type="submit" class="delete-action disabled action-btn btn-input btn-delete btn btn-default">
+            <button type="submit" class="delete-action disabled action-btn btn-input btn-delete btn btn_info">
                 <i class="glyphicon glyphicon-minus"></i>
                 {% trans "Delete" %}
             </button>
