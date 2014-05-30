@@ -11,6 +11,7 @@ from resources.models import Server, Switch
 from plugins.vt.models import VirtualMachine
 from plugins.common.exception import ConnectionRefused
 import random
+import traceback
 from plugins.common.sflow_proxy import SFlow_Proxy
 
 
@@ -209,19 +210,26 @@ def update_index_performace_data(request):
 
 def sflow_list_ports(request, switch_id):
     ports = {}
-    switch = get_object_or_404(Switch, id=switch_id)
-    print "**********switch_id:", switch.ip
-    ports = SFlow_Proxy.list_ports(switch.ip)
-    print "**********ports:", ports
-    #ports = {"1": ("up", 1000), "2": ("up", 2000), "3":("down", 0)}
-    return HttpResponse(json.dumps(ports))
+    try:
+        switch = get_object_or_404(Switch, id=switch_id)
+        print "**********switch_id:", switch.ip
+        ports = SFlow_Proxy.list_ports('192.168.5.210')
+        print "**********ports:", ports
+        #ports = {"1": ("up", 1000), "2": ("up", 2000), "3":("down", 0)}
+        return HttpResponse(json.dumps(ports))
+    except:
+        traceback.print_exc()
+        return HttpResponse(json.dumps({'result': 1}))
+
 
 def sflow_get_bps(request, switch_id, port):
     try:
         print "*****************port is ", port
         switch = get_object_or_404(Switch, id=switch_id)
-        in_bps, out_bps = SFlow_Proxy.get_switch_port_bps(switch.ip, int(port))
+        in_bps, out_bps = SFlow_Proxy.get_switch_port_bps('192.168.5.210', int(port))
+        print "flow ------- ", in_bps, ":", out_bps
         return HttpResponse(json.dumps({'result':0, 'in_bps': in_bps, \
                                     'out_bps': out_bps}))
     except:
+        traceback.print_exc()
         return HttpResponse(json.dumps({'result': 1}))

@@ -32,15 +32,19 @@ $(document).ready(function(){
         dataType: 'json',
         async: false,
         success:function(ports){
-            var context = '<option value="-1">------</option>';
-            $.each(ports, function(key, value){
-                if(value[0] == 'up'){
-                    var option = '<option value="'+ key +'">eth-0-'+key+'</option>';
-                    context += option;
-                }
-
-            });
-            $("#switch_port").html(context);
+            if(ports.data == 1){
+                $("#monitor_info").html('交换机连接出错！');
+                $(".alert_monitor").show(); 
+            }else{
+                var context = '<option value="-1">------</option>';
+                $.each(ports, function(key, value){
+                    if(value[0] == 'up'){
+                        var option = '<option value="'+ key +'">eth-0-'+key+'</option>';
+                        context += option;
+                    }
+                });
+                $("#switch_port").html(context);
+            }
         }
     });
     
