@@ -36,11 +36,23 @@
     <div class="row">
         <div class="col-md-2 count_block">
             <div class="squares">
-                <span class="s_name">新增项目</span>
+                <span class="s_name">
+                    {% if is_deleted %}
+                    删除项目
+                    {% else %}
+                    新增项目
+                    {% endif %}
+                </span>
                 <span class="s_num">{{ new_projects_num }}</span>
             </div>
             <div class="squares">
-                <span class="s_name">全部项目</span>
+                <span class="s_name">
+                    {% if is_deleted %}
+                    全部删除项目
+                    {% else %}
+                    全部项目
+                    {% endif %}
+                </span>
                 <span class="s_num">{{ total_projects }}</span>
             </div>
             <a href="javascript:void(0);" class="chart_btn chart_year" onclick="refreshcountiframe('project', 'year');">
@@ -55,7 +67,7 @@
         </div>
         <div class="col-md-10">
             <div class="chart">
-                <iframe scrolling="no" id="countiframe" width="100%" height="361" src="/slice/countiframe/?target=project&type=day&stype=0" frameborder="0"></iframe>
+                <iframe scrolling="no" id="countiframe" width="100%" height="361" src="/slice/countiframe/?target=project&type=day&stype={% if is_deleted %}2{% else %}0{% endif %}" frameborder="0"></iframe>
             </div>      
         </div>
     </div>
@@ -98,7 +110,7 @@
                 $(".chart_day").addClass("active");
             }
         }
-        document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype=0"; 
+        document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype={% if is_deleted %}2{% else %}0{% endif %}"; 
     }
     function project_type_change(){
         $('form').submit();

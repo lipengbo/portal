@@ -7,38 +7,32 @@
 
 {% endblock %}
 {% block body %}
-	<h4>交换机 {{ switch_name }}</h4>
-<!--
-	<p class="vm_chose">网桥 <select id="brs_info" onChange="change_br({{switch_id}}, this.options[this.options.selectedIndex].value, true)"></select></p>
-    <p class="vm_chose">端口 <select id="ports_info" onChange="change_port({{switch_id}}, true)"></select></p>
-    <ul class="nav nav-pills" id="br_info"></ul>
-
-				<div id="current_br_port">
-				</div>
-				(<span id="net_unit"></span>/s)  <span id="current_br"></span>  <span id="current_port"></span>
-				<div id="main_show">
-				
-    			<canvas id="port_perf_chart" width="1000" height="300"></canvas>
-					
-		
+<div class="alert_monitor alert alert-danger alert-dismissable" style="display:none">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+  <span id="monitor_info"></span>
+</div>
+	<div class="port_control clearfix">
+	    <h4 class="">交换机 {{ switch_name }}网络流量监控</h4>
+	    <form class="form-inline">
+	        <div class="form-group">
+                端口
+                <select class="form-control" id="switch_port" switch_name="{{switch_name}}" switch_id="{{switch_id}}">
+                </select>
+            </div>	        
+	    </form>
 	</div>
--->	
-
+    <p class="none_tip">当前无监控数据，请选择端口。</p>
+	<div class="port_fill">
+        <!--
+	    <span class="label label-success">协 商</span>
+	    <span class="label label-danger">非 协 商</span-->
+	     
+    </div>
+    
  <div id="container" style="height: 400px"></div>
-	<table class="table_defined" width="100%" style="margin-bottom:0;" id="switch_port_info">
-		<thead>
-			<tr>
-								<th>端口</th>
-                                <!--td><img src="{% static "img/upload.png" %}" width="20" style="width:20px;height:20px;" /></td-->
-                                <!--td><img src="{% static "img/download.png" %}" width="20" style="width:20px;height:20px;" /></td-->
-                                <th>总接收量</th>
-								<th>总发送量</th>
-								<th>每秒接收量</th>
-								<th>每秒发送量</th>
-      		</tr>                          
-		</thead>
-        <tbody></tbody>
-    </table>
+ <div class="text-center port_mean">
+     
+ </div> 
 {% endblock %}
 {% block extra_script %}
 	<script src="{{ STATIC_URL }}js/bootstrap-chart.js"></script>
@@ -48,13 +42,12 @@
 	<script>
 		$(function(){
 			//get_br_info({{ switch_id }}, true);
-			Initdata({{switch_id}});
+			//Initdata({{switch_id}});
 			$('#alert_close').on("click", function(){
 				window.location.href = "/nexus/resources/switch/";
 			})
-
 			
 		})
 	</script>
-	<script src="{{ STATIC_URL }}js/monitor_switch_new.js?v=1" ></script>
+	<script src="{{ STATIC_URL }}js/monitor_switch.js?v=1" ></script>
 {% endblock %}

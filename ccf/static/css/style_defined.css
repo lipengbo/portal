@@ -7465,9 +7465,18 @@ span[name="serverInfo"] {
   height: 7px;
 }
 .port_control {
+  position: relative;
   margin-bottom: 10px;
 }
-.port_control .form-control {
+.port_control h4 {
+  text-align: center;
+}
+.port_control .form-group {
+  position: absolute;
+  right: 0;
+  top: 2px;
+}
+.port_control .form-group .form-control {
   padding: 6px 25px;
   display: inline-block !important;
   width: auto;
@@ -7477,4 +7486,27 @@ span[name="serverInfo"] {
 }
 .port_fill .call_out {
   vertical-align: middle;
+}
+.port_mean {
+  margin-top: 20px;
+}
+.port_mean span {
+  padding: 5px;
+  border-radius: 5px;
+}
+.port_mean span i {
+  margin-right: 5px;
+}
+.port_mean .port_green {
+  border: 1px solid #99cc66;
+  margin-right: 40px;
+}
+.port_mean .port_green i {
+  color: #99cc66;
+}
+.port_mean .port_blue {
+  border: 1px solid #99ccff;
+}
+.port_mean .port_blue i {
+  color: #99ccff;
 }

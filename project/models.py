@@ -47,13 +47,13 @@ class Island(models.Model):
     description = models.TextField(verbose_name=_("description"))
     city = models.ForeignKey(City, verbose_name=_("City"))
     novnc_ip = models.IPAddressField(null=True, verbose_name=_("novnc_ip"))
-    vpn_ip = models.IPAddressField(null=True, verbose_name=_("vpn_ip"))
+    vpn_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("vpn_ip"))
 
     @staticmethod
     def admin_options():
         options = {
             'exclude_fields': ('name', 'vpn_ip'),
-            'form_exclude_fields': ('vpn_ip'),
+            'form_exclude_fields': ('vpn_ip',),
         }
         return options
 
@@ -205,12 +205,15 @@ def create_owner_membership(sender, instance, created, **kwargs):
         assign_perm('project.delete_project', owner, instance)
         assign_perm('project.create_slice', owner, instance)
         instance.add_member(instance.owner, True)
-        log(owner, instance, "成功创建项目")
+        log(owner, instance, "创建项目")
 
 
 @receiver(pre_delete, sender=Membership)
 def delete_permission(sender, instance, **kwargs):
     user_perms = get_perms(instance.user, instance.project)
+    slices = instance.project.slice_set.filter(owner=instance.user)
+    for slice in slices:
+        slice.delete(user=instance.user)
     for perm in user_perms:
         if perm != 'project.add_project':
             remove_perm(perm, instance.user, instance.project)
@@ -233,7 +236,7 @@ def delete_invitation_application(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Project)
 def log_project_delete(sender, instance, **kwargs):
-    log(instance.owner, instance, "删除了项目")
+    log(instance.owner, instance, "删除项目")
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
