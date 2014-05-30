@@ -476,14 +476,18 @@ function init_svg () {
                 var rand_num = Math.random();
                 var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                 d.bandwidth = bandwidth.toFixed(2);
-                if (rand_num < 0.3) {
-                    color = 'red';
+                if (rand_num < 0.1) {
+                    color = '#99ff99';
+                } else if (rand_num < 0.2) {
+                    color = '#33cc33';
+                } else if (rand_num < 0.4) {
+                    color = '#339933';
                 } else if (rand_num < 0.6) {
-                    color = 'orange';
-                } else if (rand_num < 0.9) {
-                    color = 'yellow';
+                    color = '#006600';
+                } else if (rand_num < 0.8) {
+                    color = '#154415';
                 } else {
-                    color = 'green';
+                    color = '#050505';
                 }
             }
             return color; 

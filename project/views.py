@@ -30,7 +30,7 @@ from slice.models import Slice, SliceDeleted
 
 from resources.models import Switch, Server, VirtualSwitch
 from plugins.openflow.models import Virttool
-from common.models import  Counter
+from common.models import  Counter, DeletedCounter
 from notifications.models import Notification
 from project.tasks import check_resource_usage
 
@@ -50,8 +50,8 @@ def index(request):
     context = {}
     user = request.user
     context = {}
+    is_deleted = request.GET.get('is_deleted')
     if user.is_superuser:
-        is_deleted = request.GET.get('is_deleted')
         if is_deleted and int(is_deleted) == 1:
             projects = Project.admin_objects.filter(is_deleted=True)
             context['is_deleted'] = True
@@ -72,7 +72,11 @@ def index(request):
             context['query'] = query
     context['projects'] = projects
     today = datetime.date.today()
-    counCounter = Counter.objects.filter(date__year=today.strftime('%Y'),
+    counter_class = Counter
+    if is_deleted and int(is_deleted) == 1:
+        counter_class = DeletedCounter
+
+    counCounter = counter_class.objects.filter(date__year=today.strftime('%Y'),
                                          date__month=today.strftime('%m'),
                                          date__day=today.strftime('%d'),
                                          target=0,
@@ -81,7 +85,12 @@ def index(request):
         context['new_projects_num'] = counCounter[0].count
     else:
         context['new_projects_num'] = 0
-    context['total_projects'] = Project.objects.all().count()
+    totail_projects = 0
+    if is_deleted and int(is_deleted) == 1:
+        total_projects = Project.admin_objects.filter(is_deleted=True).count()
+    else:
+        total_projects = Project.objects.all().count()
+    context['total_projects'] = total_projects
     context['target'] = "project"
     context['type'] = "day"
     if request.is_ajax():
@@ -341,23 +350,6 @@ def delete_project(request, id):
             slice_objs = project.slice_set.all()
             for slice_obj in slice_objs:
                 slice_obj.delete(user=request.user)
-#                 try:
-#                     slice_deleted = SliceDeleted(name = slice_obj.name,
-#                         show_name = slice_obj.show_name,
-#                         owner_name = slice_obj.owner.username,
-#                         description = slice_obj.description,
-#                         project_name = slice_obj.project.name,
-#                         date_created = slice_obj.date_created,
-#                         date_expired = slice_obj.date_expired)
-#                     if request.user.is_superuser:
-#                         slice_deleted.type = 1
-#                     else:
-#                         slice_deleted.type = 0
-#                     slice_obj.delete()
-#                 except Exception, ex:
-#                     pass
-#                 else:
-#                     slice_deleted.save()
             if request.user.is_superuser:
                 project.force_delete()
             else:

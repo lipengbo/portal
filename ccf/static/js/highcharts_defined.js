@@ -53,7 +53,7 @@ $(function () {
             total_num = 5;
             coler = ['#3366ff', '#009900', '#ff3300'];
             if(target == "project"){
-                title = show_dates[0]+"-"+show_dates[9]+"每年新增项目数";
+                title = show_dates[0]+"-"+show_dates[9]+"每年" + showtype + "项目数";
             }else{
                 title = show_dates[0]+"-"+show_dates[9]+"每年"+showtype+"虚网数";
             }
@@ -61,7 +61,7 @@ $(function () {
             total_num = 12;
             coler = ['#009900', '#3366ff', '#ff3300'];
             if(target == "project"){
-                title = year + "年每月新增项目数";
+                title = year + "年每月" + showtype + "项目数";
             }else{
                 title = year + "年每月"+showtype+"虚网数";
             }
@@ -70,7 +70,7 @@ $(function () {
             total_num = 15;
             coler = ['#ff3300', '#009900', '#3366ff'];
             if(target == "project"){
-                title = year + "年" + month + "月每日新增项目数";
+                title = year + "年" + month + "月每日" + showtype + "项目数";
             }else{
                 title = year + "年" + month + "月每日"+showtype+"虚网数";
             }

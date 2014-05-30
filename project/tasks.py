@@ -36,6 +36,6 @@ def check_resource_usage():
                 switch_ratios.append(ratio)
 
         print switch_ratios, server_ratios, island
-        cache.set('island_{}_usage'.format(island.id), (switch_ratios, server_ratios))
+        cache.set('island_{}_usage'.format(island.id), (switch_ratios, server_ratios), timeout=60 * 80)
         print cache.get('island_{}_usage'.format(island.id))
 
