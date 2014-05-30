@@ -291,5 +291,6 @@ def vm_pre_save(sender, instance, **kwargs):
             instance.mem = info['mem']
             instance.disk = info['hdd']
             instance.os = info['os']
+            instance.state = 1
         except:
             instance.state = 0
