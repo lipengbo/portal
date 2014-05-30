@@ -233,8 +233,11 @@ class VirtualSwitch(Switch):
 def vm_pre_save(sender, instance, **kwargs):
     if not function_test:
         agent_client = AgentClient(instance.ip)
-        info = agent_client.get_host_info(timeout=5)
-        instance.cpu = info['cpu']
-        instance.mem = info['mem']
-        instance.disk = info['hdd']
-        instance.os = info['os']
+        try:
+            info = agent_client.get_host_info(timeout=5)
+            instance.cpu = info['cpu']
+            instance.mem = info['mem']
+            instance.disk = info['hdd']
+            instance.os = info['os']
+        except:
+            instance.state = 0
