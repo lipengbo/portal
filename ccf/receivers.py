@@ -74,7 +74,6 @@ def decrease_counter(sender, instance, **kwargs):
 @receiver(post_delete, sender=Project)
 def increase_deleted_counter(sender, instance, created=None, **kwargs):
     print "------------------increase_deleted_counter"
-    import pdb;pdb.set_trace()
     if created or sender == Project:
         today = datetime.date.today()
         if sender == SliceDeleted:

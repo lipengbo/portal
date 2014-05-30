@@ -11,6 +11,7 @@ from profiles.models import Profile
 from guardian.shortcuts import assign_perm, remove_perm
 from account.models import EmailAddress, EmailConfirmation
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Div, Submit, HTML, Button, Row, Field, Fieldset, ButtonHolder
 
 
 class SignupForm(account.forms.SignupForm):
@@ -23,6 +24,16 @@ class SignupForm(account.forms.SignupForm):
         self.helper = FormHelper()
         self.helper.label_class = 'col-md-2'
         self.helper.field_class = 'col-md-7'
+        self.helper.layout = Layout(
+            Fieldset(
+                "", "username", "password", "password_confirm", "email",
+            ),
+            Field('realm', rows=3),
+            Field(
+                "organization",
+            ),
+        )
+        self.fields['realm'].widget.attr = {"rows": 7}
 
     def clean_password_confirm(self):
         if "password" in self.cleaned_data and "password_confirm" in self.cleaned_data:
