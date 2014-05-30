@@ -713,6 +713,7 @@ function load_topology(callback) {
             refresh_time = Math.floor(Math.random() * 10000 + 2000 );
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
                 
+                var color = 'black';
                 if (d.capacity) {
                     var rand_num = Math.random();
                     var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
