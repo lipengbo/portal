@@ -43,19 +43,19 @@ var mousedown_node = null;
 var tooltip = CustomTooltip( "posts_tooltip", 240 );
 force = d3.layout.force()
     .linkDistance(function(d){
-            var distance = 100;
+            var distance = 50;
             if (d.info) {
-                distance = 100;
+                distance = 50;
             }
             if (d.type) {
-                distance = 200;
+                distance = 100;
             }
             return distance;
         })
          .charge(function(d){
-             var charge = -1500;
+             var charge = -1000;
              if(d.group == 1) {
-                chrage = -1500;
+                chrage = -1000;
              }
              if (d.type) {
                 charge = -20;
@@ -212,7 +212,7 @@ function assign_node_icon(d) {
     
     if (d.group == 2 || d.group == 1) {
         // set status level for image
-        if (!show_logical) {
+        if (!show_logical && false) {
             var level = Math.floor(Math.random() * 1000);
             if (level < 0) {
                 ovs_image += '-error';
@@ -231,7 +231,7 @@ function assign_node_icon(d) {
     return ovs_image;
 }
 function rescale() {
-    
+   /* 
   if(d3.event.ctrlKey || mousedown_node) return;
   trans=d3.event.translate;
   scale=d3.event.scale;
@@ -239,6 +239,7 @@ function rescale() {
   svg.attr("transform",
       "translate(" + trans + ")"
       + " scale(" + scale + ")");
+      */
 }
 function mouseup () {
     mousedown_node = null;
@@ -535,8 +536,8 @@ function init_svg () {
     */
     node.append("image")
         .attr("xlink:href", assign_node_icon)
-        .attr("x", -32).attr("y", -32)
-        .attr("width", 64).attr("height", 64);
+        .attr("x", -20).attr("y", -20)
+        .attr("width", 40).attr("height", 40);
     node.append("text").attr("dx", 40).attr("dy", ".35em")
         .text(function(d) { return d.db_name ? d.db_name : "" });
     node.on("click", function (d) {
