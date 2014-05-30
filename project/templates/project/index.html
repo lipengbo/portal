@@ -113,7 +113,7 @@
         document.getElementById("countiframe").src="/slice/countiframe/?target="+target+"&type="+type+"&stype={% if is_deleted %}2{% else %}0{% endif %}"; 
     }
     function project_type_change(){
-        $('form').submit();
+        $('form.search_defined').submit();
     }
 </script>
 {% endblock %}
