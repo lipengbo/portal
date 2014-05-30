@@ -472,7 +472,7 @@ function init_svg () {
         .style("stroke", function (d) { 
             var color = 'black';
             
-            if (d.capacity) {
+            if (false) {
                 var rand_num = Math.random();
                 var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                 d.bandwidth = bandwidth.toFixed(2);
@@ -714,7 +714,7 @@ function load_topology(callback) {
             var link = svg.selectAll("line.link").style("stroke", function (d) { 
                 
                 var color = 'black';
-                if (d.capacity) {
+                if (false) {
                     var rand_num = Math.random();
                     var bandwidth = rand_num * parseInt(d.capacity.slice(0, d.capacity.length - 1));
                     d.bandwidth = bandwidth.toFixed(2);
