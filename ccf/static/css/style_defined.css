@@ -6165,6 +6165,9 @@ a.chart_btn span.color_red {
   cursor: pointer;
   position: relative;
 }
+.slice_list_block .col-md-7 {
+  height: 355px;
+}
 .slice_list_block_l {
   border-radius: 5px;
   overflow: hidden;
