@@ -131,9 +131,14 @@ class Project(models.Model):
         return u"项目：{}".format(self.__unicode__())
 
     def delete(self, *args, **kwargs):
-        self.is_deleted = True
-        self.save()
-        post_delete.send(sender=Project, instance=self)
+        try:
+            super(Project, self).delete(*args, **kwargs)
+            sasa
+        except Exception:
+            self.is_deleted = True
+            self.name = self.name + u' *'
+            self.save()
+            post_delete.send(sender=Project, instance=self)
 
     def force_delete(self):
         super(Project, self).delete()
