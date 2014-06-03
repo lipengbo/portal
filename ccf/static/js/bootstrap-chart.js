@@ -156,8 +156,8 @@ window.Chart = function(context){
 	if (window.devicePixelRatio) {
 		context.canvas.style.width = width + "px";
 		context.canvas.style.height = height + "px";
-		context.canvas.height = height * window.devicePixelRatio;
-		context.canvas.width = width * window.devicePixelRatio;
+		context.canvas.height = height * 1;
+		context.canvas.width = width * 1;
 		context.scale(window.devicePixelRatio, window.devicePixelRatio);
 	}
 

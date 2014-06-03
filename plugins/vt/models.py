@@ -68,7 +68,7 @@ class Image(models.Model):
     uuid = models.CharField(max_length=36, unique=True)
     name = models.CharField(max_length=36)
     url = models.CharField(max_length=256)
-    type = models.IntegerField(null=True)
+    type = models.IntegerField(null=True, choices=VM_TYPE)
     version = models.CharField(max_length=32, null=True)
     username = models.CharField(max_length=36, null=True)
     password = models.CharField(max_length=36, null=True)
