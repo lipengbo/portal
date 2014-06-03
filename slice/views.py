@@ -24,7 +24,7 @@ from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from resources.ovs_api import slice_delete_port_device
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from plugins.vt.models import VirtualMachine
+from plugins.vt.models import VirtualMachine, Image
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
 
@@ -301,7 +301,14 @@ def detail(request, slice_id, div_name=None):
                              'type_id': 4, 'type': "虚拟机", 'ip': vm.ip,
                              'host_ip': vm.server.ip, 'state': vm.state,
                              'dhcp': "无"})
-
+    ct_sys_names = []
+    ct_syss = Image.objects.filter(type=0)
+    for ct_sys in ct_syss:
+        ct_sys_names.append(ct_sys.name)
+    if ct_sys_names == []:
+        context['ct_sys_names'] = ['---------']
+    else:
+        context['ct_sys_names'] = ct_sys_names
     context['vms'] = show_vms
     context['flowvisor'] = slice_obj.get_virttool()
     context['dhcp'] = slice_obj.get_dhcp()
@@ -505,7 +512,6 @@ def topology_d3(request):
         else:
             context['switch_ids'] = ""
             context['switch_port_ids'] = request.GET.get('switch_port_ids')
-    print context
     user = request.user
     if user and user.is_superuser:
         context['admin'] = 1

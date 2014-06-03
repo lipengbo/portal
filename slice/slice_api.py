@@ -318,6 +318,7 @@ def start_slice_api(slice_obj, user):
     print 'start_slice_api'
     from slice.tasks import start_slice_sync
     try:
+        slice_flag = False
         controller_flag = False
         gw_flag = False
         virttool = slice_obj.get_virttool()
@@ -325,7 +326,7 @@ def start_slice_api(slice_obj, user):
             raise DbError("虚网启动失败！")
         if slice_obj.state == 0:
             slice_flag = True
-        if slice_obj.state == 4:
+        if slice_obj.state == 3:
             raise DbError("操作失败，请稍后再试！")
         if slice_obj.get_nw():
             all_vms = slice_obj.get_vms()
@@ -388,17 +389,18 @@ def stop_slice_api(slice_obj, user):
     LOG.debug('stop_slice_api')
     from slice.tasks import stop_slice_sync
     try:
-        Slice.objects.get(id=slice_obj.id)
-    except Exception, ex:
-        raise DbError(ex.message)
-    else:
-        if slice_obj.state == SLICE_STATE_STARTED:
-            try:
+        if slice_obj.state == 4:
+            raise DbError("操作失败，请稍后再试！")
+        try:
+            if slice_obj.state == SLICE_STATE_STARTED:
                 slice_obj.stopping()
                 stop_slice_sync.delay(slice_obj.id, user)
-            except Exception:
-                transaction.rollback()
-                raise DbError("虚网停止失败！")
+        except Exception:
+            transaction.rollback()
+            raise DbError("虚网停止失败！")
+    except Exception:
+        transaction.rollback()
+        raise
 
 
 def add_flowspace(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,

@@ -166,15 +166,16 @@
                    <small>点击拓扑图中网络节点选择需要的实验拓扑，红色表示选中。</small>
                 </h4>              
                 <div class="alert alert-info">
-                  
-                  <strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
-                  <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />
+                  <strong>普通交换机：</strong> 基于OpenFlow协议的交换机，支持网络虚拟化；<br />
+                  <strong>虚拟交换机：</strong> 服务器内部虚拟交换机，提供虚拟机网络管理功能，用户选择该节点后才可创建虚拟机；<br />
+                  <!--<strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
+                  <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />-->
                 </div>
                 <div class="show_frame">
                     <span id="switch_portInfo" style="display:inline;float:left;"></span>                   
                     <div class="main_frame">
                         <input type="hidden" name="switches" id="topology-switch" value="" />
-                        <div class="tuopu_sign_l">
+                        <!--<div class="tuopu_sign_l">
                             <div class="tuopu_sign_img">
                                 负载（%）
                                 <img src="{% static "img/ic_quan.png" %}">
@@ -187,11 +188,11 @@
                                     <span>100</span>
                                 </div>
                             </div>
-                       </div>
+                       </div>-->
                        <div class="frame_tip">
-                           <img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网络出口节点&nbsp
-                           <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换节点&nbsp
-                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟机关联节点
+                           <!--<img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp出口交换机&nbsp-->
+                           <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbsp普通交换机&nbsp
+                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟交换机
                        </div>
                        
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
@@ -220,13 +221,13 @@
 	                            <td>{{ovs_port.switch.dpid}}</td>
 	                            <td>
     	                            {% if ovs_port.switch_type == 1 %}
-    	                            	交换节点
+    	                            	普通交换机
     	                            {%endif%}
     	                            {% if ovs_port.switch_type == 2 %}
-    	                            	网络出口节点
+    	                            	出口交换机
     	                            {%endif%}
     	                            {% if ovs_port.switch_type == 3 %}
-    	                            	虚拟机关联节点
+    	                            	虚拟交换机
     	                            {%endif%}
 	                            </td>
 	                            <td>
@@ -248,9 +249,9 @@
                   </table>              
                   <div class="hide no-virtual-switch alert alert-danger">
                     {%if slice_type == "baseslice" %}
-                      请至少选择一个网络出口节点或普通交换节点
+                      请至少选择一个出口交换机或普通交换机
                     {%else%}
-                      请至少选择一个虚拟机关联节点
+                      请至少选择一个虚拟交换机
                     {%endif%}
                   </div>
                 </div>                                                                                                                 
@@ -307,7 +308,7 @@
                         <tr>
                             <td width="150" class="text-right">
                                 网关宿主机
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟交换机选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟交换机选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                             <td width="30%">
 								<div class="gw_ip">

@@ -14,17 +14,17 @@
 <div id="ts">
 {%if extent_html == "site_base.html" %}
 {%if slice_type == "baseslice" and controller == None%}
-<div class="alert alert-danger">
+<div class="alert alert-info">
     <strong>提示：</strong>您当前还未进行服务配置
 </div>
 {%endif%}
 {%if slice_type == "mixslice" and controller == None and gw == None%}
-<div class="alert alert-danger">
+<div class="alert alert-info">
     <strong>提示：</strong>您当前还未进行服务配置
 </div>
 {%endif%}
 {%if slice_type == "mixslice" and controller == None and gw %}
-<div class="alert alert-danger">
+<div class="alert alert-info">
     <strong>提示：</strong>您当前还未添加控制器
 </div>
 {%endif%}
@@ -254,35 +254,35 @@
                               {%else%}checked{%endif%}>
                               默认创建
                             </label>
-                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建Floodlight控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                            <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="" data-original-title="此处默认创建控制器"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                         </td>
                         <td width="100" class="text-right">控制器类型</td>
                         <td>
                             {%if controller %}
                                 {%if controller.name != 'user_define' %}
-                                    <select name="controller_sys" id="controller_sys" class="form-control">
-                                      <option value="Floodlight" {%if controller.name == "Floodlight" %}selected = "selected"{%endif%}>Floodlight</option>
-                                      <option value="POX" {%if controller.name == "POX" %}selected = "selected"{%endif%}>POX</option>
-                                      <option value="OpenDaylight" {%if controller.name == "OpenDaylight" %}selected = "selected"{%endif%}>OpenDaylight</option>
+                                    <select name="controller_sys" id="controller_sys" class="form-control" onblur="check_ct_sys()">
+                                        {%for ct_sys_name in ct_sys_names %}
+                                            <option value="{{ct_sys_name}}" {%if controller.name == ct_sys_name %}selected = "selected"{%endif%}>{{ct_sys_name}}</option>
+                                        {%endfor%}
                                     </select>
                                 {%else%}
-                                    <select name="controller_sys" id="controller_sys" class="form-control" disabled>
-                                      <option value="Floodlight">Floodlight</option>
-                                      <option value="POX">POX</option>
-                                      <option value="OpenDaylight">OpenDaylight</option>
+                                    <select name="controller_sys" id="controller_sys" class="form-control" disabled onblur="check_ct_sys()">
+                                        {%for ct_sys_name in ct_sys_names %}
+                                            <option value="{{ct_sys_name}}">{{ct_sys_name}}</option>
+                                        {%endfor%}
                                     </select>
                                 {%endif%}
                             {%else%}
-                                <select name="controller_sys" id="controller_sys" class="form-control">
-                                  <option value="Floodlight" selected = "selected">Floodlight</option>
-                                  <option value="POX">POX</option>
-                                  <option value="OpenDaylight">OpenDaylight</option>
+                                <select name="controller_sys" id="controller_sys" class="form-control" onblur="check_ct_sys()">
+                                    {%for ct_sys_name in ct_sys_names %}
+                                        <option value="{{ct_sys_name}}">{{ct_sys_name}}</option>
+                                    {%endfor%}
                                 </select>
                             {%endif%}
                             
                         </td>
                         <td colspan="3">
-                            
+                            <span id="controller_sysInfo" style="display:inline;float:none;"></span>
                         </td>
                     </tr>
                     <tr>
@@ -377,7 +377,7 @@
                         <tr>
                             <td width="150" class="text-right">
                                 网关宿主机
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟机关联节点选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟交换机选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟交换机选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                             <td width="30%">
                                 <div class="gw_ip">

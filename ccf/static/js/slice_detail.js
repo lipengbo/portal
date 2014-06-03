@@ -639,7 +639,7 @@ function submit_gw(slice_id){
                         tsstr = $("div#ts")[0].innerHTML;
                         tsstr=tsstr.replace(/\s+/g, "");
                         if(tsstr != ""){
-                            tsstr = "" + "<div class=\"alert alert-danger\"><strong>提示：</strong>您当前还未添加控制器</div>";
+                            tsstr = "" + "<div class=\"alert alert-info\"><strong>提示：</strong>您当前还未添加控制器</div>";
                             
                         }
                         $("div#ts").empty();
