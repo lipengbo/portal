@@ -240,7 +240,10 @@ def delete_invitation_application(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Project)
 def log_project_delete(sender, instance, **kwargs):
-    log(instance.owner, instance, "删除项目")
+    try:
+        log(instance.owner, instance, "删除项目")
+    except User.DoesNotExist:
+        pass
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
