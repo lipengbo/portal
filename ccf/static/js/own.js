@@ -453,9 +453,9 @@ function switch_manifest() {
             switch_ids_obj = document.getElementsByName("switch"+dpid);
             switchtype = switch_ids_obj[0].getAttribute("switchtype") 
             if(switchtype == 1){
-                type_name = "普通交换机";
+                type_name = "SDN交换机";
             }else if(switchtype == 2){
-                type_name = "出口交换机";
+                type_name = "网关交换机";
             }else if(switchtype == 3){
                 type_name = "虚拟交换机";
             }
