@@ -52,7 +52,9 @@
         
     }
     $('button.btn_info').click(function(){
-        $('.fill_form form').submit();
+        if(!$(this).parents('form').length) {
+            $('.fill_form form').submit();
+        }
     });
 </script>
 {% endblock %}

@@ -12,7 +12,7 @@
                      </td>
                  </tr>
                  <tr>
-                     <td><b>Slice</b></td>
+                     <td><b>虚网</b></td>
                      <td class="cpu_chose">
                          {% for quota in quotas.slice %}
                          <a href="javascript:void(0);" name="slice" class="{% if user.quotas.slice == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
@@ -23,7 +23,7 @@
                      </td>
                  </tr>
                  <tr>
-                     <td><b>VM</b></td>
+                     <td><b>虚拟机</b></td>
                      <td class="cpu_chose">
                          {% for quota in quotas.vm %}
                          <a href="javascript:void(0);" name="vm" class="{% if user.quotas.vm == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
