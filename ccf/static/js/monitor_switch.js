@@ -54,6 +54,7 @@ $(document).ready(function(){
 function show_chart(switch_name){
     //清除之前的调用
     if(clock){
+        alert('clear clock')
         clock = clearInterval(clock); 
     }
        
@@ -90,6 +91,7 @@ function draw_highchart(){
                                 type: 'GET',
                                 dataType: 'json',
                                 async: false,
+                                cache: false,
                                 success:function(data){
                                     if(data.result == 0){
                                         in_bps = data.in_bps/1024;
