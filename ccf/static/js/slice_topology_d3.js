@@ -951,7 +951,7 @@ function mousedown() {
 
   if(d3.event.ctrlKey || mousedown_node || mousedown_link || mousedown_icon) return;
 
-    board.call(d3.behavior.zoom().on("zoom", rescale))
+   board.call(d3.behavior.zoom().on("zoom", rescale))
 
   // insert new node at point
 /*
