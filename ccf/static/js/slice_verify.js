@@ -100,9 +100,10 @@ function check_slice_controller(obj_name){
 	for(var i=0;i<objs.length;i++){  
 		if(objs[i].checked){  
 			if(objs[i].value=="default_create"){  
-				return true; 
+			    return check_ct_sys();
 			}  
 			if(objs[i].value=="user_define"){
+			    document.getElementById('controller_sysInfo').innerHTML = '';
 			    if(slice_type == "baseslice"){
                     bip0_obj = document.getElementById("bip0");
                     bip1_obj = document.getElementById("bip1");
@@ -690,3 +691,14 @@ function trans(mask){
     }
  }
 
+function check_ct_sys(){
+    var info = document.getElementById('controller_sysInfo');
+    var controller_sys_obj = document.getElementById("controller_sys");
+    if(controller_sys_obj.value == "---------"){
+        showInfo(info," * 必选","red");
+        return false;
+    }else{
+        info.innerHTML = '';
+        return true;
+    }
+}
