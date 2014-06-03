@@ -22,7 +22,7 @@ class TimeoutTransport(xmlrpclib.Transport):
 def get_rpc_client(ip, port, timeout=None):
     t = TimeoutTransport()
     if timeout:
-        t.set_timeout(config.rpc_connection_timeout)
-    else:
         t.set_timeout(timeout)
+    else:
+        t.set_timeout(config.rpc_connection_timeout)
     return xmlrpclib.ServerProxy("http://%s:%s/" % (ip, port), allow_none=True, transport=t)

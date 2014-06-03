@@ -306,8 +306,8 @@ class Slice(models.Model):
                 print "delete subnet"
                 IPUsage.objects.delete_subnet(self.uuid)
                 print "delete route"
-                if self.vpn_state == 1:
-                    slice_delete_route(self)
+#                 if self.vpn_state == 1:
+#                     slice_delete_route(self)
             print "3:delete controller"
             delete_controller(self.get_controller(), False)
             print "4:delete slice record"

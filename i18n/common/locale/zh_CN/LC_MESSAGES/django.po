@@ -45,3 +45,6 @@ msgstr " %(number)d %(type)s"
 
 msgid "This field is required."
 msgstr "这个字段是必填项"
+
+msgid "Enter a valid e-mail address."
+msgstr "输入一个有效的 e-mail 地址"
