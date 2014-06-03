@@ -127,7 +127,10 @@ def perm_admin(request, id, user_id):
 @login_required
 def detail(request, id):
     user = request.user
-    project = get_object_or_404(Project, id=id)
+    if request.user.is_superuser:
+        project = Project.admin_objects.get(id=id)
+    else:
+        project = get_object_or_404(Project, id=id)
     #if not user.has_perm('project.view_project', project):
     #    return redirect('forbidden')
     context = {}
