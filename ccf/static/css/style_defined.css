@@ -7513,3 +7513,6 @@ span[name="serverInfo"] {
 .port_mean .port_blue i {
   color: #99ccff;
 }
+.main2 .tuopu_detail {
+  padding-top: 0;
+}
