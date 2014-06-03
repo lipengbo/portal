@@ -112,7 +112,7 @@ msgstr ""
 
 #: models.py:143
 msgid "applied to join in"
-msgstr "申请加入"
+msgstr "申请加入项目"
 
 #: models.py:151
 msgid "Application"
