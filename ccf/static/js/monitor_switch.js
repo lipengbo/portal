@@ -54,7 +54,6 @@ $(document).ready(function(){
 function show_chart(switch_name){
     //清除之前的调用
     if(clock){
-        alert('clear clock')
         clock = clearInterval(clock); 
     }
        
