@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseRedirect,Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from django.template import RequestContext
 from django.utils.translation import ugettext, ugettext as _
+from django.db.models import Q
 
 from django.contrib.admin.models import LogEntry
 from adminlog.models import SUCCESS, FAIL
@@ -21,7 +22,7 @@ def index(request):
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
-            logs = logs.filter(change_message__icontains=query)
+            logs = logs.filter(Q(change_message__icontains=query)|Q(object_repr__icontains=query))
             context['query'] = query
     context['logs'] = logs
     return render(request, 'adminlog/index.html', context)
