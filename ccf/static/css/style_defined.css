@@ -7527,6 +7527,7 @@ body .modal-dialog .modal-content .modal-header h4 {
 body .modal-dialog .modal-content .modal-footer {
   background: #f1f1f1;
   padding: 10px 15px;
+  border-radius: 0 0 6px 6px;
 }
 @media (min-width: 768px) {
   #deleteModal .modal-dialog,
