@@ -366,7 +366,7 @@ def delete(request, slice_id):
     except:
         ret = False
         log(user, slice_obj, u"删除虚网", result_code=FAIL)
-        messages.add_message(request, messages.INFO, "虚网删除失败！")
+        messages.add_message(request, messages.ERROR, "虚网删除失败！")
 #     if ret:
 #         log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
 #     else:
