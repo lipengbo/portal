@@ -37,10 +37,12 @@
                 <i class="glyphicon glyphicon-remove"></i>失败
                 {% endif %}</div>
         </div>
+        {% if log.object_repr  %}
         <div class="log_pop">
             <span class="log_sj"></span>
             <pre>{{ log.object_repr }}</pre>           
         </div>
+        {% endif %}
     </div>
     {% endfor %}
     <div class="text-center">
