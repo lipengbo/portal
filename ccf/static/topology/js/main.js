@@ -433,7 +433,7 @@ function init_svg () {
     var show_logical = $('#show-logical').attr('checked');
     var cloud_node = {id:"cloud", group:3}
     if (show_logical) {
-        g_nodes.push(cloud_node);
+        //g_nodes.push(cloud_node);
     }
     /* connect gre nodes manually */
     for (var i = 0; i < gre_ovses.length; i++) {
@@ -444,7 +444,7 @@ function init_svg () {
             if (!(dpid in nodes_map)) {
                 alert('没有以' + dpid + '为dpid的gre出口交换机');
             }
-            g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
+            // g_links.push({source: nodes_map[dpid], target: cloud_node, value:20});
         }
         for (var j = 0; j < gre_ovses.length; j++) {
             var dpid2 = recompose_dpid(gre_ovses[j]);

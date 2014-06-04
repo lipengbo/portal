@@ -190,7 +190,6 @@
                             </div>
                        </div>-->
                        <div class="frame_tip">
-                           <img src="{% static "topology/img/ovs_external_lt.png" %}" />&nbsp网关交换机&nbsp
                            <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbspSDN交换机&nbsp
                            <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟交换机
                        </div>
@@ -224,7 +223,7 @@
     	                            	SDN交换机
     	                            {%endif%}
     	                            {% if ovs_port.switch_type == 2 %}
-    	                            	网关交换机
+    	                            	SDN交换机
     	                            {%endif%}
     	                            {% if ovs_port.switch_type == 3 %}
     	                            	虚拟交换机
@@ -249,7 +248,7 @@
                   </table>              
                   <div class="hide no-virtual-switch alert alert-danger">
                     {%if slice_type == "baseslice" %}
-                      请至少选择一个网关交换机或SDN交换机
+                      请至少选择一个SDN交换机
                     {%else%}
                       请至少选择一个虚拟交换机
                     {%endif%}
