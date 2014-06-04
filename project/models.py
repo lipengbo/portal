@@ -152,7 +152,10 @@ class Project(models.Model):
         return self.name
 
     def absolute_url(self):
-        return reverse('project_detail', args=(self.id, ))
+        if self.is_deleted:
+            return ""
+        else:
+            return reverse('project_detail', args=(self.id, ))
 
     def accept(self, member):
         try:
