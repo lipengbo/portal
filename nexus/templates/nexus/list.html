@@ -17,7 +17,7 @@
 {% block breadcrumb %}
 {% with ModelClass|get_class_name as class_name  %}
 {% with ModelClass|get_class_verbose_name as class_verbose_name %}
-<li><a href="{% url nexus_list app_label class_name|lower %}">{{ class_verbose_name }}{% trans "Admin" %}</a></li>
+<li>{{ class_verbose_name }}{% trans "Admin" %}</li>
 {% endwith %}
 {% endwith %}
 {% endblock %}
