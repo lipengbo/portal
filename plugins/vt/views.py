@@ -196,15 +196,30 @@ def do_vm_action(request, vmid, action):
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
     if action in operator:
         try:
+            do_task = False
             vm = VirtualMachine.objects.get(id=vmid)
-            if action == 'create' and vm.state not in (DOMAIN_STATE_DIC['starting'], \
-                                                       DOMAIN_STATE_DIC['running']):
-                vm.state = DOMAIN_STATE_DIC['starting']
-            elif action == 'destroy' and vm.state not in (DOMAIN_STATE_DIC['stopping'],\
-                                                          DOMAIN_STATE_DIC['shutoff']):
-                vm.state = DOMAIN_STATE_DIC['stopping']
-            vm.save()
-            api.do_vm_action(request.user, vm, action)
+            if action == 'create':
+                if vm.state not in (DOMAIN_STATE_DIC['starting'], \
+                                    DOMAIN_STATE_DIC['running']):
+                    do_task = True
+                    vm.state = DOMAIN_STATE_DIC['starting']
+                    vm.save()
+                elif vm.state == DOMAIN_STATE_DIC['running']:
+                    pass
+                else:
+                    raise
+            elif action == 'destroy':
+                if vm.state not in (DOMAIN_STATE_DIC['stopping'],\
+                                    DOMAIN_STATE_DIC['shutoff']):
+                    do_task = True
+                    vm.state = DOMAIN_STATE_DIC['stopping']
+                    vm.save()
+                elif vm.state == DOMAIN_STATE_DIC['shutoff']:
+                    pass
+                else:
+                    raise
+            if do_task:
+                api.do_vm_action(request.user, vm, action)
             return HttpResponse(json.dumps({'result': 0}))
         except socket_error as serr:
             if action == 'create':
