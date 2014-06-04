@@ -504,6 +504,7 @@ function do_vm_action(url)
             {
 				document.getElementById('alert_info').innerHTML = data.error;
 				$('#alert_modal').modal('show');
+                window.location.reload();
             }else{
                 window.location.reload();
 			}
