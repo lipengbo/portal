@@ -90,6 +90,7 @@ function draw_highchart(){
                                 type: 'GET',
                                 dataType: 'json',
                                 async: false,
+                                cache: false,
                                 success:function(data){
                                     if(data.result == 0){
                                         in_bps = data.in_bps/1024;

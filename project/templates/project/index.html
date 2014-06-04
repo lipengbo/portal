@@ -20,7 +20,7 @@
                     筛选
                     <select class="form-control" name="is_deleted" id="project_type" onchange="project_type_change()">
                         <option value="0" {%if not is_deleted  %}selected{%endif%}>正常运行</option>
-                        <option value="1" {%if is_deleted %}selected{%endif%}>已删除</option>          
+                        <option value="1" {%if is_deleted %}selected{%endif%}>删除失败</option>          
                     </select>
                 </div>
                 {% endif %}
@@ -38,7 +38,7 @@
             <div class="squares">
                 <span class="s_name">
                     {% if is_deleted %}
-                    删除项目
+                    删除失败项目
                     {% else %}
                     新增项目
                     {% endif %}
@@ -48,7 +48,7 @@
             <div class="squares">
                 <span class="s_name">
                     {% if is_deleted %}
-                    全部删除项目
+                    全部删除失败项目
                     {% else %}
                     全部项目
                     {% endif %}
