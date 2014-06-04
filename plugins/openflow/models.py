@@ -228,7 +228,7 @@ def create_virtualswitch(island, datapaths):
                 logger.error('============= IP: ' + ip + '=============')
                 raise Exception(u"IP为" + ip + u"的服务器没有录入")
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
-                    ip=ip, defaults={'name': "v-ovs" + ip.split('.')[-1], 'island': island, 'password': '123', 'username': 'admin', 'server': server})
+                    ip=ip, defaults={'name': "v-switch" + ip.split('.')[-1], 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
 @receiver(pre_delete, sender=Virttool)
 def delete_slice(sender, instance, **kwargs):
