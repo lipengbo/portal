@@ -309,6 +309,12 @@ function start_or_stop_slice(slice_id, flag){
                 $("#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
              }
+        },
+        error: function(){
+            $("#slice_alert_info").empty();
+            var str = "" + "<p class=\"text-center\">虚网操作失败！</p>";
+            $("#slice_alert_info").append(str);
+            $('#slicealertModal').modal('show');
         }
     });
     return ret;
