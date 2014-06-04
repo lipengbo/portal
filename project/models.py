@@ -132,9 +132,14 @@ class Project(models.Model):
         return u"项目：{}".format(self.__unicode__())
 
     def delete(self, *args, **kwargs):
-        self.is_deleted = True
-        self.save()
-        post_delete.send(sender=Project, instance=self)
+        try:
+            super(Project, self).delete(*args, **kwargs)
+            sasa
+        except Exception:
+            self.is_deleted = True
+            self.name = self.name + u' *'
+            self.save()
+            post_delete.send(sender=Project, instance=self)
 
     def force_delete(self):
         super(Project, self).delete()
@@ -236,7 +241,10 @@ def delete_invitation_application(sender, instance, **kwargs):
 
 @receiver(post_delete, sender=Project)
 def log_project_delete(sender, instance, **kwargs):
-    log(instance.owner, instance, "删除项目")
+    try:
+        log(instance.owner, instance, "删除项目")
+    except User.DoesNotExist:
+        pass
 
 @receiver(post_save, sender=Membership)
 def assign_membership_permission(sender, instance, created, **kwargs):
