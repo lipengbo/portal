@@ -7291,7 +7291,7 @@ fieldset legend {
 }
 @media (min-width: 768px) {
   .modal-dialog {
-    margin: 50px auto;
+    margin: 150px auto 0;
   }
 }
 #svg .modal-dialog .modal-body {
@@ -7513,9 +7513,6 @@ span[name="serverInfo"] {
 .main2 .tuopu_detail {
   padding-top: 0;
 }
-body .modal-dialog .modal-content {
-  overflow: hidden;
-}
 body .modal-dialog .modal-content .modal-header {
   padding: 10px 15px;
   background: #666;
@@ -7532,8 +7529,18 @@ body .modal-dialog .modal-content .modal-footer {
   padding: 10px 15px;
 }
 @media (min-width: 768px) {
+  #deleteModal .modal-dialog,
+  #slicealertModal .modal-dialog,
   #alertModal .modal-dialog {
     width: 400px;
-    margin: 30px auto;
+    margin: 150px auto 0;
   }
+  #deleteModal .modal-dialog .modal-header,
+  #slicealertModal .modal-dialog .modal-header,
+  #alertModal .modal-dialog .modal-header {
+    padding: 5px 15px;
+  }
+}
+.modal-open {
+  overflow: auto;
 }
