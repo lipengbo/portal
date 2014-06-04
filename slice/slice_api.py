@@ -697,6 +697,10 @@ def update_slice_virtual_network_cnvp(slice_obj):
                         "", "", "0x806", slice_nw, slice_nw, "", "", "", "",
                         virttool.type)
                     arg_matches.append(arg_match)
+                    arg_match = matches_to_arg_match(switch_port.port, "", "",
+                        "", "", "0x806", slice_nw, "0.0.0.0", "", "", "", "",
+                        virttool.type)
+                    arg_matches.append(arg_match)
                     vms = switch_port.virtualmachine_set.all()
                     if vms and vms[0].type == 2:
 #网关
