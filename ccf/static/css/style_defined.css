@@ -6067,7 +6067,7 @@ a.chart_btn span.color_red {
 
 }
 .project_list .active {
-  background: #e1e1e9;
+  background: #eee;
 }
 .project_list_block {
   overflow: hidden;
@@ -6241,7 +6241,7 @@ a.chart_btn span.color_red {
   color: #999;
 }
 .slice_list .slice_list_block.active {
-  background: #f1f1f1;
+  background: #eee;
 }
 .slice_list_block .close {
   position: absolute;
