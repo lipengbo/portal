@@ -455,7 +455,7 @@ function switch_manifest() {
             if(switchtype == 1){
                 type_name = "SDN交换机";
             }else if(switchtype == 2){
-                type_name = "网关交换机";
+                type_name = "SDN交换机";
             }else if(switchtype == 3){
                 type_name = "虚拟交换机";
             }
