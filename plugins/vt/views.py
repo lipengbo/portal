@@ -193,6 +193,7 @@ def get_switch_port(request, sliceid):
 
 @login_required
 def do_vm_action(request, vmid, action):
+    #import pdb;pdb.set_trace()
     operator = ('create', 'suspend', 'undefine', 'resume', 'destroy')
     if action in operator:
         try:
