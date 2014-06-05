@@ -11,6 +11,7 @@ function start_stop_vm(vm_id, vm_type){
         //alert(1);
         ret = start_or_stop_vm(vm_id, "create");
         if(ret){
+            a_obj.style.cursor = "not-allowed"
             img_obj.src = STATIC_URL + "img/ic-ks-un.png";      
             img_obj.title = "启动中";//"停止";
             //$("#icon_state"+vm_id).removeClass("icon-minus-sign").addClass("icon-ok-sign");
@@ -33,6 +34,7 @@ function start_stop_vm(vm_id, vm_type){
         //alert(2);
         ret = start_or_stop_vm(vm_id, "destroy");
         if(ret){
+            a_obj.style.cursor = "not-allowed"
             img_obj.src = STATIC_URL + "img/ic-tz-un.png";       
             img_obj.title = "停止中";//"启动";
             //$("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
@@ -236,6 +238,7 @@ function start_stop_slice(slice_id){
             if ($(".default_create").length > 0){
                 vm_id = $(".default_create")[0].getAttribute("vm_id");
                 if($("#icon_state"+vm_id).hasClass("icon-minus-sign")){
+                    $("#"+vm_id+"_qt")[0].style = "cursor:not-allowed";
                     img_obj = $("#"+vm_id+"_qt").children("img")[0];
                     img_obj.src = STATIC_URL + "img/ic-ks-un.png";     
                     img_obj.title = "启动中";
@@ -249,6 +252,7 @@ function start_stop_slice(slice_id){
             if ($(".gw").length > 0){
                 vm_id = $(".gw")[0].getAttribute("vm_id");
                 if($("#icon_state"+vm_id).hasClass("icon-minus-sign")){
+                    $("#"+vm_id+"_qt")[0].style = "cursor:not-allowed";
                     img_obj = $("#"+vm_id+"_qt").children("img")[0];
                     img_obj.src = STATIC_URL + "img/ic-ks-un.png";      
                     img_obj.title = "启动中";
