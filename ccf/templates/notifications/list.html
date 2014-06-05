@@ -1,6 +1,7 @@
 {% extends "site_base.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load endless %}
 
 {% block head_title %}{% trans "Notifications" %}{% endblock %}
 
@@ -25,6 +26,7 @@
         <hr>
     </div>
     <div class="col-md-10">
+        {% paginate 50 notifications %}
         {% if notifications %}
             {% for notice in notifications %}
                {% include 'notifications/notice.html' %}
@@ -33,7 +35,12 @@
             <div class="empty-box">
                 <p>{% trans "No notifications at the moment" %}</p>
             </div>
-        {% endif %}
+            {% endif %}
+            <div >
+                <ul class="pagination">
+            {% show_pages %}
+                </ul>
+            </div>
     </div>
 </div>
 </form>
