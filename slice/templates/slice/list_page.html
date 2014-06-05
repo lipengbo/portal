@@ -86,27 +86,32 @@
                 {% show_pages %}
             </ul>
         </div>
+        <div class="clear" style="display: none" >
+        <p id="isajax">{{isajax}}</p>
+        </div>
     {%endif%}
 {%endif%}
-<script src="{{ STATIC_URL}}js/circlebar_defined.js"></script>
-<script>
-$('a.btn-delete').click(function(){
-    if($(this).hasClass("disabled")){
-        return false;
-    }else{
-        $('#alertModal').modal();
-        var self = $(this);
-        $('.delete-confirm').unbind('click');
-        $('.delete-confirm').click(function(){
-            window.location.href = self.attr('href');
+{%if isajax == 1 %}
+    <script src="{{ STATIC_URL}}js/circlebar_defined.js"></script>
+    <script type="text/javascript">
+        $('a.btn-delete').click(function(){
+            if($(this).hasClass("disabled")){
+                return false;
+            }else{
+                $('#alertModal').modal();
+                var self = $(this);
+                $('.delete-confirm').unbind('click');
+                $('.delete-confirm').click(function(){
+                    window.location.href = self.attr('href');
+                });
+                return false;
+            }
         });
-        return false;
-    }
-});
-//列表框，指针放上去时显示删除图标                 
-    $(".slice_list_block").hover(function(){
-        $(this).children(".close").show();
-    },function(){
-        $(this).children(".close").hide();
-    }); 
-</script>
+        //列表框，指针放上去时显示删除图标                 
+        $(".slice_list_block").hover(function(){
+            $(this).children(".close").show();
+        },function(){
+            $(this).children(".close").hide();
+        }); 
+    </script>
+{%endif%}

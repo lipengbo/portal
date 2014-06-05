@@ -189,10 +189,10 @@ def send_notification_email(sender, instance, created, **kwargs):
         subject = _('[%(site_name)s] You have new notification messages') % {'site_name': site_name}
     if instance.verb == u'调整配额':
         subject = u'SDN创新实验平台用户配额调整通知'
-        content = u"亲爱的用户，您好：\n\t您在SDN创新实验平台中的配额已经调整，您可以单击以下链接查看详情。\n" + notice_link + u"SDN创新实验平台"
+        content = u"亲爱的用户，您好：\n    您在SDN创新实验平台中的配额已经调整，您可以单击以下链接查看详情。\n    " + notice_link + u"\nSDN创新实验平台"
     if instance.verb == u'虚网过期删除':
         subject = u'SDN创新实验平台虚网过期删除通知'
-        content = u"亲爱的用户，您好：\n您创建的虚网“" + instance.action_object.show_name + u"”超过有效期已经被删除，您可以单击以下链接查看详情。\n" + notice_link
+        content = u"亲爱的用户，您好：\n    您创建的虚网“" + instance.action_object.show_name + u"”超过有效期已经被删除，您可以单击以下链接查看详情。\n    " + notice_link + u"\nSDN创新实验平台"
     if content:
         send_mail(subject, content,
                   settings.DEFAULT_FROM_EMAIL, [instance.recipient.email], fail_silently=False)
