@@ -93,3 +93,8 @@ textarea {
 a.forgetpwd:hover {
   color: #fff;
 }
+@media (min-width: 768px) {
+  #registerModal .modal-dialog {
+    margin: 80px auto 0;
+  }
+}
