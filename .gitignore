@@ -10,3 +10,4 @@ dev.db
 ccf/site_media/
 local_settings.py
 .settings
+etc/local_config.py
