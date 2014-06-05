@@ -133,8 +133,9 @@ class Project(models.Model):
 
     def delete(self, *args, **kwargs):
         try:
+            if self.slice_set.all().count() > 0:
+                raise Exception('slice does not deleted completely')
             super(Project, self).delete(*args, **kwargs)
-            sasa
         except Exception:
             self.is_deleted = True
             self.name = self.name + u' *'
