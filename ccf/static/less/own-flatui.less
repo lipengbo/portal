@@ -1,5 +1,4 @@
 .login_bg {
- 
 	background:#fff;
 	min-width:980px;
 	padding-top:0;
@@ -15,17 +14,16 @@
 	    }
 	}
 	.login_logo {
-		margin-bottom:20px;
 		width:700px;
 		img {
-		    width:auto;
+		    width:80%;
 		}
 	}
 	.login_title {
-		background:#3da2f7 url(../img/banner.png) center top;
+		background:#3da2f7 url(../img/banner.jpg) center top;
 		height:400px;
 		width:100%;
-		line-height:400px;
+		line-height:340px;
 		text-align:center;
 		font-size:70px;
 		font-family:"黑体";
@@ -45,8 +43,7 @@
 			height:40px;	
 		}	
 		.btn {
-		    height:40px;
-		    line-height:40px;
+		    line-height:38px;
 		    padding:0;
 		}
 	}
@@ -62,6 +59,11 @@
 	}
 	.login_all {       
         width: 980px;   
+    }
+    #footer {
+        img {
+            display:inline;
+        }        
     }
 }
 
@@ -98,4 +100,9 @@ textarea {
 
 a.forgetpwd:hover {
     color: #fff;    
+}
+@media (min-width: 768px) {
+  #registerModal .modal-dialog {
+    margin: 80px auto 0;
+  }
 }
