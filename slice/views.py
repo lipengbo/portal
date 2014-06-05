@@ -369,11 +369,16 @@ def delete(request, slice_id):
         ret = False
         log(user, slice_obj, u"删除虚网", result_code=FAIL)
         messages.add_message(request, messages.ERROR, "虚网删除失败！")
+    else:
+        if request.user.is_superuser and not ret:
+            log(user, slice_obj, u"删除虚网", result_code=FAIL)
+        else:
+            log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
 #     if ret:
 #         log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
 #     else:
 #         log(user, slice_obj, u"删除虚网", result_code=FAIL)
-    log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
+#     log(user, slice_obj, u"删除虚网", result_code=SUCCESS)
     if 'next' in request.GET:
         if 'type' in request.GET:
             return redirect(request.GET.get('next') + "?type=" + request.GET.get('type'))

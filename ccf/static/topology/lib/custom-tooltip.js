@@ -16,8 +16,8 @@ function CustomTooltip( tooltipId, width ) {
 
     hideTooltip();
 
-    return;
     function showTooltip( content, event ) {
+        return;
         tooltip
             .html(content)
             .show();
