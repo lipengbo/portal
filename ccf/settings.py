@@ -339,6 +339,7 @@ QUOTAS = {
 }
 
 AGORA_EDIT_TIMEOUT = {"minutes": 60 * 10000000}
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 try:
     from ccf.local_settings import *

@@ -79,7 +79,11 @@ class UserForm(forms.ModelForm):
         try:
             ec = EmailConfirmation.objects.get(email_address=ea)
         except EmailConfirmation.DoesNotExist:
-            ea.send_confirmation()
+            ec = ea.send_confirmation()
+        ec.confirm()
+        user = self.instance
+        user.is_active = True
+        user.save()
         profile = self.instance.get_profile()
         profile.state = 2
         profile.save()

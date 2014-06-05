@@ -57,7 +57,7 @@ def send_confirmation(request, id):
     user = get_object_or_404(User, id=id)
     email_address = EmailAddress.objects.get_primary(user)
     if not email_address.verified:
-        email_address.send_confirmation()
+        confirmation = email_address.send_confirmation()
     profile = user.get_profile()
     profile.state = 2
     profile.save()
