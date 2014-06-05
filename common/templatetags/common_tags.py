@@ -7,6 +7,10 @@ from django.core.urlresolvers import reverse
 from account.models import EmailAddress, EmailConfirmation
 
 @register.filter
+def divide(value, divisor):
+    return value / int(divisor)
+
+@register.filter
 def confirmation_email_sent(user):
     ea = EmailAddress.objects.get_primary(user)
     try:
