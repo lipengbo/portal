@@ -17,8 +17,8 @@
         <fieldset id="name">   
             <legend>
                 {%if extent_html == "site_base.html" %}
-                    <a href="{% url project_applicant project.id  %}" class="btn btn-info edit">{% trans "View pending members" %}</a>
-                    <a href="{% url project_invite project.id %}" class="btn btn-info edit">{% trans "Invite members" %}</a>
+                    <a href="{% url project_applicant project.id  %}" class="btn btn_info edit">{% trans "View pending members" %}</a>
+                    <a href="{% url project_invite project.id %}" class="btn btn_info edit">{% trans "Invite members" %}</a>
                 {%endif%}
                 {% trans "Members" %}
             </legend>
