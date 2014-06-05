@@ -33,9 +33,9 @@ class Checkslice(Job):
         slices = Slice.objects.filter(type=0)
         time_delta = datetime.timedelta(seconds=1)
         for slice_obj in slices:
-            print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++time manage 1"
-            print datetime.datetime.now()
-            print slice_obj.date_expired
+#             print "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++time manage 1"
+#             print datetime.datetime.now()
+#             print slice_obj.date_expired
             date = datetime.datetime.now() - slice_obj.date_expired
             if date > time_delta:
                 try:

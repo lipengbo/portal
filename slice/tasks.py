@@ -61,7 +61,6 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
         if ct_op and gw_op:
             virttool = slice_obj.get_virttool()
             if virttool:
-                print "++++++++++++++++++", slice_obj.ct_change
                 if slice_obj.ct_change == None:
                     virttool_add_slice(virttool, slice_obj.id,
                         slice_obj.get_controller(), slice_obj.owner.email)
@@ -73,12 +72,9 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
                 slice_obj.ct_change = False
                 slice_obj.save()
                 if virttool.type == 1:
-                    print 1
                     virttool_update_slice_status(virttool,
                                                   slice_obj.id, False)
-                    print 2
                     update_slice_virtual_network_cnvp(slice_obj)
-                    print 3
                     virttool_update_slice_status(virttool,
                                                   slice_obj.id, True)
                     flag = True
