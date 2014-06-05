@@ -134,7 +134,6 @@ def update_links(sender, instance, created, **kwargs):
     if settings.DEBUG and not hasattr(settings, "CAN_FETCH_FLOWVISOR"):
         return
     from plugins.openflow.virttool_api import virttool_get_switches, virttool_get_links
-#     import pdb;pdb.set_trace()
     port_name_dict = {}
     try:
         switches = virttool_get_switches(instance)
