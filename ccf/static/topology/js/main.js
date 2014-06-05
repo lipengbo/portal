@@ -538,7 +538,7 @@ function init_svg () {
         .attr("xlink:href", assign_node_icon)
         .attr("x", -20).attr("y", -20)
         .attr("width", 40).attr("height", 40);
-    node.append("text").attr("dx", 40).attr("dy", ".35em")
+    node.append("text").attr("dx", 25).attr("dy", ".20em")
         .text(function(d) { return d.db_name ? d.db_name : "" });
     node.on("click", function (d) {
         // TODO we could add some functionality here
