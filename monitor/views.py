@@ -6,6 +6,7 @@ from django.utils.translation import ugettext as _
 from plugins.common.agent_client import AgentClient
 from plugins.common.ovs_client import get_bridge_list, get_bridge_port_list,get_switch_stat
 from django.http import HttpResponse, HttpResponseRedirect,Http404
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from resources.models import Server, Switch
 from plugins.vt.models import VirtualMachine
@@ -22,9 +23,11 @@ def monitor_vm(request, vm_id):
                   {'host_id' : vm.server.id, "vm_id" : vm_id,
                    "slice_id": vm.slice.id, "project_id" : vm.slice.project.id})
 
+@login_required
 def monitor_host(request, host_id):
     return render(request, "monitor_host_or_vm.html", {'host_id' : host_id, "vm_id" : 0})
 
+@login_required
 def monitor_switch(request, switch_id):
     switch = get_object_or_404(Switch, id=switch_id)
     return render(request, "monitor_switch.html", {'switch_id' : switch_id,
