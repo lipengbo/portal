@@ -5960,29 +5960,17 @@ body a:focus {
 }
 #footer {
   height: 75px;
+  line-height: 75px;
   border-top: 1px solid #e8e8e8;
-  background: #f1f1f1;
+  background: #666;
   text-align: center;
   color: #666;
   font-size: 12px;
   margin-top: 20px;
-  padding-top: 16px;
 }
-#footer span {
-  display: inline-block;
-}
-#footer span.logo1 {
-  height: 24px;
-  line-height: 24px;
-  padding-left: 28px;
-  background: url(../img/logo-01.png) no-repeat;
-  padding-right: 20px;
-}
-#footer span.logo2 {
-  height: 24px;
-  line-height: 24px;
-  padding-left: 28px;
-  background: url(../img/logo-02.png) no-repeat;
+#footer img {
+  display: none;
+  width: 60%;
 }
 .main {
   padding-top: 20px;
