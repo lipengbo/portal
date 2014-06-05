@@ -347,30 +347,11 @@ function inittpdata(){
                 if(flag){
                     src_node_id = get_node(srcLinks[i].src_switch);
                     dst_node_id = get_node(srcLinks[i].dst_switch);
-                    //nodes_data[src_node_id-1].have_port = true;
-                    //nodes_data[dst_node_id-1].have_port = true;
                     if(src_node_id>=0 && dst_node_id>=0){
                         src_capacity = 0;
                         src_bandwidth = 0;
                         dst_capacity = 0;
                         dst_bandwidth = 0;
-                        //src_id = '' + nodes_data[src_node_id].yid + '_' + srcLinks[i].src_port;
-                        //dst_id = '' + nodes_data[dst_node_id].yid + '_' + srcLinks[i].dst_port;
-                        //for(var k=0; k< bandwidth.length; k++){
-                        //    count = 0;
-                        //    if(src_id == bandwidth[k].id){
-                        //        src_capacity = bandwidth[k].total_bd;
-                        //        src_bandwidth = bandwidth[k].cur_bd;
-                        //        count++;
-                        //     }else if(dst_id == bandwidth[k].id){
-                        //        dst_capacity = bandwidth[k].total_bd;
-                        //        dst_bandwidth = bandwidth[k].cur_bd;
-                         //       count++;
-                         //   }
-                         //   if(count == 2){
-                         //       break;
-                        //    }
-                       // }
                         link = {source: nodes_data[src_node_id], target: nodes_data[dst_node_id], src_port_name: srcLinks[i].src_port_name,
                             src_port: srcLinks[i].src_port, dst_port_name: srcLinks[i].dst_port_name,
                             dst_port: srcLinks[i].dst_port, right: true, required: true, type: 'switchswitch',
@@ -396,7 +377,6 @@ function inittpdata(){
                     nodes_data[src_node_id].type_id = normals[i].hostStatus;
                     nodes_data[src_node_id].name = normals[i].name;
                     nodes_data[src_node_id].mac = normals[i].macAddress;
-                   // nodes_data[src_node_id].vnc_port = normals[i].vnc_port;
                     if(normals[i].hostStatus == 1){
                         nodes_data[src_node_id].icon = 'img/host.png';
                     }else{
@@ -519,7 +499,6 @@ function inittpdata2(){
                     nodes_data[src_node_id].type_id = normals[i].hostStatus;
                     nodes_data[src_node_id].name = normals[i].name;
                     nodes_data[src_node_id].mac = normals[i].mac;
-                   // nodes_data[src_node_id].vnc_port = normals[i].vnc_port;
                     if(normals[i].hostStatus == 1){
                         nodes_data[src_node_id].icon = 'img/host.png';
                     }else{
