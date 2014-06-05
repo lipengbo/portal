@@ -241,7 +241,9 @@ def slice_list(request, proj_id, stype):
             context['query'] = query
     context['slices'] = slice_objs
     if request.is_ajax():
+        context['isajax'] = 1
         return render(request, 'slice/list_page.html', context)
+    context['isajax'] = 0
     return render(request, 'slice/slice_list.html', context)
 
 
