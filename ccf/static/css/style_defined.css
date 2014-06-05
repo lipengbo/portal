@@ -5798,6 +5798,9 @@ body {
 textarea {
   resize: none;
 }
+label {
+  font-weight: normal;
+}
 .clear {
   clear: both;
 }
@@ -6064,7 +6067,7 @@ a.chart_btn span.color_red {
 
 }
 .project_list .active {
-  background: #e1e1e9;
+  background: #eee;
 }
 .project_list_block {
   overflow: hidden;
@@ -6238,7 +6241,7 @@ a.chart_btn span.color_red {
   color: #999;
 }
 .slice_list .slice_list_block.active {
-  background: #f1f1f1;
+  background: #eee;
 }
 .slice_list_block .close {
   position: absolute;
@@ -7513,7 +7516,12 @@ span[name="serverInfo"] {
 .main2 .tuopu_detail {
   padding-top: 0;
 }
+body .modal-dialog .modal-content {
+  background: transparent;
+}
 body .modal-dialog .modal-content .modal-header {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
   padding: 10px 15px;
   background: #666;
   color: #fff;
@@ -7523,6 +7531,9 @@ body .modal-dialog .modal-content .modal-header .close {
 }
 body .modal-dialog .modal-content .modal-header h4 {
   font-size: 16px;
+}
+body .modal-dialog .modal-content .modal-body {
+  background: #fff;
 }
 body .modal-dialog .modal-content .modal-footer {
   background: #f1f1f1;

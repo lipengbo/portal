@@ -128,7 +128,7 @@
                 {% if not slices %}
                     <p class="none_tip">暂无虚网！</p>
                 {% else %}
-                    <div class="row example-sites">
+                    <div class="row example-sites slice_list">
                         {% for slice in project.get_slices %}
                         {% if forloop.counter <= 2  %}
                               {% include "slice/_slice.html" %}
