@@ -149,7 +149,7 @@ class Switch(SwitchResource):
 
     def type(self):
         if self.has_gre_tunnel:
-            return OVS_TYPE['EXTERNAL']
+            return OVS_TYPE['NORMAL']
         try:
             self.virtualswitch
         except VirtualSwitch.DoesNotExist:
