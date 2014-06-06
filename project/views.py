@@ -353,10 +353,7 @@ def delete_project(request, id):
             slice_objs = project.slice_set.all()
             for slice_obj in slice_objs:
                 slice_obj.delete(user=request.user)
-            if request.user.is_superuser:
-                project.force_delete()
-            else:
-                project.delete()
+            project.delete()
         except Exception, e:
             messages.add_message(request, messages.ERROR, e)
             transaction.rollback()
