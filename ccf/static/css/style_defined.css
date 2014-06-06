@@ -7543,3 +7543,6 @@ body .modal-dialog .modal-content .modal-footer {
 .modal-open {
   overflow: auto;
 }
+#div_id_name .controls {
+  height: 40px;
+}
