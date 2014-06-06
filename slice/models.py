@@ -345,7 +345,6 @@ class Slice(models.Model):
                 self.save()
             except:
                 print "6:change slice record failed! raise exception"
-                print traceback.print_exc()
                 transaction.rollback()
                 raise DbError("虚网删除失败！")
             else:

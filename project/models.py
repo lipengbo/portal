@@ -137,10 +137,11 @@ class Project(models.Model):
                 raise Exception('slice does not deleted completely')
             super(Project, self).delete(*args, **kwargs)
         except Exception:
-            self.is_deleted = True
-            self.name = self.name + u' *'
-            self.save()
-            post_delete.send(sender=Project, instance=self)
+            if not self.is_deleted:
+                self.is_deleted = True
+                self.name = self.name + u' *'
+                self.save()
+                post_delete.send(sender=Project, instance=self)
 
     def force_delete(self):
         super(Project, self).delete()
