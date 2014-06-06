@@ -36,7 +36,7 @@ slice_expiration_days = 3650
 #单元测试的时候使用，当系统发布的时候该值必须为False
 function_test = True
 #配置系统是否使用网络虚拟化工具进行虚网划分，测试使用，系统发布时该值必须为False
-virttool_disable = True
+virttool_disable = False
 #直接调度底层资源判断，发布时设置为True
 use_vt_manager_to_schedul = True
 #单台机器最多允许创建的虚拟机的数量
