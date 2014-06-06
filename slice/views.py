@@ -608,6 +608,9 @@ def get_slice_state(request, slice_id):
         else:
             if controller and controller.host:
                 c_state = controller.host.state
+            else:
+                if controller:
+                    c_state = 1
             gw = slice_obj.get_gw()
             if gw:
                 g_state = gw.state
