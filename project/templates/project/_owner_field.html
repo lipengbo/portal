@@ -1,1 +1,1 @@
-<input type="hidden" name="owner" value="{{ user.id }}">
+<input type="hidden" name="owner" value="{% if form.instance.id %}{{ form.instance.owner.id }}{% else %}{{ user.id }}{% endif %}">
