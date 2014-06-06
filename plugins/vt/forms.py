@@ -14,7 +14,7 @@ class VmForm(forms.ModelForm):
         #self.fields['image'].queryset = Image.objects.exclude(name__in=['gateway', 'floodlight'])
         image_choices = [("", "---------")]
         image_choices.extend(Image.objects.exclude(name__in=['gateway',
-                                        'Floodlight', 'POX', 'OpenDaylight']).values_list("id", "os"))
+                                        'Floodlight', 'POX', 'OpenDaylight', 'CNOS']).values_list("id", "os"))
         self.fields['image'].choices = image_choices
 
     class Meta:
