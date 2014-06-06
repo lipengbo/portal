@@ -111,6 +111,12 @@ def delete_notifications(sender, instance, **kwargs):
     target_type = ContentType.objects.get_for_model(instance)
     Notification.objects.filter(action_object_content_type=target_type, action_object_object_id=instance.id).delete()
 
+@receiver(post_delete, sender=User)
+def delete_notifications_for_user(sender, instance, **kwargs):
+    target_type = ContentType.objects.get_for_model(instance)
+    Notification.objects.filter(actor_object_id=instance.id, actor_content_type=target_type).delete()
+    Notification.objects.filter(recipient=instance).delete()
+
 @receiver(user_logged_in)
 def handle_user_logged_in(sender, **kwargs):
     log(
