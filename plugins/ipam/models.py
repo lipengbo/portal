@@ -80,7 +80,11 @@ class IPManager(models.Manager):
         ips = self.filter(supernet=subnet)
         ip = real_allocate_ip(subnet, ips)
         ip.is_used = True
-        ip.save()
+        try:
+            ip.save()
+        except:
+            ip.delete()
+            ip.save()
         return ip
 
     def release_ip(self, ip):
