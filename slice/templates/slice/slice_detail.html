@@ -506,11 +506,34 @@
 <script src="{{ STATIC_URL}}js/list_pagination.js"></script>
 <script src="{{ STATIC_URL}}js/slice_detail.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
-<script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
 <!--<script src="{{ STATIC_URL}}js/jquery-ui.js"></script>-->
 <script type="text/javascript">
     $(document).ready(function(){
+        window.check_vms = {};
+        window.check_start_vms = {};
+        window.add_check_vm = function(vm_id, is_delete, state) {
+            if(vm_id in check_vms) {
+                if(is_delete) {
+                    delete check_vms[vm_id];
+                }
+            } else {
+                if(!is_delete) {
+                    check_vms[vm_id] = state;
+                }
+            }
+        };
+        window.add_check_start_vm = function(vm_id, is_delete, state) {
+            if(vm_id in check_start_vms) {
+                if(is_delete) {
+                    delete check_start_vms[vm_id];
+                }
+            } else {
+                if(!is_delete) {
+                    check_start_vms[vm_id] = state;
+                }
+            }
+        };
         //$( "#editInfoModal" ).draggable();
         show_uuid($("[id='uuid']"));
         var slice_type = $("#slice_type").text();
@@ -528,4 +551,5 @@
 
     });
 </script>
+<script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
 {% endblock %}

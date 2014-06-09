@@ -21,6 +21,7 @@ function start_stop_vm(vm_id, vm_type){
                 .addClass("icon-spinner")
                 .addClass("icon-spin")
 				.addClass("check_vm");
+			window.add_check_vm(vm_id, false, -1);
             //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);
             //a_obj = $("#"+vm_id+"_dl")[0];
             //img_obj = $("#"+vm_id+"_dl").children("img")[0];
@@ -40,6 +41,7 @@ function start_stop_vm(vm_id, vm_type){
             //$("#icon_state"+vm_id).removeClass("icon-ok-sign").addClass("icon-minus-sign");
 			$("#icon_state"+vm_id).removeClass("icon-ok-sign").removeClass("icon_state").removeClass("check_start_vm")
 								  .addClass("icon-spinner").addClass("icon-spin").addClass("check_vm");
+			window.add_check_vm(vm_id, false, -1);
             //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
             //登录不可用
             a_obj = $("#"+vm_id+"_dl")[0];

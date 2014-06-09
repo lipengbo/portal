@@ -32,8 +32,12 @@ function update_vm_status(){
         clearTimeout(check_vm_time_id);
     }
     var check_vm_id_objs = $(".check_vm");
-    //alert(check_vm_id_objs.length);
-    if(check_vm_id_objs.length > 0){
+    if(check_vm_id_objs.length > 0 || window.check_vms != {}){
+        for(var i=0;i<check_vm_id_objs.length;i++){
+            cur_obj = check_vm_id_objs[i].id;
+            cur_vm_id = cur_obj.split("e")[1];
+            window.add_check_vm(cur_vm_id, false, -1);
+        }
         slice_id = $("#slice_id").text();
         check_vm_time_id = setTimeout("check_vm_status("+slice_id+")",1000);
     }else{
@@ -176,6 +180,14 @@ function check_vm_status(slice_id){
                     }
                     change_vm_status(check_nodes[j].cur_vm_id, check_nodes[j].status)
                 }
+                for(var j=0;j<vms.length;j++){
+                    if(vms[j].id in window.check_vms){
+                        if(vms[j].state!=8 && vms[j].state!=12 && vms[j].state!=13){
+                            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vms[j].id, vms[j].state);
+                            delete window.check_vms[vms[j].id];
+                        }
+                    }
+                }
                     //alert(i);
             }
             update_vm_status();   
@@ -229,7 +241,7 @@ function change_vm_status(vm_id, status){
                 a_obj.style.cursor = "pointer";}
             if(img_obj){
                 img_obj.src = STATIC_URL + "img/btn_jk.png"; } 
-            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);   
+            //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 1);   
         }else if(status == 5 || status == 0){
             vm_obj.removeClass("icon-spinner")
                 .removeClass("icon-spin")
@@ -243,7 +255,7 @@ function change_vm_status(vm_id, status){
             if(img_obj){
                 img_obj.src = STATIC_URL + "img/ic-ks.png";       
                 img_obj.title = "启动"; }
-            document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
+            //document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vm_id, 5);
         }
     }else if(vm_obj && vm_obj.hasClass("icon-ok-sign")){
         if(status == 5 || status == 0){
