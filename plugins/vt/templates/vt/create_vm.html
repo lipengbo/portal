@@ -126,7 +126,7 @@
                     <div class="row buttons_margin">
                         <div class="col-md-4"></div>
                                 <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail_div sliceid 1 %}'">{% trans "Cancel" %}</button></div>
-                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="post_vminfo({{ sliceid }})">{% trans "Submit" %}</button></div>
+                        <div class="col-md-2"><button type="button" id="submit_vm" class="btn btn-lg btn-block btn_info" onclick="post_vminfo({{ sliceid }})">{% trans "Submit" %}</button></div>
                         <div class="col-md-4"></div>
                     </div>
                 </div>

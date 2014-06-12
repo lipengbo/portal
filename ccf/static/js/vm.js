@@ -239,6 +239,7 @@ function submit_vms(sliceid)
 
 
 function post_vminfo(sliceid){
+    $("#submit_vm").attr("disabled", "disabled");
     if(!check_vminfo()){
         return;
     }
@@ -277,10 +278,12 @@ function post_vminfo(sliceid){
                 str = "" + "<p class=\"text-center\">" + data.error + "</p>";
                 $("div#slice_alert_info").append(str);
                 $('#slicealertModal').modal('show');
+                $("#submit_vm").removeAttr("disabled");
             }else if(data.result == -1){
                 //quota = false;
                 $("#quota_info").html(data.error);
                 $(".alert_quota").show();
+                $("#submit_vm").removeAttr("disabled");
             }else{
                 window.location.href='/slice/detail/' + sliceid + '/1/';
             }
