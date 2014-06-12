@@ -5,6 +5,9 @@ import random
 from slice.slice_exception import VirttoolError
 from etc.config import virttool_disable
 
+RE_CONNECT_MAX_NUM = 5
+CUR_RE_CONNECT_NUM = 0
+
 
 def buildRequest(url, cmd):
     random_id = random.randint(0, 100)
@@ -33,6 +36,8 @@ def parseResponse(data):
 
 
 def cnvp_service(cmd, url):
+    global RE_CONNECT_MAX_NUM
+    global CUR_RE_CONNECT_NUM
     print cmd
     print url
     if virttool_disable:
@@ -40,17 +45,23 @@ def cnvp_service(cmd, url):
     try:
         req = buildRequest(url, cmd)
         ph = urllib2.urlopen(req)
-        return parseResponse(ph.read())
+        ret = parseResponse(ph.read())
+        CUR_RE_CONNECT_NUM = 0
+        return ret
     except Exception, e:
         print "cnvp error1"
         import traceback
         traceback.print_exc()
-        if str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
+        if CUR_RE_CONNECT_NUM < RE_CONNECT_MAX_NUM and\
+            (str(e) == '<urlopen error [Errno 104] Connection reset by peer>' or str(e) == "''"):
+            CUR_RE_CONNECT_NUM = CUR_RE_CONNECT_NUM + 1
             return cnvp_service(cmd, url)
         else:
+            CUR_RE_CONNECT_NUM = 0
             raise
     except RuntimeError, e:
         print "cnvp error2"
+        CUR_RE_CONNECT_NUM = 0
         raise
 
 

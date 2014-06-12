@@ -311,7 +311,7 @@ def start_slice_api1(slice_obj, user):
         raise
 
 
-@transaction.commit_on_success
+@transaction.commit_manually
 def start_slice_api(slice_obj, user):
     """启动slice
     """
@@ -371,7 +371,9 @@ def start_slice_api(slice_obj, user):
                 if gw_flag:
                     gw.state = 12
                     gw.save()
+                transaction.commit()
                 start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag, user)
+            transaction.commit()
         except Exception:
             raise DbError("虚网启动失败！")
     except Exception:
@@ -382,7 +384,7 @@ def start_slice_api(slice_obj, user):
         raise
 
 
-@transaction.commit_on_success
+@transaction.commit_manually
 def stop_slice_api(slice_obj, user):
     """停止slice
     """
@@ -394,9 +396,10 @@ def stop_slice_api(slice_obj, user):
         try:
             if slice_obj.state == SLICE_STATE_STARTED:
                 slice_obj.stopping()
+                transaction.commit()
                 stop_slice_sync.delay(slice_obj.id, user)
+            transaction.commit()
         except Exception:
-            transaction.rollback()
             raise DbError("虚网停止失败！")
     except Exception:
         transaction.rollback()
