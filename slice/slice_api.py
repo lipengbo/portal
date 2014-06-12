@@ -640,6 +640,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
         slice_ports = slice_obj.sliceport_set.all()
         slice_nw = slice_obj.get_nw()
         if only_start_dhcp:
+            print "only_start_dhcp"
 #只启动了dhcp，添加虚拟机有dhcp功能的flowspace
             for slice_port in slice_ports:
                 switch_port = slice_port.switch_port
@@ -647,16 +648,18 @@ def update_slice_virtual_network_cnvp(slice_obj):
                     vms = switch_port.virtualmachine_set.all()
                     if vms:
                         vm = vms[0]
-                        if vm.type == 2:
+                        if vm.type == 1:
+                            #虚拟机且有dhcp服务
                             arg_match = matches_to_arg_match(switch_port.port,
-                                "", "", "", "", "0x800", "other", slice_nw, "",
-                                "", "", "", virttool.type)
+                                "", "", vm.mac, "", "0x800", "0.0.0.0",
+                                "255.255.255.255", "", "", "", "", virttool.type)
                             virttool_add_flowspace(virttool, None,
                                                     slice_obj.id,
                                                     4, 'cdn%nf',
                                                     switch_port.switch.dpid,
                                                     100, arg_match)
         else:
+            print " not only_start_dhcp"
             virttool_del_flowspace(virttool, slice_obj.id, None)
             if add_port_flag:
                 virttool_del_port(virttool, slice_obj.id, None, None)
