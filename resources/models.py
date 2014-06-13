@@ -3,7 +3,7 @@
 from django.db import models
 from django.db.models.base import ModelBase
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.utils.translation import ugettext as _
@@ -294,3 +294,10 @@ def vm_pre_save(sender, instance, **kwargs):
             instance.state = 1
         except:
             instance.state = 0
+
+@receiver(post_save, sender=Server)
+def update_vsw(sender, instance, created, **kwargs):
+    if not created:
+        for vsw in instance.virtualswitch_set.all():
+            vsw.island = instance.island
+            vsw.save()
