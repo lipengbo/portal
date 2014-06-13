@@ -167,9 +167,12 @@ def update_links(sender, instance, created, **kwargs):
     #: delete all existing links and ports
     instance.link_set.all().delete()
 
+    dpids = port_name_dict.keys()
     for link in links:
         src_port = link['src-port']
         dst_port = link['dst-port']
+        if (link['src-switch'] not in dpids) or (link['dst-switch'] not in dpids):
+            continue
         try:
             source_switch = Switch.objects.get(dpid=link['src-switch'])
         except Switch.DoesNotExist, e:
