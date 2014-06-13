@@ -183,6 +183,9 @@ msgstr "VPN 服务器IP"
 msgid "sflow_ip"
 msgstr "SFlow 服务器IP"
 
+msgid "sflow_port"
+msgstr "SFlow 端口"
+
 #~ msgid "approved your application to join"
 #~ msgstr "批准了你的申请加入"
 

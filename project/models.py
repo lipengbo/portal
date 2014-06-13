@@ -49,7 +49,7 @@ class Island(models.Model):
     novnc_ip = models.IPAddressField(null=True, verbose_name=_("novnc_ip"))
     vpn_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("vpn_ip"))
     sflow_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("sflow_ip"))
-    sflow_port = models.IntegerField(null=True)
+    sflow_port = models.IntegerField(null=True, verbose_name=_('sflow_port'))
 
     @staticmethod
     def admin_options():
