@@ -321,6 +321,9 @@ def start_slice_api(slice_obj, user):
         slice_flag = False
         controller_flag = False
         gw_flag = False
+        slice_state = None
+        controller_state = None
+        gw_state = None
         virttool = slice_obj.get_virttool()
         if virttool == None:
             raise DbError("虚网启动失败！")
@@ -364,17 +367,33 @@ def start_slice_api(slice_obj, user):
                 raise DbError("请先添加控制器！")
         try:
             if slice_flag:
+                slice_state = slice_obj.state
                 slice_obj.starting()
                 if controller_flag:
+                    controller_state = controller.host.state
                     controller.host.state = 12
                     controller.host.save()
                 if gw_flag:
+                    gw_state = gw.state
                     gw.state = 12
                     gw.save()
                 transaction.commit()
                 start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag, user)
             transaction.commit()
         except Exception:
+            try:
+                if slice_flag and slice_state != None:
+                    slice_obj.state = slice_state
+                    slice_obj.save()
+                    if controller_flag and controller_state != None:
+                        controller.host.state = controller_state
+                        controller.host.save()
+                    if gw_flag and gw_state != None:
+                        gw.state = gw_state
+                        gw.save()
+                transaction.commit()
+            except Exception:
+                pass
             raise DbError("虚网启动失败！")
     except Exception:
 #         import traceback
@@ -391,15 +410,24 @@ def stop_slice_api(slice_obj, user):
     LOG.debug('stop_slice_api')
     from slice.tasks import stop_slice_sync
     try:
+        slice_state = None
         if slice_obj.state == 4:
             raise DbError("操作失败，请稍后再试！")
         try:
             if slice_obj.state == SLICE_STATE_STARTED:
+                slice_state = SLICE_STATE_STARTED
                 slice_obj.stopping()
                 transaction.commit()
                 stop_slice_sync.delay(slice_obj.id, user)
             transaction.commit()
         except Exception:
+            try:
+                if slice_state != None:
+                    slice_obj.state = slice_state
+                    slice_obj.save()
+                    transaction.commit()
+            except Exception:
+                pass
             raise DbError("虚网停止失败！")
     except Exception:
         transaction.rollback()
