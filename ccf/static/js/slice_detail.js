@@ -739,8 +739,8 @@ function fetch_gw_select_server(slice_id){
                     content = content + servers[i].name;
                     content = content + '</option>';
                 }
-                var obj = $("#id_server_gw")[0];
-                obj.innerHTML = "" + content;
+                var obj = $("#id_server_gw");
+                obj.html(content);
                 ret = true;
         }
     });
