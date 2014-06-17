@@ -266,6 +266,18 @@ def edit_description(request, slice_id):
 
 
 @login_required
+def edit_slice(request, slice_id):
+    """编辑slice。"""
+    print "edit_slice"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    context = {}
+    context['slice_obj'] = slice_obj
+    return render(request, 'slice/edit_slice.html', context)
+
+
+@login_required
 def detail(request, slice_id, div_name=None):
     """编辑slice。"""
     print "slice_detail"

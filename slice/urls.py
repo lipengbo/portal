@@ -28,4 +28,5 @@ urlpatterns = patterns('slice.views',
     url(r'^delete_switch_port/(?P<slice_id>\d+)/(?P<portid>\d+)/$', "delete_switch_port", name="delete_switch_port"),
     url(r'^get_select_server/(?P<slice_id>\d+)/$', "get_select_server", name="get_select_server"),
     url(r'^create_gw/(?P<slice_id>\d+)/$', "create_gw", name="create_gw"),
+    url(r'^edit_slice/(?P<slice_id>\d+)/$', "edit_slice", name='edit_slice'),
 )
