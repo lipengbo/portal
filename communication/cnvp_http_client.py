@@ -50,6 +50,7 @@ def cnvp_service(cmd, url):
         return ret
     except Exception, e:
         print "cnvp error1"
+        print "CUR_RE_CONNECT_NUM", CUR_RE_CONNECT_NUM
         import traceback
         traceback.print_exc()
         if CUR_RE_CONNECT_NUM < RE_CONNECT_MAX_NUM and\
