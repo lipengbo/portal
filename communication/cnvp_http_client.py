@@ -4,6 +4,7 @@ import json
 import random
 from slice.slice_exception import VirttoolError
 from etc.config import virttool_disable
+import traceback
 
 RE_CONNECT_MAX_NUM = 5
 CUR_RE_CONNECT_NUM = 0
@@ -48,10 +49,14 @@ def cnvp_service(cmd, url):
         ret = parseResponse(ph.read())
         CUR_RE_CONNECT_NUM = 0
         return ret
+    except RuntimeError, e:
+        print "cnvp error2"
+        traceback.print_exc()
+        CUR_RE_CONNECT_NUM = 0
+        raise
     except Exception, e:
         print "cnvp error1"
         print "CUR_RE_CONNECT_NUM", CUR_RE_CONNECT_NUM
-        import traceback
         traceback.print_exc()
         if CUR_RE_CONNECT_NUM < RE_CONNECT_MAX_NUM and\
             (str(e) == '<urlopen error [Errno 104] Connection reset by peer>' or str(e) == "''"):
@@ -60,10 +65,6 @@ def cnvp_service(cmd, url):
         else:
             CUR_RE_CONNECT_NUM = 0
             raise
-    except RuntimeError, e:
-        print "cnvp error2"
-        CUR_RE_CONNECT_NUM = 0
-        raise
 
 
 class CnvpClient(object):
