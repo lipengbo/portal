@@ -7,7 +7,7 @@ from resources.ovs_api import slice_add_ovs_or_ports
 from resources.models import Switch
 from plugins.openflow.virttool_api import virttool_del_slice,\
     virttool_del_flowspace, virttool_add_flowspace,\
-    virttool_del_port, virttool_add_port
+    virttool_del_port, virttool_add_port, virttool_update_sice_controller
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
     flowspace_nw_add, flowspace_gw_add, flowspace_dhcp_add,\
     flowspace_dhcp_del, flowspace_gw_del
@@ -86,7 +86,10 @@ def slice_edit_controller(slice_obj, controller_info):
             new_controller = create_add_controller(slice_obj, controller_info)
             if haved_controller and (new_controller.ip != haved_controller.ip or\
                 new_controller.port != haved_controller.port):
-                slice_obj.ct_changed()
+                if slice_obj.ct_change == False:
+                    virttool_update_sice_controller(slice_obj.get_virttool(),
+                        slice_obj.id, new_controller.ip, new_controller.port)
+#                 slice_obj.ct_changed()
     except Exception, ex:
         try:
             delete_controller(new_controller, True)
