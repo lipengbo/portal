@@ -657,11 +657,20 @@ function submit_gw(slice_id){
                         $("div#ts").empty();
                         $("div#ts").append(tsstr);
                     }else{
+                        if(data.result == 3){
+                            $("div#slice_alert_info").empty();
+                            str = "" + "<p class=\"text-center\">操作失败！（虚网状态已更新）</p>";
+                            $("div#slice_alert_info").append(str);
+                            $('#slicealertModal').modal('show');
+                            $('#slice_alert_button').click(function(){location=location;});
+                            
+                        }else{
                         $("div#slice_alert_info").empty();
                         str = "" + "<p class=\"text-center\">" + data.error_info + "</p>";
                         $("div#slice_alert_info").append(str);
                         $('#slicealertModal').modal('show');
                         ajax_ret = false;
+                        }
                     }
                 },
                 error: function(data) {
@@ -683,7 +692,10 @@ function add_gw(){
     var slice_uuid = $("#slice_uuid").text();
     var slice_id = $("#slice_id").text();
     if(a_obj.style.cursor == "not-allowed"){
-        //alert(0);
+        $("div#slice_alert_info").empty();
+        str = "" + "<p class=\"text-center\">请确保虚网已停止！</p>";
+        $("div#slice_alert_info").append(str);
+        $('#slicealertModal').modal('show');
         return false;
     }else{
         ret1 = fetch_gw_select_server(slice_id)
