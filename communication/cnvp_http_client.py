@@ -58,8 +58,9 @@ def cnvp_service(cmd, url):
         print "cnvp error1"
         print "CUR_RE_CONNECT_NUM", CUR_RE_CONNECT_NUM
         traceback.print_exc()
-        if CUR_RE_CONNECT_NUM < RE_CONNECT_MAX_NUM and\
-            (str(e) == '<urlopen error [Errno 104] Connection reset by peer>' or str(e) == "''"):
+#         if CUR_RE_CONNECT_NUM < RE_CONNECT_MAX_NUM and\
+#             (str(e) == '<urlopen error [Errno 104] Connection reset by peer>' or str(e) == "''"):
+        if CUR_RE_CONNECT_NUM < RE_CONNECT_MAX_NUM and str(e) == '<urlopen error [Errno 104] Connection reset by peer>':
             CUR_RE_CONNECT_NUM = CUR_RE_CONNECT_NUM + 1
             return cnvp_service(cmd, url)
         else:
