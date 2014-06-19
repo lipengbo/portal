@@ -7546,3 +7546,47 @@ body .modal-dialog .modal-content .modal-footer {
 #div_id_name .controls {
   height: 40px;
 }
+.user_manage_tab {
+  background: #2291fe;
+  margin-bottom: 20px;
+}
+.user_manage_tab a {
+  display: block;
+  padding: 15px 0;
+  text-align: center;
+}
+.user_manage_tab a span {
+  color: #bfdaff;
+  padding: 5px 0 5px 35px;
+}
+.user_manage_tab a.user_index span {
+  background: url(../img/user2.png) no-repeat left center;
+}
+.user_manage_tab a.user_index:hover span,
+.user_manage_tab a.user_index.on span {
+  background: url(../img/user1.png) no-repeat left center;
+  color: #fff;
+}
+.user_manage_tab a.news_index span {
+  background: url(../img/news2.png) no-repeat left center;
+}
+.user_manage_tab a.news_index:hover span,
+.user_manage_tab a.news_index.on span {
+  background: url(../img/news1.png) no-repeat left center;
+  color: #fff;
+}
+.user_manage_tab a.log_index span {
+  background: url(../img/log2.png) no-repeat left center;
+}
+.user_manage_tab a.log_index:hover span,
+.user_manage_tab a.log_index.on span {
+  background: url(../img/log1.png) no-repeat left center;
+  color: #fff;
+}
+.user_manage_tab a:hover,
+.user_manage_tab a:active {
+  text-decoration: none;
+}
+.user_manage_tab a.on {
+  background: url(../img/sj.png) no-repeat center bottom;
+}

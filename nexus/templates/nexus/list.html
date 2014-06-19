@@ -4,6 +4,7 @@
 {% load staticfiles %}
 {% load endless %}
 
+
 {% block extra_style %}
 <link rel="stylesheet" href="{% static "css/buttons.css" %}">   
 <style type="text/css">
@@ -38,6 +39,20 @@
             <div class="index_block"><div class="index_block_btn {% if class_name == 'Virttool' %}active{% endif %}"><a href="{% url nexus_list "openflow" "virttool" %}"><div class=" btn_5"></div>网络虚拟工具</a></div></div>
 
         </div>
+{%else%}
+<div class="user_manage_tab">
+    <a href="{% url nexus_list "auth" "user" %}" class="user_index col-md-4 on">
+        <span>用户</span>
+    </a>
+    <a href="{% url notifications:all %}" class="news_index col-md-4">
+        <span>消息</span>    
+    </a>
+    <a href="{% url adminlog_index %}" class="log_index col-md-4">
+        <span>日志</span>  
+    </a>
+    <div class="clear"></div>
+</div>
+
 {% endif %}
 
 <!--
