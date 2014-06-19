@@ -17,6 +17,7 @@
 {% endblock %}
 
 {% block body %}
+{% if user.is_superuser %}
 <div class="user_manage_tab">
     <a href="{% url nexus_list "auth" "user" %}" class="user_index col-md-4">
         <span>用户</span>
@@ -29,6 +30,7 @@
     </a>
     <div class="clear"></div>
 </div>
+{% endif %}
     {% if not logs %}
         {% if query %}
             <p class="alert alert-info">抱歉，没有找到任何相关的结果</p>
