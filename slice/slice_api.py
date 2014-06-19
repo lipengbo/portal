@@ -354,7 +354,7 @@ def start_slice_api(slice_obj, user):
                         else:
                             raise DbError("请确保控制器可用！")
             gw = slice_obj.get_gw()
-            if gw and gw.enable_dhcp and gw.state != 1:
+            if gw and gw.state != 1:
                 if gw.state == 0 or gw.state == 5:
                     gw_flag = True
                 else:
