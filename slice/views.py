@@ -618,6 +618,8 @@ def get_slice_state(request, slice_id):
             gw = slice_obj.get_gw()
             if gw:
                 g_state = gw.state
+            else:
+                g_state = 1
     except:
         return HttpResponse(json.dumps({'value': 1}))
     else:
