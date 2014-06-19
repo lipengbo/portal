@@ -10,6 +10,19 @@
 {% endblock %}
 
 {% block body %}
+<div class="user_manage_tab">
+    <a href="{% url nexus_list "auth" "user" %}" class="user_index col-md-4">
+        <span>用户</span>
+    </a>
+    <a href="{% url notifications:all %}" class="news_index col-md-4 on">
+        <span>消息</span>    
+    </a>
+    <a href="{% url adminlog_index %}" class="log_index col-md-4">
+        <span>日志</span>  
+    </a>
+    <div class="clear"></div>
+</div>
+
 <form action="{% url delete_notifications %}" method="post" accept-charset="utf-8">
     {% csrf_token %}
 <div class="row">
