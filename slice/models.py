@@ -301,11 +301,8 @@ class Slice(models.Model):
                     self.state = SLICE_STATE_STOPPED
                     self.save()
                     transaction.commit()
-            print "2:delete subnet and route"
-            if self.get_nw():
-                print "delete subnet"
-                IPUsage.objects.delete_subnet(self.uuid)
-                print "delete route"
+            print "2:delete route"
+#             if self.get_nw():
 #                 if self.vpn_state == 1:
 #                     slice_delete_route(self)
             print "3:delete controller"
@@ -444,7 +441,8 @@ class SliceCount(models.Model):
 #     print "pre delete slice"
 #
 #
-# @receiver(post_delete, sender=Slice)
-# def post_delete_slice(sender, instance, **kwargs):
-#     user = kwargs.get("user")
-#     print "post delete slice"
+@receiver(post_delete, sender=Slice)
+def post_delete_slice(sender, instance, **kwargs):
+    print "post delete slice"
+    print "delete subnet"
+    IPUsage.objects.delete_subnet(instance.uuid)
