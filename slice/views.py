@@ -124,6 +124,8 @@ def create_or_edit_controller(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     if not request.user.has_perm('slice.change_slice', slice_obj):
         return redirect('forbidden')
+    if slice_obj.state != 0:
+        return HttpResponse(json.dumps({'result': 3, 'error_info': u"请确保虚网已停止！"}))
     controller_type = request.POST.get("controller_type")
     if controller_type == 'default_create':
         controller_sys = request.POST.get("controller_sys")
@@ -166,6 +168,8 @@ def create_gw(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     if not request.user.has_perm('slice.change_slice', slice_obj):
         return redirect('forbidden')
+    if slice_obj.state != 0:
+        return HttpResponse(json.dumps({'result': 3, 'error_info': u"请确保虚网已停止！"}))
     try:
         gw_host_id = request.POST.get("gw_host_id")
         gw_ip = request.POST.get("gw_ip")
@@ -626,6 +630,8 @@ def get_slice_state(request, slice_id):
             gw = slice_obj.get_gw()
             if gw:
                 g_state = gw.state
+            else:
+                g_state = 1
     except:
         return HttpResponse(json.dumps({'value': 1}))
     else:

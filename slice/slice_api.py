@@ -7,7 +7,7 @@ from resources.ovs_api import slice_add_ovs_or_ports
 from resources.models import Switch
 from plugins.openflow.virttool_api import virttool_del_slice,\
     virttool_del_flowspace, virttool_add_flowspace,\
-    virttool_del_port, virttool_add_port
+    virttool_del_port, virttool_add_port, virttool_update_sice_controller
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
     flowspace_nw_add, flowspace_gw_add, flowspace_dhcp_add,\
     flowspace_dhcp_del, flowspace_gw_del
@@ -86,7 +86,10 @@ def slice_edit_controller(slice_obj, controller_info):
             new_controller = create_add_controller(slice_obj, controller_info)
             if haved_controller and (new_controller.ip != haved_controller.ip or\
                 new_controller.port != haved_controller.port):
-                slice_obj.ct_changed()
+                if slice_obj.ct_change == False:
+                    virttool_update_sice_controller(slice_obj.get_virttool(),
+                        slice_obj.id, new_controller.ip, new_controller.port)
+#                 slice_obj.ct_changed()
     except Exception, ex:
         try:
             delete_controller(new_controller, True)
@@ -321,6 +324,9 @@ def start_slice_api(slice_obj, user):
         slice_flag = False
         controller_flag = False
         gw_flag = False
+        slice_state = None
+        controller_state = None
+        gw_state = None
         virttool = slice_obj.get_virttool()
         if virttool == None:
             raise DbError("虚网启动失败！")
@@ -348,7 +354,7 @@ def start_slice_api(slice_obj, user):
                         else:
                             raise DbError("请确保控制器可用！")
             gw = slice_obj.get_gw()
-            if gw and gw.enable_dhcp and gw.state != 1:
+            if gw and gw.state != 1:
                 if gw.state == 0 or gw.state == 5:
                     gw_flag = True
                 else:
@@ -364,17 +370,33 @@ def start_slice_api(slice_obj, user):
                 raise DbError("请先添加控制器！")
         try:
             if slice_flag:
+                slice_state = slice_obj.state
                 slice_obj.starting()
                 if controller_flag:
+                    controller_state = controller.host.state
                     controller.host.state = 12
                     controller.host.save()
                 if gw_flag:
+                    gw_state = gw.state
                     gw.state = 12
                     gw.save()
                 transaction.commit()
                 start_slice_sync.delay(slice_obj.id, controller_flag, gw_flag, user)
             transaction.commit()
         except Exception:
+            try:
+                if slice_flag and slice_state != None:
+                    slice_obj.state = slice_state
+                    slice_obj.save()
+                    if controller_flag and controller_state != None:
+                        controller.host.state = controller_state
+                        controller.host.save()
+                    if gw_flag and gw_state != None:
+                        gw.state = gw_state
+                        gw.save()
+                transaction.commit()
+            except Exception:
+                pass
             raise DbError("虚网启动失败！")
     except Exception:
 #         import traceback
@@ -391,15 +413,24 @@ def stop_slice_api(slice_obj, user):
     LOG.debug('stop_slice_api')
     from slice.tasks import stop_slice_sync
     try:
+        slice_state = None
         if slice_obj.state == 4:
             raise DbError("操作失败，请稍后再试！")
         try:
             if slice_obj.state == SLICE_STATE_STARTED:
+                slice_state = SLICE_STATE_STARTED
                 slice_obj.stopping()
                 transaction.commit()
                 stop_slice_sync.delay(slice_obj.id, user)
             transaction.commit()
         except Exception:
+            try:
+                if slice_state != None:
+                    slice_obj.state = slice_state
+                    slice_obj.save()
+                    transaction.commit()
+            except Exception:
+                pass
             raise DbError("虚网停止失败！")
     except Exception:
         transaction.rollback()

@@ -138,9 +138,10 @@
     <h4 class="block_title">
         <img src="/site_media/static/img/ic_01.png">虚拟网关配置
         <div class="pull-right">
-             {%if extent_html == "site_base.html" and permission == "edit" %}
+         {%if extent_html == "site_base.html" and permission == "edit" %}
              {%if not gw%}
-                <a class="bianji" href="javascript:void(0);" id="add_gw" onclick="return add_gw();" style="cursor:pointer" title="创建虚拟网关">
+                <a class="bianji" href="javascript:void(0);" id="add_gw" onclick="return add_gw();" 
+                {% if slice_obj.state == 0 %}style="cursor:pointer"{%else%}style="cursor:not-allowed"{%endif%} title="创建虚拟网关">
                 <i class="icon-plus"></i>
                 </a>
              {%endif%}

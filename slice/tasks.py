@@ -44,7 +44,7 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
         print "start gw"
         if gw_flag:
             gw = slice_obj.get_gw()
-            if gw and gw.enable_dhcp:
+            if gw:
                 try:
                     action_result = gw.do_action("create")
                 except Exception:

@@ -32,7 +32,12 @@ function update_vm_status(){
         clearTimeout(check_vm_time_id);
     }
     var check_vm_id_objs = $(".check_vm");
-    if(check_vm_id_objs.length > 0 || window.check_vms != {}){
+    var check_vms_length = 0
+    for(check_vm in window.check_vms) {
+        check_vms_length = check_vms_length + 1;
+        break;
+    }
+    if(check_vm_id_objs.length > 0 || check_vms_length > 0){
         for(var i=0;i<check_vm_id_objs.length;i++){
             cur_obj = check_vm_id_objs[i].id;
             cur_vm_id = cur_obj.split("e")[1];

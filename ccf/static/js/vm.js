@@ -106,7 +106,8 @@ function check_vminfo(){
 function check_vm_select(ele){
 	var field = ele;
 	var objs = document.getElementsByName(ele);
-	var infos = document.getElementsByName(ele+"Info"); 
+	//var infos = document.getElementsByName(ele+"Info"); 
+    var infos = $('[name="'+ele+'Info"]');
         var results = new Array();
         var result = true;
         for(var i=0; i < objs.length; i++)
