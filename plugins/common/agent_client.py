@@ -79,3 +79,19 @@ class AgentClient(object):
     def delete_sshkeys(self, vname, key=None, timeout=None):
         client = get_rpc_client(self.ip, config.compute_service_port, timeout)
         return client.delete_sshkeys(vname, key)
+
+    def create_snapshot(self, vname, snapshot_name, timeout=None):
+        client = get_rpc_client(self.ip, config.compute_service_port, timeout)
+        return client.create_snapshot(vname, snapshot_name)
+
+    def delete_snapshot(self, vname, snapshot_name, timeout=None):
+        client = get_rpc_client(self.ip, config.compute_service_port, timeout)
+        return client.delete_snapshot(vname, snapshot_name)
+
+    def get_current_snapshot(self, vname, timeout=None):
+        client = get_rpc_client(self.ip, config.compute_service_port, timeout)
+        return client.get_current_snapshot(vname)
+
+    def get_parent_snapshot(self, vname, snapshot_name, timeout=None):
+        client = get_rpc_client(self.ip, config.compute_service_port, timeout)
+        return client.get_parent_snapshot(vname, snapshot_name)
