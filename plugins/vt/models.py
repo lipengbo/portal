@@ -62,6 +62,7 @@ VM_TYPE = (
     (1, _('vm for slice')),
     (2, _('vm for gateway'))
 )
+SNAPSHOT_STATE = ((0, 'building'), (1, 'success'), (-1, 'failed'))
 
 
 class Image(models.Model):
@@ -247,6 +248,16 @@ class VirtualMachine(IslandResource):
     class Meta:
         verbose_name = _("Virtual Machine")
 
+class Snapshot(models.Model):
+    uuid = models.CharField(max_length=36, unique=True)
+    vm = models.ForeignKey(VirtualMachine)
+    name = models.CharField(max_length=36)
+    desc = models.CharField(max_length=256)
+    create_time = models.DateTimeField(auto_now_add=True)
+    state = models.IntegerField(null=True, choices=SNAPSHOT_STATE)
+
+    class Meta:
+        verbose_name = _("Snapshot")
 
 class SSHKey(models.Model):
     slice = models.ForeignKey(Slice)

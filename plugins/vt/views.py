@@ -15,11 +15,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from forms import VmForm
 from slice.models import Slice
-from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
+from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC, Snapshot, SNAPSHOT_STATE
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from etc.config import function_test
 from plugins.common.vt_manager_client import VTClient
+from plugins.common.utils import gen_uuid
 from plugins.common.agent_client import AgentClient
 from plugins.common.aes import *
 #from plugins.common.ovs_client import get_portid_by_name
@@ -382,4 +383,18 @@ def can_create_vm(request, sliceid):
     else:
         return HttpResponse(json.dumps({'result': '1'}))
 
+
+def create_snapshot(request):
+    if request.method == 'POST':
+        vm_id = request.POST.get('vm_id')
+        name = request.POST.get("name")
+        desc = request.POST.get("desc")
+        snapshot = Snapshot()
+        snapshot.vm = get_object_or_404(VirtualMachine, id=vm_id)
+        snapshot.uuid = gen_uuid()
+        snapshot.name = name
+        snapshot.desc = desc
+        snapshot.state = 0
+        snapshot.save()
+    return HttpResponse(json.dumps({'result': '0'}))
 
