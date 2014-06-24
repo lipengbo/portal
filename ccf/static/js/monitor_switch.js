@@ -65,7 +65,7 @@ function show_chart(switch_name){
     
      
     $(".port_mean").html('<span class="port_green"><i class="glyphicon glyphicon-stop"></i>发送流量</span><span class="port_blue"><i class="glyphicon glyphicon-stop"></i>接收流量</span>');
-    $(".port_fill").html('<span class="call_out">单位：Kbps</span>');
+    $(".port_fill").html('<span class="call_out">端口：1<br />单位：Kbps<br />间隔：3s</span>');
    //alert(test_data);
 }
 
@@ -74,7 +74,8 @@ function draw_highchart(){
             chart: {
                 type: 'spline',
                 animation: Highcharts.svg, // don't animate in old IE
-                marginRight: 1,
+                marginLeft: 70,
+                marginRight: 10,                
                 events: {
                     load: function() {
                         // set up the updating of the chart each second

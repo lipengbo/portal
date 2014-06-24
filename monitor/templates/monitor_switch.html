@@ -13,26 +13,48 @@
 </div>
 	<div class="port_control clearfix">
 	    <h4 class="">交换机 {{ switch_name }}网络流量监控</h4>
-	    <form class="form-inline">
-	        <div class="form-group">
-                端口
-                <select class="form-control" id="switch_port" switch_name="{{switch_name}}" switch_id="{{switch_id}}">
-                </select>
-            </div>	        
-	    </form>
 	</div>
     <p class="none_tip">当前无监控数据，请选择端口。</p>
-	<div class="port_fill">
-        <!--
-	    <span class="label label-success">协 商</span>
-	    <span class="label label-danger">非 协 商</span-->
-	     
-    </div>
+    <div class="switch_main">
+        <div class="tuopu_sign_r">
+            <div class="tuopu_sign_block">
+                总端口
+                <span>2</span>
+            </div>
+            <div class="tuopu_sign_block">
+                以太网口
+                <span>2</span>
+            </div>
+            <div class="tuopu_sign_block">
+                光纤端口
+                <span>7</span>
+            </div>
+            <div class="tuopu_sign_block">
+                活跃端口
+                <span>7</span>
+            </div>
+        </div>  
+        <div class="data_chart">
+            <form class="form-inline port_select">
+                <div class="form-group">
+                    端口
+                    <select class="form-control" id="switch_port" switch_name="{{switch_name}}" switch_id="{{switch_id}}">
+                    </select>
+                </div>          
+            </form>
+            <div class="port_fill">
+                <!--
+                <span class="label label-success">协 商</span>
+                <span class="label label-danger">非 协 商</span-->
+                 
+            </div>
+            <div class="port_mean"></div> 
+            <div id="container" style="height: 390px;"></div>    
+        </div>        
+    </div>	
     
- <div id="container" style="height: 400px"></div>
- <div class="text-center port_mean">
-     
- </div> 
+ 
+
 {% endblock %}
 {% block extra_script %}
 	<script src="{{ STATIC_URL }}js/bootstrap-chart.js"></script>

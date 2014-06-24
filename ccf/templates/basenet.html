@@ -1,0 +1,53 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load crispy_forms_field %}
+{% load i18n %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+<li class="active">基础虚网</li>
+{% endblock %}
+{% block body %}
+<div class="action_box">
+        <div class="pull-right">           
+            <a href="#" class="btn btn-default">
+                <i class="glyphicon glyphicon-plus"></i>
+                创建
+            </a>
+        </div>
+        <div class="clearfix"></div>
+</div>
+<div class="alert alert-danger">
+    暂无虚网！请点击右上方“创建”按钮创建虚网。
+</div>
+<h4 class="block_title show-dhcp">
+         <img src="/site_media/static/img/ic_35.png">控制器配置
+         <div class="pull-right">
+             <a href="javascript:;"><img src="/site_media/static/img/ic-ks.png" title="启动"></a>
+             <a href="javascript:;"><img src="/site_media/static/img/btn_bj.png" title="编辑"></a>
+             <a href="javascript:;"><img src="/site_media/static/img/btn_sc.png" title="删除"></a>
+         </div>
+</h4>
+<table class="table_base">
+    <tbody>
+        <tr>
+            <td width="100">状态：</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>控制器地址：</td>
+            <td>10.0.0.1</td>
+        </tr>
+    </tbody>
+</table>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/own.js"></script>
+<script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+{% endblock %}

@@ -1,0 +1,84 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% block breadcrumb %}
+<li class="active">监控</li>
+
+{% endblock %}
+{% block body %}
+<div class="row monitor_block">
+    <div class="col-md-3">
+        <div class="manage_index_block">
+                                     节点<span>2</span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="manage_index_block">
+                                      交换机<span>6</span>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="manage_index_block">
+                                    服务器<span>2</span>              
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="manage_index_block">
+                                    虚网<span>3</span>
+        </div>
+    </div>
+</div>
+
+<div class="row monitor_tp">
+    <div class="col-md-9">
+        <div class="monitor_tp_l">
+            <h4>虚网拓扑</h4>
+            <div class="wrap_pic">
+                <div class="pic"></div>
+                <div class="pic"></div>
+                <div class="pic"></div>
+                <div class="pic"></div>
+                <div class="pic"></div>
+            </div>
+            <div class="scroll_btn">
+                <i class="icon-caret-up btn_pre"></i>
+                <i class="icon-caret-down btn_next"></i>
+            </div>
+        </div>        
+    </div>
+    <div class="col-md-3">
+        <div class="monitor_tp_r">
+            <h4>虚网基本信息</h4>
+            <p class="info_name">名称：虚网1</p>
+            <p class="info_user">创建者：cjx</p>
+            <p class="info_ctime">创建时间：2011-05-06</p>
+            <p class="info_wtime">运行时间：2011-05-06</p>
+        </div>
+    </div>
+</div>
+<div class="row monitor_tp">
+    <div class="col-md-9">
+        <div class="monitor_tp_l">
+            <h4>物理拓扑</h4>
+        </div>        
+    </div>
+    <div class="col-md-3">
+        <div class="monitor_tp_r">
+            <h4>设备基本信息</h4>
+            <div class="device_pic">
+                <img src="{% static "img/jhj_.png" %}" />
+                S1
+            </div>
+            <ul>
+                <li>RX<span>100M</span></li>
+                <li>TX<span>80M</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block extra_script %}
+<script src="{{ STATIC_URL }}js/tp_scroll.js" ></script>
+{% endblock %}

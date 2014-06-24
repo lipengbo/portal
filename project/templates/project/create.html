@@ -10,11 +10,11 @@
 项目{% if form.instance.id%}编辑{% else %}创建{% endif %}
 {% endblock %}
 {% block extra_style %}
-    <style type="text/css" media="screen">
-        #div_id_islands {
-            display:none;
-        }
-    </style>    
+<style type="text/css" media="screen">
+    #div_id_islands {
+        display:none;
+    }
+</style>    
 {% endblock %}
 {% block breadcrumb %}
 <li><a href="/project/">项目</a></li>
@@ -27,13 +27,46 @@
             <img src="{% static "img/ic_baseinfo.png" %}" />基本信息
         </h4>
 
-            {% crispy form %}
-				  <div class="row buttons_margin">
-                    <div class="col-md-2 col-md-offset-5"><button type="submit" class="btn btn-lg btn-block btn_info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
-				  </div>
+        {% crispy form %}
+        
+        <h4 class="title_word_bg block_title">
+            <img src="{% static "img/ic_pz.png" %}" />项目配置
+        </h4>
+        
+        <div class="row project_slider">
+            <div class="col-md-6">
+                <div class="slider_part">
+                    <label>成员个数</label>
+                    <div id="slider-range-min"></div>       
+                    <div class="clear"></div>             
+                </div>  
+                <div class="slider_part">
+                    <label>虚拟机个数</label>
+                    <div id="slider-range-min2"></div>
+                    <div class="clear"></div>     
+                </div>                 
+            </div>
+            <div class="col-md-6">
+                <div class="slider_part">
+                    <label>虚网个数</label>
+                    <div id="slider-range-min"></div>       
+                    <div class="clear"></div>             
+                </div>  
+                <div class="slider_part">
+                    <label>带宽个数</label>
+                    <div id="slider-range-min"></div>
+                    <div class="clear"></div>     
+                </div>  
+            </div>
         </div>
-      </div>
+            
+         <div class="row buttons_margin">
+            <div class="col-md-2 col-md-offset-5"><button type="submit" class="btn btn-lg btn-block btn_info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
+         </div>
 </div>
+
+
+
 {% endblock %}
 
 {% block extra_script %}
@@ -55,6 +88,32 @@
         if(!$(this).parents('form').length) {
             $('.fill_form form').submit();
         }
+    });
+</script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.core.js"></script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.widget.js"></script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.mouse.js"></script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.slider.js"></script>
+<script>
+    $(function() {
+        $( "#slider-range-min" ).slider({
+            range: "min",
+            value: 0,
+            max: 700,
+            slide: function( event, ui ) {
+                $( "#slider-range-min .amount" ).html( ui.value + "个" );
+            }
+        });
+        $( "#slider-range-min .amount" ).html( $( "#slider-range-min" ).slider( "value" ) + "个" );
+        $( "#slider-range-min2" ).slider({
+            range: "min",
+            value: 0,
+            max: 700,
+            slide: function( event, ui ) {
+                $( "#slider-range-min2 .amount" ).html( ui.value + "个" );
+            }
+        });
+        $( "#slider-range-min2 .amount" ).html( $( "#slider-range-min2" ).slider( "value" ) + "个" );
     });
 </script>
 {% endblock %}
