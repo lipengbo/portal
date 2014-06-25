@@ -7,6 +7,7 @@ function start_stop_vm(vm_id, vm_type){
     }
     var img_obj = $("#"+vm_id+"_qt").children("img")[0];
     var STATIC_URL = $("#STATIC_URL").text();
+    $('#'+vm_id+'_snapshot').attr('style', 'cursor:not-allowed');
     if(img_obj.title == "启动"){
         //alert(1);
         ret = start_or_stop_vm(vm_id, "create");

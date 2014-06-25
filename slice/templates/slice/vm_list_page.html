@@ -90,7 +90,7 @@
             {%elif vm.state == 5%}
                 <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
             {%elif vm.state == 3%}
-                <i class="icon-pause" id="icon_state{{vm.id}}"></i>
+                <i class="icon-pause check_vm" id="icon_state{{vm.id}}"></i>
             {%endif%}
           {%endif%}
         </div></td>
@@ -172,10 +172,14 @@
                         <img src="{{ STATIC_URL}}img/loader.gif" title="创建快照中" />
                     </a>
                     
-                {%else%}
-                    <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})">
+                {%elif vm.state == 12 or vm.state == 13%}
+                    <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" style='cursor:not-allowed'>
                         <i class="icon-camera" id="icon_state{{vm.id}}"></i>
                     </a>
+                {%else%}
+                <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" >
+                        <i class="icon-camera" id="icon_state{{vm.id}}"></i>
+                 </a>
                 {%endif%}            
             {%endif%}
       </td>

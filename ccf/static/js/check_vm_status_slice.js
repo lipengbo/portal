@@ -187,7 +187,7 @@ function check_vm_status(slice_id){
                 }
                 for(var j=0;j<vms.length;j++){
                     if(vms[j].id in window.check_vms){
-                        if(vms[j].state!=8 && vms[j].state!=12 && vms[j].state!=13){
+                        if(vms[j].state!=8 && vms[j].state!=12 && vms[j].state!=13 && vms[j].state!=3){
                             document.getElementById('topologyiframe').contentWindow.topology_update_vm_state(vms[j].id, vms[j].state);
                             delete window.check_vms[vms[j].id];
                         }
@@ -209,7 +209,7 @@ function check_vm_status(slice_id){
 function change_vm_status(vm_id, status){
     var STATIC_URL = $("#STATIC_URL").text();
     vm_obj = $("#icon_state"+vm_id);
-    if(vm_obj && vm_obj.hasClass("icon-spinner")){
+    if(vm_obj && (vm_obj.hasClass("icon-spinner") || vm_obj.hasClass('icon-pause'))){
         if(status == 9 || status == 10){
             vm_obj.removeClass("icon-spinner")
                 .removeClass("icon-spin")
@@ -222,9 +222,14 @@ function change_vm_status(vm_id, status){
                 .addClass("icon-ok-sign")
                 .addClass("icon_state")
                 .addClass("check_start_vm");
+            $('#'+vm_id+'_snapshot').attr('style', 'cursor:point');
+            $('#'+vm_id+'_snapshot').html('<i class="icon-camera" id="icon_state{{vm.id}}"></i>');
             //启停虚拟机按钮
             a_obj = $("#"+vm_id+"_qt")[0];
             img_obj = $("#"+vm_id+"_qt").children("img")[0];
+            $('#'+vm_id+"_sc").children("img")
+                .attr('style', 'cursor:pointer')
+                .attr('src', STATIC_URL+'img/btn_sc.png');
             if(a_obj){
                 a_obj.style.cursor = "pointer";
             }
@@ -252,9 +257,14 @@ function change_vm_status(vm_id, status){
                 .removeClass("icon-spin")
                 .removeClass("check_vm")
                 .addClass("icon-minus-sign")
-                .addClass("icon_state"); 
+                .addClass("icon_state");
+            $('#'+vm_id+'_snapshot').attr('style', 'cursor:point'); 
+            $('#'+vm_id+'_snapshot').html('<i class="icon-camera" id="icon_state{{vm.id}}"></i>');
             a_obj = $("#"+vm_id+"_qt")[0];
             img_obj = $("#"+vm_id+"_qt").children("img")[0];
+            $('#'+vm_id+"_sc").children("img")
+                .attr('style', 'cursor:pointer')
+                .attr('src', STATIC_URL+'img/btn_sc.png');
             if(a_obj){
                 a_obj.style.cursor = "pointer";}
             if(img_obj){
@@ -269,6 +279,8 @@ function change_vm_status(vm_id, status){
                 .removeClass("check_start_vm")
                 .addClass("icon-minus-sign")
                 .addClass("icon_state");
+            $('#'+vm_id+'_snapshot').attr('style', 'cursor:point');
+            $('#'+vm_id+'_snapshot').html('<i class="icon-camera" id="icon_state{{vm.id}}"></i>');
             a_obj = $("#"+vm_id+"_qt")[0];
             img_obj = $("#"+vm_id+"_qt").children("img")[0];
             if(a_obj){
