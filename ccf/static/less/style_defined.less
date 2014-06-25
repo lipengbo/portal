@@ -1611,47 +1611,7 @@ span[name="serverInfo"] {
         color:#999;
     }
 }
-.slice_detail_tab {
-    background:#2291fe;
-    .row {
-        .slice_index {
-            padding:15px 0;
-            text-align:center;
-            a {
-                padding:5px 0 5px 35px;
-                height:25px;
-                color:#bfdaff;
-            }
-            a:hover, a:active, a:focus {
-                text-decoration:none;
-            }
-        } 
-        .slice_index.on a {
-            color:#fff;           
-        }
-        .slice_index.on {
-            background: url(../img/sj.png) no-repeat bottom center;
-        }
-        .fw a {
-            background:url(../img/fw2.png) no-repeat left center;
-        }      
-        .xnj a {
-            background:url(../img/xnj2.png) no-repeat left center;
-        }
-        .zjr a {
-            background:url(../img/zjr2.png) no-repeat left center;
-        }
-        .fw.on a {
-            background:url(../img/fw1.png) no-repeat left center;           
-        }
-        .xnj.on a {
-            background:url(../img/xnj1.png) no-repeat left center;           
-        }
-        .zjr.on a {
-            background:url(../img/zjr1.png) no-repeat left center;           
-        }
-    }
-}
+
 .slice_detail_block {
         .help-block {
             margin-bottom:40px;
@@ -1807,6 +1767,12 @@ body .modal-dialog {
             padding:5px 0 5px 35px;
         }
     }
+    a:hover,a:active {
+        text-decoration:none;
+    }
+    a.on {
+        background:url(../img/sj.png) no-repeat center bottom;
+    }
     a.user_index {
         span {
             background:url(../img/user2.png) no-repeat left center;
@@ -1840,13 +1806,52 @@ body .modal-dialog {
             color:#fff;
         }
     }
-    a:hover,a:active {
-        text-decoration:none;
+    a.fw {
+        span {
+            background:url(../img/fw2.png) no-repeat left center;
+        }
     }
-    a.on {
-        background:url(../img/sj.png) no-repeat center bottom;
+    a.fw:hover, a.fw.on {
+        span {
+            background:url(../img/fw1.png) no-repeat left center;
+            color:#fff;
+        }
+    }
+    a.xnj {
+        span {
+            background:url(../img/xnj2.png) no-repeat left center;
+        }
+    }
+    a.xnj:hover, a.xnj.on {
+        span {
+            background:url(../img/xnj1.png) no-repeat left center; 
+            color:#fff;
+        }
     }
 }
+.slice_detail_tab {
+
+    .fw a {
+        background:url(../img/fw2.png) no-repeat left center;
+    }      
+    .xnj a {
+        background:url(../img/xnj2.png) no-repeat left center;
+    }
+    .zjr a {
+        background:url(../img/zjr2.png) no-repeat left center;
+    }
+    .fw.on a {
+        background:url(../img/fw1.png) no-repeat left center;           
+    }
+    .xnj.on a {
+        background:url(../img/xnj1.png) no-repeat left center;           
+    }
+    .zjr.on a {
+        background:url(../img/zjr1.png) no-repeat left center;           
+    }
+}
+
+
 
 .switch_main {
     height:490px;

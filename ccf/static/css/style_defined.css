@@ -7359,47 +7359,6 @@ span[name="serverInfo"] {
   font-size: 12px;
   color: #999;
 }
-.slice_detail_tab {
-  background: #2291fe;
-}
-.slice_detail_tab .row .slice_index {
-  padding: 15px 0;
-  text-align: center;
-}
-.slice_detail_tab .row .slice_index a {
-  padding: 5px 0 5px 35px;
-  height: 25px;
-  color: #bfdaff;
-}
-.slice_detail_tab .row .slice_index a:hover,
-.slice_detail_tab .row .slice_index a:active,
-.slice_detail_tab .row .slice_index a:focus {
-  text-decoration: none;
-}
-.slice_detail_tab .row .slice_index.on a {
-  color: #fff;
-}
-.slice_detail_tab .row .slice_index.on {
-  background: url(../img/sj.png) no-repeat bottom center;
-}
-.slice_detail_tab .row .fw a {
-  background: url(../img/fw2.png) no-repeat left center;
-}
-.slice_detail_tab .row .xnj a {
-  background: url(../img/xnj2.png) no-repeat left center;
-}
-.slice_detail_tab .row .zjr a {
-  background: url(../img/zjr2.png) no-repeat left center;
-}
-.slice_detail_tab .row .fw.on a {
-  background: url(../img/fw1.png) no-repeat left center;
-}
-.slice_detail_tab .row .xnj.on a {
-  background: url(../img/xnj1.png) no-repeat left center;
-}
-.slice_detail_tab .row .zjr.on a {
-  background: url(../img/zjr1.png) no-repeat left center;
-}
 .slice_detail_block .help-block {
   margin-bottom: 40px;
   text-align: center;
@@ -7537,6 +7496,13 @@ body .modal-dialog .modal-content .modal-footer {
   color: #bfdaff;
   padding: 5px 0 5px 35px;
 }
+.user_manage_tab a:hover,
+.user_manage_tab a:active {
+  text-decoration: none;
+}
+.user_manage_tab a.on {
+  background: url(../img/sj.png) no-repeat center bottom;
+}
 .user_manage_tab a.user_index span {
   background: url(../img/user2.png) no-repeat left center;
 }
@@ -7561,12 +7527,39 @@ body .modal-dialog .modal-content .modal-footer {
   background: url(../img/log1.png) no-repeat left center;
   color: #fff;
 }
-.user_manage_tab a:hover,
-.user_manage_tab a:active {
-  text-decoration: none;
+.user_manage_tab a.fw span {
+  background: url(../img/fw2.png) no-repeat left center;
 }
-.user_manage_tab a.on {
-  background: url(../img/sj.png) no-repeat center bottom;
+.user_manage_tab a.fw:hover span,
+.user_manage_tab a.fw.on span {
+  background: url(../img/fw1.png) no-repeat left center;
+  color: #fff;
+}
+.user_manage_tab a.xnj span {
+  background: url(../img/xnj2.png) no-repeat left center;
+}
+.user_manage_tab a.xnj:hover span,
+.user_manage_tab a.xnj.on span {
+  background: url(../img/xnj1.png) no-repeat left center;
+  color: #fff;
+}
+.slice_detail_tab .fw a {
+  background: url(../img/fw2.png) no-repeat left center;
+}
+.slice_detail_tab .xnj a {
+  background: url(../img/xnj2.png) no-repeat left center;
+}
+.slice_detail_tab .zjr a {
+  background: url(../img/zjr2.png) no-repeat left center;
+}
+.slice_detail_tab .fw.on a {
+  background: url(../img/fw1.png) no-repeat left center;
+}
+.slice_detail_tab .xnj.on a {
+  background: url(../img/xnj1.png) no-repeat left center;
+}
+.slice_detail_tab .zjr.on a {
+  background: url(../img/zjr1.png) no-repeat left center;
 }
 .switch_main {
   height: 490px;
