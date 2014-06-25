@@ -84,7 +84,9 @@ $(document).ready(function() {
         }else{
             $('.switch-table').attr('style', '');
         }
-        $('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        //$('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
+        $('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
+        
         selected_ports = {};
         selected_dpids = {};
         $('.switch-table tbody tr').hide();
@@ -349,6 +351,18 @@ function page_function3(){
 	var slice_nw = document.getElementById("slice_nw");
 	var list_slice_nw = document.getElementById("list_slice_nw");
 	list_slice_nw.innerHTML = slice_nw.innerHTML;
+	//基本信息
+	var list_slice_name = document.getElementById("list_slice_name");
+	var slice_name_obj = document.getElementById("slice_name");
+	list_slice_name.innerHTML = slice_name_obj.value;
+	
+	var list_slice_description = document.getElementById("list_slice_description");
+    var slice_description_obj = document.getElementById("slice_description");
+    list_slice_description.innerHTML = slice_description_obj.value;
+    
+    var list_slice_island = document.getElementById("list_slice_island");
+    var island_id_obj = document.getElementById("island_id");
+    list_slice_island.innerHTML = island_id_obj.options[island_id_obj.selectedIndex].text;
 	//DHCP
 	//var dhcp_selected_obj = document.getElementById("dhcp_selected");
 	/*var list_slice_dhcp = document.getElementById("list_slice_dhcp");

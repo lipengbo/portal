@@ -51,6 +51,26 @@ class Island(models.Model):
     sflow_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("sflow_ip"))
     sflow_port = models.IntegerField(null=True, verbose_name=_('sflow_port'))
 
+    def get_switches(self):
+        switches = self.switch_set.all()
+        return switches
+
+    def get_available_switches(self):
+        switches = self.switch_set.filter(state=1)
+        return switches
+
+    def get_switch_ports(self):
+        from resources.models import SwitchPort
+        switches = self.get_switches()
+        return SwitchPort.objects.filter(switch__in=switches)
+
+    def get_virttool(self):
+        virttools = self.virttool_set.all()
+        if virttools:
+            return virttools[0]
+        else:
+            return None
+
     @staticmethod
     def admin_options():
         options = {

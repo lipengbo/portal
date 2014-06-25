@@ -29,4 +29,6 @@ urlpatterns = patterns('slice.views',
     url(r'^get_select_server/(?P<slice_id>\d+)/$', "get_select_server", name="get_select_server"),
     url(r'^create_gw/(?P<slice_id>\d+)/$', "create_gw", name="create_gw"),
     url(r'^edit_slice/(?P<slice_id>\d+)/$', "edit_slice", name='edit_slice'),
+    url(r'^topology_d3_edit/$', "topology_d3_edit", name='topology_d3_edit'),
+    url(r'^topology_edit/(?P<slice_id>\d+)/$', "topology_edit", name='slice_topology_edit'),
 )

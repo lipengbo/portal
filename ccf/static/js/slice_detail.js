@@ -328,15 +328,15 @@ function start_or_stop_slice(slice_id, flag){
 
 
 //slice编辑click事件
-function bj_slice(vm_id){
+function bj_slice(slice_id){
     var a_obj = $("#slice_bj")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
-        //alert(1);
-        $('#editInfoModal').modal('show');
+        location.href = "http://" + window.location.host + "/slice/edit_slice/"+slice_id+"/";
+        //$('#editInfoModal').modal('show');
         return false;
     }
 }

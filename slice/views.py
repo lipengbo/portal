@@ -17,7 +17,7 @@ from django.db.models import Q
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
     get_slice_links_bandwidths, get_count_show_data, slice_edit_controller,\
-    slice_edit_gw
+    slice_edit_gw, get_slice_topology_edit, slice_edit_topology, get_island_topology
 from slice.models import Slice, SliceDeleted
 from project.models import Project, Island
 from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
@@ -276,9 +276,35 @@ def edit_slice(request, slice_id):
     slice_obj = get_object_or_404(Slice, id=slice_id)
     if not request.user.has_perm('slice.change_slice', slice_obj):
         return redirect('forbidden')
-    context = {}
-    context['slice_obj'] = slice_obj
-    return render(request, 'slice/edit_slice.html', context)
+    if request.method == 'POST':
+        slice_description = request.POST.get("slice_description")
+        switch_dpids = request.POST.get("switch_dpids")
+        island = slice_obj.get_island()
+        switch_dpids_list = switch_dpids.split(",")
+        switches = []
+        for switch_dpid in switch_dpids_list:
+            switch_obj = Switch.objects.filter(dpid=switch_dpid, island=island)
+            if switch_obj and (switch_obj[0] not in switches):
+                switches.append(switch_obj[0])
+        try:
+            slice_change_description(slice_obj, slice_description)
+            slice_edit_topology(slice_obj, switches)
+        except Exception, ex:
+            return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
+        else:
+            return HttpResponse(json.dumps({'result': 1}))
+    else:
+        if not request.user.has_perm('slice.change_slice', slice_obj):
+            return redirect('forbidden')
+        context = {}
+        context['slice_obj'] = slice_obj
+        try:
+            Subnet.objects.get(owner=slice_obj.uuid)
+        except:
+            context['slice_type'] = "baseslice"
+        else:
+            context['slice_type'] = "mixslice"
+        return render(request, 'slice/edit_slice.html', context)
 
 
 @login_required
@@ -428,6 +454,19 @@ def topology(request, slice_id):
     return HttpResponse(result, mimetype='text/plain')
 
 
+def topology_edit(request, slice_id):
+    """ajax获取slice拓扑信息。"""
+    if int(slice_id) != 0:
+        slice_obj = get_object_or_404(Slice, id=slice_id)
+        jsondatas = get_slice_topology_edit(slice_obj)
+    else:
+        island_id = request.GET.get('island_id')
+        island_obj = get_object_or_404(Island, id=island_id)
+        jsondatas = get_island_topology(island_obj)
+    result = json.dumps(jsondatas)
+    return HttpResponse(result, mimetype='text/plain')
+
+
 @login_required
 def check_slice_name(request):
     """
@@ -456,6 +495,7 @@ def create_nw(request, owner, nw_num):
     """
     print "create_nw"
     try:
+        print nw_num
         if owner == '0':
             uuid = utils.gen_uuid()
             owner = ''.join(uuid.split('-'))
@@ -478,6 +518,8 @@ def create_nw(request, owner, nw_num):
         else:
             return HttpResponse(json.dumps({'value': 0}))
     except Exception:
+        import traceback
+        traceback.print_exc()
         return HttpResponse(json.dumps({'value': 0}))
 
 
@@ -541,6 +583,15 @@ def topology_d3(request):
     else:
         context['admin'] = 0
     return render(request, 'slice/slice_topology.html', context)
+
+
+def topology_d3_edit(request):
+    """拓扑测试"""
+    context = {}
+    context['slice_id'] = request.GET.get('slice_id')
+    context['island_id'] = request.GET.get('island_id')
+    context['height'] = request.GET.get('height')
+    return render(request, 'slice/slice_topology_edit.html', context)
 
 
 def update_links_bandwidths(request, slice_id):

@@ -3,11 +3,12 @@ from django.db import transaction
 from slice.models import Slice, SliceDeleted, SLICE_STATE_STOPPED,\
     SLICE_STATE_STARTED
 from slice.slice_exception import DbError, IslandError, NameExistError
-from resources.ovs_api import slice_add_ovs_or_ports
+from resources.ovs_api import slice_add_ovs_or_ports, slice_change_ovs_ports
 from resources.models import Switch
 from plugins.openflow.virttool_api import virttool_del_slice,\
     virttool_del_flowspace, virttool_add_flowspace,\
-    virttool_del_port, virttool_add_port, virttool_update_sice_controller
+    virttool_del_port, virttool_add_port, virttool_update_sice_controller,\
+    update_physic_topology
 from plugins.openflow.flowspace_api import matches_to_arg_match,\
     flowspace_nw_add, flowspace_gw_add, flowspace_dhcp_add,\
     flowspace_dhcp_del, flowspace_gw_del
@@ -216,6 +217,55 @@ def slice_change_description(slice_obj, new_description):
     except Exception:
         transaction.rollback()
         raise DbError("编辑失败！")
+
+
+@transaction.commit_manually
+def slice_edit_topology(slice_obj, switches):
+    """编辑slice拓扑
+    """
+    LOG.debug('slice_edit_topology')
+    try:
+        add_switches = []
+        delete_switches = []
+        unchanged_switches = []
+        old_switches = slice_obj.get_switches()
+        for switch in switches:
+            if switch in old_switches:
+                unchanged_switches.append(switch)
+            else:
+                add_switches.append(switch)
+        for old_switch in old_switches:
+            if old_switch not in switches:
+                delete_switches.append(old_switch)
+        error_delete_vms = []
+        error_delete_switches = []
+        for delete_switch in delete_switches:
+            switch_can_delete_flag = True
+            if delete_switch.is_virtual():
+                vms = delete_switch.virtualswitch.server.virtualmachine_set.filter(slice=slice_obj)
+                for vm in vms:
+                    if vm.type != 0:
+                        try:
+                            vm.delete()
+                        except:
+                            switch_can_delete_flag = False
+                            error_delete_vms.append(vm)
+            if not switch_can_delete_flag:
+                error_delete_switches.append(delete_switch)
+        cur_switches = switches
+        for error_delete_switch in error_delete_switches:
+            delete_switches.remove(error_delete_switch)
+            cur_switches.append(error_delete_switch)
+        transaction.commit()
+        slice_change_ovs_ports(slice_obj, delete_switches, add_switches, cur_switches)
+    except Exception:
+        transaction.rollback()
+        raise DbError("编辑失败！")
+    else:
+        transaction.commit()
+        if error_delete_switches:
+            raise DbError("部分虚拟机删除失败！")
+        transaction.commit()
 
 
 @transaction.commit_manually
@@ -978,6 +1028,141 @@ def get_slice_topology(slice_obj):
         return []
     else:
         print "get topology success"
+        return topology
+
+
+def get_slice_topology_edit(slice_obj):
+    """获取编辑slice拓扑信息
+    """
+    print 'get_slice_topology_edit'
+#     交换机
+    try:
+        switches = []
+        dpids = []
+        island = slice_obj.get_island()
+        update_physic_topology(island.get_virttool())
+        if island != None:
+            py_switches = island.get_available_switches()
+        switch_objs = slice_obj.get_switches()
+        for py_switch in py_switches:
+            ports = []
+            switch_select_flag = False
+            if py_switch in switch_objs:
+                switch_select_flag = True
+                dpids.append(py_switch.dpid)
+            switch_ports = py_switch.get_ports()
+            one_switch_ports = slice_obj.get_one_switch_ports(py_switch)
+            for switch_port in switch_ports:
+                port_select_flag = False
+                if switch_port in one_switch_ports:
+                    port_select_flag = True
+                ports.append({'name': switch_port.name,
+                              'port': switch_port.port,
+                              'selected': port_select_flag})
+            switch = {'dpid': py_switch.dpid,
+                      'name': py_switch.name,
+                      'type': py_switch.type(),
+                      'id': py_switch.id,
+                      'ports': ports,
+                      'selected': switch_select_flag}
+            switches.append(switch)
+#         print switches
+#     链接
+        links = []
+        switch_ports = island.get_switch_ports()
+        print switch_ports
+        virttool = slice_obj.get_virttool()
+        if virttool:
+            link_objs = virttool.link_set.filter(
+                source__in=switch_ports, target__in=switch_ports)
+        for link_obj in link_objs:
+            link_select_flag = False
+            if (link_obj.source.switch.dpid in dpids) and\
+                (link_obj.target.switch.dpid in dpids):
+                link_select_flag = True
+            link = {'src_switch': link_obj.source.switch.dpid,
+                    'src_port_name': link_obj.source.name,
+                    'src_port': link_obj.source.port,
+                    'dst_switch': link_obj.target.switch.dpid,
+                    'dst_port': link_obj.target.port,
+                    'dst_port_name': link_obj.target.name,
+                    'selected': link_select_flag}
+            links.append(link)
+    #     虚拟机
+        normals = []
+        vms = slice_obj.get_vms()
+        for vm in vms:
+            virtual_switch = vm.server.get_link_vs()
+            if virtual_switch and (virtual_switch.dpid in dpids):
+                if vm.type == 1 or vm.type == 2:
+                    vm_info = {'macAddress': vm.mac,
+                               'switchDPID': virtual_switch.dpid,
+                               'hostid': vm.id,
+                               'hostStatus': vm.state,
+                               'name': vm.name,
+                               'ip': vm.ip.ipaddr}
+                    normals.append(vm_info)
+        topology = {'switches': switches, 'links': links,
+                    'normals': normals}
+    except Exception:
+        traceback.print_exc()
+        print "get topology failed"
+        return []
+    else:
+        print "get topology success"
+        print topology
+        return topology
+
+
+def get_island_topology(island_obj):
+    """获取创建slice拓扑信息
+    """
+    print 'get_island_topology'
+#     交换机
+    try:
+        update_physic_topology(island_obj.get_virttool())
+        switches = []
+        dpids = []
+        py_switches = island_obj.get_available_switches()
+        for py_switch in py_switches:
+            ports = []
+            switch_ports = py_switch.get_ports()
+            for switch_port in switch_ports:
+                ports.append({'name': switch_port.name,
+                              'port': switch_port.port})
+            switch = {'dpid': py_switch.dpid,
+                      'name': py_switch.name,
+                      'type': py_switch.type(),
+                      'id': py_switch.id,
+                      'ports': ports}
+            switches.append(switch)
+#         print switches
+#     链接
+        links = []
+        switch_ports = island_obj.get_switch_ports()
+        virttool = island_obj.get_virttool()
+        if virttool:
+            link_objs = virttool.link_set.filter(
+                source__in=switch_ports, target__in=switch_ports)
+        for link_obj in link_objs:
+            link = {'src_switch': link_obj.source.switch.dpid,
+                    'src_port_name': link_obj.source.name,
+                    'src_port': link_obj.source.port,
+                    'dst_switch': link_obj.target.switch.dpid,
+                    'dst_port': link_obj.target.port,
+                    'dst_port_name': link_obj.target.name}
+            links.append(link)
+    #     虚拟机
+        normals = []
+        topology = {'switches': switches, 'links': links,
+                    'normals': normals}
+    except Exception:
+        traceback.print_exc()
+        print "get topology failed"
+        return []
+    else:
+        print "get topology success"
+        print topology
         return topology
 
 

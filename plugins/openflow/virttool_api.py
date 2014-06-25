@@ -1,7 +1,10 @@
 # coding:utf-8
+import hashlib
+import json
 from communication.flowvisor_client import  do_updateFlowSpace, FlowvisorClient
 from slice.slice_exception import VirttoolError, DbError
 from communication.cnvp_http_client import CnvpClient
+from etc.config import virttool_disable
 #from communication.cnvp_client import CnvpClient
 
 import logging
@@ -214,6 +217,29 @@ def virttool_get_switches(virttool):
     """virttool上获取交换机信息
     """
     LOG.debug('virttool_get_switches')
+    switches = [{'dpid':'00:00:00:00:00:00:00:06', 'ports':[{'portNumber':2,'name':'ovs128-2'},{'portNumber':1,'name':'ovs128-1'}], 'target_switch':()},
+                {'dpid':'00:00:00:00:00:00:00:05', 'ports':[{'portNumber':2,'name':'ovs127-2'},{'portNumber':1,'name':'ovs127-1'}], 'target_switch':()},
+                {'dpid':'00:00:00:00:00:00:00:04', 'ports':[{'portNumber':2,'name':'ovs126-2'},{'portNumber':1,'name':'ovs126-1'}], 'target_switch':()},
+                {'dpid':'00:00:00:00:00:00:00:03', 'ports':[{'portNumber':2,'name':'ovs125-2'},{'portNumber':1,'name':'ovs125-1'}], 'target_switch':()},
+                {'dpid':'00:ee:00:00:00:00:00:01', 'ports':[{'portNumber':90,'name':'p90'}], 'target_switch':()},
+                {'dpid':'00:ff:00:00:00:00:00:01', 'ports':[{'portNumber':655,'name':'p655'},{'portNumber':1,'name':'eth1'}], 'target_switch':()},
+                {'dpid':'00:00:00:00:00:00:00:02', 'ports':[{'portNumber':14,'name':'et14'},{'portNumber':13,'name':'et13'},
+                                                            {'portNumber':12,'name':'et12'},{'portNumber':11,'name':'et11'},
+                                                            {'portNumber':10,'name':'et10'},{'portNumber':2,'name':'eth2'},
+                                                            {'portNumber':1,'name':'eth1'}], 'target_switch':()}]
+#     switches = [{'dpid':'00:00:a0:36:9f:02:e4:18', 'ports':[], 'target_switch':()},
+#                 {'dpid':'00:00:00:00:00:00:00:06', 'ports':[{'portNumber':2,'name':'ovs128-2'},{'portNumber':1,'name':'ovs128-1'}], 'target_switch':()},
+#                 {'dpid':'00:00:00:00:00:00:00:05', 'ports':[{'portNumber':2,'name':'ovs127-2'},{'portNumber':1,'name':'ovs127-1'}], 'target_switch':()},
+#                 {'dpid':'00:00:00:00:00:00:00:04', 'ports':[{'portNumber':2,'name':'ovs126-2'},{'portNumber':1,'name':'ovs126-1'}], 'target_switch':()},
+#                 {'dpid':'00:00:00:00:00:00:00:03', 'ports':[{'portNumber':2,'name':'ovs125-2'},{'portNumber':1,'name':'ovs125-1'}], 'target_switch':()},
+#                 {'dpid':'00:ee:00:00:00:00:00:01', 'ports':[{'portNumber':90,'name':'p90'}], 'target_switch':()},
+#                 {'dpid':'00:ff:00:00:00:00:00:02', 'ports':[{'portNumber':99,'name':'p99'}], 'target_switch':()},
+#                 {'dpid':'00:ff:00:00:00:00:00:01', 'ports':[{'portNumber':655,'name':'p655'},{'portNumber':1,'name':'eth1'}], 'target_switch':()},
+#                 {'dpid':'00:00:00:00:00:00:00:02', 'ports':[{'portNumber':14,'name':'et14'},{'portNumber':13,'name':'et13'},
+#                                                             {'portNumber':12,'name':'et12'},{'portNumber':11,'name':'et11'},
+#                                                             {'portNumber':10,'name':'et10'},{'portNumber':2,'name':'eth2'},
+#                                                             {'portNumber':1,'name':'eth1'}], 'target_switch':()}]
+    return switches
     if virttool:
         if virttool.type == 1:
             print "cnvp"
@@ -232,6 +258,15 @@ def virttool_get_links(virttool):
     """virttool上获取交换机链接信息
     """
     LOG.debug('virttool_get_links')
+    links = [{'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:06', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:05'},
+             {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:05', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:04'},
+             {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:04', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:03'},
+             {'dst-port':1, 'dst-switch':'00:ff:00:00:00:00:00:01', 'src-port':1, 'src-switch':'00:00:00:00:00:00:00:02'}]
+#     links = [{'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:06', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:05'},
+#              {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:05', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:04'},
+#              {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:04', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:03'},
+#              {'dst-port':1, 'dst-switch':'00:ff:00:00:00:00:00:01', 'src-port':1, 'src-switch':'00:00:00:00:00:00:00:02'}]
+    return links
     if virttool:
         if virttool.type == 1:
             print "cnvp"
@@ -244,3 +279,89 @@ def virttool_get_links(virttool):
             raise
     else:
         raise DbError("数据库异常")
+
+
+def update_physic_topology(instance):
+    from resources.models import Switch, SwitchPort
+    from plugins.openflow.models import Link, VirttoolLinksMd5
+    try:
+        if virttool_disable:
+            return
+        port_name_dict = {}
+        island_obj = instance.island
+        try:
+            switches = virttool_get_switches(instance)
+        except:
+            return
+        for switch in switches:
+            dpid = switch['dpid']
+            port_name_dict[dpid] = {}
+            for port in switch['ports']:
+                port_name_dict[dpid][port['portNumber']] = port['name']
+            switch_dbs = Switch.objects.filter(island=island_obj, dpid=dpid)
+            if switch_dbs:
+                switch_dbs[0].update_state(1)
+        dpids = port_name_dict.keys()
+        print dpids
+        switch_dbs = Switch.objects.filter(island=island_obj, state=1)
+        for switch_db in switch_dbs:
+            if switch_db.dpid not in dpids:
+                switch_db.update_state(0)
+        try:
+            links = virttool_get_links(instance)
+        except:
+            return
+        digest = hashlib.md5(json.dumps(links)).hexdigest()
+        try:
+            md5_obj = instance.virttoollinksmd5
+        except VirttoolLinksMd5.DoesNotExist:
+            #: if it's the first time update, create a md5 record
+            VirttoolLinksMd5(md5=digest, virttool=instance).save()
+        else:
+            if md5_obj.md5 != digest: #: update the md5 digest and do the updates and deletions
+                md5_obj.md5 = digest
+                md5_obj.save()
+            else:
+                return
+        #: delete all existing links and ports
+        instance.link_set.all().delete()
+        for link in links:
+            src_port = link['src-port']
+            dst_port = link['dst-port']
+            if (link['src-switch'] not in dpids) or (link['dst-switch'] not in dpids):
+                continue
+            try:
+                source_switch = Switch.objects.get(dpid=link['src-switch'], island=island_obj)
+                target_switch = Switch.objects.get(dpid=link['dst-switch'], island=island_obj)
+            except Switch.DoesNotExist:
+                continue
+            try:
+                src_port_name = port_name_dict[source_switch.dpid][int(src_port)]
+            except KeyError:
+                src_port_name = 'eth' + str(src_port)
+            try:
+                dst_port_name = port_name_dict[target_switch.dpid][int(dst_port)]
+            except KeyError:
+                dst_port_name = 'eth' + str(dst_port)
+            source_port, created = SwitchPort.objects.get_or_create(
+                    switch=source_switch,
+                    port=src_port,
+                    defaults={'name': src_port_name})
+            source_port.name = src_port_name
+            source_port.save()
+
+            target_port, created = SwitchPort.objects.get_or_create(
+                    switch=target_switch,
+                    port=dst_port,
+                    defaults={'name': dst_port_name})
+            target_port.name = dst_port_name
+            target_port.save()
+
+            link_obj = Link(virttool=instance,
+                    source=source_port,
+                    target=target_port)
+            link_obj.save()
+    except:
+        import traceback
+        traceback.print_exc()
+        raise

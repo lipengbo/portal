@@ -121,6 +121,7 @@ class SwitchResource(IslandResource):
     dpid = models.CharField(max_length=256, help_text="dpid以冒号“:”分隔", verbose_name="DPID")
     has_gre_tunnel = models.BooleanField(default=False, verbose_name=_("Has GRE tunnel"))
     slices = models.ManyToManyField(Slice, through="SliceSwitch")
+    state = models.IntegerField(null=True, default=1, verbose_name=_("state"), choices=((0, _("Not available")), (1, _("Available"))))
 
     def __unicode__(self):
         return self.name
@@ -168,6 +169,18 @@ class Switch(SwitchResource):
                 edge_ports.append(port)
         return edge_ports
 
+    def get_ports(self):
+        ports = self.switchport_set.all()
+        if ports:
+            return ports
+        else:
+            return []
+
+    def update_state(self, state):
+        if self.state != state:
+            self.state = state
+            self.save()
+
     @staticmethod
     def admin_options():
         options = {
@@ -210,10 +223,10 @@ class SwitchPort(Resource):
         slice_ports = SlicePort.objects.filter(
             switch_port=self, slice=slice_obj)
         for slice_port in slice_ports:
-            switch = slice_port.switch_port.switch
+#             switch = slice_port.switch_port.switch
             slice_port.delete()
-            if not slice_obj.get_switch_ports().filter(switch=switch):
-                slice_obj.remove_resource(switch)
+#             if not slice_obj.get_switch_ports().filter(switch=switch):
+#                 slice_obj.remove_resource(switch)
 
     def can_monopolize(self):
         slice_ports_c = SlicePort.objects.filter(switch_port=self).count()
