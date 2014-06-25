@@ -33,6 +33,7 @@ from project.models import Island
 import logging
 from django.utils.translation import ugettext as _
 from adminlog.models import log, SUCCESS, FAIL
+from task import create_snapshot
 LOG = logging.getLogger('plugins')
 
 
@@ -390,7 +391,10 @@ def create_snapshot(request):
         name = request.POST.get("name")
         desc = request.POST.get("desc")
         snapshot = Snapshot()
-        snapshot.vm = get_object_or_404(VirtualMachine, id=vm_id)
+        vm = get_object_or_404(VirtualMachine, id=vm_id)
+        vm.state = 3
+        vm.save()
+        snapshot.vm = vm
         snapshot.uuid = gen_uuid()
         snapshot.name = name
         snapshot.desc = desc
