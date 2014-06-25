@@ -6990,21 +6990,7 @@ fieldset legend {
 .table_base thead tr td,
 .table_base tbody tr td {
   padding: 0 8px 8px 8px;
-  white-space: pre-wrap;
-  /* CSS-3 */
-
-  white-space: -moz-pre-wrap;
-  /* Mozilla, since 1999 */
-
-  white-space: -pre-wrap;
-  /* Opera 4-6 */
-
-  white-space: -o-pre-wrap;
-  /* Opera 7 */
-
   Word-wrap: break-word;
-  /* Internet Explorer 5.5+ */
-
 }
 .table_base .slider_td {
   padding-top: 8px;
