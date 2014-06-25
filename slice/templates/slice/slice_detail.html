@@ -241,7 +241,7 @@
           {%endif%}
           </h4>      
         </div>
-        <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
+        <form class="form-horizontal" accept-charset="utf-8" AUTOCOMPLETE="OFF">{% csrf_token %}
             <div class="modal-body base_info">
               <table class="table_base tooltip-demo">
                 <tbody>
@@ -295,7 +295,7 @@
                             <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign"></i></a>
                         </td>
                         <td class="text-right">控制器IP</td>
-                        <td width="230">
+                        <td width="250">
                             <div id="ipInput" class="disabled"></div>
                         </td>
                         <td width="50" class="text-right">端口</td>

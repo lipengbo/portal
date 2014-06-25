@@ -31,10 +31,10 @@
                 <button type="submit" class="btn btn_info">{% trans "Accept" %}</button>
                 <a href="{% url profiles_reject formset.instance.id %}" class="btn btn-default">{% trans "Reject" %}</a>
                 {% else %}
-                    {% if class_name == 'User' %}
+                    <!--{% if class_name == 'User' %}
                         {% quotas %}
                         {% include "quota_admin/_quota_selector.html" with user=formset.instance %}
-                    {% endif %}
+                    {% endif %}-->
                 <button type="submit" class="btn btn_info">{% trans "Save" %}</button>
                 {% endif %}
             </div>
