@@ -27,6 +27,13 @@ class DbError(Error):
         super(DbError, self).__init__('%s' % (message))
 
 
+class DeleteSwitchError(Error):
+
+    def __init__(self, message='Unknown'):
+        self.message = message
+        super(DeleteSwitchError, self).__init__('%s' % (message))
+
+
 class NameExistError(Error):
 
     def __init__(self, message='Unknown'):

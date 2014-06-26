@@ -209,8 +209,10 @@ class VirtualMachine(IslandResource):
             if function_test:
                 print '----------------------delete a vm=%s -------------------------' % self.name
             else:
+                kk
                 agent_client = AgentClient(self.server.ip)
                 agent_client.delete_vm(self.uuid)
+                print "++++++++++++++++++++++++++++++++++"
         except socket_error as serr:
             if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
                 raise ConnectionRefused()

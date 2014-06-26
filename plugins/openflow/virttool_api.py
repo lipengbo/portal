@@ -222,6 +222,7 @@ def virttool_get_switches(virttool):
                 {'dpid':'00:00:00:00:00:00:00:04', 'ports':[{'portNumber':2,'name':'ovs126-2'},{'portNumber':1,'name':'ovs126-1'}], 'target_switch':()},
                 {'dpid':'00:00:00:00:00:00:00:03', 'ports':[{'portNumber':2,'name':'ovs125-2'},{'portNumber':1,'name':'ovs125-1'}], 'target_switch':()},
                 {'dpid':'00:ee:00:00:00:00:00:01', 'ports':[{'portNumber':90,'name':'p90'}], 'target_switch':()},
+                {'dpid':'00:ff:00:00:00:00:00:02', 'ports':[{'portNumber':99,'name':'p99'}], 'target_switch':()},
                 {'dpid':'00:ff:00:00:00:00:00:01', 'ports':[{'portNumber':655,'name':'p655'},{'portNumber':1,'name':'eth1'}], 'target_switch':()},
                 {'dpid':'00:00:00:00:00:00:00:02', 'ports':[{'portNumber':14,'name':'et14'},{'portNumber':13,'name':'et13'},
                                                             {'portNumber':12,'name':'et12'},{'portNumber':11,'name':'et11'},

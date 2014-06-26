@@ -27,6 +27,7 @@ from plugins.common import utils
 from plugins.vt.models import VirtualMachine, Image
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
+from slice.slice_exception import DeleteSwitchError
 
 import datetime
 
@@ -289,7 +290,12 @@ def edit_slice(request, slice_id):
         try:
             slice_change_description(slice_obj, slice_description)
             slice_edit_topology(slice_obj, switches)
+        except DeleteSwitchError, ex:
+            print "++++++++++++++++++++++++++++++++"
+            print ex
+            return HttpResponse(json.dumps({'result': 2, 'error_info': str(ex)}))
         except Exception, ex:
+            print "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{"
             return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
         else:
             return HttpResponse(json.dumps({'result': 1}))

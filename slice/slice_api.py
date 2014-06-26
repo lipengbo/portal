@@ -2,7 +2,7 @@
 from django.db import transaction
 from slice.models import Slice, SliceDeleted, SLICE_STATE_STOPPED,\
     SLICE_STATE_STARTED
-from slice.slice_exception import DbError, IslandError, NameExistError
+from slice.slice_exception import DbError, IslandError, NameExistError, DeleteSwitchError
 from resources.ovs_api import slice_add_ovs_or_ports, slice_change_ovs_ports
 from resources.models import Switch
 from plugins.openflow.virttool_api import virttool_del_slice,\
@@ -216,7 +216,7 @@ def slice_change_description(slice_obj, new_description):
             slice_obj.change_description(new_description)
     except Exception:
         transaction.rollback()
-        raise DbError("编辑失败！")
+        raise DbError(u"编辑失败！")
 
 
 @transaction.commit_manually
@@ -246,8 +246,10 @@ def slice_edit_topology(slice_obj, switches):
                 for vm in vms:
                     if vm.type != 0:
                         try:
+                            print "delete vm ====================================="
                             vm.delete()
                         except:
+                            print "delete vm fail======================================"
                             switch_can_delete_flag = False
                             error_delete_vms.append(vm)
             if not switch_can_delete_flag:
@@ -264,7 +266,12 @@ def slice_edit_topology(slice_obj, switches):
     else:
         transaction.commit()
         if error_delete_switches:
-            raise DbError("部分虚拟机删除失败！")
+            str = ''
+            for error_delete_switch in error_delete_switches:
+                str = str + error_delete_switch.name
+            print "pppppppppppppppppppppppppppppppp"
+            print str
+            raise DeleteSwitchError(u"交换机（" + str + u"）部分虚拟机删除失败！")
         transaction.commit()
 
 

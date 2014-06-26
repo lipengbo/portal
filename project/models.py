@@ -21,6 +21,15 @@ from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from invite.models import Invitation, Application
 from notifications import notify
 
+
+class Priority(models.Model):
+    priority = models.IntegerField(null=True, verbose_name=u"优先级")
+    user = models.OneToOneField(User, verbose_name=u"用户")
+
+    def __unicode__(self):
+        return self.user.username
+
+
 class City(models.Model):
     name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
