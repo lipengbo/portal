@@ -42,18 +42,20 @@ def reset_state(user, vm, action, result, is_except):
             log(user, vm, u"启动" + VM_TYPE[vm.type][1], FAIL)
 
 @task
-def create_snapshot(server_ip, vm, snapshot, vm_pre_state):
-    print "create snapshot ", snapshot.uuid, "on ", server_ip, "for ", vm.uuid
+def do_create_snapshot(server_ip, vm, snapshot):
+    print "create snapshot ", snapshot.uuid, "on ", server_ip, "for vm ", vm.uuid
     try:
         result = AgentClient(server_ip).create_snapshot(vm.uuid, snapshot.uuid)
-        snapshot.state = 1
+        if result:
+            snapshot.state = 1
+        else:
+            snapshot.state = -1
     except:
-        print "result is ", result
         snapshot.state = -1
         traceback.print_exc()
     finally:
-        vm.state = vm_pre_state
-        vm.save()
+        snapshot.save()
+        print "result is ", result
 
 
 

@@ -15,7 +15,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from forms import VmForm
 from slice.models import Slice
-from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC, Snapshot, SNAPSHOT_STATE
+from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC, Snapshot
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from etc.config import function_test
@@ -33,7 +33,7 @@ from project.models import Island
 import logging
 from django.utils.translation import ugettext as _
 from adminlog.models import log, SUCCESS, FAIL
-from task import create_snapshot
+from tasks import do_create_snapshot
 LOG = logging.getLogger('plugins')
 
 
@@ -292,6 +292,7 @@ def get_slice_gateway_ip(request, slice_name):
 
 
 def set_domain_state(vname, state):
+    print "vm state---", state
     try:
         result = 1
         vm_query = VirtualMachine.objects.filter(uuid=vname)
@@ -384,7 +385,6 @@ def can_create_vm(request, sliceid):
     else:
         return HttpResponse(json.dumps({'result': '1'}))
 
-
 def create_snapshot(request):
     if request.method == 'POST':
         vm_id = request.POST.get('vm_id')
@@ -392,13 +392,18 @@ def create_snapshot(request):
         desc = request.POST.get("desc")
         snapshot = Snapshot()
         vm = get_object_or_404(VirtualMachine, id=vm_id)
-        vm.state = 3
-        vm.save()
         snapshot.vm = vm
         snapshot.uuid = gen_uuid()
         snapshot.name = name
         snapshot.desc = desc
         snapshot.state = 0
         snapshot.save()
+        do_create_snapshot.delay('192.168.5.113', vm, snapshot)
     return HttpResponse(json.dumps({'result': '0'}))
+
+def list_snapshot(request, vm_id):
+    selected_vm = get_object_or_404(VirtualMachine, id=vm_id)
+    snapshots = Snapshot.objects.filter(vm=selected_vm)
+    print 'snapshots*******', snapshots
+    return render(request, 'html', {'snapshots': '1'})
 
