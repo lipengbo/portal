@@ -26,6 +26,9 @@ body a:active, body a:focus {
     color:#fff;
 }
 /* bootstrap defined */
+a:link {
+    text-decoration:none;    
+}
 .btn:focus,
 .btn:active:focus,
 .btn.active:focus {
@@ -1236,7 +1239,6 @@ fieldset {
     vertical-align: top;
 }
 .create_vm_form {
-    width:100%;
     tbody tr td {
         padding:0 8px 16px 8px;
         img {
@@ -1618,7 +1620,6 @@ span[name="serverInfo"] {
             text-align:center;
         }
         .slice_detail_content {
-            padding:10px 20px;
             display:none;
         }
 }
@@ -1828,30 +1829,40 @@ body .modal-dialog {
             color:#fff;
         }
     }
+    a.zjr {
+        span {
+            background:url(../img/zjr2.png) no-repeat left center;
+        }        
+    }
+    a.zjr:hover, a.zjr.on {
+        span {
+            background:url(../img/zjr1.png) no-repeat left center;
+            color:#fff;
+        }        
+    }
+    a.jx {
+        span {
+            background:url(../img/jx2.png) no-repeat left center;
+        }
+    }
+    a.jx:hover, a.jx.on {
+        span {
+            background:url(../img/jx1.png) no-repeat left center;
+            color:#fff;
+        }
+    }
+    a.bf {
+        span {
+            background:url(../img/bf2.png) no-repeat left center;
+        }
+    }
+    a.bf:hover, a.bf.on {
+        span {
+            background:url(../img/bf1.png) no-repeat left center;
+            color:#fff;
+        }
+    }
 }
-.slice_detail_tab {
-
-    .fw a {
-        background:url(../img/fw2.png) no-repeat left center;
-    }      
-    .xnj a {
-        background:url(../img/xnj2.png) no-repeat left center;
-    }
-    .zjr a {
-        background:url(../img/zjr2.png) no-repeat left center;
-    }
-    .fw.on a {
-        background:url(../img/fw1.png) no-repeat left center;           
-    }
-    .xnj.on a {
-        background:url(../img/xnj1.png) no-repeat left center;           
-    }
-    .zjr.on a {
-        background:url(../img/zjr1.png) no-repeat left center;           
-    }
-}
-
-
 
 .switch_main {
     height:490px;
@@ -2097,4 +2108,110 @@ body .modal-dialog {
             outline:none;
         }
     } 
+}
+ul.action_box_tab {
+    float:left;
+    margin-bottom:0;
+    li {
+        float:left;
+        a {
+            display:block;
+            padding: 6px 24px;
+            border: 1px solid #e1f2fa;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-right: 10px;
+            color: #2489c5;
+            font-weight: bold;
+            text-decoration: none;
+            -webkit-transition: all 0.2s ease-in-out;
+            -moz-transition: all 0.2s ease-in-out;
+            -o-transition: all 0.2s ease-in-out;
+            transition: all 0.2s ease-in-out;
+        }
+        a:hover, a:focus {
+            border-color: #2b8fcd;
+            text-decoration: none;
+        }
+     }
+     li.active a {
+         background: #2489c5;
+         border: 1px solid #2b8fcd;
+         color: #fff;
+     }
+}
+
+.t_dropdown {
+    .dropdown {
+        a {
+            color:#fff;
+        }
+    }
+    ul.dropdown-menu {
+        min-width:140px;
+        li {
+            a {
+                color:#333;                
+            }
+            a:hover, a:focus {
+                color: #262626;
+                background-color: #f5f5f5;
+            }
+        }
+    }
+}
+.action_box_tab_blocks {
+    .action_box_tab_block {
+        display:none;
+    }
+}
+ul.errorlist {
+    list-style: none;
+    padding-left:0;
+}
+
+.radio_defined {
+    margin-left:56px;
+    margin-right:20px;
+}
+.pot_state {
+    span {
+        width:10px;
+        height:10px;
+        display:inline-block;
+        background:#15AD66;     
+        border-radius: 50%;
+        box-shadow:none;
+        animation:myfirst 2s infinite;
+        -moz-animation:myfirst 2s infinite; /* Firefox */
+        -webkit-animation:myfirst 2s infinite; /* Safari and Chrome */
+        -o-animation:myfirst 2s infinite; /* Opera */   
+    }
+}
+@keyframes myfirst
+{
+0% {box-shadow:none;}
+50% {box-shadow:0 0 10px green;}
+100% {box-shadow:none;}
+}
+
+@-moz-keyframes myfirst /* Firefox */
+{
+0% {box-shadow:none;}
+50% {box-shadow:0 0 10px green;}
+100% {box-shadow:none;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+0%{box-shadow:none;}
+50% {box-shadow:0 0 10px #15AD66;}
+100% {box-shadow:none;}
+}
+
+@-o-keyframes myfirst /* Opera */
+{
+0% {box-shadow:none;}
+50% {box-shadow:0 0 10px green;}
+100% {box-shadow:none;}
 }

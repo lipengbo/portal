@@ -46,10 +46,14 @@
     <table class="table_defined">
         <thead>
             <tr>
-                <th width="25%">{% trans "Project Name" %}</th>
-                <th width="25%">{% trans "Project Description" %}</th>
-                <th width="25%">{% trans "Creator" %}</th>
-                <th width="25%">{% trans "Category" %}</th>
+                <th width="14%">{% trans "Project Name" %}</th>
+                <th width="15%">{% trans "Project Description" %}</th>
+                <th width="13%">{% trans "Creator" %}</th>
+                <th width="15%">{% trans "Category" %}</th>
+                <th width="10%">成员数</th>
+                <th width="10%">虚网数</th>
+                <th width="10%">虚拟机数</th>
+                <th width="13%">带宽（Mbit/s）</th>
             </tr>
         </thead>
         <tbody>
@@ -58,6 +62,10 @@
                 <td>{{ project.description }}</td>
                 <td>{{ project.owner }}</td>
                 <td><span class="">{{ project.category }}</span></td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
+                <td>10</td>
            </tr> 
         </tbody>
     </table>
@@ -75,7 +83,7 @@
             {% trans "Members" %}
             {% if not user.is_superuser %}
                 {% if user == project.owner %}
-                    <a href="{% url project_member_manage project.id %}" class="edit pull-right" title="管理"><i class="icon-wrench"></i></a>
+                    <a href="{% url project_member_manage project.id %}" class="edit pull-right" title="管理"><i class="icon-folder-close"></i></a>
                 {% endif %}
             {% endif %}
         </h4>
