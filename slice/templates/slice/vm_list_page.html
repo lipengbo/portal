@@ -36,7 +36,7 @@
         </div>
     </div>
 <h4 class="block_title">
-    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】<a href="/plugins/vt/list_snapshot/">备份列表</a>
+    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】<a href="/ghost/list_snapshot/">备份列表</a>
     <div class="pull-right">
          {%if extent_html == "site_base.html" and permission == "edit" and slice_type == "mixslice" %}
                 <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="can_create_vm({{slice_obj.id}});"

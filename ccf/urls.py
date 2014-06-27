@@ -100,7 +100,8 @@ urlpatterns = patterns("",
     url(r"^accounts/", include("account.urls")),
     url(r'^xmlrpc/$', 'django_xmlrpc.views.handle_xmlrpc', name='xmlrpc'),
     url(r"^nexus/", include("nexus.urls")),
-	url(r"^monitor/", include("monitor.urls")),
+    url(r"^monitor/", include("monitor.urls")),
+    url(r"^ghost/", include("ghost.urls")),
 )
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

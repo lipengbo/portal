@@ -14,8 +14,4 @@ urlpatterns = patterns('plugins.vt.views',
     url(r'^get_flavor_msg/$', "get_flavor_msg", name ='get_flavor_msg'),
     url(r'^download_keypair/$', "download_keypair", name = "download_keypair"),
     url(r'^can_create_vm/(?P<sliceid>\d+)/$', "can_create_vm", name="can_create_vm"),
-    url(r'^create_snapshot/$', "create_snapshot", name="create_snapshot"),
-    url(r'^list_snapshot/$', "list_snapshot", name="list_snapshot"),
-    url(r'^delete_snapshot/$', "delete_snapshot", name="delete_snapshot"),
-    url(r'^restore_snapshot/$', "restore_snapshot", name="restore_snapshot"),
 )
