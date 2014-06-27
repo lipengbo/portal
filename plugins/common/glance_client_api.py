@@ -10,10 +10,11 @@ import itertools
 import thread
 
 from plugins.common import glanceclient as glance_client
+from plugins.common.glanceclient import client
 
 
 def glanceclient(url):
-    return glance_client.Client('1', url)
+    return client.Client('1', url)
 
 
 def image_delete(url, image_id):

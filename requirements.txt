@@ -29,7 +29,7 @@ django-reversion==1.7.1
 django-xmlrpc==0.1.5
 git+https://github.com/eldarion/idios.git
 django-filter
-git+https://github.com/fay/django-notifications
+#git+https://github.com/fay/django-notifications
 South==0.8.1
 django-smtp-ssl==1.0
 django-celery-with-redis==3.0
