@@ -49,9 +49,12 @@ urlpatterns = patterns("",
 #     url(r"^check_quota/", TemplateView.as_view(template_name="check_quota.html"), name="demo"),
 #     url(r"^apply_expanding_quota/", TemplateView.as_view(template_name="apply_expanding_quota.html"), name="demo"),
 #     url(r"^basenet/", TemplateView.as_view(template_name="basenet.html"), name="demo"),
-# 
+#
 # >>>>>>> 8db340c2dbe23426749528106cb7a30cee5e9c6b
 
+#    url(r"^monitor/", TemplateView.as_view(template_name="monitor.html"), name="demo"),
+#    url(r"^jxbf_jx/", TemplateView.as_view(template_name="jxbf_jx.html"), name="demo"),
+#    url(r"^jxbf_bf/", TemplateView.as_view(template_name="jxbf_bf.html"), name="demo"),
 
     url(r"^manage_index/", 'project.views.manage_index', name="manage_index"),
     url(r"^password_change_success/$", TemplateView.as_view(template_name="account/password_change_success.html"), name="password_change_success"),
