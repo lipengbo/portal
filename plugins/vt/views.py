@@ -252,20 +252,19 @@ def vnc(request, vmid, island_id):
 
 def delete_vm(request, vmid, flag):
     vm = VirtualMachine.objects.get(id=vmid)
+    snapshot = Snapshot.objects.filter(vm=vm)
+    if snapshot.count() > 0:
+        return HttpResponse(json.dumps({'result': 1, \
+                            'error_info' : _('failed to delete vm because of snapshot')}))
     try:
         vm.delete()
-        #if flag == '1':
-            #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
-        #else:
         vm.slice.flowspace_changed(3)
         log(request.user, vm,  u"删除虚拟机", SUCCESS)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())
         log(request.user, vm, u"删除虚拟机", FAIL)
-        #if flag == '0':
         return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
-    #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
 
 
 def get_vms_state_by_sliceid(request, sliceid):
