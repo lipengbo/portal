@@ -123,6 +123,23 @@ class Project(models.Model):
     objects = ProjectManager()
     admin_objects = models.Manager()
 
+    def set_quota(self, member, slice, vm, band):
+        try:
+            old_quota = self.projectquota
+            old_quota.member = int(member)
+            old_quota.slice = int(slice)
+            old_quota.vm = int(vm)
+            old_quota.band = int(band)
+            old_quota.save()
+            return old_quota
+        except ProjectQuota.DoesNotExist:
+            new_quota = ProjectQuota(project=self,
+                         member=int(member),
+                         slice=int(slice),
+                         vm=int(vm),
+                         band=int(vm)).save()
+            return new_quota
+
     def created_date(self):
         return self.created_time
 
@@ -296,3 +313,13 @@ def on_add_into_slice(sender, instance, action, pk_set, model, **kwargs):
     if action == 'post_add': #: only handle post_add event
         resource.on_add_into_slice()
 
+
+class ProjectQuota(models.Model):
+    project = models.OneToOneField(Project, verbose_name=u"项目")
+    member = models.IntegerField(null=True, verbose_name=u"成员个数", default=0)
+    slice = models.IntegerField(null=True, verbose_name=u"虚网个数", default=0)
+    vm = models.IntegerField(null=True, verbose_name=u"虚拟机个数", default=0)
+    band = models.IntegerField(null=True, verbose_name=u"带宽大小", default=0)
+
+    def __unicode__(self):
+        return self.project.name

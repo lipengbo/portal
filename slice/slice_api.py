@@ -216,7 +216,7 @@ def slice_change_description(slice_obj, new_description):
             slice_obj.change_description(new_description)
     except Exception:
         transaction.rollback()
-        raise DbError(u"编辑失败！")
+        raise DbError(u"虚网描述信息编辑失败！")
 
 
 @transaction.commit_manually
@@ -246,10 +246,8 @@ def slice_edit_topology(slice_obj, switches):
                 for vm in vms:
                     if vm.type != 0:
                         try:
-                            print "delete vm ====================================="
                             vm.delete()
                         except:
-                            print "delete vm fail======================================"
                             switch_can_delete_flag = False
                             error_delete_vms.append(vm)
             if not switch_can_delete_flag:
@@ -262,16 +260,15 @@ def slice_edit_topology(slice_obj, switches):
         slice_change_ovs_ports(slice_obj, delete_switches, add_switches, cur_switches)
     except Exception:
         transaction.rollback()
-        raise DbError("编辑失败！")
+        raise DbError("虚网拓扑编辑失败！")
     else:
         transaction.commit()
+        error_delete_switch_names = []
         if error_delete_switches:
-            str = ''
             for error_delete_switch in error_delete_switches:
-                str = str + error_delete_switch.name
-            print "pppppppppppppppppppppppppppppppp"
-            print str
-            raise DeleteSwitchError(u"交换机（" + str + u"）部分虚拟机删除失败！")
+                error_delete_switch_names.append(error_delete_switch.name)
+            str = ",".join(error_delete_switch_names)
+            raise DeleteSwitchError(u"虚网拓扑编辑失败！交换机（" + str + u"）下挂虚拟机删除失败！")
         transaction.commit()
 
 
@@ -1117,7 +1114,6 @@ def get_slice_topology_edit(slice_obj):
         return []
     else:
         print "get topology success"
-        print topology
         return topology
 
 

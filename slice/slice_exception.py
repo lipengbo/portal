@@ -5,6 +5,9 @@
 import traceback
 import logging
 LOG = logging.getLogger("CENI")
+import sys  
+reload(sys)  
+sys.setdefaultencoding('utf8')
 
 
 class Error(Exception):

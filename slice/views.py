@@ -291,13 +291,13 @@ def edit_slice(request, slice_id):
             slice_change_description(slice_obj, slice_description)
             slice_edit_topology(slice_obj, switches)
         except DeleteSwitchError, ex:
-            print "++++++++++++++++++++++++++++++++"
-            print ex
+            print 1
             return HttpResponse(json.dumps({'result': 2, 'error_info': str(ex)}))
         except Exception, ex:
-            print "{{{{{{{{{{{{{{{{{{{{{{{{{{{{{"
+            print 2
             return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
         else:
+            print 3
             return HttpResponse(json.dumps({'result': 1}))
     else:
         if not request.user.has_perm('slice.change_slice', slice_obj):

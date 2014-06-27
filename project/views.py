@@ -33,6 +33,7 @@ from plugins.openflow.models import Virttool
 from common.models import  Counter, DeletedCounter
 from notifications.models import Notification
 from project.tasks import check_resource_usage
+from etc.config import project_quotas
 
 #check_resource_usage.delay()
 def home(request):
@@ -297,18 +298,34 @@ def create_or_edit(request, id=None):
     context = {}
     instance = None
     project_count = user.project_set.all().count()
+    max_quota = project_quotas
+    cur_quota = {"member": 0, "slice": 0, "vm": 0, "band": 0}
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
         if not user.has_perm('project.change_project', instance):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
+        try:
+            cur_quota = instance.projectquota
+            if cur_quota.member > project_quotas["member"]:
+                max_quota["member"] = cur_quota.member
+            if cur_quota.slice > project_quotas["slice"]:
+                max_quota["slice"] = cur_quota.slice
+            if cur_quota.vm > project_quotas["vm"]:
+                max_quota["vm"] = cur_quota.vm
+            if cur_quota.band > project_quotas["band"]:
+                max_quota["band"] = cur_quota.band
+        except:
+            pass
     else:
         if not user.has_perm('project.add_project'):
             return redirect('forbidden')
         if user.quotas.project <= project_count:
             messages.add_message(request, messages.INFO, "项目个数已经超过配额")
             return redirect('quota_admin_apply')
+    context['max_quota'] = max_quota
+    context['cur_quota'] = cur_quota
 
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
@@ -323,8 +340,16 @@ def create_or_edit(request, id=None):
                     return redirect('quota_admin_apply')
             project.save()
             form.save_m2m()
-            return redirect('project_detail', id=project.id)
-
+            try:
+                member_num = request.POST.get("new_member")
+                slice_num = request.POST.get("new_slice")
+                vm_num = request.POST.get("new_vm")
+                band_value = request.POST.get("new_band")
+                project.set_quota(member_num, slice_num, vm_num, band_value)
+            except:
+                messages.add_message(request, messages.INFO, "项目配额设置失败")
+            else:
+                return redirect('project_detail', id=project.id)
     context['form'] = form
     cats = Category.objects.all()
     context['cats'] = cats
