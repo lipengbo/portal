@@ -36,7 +36,7 @@
         </div>
     </div>
 <h4 class="block_title">
-    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】
+    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】<a href="/plugins/vt/list_snapshot/">备份列表</a>
     <div class="pull-right">
          {%if extent_html == "site_base.html" and permission == "edit" and slice_type == "mixslice" %}
                 <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="can_create_vm({{slice_obj.id}});"
@@ -177,7 +177,7 @@
                         <i class="icon-camera" id="icon_state{{vm.id}}"></i>
                     </a>
                 {%else%}
-                <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" >
+                <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}},'{{vm.host_ip}}')" >
                         <i class="icon-camera" id="icon_state{{vm.id}}"></i>
                  </a>
                 {%endif%}            

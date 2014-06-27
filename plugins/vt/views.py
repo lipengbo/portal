@@ -33,7 +33,7 @@ from project.models import Island
 import logging
 from django.utils.translation import ugettext as _
 from adminlog.models import log, SUCCESS, FAIL
-from tasks import do_create_snapshot
+from tasks import do_create_snapshot, do_restore_snapshot
 LOG = logging.getLogger('plugins')
 
 
@@ -391,6 +391,7 @@ def create_snapshot(request):
         name = request.POST.get("name")
         desc = request.POST.get("desc")
         snapshot = Snapshot()
+        snapshot.owner = request.user
         vm = get_object_or_404(VirtualMachine, id=vm_id)
         snapshot.vm = vm
         snapshot.uuid = gen_uuid()
@@ -398,12 +399,33 @@ def create_snapshot(request):
         snapshot.desc = desc
         snapshot.state = 0
         snapshot.save()
-        do_create_snapshot.delay('192.168.5.113', vm, snapshot)
+        do_create_snapshot.delay(vm, snapshot)
     return HttpResponse(json.dumps({'result': '0'}))
 
-def list_snapshot(request, vm_id):
-    selected_vm = get_object_or_404(VirtualMachine, id=vm_id)
-    snapshots = Snapshot.objects.filter(vm=selected_vm)
-    print 'snapshots*******', snapshots
-    return render(request, 'html', {'snapshots': '1'})
+def list_snapshot(request):
+    snapshots = Snapshot.objects.filter(owner=request.user, state=1).order_by('create_time')
+    return render(request, 'vt/snapshot_list.html', {'snapshots': snapshots})
+
+def delete_snapshot(request):
+    if request.method == 'POST':
+        vm = get_object_or_404(VirtualMachine, id=request.POST.get('vm_id'))
+        snapshot_uuid = request.POST.get('snapshot_uuid')
+        snapshot = Snapshot.objects.get(uuid=snapshot_uuid)
+        try:
+            if AgentClient(vm.server.ip).delete_snapshot(vm.uuid, snapshot_uuid):
+                snapshot.delete()
+                return HttpResponse(json.dumps({'result': 0}))
+            else:
+                raise
+        except:
+            traceback.print_exc()
+            return HttpResponse(json.dumps({'result': -1}))
+
+def restore_snapshot(request):
+    if request.method == 'POST':
+        vm = get_object_or_404(VirtualMachine, id=request.POST.get('vm_id'))
+        snapshot_uuid = request.POST.get('snapshot_uuid')
+        snapshot = Snapshot.objects.get(uuid=snapshot_uuid)
+        do_restore_snapshot.delay(vm, snapshot)
+        return HttpResponse(json.dumps({'result': 0}))
 

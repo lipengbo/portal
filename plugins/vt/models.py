@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete, pre_delete, pre_save
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
+from django.contrib.auth.models import User
 from django.db.models import Sum
 
 from resources.models import IslandResource, Server, SwitchPort
@@ -249,12 +250,17 @@ class VirtualMachine(IslandResource):
         verbose_name = _("Virtual Machine")
 
 class Snapshot(models.Model):
+    owner = models.ForeignKey(User)
     uuid = models.CharField(max_length=36, unique=True)
     vm = models.ForeignKey(VirtualMachine)
     name = models.CharField(max_length=36)
     desc = models.CharField(max_length=256)
     create_time = models.DateTimeField(auto_now_add=True)
     state = models.IntegerField(null=True, choices=SNAPSHOT_STATE)
+    is_current = models.BooleanField(default=False)
+
+    def log_info(self):
+        return u'备份名称:' + self.name +'\n'+ u'备份uuid:' + self.uuid
 
     class Meta:
         verbose_name = _("Snapshot")
