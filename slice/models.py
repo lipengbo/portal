@@ -302,9 +302,9 @@ class Slice(models.Model):
                     self.save()
                     transaction.commit()
             print "2:delete route"
-#             if self.get_nw():
-#                 if self.vpn_state == 1:
-#                     slice_delete_route(self)
+            if self.get_nw():
+                if self.vpn_state == 1:
+                    slice_delete_route(self)
             print "3:delete controller"
             delete_controller(self.get_controller(), False)
             print "4:delete slice record"
