@@ -5,8 +5,8 @@
 import traceback
 import logging
 LOG = logging.getLogger("CENI")
-import sys  
-reload(sys)  
+import sys
+reload(sys)
 sys.setdefaultencoding('utf8')
 
 

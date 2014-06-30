@@ -123,6 +123,13 @@ class Project(models.Model):
     objects = ProjectManager()
     admin_objects = models.Manager()
 
+    def get_quota(self):
+        try:
+            setted_quota = self.projectquota
+            return setted_quota
+        except ProjectQuota.DoesNotExist:
+            return {"member": 0, "slice": 0, "vm": 0, "band": 0}
+
     def set_quota(self, member, slice, vm, band):
         try:
             old_quota = self.projectquota

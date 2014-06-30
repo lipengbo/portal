@@ -18,6 +18,7 @@
 {% endblock %}
 {% block breadcrumb %}
 <li><a href="/project/">项目</a></li>
+{% if form.instance.id%}<li><a href="/project/detail/{{form.instance.id}}/">项目详情</a></li>{% endif %}
 <li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
@@ -28,47 +29,7 @@
         </h4>
 
         {% crispy form %}
-        
-        <h4 class="title_word_bg block_title">
-            <img src="{% static "img/ic_pz.png" %}" />项目配置
-        </h4>
-        
-        <div class="row project_slider">
-            <div class="col-md-6">
-                <div class="slider_part">
-                    <label>成员个数</label>
-                    <div id="member-range-min"></div>       
-                    <div class="clear"></div>             
-                </div>  
-                <div class="slider_part">
-                    <label>虚拟机个数</label>
-                    <div id="vm-range-min"></div>
-                    <div class="clear"></div>     
-                </div>                 
-            </div>
-            <div class="col-md-6">
-                <div class="slider_part">
-                    <label>虚网个数</label>
-                    <div id="slice-range-min"></div>       
-                    <div class="clear"></div>             
-                </div>  
-                <div class="slider_part">
-                    <label>带宽大小</label>
-                    <div id="band-range-min"></div>
-                    <div class="clear"></div>     
-                </div>  
-            </div>
-        </div>
-        <div class="clear" style="display: none" >
-            <p id="member_num">{{max_quota.member}}</p>
-            <p id="slice_num">{{max_quota.slice}}</p>
-            <p id="vm_num">{{max_quota.vm}}</p>
-            <p id="band_value">{{max_quota.band}}</p>
-            <p id="cur_member_num">{{cur_quota.member}}</p>
-            <p id="cur_slice_num">{{cur_quota.slice}}</p>
-            <p id="cur_vm_num">{{cur_quota.vm}}</p>
-            <p id="cur_band_value">{{cur_quota.band}}</p>
-        </div>
+
          <div class="row buttons_margin">
             <div class="col-md-2 col-md-offset-5"><button type="submit" class="btn btn-lg btn-block btn_info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
          </div>
@@ -115,37 +76,41 @@
         var cur_band_value = $("#cur_band_value").text()
         $( "#member-range-min" ).slider({
             range: "min",
-            value: cur_member_num,
+            value: parseFloat(cur_member_num),
             max: member_num,
             slide: function( event, ui ) {
                 $( "#member-range-min .amount" ).html( ui.value + "个" );
+                $("#new_member").val(ui.value);
             }
         });
         $( "#member-range-min .amount" ).html( $( "#member-range-min" ).slider( "value" ) + "个" );
         $( "#slice-range-min" ).slider({
             range: "min",
-            value: cur_slice_num,
+            value: parseFloat(cur_slice_num),
             max: slice_num,
             slide: function( event, ui ) {
                 $( "#slice-range-min .amount" ).html( ui.value + "个" );
+                $("#new_slice").val(ui.value);
             }
         });
         $( "#slice-range-min .amount" ).html( $( "#slice-range-min" ).slider( "value" ) + "个" );
         $( "#vm-range-min" ).slider({
             range: "min",
-            value: cur_vm_num,
+            value: parseFloat(cur_vm_num),
             max: vm_num,
             slide: function( event, ui ) {
                 $( "#vm-range-min .amount" ).html( ui.value + "个" );
+                $("#new_vm").val(ui.value);
             }
         });
         $( "#vm-range-min .amount" ).html( $( "#vm-range-min" ).slider( "value" ) + "个" );
         $( "#band-range-min" ).slider({
             range: "min",
-            value: cur_band_value,
+            value: parseFloat(cur_band_value),
             max: band_value,
             slide: function( event, ui ) {
                 $( "#band-range-min .amount" ).html( ui.value + "MB" );
+                $("#new_band").val(ui.value);
             }
         });
         $( "#band-range-min .amount" ).html( $( "#band-range-min" ).slider( "value" ) + "MB" );

@@ -33,7 +33,7 @@ from plugins.openflow.models import Virttool
 from common.models import  Counter, DeletedCounter
 from notifications.models import Notification
 from project.tasks import check_resource_usage
-from etc.config import project_quotas
+from etc.config import project_quotas, project_quotas_admin
 
 #check_resource_usage.delay()
 def home(request):
@@ -155,6 +155,7 @@ def detail(request, id):
     else:
         context['extent_html'] = "site_base.html"
     context['project'] = project
+    context['cur_quota'] = project.get_quota()
     return render(request, 'project/detail.html', context)
 
 
@@ -298,7 +299,11 @@ def create_or_edit(request, id=None):
     context = {}
     instance = None
     project_count = user.project_set.all().count()
-    max_quota = project_quotas
+    max_quota = {}
+    max_quota["member"] = project_quotas["member"]
+    max_quota["slice"] = project_quotas["slice"]
+    max_quota["vm"] = project_quotas["vm"]
+    max_quota["band"] = project_quotas["band"]
     cur_quota = {"member": 0, "slice": 0, "vm": 0, "band": 0}
     if id:
         instance = get_object_or_404(Project, id=id)
@@ -307,16 +312,23 @@ def create_or_edit(request, id=None):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
         try:
-            cur_quota = instance.projectquota
-            if cur_quota.member > project_quotas["member"]:
-                max_quota["member"] = cur_quota.member
-            if cur_quota.slice > project_quotas["slice"]:
-                max_quota["slice"] = cur_quota.slice
-            if cur_quota.vm > project_quotas["vm"]:
-                max_quota["vm"] = cur_quota.vm
-            if cur_quota.band > project_quotas["band"]:
-                max_quota["band"] = cur_quota.band
+            print "-----------------------"
+            setted_quota = instance.projectquota
+            if setted_quota.member > project_quotas["member"]:
+                max_quota["member"] = setted_quota.member
+            cur_quota["member"] = setted_quota.member
+            if setted_quota.slice > project_quotas["slice"]:
+                max_quota["slice"] = setted_quota.slice
+            cur_quota["slice"] = setted_quota.slice
+            if setted_quota.vm > project_quotas["vm"]:
+                max_quota["vm"] = setted_quota.vm
+            cur_quota["vm"] = setted_quota.vm
+            if setted_quota.band > project_quotas["band"]:
+                max_quota["band"] = setted_quota.band
+            cur_quota["band"] = setted_quota.band
         except:
+            import traceback
+            traceback.print_exc()
             pass
     else:
         if not user.has_perm('project.add_project'):
@@ -326,6 +338,7 @@ def create_or_edit(request, id=None):
             return redirect('quota_admin_apply')
     context['max_quota'] = max_quota
     context['cur_quota'] = cur_quota
+    print max_quota, cur_quota
 
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
@@ -341,6 +354,7 @@ def create_or_edit(request, id=None):
             project.save()
             form.save_m2m()
             try:
+                print "222222222222222222222222"
                 member_num = request.POST.get("new_member")
                 slice_num = request.POST.get("new_slice")
                 vm_num = request.POST.get("new_vm")
@@ -354,6 +368,29 @@ def create_or_edit(request, id=None):
     cats = Category.objects.all()
     context['cats'] = cats
     return render(request, 'project/create.html', context)
+
+
+@login_required
+def edit_admin(request, id):
+    instance = get_object_or_404(Project, id=id)
+    setted_quota = instance.get_quota()
+    context = {}
+    context['project_obj'] = instance
+    context['cur_quota'] = setted_quota
+    context['max_quota'] = project_quotas_admin
+    if request.method == 'POST':
+        try:
+            member_num = request.POST.get("new_member")
+            slice_num = request.POST.get("new_slice")
+            vm_num = request.POST.get("new_vm")
+            band_value = request.POST.get("new_band")
+            instance.set_quota(member_num, slice_num, vm_num, band_value)
+        except:
+            messages.add_message(request, messages.INFO, "项目配额设置失败")
+        else:
+            return redirect('project_detail', id=instance.id)
+    return render(request, 'project/edit_quota.html', context)
+
 
 @login_required
 def delete_member(request, id):

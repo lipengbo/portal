@@ -57,3 +57,4 @@ except ImportError:
     pass
 #项目创建时成员、虚网、虚拟机、带宽最大配额
 project_quotas = {"member": 100, "slice": 10, "vm": 256, "band": 1000}
+project_quotas_admin = {"member": 2000, "slice": 200, "vm": 5120, "band": 20000}
