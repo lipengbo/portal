@@ -799,6 +799,10 @@ def update_slice_virtual_network_cnvp(slice_obj):
                             "", "", "", "0x800", "other", slice_nw, "", "", "",
                             "", virttool.type)
                         arg_matches.append(arg_match)
+                        arg_match = matches_to_arg_match(switch_port.port, "",
+                            "", "", "", "0x800", slice_nw, "255.255.255.255", "", "", "",
+                            "", virttool.type)
+                        arg_matches.append(arg_match)
                     else:
                         arg_match = matches_to_arg_match(switch_port.port, "",
                             "", "", "", "0x800", slice_nw, "other", "", "", "",
