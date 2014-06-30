@@ -187,7 +187,9 @@
         {% endblock %}
 		
 {% block extra_body_base %}
-
+    <div class="clear" style="display: none" >
+            <p id="STATIC_URL">{{STATIC_URL}}</p>
+    </div>
     <div id="logoutModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
