@@ -235,11 +235,11 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">路径</label>
                     <div class="col-md-8">
-                            <input type="text" class="form-control" name="" />
+                            <input type="text" class="form-control" name="" id="textfile" />
                     </div>
                     <div class="col-md-2 btn_file">
                             <button class="btn btn-inverse">浏览</button>
-                            <input type="file" class="" value="浏览" />
+                            <input type="file" class="" value="浏览" onchange="document.getElementById('textfile').value=this.value" />
                     </div>                    
                 </div>
                 <div class="form-group">
