@@ -11,6 +11,10 @@ from django.shortcuts import render
 from plugins.common import glance_client_api
 from plugins.images.forms import CreateImageForm
 from django.http import HttpResponse
+from etc import config
+
+import json
+import traceback
 
 
 def create(request):
@@ -30,8 +34,44 @@ def create(request):
 
 
 def list(request):
-    url = 'http://192.168.5.111:9292'
-    images = glance_client_api.image_list_detailed(url)
+    print config.glance_url()
+    sys_images, app_images = glance_client_api.image_list_detailed_on_type(config.glance_url())
+    user = request.user
     context = {}
-    context['images'] = images
-    return render(request, 'images/list.html', context)
+    if user.is_superuser:
+        context['extent_html'] = 'admin_base.html'
+    else:
+        context['extent_html'] = 'site_base.html'
+    context['sys_images'] = sys_images
+    context['app_images'] = app_images
+    return render(request, 'image_list.html', context)
+
+def update(request):
+    try:
+        if request.method == 'POST':
+            image_name = request.POST.get('name')
+            image_desc = request.POST.get('desc')
+            image_uuid = request.POST.get('uuid')
+            image = glance_client_api.image_get(config.glance_url(), image_uuid)
+            image_properties = image.properties
+            if image_properties.has_key('description'):
+                image_properties['description'] = image_desc
+            result = glance_client_api.image_update(config.glance_url(), \
+                                                    image_uuid, name=image_name, properties=image_properties)
+            if result:
+                return HttpResponse(json.dumps({'result': 0}))
+            else:
+                raise
+    except:
+        traceback.print_exc()
+        return HttpResponse(json.dumps({'result': -1}))
+
+def delete(request):
+    try:
+        if request.method == 'POST':
+            image_uuid = request.POST.get('uuid')
+            glance_client_api.image_delete(config.glance_url(), image_uuid)
+            return HttpResponse(json.dumps({'result': 0}))
+    except:
+        traceback.print_exc()
+        return HttpResponse(json.dumps({'result': -1}))

@@ -18,9 +18,10 @@ from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC, Snapshot
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from etc.config import function_test
+from etc.config import function_test, glance_url
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
+from plugins.common import glance_client_api
 from plugins.common.aes import *
 #from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
@@ -148,11 +149,14 @@ def create_vm(request, sliceid):
         servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
         servers.insert(0, ('', '---------'))
         vm_form.fields['server'].choices = servers
+        sys_images, app_images = glance_client_api.image_list_detailed_on_type(glance_url())
         context = {}
         context['vm_form'] = vm_form
         context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
+        context['sys_images'] = sys_images
+        context['app_images'] = app_images
         return render(request, 'vt/create_vm.html', context)
 
 

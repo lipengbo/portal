@@ -55,6 +55,7 @@ $(document).ready(function(){
 			$(".type_chose a").removeClass("vm_active");
 		}
 	});
+    $("[style='display: block;']").children("div:first").children("a:first").addClass('active'); 
 });
 
 
@@ -251,6 +252,8 @@ function post_vminfo(sliceid){
     var s_cpu = $(".cpu_chose").children("a.vm_active").attr("value");
     var s_ram = rams[$("#ram_slider").slider( "option", "value" ) - 1];
 
+    var image_uuid = $(".clearfix.active").children(".pull-right").text();
+
     /*var enable_dhcp_checked;
 	if($('.switch_btn.dhcp.vm').hasClass("checked")){
 		enable_dhcp_checked = 1;
@@ -268,7 +271,7 @@ function post_vminfo(sliceid){
 				cpu: s_cpu,
 				ram: s_ram,
 				hdd: 10,
-                image: $("#id_image").val(),
+                image: $("#id_image").val(),//image_uuid, //
                 server: $("#id_server").val(),
                 enable_dhcp: 1
         },

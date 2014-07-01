@@ -11,6 +11,8 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from plugins.common import glance_client_api
 
+IMAGE_TYPE_CHOIES = ((1, 'sys'),(2, 'app'))
+
 
 class CreateImageForm(forms.Form):
     name = forms.CharField(max_length="255", label=_("Name"), required=True)
@@ -50,6 +52,7 @@ class CreateImageForm(forms.Form):
                                     widget=forms.Select(attrs={'class':
                                                                'switchable'}))
     is_public = forms.BooleanField(label=_("Public"), required=False)
+    image_type = forms.ChoiceField(widget=forms.RadioSelect, choices=IMAGE_TYPE_CHOIES)
 
     def __init__(self, *args, **kwargs):
         super(CreateImageForm, self).__init__(*args, **kwargs)
@@ -63,7 +66,10 @@ class CreateImageForm(forms.Form):
                 'disk_format': data['disk_format'],
                 'container_format': 'bare',
                 'name': data['name'],
+                'owner': request.user,
+                'container_format': 'ovf',
                 'properties': {}}
+        meta['properties']['image_type'] = data['image_type']
         if data['description']:
             meta['properties']['description'] = data['description']
         if data.get('location', None):
