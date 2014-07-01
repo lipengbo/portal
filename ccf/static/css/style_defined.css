@@ -7043,7 +7043,7 @@ fieldset legend {
   margin-left: 13px;
   margin-top: 3px;
 }
-.create_vm_form td.type_chose a {
+.create_vm_form .type_chose a {
   display: inline-block;
   padding: 8px 16px;
   border: 1px solid #e1f2fa;
@@ -7060,7 +7060,7 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.create_vm_form td.cpu_chose a {
+.create_vm_form .cpu_chose a {
   font-family: "Microsoft YaHei";
   display: inline-block;
   padding: 12px 26px;
@@ -7077,17 +7077,17 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.create_vm_form td.cpu_chose a.disabled {
+.create_vm_form .cpu_chose a.disabled {
   border-color: #bebebe;
   background: #eee;
   color: #999;
   cursor: not-allowed;
 }
-.create_vm_form td.cpu_chose a.disabled:hover {
+.create_vm_form .cpu_chose a.disabled:hover {
   border-color: #bebebe;
 }
-.create_vm_form td.type_chose a:hover,
-.create_vm_form td.cpu_chose a:hover {
+.create_vm_form .type_chose a:hover,
+.create_vm_form .cpu_chose a:hover {
   border-color: #2b8fcd;
 }
 .create_vm_form a.vm_active {
@@ -7959,4 +7959,19 @@ ul.errorlist {
   background: red;
   width: 54px;
   opacity: 0;
+}
+.oper_menu li img {
+  width: 20px;
+  margin-right: 10px;
+}
+.oper_menu li i {
+  color: #2291fe;
+  margin-right: 10px;
+}
+.pop_chose_block .create_vm_form .cpu_chose a {
+  padding: 10px 15px;
+}
+.pop_chose_block .slider_td .value_s,
+.pop_chose_block .slider_td .value_e {
+  top: -4px;
 }

@@ -1264,7 +1264,7 @@ fieldset {
             margin-top: 3px;
         }
     }    
-    td.type_chose a {
+    .type_chose a {
             display:inline-block;
             padding:8px 16px;
             border:1px solid #e1f2fa;
@@ -1281,7 +1281,7 @@ fieldset {
             -o-transition: all .2s ease-in-out;
             transition: all .2s ease-in-out;
     }    
-    td.cpu_chose a {
+    .cpu_chose a {
         font-family: "Microsoft YaHei";
         display:inline-block;
         padding:12px 26px;
@@ -1298,16 +1298,16 @@ fieldset {
         -o-transition: all .2s ease-in-out;
         transition: all .2s ease-in-out;
     }
-    td.cpu_chose a.disabled {
+    .cpu_chose a.disabled {
         border-color: #bebebe;
         background: #eee;
         color: #999;
         cursor: not-allowed;
     }
-    td.cpu_chose a.disabled:hover {
+    .cpu_chose a.disabled:hover {
         border-color:#bebebe;
     }
-    td.type_chose a:hover, td.cpu_chose a:hover {
+    .type_chose a:hover, .cpu_chose a:hover {
         border-color:#2b8fcd;        
     }
     a.vm_active{
@@ -2256,3 +2256,31 @@ ul.errorlist {
         opacity: 0;
     }
 }
+
+.oper_menu {
+    li {
+        img {
+            width:20px;
+            margin-right:10px;
+        }
+        i {
+            color:#2291fe;
+            margin-right:10px;
+        }
+    }
+}
+
+.pop_chose_block {
+    .create_vm_form {
+        .cpu_chose {
+            a {
+                padding:10px 15px;                
+              }
+        }
+    }
+    .slider_td {
+        .value_s, .value_e {
+            top:-4px;
+        }
+    }
+} 

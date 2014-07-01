@@ -1,10 +1,8 @@
 {% extends "site_base.html" %}
-{% load bootstrap_tags %}
-{% load crispy_forms_field %}
+
 {% load i18n %}
+{% load url from future %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
-{% load project_tags %}
 
 {% block head_title %}
 镜像备份
@@ -265,7 +263,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">邀请</button>
+              <button class="btn btn_info submit-invite">确定</button>
             </div>
         </div>
     </div>
@@ -295,7 +293,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">邀请</button>
+              <button class="btn btn_info submit-invite">确定</button>
             </div>
         </div>
     </div>
