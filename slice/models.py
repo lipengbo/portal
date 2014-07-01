@@ -325,6 +325,8 @@ class Slice(models.Model):
             del kwargs['user']
             super(self.__class__, self).delete(*args, **kwargs)
         except Exception, ex:
+            import traceback
+            traceback.print_exc()
             print "5:delete slice failed and change slice record"
             transaction.rollback()
 #             log(user, None, u"删除虚网(" + self.show_name + u")失败！", result_code=FAIL)
@@ -445,4 +447,9 @@ class SliceCount(models.Model):
 def post_delete_slice(sender, instance, **kwargs):
     print "post delete slice"
     print "delete subnet"
-    IPUsage.objects.delete_subnet(instance.uuid)
+    try:
+        IPUsage.objects.delete_subnet(instance.uuid)
+    except Subnet.DoesNotExist:
+        pass
+    except Exception:
+        raise
