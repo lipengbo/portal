@@ -327,8 +327,6 @@ def create_or_edit(request, id=None):
                 max_quota["band"] = setted_quota.band
             cur_quota["band"] = setted_quota.band
         except:
-            import traceback
-            traceback.print_exc()
             pass
     else:
         if not user.has_perm('project.add_project'):
@@ -449,7 +447,11 @@ def applicant(request, id, user_id=None):
         selected_applications = Application.objects.select_related('from_user', 'to_user', 'target').filter(id__in=application_ids)
         for application in selected_applications:
             if 'approve' in request.POST:
-                application.accept()
+                if not application.target.check_project_member_quota():
+                    application.reject()
+                    messages.add_message(request, messages.INFO, "加入项目失败，项目成员个数已经超过配额！")
+                else:
+                    application.accept()
             elif 'deny' in request.POST:
                 application.reject()
 

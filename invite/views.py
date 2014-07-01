@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -39,11 +40,19 @@ def invite(request, target_type_id, target_id):
     return render(request, "invite/invite.html", context)
 
 def accept(request, kind="invite", key=""):
+    print "accept==============="
     if kind == 'apply':
         ModelClass = Application
     else:
         ModelClass = Invitation
     invitation = get_object_or_404(ModelClass, key=key)
+    redirect_url = request.GET.get('next')
+    if not redirect_url:
+        redirect_url = "notifications:all"
+    if not invitation.target.check_project_member_quota():
+        invitation.reject()
+        messages.add_message(request, messages.INFO, "加入项目失败，项目成员个数已经超过配额！")
+        return redirect(redirect_url)
     if kind == 'invite':
         messages.add_message(request, messages.INFO,
                 _("You have joined %s") % (invitation.get_target_name(), ))
@@ -51,9 +60,6 @@ def accept(request, kind="invite", key=""):
 
     user = request.user
 
-    redirect_url = request.GET.get('next')
-    if not redirect_url:
-        redirect_url = "notifications:all"
     return redirect(redirect_url)
 
 def reject(request, kind="invite", key=""):

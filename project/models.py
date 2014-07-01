@@ -104,10 +104,12 @@ class Category(models.Model):
     class Meta:
         verbose_name = _("Category")
 
+
 class ProjectManager(models.Manager):
 
     def get_query_set(self, *args, **kwargs):
         return super(ProjectManager, self).get_query_set(*args, **kwargs).filter(is_deleted=False)
+
 
 class Project(models.Model):
     owner = models.ForeignKey(User, verbose_name=u"用户")
@@ -123,12 +125,54 @@ class Project(models.Model):
     objects = ProjectManager()
     admin_objects = models.Manager()
 
+    def check_project_slice_quota(self):
+        cur_quotas = self.get_quota()
+        slice_quota = cur_quotas["slice"]
+        created_slice_count = self.slice_set.filter(type=0).count()
+        print created_slice_count, slice_quota
+        if created_slice_count < slice_quota:
+            return True
+        else:
+            return False
+
+    def check_project_member_quota(self):
+        cur_quotas = self.get_quota()
+        member_quota = cur_quotas["member"]
+        created_member_count = self.memberships.all().count()
+        print created_member_count, member_quota
+        if created_member_count < member_quota:
+            return True
+        else:
+            return False
+
+    def check_project_vm_quota(self):
+        cur_quotas = self.get_quota()
+        vm_quota = cur_quotas["vm"]
+        cur_slices = self.slice_set.filter(type=0)
+        cur_vm_count = 0
+        for cur_slice in cur_slices:
+            vm_count = cur_slice.virtualmachine_set.filter(type=1).count()
+            cur_vm_count = cur_vm_count + vm_count
+        print cur_vm_count, vm_quota
+        if cur_vm_count < vm_quota:
+            return True
+        else:
+            return False
+
+    def check_project_band_quota(self):
+        return True
+
     def get_quota(self):
+        setted_quota = {"member": 0, "slice": 0, "vm": 0, "band": 0}
         try:
-            setted_quota = self.projectquota
+            cur_quota = self.projectquota
+            setted_quota["member"] = cur_quota.member
+            setted_quota["slice"] = cur_quota.slice
+            setted_quota["vm"] = cur_quota.vm
+            setted_quota["band"] = cur_quota.band
             return setted_quota
         except ProjectQuota.DoesNotExist:
-            return {"member": 0, "slice": 0, "vm": 0, "band": 0}
+            return setted_quota
 
     def set_quota(self, member, slice, vm, band):
         try:

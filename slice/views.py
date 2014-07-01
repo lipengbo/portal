@@ -42,6 +42,11 @@ def create(request, proj_id, flag):
     if request.user.quotas.slice <= slice_count:
         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
         return redirect('quota_admin_apply')
+    if not project.check_project_slice_quota():
+        print "fail+++++++++++++++++++++++++++++"
+        messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+        return HttpResponseRedirect(
+                                    reverse("project_detail", kwargs={"id": project.id}))
     error_info = None
     islands = project.islands.all()
     if not islands:
@@ -73,13 +78,19 @@ def create(request, proj_id, flag):
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
     project = get_object_or_404(Project, id=proj_id)
+    user = request.user
     slice_count = request.user.slice_set.filter(type=0).count()
     if request.user.quotas.slice <= slice_count:
         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
         return redirect('quota_admin_apply')
+    if not project.check_project_slice_quota():
+        print "fail+++++++++++++++++++++++++++++"
+        log(user,  None, "创建虚网", result_code=FAIL)
+        jsondatas = {'result': 0, 'error_info': "您的虚网个数已经超过配额！"}
+        result = json.dumps(jsondatas)
+        return HttpResponse(result, mimetype='text/plain')
     if request.method == 'POST':
         try:
-            user = request.user
             slice_uuid = request.POST.get("slice_uuid")
             slice_name = request.POST.get("slice_name")
             slice_description = request.POST.get("slice_description")
