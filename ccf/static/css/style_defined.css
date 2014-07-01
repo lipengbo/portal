@@ -7807,8 +7807,6 @@ body .modal-dialog .modal-content .modal-footer {
 }
 ul.action_box_tab {
   float: left;
-  list-style: none;
-  padding-left: 0;
   margin-bottom: 0;
 }
 ul.action_box_tab li {
@@ -7924,4 +7922,41 @@ ul.errorlist {
   100% {
     box-shadow: none;
   }
+}
+.block_chose a {
+  display: block;
+  margin-bottom: 10px;
+  padding: 8px 16px;
+  border: 1px solid #e1f2fa;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 2px;
+  color: #2b8fcd;
+  font-size: 12px;
+  font-weight: bold;
+  font-family: "Microsoft YaHei";
+  text-decoration: none;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.block_chose a:hover {
+  border-color: #2b8fcd;
+}
+.block_chose a.active {
+  border-color: #2b8fcd;
+  background: #2b8fcd;
+  color: #fff;
+}
+.btn_file {
+  position: relative;
+}
+.btn_file input[type="file"] {
+  position: absolute;
+  top: 0;
+  height: 34px;
+  background: red;
+  width: 54px;
+  opacity: 0;
 }

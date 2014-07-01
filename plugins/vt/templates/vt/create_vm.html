@@ -51,10 +51,12 @@
   <span id="quota_info"></span>
 </div>
 <form class="form-horizontal" action="" method="post" accept-charset="utf-8">
+<div class="row">
+    <div class="col-md-6">
     
-                        <h4 class="title_word_bg block_title">
-                                       <img src="{% static "img/ic_41.png" %}" /> 虚拟机配置      
-                        </h4>  
+        <h4 class="title_word_bg block_title">
+           <img src="{% static "img/ic_41.png" %}" /> 虚拟机配置      
+        </h4>  
                
     	<table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
 			<tbody>
@@ -66,6 +68,14 @@
 						{%endfor%}
 			     	</td>
 				</tr>
+				<tr>
+                    <td><b>虚拟机</b></td>
+                    <td class="type_chose">
+                        {%for flavor in flavors%}
+                            <a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
+                        {%endfor%}
+                    </td>
+                </tr>
 				<tr>
             		<td><b>CPU</b></td>
                 	<td class="cpu_chose">
@@ -79,17 +89,19 @@
                     	<span class="value_e"></span>
                  	</td>
             	</tr>
+            	<!--
                 <tr>
                 	<td><b>镜像</b></td>
                     <td>
-						<div class="col-md-3 image">{{ vm_form.image|as_crispy_field }}</div> 
+						<div class="col-md-6 image">{{ vm_form.image|as_crispy_field }}</div> 
 						<span name="imageInfo"></span>
                     </td>
                 </tr>
+                -->
                 <tr>
                 	<td><b>宿主机</b></td>
                  	<td>
-						<div class="col-md-3 server">{{ vm_form.server|as_crispy_field }} </div><span name="serverInfo"></span> 
+						<div class="col-md-6 server">{{ vm_form.server|as_crispy_field }} </div><span name="serverInfo"></span> 
                     	<a href="javascript:void(0);" id="show_topo" class="view_topo" onclick="show_topology()">查看拓扑</button></a>
 						
                 	</td>
@@ -121,15 +133,111 @@
 				-->
 			</tbody>
 		</table>
-                 
-                 <div class="form-actions">
-                    <div class="row buttons_margin">
-                        <div class="col-md-4"></div>
-                                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail_div sliceid 1 %}'">{% trans "Cancel" %}</button></div>
-                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="post_vminfo({{ sliceid }})">{% trans "Submit" %}</button></div>
-                        <div class="col-md-4"></div>
-                    </div>
+     </div>
+     <div class="col-md-6">
+         <h4 class="title_word_bg block_title">
+               <img src="{% static "img/icon_iso.png" %}" /> 镜像      
+         </h4>
+         <div class="action_box clearfix">
+            <ul class="action_box_tab clearfix list-unstyled">
+                <li class="active"><a>系统</a></li>
+                <li><a>应用</a></li>
+                <li><a>自有</a></li>
+            </ul>
+        </div>
+        <div class="action_box_tab_blocks">
+            <div class="action_box_tab_block" style="display: block;">
+                <div class="block_chose">
+                    <a href="javascript:;" class="clearfix active">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
                 </div>
+                <div class="text-right">
+                    <ul class="pagination">       
+                        <li class="active"><a class="endless_page_current">1</a></li>
+                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
+                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
+                   </ul>
+                </div>
+            </div>
+            <div class="action_box_tab_block">
+                <div class="block_chose">
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                </div>
+                <div class="text-right">
+                    <ul class="pagination">       
+                        <li class="active"><a class="endless_page_current">1</a></li>
+                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
+                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
+                   </ul>
+                </div>
+            </div>
+            <div class="action_box_tab_block">
+                <div class="block_chose">
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                    <a href="javascript:;" class="clearfix">
+                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
+                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                    </a>
+                </div>
+                <div class="text-right">
+                    <ul class="pagination">       
+                        <li class="active"><a class="endless_page_current">1</a></li>
+                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
+                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
+                   </ul>
+                </div>
+            </div>
+        </div>
+     </div>
+ </div>        
+ <div class="form-actions">
+    <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+                <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="document.location='{% url slice_detail_div sliceid 1 %}'">{% trans "Cancel" %}</button></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="post_vminfo({{ sliceid }})">{% trans "Submit" %}</button></div>
+        <div class="col-md-4"></div>
+    </div>
+  </div>
     
 </form>
 {% endblock %}
@@ -137,6 +245,8 @@
 <script src="{{ STATIC_URL}}js/icheck/jquery.icheck.min.js"></script>
 <script src="{{ STATIC_URL}}js/vm.js"></script>
 <script src="{{ STATIC_URL}}js/flat_slider.js"></script>
+<script src="{{ STATIC_URL}}js/block_tab.js"></script>
+<script src="{{ STATIC_URL}}js/block_chose.js"></script>
 <script>
 	var STATIC_URL = "{{ STATIC_URL}}";
 	$("#alert_close_sure").on("click", function(){
@@ -144,10 +254,8 @@
             window.location.href='/quota_admin/quota/';
         }else{
             window.location.href='/slice/detail/' + {{sliceid}} + '/1/';
-        }
-		
-	});
-	
+        }		
+	});	
 </script>
 
 {% endblock %}

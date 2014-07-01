@@ -46,6 +46,9 @@
         <li><a>应用</a></li>
         <li><a>自有</a></li>
     </ul>
+    <div class="pull-right">
+        <button class="btn btn-inverse" data-toggle="modal" data-target="#upload_jx"><i class="icon-upload-alt"></i> 上传镜像</button>
+    </div>
 </div>
 
 <div class="action_box_tab_blocks">
@@ -55,25 +58,42 @@
                 <tr>
                     <th width="20%">ID</th>
                     <th width="20%">名称</th>
-                    <th width="30%">描述</th>
-                    <th width="15%">容量（G）</th>
-                    <th width="15%">创建时间</th>
+                    <th width="25%">描述</th>
+                    <th width="10%">容量（G）</th>
+                    <th width="10%">创建时间</th>
+                    <th width="15%">操作</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>aaaaaaaaaaaaaaaaaaaaaaaaa</td>
                     <td>20</td>
-                    <td>2014-6-24</td>               
+                    <td>20</td>
+                    <td>2014-06-24</td>   
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:;" title="删除">
+                            <img src="/site_media/static/img/btn_sc.png">
+                        </a>
+                    </td>            
                 </tr>
                 <tr>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>aaaaaaaaaaaaaaaaaaaaaaaaa</td>
                     <td>20</td>
-                    <td>2014-6-24</td>             
+                    <td>20</td>
+                    <td>2014-06-24</td>   
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:;" title="删除">
+                            <img src="/site_media/static/img/btn_sc.png">
+                        </a>
+                    </td>            
                 </tr>
             </tbody>
         </table>
@@ -90,11 +110,12 @@
         <table class="table_defined">
             <thead>
                 <tr>
-                    <th width="20%">ID</th>
-                    <th width="20%">名称</th>
-                    <th width="30%">描述</th>
+                    <th width="15%">ID</th>
+                    <th width="15%">名称</th>
+                    <th width="25%">描述</th>
                     <th width="15%">容量（G）</th>
                     <th width="15%">创建时间</th>
+                    <th width="15%">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,14 +124,30 @@
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>20</td>
-                    <td>2014-6-24</td>               
+                    <td>2014-6-24</td>          
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:;" title="删除">
+                            <img src="/site_media/static/img/btn_sc.png">
+                        </a>
+                    </td>      
                 </tr>
                 <tr>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>20</td>
-                    <td>2014-6-24</td>               
+                    <td>2014-6-24</td>  
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:;" title="删除">
+                            <img src="/site_media/static/img/btn_sc.png">
+                        </a>
+                    </td>              
                 </tr>
             </tbody>
         </table>
@@ -126,11 +163,12 @@
         <table class="table_defined">
             <thead>
                 <tr>
-                    <th width="15%">ID</th>
-                    <th width="15%">名称</th>
-                    <th width="25%">描述</th>
-                    <th width="10%">容量（G）</th>
-                    <th width="10%" class="t_dropdown">
+                    <th width="20%">ID</th>
+                    <th width="20%">名称</th>
+                    <th width="20%">描述</th>
+                    <th width="20%">用户</th>
+                    <th width="15%">容量（G）</th>
+                    <th width="15%" class="t_dropdown">
                         <span class="dropdown"> 
                           可见范围
                           <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
@@ -140,7 +178,7 @@
                            </ul>
                         </span>
                     </th>
-                    <th width="10%">创建时间</th>
+                    <th width="15%">创建时间</th>
                     <th width="15%">操作</th>
                 </tr>
             </thead>
@@ -148,14 +186,12 @@
                 <tr>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>20</td>
+                    <td>user</td>
                     <td>20</td>
                     <td>共享</td>
                     <td>2014-6-24</td>           
                     <td class="btn_operation">
-                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
-                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
-                        </a>
                         <a href="javascript:;" title="删除">
                             <img src="/site_media/static/img/btn_sc.png">
                         </a>
@@ -164,20 +200,17 @@
                 <tr>
                     <td>ubuntu 12.04 LTS 64bit</td>
                     <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>20</td>
+                    <td>user</td>
                     <td>20</td>
                     <td>共享</td>
                     <td>2014-6-24</td>           
                     <td class="btn_operation">
-                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
-                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
-                        </a>
                         <a href="javascript:;" title="删除">
                             <img src="/site_media/static/img/btn_sc.png">
                         </a>
                     </td>    
                 </tr>
-
             </tbody>
         </table>
         <div class="text-center">
@@ -190,6 +223,55 @@
     </div>
 </div>
 
+<!-- 上传镜像 -->
+<div id="upload_jx" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 id="myModalLabel" class="modal-title">上传镜像</h4>      
+            </div>
+            <div class="modal-body base_info form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2">路径</label>
+                    <div class="col-md-8">
+                            <input type="text" class="form-control" name="" />
+                    </div>
+                    <div class="col-md-2 btn_file">
+                            <button class="btn btn-inverse">浏览</button>
+                            <input type="file" class="" value="浏览" />
+                    </div>                    
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">名称</label>
+                    <div class="col-md-8">
+                            <input type="text" class="form-control" name="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">描述</label>
+                    <div class="col-md-8">
+                            <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                   <label class="radio-inline radio_defined">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 系统
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 应用
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button class="btn btn_info submit-invite">邀请</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑 -->
 <div id="images_bj" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -210,14 +292,6 @@
                             <textarea class="form-control" rows="3"></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                   <label class="radio-inline radio_defined">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 共享
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 私有
-                    </label>
-                </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
@@ -226,6 +300,7 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 
 {% block extra_script %}
