@@ -51,13 +51,13 @@ class Island(models.Model):
     sflow_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("sflow_ip"))
     sflow_port = models.IntegerField(null=True, verbose_name=_('sflow_port'))
 
-    @staticmethod
-    def admin_options():
-        options = {
-            'exclude_fields': ('name', 'vpn_ip'),
-            'form_exclude_fields': ('vpn_ip',),
-        }
-        return options
+    #@staticmethod
+    #def admin_options():
+    #    options = {
+    #        'exclude_fields': ('name', 'vpn_ip'),
+    #       'form_exclude_fields': ('vpn_ip',),
+    #   }
+    #    return options
 
     def __unicode__(self):
         return self.name
