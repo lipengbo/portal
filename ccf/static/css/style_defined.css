@@ -7975,9 +7975,11 @@ ul.errorlist {
 .pop_chose_block .slider_td .value_e {
   top: -4px;
 }
-.select_multi {
+.select_multi_l,
+.select_multi_r {
   width: 100%;
   height: 300px;
+  margin-bottom: 20px;
   overflow-x: hidden;
   overflow-y: scroll;
   padding: 6px 12px;
@@ -7992,6 +7994,36 @@ ul.errorlist {
   -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
-.select_multi .row {
+.select_multi_l .select_row,
+.select_multi_r .select_row {
   cursor: pointer;
+  margin-left: 0;
+  margin-right: 0;
+}
+.select_multi_l .select_row div,
+.select_multi_r .select_row div {
+  word-break: break-all;
+  float: left;
+  display: inline;
+}
+.select_multi_l .select_row .select_row_l,
+.select_multi_r .select_row .select_row_l {
+  width: 60%;
+}
+.select_multi_l .select_row .select_row_r,
+.select_multi_r .select_row .select_row_r {
+  width: 40%;
+}
+.select_multi_l .active,
+.select_multi_r .active {
+  background: #ccc;
+}
+.select_btn_l,
+.select_btn_r {
+  display: block;
+  margin: 0 auto;
+}
+.select_btn_r {
+  margin-bottom: 15px;
+  margin-top: 128px;
 }
