@@ -6591,7 +6591,7 @@ a.tuopu_sign_block:focus {
   color: #fc0500;
 }
 .slice_state i.icon-minus-sign {
-  color: #f99c61;
+  color: #e81111;
 }
 .slice_state i.icon-warning-sign {
   color: #f9e99b;
@@ -6993,6 +6993,7 @@ fieldset legend {
 .table_base thead tr td,
 .table_base tbody tr td {
   padding: 0 8px 8px 8px;
+  Word-break: break-all;
 }
 .table_base .slider_td {
   padding-top: 8px;
@@ -7042,7 +7043,7 @@ fieldset legend {
   margin-left: 13px;
   margin-top: 3px;
 }
-.create_vm_form td.type_chose a {
+.create_vm_form .type_chose a {
   display: inline-block;
   padding: 8px 16px;
   border: 1px solid #e1f2fa;
@@ -7059,7 +7060,7 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.create_vm_form td.cpu_chose a {
+.create_vm_form .cpu_chose a {
   font-family: "Microsoft YaHei";
   display: inline-block;
   padding: 12px 26px;
@@ -7076,17 +7077,17 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.create_vm_form td.cpu_chose a.disabled {
+.create_vm_form .cpu_chose a.disabled {
   border-color: #bebebe;
   background: #eee;
   color: #999;
   cursor: not-allowed;
 }
-.create_vm_form td.cpu_chose a.disabled:hover {
+.create_vm_form .cpu_chose a.disabled:hover {
   border-color: #bebebe;
 }
-.create_vm_form td.type_chose a:hover,
-.create_vm_form td.cpu_chose a:hover {
+.create_vm_form .type_chose a:hover,
+.create_vm_form .cpu_chose a:hover {
   border-color: #2b8fcd;
 }
 .create_vm_form a.vm_active {
@@ -7358,47 +7359,6 @@ span[name="serverInfo"] {
   font-size: 12px;
   color: #999;
 }
-.slice_detail_tab {
-  background: #2291fe;
-}
-.slice_detail_tab .row .slice_index {
-  padding: 15px 0;
-  text-align: center;
-}
-.slice_detail_tab .row .slice_index a {
-  padding: 5px 0 5px 35px;
-  height: 25px;
-  color: #bfdaff;
-}
-.slice_detail_tab .row .slice_index a:hover,
-.slice_detail_tab .row .slice_index a:active,
-.slice_detail_tab .row .slice_index a:focus {
-  text-decoration: none;
-}
-.slice_detail_tab .row .slice_index.on a {
-  color: #fff;
-}
-.slice_detail_tab .row .slice_index.on {
-  background: url(../img/sj.png) no-repeat bottom center;
-}
-.slice_detail_tab .row .fw a {
-  background: url(../img/fw2.png) no-repeat left center;
-}
-.slice_detail_tab .row .xnj a {
-  background: url(../img/xnj2.png) no-repeat left center;
-}
-.slice_detail_tab .row .zjr a {
-  background: url(../img/zjr2.png) no-repeat left center;
-}
-.slice_detail_tab .row .fw.on a {
-  background: url(../img/fw1.png) no-repeat left center;
-}
-.slice_detail_tab .row .xnj.on a {
-  background: url(../img/xnj1.png) no-repeat left center;
-}
-.slice_detail_tab .row .zjr.on a {
-  background: url(../img/zjr1.png) no-repeat left center;
-}
 .slice_detail_block .help-block {
   margin-bottom: 40px;
   text-align: center;
@@ -7475,29 +7435,6 @@ span[name="serverInfo"] {
 }
 .port_fill .call_out {
   vertical-align: middle;
-}
-.port_mean {
-  margin-top: 20px;
-}
-.port_mean span {
-  padding: 5px;
-  border-radius: 5px;
-}
-.port_mean span i {
-  margin-right: 5px;
-}
-.port_mean .port_green {
-  border: 1px solid #99cc66;
-  margin-right: 40px;
-}
-.port_mean .port_green i {
-  color: #99cc66;
-}
-.port_mean .port_blue {
-  border: 1px solid #99ccff;
-}
-.port_mean .port_blue i {
-  color: #99ccff;
 }
 .main2 .tuopu_detail {
   padding-top: 0;
@@ -8022,4 +7959,71 @@ ul.errorlist {
   background: red;
   width: 54px;
   opacity: 0;
+}
+.oper_menu li img {
+  width: 20px;
+  margin-right: 10px;
+}
+.oper_menu li i {
+  color: #2291fe;
+  margin-right: 10px;
+}
+.pop_chose_block .create_vm_form .cpu_chose a {
+  padding: 10px 15px;
+}
+.pop_chose_block .slider_td .value_s,
+.pop_chose_block .slider_td .value_e {
+  top: -4px;
+}
+.select_multi_l,
+.select_multi_r {
+  width: 100%;
+  height: 300px;
+  margin-bottom: 20px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 6px 12px;
+  line-height: 1.428571429;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.select_multi_l .select_row,
+.select_multi_r .select_row {
+  cursor: pointer;
+  margin-left: 0;
+  margin-right: 0;
+}
+.select_multi_l .select_row div,
+.select_multi_r .select_row div {
+  word-break: break-all;
+  float: left;
+  display: inline;
+}
+.select_multi_l .select_row .select_row_l,
+.select_multi_r .select_row .select_row_l {
+  width: 60%;
+}
+.select_multi_l .select_row .select_row_r,
+.select_multi_r .select_row .select_row_r {
+  width: 40%;
+}
+.select_multi_l .active,
+.select_multi_r .active {
+  background: #ccc;
+}
+.select_btn_l,
+.select_btn_r {
+  display: block;
+  margin: 0 auto;
+}
+.select_btn_r {
+  margin-bottom: 15px;
+  margin-top: 128px;
 }

@@ -812,7 +812,7 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
     color:#fc0500;
 }
 .slice_state i.icon-minus-sign {
-    color:#f99c61;
+    color:#e81111;
 }
 .slice_state i.icon-warning-sign {
     color:#f9e99b;
@@ -1217,6 +1217,7 @@ fieldset {
     margin-bottom:20px;
     thead tr td, tbody tr td {
         padding:0 8px 8px 8px;
+        Word-break:break-all;
     }
     .slider_td {
         padding-top: 8px;
@@ -1263,7 +1264,7 @@ fieldset {
             margin-top: 3px;
         }
     }    
-    td.type_chose a {
+    .type_chose a {
             display:inline-block;
             padding:8px 16px;
             border:1px solid #e1f2fa;
@@ -1280,7 +1281,7 @@ fieldset {
             -o-transition: all .2s ease-in-out;
             transition: all .2s ease-in-out;
     }    
-    td.cpu_chose a {
+    .cpu_chose a {
         font-family: "Microsoft YaHei";
         display:inline-block;
         padding:12px 26px;
@@ -1297,16 +1298,16 @@ fieldset {
         -o-transition: all .2s ease-in-out;
         transition: all .2s ease-in-out;
     }
-    td.cpu_chose a.disabled {
+    .cpu_chose a.disabled {
         border-color: #bebebe;
         background: #eee;
         color: #999;
         cursor: not-allowed;
     }
-    td.cpu_chose a.disabled:hover {
+    .cpu_chose a.disabled:hover {
         border-color:#bebebe;
     }
-    td.type_chose a:hover, td.cpu_chose a:hover {
+    .type_chose a:hover, .cpu_chose a:hover {
         border-color:#2b8fcd;        
     }
     a.vm_active{
@@ -1612,47 +1613,7 @@ span[name="serverInfo"] {
         color:#999;
     }
 }
-.slice_detail_tab {
-    background:#2291fe;
-    .row {
-        .slice_index {
-            padding:15px 0;
-            text-align:center;
-            a {
-                padding:5px 0 5px 35px;
-                height:25px;
-                color:#bfdaff;
-            }
-            a:hover, a:active, a:focus {
-                text-decoration:none;
-            }
-        } 
-        .slice_index.on a {
-            color:#fff;           
-        }
-        .slice_index.on {
-            background: url(../img/sj.png) no-repeat bottom center;
-        }
-        .fw a {
-            background:url(../img/fw2.png) no-repeat left center;
-        }      
-        .xnj a {
-            background:url(../img/xnj2.png) no-repeat left center;
-        }
-        .zjr a {
-            background:url(../img/zjr2.png) no-repeat left center;
-        }
-        .fw.on a {
-            background:url(../img/fw1.png) no-repeat left center;           
-        }
-        .xnj.on a {
-            background:url(../img/xnj1.png) no-repeat left center;           
-        }
-        .zjr.on a {
-            background:url(../img/zjr1.png) no-repeat left center;           
-        }
-    }
-}
+
 .slice_detail_block {
         .help-block {
             margin-bottom:40px;
@@ -1740,29 +1701,7 @@ span[name="serverInfo"] {
         vertical-align: middle;
     }
 }
-.port_mean {
-    margin-top:20px;
-    span {
-        padding:5px;       
-        border-radius: 5px;
-        i {
-            margin-right:5px;
-        }
-    }
-    .port_green {
-        border:1px solid #99cc66;
-        margin-right:40px;
-        i {            
-            color:#99cc66;
-        }
-    }
-    .port_blue {
-        border:1px solid #99ccff;
-        i {
-            color:#99ccff;
-        }
-    }
-}
+
 .modal_poptip_defined {
     
 }
@@ -2276,6 +2215,7 @@ ul.errorlist {
 50% {box-shadow:0 0 10px green;}
 100% {box-shadow:none;}
 }
+
 .block_chose {
     a {
         display:block;
@@ -2345,6 +2285,48 @@ ul.errorlist {
     }
 } 
 
-.select_switch {
-   
+.select_multi_l, .select_multi_r {
+    width: 100%;
+    height:300px;
+    margin-bottom:20px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    padding: 6px 12px;
+    line-height: 1.428571429;
+    color: #555555;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    -webkit-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    .select_row {
+        cursor:pointer;
+        margin-left:0;
+        margin-right:0;
+        div {
+            word-break:break-all;
+            float:left;
+            display:inline;
+        }
+        .select_row_l {
+            width:60%;
+        }
+        .select_row_r {
+            width:40%;
+        }
+    }
+    .active {
+        background:#ccc;
+    }
+}
+.select_btn_l, .select_btn_r {
+    display: block;
+    margin:0 auto;
+}
+.select_btn_r {
+    margin-bottom:15px;
+    margin-top:128px;
 }
