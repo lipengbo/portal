@@ -19,18 +19,21 @@ import traceback
 
 def create(request):
     if request.method == 'POST':
-        createImageForm = CreateImageForm(request.POST)
-        if createImageForm.is_valid():
-            print request.FILES['image_file']
-            data = createImageForm.clean()
-            print data
-            url = 'http://192.168.5.111:9292'
-            createImageForm.handle(request, url, data)
-        return HttpResponse(0)
+        try:
+            createImageForm = CreateImageForm(request.POST)
+            if createImageForm.is_valid():
+                print request.FILES['image_file']
+                data = createImageForm.clean()
+                print data
+                createImageForm.handle(request, config.glance_url(), data)
+            return render(request, 'upload_success.html')
+        except:
+            pass
     else:
         context = {}
         context['forms'] = CreateImageForm()
-        return render(request, 'images/create.html', context)
+        return render(request, 'create_image.html', context)
+
 
 
 def list(request):
@@ -75,3 +78,12 @@ def delete(request):
     except:
         traceback.print_exc()
         return HttpResponse(json.dumps({'result': -1}))
+
+def upload(request):
+    try:
+        if request.method == 'POST':
+            pass
+        else:
+            return render(request, 'upload_image.html')
+    except:
+        traceback.print_exc()

@@ -55,11 +55,10 @@ urlpatterns = patterns("",
 #    url(r"^monitor/", TemplateView.as_view(template_name="monitor.html"), name="demo"),
 #    url(r"^jxbf_jx/", TemplateView.as_view(template_name="jxbf_jx.html"), name="demo"),
 #    url(r"^jxbf_bf/", TemplateView.as_view(template_name="jxbf_bf.html"), name="demo"),
-#    url(r"^monitor/", TemplateView.as_view(template_name="monitor.html"), name="demo"),
-#    url(r"^jxbf_jx/", TemplateView.as_view(template_name="jxbf_jx.html"), name="demo"),
-#    url(r"^jxbf_bf/", TemplateView.as_view(template_name="jxbf_bf.html"), name="demo"),
 #    url(r"^admin_jx/", TemplateView.as_view(template_name="admin_jx.html"), name="demo"),
 #    url(r"^admin_bf/", TemplateView.as_view(template_name="admin_bf.html"), name="demo"),
+#    url(r"^up_iso/", TemplateView.as_view(template_name="up_iso.html"), name="demo"),
+
 
     url(r"^manage_index/", 'project.views.manage_index', name="manage_index"),
     url(r"^password_change_success/$", TemplateView.as_view(template_name="account/password_change_success.html"), name="password_change_success"),
