@@ -103,6 +103,9 @@
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                     {%endif%}
+                    <a href="javascript:void(0);" class="bianji" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:pointer">
+                        <img src="{{ STATIC_URL}}img/ic_slice.png" title="编辑虚网连通性" />
+                    </a>
                   </td>
              </tr>
              </tbody>

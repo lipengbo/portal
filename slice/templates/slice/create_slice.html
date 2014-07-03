@@ -43,7 +43,8 @@
               	{%endif%}
 
                  <h4 class="title_word_bg block_title">
-                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息      
+                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息   
+                       <span id="nw_numInfo" style="display:inline;float:none;"></span>   
                  </h4> 
                  
                  <table class="table_base tooltip-demo">
@@ -106,7 +107,7 @@
                              </td>
                          </tr>
                          
-                         <tr>
+                         <tr style="display:none">
                              <td class="text-right title_padding">
                                  最大虚拟机数                
                              </td>
@@ -118,12 +119,12 @@
                                   <option value="8">5</option>
                                   <option value="16">13</option>
                                   <option value="32">29</option>
-                                  <option value="64">61</option>
-                                  <option value="256" selected>253</option>
+                                  <option value="64" selected>61</option>
+                                  <option value="256">253</option>
                                 </select>  
                              </td>
                              <td>
-                                <span id="nw_numInfo" style="display:inline;float:none;"></span>
+                                
                                 <input type="text" id="slice_nw_input" style="display:none"/>
                                 <span id="slice_nw" style="display:none"></span>
                                 <input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -149,7 +150,7 @@
                          </tr>
                          
                      </tbody>
-                </table>                                             
+                </table>                                       
                 
                 <div class="form-actions">
                     <div class="row buttons_margin">
@@ -168,7 +169,7 @@
                 </h4>              
                 <div class="alert alert-info">
                   <!--<strong>SDN交换机：</strong> 基于OpenFlow协议的交换机，支持网络虚拟化；<br />-->
-                  <strong>虚拟交换机：</strong> 服务器内部虚拟交换机，提供虚拟机网络管理功能，用户选择该节点后才可创建虚拟机；<br />
+                  <strong>计算存储服务器：</strong> 提供虚拟机网络管理功能，用户选择该节点后才可创建虚拟机；<br />
                   <!--<strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />-->
                 </div>
@@ -192,7 +193,7 @@
                        </div>-->
                        <div class="frame_tip">
                            <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbspSDN交换机&nbsp
-                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟交换机
+                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp计算存储服务器
                        </div>
                        
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
@@ -227,7 +228,7 @@
     	                            	SDN交换机
     	                            {%endif%}
     	                            {% if ovs_port.switch_type == 3 %}
-    	                            	虚拟交换机
+    	                            	计算存储服务器
     	                            {%endif%}
 	                            </td>
 	                            <td>
@@ -251,7 +252,7 @@
                         {%if slice_type == "baseslice" %}
                           请至少选择一个SDN交换机
                         {%else%}
-                          请至少选择一个虚拟交换机
+                          请至少选择一个计算存储服务器
                         {%endif%}
                     </div>
                 </div>                                                                                                                 
@@ -308,7 +309,7 @@
                         <tr>
                             <td width="150" class="text-right">
                                 网关宿主机
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟交换机选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟交换机选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的计算存储服务器选取虚拟网关部署位置" data-original-title="用户根据选取的计算存储服务器选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                             <td width="30%">
 								<div class="gw_ip">

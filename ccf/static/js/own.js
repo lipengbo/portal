@@ -471,7 +471,7 @@ function switch_manifest() {
             }else if(switchtype == 2){
                 type_name = "SDN交换机";
             }else if(switchtype == 3){
-                type_name = "虚拟交换机";
+                type_name = "计算存储服务器";
             }
             str = str + "<tr>"
             + "<td>"+switch_ids_obj[0].getAttribute("switchname")+"</td>"

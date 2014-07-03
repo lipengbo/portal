@@ -333,6 +333,14 @@ def vm_pre_delete(sender, instance, **kwargs):
     if instance.type == 0:
         controllers = Controller.objects.filter(object_id=instance.id)
         controllers.delete()
+    if instance.type == 2:
+        try:
+            unicom_slices = instance.slice.get_unicom_slices()
+            for unicom_slice in unicom_slices:
+                if not instance.slice.del_unicom_slice_api(unicom_slice):
+                    raise Exception("虚网连通关系删除失败！")
+        except Exception:
+            raise
 
 
 @receiver(post_delete, sender=VirtualMachine)

@@ -833,3 +833,18 @@ function start_or_stop_vpn(slice_id, island_id, flag){
 function qx_bj(){
     $('#editInfoModal').modal('hide');
 }
+
+
+//虚网间通信编辑click事件
+function bj_unicom(slice_id){
+    var a_obj = $("#slice_bj")[0];
+    //alert(a_obj.attr("style"));
+    if(a_obj.style.cursor == "not-allowed"){
+        //alert(0);
+        return false;
+    }else{
+        location.href = "http://" + window.location.host + "/slice/edit_unicom/"+slice_id+"/";
+        //$('#editInfoModal').modal('show');
+        return false;
+    }
+}

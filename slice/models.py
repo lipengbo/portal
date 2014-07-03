@@ -398,6 +398,69 @@ class Slice(models.Model):
         ret = u"虚网名称：" + self.show_name
         return ret
 
+    def get_can_unicom_slices(self):
+        can_unicom_slices = []
+        owner_slices = self.owner.slice_set.filter(type=SLICE_TYPE_USABLE)
+        unicom_slices = self.get_unicom_slices()
+        for owner_slice in owner_slices:
+            if owner_slice not in unicom_slices:
+                can_unicom_slices.append(owner_slice)
+        return can_unicom_slices
+
+    def get_unicom_slices(self):
+        unicom_slices = []
+        src_unicoms = UnicomSlice.objects.filter(dst_slice=self)
+        for src_unicom in src_unicoms:
+            if src_unicom.src_slice not in unicom_slices:
+                gw = src_unicom.src_slice.get_gw()
+                if gw and gw.usable():
+                    unicom_slices.append(src_unicom.src_slice)
+        dst_unicoms = UnicomSlice.objects.filter(src_slice=self)
+        for dst_unicom in dst_unicoms:
+            if dst_unicom.dst_slice not in unicom_slices:
+                gw = dst_unicom.dst_slice.get_gw()
+                if gw and gw.usable():
+                    unicom_slices.append(dst_unicom.dst_slice)
+        return unicom_slices
+
+    @transaction.commit_on_success
+    def add_unicom_slice(self, other_slice):
+        try:
+            unicom_count = UnicomSlice.objects.filter(src_slice=self, dst_slice=other_slice).count()
+            if unicom_count > 0:
+                return True
+            unicom_count = UnicomSlice.objects.filter(src_slice=other_slice, dst_slice=self).count()
+            if unicom_count > 0:
+                return True
+            gw_src = self.get_gw()
+            gw_dst = other_slice.get_gw()
+            if gw_src and gw_dst and gw_src.usable() and gw_dst.usable():
+                UnicomSlice(src_slice=self, dst_slice=other_slice).save()
+                add_unicom_slice_api(self, other_slice)
+                return True
+            else:
+                return False
+        except:
+            transaction.rollback()
+            return False
+
+    @transaction.commit_on_success
+    def del_unicom_slice(self, other_slice):
+        try:
+            dst_unicoms = UnicomSlice.objects.filter(src_slice=self, dst_slice=other_slice)
+            src_unicoms = UnicomSlice.objects.filter(src_slice=other_slice, dst_slice=self)
+            if dst_unicoms.count() + src_unicoms.count() > 0:
+                dst_unicoms.delete()
+                src_unicoms.delete()
+                gw_src = self.get_gw()
+                gw_dst = other_slice.get_gw()
+                if gw_src and gw_dst and gw_src.usable() and gw_dst.usable():
+                    del_unicom_slice_api(self, other_slice)
+            return True
+        except:
+            transaction.rollback()
+            return False
+
     def __unicode__(self):
         return self.name
 
@@ -405,6 +468,7 @@ class Slice(models.Model):
         permissions = (
             ('view_slice', _('View Slice')),
         )
+
 
 class SliceDeleted(models.Model):
     name = models.CharField(max_length=256)
@@ -453,3 +517,19 @@ def post_delete_slice(sender, instance, **kwargs):
         pass
     except Exception:
         raise
+    print "delete route on unicom slices"
+    try:
+        unicom_slices = instance.get_unicom_slices()
+        for unicom_slice in unicom_slices:
+            if not instance.del_unicom_slice_api(unicom_slice):
+                raise DbError("虚网连通关系删除失败！")
+    except Exception:
+        raise
+
+
+class UnicomSlice(models.Model):
+    src_slice = models.ForeignKey(Slice)
+    dst_slice = models.ForeignKey(Slice)
+
+    class Meta:
+        unique_together = (("src_slice", "dst_slice"), )
