@@ -3,7 +3,6 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 
 {% block head_title %}
 镜像备份
@@ -17,9 +16,9 @@
 {% endblock %}
 
 {% block body %}
+<form action="" class="form-horizontal" method="post" enctype="multipart/form-data">{% csrf_token %}
 <div class="row">
-    <div class="col-md-9">
-        <form action="" class="form-horizontal" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <div class="col-md-9">        
             <h4 class="block_title">
                 <img src="{{ STATIC_URL}}img/ic_baseinfo.png">基本信息     
             </h4>
@@ -88,7 +87,7 @@
        SDN控制器镜像
                     </label>
                     <div class="col-md-6">
-                        <select name="image_attr" class="form-control radio_select_form">
+                        <select name="image_attr" class="form-control radio_select_form" disabled="">
                             <option value="1">应用镜像</option>
                         </select>
                     </div>                               
@@ -99,7 +98,7 @@
                         &nbsp;&nbsp;&nbsp;虚拟网关镜像
                     </label>
                     <div class="col-md-6">
-                        <select name="image_attr" class="form-control radio_select_form">
+                        <select name="image_attr" class="form-control radio_select_form" disabled="">
                             <option value="1">应用镜像</option>
                         </select>
                     </div>                               
@@ -127,11 +126,20 @@
                     </div> 
                 </div>
             </div-->
-            <input type="submit" value="提交"></input>          
-        </form>             
+                               
     </div>
+    
+     
 </div>
-
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-default">取消</button></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-lg btn-block btn_info">提交</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+</form> 
 {% endblock %}
 
 {% block extra_script %}
