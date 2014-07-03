@@ -1,0 +1,67 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}
+镜像备份
+{% endblock %}
+{% block extra_style %}
+   
+{% endblock %}
+{% block breadcrumb %}
+<li><a href="#">项目</a></li>
+<li><a href="#">项目详情</a></li>
+<li class="active">虚网详情</li>
+{% endblock %}
+
+{% block body %}
+<h4 class="block_title">
+    <img src="/site_media/static/img/btn_link.png">虚网连通信配置     
+</h4>
+<div class="row">
+    <div class="col-md-5">
+        <h4 class="text-center">可通信虚网</h4>
+        <div class="select_multi">
+            <div class="row">
+                <div class="col-md-6">slice00000</div>
+                <div class="col-md-6 text-right">10.0.0.9/29</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">slice00000</div>
+                <div class="col-md-6 text-right">10.0.0.9/29</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">slice00000</div>
+                <div class="col-md-6 text-right">10.0.0.9/29</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 text-center">
+        <button class="btn btn-inverse"><span class="glyphicon glyphicon-chevron-left"></span></button>
+        <button class="btn btn-inverse"><span class="glyphicon glyphicon-chevron-right"></span></button>
+    </div>
+    <div class="col-md-5">
+        <h4 class="text-center">不可通信虚网</h4>
+        <div class="select_multi">
+            <div class="row">
+                <div class="col-md-6">slice00000</div>
+                <div class="col-md-6 text-right">10.0.0.9/29</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">slice00000</div>
+                <div class="col-md-6 text-right">10.0.0.9/29</div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">slice00000</div>
+                <div class="col-md-6 text-right">10.0.0.9/29</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/radio_tab.js"></script>
+{% endblock %}
