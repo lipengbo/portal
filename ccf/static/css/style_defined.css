@@ -7975,3 +7975,23 @@ ul.errorlist {
 .pop_chose_block .slider_td .value_e {
   top: -4px;
 }
+.select_multi {
+  width: 100%;
+  height: 300px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding: 6px 12px;
+  line-height: 1.428571429;
+  color: #555555;
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+.select_multi .row {
+  cursor: pointer;
+}

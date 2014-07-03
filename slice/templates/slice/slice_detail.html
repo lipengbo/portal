@@ -33,12 +33,12 @@
         <table class="table_defined">
             <thead>
                 <tr>
-                    <th width="16%">虚网名称</th>
-                    <th width="32%">描述</th>
-                    <th width="16%">所属节点</th>
+                    <th width="15%">虚网名称</th>
+                    <th width="30%">描述</th>
+                    <th width="15%">所属节点</th>
                     <th width="20%">网段</th>
-                    <th width="8%">状态</th>
-                    <th width="12%">操作</th>
+                    <th width="5%">状态</th>
+                    <th width="15%">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -103,6 +103,10 @@
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                     {%endif%}
+                    <!-- 虚网通信配置-->
+                        <a href="javascript:;">
+                            <img src="{{ STATIC_URL}}img/btn_link.png" title="虚网通信配置" />
+                        </a>
                   </td>
              </tr>
              </tbody>
