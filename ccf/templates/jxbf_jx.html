@@ -1,7 +1,6 @@
 {% extends "site_base.html" %}
 
 {% load i18n %}
-{% load crispy_forms_tags %}
 {% load url from future %}
 {% load staticfiles %}
 
@@ -189,6 +188,7 @@
     </div>
 </div>
 
+<!-- 编辑 -->
 <div id="images_bj" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -220,7 +220,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">邀请</button>
+              <button class="btn btn_info submit-invite">确定</button>
             </div>
         </div>
     </div>
