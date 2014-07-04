@@ -62,6 +62,7 @@ class CreateImageForm(forms.Form):
 
     def clean(self):
         data = super(CreateImageForm, self).clean()
+        print "----------data---------", data
         return data
 
     def handle(self, request, glance_url, data):
@@ -76,7 +77,7 @@ class CreateImageForm(forms.Form):
         meta['properties']['image_attr'] = data['image_attr']
         if data['description']:
             meta['properties']['description'] = data['description']
-        if data.get('location', None):
+        if data.get('location', None) != '':
             meta['location'] = data['location']
         else:
             meta['data'] = request.FILES['image_file']

@@ -18,21 +18,19 @@ import traceback
 
 
 def create(request):
+    context = {}
+    context['forms'] = CreateImageForm()
+    context['success'] = 1
     if request.method == 'POST':
-        try:
-            createImageForm = CreateImageForm(request.POST)
-            if createImageForm.is_valid():
-                print request.FILES['image_file']
-                data = createImageForm.clean()
-                print data
-                createImageForm.handle(request, config.glance_url(), data)
-            return render(request, 'upload_success.html')
-        except:
-            pass
-    else:
-        context = {}
-        context['forms'] = CreateImageForm()
-        return render(request, 'create_image.html', context)
+        createImageForm = CreateImageForm(request.POST)
+        if createImageForm.is_valid():
+            data = createImageForm.clean()
+            createImageForm.handle(request, config.glance_url(), data)
+            context['success'] = 0
+        else:
+            print '------invalid-------'
+            context['success'] = -1
+    return render(request, 'create_image.html', context)
 
 
 

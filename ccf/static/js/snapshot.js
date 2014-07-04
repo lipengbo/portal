@@ -9,6 +9,11 @@ function snapshot_creation_show(vm_id, host_ip){
 }
 
 function create_snapshot(vm_id, host_ip){
+    var name = $('#snapshot_name').val();
+    var desc = $('#snapshot_desc').val();
+    if(!(check('name', name) && check('desc', desc))){
+        return;
+    }
     $('#snapshot_creation').modal('hide');
     if($('#'+vm_id+'_qt').children('img').attr('title') == '停止'){
         $('#'+vm_id+'_qt').attr('style', 'cursor:not-allowed');
@@ -24,8 +29,8 @@ function create_snapshot(vm_id, host_ip){
         type: 'POST',
         url: '/ghost/create_snapshot/',
         data: {
-            name: $('#snapshot_name').val(),
-            desc: $('#snapshot_desc').val(),
+            name: name,
+            desc: desc,
             host_ip: host_ip,
             vm_id: vm_id
         },
@@ -90,4 +95,17 @@ function restore_snapshot(vm_id, snapshot_uuid){
         });
     });
     
+}
+
+function check(class_var, obj_var){
+    var obj = $('.form-group.'+class_var+"");
+    if(obj_var == ""){
+        obj.addClass('has-error');
+        return false;
+    }else{
+        if(obj.hasClass('has-error')){
+            obj.removeClass('has-error');
+        }
+        return true;
+    }
 }

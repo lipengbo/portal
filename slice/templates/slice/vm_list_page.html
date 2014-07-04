@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load endless %}
 {% paginate 4 vms %}
-<div id="snapshot_creation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<!--div id="snapshot_creation1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -29,12 +29,12 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button type="button" id="snapshot_ensure" class="btn btn_info">确定</button>
+              <button type="button" class="btn btn_info">确定</button>
             </div>
         </form>
         </div>
         </div>
-    </div>
+    </div-->
 <h4 class="block_title">
     <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】<a href="/ghost/list_snapshot/">备份列表</a>
     <div class="pull-right">

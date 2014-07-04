@@ -26,7 +26,28 @@ $(document).ready(function(){
     $('.btn-inverse').click(function(){
         window.location.href = '/plugins/images/create/'
     });
+
+    $('#create_submit_btn').click(function(){
+        var name = $('#id_name').val();
+        var desc = $('#id_description').val();
+        if(!(check('name', name) && check('desc', desc))){
+            return;
+        } 
+        if($('#local_file').attr('checked') == "checked"){
+            if(!(check('file', $('#textfile').val()))){
+                return;
+            }
+        }else{
+            if(!(check('url', $('#id_location').val()))){
+                return;
+            }
+        }    
+        $('form').submit();
+        $('#alert_info').text('uploading...');
+        $('#alert_modal').modal();
+    });
 });
+
 
 function delete_image(uuid){
      $('#alertModal').modal();
@@ -44,4 +65,17 @@ function delete_image(uuid){
                 }
         });
     });
+}
+
+function check(class_var, obj_var){
+    var obj = $('.form-group.'+class_var+"");
+    if(obj_var == ""){
+        obj.addClass('has-error');
+        return false;
+    }else{
+        if(obj.hasClass('has-error')){
+            obj.removeClass('has-error');
+        }
+        return true;
+    }
 }
