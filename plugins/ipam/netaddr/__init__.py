@@ -95,7 +95,11 @@ class Network(IPNetwork):
         return super(Network, self).subnet(prefixlen, *args, **kwargs)
 
     def get_subnet(self, ipcount, index):
-        if ipcount == 64:
+        if ipcount == 256:
+            prefixlen = 24
+        elif ipcount == 128:
+            prefixlen = 25
+        elif ipcount == 64:
             prefixlen = 26
         elif ipcount == 32:
             prefixlen = 27
