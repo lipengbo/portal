@@ -815,7 +815,13 @@ def edit_unicom(request, slice_id):
         add_errors = []
         del_errors = []
         try:
-            new_unicom_slices = []
+            unicom_slice_ids = request.POST.get("unicom_slice_ids")
+            if unicom_slice_ids != "":
+                new_unicom_slice_ids = unicom_slice_ids.split(",")
+                new_unicom_slices = Slice.objects.filter(id__in=new_unicom_slice_ids)
+            else:
+                new_unicom_slices = []
+            print new_unicom_slices
             for new_unicom_slice in new_unicom_slices:
                 if new_unicom_slice not in unicom_slices:
                     if not slice_obj.add_unicom_slice(new_unicom_slice):
@@ -826,21 +832,24 @@ def edit_unicom(request, slice_id):
                         del_errors.append(unicom_slice)
         except Exception, ex:
             print 2
+#             import traceback
+#             traceback.print_exc()
             return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
         else:
             print 3
             if add_errors != [] or del_errors != []:
+                print 4
                 error_str = ""
                 add_error_names = []
                 if add_errors:
                     for add_error in add_errors:
-                        add_error_names.append(add_error.name)
-                    error_str = error_str + u"添加虚网（" + ",".join(add_error_names) + u"）连通关系失败！"
+                        add_error_names.append(add_error.show_name)
+                    error_str = error_str + u"添加虚网（" + ",".join(add_error_names) + u"）通信关系失败！"
                 del_error_names = []
                 if del_errors:
                     for del_error in del_errors:
-                        del_error_names.append(del_error.name)
-                    error_str = error_str + u"删除虚网（" + ",".join(del_error_names) + u"）连通关系失败！"
+                        del_error_names.append(del_error.show_name)
+                    error_str = error_str + u"删除虚网（" + ",".join(del_error_names) + u"）通信关系失败！"
                 return HttpResponse(json.dumps({'result': 2, 'error_info': error_str}))
             else:
                 return HttpResponse(json.dumps({'result': 1}))
@@ -850,3 +859,19 @@ def edit_unicom(request, slice_id):
         context['can_unicom_slices'] = slice_obj.get_can_unicom_slices()
         context['unicom_slices'] = unicom_slices
         return render(request, 'slice/edit_unicom.html', context)
+
+
+@login_required
+def can_edit_unicom(request, slice_id):
+    """编辑虚网间通信关系。"""
+    print "can_edit_unicom"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    try:
+        if slice_obj.can_edit_unicom():
+            return HttpResponse(json.dumps({'result': 1}))
+        else:
+            return HttpResponse(json.dumps({'result': 2}))
+    except:
+        return HttpResponse(json.dumps({'result': 0}))

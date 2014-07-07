@@ -130,6 +130,9 @@ class VirtualMachine(IslandResource):
 
     objects = VirtualMachineManager()
 
+    def usable(self):
+        return True
+
     def get_ipaddr(self):
         return self.ip.ipaddr
 
@@ -337,8 +340,8 @@ def vm_pre_delete(sender, instance, **kwargs):
         try:
             unicom_slices = instance.slice.get_unicom_slices()
             for unicom_slice in unicom_slices:
-                if not instance.slice.del_unicom_slice_api(unicom_slice):
-                    raise Exception("虚网连通关系删除失败！")
+                if not instance.slice.del_unicom_slice(unicom_slice):
+                    raise Exception("虚网通信关系删除失败！")
         except Exception:
             raise
 

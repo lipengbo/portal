@@ -1,0 +1,232 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}
+镜像备份
+{% endblock %}
+{% block extra_style %}
+   
+{% endblock %}
+{% block breadcrumb %}
+<li class="active">镜像备份</li>
+{% endblock %}
+{% block extra_breadcrumb %}
+<form class="navbar-form navbar-right search_defined">
+    <div class="form-group">
+      <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
+     <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
+    </div>
+</form>
+{% endblock %}
+
+{% block body %}
+<div class="user_manage_tab"> 
+    <a class="slice_index col-md-6 jx on" href="">
+        <span>镜像</span>
+    </a>
+    <a class="slice_index col-md-6 bf" href="">
+         <span>备份</span>
+    </a>
+    <div class="clear"></div>
+</div>
+
+<div class="well intro_well">
+    <h3 class="list_title">镜像（Images）</h3>                        
+    <p class="list_lead">映像 (Image) 是带有操作系统的主机模板。平台会提供主流的 Linux、Windows 模板，并根据上游厂商更新版本时及时制作新模板。用户也可以在将自己名下的主机制作成模板，以备后用。</p>                     
+</div>
+
+<div class="action_box clearfix">
+    <ul class="action_box_tab clearfix list-unstyled">
+        <li class="active"><a>系统</a></li>
+        <li><a>应用</a></li>
+        <li><a>自有</a></li>
+    </ul>
+</div>
+
+<div class="action_box_tab_blocks">
+    <div class="action_box_tab_block" style="display: block;">
+        <table class="table_defined">
+            <thead>
+                <tr>
+                    <th width="20%">ID</th>
+                    <th width="20%">名称</th>
+                    <th width="30%">描述</th>
+                    <th width="15%">容量（G）</th>
+                    <th width="15%">创建时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>aaaaaaaaaaaaaaaaaaaaaaaaa</td>
+                    <td>20</td>
+                    <td>2014-6-24</td>               
+                </tr>
+                <tr>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>aaaaaaaaaaaaaaaaaaaaaaaaa</td>
+                    <td>20</td>
+                    <td>2014-6-24</td>             
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <ul class="pagination">       
+                <li class="active"><a class="endless_page_current">1</a></li>
+                <li><a class="endless_page_link" href="" rel="page">2</a></li>
+                <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
+           </ul>
+        </div>
+    </div>
+    
+    <div class="action_box_tab_block">
+        <table class="table_defined">
+            <thead>
+                <tr>
+                    <th width="20%">ID</th>
+                    <th width="20%">名称</th>
+                    <th width="30%">描述</th>
+                    <th width="15%">容量（G）</th>
+                    <th width="15%">创建时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>20</td>
+                    <td>2014-6-24</td>               
+                </tr>
+                <tr>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>20</td>
+                    <td>2014-6-24</td>               
+                </tr>
+            </tbody>
+        </table>
+        <div class="text-center">
+            <ul class="pagination">       
+                <li class="active"><a class="endless_page_current">1</a></li>
+                <li><a class="endless_page_link" href="" rel="page">2</a></li>
+                <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
+           </ul>
+        </div>
+    </div>
+    <div class="action_box_tab_block">
+        <table class="table_defined">
+            <thead>
+                <tr>
+                    <th width="15%">ID</th>
+                    <th width="15%">名称</th>
+                    <th width="25%">描述</th>
+                    <th width="10%">容量（G）</th>
+                    <th width="10%" class="t_dropdown">
+                        <span class="dropdown"> 
+                          可见范围
+                          <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+                          <ul id="" class="dropdown-menu" role="menu">
+                              <li><a href="javascript:;">共享</a></li>
+                              <li><a href="javascript:;">私有</a></li>
+                           </ul>
+                        </span>
+                    </th>
+                    <th width="10%">创建时间</th>
+                    <th width="15%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>20</td>
+                    <td>共享</td>
+                    <td>2014-6-24</td>           
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:;" title="删除">
+                            <img src="/site_media/static/img/btn_sc.png">
+                        </a>
+                    </td>    
+                </tr>
+                <tr>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>ubuntu 12.04 LTS 64bit</td>
+                    <td>20</td>
+                    <td>共享</td>
+                    <td>2014-6-24</td>           
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:;" title="删除">
+                            <img src="/site_media/static/img/btn_sc.png">
+                        </a>
+                    </td>    
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="text-center">
+            <ul class="pagination">       
+                <li class="active"><a class="endless_page_current">1</a></li>
+                <li><a class="endless_page_link" href="" rel="page">2</a></li>
+                <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
+           </ul>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑 -->
+<div id="images_bj" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 id="myModalLabel" class="modal-title">编辑</h4>      
+            </div>
+            <div class="modal-body base_info form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-2">名称</label>
+                    <div class="col-md-8">
+                            <input type="text" class="form-control" name="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-2">描述</label>
+                    <div class="col-md-8">
+                            <textarea class="form-control" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                   <label class="radio-inline radio_defined">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 共享
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 私有
+                    </label>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button class="btn btn_info submit-invite">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/block_tab.js"></script>
+{% endblock %}

@@ -843,7 +843,38 @@ function bj_unicom(slice_id){
         //alert(0);
         return false;
     }else{
-        location.href = "http://" + window.location.host + "/slice/edit_unicom/"+slice_id+"/";
+        var ret = false;
+        $.ajax({
+            url: "/slice/can_edit_unicom/"+slice_id+"/",
+            type: 'GET',
+            dataType: 'json',
+            async : false,
+            success: function(data){
+                if(data.result == 1){
+                    ret = true;
+                }else if(data.result == 2){
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">请确保虚拟网关可用！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }else{
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">操作失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }
+            },
+            error: function(data) {
+                $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">操作失败！</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+            }
+        });
+        if(ret){
+            location.href = "http://" + window.location.host + "/slice/edit_unicom/"+slice_id+"/";
+        }
+        
         //$('#editInfoModal').modal('show');
         return false;
     }

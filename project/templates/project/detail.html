@@ -67,7 +67,7 @@
                 <td>{{ cur_quota.member }}个</td>
                 <td>{{ cur_quota.slice }}个</td>
                 <td>{{ cur_quota.vm }}个</td>
-                <td>{{ cur_quota.band }}MB</td>
+                <td>{{ cur_quota.band }}MB/s</td>
            </tr> 
         </tbody>
     </table>
@@ -85,7 +85,7 @@
             {% trans "Members" %}
             {% if not user.is_superuser %}
                 {% if user == project.owner %}
-                    <a href="{% url project_member_manage project.id %}" class="edit pull-right" title="管理"><i class="icon-wrench"></i></a>
+                    <a href="{% url project_member_manage project.id %}" class="edit pull-right" title="管理"><i class="icon-folder-close"></i></a>
                 {% endif %}
             {% endif %}
         </h4>

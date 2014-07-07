@@ -32,4 +32,5 @@ urlpatterns = patterns('slice.views',
     url(r'^topology_d3_edit/$', "topology_d3_edit", name='topology_d3_edit'),
     url(r'^topology_edit/(?P<slice_id>\d+)/$', "topology_edit", name='slice_topology_edit'),
     url(r'^edit_unicom/(?P<slice_id>\d+)/$', "edit_unicom", name='edit_unicom'),
+    url(r'^can_edit_unicom/(?P<slice_id>\d+)/$', "can_edit_unicom", name='can_edit_unicom'),
 )

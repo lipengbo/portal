@@ -826,7 +826,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
         raise
 
 
-def update_slice_virtual_network_virttool(slice_obj):
+def update_slice_virtual_network_flowvisor(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
     except Exception, ex:
@@ -927,7 +927,7 @@ def update_slice_virtual_network(slice_obj):
         if virttool.type == 1:
             update_slice_virtual_network_cnvp(slice_obj)
         else:
-            update_slice_virtual_network_virttool(slice_obj)
+            update_slice_virtual_network_flowvisor(slice_obj)
     else:
         raise DbError("数据库异常!")
 

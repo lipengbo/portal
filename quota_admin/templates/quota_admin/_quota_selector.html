@@ -2,14 +2,14 @@
         <table cellpadding="0" cellspacing="0" class="table_base create_vm_form">
              <tbody>
                  <tr>
-                     <td><b>项目</b></td>
+                     <td width="80"><b>项目</b></td>
                      <td class="cpu_chose">
                          {% for quota in quotas.project %}
                          <a href="javascript:void(0);" name="project" class="{% if user.quotas.project == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
                          {% endfor %}
-                         <ul class="list-unstyled text-danger">
+                         <div class="list-unstyled text-danger">
                              {{ form.project.errors }}
-                         </ul>
+                         </div>
                      </td>
                  </tr>
                  <tr>
@@ -18,9 +18,9 @@
                          {% for quota in quotas.slice %}
                          <a href="javascript:void(0);" name="slice" class="{% if user.quotas.slice == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
                          {% endfor %}
-                         <ul class="list-unstyled text-danger">
+                         <div class="list-unstyled text-danger">
                              {{ form.slice.errors }}
-                         </ul>
+                         </div>
                      </td>
                  </tr>
                  <tr>
@@ -29,9 +29,9 @@
                          {% for quota in quotas.vm %}
                          <a href="javascript:void(0);" name="vm" class="{% if user.quotas.vm == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 个</a>
                          {% endfor %}
-                         <ul class="list-unstyled text-danger">
+                         <div class="list-unstyled text-danger">
                              {{ form.vm.errors }}
-                         </ul>
+                         </div>
                      </td>
                  </tr>
                  <tr>
@@ -40,9 +40,9 @@
                          {% for quota in quotas.cpu %}
                          <a href="javascript:void(0);" name="cpu" class="{% if user.quotas.cpu == quota %}vm_active{% endif %}" value="{{ quota }}">{{ quota }} 核</a>
                          {% endfor %}
-                         <ul class="list-unstyled text-danger">
+                         <div class="list-unstyled text-danger">
                              {{ form.cpu.errors }}
-                         </ul>
+                         </div>
                      </td>
                  </tr>
                  <tr>
@@ -52,9 +52,9 @@
                          </div>
                          <span class="value_s">{{ quotas.mem|first }}MB</span>
                          <span class="value_e">{{ quotas.mem|last|divide:"1024" }}GB</span>
-                         <ul class="list-unstyled text-danger">
+                         <div class="list-unstyled text-danger">
                              {{ form.mem.errors }}
-                         </ul>
+                         </div>
                      </td>
                  </tr>  
                  <tr>
@@ -65,9 +65,9 @@
                          </div>
                          <span class="value_s">{{ quotas.disk|first}} GB</span>
                          <span class="value_e">{{ quotas.disk|last }} GB</span>
-                         <ul class="list-unstyled text-danger">
+                         <div class="list-unstyled text-danger">
                              {{ form.disk.errors }}
-                         </ul>
+                         </div>
                      </td>
                  </tr>
              </tbody>

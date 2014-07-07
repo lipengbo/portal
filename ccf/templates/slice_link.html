@@ -1,0 +1,76 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}
+镜像备份
+{% endblock %}
+{% block extra_style %}
+   
+{% endblock %}
+{% block breadcrumb %}
+<li><a href="#">项目</a></li>
+<li><a href="#">项目详情</a></li>
+<li class="active">虚网详情</li>
+{% endblock %}
+
+{% block body %}
+<h4 class="block_title">
+    <img src="/site_media/static/img/btn_link.png">虚网连通信配置     
+</h4>
+<div class="row">
+    <div class="col-md-5">
+        <h4 class="text-center">可通信虚网</h4>
+        <div class="select_multi_l">
+            <div class="select_row clearfix">
+                <div class="select_row_l">slice00000</div>
+                <div class="select_row_r text-right">10.0.0.7/29</div>
+            </div>
+            <div class="select_row clearfix">
+                <div class="select_row_l">slice00000</div>
+                <div class="select_row_r text-right">10.0.0.8/29</div>
+            </div>
+            <div class="select_row clearfix">
+                <div class="select_row_l">slice00000</div>
+                <div class="select_row_r text-right">10.0.0.9/29</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 text-center">
+        <button class="btn btn-inverse select_btn_r"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button class="btn btn-inverse select_btn_l"><span class="glyphicon glyphicon-chevron-left"></span></button>        
+    </div>
+    <div class="col-md-5">
+        <h4 class="text-center">不可通信虚网</h4>
+        <div class="select_multi_r">
+            <div class="select_row clearfix">
+                <div class="select_row_l">slice00000</div>
+                <div class="select_row_r text-right">10.0.0.9/29</div>
+            </div>
+            <div class="select_row clearfix">
+                <div class="select_row_l">slice00000</div>
+                <div class="select_row_r text-right">10.0.0.9/29</div>
+            </div>
+            <div class="select_row clearfix">
+                <div class="select_row_l">slice00000</div>
+                <div class="select_row_r text-right">10.0.0.9/29</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-default">取消</button></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info">提交</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/select_switch.js"></script>
+{% endblock %}

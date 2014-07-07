@@ -5,7 +5,7 @@ from plugins.openflow.virttool_api import virttool_del_slice,\
     virttool_update_slice_status, virttool_add_slice,\
     virttool_update_sice_controller
 from slice.slice_api import update_slice_virtual_network_cnvp,\
-    update_slice_virtual_network_virttool
+    update_slice_virtual_network_flowvisor
 from plugins.vt.models import DOMAIN_STATE_DIC
 from slice.slice_exception import DbError
 from adminlog.models import log, SUCCESS, FAIL
@@ -82,7 +82,7 @@ def start_slice_sync(slice_id, controller_flag, gw_flag, user):
                     virttool_update_slice_status(virttool,
                                                   slice_obj.id, True)
                     flag = True
-                    update_slice_virtual_network_virttool(slice_obj)
+                    update_slice_virtual_network_flowvisor(slice_obj)
                 slice_obj.start()
             else:
                 raise DbError("环境异常!")
