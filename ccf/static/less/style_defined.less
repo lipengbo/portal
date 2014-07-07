@@ -475,9 +475,12 @@ a.chart_btn span.color_red {
     table-layout:fixed;
     word-wrap: break-word;
     word-break:break-all;
-    background:#e1e1e9;
+    background:#f7f8fc;
     width: 100%;
     margin-bottom: 20px;
+    tr {
+        border-bottom:1px solid #eee;
+    }
 }
 .table_defined td.btn_operation {
     button {
@@ -511,8 +514,8 @@ a.chart_btn span.color_red {
     background:#666;
     color:#fff;
 }
-.table_defined>tbody>tr:nth-child(odd)>td {
-    background:#f7f8fc;
+.table_defined>tbody>tr:nth-child(even) {
+    background:#fff;
 }
 .infrastructure_index {
     padding-bottom:40px;
@@ -1263,7 +1266,7 @@ fieldset {
             margin-top: 3px;
         }
     }    
-    td.type_chose a {
+    .type_chose a {
             display:inline-block;
             padding:8px 16px;
             border:1px solid #e1f2fa;
@@ -1280,7 +1283,7 @@ fieldset {
             -o-transition: all .2s ease-in-out;
             transition: all .2s ease-in-out;
     }    
-    td.cpu_chose a {
+    .cpu_chose a {
         font-family: "Microsoft YaHei";
         display:inline-block;
         padding:12px 26px;
@@ -1297,16 +1300,16 @@ fieldset {
         -o-transition: all .2s ease-in-out;
         transition: all .2s ease-in-out;
     }
-    td.cpu_chose a.disabled {
+    .cpu_chose a.disabled {
         border-color: #bebebe;
         background: #eee;
         color: #999;
         cursor: not-allowed;
     }
-    td.cpu_chose a.disabled:hover {
+    .cpu_chose a.disabled:hover {
         border-color:#bebebe;
     }
-    td.type_chose a:hover, td.cpu_chose a:hover {
+    .type_chose a:hover, .cpu_chose a:hover {
         border-color:#2b8fcd;        
     }
     a.vm_active{
@@ -2326,6 +2329,18 @@ ul.errorlist {
         i {
             color:#2291fe;
             margin-right:10px;
+            font-weight:bold;
+        }
+        i.glyphicon-trash {
+            color:#ff3333;
+        }
+        a.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+            color: #ccc !important;
+            i {
+                color:#ccc;
+            }
         }
     }
 }
@@ -2390,3 +2405,14 @@ ul.errorlist {
     margin-bottom:15px;
     margin-top:128px;
 }
+.main2 .row_chose {
+    tbody {
+        tr.row_hover {
+            background:#e1e1e9;
+        }
+        tr.active {
+            background:#e1e1e9 !important;
+            border-bottom:1px solid #ccc;
+        }
+    }    
+} 
