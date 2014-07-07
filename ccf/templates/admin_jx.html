@@ -1,10 +1,8 @@
 {% extends "site_base.html" %}
-{% load bootstrap_tags %}
-{% load crispy_forms_field %}
+
 {% load i18n %}
+{% load url from future %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
-{% load project_tags %}
 
 {% block head_title %}
 镜像备份
@@ -223,54 +221,6 @@
     </div>
 </div>
 
-<!-- 上传镜像 -->
-<div id="upload_jx" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 id="myModalLabel" class="modal-title">上传镜像</h4>      
-            </div>
-            <div class="modal-body base_info form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-md-2">路径</label>
-                    <div class="col-md-8">
-                            <input type="text" class="form-control" name="" />
-                    </div>
-                    <div class="col-md-2 btn_file">
-                            <button class="btn btn-inverse">浏览</button>
-                            <input type="file" class="" value="浏览" />
-                    </div>                    
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2">名称</label>
-                    <div class="col-md-8">
-                            <input type="text" class="form-control" name="" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-2">描述</label>
-                    <div class="col-md-8">
-                            <textarea class="form-control" rows="3"></textarea>
-                    </div>
-                </div>
-                <div class="form-group">
-                   <label class="radio-inline radio_defined">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 系统
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 应用
-                    </label>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">邀请</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- 编辑 -->
 <div id="images_bj" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
@@ -295,7 +245,7 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">邀请</button>
+              <button class="btn btn_info submit-invite">确定</button>
             </div>
         </div>
     </div>

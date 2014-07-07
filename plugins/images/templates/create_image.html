@@ -3,7 +3,6 @@
 {% load i18n %}
 {% load url from future %}
 {% load staticfiles %}
-{% load crispy_forms_tags %}
 
 {% block head_title %}
 镜像备份
@@ -12,7 +11,7 @@
    
 {% endblock %}
 {% block breadcrumb %}
-<li><a href="{%url list_images%}">镜像备份</a></li>
+<li><a href="/plugins/images/list/">镜像备份</a></li>
 <li class="active">上传镜像</li>
 {% endblock %}
 
@@ -93,7 +92,7 @@
        SDN控制器镜像
                     </label>
                     <div class="col-md-6">
-                        <select name="image_attr" class="form-control radio_select_form">
+                        <select name="image_attr" class="form-control radio_select_form" disabled="">
                             <option value="1">应用镜像</option>
                         </select>
                     </div>                               
@@ -104,18 +103,26 @@
                         &nbsp;&nbsp;&nbsp;虚拟网关镜像
                     </label>
                     <div class="col-md-6">
-                        <select name="image_attr" class="form-control radio_select_form">
+                        <select name="image_attr" class="form-control radio_select_form" disabled="">
                             <option value="1">应用镜像</option>
                         </select>
                     </div>                               
                 </div>
             </div>            
-            <input type="button" id="create_submit_btn" value="提交"></input> 
-            <!--input type="submit" value="提交"></inpu-->          
         </form>  
     </div>
+    
+     
 </div>
-
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="button" id="create_cancel_btn" class="btn btn-lg btn-block btn-default">取消</button></div>
+        <div class="col-md-2"><button type="submit" id="create_submit_btn" class="btn btn-lg btn-block btn_info">提交</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+</form> 
 {% endblock %}
 
 {% block extra_script %}

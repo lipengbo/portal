@@ -24,7 +24,11 @@ $(document).ready(function(){
     });
     
     $('.btn-inverse').click(function(){
-        window.location.href = '/plugins/images/create/'
+        window.location.href = '/plugins/images/create/';
+    });
+    
+    $('#create_cancel_btn').click(function(){
+        window.location.href = '/plugins/images/list/';
     });
 
     $('#create_submit_btn').click(function(){
