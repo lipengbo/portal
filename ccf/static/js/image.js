@@ -4,7 +4,11 @@ $(document).ready(function(){
     });
     
     $('.submit-edit').click(function(){
-        
+        var name = $('#image_name').val();
+        var desc = $('#image_desc').val();
+        if(!(check('name', name) && check('desc', desc))){
+            return;
+        } 
         $.ajax({
             url : '/plugins/images/update/',
 		    type : 'POST',

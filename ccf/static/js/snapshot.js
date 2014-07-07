@@ -1,3 +1,34 @@
+$(document).ready(function(){
+    $('#edit_snapshot').click(function(){
+        $('#snapshot_bj').modal();
+    });
+    
+    $('.submit-edit').click(function(){
+        var name = $('#snapshot_name').val();
+        var desc = $('#snapshot_desc').val();
+        var uuid = $('.tr.active').children("td:first").text();
+        if(!(check('name', name) && check('desc', desc))){
+            return;
+        } 
+        $.ajax({
+            url : '/ghost/edit_snapshot/',
+		    type : 'POST',
+		    dataType: 'json',
+            data: {
+                name: $('#snapshot_name').val(),
+                desc: $('#snapshot_desc').val(),
+                uuid: uuid
+            },
+		    success:function(data){
+                $('#snapshot_bj').modal('hide');
+                if(data.result == 0){
+                    window.location.href = '/ghost/list_snapshot/';
+                }
+            }
+        });
+    });
+});
+
 var STATIC_URL = $("#STATIC_URL").text();
 
 function snapshot_creation_show(vm_id, host_ip){
@@ -44,7 +75,7 @@ function create_snapshot(vm_id, host_ip){
     update_vm_status();
 }
 
-function delete_snapshot(vm_id, snapshot_uuid){
+function delete_snapshot(snapshot_uuid){
      $('#alertModal').modal();
      $('.delete-confirm').unbind('click');
      $('.delete-confirm').click(function(){
@@ -52,7 +83,6 @@ function delete_snapshot(vm_id, snapshot_uuid){
                 type: 'POST',
                 url: '/ghost/delete_snapshot/',
                 data: {
-                    vm_id: vm_id,
                     snapshot_uuid: snapshot_uuid,
                 },
                 dataType: 'json',
@@ -65,6 +95,11 @@ function delete_snapshot(vm_id, snapshot_uuid){
                 }
         });
     });
+}
+
+function delete_from_dropdown(){
+    var snapshot_uuid = $('.tr.active').children("td:first").text();
+    delete_snapshot(snapshot_uuid);
 }
 
 function restore_snapshot(vm_id, snapshot_uuid){

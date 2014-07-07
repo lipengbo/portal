@@ -39,9 +39,10 @@ def create_snapshot(request):
 
 def delete_snapshot(request):
     if request.method == 'POST':
-        vm = get_object_or_404(VirtualMachine, id=request.POST.get('vm_id'))
+        #vm = get_object_or_404(VirtualMachine, id=request.POST.get('vm_id'))
         snapshot_uuid = request.POST.get('snapshot_uuid')
         snapshot = Snapshot.objects.get(uuid=snapshot_uuid)
+        vm = snapshot.vm
         try:
             if AgentClient(vm.server.ip).delete_snapshot(vm.uuid, snapshot_uuid):
                 snapshot.delete()
@@ -59,3 +60,19 @@ def restore_snapshot(request):
         snapshot = Snapshot.objects.get(uuid=snapshot_uuid)
         do_restore_snapshot.delay(vm, snapshot)
         return HttpResponse(json.dumps({'result': 0}))
+
+def edit_snapshot(request):
+    try:
+        snapshot_uuid = request.POST.get('uuid')
+        name = request.POST.get('name')
+        desc = request.POST.get('desc')
+        snapshot = Snapshot.objects.get(uuid=snapshot_uuid)
+        snapshot.name = name
+        snapshot.desc = desc
+        snapshot.save()
+        return HttpResponse(json.dumps({'result': 0}))
+    except:
+        traceback.print_exc()
+        return HttpResponse(json.dumps({'result': -1}))
+
+

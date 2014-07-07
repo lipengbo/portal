@@ -124,7 +124,7 @@
                     <td>{{image.updated_at}}</td>
                     {%if extent_html == "admin_base.html"%}
                     <td class="btn_operation">
-                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="" data-target="#images_bj" style="cursor:pointer">
+                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
                              <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
                         </a>
                         <a href="javascript:delete_image('{{image.id}}');" title="删除">
@@ -203,13 +203,13 @@
               <h4 id="myModalLabel" class="modal-title">编辑</h4>      
             </div>
             <div class="modal-body base_info form-horizontal">
-                <div class="form-group">
+                <div class="form-group name">
                     <label class="control-label col-md-2">名称</label>
                     <div class="col-md-8">
                             <input type="text" class="form-control" id="image_name" />
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group desc">
                     <label class="control-label col-md-2">描述</label>
                     <div class="col-md-8">
                             <textarea class="form-control" id="image_desc" rows="3"></textarea>
