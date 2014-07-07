@@ -205,6 +205,8 @@ class IPManager(models.Manager):
                 sub8_count = math.ceil(sub8_count / 8.0)
                 sub_count = int(sub64_count + sub32_count + sub16_count + sub8_count) << 3
                 new_subnet_addr = supernet.get_network().get_subnet(ipcount, sub_count)
+        else:
+            sub_count = Subnet.objects.filter(supernet=supernet, size=ipcount).count()
         new_subnet = Subnet(supernet=supernet, netaddr=str(new_subnet_addr), owner=owner)
         return new_subnet
 
