@@ -148,7 +148,8 @@
                 <tr>
                     <th width="15%">ID</th>
                     <th width="15%">名称</th>
-                    <th width="25%">描述</th>
+                    <th width="15%">描述</th>
+                    <th width="10%">所有者</th>
                     <th width="10%">容量（MB）</th>
                     <th width="10%" class="t_dropdown">
                         <span class="dropdown"> 
@@ -165,32 +166,48 @@
                 </tr>
             </thead>
             <tbody>
+                {% paginate 5 pri_images using 'pri' %}
+                {%for image in pri_images%}
                 <tr>
-                    <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>ubuntu 12.04 LTS 64bit</td>
-                    <td>20</td>
-                    <td>共享</td>
-                    <td>2014-6-24</td>           
+                    <td>{{image.id}}</td>
+                    <td>{{image.name}}</td>
+                    <td>{{image.properties.description}}</td>
+                    <td>{{image.owner}}</td>
+                    <td>{% widthratio image.size 1048576 1 %}</td>
+                    <td>{%if image.is_public == 1 %}共享{%else%}私有{%endif%}</td>
+                    <td>{{image.updated_at|set_date_format|date:"Y-m-d H:i:s"}}</td>
                     <td class="btn_operation">
                         {%if extent_html == "site_base.html"%}
-                        <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
-                             <img src="/site_media/static/img/btn_bj.png" title="编辑">
+                            {%if owner == image.owner%}
+                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="" data-target="" style="cursor:pointer">
+                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:delete_image('{{image.id}}');" title="删除">
+                            <img src="{{ STATIC_URL}}img/btn_sc.png">
+                        </a>
+                            {%else%}
+                         <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="" style="cursor:now-allow">
+                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑">
+                        </a>   
+                        <a href="javascript:void(0);" title="删除">
+                            <img src="{{ STATIC_URL}}img/btn_sc_gray.png">
+                        </a>
+                            {%endif%}
+                            
+                        {%else%}
+                        <a href="javascript:delete_image('{{image.id}}');" title="删除">
+                            <img src="{{ STATIC_URL}}img/btn_sc.png">
                         </a>
                         {%endif%}
-                        <a href="javascript:;" title="删除">
-                            <img src="/site_media/static/img/btn_sc.png">
-                        </a>
                     </td>    
                 </tr>
+                {%endfor%}
             </tbody>
         </table>
         <div class="text-center">
-            <ul class="pagination">       
-                <li class="active"><a class="endless_page_current">1</a></li>
-                <li><a class="endless_page_link" href="" rel="page">2</a></li>
-                <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
-           </ul>
+            <ul class="pagination">
+                {% show_pages %}
+            </ul>
         </div>
     </div>
 </div>
@@ -218,10 +235,10 @@
                 {%if extent_html == "site_base.html"%}
                 <div class="form-group is_public">
                    <label class="radio-inline radio_defined">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 共享
+                      <input type="radio" name="inlineRadioOptions" id="image_public" value="option1" checked> 共享
                     </label>
                     <label class="radio-inline">
-                      <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 私有
+                      <input type="radio" name="inlineRadioOptions" id="image_private" value="option2"> 私有
                     </label>
                 </div>
                 {%endif%}

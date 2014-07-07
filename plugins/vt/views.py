@@ -149,7 +149,7 @@ def create_vm(request, sliceid):
         servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
         servers.insert(0, ('', '---------'))
         vm_form.fields['server'].choices = servers
-        sys_images, app_images = glance_client_api.image_list_detailed_on_type(glance_url())
+        sys_images, app_images, pri_images = glance_client_api.image_list_detailed_on_type(user.username, glance_url())
         context = {}
         context['vm_form'] = vm_form
         context['flavors'] = Flavor.objects.all()
@@ -157,6 +157,7 @@ def create_vm(request, sliceid):
         context['slice_obj'] = Slice.objects.get(id=sliceid)
         context['sys_images'] = sys_images
         context['app_images'] = app_images
+        context['pri_images'] = pri_images
         return render(request, 'vt/create_vm.html', context)
 
 

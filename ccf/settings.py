@@ -170,7 +170,7 @@ INSTALLED_APPS = [
     "bootstrapform",
 
     #xmlrpc
-    #'django_xmlrpc',
+    'django_xmlrpc',
 
     # project
     "ccf",
@@ -179,7 +179,7 @@ INSTALLED_APPS = [
     "project",
     "profiles",
     "resources",
-    #"plugins.vt",
+    "plugins.vt",
     "plugins.ipam",
     "plugins.openflow",
     "plugins.network",

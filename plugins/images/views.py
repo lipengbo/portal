@@ -35,8 +35,8 @@ def create(request):
 
 
 def list(request):
-    print config.glance_url()
-    sys_images, app_images = glance_client_api.image_list_detailed_on_type(config.glance_url())
+    sys_images, app_images, pri_images = glance_client_api\
+            .image_list_detailed_on_type(request.user.username, config.glance_url())
     user = request.user
     context = {}
     if user.is_superuser:
@@ -45,6 +45,9 @@ def list(request):
         context['extent_html'] = 'site_base.html'
     context['sys_images'] = sys_images
     context['app_images'] = app_images
+    context['pri_images'] = pri_images
+    print '--priv image', pri_images
+    context['owner'] = user.username
     return render(request, 'image_list.html', context)
 
 def update(request):
@@ -53,12 +56,19 @@ def update(request):
             image_name = request.POST.get('name')
             image_desc = request.POST.get('desc')
             image_uuid = request.POST.get('uuid')
+            is_public = request.POST.get('is_public')
+            if is_public == 'true':
+                _is_public = True
+            else:
+                _is_public = False
+
+            print "---------image uuid", image_uuid
             image = glance_client_api.image_get(config.glance_url(), image_uuid)
             image_properties = image.properties
             if image_properties.has_key('description'):
                 image_properties['description'] = image_desc
             result = glance_client_api.image_update(config.glance_url(), \
-                                                    image_uuid, name=image_name, properties=image_properties)
+                                                   image_uuid, is_public=_is_public, name=image_name, properties=image_properties)
             if result:
                 return HttpResponse(json.dumps({'result': 0}))
             else:

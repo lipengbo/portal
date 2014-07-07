@@ -6,4 +6,5 @@ urlpatterns = patterns('ghost.views',
     url(r'^list_snapshot/$', "list_snapshot", name="list_snapshot"),
     url(r'^delete_snapshot/$', "delete_snapshot", name="delete_snapshot"),
     url(r'^restore_snapshot/$', "restore_snapshot", name="restore_snapshot"),
+    url(r'^create_image/$', "create_image", name="create_image"),
 )

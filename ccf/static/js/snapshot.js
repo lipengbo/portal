@@ -3,6 +3,10 @@ $(document).ready(function(){
         $('#snapshot_bj').modal();
     });
     
+    $('#create_image').click(function(){
+        $('#make_image').modal();
+    });
+
     $('.submit-edit').click(function(){
         var name = $('#snapshot_name').val();
         var desc = $('#snapshot_desc').val();
@@ -27,16 +31,53 @@ $(document).ready(function(){
             }
         });
     });
+
+    $('.submit-create').click(function(){
+        var name = $('#image_name').val();
+        var desc = $('#image_desc').val();
+        var uuid = $('.tr.active').children("td:first").text();
+        var is_public;
+
+        if($('#image_public').attr('checked') == 'checked'){
+            is_public = true;
+        }else{
+            is_public = false;
+        }
+
+        if(!(check('name', name) && check('desc', desc))){
+            return;
+        }
+
+        $.ajax({
+            url : '/ghost/create_image/',
+		    type : 'POST',
+		    dataType: 'json',
+            data: {
+                name: name,
+                desc: desc,
+                is_public: is_public,
+                uuid: uuid
+            },
+		    success:function(data){
+                $('#make_image').modal('hide');
+                if(data.result == 0){
+                    window.location.href = '#';
+                }
+            }
+        });                
+    });
 });
 
 var STATIC_URL = $("#STATIC_URL").text();
 
-function snapshot_creation_show(vm_id, host_ip){
+function snapshot_creation_show(){
+    var vm_id = $('#uuid').attr('title');
+    alert('')
     if($('#'+vm_id+'_snapshot').attr('style') == 'cursor:not-allowed'){
         return;
     }
     $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
-    $('#snapshot_creation').modal('show');
+    //$('#snapshot_creation').modal('show');
 }
 
 function create_snapshot(vm_id, host_ip){
@@ -54,8 +95,8 @@ function create_snapshot(vm_id, host_ip){
         $('#'+vm_id+'_sc').attr('style', 'cursor:not-allowed');
         $('#'+vm_id+'_sc').children('img').attr('src', ''+STATIC_URL+'img/btn_sc_gray.png');
     }
-    $('#icon_state'+vm_id).removeClass().addClass('icon-pause').addClass('check_vm');
-    $('#'+vm_id+'_snapshot').html('<img src="'+STATIC_URL+'img/loader.gif" title="创建快照中" />');
+    $('#icon_state'+vm_id).removeClass().addClass("icon-spinner").addClass("icon-spin").addClass('check_vm');
+   // $('#'+vm_id+'_snapshot').html('<img src="'+STATIC_URL+'img/loader.gif" title="创建快照中" />');
     $.ajax({
         type: 'POST',
         url: '/ghost/create_snapshot/',

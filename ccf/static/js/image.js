@@ -2,22 +2,29 @@ $(document).ready(function(){
     $('#edit_image').click(function(){
         $('#images_bj').modal();
     });
-    
+
     $('.submit-edit').click(function(){
         var name = $('#image_name').val();
         var desc = $('#image_desc').val();
+        var is_public;
+        var post_data; 
         if(!(check('name', name) && check('desc', desc))){
             return;
         } 
+        
+        post_data = "name="+name+"&desc="+desc+"&uuid="+$('#edit_image').attr('uuid');
+
+        if($('#image_private').attr('checked') == 'checked'){
+            post_data = post_data + "&is_public=" + false;
+        }else{
+            post_data = post_data + "&is_public=" + true;
+        }
+        
         $.ajax({
             url : '/plugins/images/update/',
 		    type : 'POST',
 		    dataType: 'json',
-            data: {
-                name: $('#image_name').val(),
-                desc: $('#image_desc').val(),
-                uuid: $('#edit_image').attr('uuid')
-            },
+            data: post_data,
 		    success:function(data){
                 $('#images_bj').modal('hide');
                 if(data.result == 0){
