@@ -3,6 +3,7 @@ pinax-project-account
 
 Getting Started:
 
+    apt-get install libffi-dev
     pip install virtualenv
     virtualenv mysiteenv
     source mysiteenv/bin/activate
