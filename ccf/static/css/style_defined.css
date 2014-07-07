@@ -6252,9 +6252,12 @@ a.chart_btn span.color_red {
   table-layout: fixed;
   word-wrap: break-word;
   word-break: break-all;
-  background: #e1e1e9;
+  background: #f7f8fc;
   width: 100%;
   margin-bottom: 20px;
+}
+.table_defined tr {
+  border-bottom: 1px solid #eee;
 }
 .table_defined td.btn_operation button {
   border: none;
@@ -6287,8 +6290,8 @@ a.chart_btn span.color_red {
   background: #666;
   color: #fff;
 }
-.table_defined > tbody > tr:nth-child(odd) > td {
-  background: #f7f8fc;
+.table_defined > tbody > tr:nth-child(even) {
+  background: #fff;
 }
 .infrastructure_index {
   padding-bottom: 40px;
@@ -7042,7 +7045,7 @@ fieldset legend {
   margin-left: 13px;
   margin-top: 3px;
 }
-.create_vm_form td.type_chose a {
+.create_vm_form .type_chose a {
   display: inline-block;
   padding: 8px 16px;
   border: 1px solid #e1f2fa;
@@ -7059,7 +7062,7 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.create_vm_form td.cpu_chose a {
+.create_vm_form .cpu_chose a {
   font-family: "Microsoft YaHei";
   display: inline-block;
   padding: 12px 26px;
@@ -7076,17 +7079,17 @@ fieldset legend {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-.create_vm_form td.cpu_chose a.disabled {
+.create_vm_form .cpu_chose a.disabled {
   border-color: #bebebe;
   background: #eee;
   color: #999;
   cursor: not-allowed;
 }
-.create_vm_form td.cpu_chose a.disabled:hover {
+.create_vm_form .cpu_chose a.disabled:hover {
   border-color: #bebebe;
 }
-.create_vm_form td.type_chose a:hover,
-.create_vm_form td.cpu_chose a:hover {
+.create_vm_form .type_chose a:hover,
+.create_vm_form .cpu_chose a:hover {
   border-color: #2b8fcd;
 }
 .create_vm_form a.vm_active {
@@ -8030,6 +8033,18 @@ ul.errorlist {
 .oper_menu li i {
   color: #2291fe;
   margin-right: 10px;
+  font-weight: bold;
+}
+.oper_menu li i.glyphicon-trash {
+  color: #ff3333;
+}
+.oper_menu li a.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  color: #ccc !important;
+}
+.oper_menu li a.disabled i {
+  color: #ccc;
 }
 .pop_chose_block .create_vm_form .cpu_chose a {
   padding: 10px 15px;
@@ -8089,4 +8104,11 @@ ul.errorlist {
 .select_btn_r {
   margin-bottom: 15px;
   margin-top: 128px;
+}
+.main2 .row_chose tbody tr.row_hover {
+  background: #e1e1e9;
+}
+.main2 .row_chose tbody tr.active {
+  background: #e1e1e9 !important;
+  border-bottom: 1px solid #ccc;
 }

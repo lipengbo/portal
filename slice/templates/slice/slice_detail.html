@@ -670,7 +670,17 @@
             init_ipinput_base();
         }
         
-
+        // jQuery UI Sliders
+        var $slider = $("#slider");
+        if ($slider.length) {
+          $slider.slider({
+            min: 1,
+            max: 5,
+            value: 2,
+            orientation: "horizontal",
+            range: "min"
+          }).addSliderSegments($slider.slider("option").max);
+        }
     });
 </script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
