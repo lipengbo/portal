@@ -183,6 +183,7 @@ INSTALLED_APPS = [
     "plugins.ipam",
     "plugins.openflow",
     "plugins.network",
+    "plugins.images",
     "invite",
     "django_cron",
     "nexus",
@@ -190,6 +191,7 @@ INSTALLED_APPS = [
     "guardian",
     'djcelery',
     "adminlog",
+    "ghost",
 ]
 
 # Celery settings

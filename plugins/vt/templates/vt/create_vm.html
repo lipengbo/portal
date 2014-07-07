@@ -3,6 +3,7 @@
 {% load i18n %}
 {% load crispy_forms_tags %}
 {% load staticfiles %}
+{% load endless %}
 {% block breadcrumb %}
     <li><a href="/project/">项目</a></li>
 	<li><a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a></li>
@@ -133,103 +134,9 @@
 				-->
 			</tbody>
 		</table>
+     </div>
+     {% include "vt/images.html" %}
 
-     </div>
-     <div class="col-md-6">
-         <h4 class="title_word_bg block_title">
-               <img src="{% static "img/icon_iso.png" %}" /> 镜像      
-         </h4>
-         <div class="action_box clearfix">
-            <ul class="action_box_tab clearfix list-unstyled">
-                <li class="active"><a>系统</a></li>
-                <li><a>应用</a></li>
-                <li><a>自有</a></li>
-            </ul>
-        </div>
-        <div class="action_box_tab_blocks">
-            <div class="action_box_tab_block" style="display: block;">
-                <div class="block_chose">
-                    <a href="javascript:;" class="clearfix active">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                </div>
-                <div class="text-right">
-                    <ul class="pagination">       
-                        <li class="active"><a class="endless_page_current">1</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
-                   </ul>
-                </div>
-            </div>
-            <div class="action_box_tab_block">
-                <div class="block_chose">
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                </div>
-                <div class="text-right">
-                    <ul class="pagination">       
-                        <li class="active"><a class="endless_page_current">1</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
-                   </ul>
-                </div>
-            </div>
-            <div class="action_box_tab_block">
-                <div class="block_chose">
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                </div>
-                <div class="text-right">
-                    <ul class="pagination">       
-                        <li class="active"><a class="endless_page_current">1</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
-                   </ul>
-                </div>
-            </div>
-        </div>
-     </div>
  </div>        
  <div class="form-actions">
     <div class="row buttons_margin">

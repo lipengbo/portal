@@ -1,0 +1,147 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}
+镜像备份
+{% endblock %}
+{% block extra_style %}
+   
+{% endblock %}
+{% block breadcrumb %}
+<li><a href="#">镜像备份</a></li>
+<li class="active">上传镜像</li>
+{% endblock %}
+
+{% block body %}
+<form action="" class="form-horizontal" method="post" enctype="multipart/form-data">{% csrf_token %}
+<div class="row">
+    <div class="col-md-9">        
+            <h4 class="block_title">
+                <img src="{{ STATIC_URL}}img/ic_baseinfo.png">基本信息     
+            </h4>
+            <div class="form-group">
+                <label class="control-label col-md-2">名称</label>
+                <div class="col-md-6">
+                        {{ forms.name }}
+                        <!--input type="text" class="form-control" name="" /-->
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">描述</label>
+                <div class="col-md-6">
+                        {{ forms.description}}
+                        <!--textarea class="form-control" rows="3"></textarea-->
+                </div>
+            </div>
+            <h4 class="block_title">
+                <img src="{{ STATIC_URL}}img/ic_path.png">资源路径     
+            </h4>
+            <div class="select_switch">
+                <div class="form-group radio_tab">
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="resource_path" checked="" />
+                        本地路径
+                    </label>
+                    <div class="col-md-6">
+                            <input type="text" class="form-control radio_select_form" name="" id="textfile" />
+                    </div>
+                    <div class="col-md-2 btn_file">
+                            <button class="btn btn-inverse">浏览</button>
+                            {{forms.image_file}}
+                            <!--input type="file" class="" value="浏览" onchange="document.getElementById('textfile').value=this.value" /-->
+                    </div>                    
+                </div>
+                 <div class="form-group radio_tab">
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="resource_path" />
+                        网络路径
+                    </label>
+                    <div class="col-md-6">
+                            {{forms.location}}
+                            <!--input type="text" class="form-control radio_select_form" name="" id="textfile" disabled="" /-->
+                    </div>                               
+                </div>
+            </div>        
+            <h4 class="block_title">
+                <img src="/site_media/static/img/ic_type.png">资源类型     
+            </h4>
+            <div class="select_switch">
+                <div class="form-group radio_tab">
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="image_type" checked="" />
+                        普通虚拟机镜像
+                    </label>
+                    <div class="col-md-6">
+                        <select name="image_attr" class="form-control radio_select_form">
+                            <option value="0">系统镜像</option>
+                            <option value="1">应用镜像</option>
+                        </select>
+                    </div>                 
+                </div>
+                <div class="form-group radio_tab">
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="image_type" />
+       SDN控制器镜像
+                    </label>
+                    <div class="col-md-6">
+                        <select name="image_attr" class="form-control radio_select_form" disabled="">
+                            <option value="1">应用镜像</option>
+                        </select>
+                    </div>                               
+                </div>
+                <div class="form-group radio_tab">
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="image_type" />
+                        &nbsp;&nbsp;&nbsp;虚拟网关镜像
+                    </label>
+                    <div class="col-md-6">
+                        <select name="image_attr" class="form-control radio_select_form" disabled="">
+                            <option value="1">应用镜像</option>
+                        </select>
+                    </div>                               
+                </div>
+            </div>            
+            <!--div class="select_switch">
+                <div class="form-group radio_tab">
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="image_type" value="1" checked="" />
+                        普通虚拟机镜像
+                    </label>
+                     <label class="control-label col-md-2">
+                        <input type="radio" name="image_type" value="0" />
+       SDN控制器镜像
+                    </label>
+                    <label class="control-label col-md-2">
+                        <input type="radio" name="image_type" value="2" />
+                        &nbsp;&nbsp;&nbsp;虚拟网关镜像
+                    </label>
+                    <div class="col-md-6">
+                        <select name="image_attr" class="form-control radio_select_form">
+                            <option value="0">系统镜像</option>
+                            <option value="1">应用镜像</option>
+                        </select>
+                    </div> 
+                </div>
+            </div-->
+                               
+    </div>
+    
+     
+</div>
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-default">取消</button></div>
+        <div class="col-md-2"><button type="submit" class="btn btn-lg btn-block btn_info">提交</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+</form> 
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/radio_tab.js"></script>
+{% endblock %}

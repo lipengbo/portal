@@ -1,0 +1,18 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block body %}
+
+<div class="row-fluid">
+  <div class="span12">
+          <form action="" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+                  {{forms.as_ul}}
+          <input type="submit" value="提交"></input>  
+          </form>  
+  </div>
+</div>
+{% endblock %}

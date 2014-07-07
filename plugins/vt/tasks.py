@@ -2,6 +2,8 @@
 from celery import task
 from models import DOMAIN_STATE_DIC
 from adminlog.models import log, SUCCESS, FAIL
+from plugins.common.agent_client import AgentClient
+import traceback
 
 VM_TYPE = ((0, u'控制器'),(1, u'虚拟机'),(2, u'网关'))
 
@@ -38,3 +40,5 @@ def reset_state(user, vm, action, result, is_except):
             vm.state = DOMAIN_STATE_DIC['shutoff']
             vm.save()
             log(user, vm, u"启动" + VM_TYPE[vm.type][1], FAIL)
+
+

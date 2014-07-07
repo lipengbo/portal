@@ -106,6 +106,10 @@ msgstr "虚拟机操作失败"
 msgid "failed to delete vm"
 msgstr "虚拟机删除失败"
 
+msgid "failed to delete vm because of snapshot"
+msgstr "无法删除带有快照的虚拟机"
+
+
 #: templates/vt/create_vm.html:10
 msgid "create vm"
 msgstr "创建虚拟机"

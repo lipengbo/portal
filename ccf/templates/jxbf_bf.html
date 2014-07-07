@@ -39,7 +39,11 @@
     <p class="list_lead">备份 (Snapshot) 用于对正在运行的主机做在线备份。</p>                     
 </div>
 
+<<<<<<< HEAD
 <table class="table_defined td_chose">
+=======
+<table class="table_defined row_chose" id="jxbf">
+>>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
     <thead>
         <tr>
             <th width="15%">ID</th>
@@ -52,10 +56,17 @@
                 <span class="dropdown"> 
                   操作
                   <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
+<<<<<<< HEAD
                   <ul id="" class="dropdown-menu oper_menu" role="menu">
                       <li><a href="javascript:;" data-toggle="modal" data-target="#make_iso"><img src="{% static "img/icon_iso.png" %}" />镜像</a></li>
                       <li><a href="javascript:;" data-toggle="modal" data-target="#images_bj"><img src="{% static "img/btn_bj.png" %}" />编辑</a></li>
                       <li><a href="javascript:;"><img src="{% static "img/btn_sc.png" %}" />删除</a></li>
+=======
+                  <ul class="dropdown-menu oper_menu" role="menu">
+                      <li><a href="javascript:;" data-toggle="modal" data-target="#make_iso" class="disabled"><i class="glyphicon glyphicon-record"></i>制作镜像</a></li>
+                      <li><a href="javascript:;" data-toggle="modal" data-target="#images_bj" class="disabled"><i class="glyphicon glyphicon-pencil"></i>编辑</a></li>
+                      <li><a href="javascript:;" class="disabled"><i class="glyphicon glyphicon-trash"></i>删除</a></li>
+>>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
                    </ul>
                 </span>
             </th>
@@ -191,4 +202,8 @@
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/block_tab.js"></script>
+<<<<<<< HEAD
+=======
+<script src="{{ STATIC_URL}}js/table_click.js"></script>
+>>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
 {% endblock %}

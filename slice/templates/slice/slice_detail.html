@@ -512,7 +512,7 @@
         </div>
       </div>
     </div>
-    
+
 <!-- 创建备份 -->
 <div id="create_bf" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
@@ -635,7 +635,6 @@
     </div>
 </div>
 
-
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>
@@ -643,6 +642,7 @@
 <script src="{{ STATIC_URL}}js/slice_detail.js"></script>
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
+<script src="{{ STATIC_URL}}js/type_chose.js"></script>
 <!--<script src="{{ STATIC_URL}}js/jquery-ui.js"></script>-->
 <script type="text/javascript">
     $(document).ready(function(){
@@ -698,4 +698,5 @@
     });
 </script>
 <script src="{{ STATIC_URL}}js/check_vm_status_slice.js"></script>
+<script src="{{ STATIC_URL}}js/snapshot.js"></script>
 {% endblock %}

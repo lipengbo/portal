@@ -6252,9 +6252,12 @@ a.chart_btn span.color_red {
   table-layout: fixed;
   word-wrap: break-word;
   word-break: break-all;
-  background: #e1e1e9;
+  background: #f7f8fc;
   width: 100%;
   margin-bottom: 20px;
+}
+.table_defined tr {
+  border-bottom: 1px solid #eee;
 }
 .table_defined td.btn_operation button {
   border: none;
@@ -6287,8 +6290,8 @@ a.chart_btn span.color_red {
   background: #666;
   color: #fff;
 }
-.table_defined > tbody > tr:nth-child(odd) > td {
-  background: #f7f8fc;
+.table_defined > tbody > tr:nth-child(even) {
+  background: #fff;
 }
 .infrastructure_index {
   padding-bottom: 40px;
@@ -7967,6 +7970,21 @@ ul.errorlist {
 .oper_menu li i {
   color: #2291fe;
   margin-right: 10px;
+<<<<<<< HEAD
+=======
+  font-weight: bold;
+}
+.oper_menu li i.glyphicon-trash {
+  color: #ff3333;
+}
+.oper_menu li a.disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  color: #ccc !important;
+}
+.oper_menu li a.disabled i {
+  color: #ccc;
+>>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
 }
 .pop_chose_block .create_vm_form .cpu_chose a {
   padding: 10px 15px;
@@ -8027,3 +8045,13 @@ ul.errorlist {
   margin-bottom: 15px;
   margin-top: 128px;
 }
+<<<<<<< HEAD
+=======
+.main2 .row_chose tbody tr.row_hover {
+  background: #e1e1e9;
+}
+.main2 .row_chose tbody tr.active {
+  background: #e1e1e9 !important;
+  border-bottom: 1px solid #ccc;
+}
+>>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463

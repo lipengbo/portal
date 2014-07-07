@@ -15,12 +15,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib import messages
 from forms import VmForm
 from slice.models import Slice
-from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC
+from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC, Snapshot
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from etc.config import function_test
+from etc.config import function_test, glance_url
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
+from plugins.common import glance_client_api
 from plugins.common.aes import *
 #from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
@@ -151,11 +152,14 @@ def create_vm(request, sliceid):
         servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
         servers.insert(0, ('', '---------'))
         vm_form.fields['server'].choices = servers
+        sys_images, app_images = glance_client_api.image_list_detailed_on_type(glance_url())
         context = {}
         context['vm_form'] = vm_form
         context['flavors'] = Flavor.objects.all()
         context['sliceid'] = sliceid
         context['slice_obj'] = Slice.objects.get(id=sliceid)
+        context['sys_images'] = sys_images
+        context['app_images'] = app_images
         return render(request, 'vt/create_vm.html', context)
 
 
@@ -253,20 +257,19 @@ def vnc(request, vmid, island_id):
 
 def delete_vm(request, vmid, flag):
     vm = VirtualMachine.objects.get(id=vmid)
+    snapshot = Snapshot.objects.filter(vm=vm)
+    if snapshot.count() > 0:
+        return HttpResponse(json.dumps({'result': 1, \
+                            'error_info' : _('failed to delete vm because of snapshot')}))
     try:
         vm.delete()
-        #if flag == '1':
-            #return HttpResponseRedirect(reverse("vm_list", kwargs={"sliceid": vm.slice.id}))
-        #else:
         vm.slice.flowspace_changed(3)
         log(request.user, vm,  u"删除虚拟机", SUCCESS)
         return HttpResponse(json.dumps({'result': 0}))
     except Exception:
         LOG.debug(traceback.print_exc())
         log(request.user, vm, u"删除虚拟机", FAIL)
-        #if flag == '0':
         return HttpResponse(json.dumps({'result': 1, 'error_info': _('failed to delete vm')}))
-    #return render(request, 'slice/warning.html', {'info': _('failed to delete vm')})
 
 
 def get_vms_state_by_sliceid(request, sliceid):
@@ -293,6 +296,7 @@ def get_slice_gateway_ip(request, slice_name):
 
 
 def set_domain_state(vname, state):
+    print "vm state---", state
     try:
         result = 1
         vm_query = VirtualMachine.objects.filter(uuid=vname)
@@ -387,5 +391,4 @@ def can_create_vm(request, sliceid):
         return HttpResponse(json.dumps({'result': '0'}))
     else:
         return HttpResponse(json.dumps({'result': '1'}))
-
 

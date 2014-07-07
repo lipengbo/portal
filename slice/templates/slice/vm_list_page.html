@@ -1,8 +1,42 @@
 {% load staticfiles %}
 {% load endless %}
 {% paginate 4 vms %}
+<div id="snapshot_creation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+          <h4 class="modal-title">创建快照</h4>      
+        </div>
+        <form class="" accept-charset="utf-8">{% csrf_token %}
+            <div class="modal-body base_info">
+              <table class="table_base">
+                  <tbody>
+                      <tr>
+                          <td width="100" class="text-right">名称</td>
+                          <td width="400"><input id="snapshot_name"></input></td>
+                          <td></td>
+                      </tr>
+                      <tr>
+                          <td class="text-right v_top">描述</td>
+                             <td>
+                                <textarea class="form-control" rows="5" maxlength=1024 id="snapshot_desc" name="snapshot_desc"></textarea>
+                             </td>
+                          <td><span id="snapshot_descinfo" style="display:inline;float:none;"></span> </td>
+                      </tr>
+                  </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-default" data-dismiss="modal">取消</button>
+              <button type="button" id="snapshot_ensure" class="btn btn_info">确定</button>
+            </div>
+        </form>
+        </div>
+        </div>
+    </div>
 <h4 class="block_title">
-    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】
+    <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】<a href="/ghost/list_snapshot/">备份列表</a>
     <div class="pull-right">
          {%if extent_html == "site_base.html" and permission == "edit" and slice_type == "mixslice" %}
                 <a class="bianji" id="vm_add" href="javascript:void(0);" onclick="can_create_vm({{slice_obj.id}});"
@@ -63,8 +97,10 @@
                 <i class="icon-warning-sign" id="icon_state{{vm.id}}" title="资源不足"></i>
             {% elif vm.state == 1 %}
                 <i class="icon-ok-sign icon_state check_start_vm" id="icon_state{{vm.id}}"></i>
-            {%else%}
+            {%elif vm.state == 5%}
                 <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
+            {%elif vm.state == 3%}
+                <i class="icon-pause check_vm" id="icon_state{{vm.id}}"></i>
             {%endif%}
           {%endif%}
         </div></td>
@@ -81,8 +117,10 @@
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor:pointer">
                         {%if vm.state == 1 %}
                             <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
-                        {%else%}
+                        {%elif vm.state == 5 %}
                             <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
+                        {%elif vm.state == 3%}
+                            <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止" />
                         {%endif%}
                         </a>
                     {%endif%}
@@ -129,7 +167,7 @@
             {%endif%}
             {%if extent_html == "admin_base.html" or permission == "edit" %}
                 {%if vm.type_id == 4%}
-                    {%if slice_obj.state == 0 %}
+                    {%if slice_obj.state == 0 and vm.state != 3%}
                         <a class="shanchu" href="javascript:void(0);" id="{{vm.id}}_sc" onclick="sc_vm({{vm.id}});" style="cursor:pointer">
                         <img src="{{ STATIC_URL}}img/btn_sc.png" title="删除" />
                         </a>
@@ -139,6 +177,20 @@
                         </a>
                     {%endif%}
                 {%endif%}
+                {%if vm.state == 3%}
+                    <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" style="cursor:not-allowed">
+                        <img src="{{ STATIC_URL}}img/loader.gif" title="创建快照中" />
+                    </a>
+                    
+                {%elif vm.state == 12 or vm.state == 13%}
+                    <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" style='cursor:not-allowed'>
+                        <i class="icon-camera" id="icon_state{{vm.id}}"></i>
+                    </a>
+                {%else%}
+                <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}},'{{vm.host_ip}}')" >
+                        <i class="icon-camera" id="icon_state{{vm.id}}"></i>
+                 </a>
+                {%endif%}            
             {%endif%}
       </td>
     </tr>
