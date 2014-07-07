@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load staticfiles %}
+<link href="{% static "css/bootstrap.min.css" %}" rel="stylesheet">
+<link rel="stylesheet" href="{{ STATIC_URL}}css/slice_topology_d3.css">
+<style type="text/css">
+    body.tuopu_bg {background:transparent;}
+</style>
+<body class="tuopu_bg" style="margin: 0">
+<div class="topology">
+    
+</div>
+<div class="clear" style="display: none" >
+    <p id="slice_id">{{slice_id}}</p>
+    <p id="island_id">{{island_id}}</p>
+    <p id="height">{{height}}</p>
+    <p id="STATIC_URL">{{STATIC_URL}}</p>
+</div>
+<!--<div id="container" style="min-width: 400px; height: 182px; margin: 0 auto"></div>-->
+</body>
+<script src="{{ STATIC_URL }}topology/lib/jquery.min.js"></script>
+<script src="{{ STATIC_URL }}pinax/js/theme.js"></script>
+<script src="{{ STATIC_URL }}js/d3.v3.min.js"></script>
+<script src="{{ STATIC_URL }}topology/lib/custom-tooltip.js"></script>
+<script src="{{ STATIC_URL}}js/taffy.js"></script>
+<script src="{{ STATIC_URL }}js/slice_topology_d3_edit.js"></script> 

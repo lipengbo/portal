@@ -1,0 +1,76 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}虚网通信配置{% endblock %}
+{% block breadcrumb %}
+    <li><a href="/project/">项目</a></li>
+    <li><a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a></li>
+    <li><a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a></li>
+    <li class="active">虚网通信配置</li>
+{% endblock %}
+{% block body %}
+<div class="row">
+    <h4 class="title_word_bg block_title">
+        <img src="{% static "img/ic_pz.png" %}" />虚网通信配置
+    </h4>
+    <div class="col-md-5">
+        <h4 class="text-center">可通信虚网</h4>
+        <div class="select_multi_l">
+            {%for unicom_slice in unicom_slices%}
+            <div class="select_row clearfix" id="{{unicom_slice.id}}">
+                <div class="select_row_l">{{unicom_slice.show_name}}</div>
+                <div class="select_row_r text-right">{{unicom_slice.get_nw}}</div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+    <div class="col-md-2 text-center">
+        <button class="btn btn-inverse select_btn_r"><span class="glyphicon glyphicon-chevron-right"></span></button>
+        <button class="btn btn-inverse select_btn_l"><span class="glyphicon glyphicon-chevron-left"></span></button>        
+    </div>
+    <div class="col-md-5">
+        <h4 class="text-center">不可通信虚网</h4>
+        <div class="select_multi_r">
+            {%for can_unicom_slice in can_unicom_slices%}
+            <div class="select_row clearfix" id="{{can_unicom_slice.id}}">
+                <div class="select_row_l">{{can_unicom_slice.show_name}}</div>
+                <div class="select_row_r text-right">{{can_unicom_slice.get_nw}}</div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+</div>
+
+<div class="form-actions">
+      <div class="row buttons_margin">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice_obj.id }}/';">{% trans "Cancel" %}</button></div>
+        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="post_unicom_info({{ slice_obj.id }})">提交</button></div>
+        <div class="col-md-4"></div>
+      </div>
+</div>
+<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+      <h4 class="modal-title">提示</h4>      
+    </div>
+    <div class="modal-body" id="slice_alert_info">
+      <p class="text-center">虚网创建失败！</p>
+    </div> 
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn_info edit-confirm" data-dismiss="modal" id="alert_closed">确定</button>
+    </div>   
+</div>
+</div>       
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script src="{{ STATIC_URL}}js/select_switch.js"></script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% load project_tags %}
+{% load staticfiles %}
+  <div class="row">
+      <div class="col-md-12">
+        <h4 class="title_word_bg block_title">
+            <img src="{% static "img/ic_pz.png" %}" />项目配置
+        </h4>
+        
+        <div class="row project_slider">
+            <div class="col-md-6">
+                <div class="slider_part">
+                    <label>成员个数</label>
+                    <div id="member-range-min"></div>       
+                    <div class="clear"></div>             
+                </div>  
+                <div class="slider_part">
+                    <label>虚拟机个数</label>
+                    <div id="vm-range-min"></div>
+                    <div class="clear"></div>     
+                </div>                 
+            </div>
+            <div class="col-md-6">
+                <div class="slider_part">
+                    <label>虚网个数</label>
+                    <div id="slice-range-min"></div>       
+                    <div class="clear"></div>             
+                </div>  
+                <div class="slider_part">
+                    <label>带宽大小</label>
+                    <div id="band-range-min"></div>
+                    <div class="clear"></div>     
+                </div>  
+            </div>
+            <input type="text" value="{{cur_quota.member}}" id="new_member" name="new_member" style="display:none"/>
+            <input type="text" value="{{cur_quota.slice}}" id="new_slice" name="new_slice" style="display:none"/>
+            <input type="text" value="{{cur_quota.vm}}" id="new_vm" name="new_vm" style="display:none"/>
+            <input type="text" value="{{cur_quota.band}}" id="new_band" name="new_band" style="display:none"/>
+        </div>
+        <div class="clear" style="display: none" >
+            <p id="member_num">{{max_quota.member}}</p>
+            <p id="slice_num">{{max_quota.slice}}</p>
+            <p id="vm_num">{{max_quota.vm}}</p>
+            <p id="band_value">{{max_quota.band}}</p>
+            <p id="cur_member_num">{{cur_quota.member}}</p>
+            <p id="cur_slice_num">{{cur_quota.slice}}</p>
+            <p id="cur_vm_num">{{cur_quota.vm}}</p>
+            <p id="cur_band_value">{{cur_quota.band}}</p>
+        </div>
+     </div>
+</div>

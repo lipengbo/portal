@@ -1,0 +1,125 @@
+{% extends "site_base.html" %}
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+{% load url from future %}
+{% load staticfiles %}
+
+{% block head_title %}编辑虚网{% endblock %}
+{% block breadcrumb %}
+    <li><a href="/project/">项目</a></li>
+    <li><a href="/project/detail/{{ slice_obj.project.id }}/">项目详情</a></li>
+    <li><a href="/slice/detail/{{ slice_obj.id }}/">虚网详情</a></li>
+    <li class="active">编辑虚网</li>
+{% endblock %}
+
+{% block body %}
+    <div class="fill_form form-wizard">
+        <form class="form-horizontal" action="" method="post" accept-charset="utf-8">{% csrf_token %}
+
+            <h4 class="title_word_bg block_title">
+                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息      
+            </h4> 
+                 
+            <table class="table_base tooltip-demo">
+                     <tbody>
+                        <tr>
+                            <td width="100" class="text-right">虚网名称</td>
+                            <td width="400">{{slice_obj.get_show_name}}</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td class="text-right v_top">虚网描述</td>
+                            <td>
+                                <textarea class="form-control" rows="5" maxlength=1024 id="slice_description" name="slice_description" onblur="check_slice_description('slice_description',1)">{{slice_obj.description}}</textarea>  
+                            </td>
+                            <td><span id="slice_descriptionInfo" style="display:inline;float:none;"></span> </td>
+                        </tr>
+                     </tbody>
+            </table>                                             
+
+            <h4 class="title_word_bg block_title">
+                   <img src="{% static "img/ic_37.png" %}" />网络节点选择
+                   <small>点击拓扑图中网络节点选择需要的实验拓扑，红色表示选中。</small>
+            </h4>              
+            <div class="alert alert-info">
+                  <strong>计算存储服务器：</strong> 提供虚拟机网络管理功能，用户选择该节点后才可创建虚拟机；删除该节点时，其下挂虚拟机会被删除。<br />
+            </div>
+            <div class="show_frame">
+                <span id="switch_portInfo" style="display:inline;float:left;"></span>                   
+                <div class="main_frame">
+                    <input type="hidden" name="switches" id="topology-switch" value="" />
+                    <div class="frame_tip">
+                           <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbspSDN交换机&nbsp
+                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp计算存储服务器
+                    </div>
+                    <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe> 
+                    <!--<iframe scrolling="no" id="topologyiframe" width="100%" height="450" src="/slice/topology_d3_edit/?slice_id={{slice_obj.id}}&width=1205&height=450" frameborder="0"></iframe>-->
+                </div>
+             
+                <div class="hide no-virtual-switch alert alert-danger">
+                    {%if slice_type == "baseslice" %}
+                      请至少选择一个SDN交换机
+                    {%else%}
+                      请至少选择一个计算存储服务器
+                    {%endif%}
+                </div>
+            </div>                                                                                                                 
+              
+            <div class="clear" style="display: none" >
+                <p id="slice_id">{{slice_obj.id}}</p>
+            </div>
+            <div class="form-actions">
+                <div class="row buttons_margin">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="location.href = 'http://' + window.location.host + '/slice/detail/{{ slice_obj.id }}/';">{% trans "Cancel" %}</button></div>
+                    <div class="col-md-2"><button type="button" id="submit_sliceinfo" class="btn btn-lg btn-block btn_info" onclick="post_sliceinfo({{ slice_obj.id }})">{% trans "Submit" %}</button></div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<div class="modal-dialog">
+<div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+      <h4 class="modal-title">提示</h4>      
+    </div>
+    <div class="modal-body" id="slice_alert_info">
+      <p class="text-center">虚网创建失败！</p>
+    </div> 
+    <div class="modal-footer">
+      <button class="btn delete-confirm btn_info edit-confirm" data-dismiss="modal" id="alert_closed">确定</button>
+    </div>   
+</div>
+</div>       
+</div>
+{% endblock %}
+{% block extra_script %}
+<script>  
+    $(document).ready(function() {
+        window.selected_dpids = {};
+        window.add_dpid = function(dpid, is_delete) {
+            if(dpid in selected_dpids) {
+                if(is_delete) {
+                    delete selected_dpids[dpid];
+                }
+            } else {
+                if(!is_delete) {
+                    selected_dpids[dpid] = true;
+                }
+            }
+        };
+        window.delete_dpid = function(dpid) {
+            if(dpid in selected_dpids) {
+                delete selected_dpids[dpid];
+            }
+        };
+        var slice_id=$('#slice_id').text()
+        $('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id='+slice_id+'&height=500');
+    });
+</script> 
+<script src="{{ STATIC_URL}}js/slice_verify.js"></script>
+<script src="{{ STATIC_URL}}js/slice_edit.js"></script>
+{% endblock %}

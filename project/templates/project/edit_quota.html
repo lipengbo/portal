@@ -1,0 +1,154 @@
+{% extends "site_base.html" %}
+{% load bootstrap_tags %}
+{% load crispy_forms_field %}
+{% load i18n %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+{% load project_tags %}
+
+{% block head_title %}
+项目{% if form.instance.id%}编辑{% else %}创建{% endif %}
+{% endblock %}
+{% block extra_style %}
+<style type="text/css" media="screen">
+    #div_id_islands {
+        display:none;
+    }
+</style>    
+{% endblock %}
+{% block breadcrumb %}
+<li><a href="/project/">项目</a></li>
+<li><a href="/project/detail/{{project_obj.id}}/">项目详情</a></li>
+<li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
+{% endblock %}
+{% block body %}
+    <form class="form-horizontal" action="" method="post" accept-charset="utf-8" id="form1">{% csrf_token %}
+  <div class="row">
+      <div class="col-md-12">
+        <h4 class="title_word_bg block_title">
+            <img src="{% static "img/ic_pz.png" %}" />项目配置
+        </h4>
+        <table class="table_base tooltip-demo">
+         <tbody>
+             <tr>
+                 <td width="140" class="text-right title_padding">
+                     成员个数（个）:
+                 </td>
+                 <td width="15"></td>
+                 <td width="30%">                                
+                     <input type="text" class="form-control" value="{{cur_quota.member}}" id="new_member" name="new_member" onblur="check_project_quota('new_member',1)"/>
+                 </td>
+                 <td><span id="new_memberInfo" style="display:inline;float:none;"></span></td>
+             </tr>
+             <tr>
+                 <td class="text-right title_padding">
+                     虚网个数（个）:
+                 </td>
+                 <td></td>
+                 <td>                                
+                     <input type="text" class="form-control" value="{{cur_quota.slice}}" id="new_slice" name="new_slice" onblur="check_project_quota('new_slice',1)"/>
+                 </td>
+                 <td><span id="new_sliceInfo" style="display:inline;float:none;"></span></td>
+             </tr>
+             <tr>
+                 <td class="text-right title_padding">
+                     虚拟机个数（个）:
+                 </td>
+                 <td></td>
+                 <td>                                
+                     <input type="text" class="form-control" value="{{cur_quota.vm}}" id="new_vm" name="new_vm" onblur="check_project_quota('new_vm',1)"/>
+                 </td>
+                 <td><span id="new_vmInfo" style="display:inline;float:none;"></span></td>
+             </tr>
+             <tr>
+                 <td class="text-right title_padding">
+                     带宽大小（MB）:
+                 </td>
+                 <td></td>
+                 <td>                                
+                     <input type="text" class="form-control" value="{{cur_quota.band}}" id="new_band" name="new_band" onblur="check_project_quota('new_band',1)"/>
+                 </td>
+                 <td><span id="new_bandInfo" style="display:inline;float:none;"></span></td>
+             </tr>
+       </tbody>
+       </table>
+        <div class="clear" style="display: none" >
+
+        </div>
+        <div class="form-actions">
+                <div class="row buttons_margin">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="location.href = 'http://' + window.location.host + '/project/detail/{{ project_obj.id }}/';">{% trans "Cancel" %}</button></div>
+                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info" onclick="submit_quotainfo()">{% trans "Submit" %}</button></div>
+                    <div class="col-md-4"></div>
+                </div>
+            </div>
+     </div>
+</div>
+</form>
+
+{% endblock %}
+
+{% block extra_script %}
+<script>  
+function submit_quotainfo(){
+    ret1 = check_project_quota("new_member",1);
+    ret2 = check_project_quota("new_slice",1);
+    ret3 = check_project_quota("new_vm",1);
+    ret4 = check_project_quota("new_band",1);
+    if(ret1 && ret2 && ret3 && ret4){
+        document.getElementById("form1").submit();
+        return true;
+    }else{
+        return false;
+    }
+}
+//校验配额
+function check_project_quota(name,flag){
+    var info = document.getElementById(name+"Info");
+    var quota_obj = document.getElementById(name);
+    var quota = quota_obj.value
+    var min=0
+    var max=0
+    var reg = /^[0-9]*$/;
+    if(quota.length > 0){
+        if(name == "new_slice"){
+            min=0
+            max=200
+        }else if(name == "new_member"){
+            min=0
+            max=2000
+        }else if(name == "new_vm"){
+            min=0
+            max=5120
+        }else{
+            min=0
+            max=20000
+        }
+        if(!reg.test(quota) || quota > max || quota < min){
+            showInfo(info," * ("+min+"~"+max+")","red");
+            return false;
+        }
+        else{
+            showInfo(info," ","green");
+            return true;
+        }   
+    }
+    else{
+        if(flag){
+            showInfo(info," * 不能为空","red");
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+}
+//显示信息
+function showInfo(_info,msg,color){
+    var info=_info;
+    info.innerHTML = msg;
+    info.style.color=color;
+}
+</script>  
+{% endblock %}
