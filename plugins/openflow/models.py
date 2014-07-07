@@ -23,7 +23,8 @@ from slice.models import Slice
 
 FLOWVISOR = 0
 CNVP = 1
-VIRTTOOL_TYPES = ((CNVP, 'cnvp'),)
+VIRTTOOL_TYPES = ((CNVP, 'cnvp'),
+                  (FLOWVISOR, 'flowvisor'),)
 
 
 class Controller(ServiceResource):

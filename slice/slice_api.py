@@ -505,79 +505,6 @@ def add_flowspace(in_port, dl_vlan, dl_vpcp, dl_src, dl_dst, dl_type,
         raise
 
 
-def update_slice_virtual_network_cnvp_nt(slice_obj):
-    try:
-        Slice.objects.get(id=slice_obj.id)
-    except Exception, ex:
-        raise DbError(ex.message)
-    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
-        return
-    virttool = slice_obj.get_virttool()
-    switch_ports = slice_obj.get_switch_ports()
-    dpids = []
-    dhcp_macs = []
-    for switch_port in switch_ports:
-        if switch_port.switch.type() == 3:
-            if switch_port.switch.dpid not in dpids:
-                dpids.append(switch_port.switch.dpid)
-            vms = switch_port.virtualmachine_set.all()
-            for vm in vms:
-                if (vm.type == 1 and vm.enable_dhcp and vm.mac):
-                    dhcp_macs.append({'dpid': switch_port.switch.dpid,
-                                      'mac': vm.mac})
-#delete flowspace port, add port flowspace
-    try:
-        if slice_obj.changed == None or (slice_obj.changed != None and slice_obj.changed & 0b1101 != 4):
-            virttool_del_flowspace(virttool, slice_obj.id, None)
-            virttool_del_port(virttool, slice_obj.id, None, None)
-            for switch_port in switch_ports:
-                virttool_add_port(virttool, slice_obj.id,
-                                   switch_port.switch.dpid, switch_port.port)
-            slice_nw = slice_obj.get_nw()
-            for dpid in dpids:
-                arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                    slice_nw, slice_nw, "", "", "", "", virttool.type)
-                virttool_add_flowspace(virttool, None,
-                                        slice_obj.id,
-                                        4, 'cdn%nf',
-                                        dpid,
-                                        100, arg_match)
-                arg_match = matches_to_arg_match("", "", "", "", "", "0x806",
-                    slice_nw, slice_nw, "", "", "", "", virttool.type)
-                virttool_add_flowspace(virttool, None,
-                                        slice_obj.id,
-                                        4, 'cdn%nf',
-                                        dpid,
-                                        100, arg_match)
-                arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                    slice_nw, "other", "", "", "", "", virttool.type)
-                virttool_add_flowspace(virttool, None,
-                                        slice_obj.id,
-                                        4, 'cdn%nf',
-                                        dpid,
-                                        100, arg_match)
-                arg_match = matches_to_arg_match("", "", "", "", "", "0x800",
-                    "other", slice_nw, "", "", "", "", virttool.type)
-                virttool_add_flowspace(virttool, None,
-                                        slice_obj.id,
-                                        4, 'cdn%nf',
-                                        dpid,
-                                        100, arg_match)
-        dhcp_tag = slice_obj.get_dhcp()
-        if dhcp_tag:
-            for dhcp_mac in dhcp_macs:
-                arg_match = matches_to_arg_match("", "", "", dhcp_mac['mac'],
-                    "", "0x800", "0.0.0.0", "255.255.255.255", "", "", "", "",
-                    virttool.type)
-                virttool_add_flowspace(virttool, None,
-                                        slice_obj.id,
-                                        4, 'cdn%nf',
-                                        dhcp_mac['dpid'],
-                                        100, arg_match)
-    except:
-        raise
-
-
 def update_null_slice_virtual_network_cnvp(slice_obj):
     """更新空slice的虚网，按端口划分
     """
@@ -623,83 +550,6 @@ def update_null_slice_virtual_network_cnvp(slice_obj):
         raise
 
 
-def update_slice_virtual_network_cnvp_pt(slice_obj):
-    """更新slice的虚网，按端口划分
-    """
-    LOG.debug('update_slice_virtual_network_cnvp_pt')
-    try:
-        Slice.objects.get(id=slice_obj.id)
-    except Exception, ex:
-        raise DbError(ex.message)
-    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
-        return
-    if slice_obj.get_dhcp() == None:
-        dhcp_flag = False
-    else:
-        dhcp_flag = True
-    add_port_flag = False
-    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 4:
-        if slice_obj.virtualmachine_set.filter(type=1, enable_dhcp=True).count() == 0:
-            return
-        else:
-            add_port_flag = True
-    try:
-        virttool = slice_obj.get_virttool()
-        virttool_del_flowspace(virttool, slice_obj.id, None)
-        if add_port_flag:
-            virttool_del_port(virttool, slice_obj.id, None, None)
-        slice_ports = slice_obj.sliceport_set.all()
-        slice_nw = slice_obj.get_nw()
-        for slice_port in slice_ports:
-            switch_port = slice_port.switch_port
-            if add_port_flag:
-                virttool_add_port(virttool, slice_obj.id,
-                                   switch_port.switch.dpid, switch_port.port)
-            if slice_port.type == 0:
-                arg_match = matches_to_arg_match(switch_port.port, "", "", "",
-                    "", "", "", "", "", "", "", "", virttool.type)
-                virttool_add_flowspace(virttool, None,
-                                        slice_obj.id,
-                                        4, 'cdn%nf',
-                                        switch_port.switch.dpid,
-                                        100, arg_match)
-            else:
-                if switch_port.switch.type() == 3:
-                    vms = switch_port.virtualmachine_set.all()
-                    if vms:
-                        vm = vms[0]
-                        if vm.type == 1 and ((not dhcp_flag) or\
-                            (dhcp_flag and (not vm.enable_dhcp))):
-                            arg_match = matches_to_arg_match(switch_port.port,
-                                "", "", "", "", "", slice_nw, "", "", "", "",
-                                "", virttool.type)
-                        else:
-                            arg_match = matches_to_arg_match(switch_port.port,
-                                "", "", "", "", "", "", "", "", "", "", "",
-                                virttool.type)
-                        virttool_add_flowspace(virttool, None,
-                                                slice_obj.id,
-                                                4, 'cdn%nf',
-                                                switch_port.switch.dpid,
-                                                100, arg_match)
-                else:
-                    if switch_port.is_edge():
-                        owner_devices = slice_port.ownerdevice_set.all()
-                        if owner_devices:
-                            macs = owner_devices[0].mac_list.split(",")
-                            for mac in macs:
-                                arg_match = matches_to_arg_match(
-                                    switch_port.port, "", "", mac, "", "", "",
-                                    "", "", "", "", "", virttool.type)
-                                virttool_add_flowspace(virttool, None,
-                                                        slice_obj.id,
-                                                        4, 'cdn%nf',
-                                                        switch_port.switch.dpid,
-                                                        100, arg_match)
-    except:
-        raise
-
-
 def update_slice_virtual_network_cnvp(slice_obj):
     try:
         Slice.objects.get(id=slice_obj.id)
@@ -717,10 +567,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
     add_port_flag = True
     only_start_dhcp = False
     if slice_obj.changed != None and slice_obj.changed & 0b1100 == 4:
-        if slice_obj.virtualmachine_set.filter(type=1, enable_dhcp=True).count() == 0:
-            return
-        else:
-            add_port_flag = False
+        add_port_flag = False
         if slice_obj.changed & 0b1101 == 4:
             only_start_dhcp = True
     try:
@@ -729,7 +576,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
         slice_nw = slice_obj.get_nw()
         if only_start_dhcp:
             print "only_start_dhcp"
-#只启动了dhcp，添加虚拟机有dhcp功能的flowspace
+#只启动了dhcp，添加虚拟机有dhcp功能的flowspace和网关dhcp offer的flowspace
             for slice_port in slice_ports:
                 switch_port = slice_port.switch_port
                 if switch_port.switch.type() == 3:
@@ -741,6 +588,16 @@ def update_slice_virtual_network_cnvp(slice_obj):
                             arg_match = matches_to_arg_match(switch_port.port,
                                 "", "", vm.mac, "", "0x800", "0.0.0.0",
                                 "255.255.255.255", "", "", "", "", virttool.type)
+                            virttool_add_flowspace(virttool, None,
+                                                    slice_obj.id,
+                                                    4, 'cdn%nf',
+                                                    switch_port.switch.dpid,
+                                                    100, arg_match)
+                        if vm.type == 2:
+#                             网关且有dhcp服务
+                            arg_match = matches_to_arg_match(switch_port.port, "",
+                                "", "", "", "0x800", slice_nw, "255.255.255.255", "", "", "",
+                                "", virttool.type)
                             virttool_add_flowspace(virttool, None,
                                                     slice_obj.id,
                                                     4, 'cdn%nf',
@@ -799,10 +656,11 @@ def update_slice_virtual_network_cnvp(slice_obj):
                             "", "", "", "0x800", "other", slice_nw, "", "", "",
                             "", virttool.type)
                         arg_matches.append(arg_match)
-                        arg_match = matches_to_arg_match(switch_port.port, "",
-                            "", "", "", "0x800", slice_nw, "255.255.255.255", "", "", "",
-                            "", virttool.type)
-                        arg_matches.append(arg_match)
+                        if dhcp_flag:
+                            arg_match = matches_to_arg_match(switch_port.port, "",
+                                "", "", "", "0x800", slice_nw, "255.255.255.255", "", "", "",
+                                "", virttool.type)
+                            arg_matches.append(arg_match)
                     else:
                         arg_match = matches_to_arg_match(switch_port.port, "",
                             "", "", "", "0x800", slice_nw, "other", "", "", "",
@@ -814,9 +672,7 @@ def update_slice_virtual_network_cnvp(slice_obj):
                                 "", "", vms[0].mac, "", "0x800", "0.0.0.0",
                                 "255.255.255.255", "", "", "", "", virttool.type)
                             arg_matches.append(arg_match)
-#                 print "++++++++++++++",arg_matches
                 for arg_match in arg_matches:
-#                     print "++++++++++++++",1
                     virttool_add_flowspace(virttool, None,
                                             slice_obj.id,
                                             4, 'cdn%nf',
@@ -914,6 +770,140 @@ def update_slice_virtual_network_flowvisor(slice_obj):
                                                 arg_match)
             if switch_port.switch.dpid not in dpids:
                 dpids.append(switch_port.switch.dpid)
+    except:
+        raise
+
+
+def update_slice_virtual_network_flowvisor_new(slice_obj):
+    try:
+        Slice.objects.get(id=slice_obj.id)
+    except Exception, ex:
+        raise DbError(ex.message)
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 0:
+        return
+    if slice_obj.get_dhcp() == None:
+        dhcp_flag = False
+    else:
+        dhcp_flag = True
+    only_start_dhcp = False
+    if slice_obj.changed != None and slice_obj.changed & 0b1100 == 4:
+        add_port_flag = False
+        if slice_obj.changed & 0b1101 == 4:
+            only_start_dhcp = True
+    try:
+        virttool = slice_obj.get_virttool()
+        flowspace_name = str(slice_obj.id) + '_df'
+        slice_ports = slice_obj.sliceport_set.all()
+        slice_nw = slice_obj.get_nw()
+        slice_gw = get_slice_gw_mac(slice_obj)
+        vm_macs = []
+        if not only_start_dhcp:
+            virttool_del_flowspace(virttool, slice_obj.id, flowspace_name)
+#添加虚拟机、网关、自接入设备关联端口的flowspace
+        for slice_port in slice_ports:
+            cur_arg_matches = []
+            switch_port = slice_port.switch_port
+            if not switch_port.is_edge():
+                continue
+            if (not only_start_dhcp) and switch_port.switch.type() != 3 and slice_port.type == 1:
+    #用户自接入设备，且共享
+                owner_devices = slice_port.ownerdevice_set.all()
+                if owner_devices:
+                    macs = owner_devices[0].mac_list.split(",")
+                    for mac in macs:
+                        arg_match = matches_to_arg_match(switch_port.port,
+                            "", "", mac, "", "0x800", slice_nw, slice_nw,
+                            "", "", "", "", virttool.type)
+                        cur_arg_matches.append(arg_match)
+                        arg_match = matches_to_arg_match(switch_port.port,
+                            "", "", mac, "", "0x806", slice_nw, slice_nw,
+                            "", "", "", "", virttool.type)
+                        cur_arg_matches.append(arg_match)
+                        arg_match = matches_to_arg_match(switch_port.port,
+                            "", "", mac, slice_gw, "0x800", slice_nw, "",
+                            "", "", "", "", virttool.type)
+                        cur_arg_matches.append(arg_match)
+            else:
+                if not only_start_dhcp:
+                    arg_match = matches_to_arg_match(switch_port.port, "", "",
+                        "", "", "0x800", slice_nw, slice_nw, "", "", "", "",
+                        virttool.type)
+                    cur_arg_matches.append(arg_match)
+                    arg_match = matches_to_arg_match(switch_port.port, "", "",
+                        "", "", "0x806", slice_nw, slice_nw, "", "", "", "",
+                        virttool.type)
+                    cur_arg_matches.append(arg_match)
+                vms = switch_port.virtualmachine_set.all()
+                if vms and vms[0].type == 2:
+                    if not only_start_dhcp:
+                        arg_match = matches_to_arg_match(switch_port.port, "",
+                            "", "", slice_gw, "0x800", "", slice_nw, "", "", "",
+                            "", virttool.type)
+                        cur_arg_matches.append(arg_match)
+                    if dhcp_flag and vms[0].enable_dhcp:
+                        #网关且有dhcp服务
+                        arg_match = matches_to_arg_match(switch_port.port, "",
+                            "", "", "", "0x800", slice_nw, "255.255.255.255", "", "", "",
+                            "", virttool.type)
+                        cur_arg_matches.append(arg_match)
+                else:
+                    if not only_start_dhcp:
+                        arg_match = matches_to_arg_match(switch_port.port, "",
+                            "", slice_gw, "", "0x800", slice_nw, "", "", "", "",
+                            "", virttool.type)
+                        cur_arg_matches.append(arg_match)
+                    if dhcp_flag and vms and vms[0].enable_dhcp:
+                        #虚拟机且有dhcp服务
+                        arg_match = matches_to_arg_match(switch_port.port,
+                            "", "", vms[0].mac, "", "0x800", "0.0.0.0",
+                            "255.255.255.255", "", "", "", "", virttool.type)
+                        vm_macs.append(vms[0].mac)
+                        cur_arg_matches.append(arg_match)
+            for cur_arg_match in cur_arg_matches:
+                virttool_add_flowspace(virttool, None,
+                                        slice_obj.id,
+                                        4, 'cdn%nf',
+                                        switch_port.switch.dpid,
+                                        100, arg_match)
+#添加非边缘端口相关flowspace
+        arg_matches = []
+        for vm_mac in vm_macs:
+            arg_match = matches_to_arg_match("",
+                "", "", vm_mac, "", "0x800", "0.0.0.0",
+                "255.255.255.255", "", "", "", "", virttool.type)
+            arg_matches.append(arg_match)
+        if dhcp_flag:
+            arg_match = matches_to_arg_match("", "",
+                "", "", "", "0x800", slice_nw, "255.255.255.255", "", "", "",
+                "", virttool.type)
+            arg_matches.append(arg_match)
+        if not only_start_dhcp:
+            arg_match = matches_to_arg_match("", "", "",
+                "", "", "0x800", slice_nw, slice_nw, "", "", "", "",
+                virttool.type)
+            arg_matches.append(arg_match)
+            arg_match = matches_to_arg_match("", "", "",
+                "", "", "0x806", slice_nw, slice_nw, "", "", "", "",
+                virttool.type)
+            arg_matches.append(arg_match)
+            arg_match = matches_to_arg_match("", "",
+                "", slice_gw, "", "0x800", slice_nw, "", "", "", "",
+                "", virttool.type)
+            arg_matches.append(arg_match)
+            arg_match = matches_to_arg_match("", "",
+                "", "", slice_gw, "0x800", "", slice_nw, "", "", "",
+                "", virttool.type)
+            arg_matches.append(arg_match)
+        if arg_matches != []:
+            for slice_port in slice_ports:
+                switch_port = slice_port.switch_port
+                if switch_port.switch.type() != 3 and (not switch_port.is_edge()):
+                    for arg_match in arg_matches:
+                        virttool_add_flowspace(virttool, None,
+                                            slice_obj.id,
+                                            4, 'cdn%nf',
+                                            switch_port.switch.dpid,
+                                            100, arg_match)
     except:
         raise
 
