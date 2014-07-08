@@ -367,25 +367,29 @@ class Slice(models.Model):
                 return True
 
     def flowspace_changed(self, flag):
+#         0：启动DHCP；1：停止DHCP；2：添加虚拟机、添加外接设备；3：删除虚拟机、删除外接设备；
         a = self.changed
         if a == None:
             return
-        if flag == 0:
-            if a & 0b0100 == 0:
-                a = a | 0b0100 & 0b1110
-            else:
-                a = a & 0b1011
-        if flag == 1:
-            if a & 0b0100 == 0:
-                a = a | 0b0101
-            else:
-                a = a & 0b1011
-        if flag == 2:
-            if a & 0b1000 == 0:
-                a = a | 0b1000
-        if flag == 3:
-            if a & 0b1000 == 0:
-                a = a | 0b1010
+        if flag == None:
+            a = None
+        else:
+            if flag == 0:
+                if a & 0b0100 == 0:
+                    a = a | 0b0100 & 0b1110
+                else:
+                    a = a & 0b1011
+            if flag == 1:
+                if a & 0b0100 == 0:
+                    a = a | 0b0101
+                else:
+                    a = a & 0b1011
+            if flag == 2:
+                if a & 0b1000 == 0:
+                    a = a | 0b1000
+            if flag == 3:
+                if a & 0b1000 == 0:
+                    a = a | 0b1010
         self.changed = a
         self.save()
 
@@ -446,7 +450,7 @@ class Slice(models.Model):
             gw_dst = other_slice.get_gw()
             if gw_src and gw_dst and gw_src.usable() and gw_dst.usable():
                 UnicomSlice(src_slice=self, dst_slice=other_slice).save()
-#                 add_unicom_slice_api(self, other_slice)
+                add_unicom_slice_api(self, other_slice)
                 return True
             else:
                 print "f1"
@@ -470,8 +474,7 @@ class Slice(models.Model):
                 gw_src = self.get_gw()
                 gw_dst = other_slice.get_gw()
                 if gw_src and gw_dst and gw_src.usable() and gw_dst.usable():
-                    pass
-#                     del_unicom_slice_api(self, other_slice)
+                    del_unicom_slice_api(self, other_slice)
             return True
         except:
             transaction.rollback()
@@ -549,3 +552,11 @@ class UnicomSlice(models.Model):
 
     class Meta:
         unique_together = (("src_slice", "dst_slice"), )
+
+
+def add_unicom_slice_api(slice_obj, unicom_slice):
+    pass
+
+
+def del_unicom_slice_api(slice_obj, unicom_slice):
+    pass

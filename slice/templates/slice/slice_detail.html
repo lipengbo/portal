@@ -93,11 +93,11 @@
                         {%endif%}
                         
                         {%if slice_obj.state == 0 %}
-                        <a href="javascript:void(0);" class="bianji" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:pointer">
                             <img src="{{ STATIC_URL}}img/btn_link.png" title="虚网通信配置" />
                         </a>
                         {%else%}
-                        <a href="javascript:;" class="bianji" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                         {%endif%}
@@ -112,7 +112,7 @@
                         <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
-                        <a href="javascript:;" class="bianji" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                     {%endif%}
