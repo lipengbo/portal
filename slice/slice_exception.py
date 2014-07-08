@@ -5,6 +5,9 @@
 import traceback
 import logging
 LOG = logging.getLogger("CENI")
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 
 class Error(Exception):
@@ -25,6 +28,13 @@ class DbError(Error):
     def __init__(self, message='Unknown'):
         self.message = message
         super(DbError, self).__init__('%s' % (message))
+
+
+class DeleteSwitchError(Error):
+
+    def __init__(self, message='Unknown'):
+        self.message = message
+        super(DeleteSwitchError, self).__init__('%s' % (message))
 
 
 class NameExistError(Error):

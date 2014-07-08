@@ -56,7 +56,7 @@ def slice_add_ovs_or_ports(slice_obj, ovs_or_ports, tp_mod):
 
 
 @transaction.commit_on_success
-def slice_change_ovs_ports(slice_obj, ovs_ports):
+def slice_change_ovs_ports(slice_obj, delete_switches, add_switches, cur_switches):
     """slice更新交换端口
     """
     LOG.debug('slice_change_ovs_ports')
@@ -65,23 +65,35 @@ def slice_change_ovs_ports(slice_obj, ovs_ports):
     except Exception, ex:
         raise DbError(ex)
     try:
-        haved_ovs_ports = slice_obj.get_switch_ports()
-        cur_ovs_port_ids = []
-        haved_ovs_port_ids = []
-        for haved_ovs_port in haved_ovs_ports:
-            haved_ovs_port_ids.append(haved_ovs_port.id)
-        for ovs_port in ovs_ports:
-            cur_ovs_port_ids.append(ovs_port.id)
-            if ovs_port.id not in haved_ovs_port_ids:
+        ports = []
+        cur_ports = []
+        for cur_switch in cur_switches:
+            s_ports = cur_switch.switchport_set.all()
+            ports.extend(s_ports)
+        links = Link.objects.filter(source__in=ports, target__in=ports)
+        for link in links:
+            if link.source not in cur_ports:
+                cur_ports.append(link.source)
+            if link.target not in cur_ports:
+                cur_ports.append(link.target)
+        old_ports = slice_obj.get_switch_ports()
+        for add_switch in add_switches:
+            slice_obj.add_resource(add_switch)
+        for delete_switch in delete_switches:
+            slice_obj.remove_resource(delete_switch)
+        for ovs_port in cur_ports:
+            if ovs_port not in old_ports:
                 slice_obj.add_resource(ovs_port)
                 if ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
                     flowspace_gw_add(slice_obj, ovs_port.switch.virtualswitch.server.mac)
-        for haved_ovs_port in haved_ovs_ports:
-            if haved_ovs_port.id not in cur_ovs_port_ids:
+        for haved_ovs_port in old_ports:
+            if haved_ovs_port.is_edge() and (haved_ovs_port not in cur_ports):
                 slice_obj.remove_resource(haved_ovs_port)
                 if haved_ovs_port.switch.type() == OVS_TYPE['EXTERNAL']:
                     flowspace_gw_del(slice_obj, haved_ovs_port.switch.virtualswitch.server.mac)
     except Exception, ex:
+        import traceback
+        traceback.print_exc()
         transaction.rollback()
         raise DbError(ex)
 

@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block body %}
-        <div class="fill_form form-wizard">
-            <ul class="row nav nav-pills">                
+    <div class="fill_form form-wizard">
+        <ul class="row nav nav-pills">                
                 <li class="col-md-3"></li>
                 <li class="col-md-2 jump_step visit">
                     <a href="#tab1" class="step">
@@ -35,15 +35,16 @@
                     </a> 
                 </li>
                 <li class="col-md-3"></li>
-            </ul>
-          <form class="form-horizontal" action="" method="post" accept-charset="utf-8">{% csrf_token %}
+        </ul>
+        <form class="form-horizontal" action="" method="post" accept-charset="utf-8">{% csrf_token %}
             <div class="tab_part tab_1">
               	{% if error_info %}
               		<p>{{error_info}}ok</p>
               	{%endif%}
 
                  <h4 class="title_word_bg block_title">
-                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息      
+                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息   
+                       <span id="nw_numInfo" style="display:inline;float:none;"></span>   
                  </h4> 
                  
                  <table class="table_base tooltip-demo">
@@ -106,7 +107,7 @@
                              </td>
                          </tr>
                          
-                         <tr>
+                         <tr style="display:none">
                              <td class="text-right title_padding">
                                  最大虚拟机数                
                              </td>
@@ -119,10 +120,11 @@
                                   <option value="16">13</option>
                                   <option value="32">29</option>
                                   <option value="64">61</option>
+                                  <option value="256" selected>253</option>
                                 </select>  
                              </td>
                              <td>
-                                <span id="nw_numInfo" style="display:inline;float:none;"></span>
+                                
                                 <input type="text" id="slice_nw_input" style="display:none"/>
                                 <span id="slice_nw" style="display:none"></span>
                                 <input type="text" value="" name="old_slice_nw" id="old_slice_nw" style="display:none"/>
@@ -148,26 +150,26 @@
                          </tr>
                          
                      </tbody>
-                 </table>                                             
+                </table>                                       
                 
-               <div class="form-actions">
-                  <div class="row buttons_margin">
+                <div class="form-actions">
+                    <div class="row buttons_margin">
                     <div class="col-md-4"></div>
                     <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info"  onclick="document.location='/project/detail/{{ project.id }}/'">返 回</button></div>
                     <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-step1 btn_info next_btn">下一步</button></div>
                     <div class="col-md-4"></div>
-                  </div>
-              </div>
-             </div>
+                    </div>
+                </div>
+            </div>
              
-             <div class="tab_part">
+            <div class="tab_part">
                 <h4 class="title_word_bg block_title">
                    <img src="{% static "img/ic_37.png" %}" />网络节点选择
                    <small>点击拓扑图中网络节点选择需要的实验拓扑，红色表示选中。</small>
                 </h4>              
                 <div class="alert alert-info">
                   <!--<strong>SDN交换机：</strong> 基于OpenFlow协议的交换机，支持网络虚拟化；<br />-->
-                  <strong>虚拟交换机：</strong> 服务器内部虚拟交换机，提供虚拟机网络管理功能，用户选择该节点后才可创建虚拟机；<br />
+                  <strong>计算存储服务器：</strong> 提供虚拟机网络管理功能，用户选择该节点后才可创建虚拟机；<br />
                   <!--<strong>网络出口节点：</strong> 网络出口节点用于提供虚网中的虚拟机访问外网的功能，用户选择该节点后才可使虚拟机与外网通信；<br />
                   <strong>虚拟机关联节点：</strong> 虚拟机关联节点提供虚拟机网络管理的功能，用户选择该节点后才可创建虚拟机；<br />-->
                 </div>
@@ -191,7 +193,7 @@
                        </div>-->
                        <div class="frame_tip">
                            <img src="{% static "topology/img/ovs_normal_lt.png" %}" />&nbspSDN交换机&nbsp
-                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp虚拟交换机
+                           <img src="{% static "topology/img/ovs_related_lt.png" %}" />&nbsp计算存储服务器
                        </div>
                        
                        <iframe id="topology-iframe" width="100%" height="500px" src="" frameborder="0"></iframe>
@@ -226,7 +228,7 @@
     	                            	SDN交换机
     	                            {%endif%}
     	                            {% if ovs_port.switch_type == 3 %}
-    	                            	虚拟交换机
+    	                            	计算存储服务器
     	                            {%endif%}
 	                            </td>
 	                            <td>
@@ -245,28 +247,28 @@
                         	</tr>
                     	{%endfor%}
                     </tbody>
-                  </table>              
-                  <div class="hide no-virtual-switch alert alert-danger">
-                    {%if slice_type == "baseslice" %}
-                      请至少选择一个SDN交换机
-                    {%else%}
-                      请至少选择一个虚拟交换机
-                    {%endif%}
-                  </div>
+                    </table>              
+                    <div class="hide no-virtual-switch alert alert-danger">
+                        {%if slice_type == "baseslice" %}
+                          请至少选择一个SDN交换机
+                        {%else%}
+                          请至少选择一个计算存储服务器
+                        {%endif%}
+                    </div>
                 </div>                                                                                                                 
              
-              <div class="form-actions">
-                  <div class="row buttons_margin">
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info prev_btn">上一步</button></div>
-                    <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info btn-step2 next_btn">下一步</button></div>
-                    <div class="col-md-4"></div>
-                  </div>
-              </div>
-             </div>              
+                <div class="form-actions">
+                      <div class="row buttons_margin">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info prev_btn">上一步</button></div>
+                        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info btn-step2 next_btn">下一步</button></div>
+                        <div class="col-md-4"></div>
+                      </div>
+                </div>
+            </div>              
             
              
-             <!--<div class="tab_part">  
+            <!--<div class="tab_part">  
                     <h4 class="title_word_bg block_title">
                          <img src="{% static "img/ic_33.png" %}" />网络地址配置                             
                     </h4>  
@@ -307,7 +309,7 @@
                         <tr>
                             <td width="150" class="text-right">
                                 网关宿主机
-                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的虚拟交换机选取虚拟网关部署位置" data-original-title="用户根据选取的虚拟交换机选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
+                                <a href="javascript:void(0);" data-toggle="tooltip" data-placement="right" title="用户根据选取的计算存储服务器选取虚拟网关部署位置" data-original-title="用户根据选取的计算存储服务器选取虚拟网关部署位置"><i class="glyphicon glyphicon-question-sign glyphicon glyphicon-align-left"></i></a>
                             </td>
                             <td width="30%">
 								<div class="gw_ip">
@@ -394,15 +396,15 @@
                     <div class="col-md-4"></div>
                   </div>
               </div>
-             </div>   -->  
+            </div>   -->  
              
              
-             <div class="tab_part">
-                    <!--<h4 class="title_word_bg block_title">
+            <div class="tab_part">
+                <!--<h4 class="title_word_bg block_title">
                          <img src="{% static "img/ic_33.png" %}" />虚网类型
-                    </h4> 
-                 </legend>
-                 <table class="table_base">
+                </h4> 
+                </legend>
+                <table class="table_base">
                     <tbody>
                         <tr>
                             <td width="120">虚网类型：</td>
@@ -415,12 +417,12 @@
                             </td>
                         </tr>
                     </tbody>
-                 </table>  -->
+                </table>  -->
 
-                   <h4 class="title_word_bg block_title">
-                                    <img src="{% static "img/ic_08.png" %}" />网络节点      
-                   </h4>                
-                 <table class="switch-manifest table_defined">
+                <h4 class="title_word_bg block_title">
+                    <img src="{% static "img/ic_08.png" %}" />网络节点      
+                </h4>                
+                <table class="switch-manifest table_defined">
                     <thead>
                         <tr>
                             <th>名称</th>
@@ -431,49 +433,69 @@
                     </thead>
                     <tbody>
                     </tbody>
-                 </table>   
+                </table> 
+                 
+                <h4 class="title_word_bg block_title">
+                       <img src="{% static "img/ic_baseinfo.png" %}" />基本信息      
+                </h4>                
+                <table class="table_base">
+                    <tbody>
+                        <tr>
+                            <td width="120" class="v_top">虚网名称：</td>
+                            <td><span id="list_slice_name"></span></td>
+                        </tr>
+                        <tr>
+                            <td width="120" class="v_top">虚网描述：</td>
+                            <td><span id="list_slice_description"></span></td>
+                        </tr>
+                        <tr>
+                            <td width="120">选择节点：</td>
+                            <td><span id="list_slice_island"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+                 
                 {%if slice_type == "mixslice" %}
                     <h4 class="title_word_bg block_title">
                          <img src="{% static "img/ic_33.png" %}" />网络地址                          
                     </h4> 
-                 </legend>
-                 <table class="table_base">
+                    </legend>
+                    <table class="table_base">
                     <tbody>
                         <tr>
                             <td width="120">网络地址：</td>
                             <td><span id="list_slice_nw"></span></td>
                         </tr>
                     </tbody>
-                 </table>  
+                    </table>  
                  {%else%}
-                 <table class="table_base" style="display: none">
+                    <table class="table_base" style="display: none">
                     <tbody>
                         <tr>
                             <td width="120">网络地址：</td>
                             <td><span id="list_slice_nw"></span></td>
                         </tr>
                     </tbody>
-                 </table>
+                    </table>
                  {%endif%} 
 
-                    <!-- <h4 class="title_word_bg block_title">
+                <!-- <h4 class="title_word_bg block_title">
                         <img src="{% static "img/ic_41.png" %}" />控制器      
-                    </h4>               
+                </h4>               
 
-                 <div id="list_controller"></div>
+                <div id="list_controller"></div>
 
-                   <h4 class="title_word_bg block_title">
+                <h4 class="title_word_bg block_title">
                         <img src="{% static "img/ic_01.png" %}" />虚拟网关      
+                </h4> 
 
-                    </h4> 
+                <div id="list_gw"></div>
 
-                 <div id="list_gw"></div>
-
-                    <h4 class="title_word_bg block_title">
+                <h4 class="title_word_bg block_title">
                         <img src="{% static "img/ic_11.png" %}" />虚拟机列表      
-                    </h4>               
-                 </legend>
-                 <table class="table_defined">
+                </h4>               
+                </legend>
+                <table class="table_defined">
                     <thead>
                         <tr>
                             <th>虚拟机类型</th>
@@ -491,41 +513,41 @@
                             <td>是</td>
                         </tr>
                     </tbody>
-                 </table>--> 
+                </table>--> 
               
-              <div class="form-actions">
+                <div class="form-actions">
                   <div class="row buttons_margin">
                     <div class="col-md-4"></div>
                     <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info prev_btn">上一步</button></div>
                     <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn_info next_btn">生成虚网</button></div>
                     <div class="col-md-4"></div>
                   </div>
-              </div>
+                </div>
               
-              <div class="clear" style="display: none" >
+                <div class="clear" style="display: none" >
 					<p id="project_id">{{project.id}}</p>
 					<p id="slice_type">{{slice_type}}</p>
-			  </div>
-             </div>
-           </form>
-        </div>
-        
-<div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-<div class="modal-dialog">
-<div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
-      <h4 class="modal-title">提示</h4>      
+                </div>
+            </div>
+        </form>
     </div>
-    <div class="modal-body" id="slice_alert_info">
-      <p class="text-center">虚网创建失败！</p>
-    </div> 
-    <div class="modal-footer">
-      <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_closed">确定</button>
-    </div>   
-</div>
-</div>       
-</div>
+        
+    <div id="slicealertModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>    
+                  <h4 class="modal-title">提示</h4>      
+                </div>
+                <div class="modal-body" id="slice_alert_info">
+                  <p class="text-center">虚网创建失败！</p>
+                </div> 
+                <div class="modal-footer">
+                  <button class="btn delete-confirm btn_info" data-dismiss="modal" id="alert_closed">确定</button>
+                </div>   
+            </div>
+        </div>       
+    </div>
 {% endblock %}
 {% block extra_script %}
 <script>  

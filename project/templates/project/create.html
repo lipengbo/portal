@@ -10,14 +10,15 @@
 项目{% if form.instance.id%}编辑{% else %}创建{% endif %}
 {% endblock %}
 {% block extra_style %}
-    <style type="text/css" media="screen">
-        #div_id_islands {
-            display:none;
-        }
-    </style>    
+<style type="text/css" media="screen">
+    #div_id_islands {
+        display:none;
+    }
+</style>    
 {% endblock %}
 {% block breadcrumb %}
 <li><a href="/project/">项目</a></li>
+{% if form.instance.id%}<li><a href="/project/detail/{{form.instance.id}}/">项目详情</a></li>{% endif %}
 <li class="active">{% if form.instance.id %}{% trans "Edit Project" %}{% else %}{% trans "Create Project" %}{% endif %}</li>
 {% endblock %}
 {% block body %}
@@ -27,13 +28,15 @@
             <img src="{% static "img/ic_baseinfo.png" %}" />基本信息
         </h4>
 
-            {% crispy form %}
-				  <div class="row buttons_margin">
-                    <div class="col-md-2 col-md-offset-5"><button type="submit" class="btn btn-lg btn-block btn_info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
-				  </div>
-        </div>
-      </div>
+        {% crispy form %}
+
+         <div class="row buttons_margin">
+            <div class="col-md-2 col-md-offset-5"><button type="submit" class="btn btn-lg btn-block btn_info">{% if form.instance.id %}保 存{% else %}创 建{% endif %}</button></div>
+         </div>
 </div>
+
+
+
 {% endblock %}
 
 {% block extra_script %}
@@ -55,6 +58,62 @@
         if(!$(this).parents('form').length) {
             $('.fill_form form').submit();
         }
+    });
+</script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.core.js"></script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.widget.js"></script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.mouse.js"></script>
+<script src="{{STATIC_URL}}js/slider/jquery.ui.slider.js"></script>
+<script>
+    $(function() {
+        var member_num = $("#member_num").text()
+        var slice_num = $("#slice_num").text()
+        var vm_num = $("#vm_num").text()
+        var band_value = $("#band_value").text()
+        var cur_member_num = $("#cur_member_num").text()
+        var cur_slice_num = $("#cur_slice_num").text()
+        var cur_vm_num = $("#cur_vm_num").text()
+        var cur_band_value = $("#cur_band_value").text()
+        $( "#member-range-min" ).slider({
+            range: "min",
+            value: parseFloat(cur_member_num),
+            max: member_num,
+            slide: function( event, ui ) {
+                $( "#member-range-min .amount" ).html( ui.value + "个" );
+                $("#new_member").val(ui.value);
+            }
+        });
+        $( "#member-range-min .amount" ).html( $( "#member-range-min" ).slider( "value" ) + "个" );
+        $( "#slice-range-min" ).slider({
+            range: "min",
+            value: parseFloat(cur_slice_num),
+            max: slice_num,
+            slide: function( event, ui ) {
+                $( "#slice-range-min .amount" ).html( ui.value + "个" );
+                $("#new_slice").val(ui.value);
+            }
+        });
+        $( "#slice-range-min .amount" ).html( $( "#slice-range-min" ).slider( "value" ) + "个" );
+        $( "#vm-range-min" ).slider({
+            range: "min",
+            value: parseFloat(cur_vm_num),
+            max: vm_num,
+            slide: function( event, ui ) {
+                $( "#vm-range-min .amount" ).html( ui.value + "个" );
+                $("#new_vm").val(ui.value);
+            }
+        });
+        $( "#vm-range-min .amount" ).html( $( "#vm-range-min" ).slider( "value" ) + "个" );
+        $( "#band-range-min" ).slider({
+            range: "min",
+            value: parseFloat(cur_band_value),
+            max: band_value,
+            slide: function( event, ui ) {
+                $( "#band-range-min .amount" ).html( ui.value + "MB" );
+                $("#new_band").val(ui.value);
+            }
+        });
+        $( "#band-range-min .amount" ).html( $( "#band-range-min" ).slider( "value" ) + "MB" );
     });
 </script>
 {% endblock %}

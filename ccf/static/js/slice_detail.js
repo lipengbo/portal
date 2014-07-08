@@ -230,6 +230,9 @@ function start_stop_slice(slice_id){
             //控制器编辑、slice编辑按钮变化
             $(".bianji").attr("style","cursor:not-allowed");
             $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj_gray.png");
+            //虚网通信编辑按钮变化
+            $(".unicom").attr("style","cursor:not-allowed");
+            $(".unicom").children("img").attr("src",STATIC_URL+"img/btn_link_gray.png");
             //vm删除、port删除
             $(".shanchu").attr("style","cursor:not-allowed");
             $(".shanchu").children("img").attr("src",STATIC_URL+"img/btn_sc_gray.png");
@@ -329,15 +332,15 @@ function start_or_stop_slice(slice_id, flag){
 
 
 //slice编辑click事件
-function bj_slice(vm_id){
+function bj_slice(slice_id){
     var a_obj = $("#slice_bj")[0];
     //alert(a_obj.attr("style"));
     if(a_obj.style.cursor == "not-allowed"){
         //alert(0);
         return false;
     }else{
-        //alert(1);
-        $('#editInfoModal').modal('show');
+        location.href = "http://" + window.location.host + "/slice/edit_slice/"+slice_id+"/";
+        //$('#editInfoModal').modal('show');
         return false;
     }
 }
@@ -833,4 +836,50 @@ function start_or_stop_vpn(slice_id, island_id, flag){
 
 function qx_bj(){
     $('#editInfoModal').modal('hide');
+}
+
+
+//虚网间通信编辑click事件
+function bj_unicom(slice_id){
+    var a_obj = $("#slice_bj")[0];
+    //alert(a_obj.attr("style"));
+    if(a_obj.style.cursor == "not-allowed"){
+        //alert(0);
+        return false;
+    }else{
+        var ret = false;
+        $.ajax({
+            url: "/slice/can_edit_unicom/"+slice_id+"/",
+            type: 'GET',
+            dataType: 'json',
+            async : false,
+            success: function(data){
+                if(data.result == 1){
+                    ret = true;
+                }else if(data.result == 2){
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">请确保虚拟网关可用！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }else{
+                    $("div#slice_alert_info").empty();
+                    str = "" + "<p class=\"text-center\">操作失败！</p>";
+                    $("div#slice_alert_info").append(str);
+                    $('#slicealertModal').modal('show');
+                }
+            },
+            error: function(data) {
+                $("div#slice_alert_info").empty();
+                str = "" + "<p class=\"text-center\">操作失败！</p>";
+                $("div#slice_alert_info").append(str);
+                $('#slicealertModal').modal('show');
+            }
+        });
+        if(ret){
+            location.href = "http://" + window.location.host + "/slice/edit_unicom/"+slice_id+"/";
+        }
+        
+        //$('#editInfoModal').modal('show');
+        return false;
+    }
 }

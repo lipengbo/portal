@@ -815,7 +815,7 @@ a.tuopu_sign_block:hover, a.tuopu_sign_block:focus {
     color:#fc0500;
 }
 .slice_state i.icon-minus-sign {
-    color:#f99c61;
+    color:#e81111;
 }
 .slice_state i.icon-warning-sign {
     color:#f9e99b;
@@ -1220,6 +1220,7 @@ fieldset {
     margin-bottom:20px;
     thead tr td, tbody tr td {
         padding:0 8px 8px 8px;
+        Word-break:break-all;
     }
     .slider_td {
         padding-top: 8px;
@@ -1615,47 +1616,7 @@ span[name="serverInfo"] {
         color:#999;
     }
 }
-.slice_detail_tab {
-    background:#2291fe;
-    .row {
-        .slice_index {
-            padding:15px 0;
-            text-align:center;
-            a {
-                padding:5px 0 5px 35px;
-                height:25px;
-                color:#bfdaff;
-            }
-            a:hover, a:active, a:focus {
-                text-decoration:none;
-            }
-        } 
-        .slice_index.on a {
-            color:#fff;           
-        }
-        .slice_index.on {
-            background: url(../img/sj.png) no-repeat bottom center;
-        }
-        .fw a {
-            background:url(../img/fw2.png) no-repeat left center;
-        }      
-        .xnj a {
-            background:url(../img/xnj2.png) no-repeat left center;
-        }
-        .zjr a {
-            background:url(../img/zjr2.png) no-repeat left center;
-        }
-        .fw.on a {
-            background:url(../img/fw1.png) no-repeat left center;           
-        }
-        .xnj.on a {
-            background:url(../img/xnj1.png) no-repeat left center;           
-        }
-        .zjr.on a {
-            background:url(../img/zjr1.png) no-repeat left center;           
-        }
-    }
-}
+
 .slice_detail_block {
         .help-block {
             margin-bottom:40px;
@@ -1743,29 +1704,7 @@ span[name="serverInfo"] {
         vertical-align: middle;
     }
 }
-.port_mean {
-    margin-top:20px;
-    span {
-        padding:5px;       
-        border-radius: 5px;
-        i {
-            margin-right:5px;
-        }
-    }
-    .port_green {
-        border:1px solid #99cc66;
-        margin-right:40px;
-        i {            
-            color:#99cc66;
-        }
-    }
-    .port_blue {
-        border:1px solid #99ccff;
-        i {
-            color:#99ccff;
-        }
-    }
-}
+
 .modal_poptip_defined {
     
 }
@@ -2405,6 +2344,8 @@ ul.errorlist {
     margin-bottom:15px;
     margin-top:128px;
 }
+<<<<<<< HEAD
+=======
 .main2 .row_chose {
     tbody {
         tr.row_hover {
@@ -2416,3 +2357,4 @@ ul.errorlist {
         }
     }    
 } 
+>>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463

@@ -21,6 +21,15 @@ from guardian.shortcuts import assign_perm, remove_perm, get_perms
 from invite.models import Invitation, Application
 from notifications import notify
 
+
+class Priority(models.Model):
+    priority = models.IntegerField(null=True, verbose_name=u"优先级")
+    user = models.OneToOneField(User, verbose_name=u"用户")
+
+    def __unicode__(self):
+        return self.user.username
+
+
 class City(models.Model):
     name = models.CharField(max_length=128, verbose_name=_("name"), unique=True)
     description = models.TextField(verbose_name=_("description"))
@@ -51,6 +60,26 @@ class Island(models.Model):
     sflow_ip = models.IPAddressField(null=True, default='0.0.0.0', verbose_name=_("sflow_ip"))
     sflow_port = models.IntegerField(null=True, verbose_name=_('sflow_port'))
 
+    def get_switches(self):
+        switches = self.switch_set.all()
+        return switches
+
+    def get_available_switches(self):
+        switches = self.switch_set.filter(state=1)
+        return switches
+
+    def get_switch_ports(self):
+        from resources.models import SwitchPort
+        switches = self.get_switches()
+        return SwitchPort.objects.filter(switch__in=switches)
+
+    def get_virttool(self):
+        virttools = self.virttool_set.all()
+        if virttools:
+            return virttools[0]
+        else:
+            return None
+
     @staticmethod
     def admin_options():
         options = {
@@ -75,10 +104,12 @@ class Category(models.Model):
     class Meta:
         verbose_name = _("Category")
 
+
 class ProjectManager(models.Manager):
 
     def get_query_set(self, *args, **kwargs):
         return super(ProjectManager, self).get_query_set(*args, **kwargs).filter(is_deleted=False)
+
 
 class Project(models.Model):
     owner = models.ForeignKey(User, verbose_name=u"用户")
@@ -93,6 +124,72 @@ class Project(models.Model):
 
     objects = ProjectManager()
     admin_objects = models.Manager()
+
+    def check_project_slice_quota(self):
+        cur_quotas = self.get_quota()
+        slice_quota = cur_quotas["slice"]
+        created_slice_count = self.slice_set.filter(type=0).count()
+        print created_slice_count, slice_quota
+        if created_slice_count < slice_quota:
+            return True
+        else:
+            return False
+
+    def check_project_member_quota(self):
+        cur_quotas = self.get_quota()
+        member_quota = cur_quotas["member"]
+        created_member_count = self.memberships.all().count()
+        print created_member_count, member_quota
+        if created_member_count < member_quota:
+            return True
+        else:
+            return False
+
+    def check_project_vm_quota(self):
+        cur_quotas = self.get_quota()
+        vm_quota = cur_quotas["vm"]
+        cur_slices = self.slice_set.filter(type=0)
+        cur_vm_count = 0
+        for cur_slice in cur_slices:
+            vm_count = cur_slice.virtualmachine_set.filter(type=1).count()
+            cur_vm_count = cur_vm_count + vm_count
+        print cur_vm_count, vm_quota
+        if cur_vm_count < vm_quota:
+            return True
+        else:
+            return False
+
+    def check_project_band_quota(self):
+        return True
+
+    def get_quota(self):
+        setted_quota = {"member": 0, "slice": 0, "vm": 0, "band": 0}
+        try:
+            cur_quota = self.projectquota
+            setted_quota["member"] = cur_quota.member
+            setted_quota["slice"] = cur_quota.slice
+            setted_quota["vm"] = cur_quota.vm
+            setted_quota["band"] = cur_quota.band
+            return setted_quota
+        except ProjectQuota.DoesNotExist:
+            return setted_quota
+
+    def set_quota(self, member, slice, vm, band):
+        try:
+            old_quota = self.projectquota
+            old_quota.member = int(member)
+            old_quota.slice = int(slice)
+            old_quota.vm = int(vm)
+            old_quota.band = int(band)
+            old_quota.save()
+            return old_quota
+        except ProjectQuota.DoesNotExist:
+            new_quota = ProjectQuota(project=self,
+                         member=int(member),
+                         slice=int(slice),
+                         vm=int(vm),
+                         band=int(vm)).save()
+            return new_quota
 
     def created_date(self):
         return self.created_time
@@ -267,3 +364,13 @@ def on_add_into_slice(sender, instance, action, pk_set, model, **kwargs):
     if action == 'post_add': #: only handle post_add event
         resource.on_add_into_slice()
 
+
+class ProjectQuota(models.Model):
+    project = models.OneToOneField(Project, verbose_name=u"项目")
+    member = models.IntegerField(null=True, verbose_name=u"成员个数", default=0)
+    slice = models.IntegerField(null=True, verbose_name=u"虚网个数", default=0)
+    vm = models.IntegerField(null=True, verbose_name=u"虚拟机个数", default=0)
+    band = models.IntegerField(null=True, verbose_name=u"带宽大小", default=0)
+
+    def __unicode__(self):
+        return self.project.name

@@ -332,12 +332,12 @@ ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = ACCOUNT_EMAIL_CONFIRMATI
 ENABLE_CRON = True
 
 QUOTAS = {
-    'project': [1, 2, 4, 8],
-    'cpu': [2, 4, 8, 16],
-    'mem': [512, 1024, 2048, 4096, 8192],
-    'disk': [20, 40, 80, 160],
-    'slice': [1, 2, 4, 8],
-    'vm': [2, 4, 8, 16],
+    'project': [1, 2, 4, 8, 256],
+    'cpu': [2, 4, 8, 16, 4096],
+    'mem': [1024, 2048, 4096, 8192, 1048576],
+    'disk': [20, 40, 80, 160, 40960],
+    'slice': [1, 2, 4, 8, 256],
+    'vm': [2, 4, 8, 16, 1024],
 }
 
 AGORA_EDIT_TIMEOUT = {"minutes": 60 * 10000000}

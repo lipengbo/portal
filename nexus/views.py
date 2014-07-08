@@ -87,6 +87,7 @@ def get_islands(request):
 @transaction.commit_on_success
 @staff_member_required
 def add_or_edit(request, app_label, model_class, id=None):
+    from project.models import Priority
     context = {}
     Model = get_model(app_label, model_class, False)
     context['ModelClass'] = Model
@@ -110,10 +111,29 @@ def add_or_edit(request, app_label, model_class, id=None):
             else:
                 defaults[k] = v
         context['formset'] = ModelForm(instance=instance, initial=defaults)
+        if model_class == 'user':
+            max_priority = 100
+            prioritys = []
+            for i in range(max_priority):
+                prioritys.append(i)
+            context['prioritys'] = prioritys
+            try:
+                cur_priority = instance.priority.priority
+            except:
+                cur_priority = 0
+            context['cur_priority'] = cur_priority
     else:
         formset = ModelForm(request.POST, instance=instance)
         #: quota perm
         if model_class == 'user':
+            priority = request.POST.get("priority")
+            if instance:
+                try:
+                    cur_priority = instance.priority
+                    cur_priority.priority = priority
+                    cur_priority.save()
+                except:
+                    Priority(priority=priority, user=instance).save()
             resources = {'project': None, 'slice': None, 'vm': None, 'cpu': None, 'mem': None, 'disk': None}
             quota_changed = False
             for resource in resources.keys():
@@ -124,7 +144,7 @@ def add_or_edit(request, app_label, model_class, id=None):
                     quota_changed = True
                     instance.user_permissions.remove(*list(Permission.objects.filter(codename__contains='quota_{}_'.format(resource))))
                     if not quota:
-                        quota = settings.QUOTAS[resource][0]
+                        quota = settings.QUOTAS[resource][4]
                     instance.user_permissions.add(Permission.objects.get(codename='quota_{}_{}'.format(resource, quota)))
             if quota_changed and instance.get_profile().state == 2:
                 notify.send(request.user, recipient=instance, verb=u'调整配额', action_object=instance.get_profile())

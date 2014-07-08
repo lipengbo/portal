@@ -36,9 +36,9 @@ gw_controller = False
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 3650
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = False
+function_test = True
 #配置系统是否使用网络虚拟化工具进行虚网划分，测试使用，系统发布时该值必须为False
-virttool_disable = False
+virttool_disable = True
 #直接调度底层资源判断，发布时设置为True
 use_vt_manager_to_schedul = True
 #单台机器最多允许创建的虚拟机的数量
@@ -57,3 +57,6 @@ try:
     from etc.local_config import *
 except ImportError:
     pass
+#项目创建时成员、虚网、虚拟机、带宽最大配额
+project_quotas = {"member": 100, "slice": 10, "vm": 256, "band": 1000}
+project_quotas_admin = {"member": 2000, "slice": 200, "vm": 5120, "band": 20000}

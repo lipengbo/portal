@@ -17,7 +17,7 @@ from django.db.models import Q
 from slice.slice_api import create_slice_step, start_slice_api,\
     stop_slice_api, get_slice_topology, slice_change_description,\
     get_slice_links_bandwidths, get_count_show_data, slice_edit_controller,\
-    slice_edit_gw
+    slice_edit_gw, get_slice_topology_edit, slice_edit_topology, get_island_topology
 from slice.models import Slice, SliceDeleted
 from project.models import Project, Island
 from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
@@ -27,6 +27,7 @@ from plugins.common import utils
 from plugins.vt.models import VirtualMachine, Image
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
+from slice.slice_exception import DeleteSwitchError
 
 import datetime
 
@@ -41,6 +42,11 @@ def create(request, proj_id, flag):
     if request.user.quotas.slice <= slice_count:
         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
         return redirect('quota_admin_apply')
+    if not project.check_project_slice_quota():
+        print "fail+++++++++++++++++++++++++++++"
+        messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
+        return HttpResponseRedirect(
+                                    reverse("project_detail", kwargs={"id": project.id}))
     error_info = None
     islands = project.islands.all()
     if not islands:
@@ -72,13 +78,19 @@ def create(request, proj_id, flag):
 def create_first(request, proj_id):
     """创建slice不含虚拟机创建。"""
     project = get_object_or_404(Project, id=proj_id)
+    user = request.user
     slice_count = request.user.slice_set.filter(type=0).count()
     if request.user.quotas.slice <= slice_count:
         messages.add_message(request, messages.INFO, "您的虚网个数已经超过配额")
         return redirect('quota_admin_apply')
+    if not project.check_project_slice_quota():
+        print "fail+++++++++++++++++++++++++++++"
+        log(user,  None, "创建虚网", result_code=FAIL)
+        jsondatas = {'result': 0, 'error_info': "您的虚网个数已经超过配额！"}
+        result = json.dumps(jsondatas)
+        return HttpResponse(result, mimetype='text/plain')
     if request.method == 'POST':
         try:
-            user = request.user
             slice_uuid = request.POST.get("slice_uuid")
             slice_name = request.POST.get("slice_name")
             slice_description = request.POST.get("slice_description")
@@ -270,6 +282,47 @@ def edit_description(request, slice_id):
 
 
 @login_required
+def edit_slice(request, slice_id):
+    """编辑slice。"""
+    print "edit_slice"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    if request.method == 'POST':
+        slice_description = request.POST.get("slice_description")
+        switch_dpids = request.POST.get("switch_dpids")
+        island = slice_obj.get_island()
+        switch_dpids_list = switch_dpids.split(",")
+        switches = []
+        for switch_dpid in switch_dpids_list:
+            switch_obj = Switch.objects.filter(dpid=switch_dpid, island=island)
+            if switch_obj and (switch_obj[0] not in switches):
+                switches.append(switch_obj[0])
+        try:
+            slice_change_description(slice_obj, slice_description)
+            slice_edit_topology(slice_obj, switches)
+        except DeleteSwitchError, ex:
+            print 1
+            return HttpResponse(json.dumps({'result': 2, 'error_info': str(ex)}))
+        except Exception, ex:
+            print 2
+            return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
+        else:
+            print 3
+            return HttpResponse(json.dumps({'result': 1}))
+    else:
+        context = {}
+        context['slice_obj'] = slice_obj
+        try:
+            Subnet.objects.get(owner=slice_obj.uuid)
+        except:
+            context['slice_type'] = "baseslice"
+        else:
+            context['slice_type'] = "mixslice"
+        return render(request, 'slice/edit_slice.html', context)
+
+
+@login_required
 def detail(request, slice_id, div_name=None):
     """编辑slice。"""
     print "slice_detail"
@@ -416,6 +469,19 @@ def topology(request, slice_id):
     return HttpResponse(result, mimetype='text/plain')
 
 
+def topology_edit(request, slice_id):
+    """ajax获取slice拓扑信息。"""
+    if int(slice_id) != 0:
+        slice_obj = get_object_or_404(Slice, id=slice_id)
+        jsondatas = get_slice_topology_edit(slice_obj)
+    else:
+        island_id = request.GET.get('island_id')
+        island_obj = get_object_or_404(Island, id=island_id)
+        jsondatas = get_island_topology(island_obj)
+    result = json.dumps(jsondatas)
+    return HttpResponse(result, mimetype='text/plain')
+
+
 @login_required
 def check_slice_name(request):
     """
@@ -444,6 +510,7 @@ def create_nw(request, owner, nw_num):
     """
     print "create_nw"
     try:
+        print nw_num
         if owner == '0':
             uuid = utils.gen_uuid()
             owner = ''.join(uuid.split('-'))
@@ -466,6 +533,8 @@ def create_nw(request, owner, nw_num):
         else:
             return HttpResponse(json.dumps({'value': 0}))
     except Exception:
+        import traceback
+        traceback.print_exc()
         return HttpResponse(json.dumps({'value': 0}))
 
 
@@ -529,6 +598,15 @@ def topology_d3(request):
     else:
         context['admin'] = 0
     return render(request, 'slice/slice_topology.html', context)
+
+
+def topology_d3_edit(request):
+    """拓扑测试"""
+    context = {}
+    context['slice_id'] = request.GET.get('slice_id')
+    context['island_id'] = request.GET.get('island_id')
+    context['height'] = request.GET.get('height')
+    return render(request, 'slice/slice_topology_edit.html', context)
 
 
 def update_links_bandwidths(request, slice_id):
@@ -723,3 +801,77 @@ def start_or_stop_vpn(request, slice_id, island_id, flag):
             return HttpResponse(json.dumps({'result': 1,
                                             'error_info': u'请先添加网关！'}))
         return HttpResponse(json.dumps({'result': 1}))
+
+
+@login_required
+def edit_unicom(request, slice_id):
+    """编辑虚网间通信关系。"""
+    print "edit_unicom"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    unicom_slices = slice_obj.get_unicom_slices()
+    if request.method == 'POST':
+        add_errors = []
+        del_errors = []
+        try:
+            unicom_slice_ids = request.POST.get("unicom_slice_ids")
+            if unicom_slice_ids != "":
+                new_unicom_slice_ids = unicom_slice_ids.split(",")
+                new_unicom_slices = Slice.objects.filter(id__in=new_unicom_slice_ids)
+            else:
+                new_unicom_slices = []
+            print new_unicom_slices
+            for new_unicom_slice in new_unicom_slices:
+                if new_unicom_slice not in unicom_slices:
+                    if not slice_obj.add_unicom_slice(new_unicom_slice):
+                        add_errors.append(new_unicom_slice)
+            for unicom_slice in unicom_slices:
+                if unicom_slice not in new_unicom_slices:
+                    if not slice_obj.del_unicom_slice(unicom_slice):
+                        del_errors.append(unicom_slice)
+        except Exception, ex:
+            print 2
+#             import traceback
+#             traceback.print_exc()
+            return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
+        else:
+            print 3
+            if add_errors != [] or del_errors != []:
+                print 4
+                error_str = ""
+                add_error_names = []
+                if add_errors:
+                    for add_error in add_errors:
+                        add_error_names.append(add_error.show_name)
+                    error_str = error_str + u"添加虚网（" + ",".join(add_error_names) + u"）通信关系失败！"
+                del_error_names = []
+                if del_errors:
+                    for del_error in del_errors:
+                        del_error_names.append(del_error.show_name)
+                    error_str = error_str + u"删除虚网（" + ",".join(del_error_names) + u"）通信关系失败！"
+                return HttpResponse(json.dumps({'result': 2, 'error_info': error_str}))
+            else:
+                return HttpResponse(json.dumps({'result': 1}))
+    else:
+        context = {}
+        context['slice_obj'] = slice_obj
+        context['can_unicom_slices'] = slice_obj.get_can_unicom_slices()
+        context['unicom_slices'] = unicom_slices
+        return render(request, 'slice/edit_unicom.html', context)
+
+
+@login_required
+def can_edit_unicom(request, slice_id):
+    """编辑虚网间通信关系。"""
+    print "can_edit_unicom"
+    slice_obj = get_object_or_404(Slice, id=slice_id)
+    if not request.user.has_perm('slice.change_slice', slice_obj):
+        return redirect('forbidden')
+    try:
+        if slice_obj.can_edit_unicom():
+            return HttpResponse(json.dumps({'result': 1}))
+        else:
+            return HttpResponse(json.dumps({'result': 2}))
+    except:
+        return HttpResponse(json.dumps({'result': 0}))

@@ -74,6 +74,9 @@ def create_vm(request, sliceid):
     if request.method == 'POST':
         if user.quotas.vm <= vm_count:
             return redirect('forbidden')
+        slice = get_object_or_404(Slice, id=sliceid)
+        if not slice.project.check_project_vm_quota():
+            return HttpResponse(json.dumps({'result': -1, 'error': "您的虚拟机个数已经超过配额"}))
         vm_form = VmForm(request.POST)
         if vm_form.is_valid():
             try:
@@ -365,6 +368,9 @@ def can_create_vm(request, sliceid):
     slice = get_object_or_404(Slice, id=sliceid)
     vms_num = slice.get_common_vms().count()
     user = request.user
+    slice = get_object_or_404(Slice, id=sliceid)
+    if not slice.project.check_project_vm_quota():
+        return HttpResponse(json.dumps({'result': -1, 'error': "您的虚拟机个数已经超过配额"}))
     vm_count = VirtualMachine.objects.total_vms(user)
     if vms_num < slice.vm_num:
         if user.quotas.vm <= vm_count:

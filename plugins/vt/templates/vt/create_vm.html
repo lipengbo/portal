@@ -70,6 +70,14 @@
 			     	</td>
 				</tr>
 				<tr>
+                    <td><b>虚拟机</b></td>
+                    <td class="type_chose">
+                        {%for flavor in flavors%}
+                            <a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
+                        {%endfor%}
+                    </td>
+                </tr>
+				<tr>
             		<td><b>CPU</b></td>
                 	<td class="cpu_chose">
                   	</td>
@@ -82,6 +90,7 @@
                     	<span class="value_e"></span>
                  	</td>
             	</tr>
+            	
                 <tr>
                 	<td><b>镜像</b></td>
                     <td>
@@ -89,6 +98,7 @@
 						<span name="imageInfo"></span>
                     </td>
                 </tr>
+                
                 <tr>
                 	<td><b>宿主机</b></td>
                  	<td>
@@ -126,6 +136,7 @@
 		</table>
      </div>
      {% include "vt/images.html" %}
+
  </div>        
  <div class="form-actions">
     <div class="row buttons_margin">

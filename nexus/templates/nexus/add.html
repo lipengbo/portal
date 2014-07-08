@@ -25,16 +25,25 @@
     <form class="col-md-6" method="post" action="">
         {% csrf_token %}
         {{ formset|crispy }}
+        <div>
+        优先级：
+        <select name="priority">
+          {%for i in prioritys %}
+          <option value ="{{i}}" {%if cur_priority == i %}selected{%endif%}>{{i}}</option>
+          {%endfor%}
+        </select>
+        </div>
         <div class="form-actions">
             <div class="buttons_margin">
                 {% if class_name == 'User' and formset.instance.get_profile.state == 0 %}
                 <button type="submit" class="btn btn_info">{% trans "Accept" %}</button>
                 <a href="{% url profiles_reject formset.instance.id %}" class="btn btn-default">{% trans "Reject" %}</a>
                 {% else %}
-                    {% if class_name == 'User' %}
+                    <!--{% if class_name == 'User' %}
                         {% quotas %}
                         {% include "quota_admin/_quota_selector.html" with user=formset.instance %}
-                    {% endif %}
+                    {% endif %}-->
+                    
                 <button type="submit" class="btn btn_info">{% trans "Save" %}</button>
                 {% endif %}
             </div>

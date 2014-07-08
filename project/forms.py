@@ -12,7 +12,7 @@ from project.models import Project, Category
 class ProjectForm(forms.ModelForm):
 
     #    category_name = forms.RegexField(regex=u"^[\w\u4e00-\u9fa5]+$", required=True, max_length=64)
-
+    projectquota = forms.CharField(max_length=64, required=False, widget=forms.HiddenInput)
     def __init__(self, *args, **kwargs):
         super(ProjectForm, self).__init__(*args, **kwargs)
         self.fields['description'].widget = forms.Textarea()
@@ -28,6 +28,7 @@ class ProjectForm(forms.ModelForm):
                 "", "name", "description", "category"
             ),
             Field('islands', template="project/_create_project_islands.html"),
+            Field('projectquota', template="project/_create_project_quotas.html"),
             Field('owner', template="project/_owner_field.html"),
         )
 

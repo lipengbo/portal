@@ -33,12 +33,12 @@
         <table class="table_defined">
             <thead>
                 <tr>
-                    <th width="16%">虚网名称</th>
-                    <th width="32%">描述</th>
-                    <th width="16%">所属节点</th>
+                    <th width="15%">虚网名称</th>
+                    <th width="30%">描述</th>
+                    <th width="15%">所属节点</th>
                     <th width="20%">网段</th>
-                    <th width="8%">状态</th>
-                    <th width="12%">操作</th>
+                    <th width="5%">状态</th>
+                    <th width="15%">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -91,6 +91,16 @@
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                         {%endif%}
+                        
+                        {%if slice_obj.state == 0 %}
+                        <a href="javascript:void(0);" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:pointer">
+                            <img src="{{ STATIC_URL}}img/btn_link.png" title="虚网通信配置" />
+                        </a>
+                        {%else%}
+                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
+                        </a>
+                        {%endif%}
                     {%else%}
                         <a href="javascript:void(0);" id="slice_qt" onclick="start_stop_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             {%if slice_obj.state == 0 or slice_obj.state == 4 %}
@@ -101,6 +111,9 @@
                         </a>
                         <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
+                        </a>
+                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                            <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                     {%endif%}
                   </td>
@@ -134,15 +147,14 @@
             <iframe scrolling="no" id="topologyiframe" width="100%" height="300" src="/slice/topology_d3/?slice_id={{slice_obj.id}}&width=1205&height=300&top=0&band=0" frameborder="0"></iframe>
         </div>
         
-        <div class="slice_detail_tab">
-            <div class="row">
-                <div class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}">
-                    <a href="javascript:;">服务配置</a>
-                </div>
-                <div class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}">
-                     <a href="javascript:;">虚拟机资源</a>
-                </div>
-            </div>
+        <div class="user_manage_tab page_tab"> 
+            <a class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}" href="javascript:;">
+                <span>服务配置</span>
+            </a>
+            <a class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}" href="javascript:;">
+                 <span>虚拟机资源</span>
+            </a>
+            <div class="clear"></div>
         </div>
         
         <div class="slice_detail_block">
@@ -241,7 +253,7 @@
           {%endif%}
           </h4>      
         </div>
-        <form class="form-horizontal" accept-charset="utf-8">{% csrf_token %}
+        <form class="form-horizontal" accept-charset="utf-8" AUTOCOMPLETE="OFF">{% csrf_token %}
             <div class="modal-body base_info">
               <table class="table_base tooltip-demo">
                 <tbody>
@@ -295,7 +307,7 @@
                             <a href="javascript:void(0);" title="用户提供自己的控制器" data-toggle="tooltip" data-placement="right" data-original-title="用户提供自己的控制器"><i class="glyphicon glyphicon-question-sign"></i></a>
                         </td>
                         <td class="text-right">控制器IP</td>
-                        <td width="230">
+                        <td width="250">
                             <div id="ipInput" class="disabled"></div>
                         </td>
                         <td width="50" class="text-right">端口</td>
@@ -500,6 +512,7 @@
         </div>
       </div>
     </div>
+
 <!-- 创建备份 -->
 <div id="snapshot_creation" class="modal fade modal_base_defined" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
     <div class="modal-dialog">
@@ -621,6 +634,7 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/own.js"></script>

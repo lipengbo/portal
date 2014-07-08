@@ -40,20 +40,22 @@
                 {% if has_perm %}
                 <a href="{% url project_edit project.id %}" class="edit pull-right" title="编辑"><i class="icon-pencil"></i></a>
                 {% endif %}
+            {%else%}
+                <a href="{% url project_edit_admin project.id %}" class="edit pull-right" title="编辑配额"><i class="icon-pencil"></i></a>
             {%endif%} 
         </h4>
 
     <table class="table_defined">
         <thead>
             <tr>
-                <th width="14%">{% trans "Project Name" %}</th>
+                <th width="15%">{% trans "Project Name" %}</th>
                 <th width="15%">{% trans "Project Description" %}</th>
-                <th width="13%">{% trans "Creator" %}</th>
+                <th width="15%">{% trans "Creator" %}</th>
                 <th width="15%">{% trans "Category" %}</th>
-                <th width="10%">成员数</th>
-                <th width="10%">虚网数</th>
-                <th width="10%">虚拟机数</th>
-                <th width="13%">带宽（Mbit/s）</th>
+                <th width="10%">成员配置</th>
+                <th width="10%">虚网配置</th>
+                <th width="10%">虚拟机配置</th>
+                <th width="10%">带宽配置</th>
             </tr>
         </thead>
         <tbody>
@@ -62,10 +64,10 @@
                 <td>{{ project.description }}</td>
                 <td>{{ project.owner }}</td>
                 <td><span class="">{{ project.category }}</span></td>
-                <td>10</td>
-                <td>10</td>
-                <td>10</td>
-                <td>10</td>
+                <td>{{ cur_quota.member }}个</td>
+                <td>{{ cur_quota.slice }}个</td>
+                <td>{{ cur_quota.vm }}个</td>
+                <td>{{ cur_quota.band }}MB/s</td>
            </tr> 
         </tbody>
     </table>

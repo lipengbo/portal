@@ -23,7 +23,8 @@ from slice.models import Slice
 
 FLOWVISOR = 0
 CNVP = 1
-VIRTTOOL_TYPES = ((CNVP, 'cnvp'),)
+VIRTTOOL_TYPES = ((CNVP, 'cnvp'),
+                  (FLOWVISOR, 'flowvisor'),)
 
 
 class Controller(ServiceResource):
@@ -218,6 +219,7 @@ def update_links(sender, instance, created, **kwargs):
             port=port_num,
             defaults={'name': port_name})
 
+
 def create_virtualswitch(island, datapaths):
     for datapath in datapaths:
         dpid = datapath['dpid']
@@ -232,6 +234,8 @@ def create_virtualswitch(island, datapaths):
             virtual_switch, created = VirtualSwitch.objects.get_or_create(dpid=dpid,
                     ip=ip, defaults={'name': "v-switch" + ip.split('.')[-1], 'island': island, 'password': '123', 'username': 'admin', 'server': server})
 
+
 @receiver(pre_delete, sender=Virttool)
 def delete_slice(sender, instance, **kwargs):
     instance.slices.all().delete()
+            
