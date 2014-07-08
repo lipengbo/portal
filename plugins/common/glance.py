@@ -4,20 +4,25 @@
 # Date:Tue Jul 09 02:36:49 CST 2013
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
-import utils
-from etc import config
+from etc.config import generate_glance_url
+from plugins.common import glance_client_api
 
 
-def get_image_list():
-    glance_url = config.generate_glance_url()
-    index_url = glance_url + '/images'
-    try:
-        images = utils.execute(['curl', index_url])
-    except:
-        #Try it again
-        images = utils.execute(['curl', index_url])
-    images = "images=" + images
-    exec(images)
-    for image in images['images']:
-        download_url = glance_url + '/images/' + image['id']
-        yield image['id'], image['name'], download_url
+def image_delete(image_id):
+    return glance_client_api.image_delete(generate_glance_url(), image_id)
+
+
+def image_get(image_id):
+    return glance_client_api.image_get(generate_glance_url(), image_id)
+
+
+def image_list_detailed(marker=None, filters=None, paginate=False):
+    return glance_client_api.image_list_detailed(generate_glance_url(), marker=marker, filters=filters, paginate=paginate)
+
+
+def image_update(image_id, **kwargs):
+    return glance_client_api.image_update(generate_glance_url(), image_id, **kwargs)
+
+
+def image_create(**kwargs):
+    return glance_client_api.image_create(generate_glance_url(), **kwargs)

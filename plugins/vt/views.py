@@ -25,11 +25,12 @@ from plugins.common import glance_client_api
 from plugins.common.aes import *
 #from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
-from models import Image, Flavor, SSHKey
+from models import Flavor, SSHKey
 from resources.models import Server, SwitchPort
 from resources.ovs_api import get_edge_ports, slice_add_port_device
 from plugins.vt import api
 from project.models import Island
+#from plugins.common import glance
 import logging
 from django.utils.translation import ugettext as _
 from adminlog.models import log, SUCCESS, FAIL
@@ -247,7 +248,7 @@ def vnc(request, vmid, island_id):
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
     print "-----------vnc_port-----------", vnc_port
     private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
-    vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, vm.image.username, vm.image.password)
+    vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, 'root', '123')
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \
@@ -353,9 +354,9 @@ def get_flavor_msg(request):
             flavor = get_object_or_404(Flavor, id=obj_id)
             return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
         if name == 'image':
-            image = get_object_or_404(Image, id=obj_id)
-            print image.username, image.password
-            return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
+            #image = get_object_or_404(Image, id=obj_id)
+            #print image.username, image.password
+            return HttpResponse(json.dumps({'username':'root', 'password' : '123'}))
 
 def download_keypair(request):
     slice_obj = get_object_or_404(Slice, id=request.POST.get("slice_id"))

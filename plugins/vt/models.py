@@ -19,7 +19,7 @@ from plugins.common.exception import ConnectionRefused
 from django.utils.translation import ugettext as _
 import errno
 from socket import error as socket_error
-from etc.config import function_test
+from etc.config import function_test, generate_glance_url
 import logging
 LOG = logging.getLogger('plugins')
 DOMAIN_STATE_TUPLE = (
@@ -124,7 +124,8 @@ class VirtualMachine(IslandResource):
     enable_dhcp = models.BooleanField(default=False)
     slice = models.ForeignKey(Slice)
     flavor = models.ForeignKey(Flavor, null=True)
-    image = models.ForeignKey(Image)
+    #image = models.ForeignKey(Image)
+    image = models.CharField(max_length=36, null=True)
     server = models.ForeignKey(Server)
     switch_port = models.ForeignKey(SwitchPort, null=True)
     state = models.IntegerField(null=True, choices=DOMAIN_STATE_TUPLE)
@@ -188,8 +189,8 @@ class VirtualMachine(IslandResource):
                 vmInfo['hdd'] = self.flavor.hdd
 
             vmInfo['name'] = self.uuid
-            vmInfo['img'] = self.image.uuid
-            vmInfo['glanceURL'] = self.image.url
+            vmInfo['img'] = self.image
+            vmInfo['glanceURL'] = generate_glance_url + "/" + self.image
             vmInfo['type'] = self.type
             vmInfo['network'] = []
             network = {}
