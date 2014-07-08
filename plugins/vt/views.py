@@ -20,9 +20,10 @@ from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 #from plugins.common.ovs_client import get_portid_by_name
 from plugins.ipam.models import Subnet
-from models import Image, Flavor, SSHKey
+from models import Flavor, SSHKey
 from resources.models import Server, SwitchPort
 from plugins.vt import api
+#from plugins.common import glance
 import logging
 from django.utils.translation import ugettext as _
 LOG = logging.getLogger('plugins')
@@ -139,7 +140,9 @@ def vnc(request, vmid):
     vm = VirtualMachine.objects.get(id=vmid)
     host_ip = vm.server.ip
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
-    token = '%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip, vm.image.username, vm.image.password)
+    #image = glance.image_get(vm.image)
+    #token = '%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip, image.properties['username'], image.properties['password'])
+    token = '%s_%s_%s_%s_%s_%s' % (host_ip, vnc_port, vm.name, vm.ip, 'root', '123')
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' % (request.META.get('HTTP_HOST').split(':')[0], token)
     #context = {}
     #context['host_ip'] = host_ip
@@ -228,9 +231,10 @@ def get_flavor_msg(request):
         flavor = get_object_or_404(Flavor, id=obj_id)
         return HttpResponse(json.dumps({'cpu':flavor.cpu, 'ram':flavor.ram, 'hdd':flavor.hdd}))
     if name == 'image':
-        image = get_object_or_404(Image, id=obj_id)
-        print image.username, image.password
-        return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
+        #image = get_object_or_404(Image, id=obj_id)
+        #print image.username, image.password
+        #return HttpResponse(json.dumps({'username':image.username, 'password' : image.password}))
+        return HttpResponse(json.dumps({'username': 'root', 'password': '123'}))
 
 def download_keypair(request):
     slice_obj = get_object_or_404(Slice, id=request.POST.get("slice_id"))

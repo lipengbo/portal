@@ -4,13 +4,14 @@
 # Date:Sat Oct 05 00:10:59 CST 2013
 # Author:Pengbo Li
 # E-mail:lipengbo10054444@gmail.com
-from plugins.vt.models import VirtualMachine, Image, Flavor, DOMAIN_STATE_DIC
+from plugins.vt.models import VirtualMachine, Flavor, DOMAIN_STATE_DIC
 from plugins.ipam.models import IPUsage, Subnet
 from etc.config import controller_flavor_id, gateway_flavor_id
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.exception import ResourceNotEnough, ConnectionRefused, FailedToAllocateResources
 from resources.models import Server
 from etc.config import function_test
+from plugins.common import glance
 import errno, traceback, logging
 from socket import error as socket_error
 LOG = logging.getLogger("plugins")
@@ -21,9 +22,10 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         ip_obj = IPUsage.objects.allocate_ip_for_controller(island=island_obj)
         vm = VirtualMachine(slice=slice_obj, island=island_obj, ip=ip_obj)
         vm.name = image_name
-        images = Image.objects.filter(name=image_name)
+        images, hasnext = glance.image_list_detailed(filters={'name': image_name})
+        #images = Image.objects.filter(name=image_name)
         if images:
-            vm.image = images[0]
+            vm.image = images[0].name
         vm.flavor = Flavor.objects.get(id=controller_flavor_id)
         vm.cpu = vm.flavor.cpu
         vm.ram = vm.flavor.ram
@@ -68,9 +70,10 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         vm = VirtualMachine(slice=slice_obj, island=island_obj, gateway_public_ip=gateway_public_ip_obj, ip=ip_obj)
         vm.name = image_name
         vm.enable_dhcp = enable_dhcp
-        images = Image.objects.filter(name=image_name)
+        #images = Image.objects.filter(name=image_name)
+        images, hasnext = glance.image_list_detailed(filters={'name': image_name})
         if images:
-            vm.image = images[0]
+            vm.image = images[0].name
         vm.flavor = Flavor.objects.get(id=gateway_flavor_id)
         vm.cpu = vm.flavor.cpu
         vm.ram = vm.flavor.ram
@@ -122,7 +125,7 @@ def do_vm_action(vm, action):
             result = True
         else:
             result = False
-    if result == True:
+    if result is True:
         vm.save()
     return result
 
@@ -177,7 +180,3 @@ def schedul_for_controller_and_gw(controller_info, gw_host_id, island_obj):
     except socket_error as serr:
         if serr.errno == errno.ECONNREFUSED or serr.errno == errno.EHOSTUNREACH:
             raise ConnectionRefused()
-
-
-
-
