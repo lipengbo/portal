@@ -241,6 +241,7 @@ class CnvpClient(object):
                             link_dict['src-port'] = link['src_port']
                             link_dict['src-switch'] = link['src_dpid']
                             links.append(link_dict)
+#                 print links
                 return links
         except:
             raise VirttoolError("物理链接信息获取失败!")
