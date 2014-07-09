@@ -11,8 +11,8 @@ def do_create_snapshot(vm, snapshot):
     try:
         result = AgentClient(vm.server.ip).create_snapshot(vm.uuid, snapshot.uuid)
         if result:
-            set_current_snapshot(snapshot.uuid, vm)
-            snapshot.is_current = True
+            #set_current_snapshot(snapshot.uuid, vm)
+            snapshot.is_current = False
             snapshot.state = 1
             log(snapshot.owner, snapshot, u'创建备份', SUCCESS)
         else:
