@@ -27,7 +27,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
         images, hasnext = glance.image_list_detailed(filters={'name': image_name})
         #images = Image.objects.filter(name=image_name)
         if images:
-            vm.image = images[0].name
+            vm.image = images[0].id
         vm.flavor = Flavor.objects.get(id=controller_flavor_id)
         vm.cpu = vm.flavor.cpu
         vm.ram = vm.flavor.ram
@@ -75,7 +75,7 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
         #images = Image.objects.filter(name=image_name)
         images, hasnext = glance.image_list_detailed(filters={'name': image_name})
         if images:
-            vm.image = images[0].name
+            vm.image = images[0].id
         vm.flavor = Flavor.objects.get(id=gateway_flavor_id)
         vm.cpu = vm.flavor.cpu
         vm.ram = vm.flavor.ram

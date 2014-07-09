@@ -240,7 +240,7 @@ def virttool_get_switches(virttool):
 #                                                             {'portNumber':12,'name':'et12'},{'portNumber':11,'name':'et11'},
 #                                                             {'portNumber':10,'name':'et10'},{'portNumber':2,'name':'eth2'},
 #                                                             {'portNumber':1,'name':'eth1'}], 'target_switch':()}]
-    return switches
+    #return switches
     if virttool:
         if virttool.type == 1:
             print "cnvp"
@@ -267,7 +267,7 @@ def virttool_get_links(virttool):
 #              {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:05', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:04'},
 #              {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:04', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:03'},
 #              {'dst-port':1, 'dst-switch':'00:ff:00:00:00:00:00:01', 'src-port':1, 'src-switch':'00:00:00:00:00:00:00:02'}]
-    return links
+    #return links
     if virttool:
         if virttool.type == 1:
             print "cnvp"

@@ -66,22 +66,22 @@ VM_TYPE = (
 SNAPSHOT_STATE = ((0, 'building'), (1, 'success'), (-1, 'failed'))
 
 
-class Image(models.Model):
-    uuid = models.CharField(max_length=36, unique=True)
-    name = models.CharField(max_length=36)
-    url = models.CharField(max_length=256)
-    type = models.IntegerField(null=True, choices=VM_TYPE)
-    version = models.CharField(max_length=32, null=True)
-    username = models.CharField(max_length=36, null=True)
-    password = models.CharField(max_length=36, null=True)
-    os = models.CharField(max_length=256, null=True)
+#class Image(models.Model):
+#    uuid = models.CharField(max_length=36, unique=True)
+#    name = models.CharField(max_length=36)
+#    url = models.CharField(max_length=256)
+#    type = models.IntegerField(null=True, choices=VM_TYPE)
+#    version = models.CharField(max_length=32, null=True)
+#    username = models.CharField(max_length=36, null=True)
+#    password = models.CharField(max_length=36, null=True)
+#    os = models.CharField(max_length=256, null=True)
 
-    def __unicode__(self):
+#    def __unicode__(self):
         #return self.os and self.os or ""
-        return self.name
+#        return self.name
 
-    class Meta:
-        verbose_name = _("Image")
+#    class Meta:
+#        verbose_name = _("Image")
 
 
 class Flavor(models.Model):
@@ -190,7 +190,7 @@ class VirtualMachine(IslandResource):
 
             vmInfo['name'] = self.uuid
             vmInfo['img'] = self.image
-            vmInfo['glanceURL'] = generate_glance_url + "/" + self.image
+            vmInfo['glanceURL'] = generate_glance_url() + "/images/" + self.image
             vmInfo['type'] = self.type
             vmInfo['network'] = []
             network = {}
