@@ -28,7 +28,6 @@ def create(request):
             createImageForm.handle(request, config.glance_url(), data)
             context['success'] = 0
         else:
-            print '------invalid-------'
             context['success'] = -1
     return render(request, 'create_image.html', context)
 
@@ -46,7 +45,6 @@ def list(request):
     context['sys_images'] = sys_images
     context['app_images'] = app_images
     context['pri_images'] = pri_images
-    print '--priv image', pri_images
     context['owner'] = user.username
     return render(request, 'image_list.html', context)
 

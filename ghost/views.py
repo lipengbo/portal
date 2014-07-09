@@ -78,21 +78,31 @@ def edit_snapshot(request):
 
 def create_image(request):
     try:
-        snapshot_uuid = request.POST.get('uuid')
+        _uuid = request.POST.get('uuid')
         name = request.POST.get('name')
         desc = request.POST.get('desc')
+        username = request.POST.get('username')
+        passwd = request.POST.get('passwd')
         is_public = request.POST.get('is_public')
-        snapshot = Snapshot.objects.get(uuid=snapshot_uuid)
-        vm = snapshot.vm
+        flag = request.POST.get('flag')
         image_meta = {'is_public': is_public, 'disk_format': 'qcow2',\
                       'container_format': 'ovf', 'name': name,\
                       'owner': request.user.username, \
-                      'properties':{'description': desc, 'image_type': 3, 'image_attr': 2}}
+                      'properties':{'description': desc, 'image_type': 1, 'image_attr': 3,\
+                                    'image_username': username, 'image_passwd': passwd}}
         url = config.glance_url()
 
-        result = AgentClient(vm.server.ip)\
-                .create_image_from_snapshot(vm.uuid, snapshot.uuid, url, image_meta)
-        print '----create_image_from_snapshot', result
+        if int(flag) == 0:
+            snapshot = Snapshot.objects.get(uuid=_uuid)
+            vm = snapshot.vm
+
+            result = AgentClient(vm.server.ip)\
+                    .create_image_from_snapshot(vm.uuid, snapshot.uuid, url, image_meta)
+            print '----create_image_from_snapshot', result
+        else:
+            vm = VirtualMachine.objects.get(uuid=_uuid)
+            result = AgentClient(vm.server.ip).create_image_from_vm(_uuid, url, image_meta)
+            print '----create_image_from_vm', result
         return HttpResponse(json.dumps({'result': 0}))
     except:
         traceback.print_exc()

@@ -65,12 +65,12 @@ def image_list_detailed_on_type(username, url):
     pri_images = []
     for image in images:
         if image.status == 'active':
-            if image.properties.has_key('image_type'):
-                if image.properties['image_type'] == '2':
+            if image.properties.has_key('image_attr'):
+                if image.properties['image_attr'] == '2':
                     app_images.append(image)
-                elif image.properties['image_type'] == '1':
+                elif image.properties['image_attr'] == '1':
                     sys_images.append(image)
-                elif image.properties['image_type'] == '3':
+                elif image.properties['image_attr'] == '3':
                     if image.is_public or image.owner == username:
                         pri_images.append(image)
 

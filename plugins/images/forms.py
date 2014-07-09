@@ -26,6 +26,13 @@ class CreateImageForm(forms.Form):
     #    choices=((0, ''), (1, '')),
     #    widget=forms.RadioSelect())
 
+    image_username = forms.CharField(max_length='255',\
+                                     widget=forms.widgets.TextInput(attrs={'class':'form-control'}),\
+                                     required=True)
+    image_passwd = forms.CharField(max_length='255', \
+                                   widget=forms.widgets.PasswordInput(attrs={'class': 'form-control'}),\
+                                       required=True)
+
     location = forms.CharField(max_length="255",
                                help_text=_("An external (HTTP) URL to load "
                                            "the image from."),
@@ -73,6 +80,8 @@ class CreateImageForm(forms.Form):
                 'owner': request.user,
                 #'container_format': 'bare',
                 'properties': {}}
+        meta['properties']['image_username'] = data['image_username']
+        meta['properties']['image_passwd'] = data['image_passwd']
         meta['properties']['image_type'] = data['image_type']
         meta['properties']['image_attr'] = data['image_attr']
         if data['description']:
