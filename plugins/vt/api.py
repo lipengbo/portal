@@ -185,3 +185,10 @@ def slice_delete_route(slice_obj):
         raise
 
 
+def reset_domain(dom, mem_size=None, vcpu=None):
+    if mem_size or vcpu:
+        dom.ram = mem_size or dom.ram
+        dom.cpu = vcpu or dom.cpu
+        dom.save()
+        agent_client = AgentClient(dom.server.ip)
+        agent_client.reset_dom_mem_vcpu(dom.uuid, mem_size, vcpu)
