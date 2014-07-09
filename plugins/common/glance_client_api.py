@@ -56,19 +56,27 @@ def image_list_detailed(url, marker=None, filters=None, paginate=False):
         images = list(images_iter)
     return (images, has_more_data)
 
-def image_list_detailed_on_type(url):
+def image_list_detailed_on_type(username, url):
     images, has_more_data = image_list_detailed(url)
+    private_images, has_more_data = image_list_detailed(url, filters={'is_public':False})
+    images.extend(private_images)
     sys_images = []
     app_images = []
+    pri_images = []
     for image in images:
-        if image.properties.has_key('image_type'):
-            if image.properties['image_type'] == '2':
-                app_images.append(image)
-            elif image.properties['image_type'] == '1':
-                sys_images.append(image)
+        if image.status == 'active':
+            if image.properties.has_key('image_type'):
+                if image.properties['image_type'] == '2':
+                    app_images.append(image)
+                elif image.properties['image_type'] == '1':
+                    sys_images.append(image)
+                elif image.properties['image_type'] == '3':
+                    if image.is_public or image.owner == username:
+                        pri_images.append(image)
+
         #else:
         #    sys_images.append(image)
-    return sys_images, app_images
+    return sys_images, app_images, pri_images
 
 def image_update(url, image_id, **kwargs):
     return glanceclient(url).images.update(image_id, **kwargs)

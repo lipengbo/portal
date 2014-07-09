@@ -34,13 +34,15 @@ a:link {
 .btn.active:focus {
   outline: none;
 }
-.modal-open {
-
-}
 
 .alert {
     border-radius:0;
 }
+
+.modal-open {
+   overflow:auto;
+}
+
 .container-fluid {
     padding-left: 30px;
     padding-right: 30px;
@@ -60,7 +62,8 @@ a:link {
     margin-right:10px;
 }
 .modal {
-    overflow-y:auto;
+    position:absolute;
+    overflow:visible;   
 }
 .modal .modal-footer {
     text-align:center;
@@ -983,7 +986,7 @@ fieldset {
             padding-bottom:5px;   
             padding-top:20px;        
             i{
-                color:#2489c5;
+                color:#2291fe;
                 font-size:20px;
                 margin-right:10px;
                 vertical-align:middle;
@@ -1274,7 +1277,7 @@ fieldset {
             border-radius:3px;
             cursor:pointer;
             margin-right:2px;
-            color:#2b8fcd;
+            color:#2291fe;
             font-size:12px;
             font-weight:bold;
             font-family: "Microsoft YaHei";
@@ -1292,7 +1295,7 @@ fieldset {
         border-radius:3px;
         cursor:pointer;
         margin-right:6px;
-        color:#2489c5;
+        color:#2291fe;
         font-size:12px;
         font-weight:bold;
         text-decoration:none;
@@ -1311,11 +1314,11 @@ fieldset {
         border-color:#bebebe;
     }
     .type_chose a:hover, .cpu_chose a:hover {
-        border-color:#2b8fcd;        
+        border-color:#2291fe;        
     }
     a.vm_active{
-        background:#2489c5;
-        border:1px solid #2b8fcd;
+        background:#2291fe;
+        border:1px solid #2291fe;
         color:#fff !important;
     }
 }
@@ -1749,9 +1752,6 @@ body .modal-dialog {
   }
 }
 
-.modal-open {
-    overflow:auto;
-}
 
 #div_id_name {
     .controls {
@@ -2124,7 +2124,7 @@ ul.action_box_tab {
             border-radius: 3px;
             cursor: pointer;
             margin-right: 10px;
-            color: #2489c5;
+            color: #2291fe;
             font-weight: bold;
             text-decoration: none;
             -webkit-transition: all 0.2s ease-in-out;
@@ -2133,13 +2133,13 @@ ul.action_box_tab {
             transition: all 0.2s ease-in-out;
         }
         a:hover, a:focus {
-            border-color: #2b8fcd;
+            border-color: #2291fe;
             text-decoration: none;
         }
      }
      li.active a {
-         background: #2489c5;
-         border: 1px solid #2b8fcd;
+         background: #2291fe;
+         border: 1px solid #2291fe;
          color: #fff;
      }
 }
@@ -2227,7 +2227,7 @@ ul.errorlist {
         border-radius: 3px;
         cursor: pointer;
         margin-right: 2px;
-        color: #2b8fcd;
+        color: #2291fe;
         font-size: 12px;
         font-weight: bold;
         font-family: "Microsoft YaHei";
@@ -2238,11 +2238,11 @@ ul.errorlist {
         transition: all 0.2s ease-in-out;
     }  
     a:hover {
-        border-color: #2b8fcd;
+        border-color: #2291fe;
     }  
     a.active {
-        border-color: #2b8fcd;
-        background: #2b8fcd;
+        border-color: #2291fe;
+        background: #2291fe;
         color:#fff;
     }
 }
@@ -2344,8 +2344,6 @@ ul.errorlist {
     margin-bottom:15px;
     margin-top:128px;
 }
-<<<<<<< HEAD
-=======
 .main2 .row_chose {
     tbody {
         tr.row_hover {
@@ -2357,4 +2355,6 @@ ul.errorlist {
         }
     }    
 } 
->>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
+.pagination > .active > a {
+    background-color:#2291fe;
+}

@@ -11,38 +11,59 @@
    
 {% endblock %}
 {% block breadcrumb %}
-<li><a href="#">镜像备份</a></li>
+<li><a href="/plugins/images/list/">镜像备份</a></li>
 <li class="active">上传镜像</li>
 {% endblock %}
 
 {% block body %}
-<form action="" class="form-horizontal" method="post" enctype="multipart/form-data">{% csrf_token %}
+{% if success == 0 %}
+<div class="alert alert-success" role="alert">成功上传镜像镜像文件！</div>
+{%elif success == -1 %}
+<div class="alert alert-danger" role="alert">镜像文件上传失败！</div>
+{%endif%}
 <div class="row">
-    <div class="col-md-9">        
+    <div class="col-md-9">
+        <form action="" class="form-horizontal" method="post" id="image_create_form" enctype="multipart/form-data">{% csrf_token %}
             <h4 class="block_title">
                 <img src="{{ STATIC_URL}}img/ic_baseinfo.png">基本信息     
             </h4>
-            <div class="form-group">
+            <div class="alert alert-info">
+                <strong>提示：</strong>初始用户名与密码必须是镜像中存在的用户名与密码，建议填写管理员的用户名与密码！
+            </div>
+            <div class="form-group name">
                 <label class="control-label col-md-2">名称</label>
                 <div class="col-md-6">
-                        {{ forms.name }}
+                        {{ forms.name }}{{forms.name.errors}}
                         <!--input type="text" class="form-control" name="" /-->
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group desc">
                 <label class="control-label col-md-2">描述</label>
                 <div class="col-md-6">
                         {{ forms.description}}
                         <!--textarea class="form-control" rows="3"></textarea-->
                 </div>
             </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">初始用户名</label>
+                <div class="col-md-6">
+                        <input type="text" class="form-control" name="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">初始密码</label>
+                <div class="col-md-6">
+                        <input type="text" class="form-control" name="" />
+                </div>
+            </div>
             <h4 class="block_title">
                 <img src="{{ STATIC_URL}}img/ic_path.png">资源路径     
             </h4>
             <div class="select_switch">
-                <div class="form-group radio_tab">
+                <div class="form-group radio_tab file">
                     <label class="control-label col-md-2">
-                        <input type="radio" name="resource_path" checked="" />
+                        <input type="radio" name="resource_path" id="local_file" checked="" />
                         本地路径
                     </label>
                     <div class="col-md-6">
@@ -54,9 +75,9 @@
                             <!--input type="file" class="" value="浏览" onchange="document.getElementById('textfile').value=this.value" /-->
                     </div>                    
                 </div>
-                 <div class="form-group radio_tab">
+                 <div class="form-group radio_tab url">
                     <label class="control-label col-md-2">
-                        <input type="radio" name="resource_path" />
+                        <input type="radio" name="resource_path" id="local_url"/>
                         网络路径
                     </label>
                     <div class="col-md-6">
@@ -71,7 +92,7 @@
             <div class="select_switch">
                 <div class="form-group radio_tab">
                     <label class="control-label col-md-2">
-                        <input type="radio" name="image_type" checked="" />
+                        <input type="radio" name="image_type" checked="" value="1"/>
                         普通虚拟机镜像
                     </label>
                     <div class="col-md-6">
@@ -83,7 +104,7 @@
                 </div>
                 <div class="form-group radio_tab">
                     <label class="control-label col-md-2">
-                        <input type="radio" name="image_type" />
+                        <input type="radio" name="image_type" value="0"/>
        SDN控制器镜像
                     </label>
                     <div class="col-md-6">
@@ -94,7 +115,7 @@
                 </div>
                 <div class="form-group radio_tab">
                     <label class="control-label col-md-2">
-                        <input type="radio" name="image_type" />
+                        <input type="radio" name="image_type" value="2"/>
                         &nbsp;&nbsp;&nbsp;虚拟网关镜像
                     </label>
                     <div class="col-md-6">
@@ -104,29 +125,7 @@
                     </div>                               
                 </div>
             </div>            
-            <!--div class="select_switch">
-                <div class="form-group radio_tab">
-                    <label class="control-label col-md-2">
-                        <input type="radio" name="image_type" value="1" checked="" />
-                        普通虚拟机镜像
-                    </label>
-                     <label class="control-label col-md-2">
-                        <input type="radio" name="image_type" value="0" />
-       SDN控制器镜像
-                    </label>
-                    <label class="control-label col-md-2">
-                        <input type="radio" name="image_type" value="2" />
-                        &nbsp;&nbsp;&nbsp;虚拟网关镜像
-                    </label>
-                    <div class="col-md-6">
-                        <select name="image_attr" class="form-control radio_select_form">
-                            <option value="0">系统镜像</option>
-                            <option value="1">应用镜像</option>
-                        </select>
-                    </div> 
-                </div>
-            </div-->
-                               
+        </form>  
     </div>
     
      
@@ -134,8 +133,8 @@
 <div class="form-actions">
       <div class="row buttons_margin">
         <div class="col-md-4"></div>
-        <div class="col-md-2"><button type="button" class="btn btn-lg btn-block btn-default">取消</button></div>
-        <div class="col-md-2"><button type="submit" class="btn btn-lg btn-block btn_info">提交</button></div>
+        <div class="col-md-2"><button type="button" id="create_cancel_btn" class="btn btn-lg btn-block btn-default">取消</button></div>
+        <div class="col-md-2"><button type="submit" id="create_submit_btn" class="btn btn-lg btn-block btn_info">提交</button></div>
         <div class="col-md-4"></div>
       </div>
 </div>
@@ -144,4 +143,5 @@
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/radio_tab.js"></script>
+<script src="{{ STATIC_URL}}js/image.js"></script>
 {% endblock %}

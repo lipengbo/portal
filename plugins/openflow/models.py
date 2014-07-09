@@ -238,4 +238,4 @@ def create_virtualswitch(island, datapaths):
 @receiver(pre_delete, sender=Virttool)
 def delete_slice(sender, instance, **kwargs):
     instance.slices.all().delete()
-            
+

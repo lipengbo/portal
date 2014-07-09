@@ -24,7 +24,8 @@ from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from resources.ovs_api import slice_delete_port_device
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from plugins.vt.models import VirtualMachine, Image
+from plugins.vt.models import VirtualMachine
+from plugins.common import glance
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
 from slice.slice_exception import DeleteSwitchError
@@ -361,9 +362,11 @@ def detail(request, slice_id, div_name=None):
                              'host_ip': vm.server.ip, 'state': vm.state,
                              'dhcp': "无"})
     ct_sys_names = []
-    ct_syss = Image.objects.filter(type=0)
+    ct_syss, has_more = glance.image_list_detailed()
     for ct_sys in ct_syss:
-        ct_sys_names.append(ct_sys.name)
+        image_type = ct_sys.properties['image_type']
+        if image_type == '0':
+            ct_sys_names.append(ct_sys.name)
     if ct_sys_names == []:
         context['ct_sys_names'] = ['---------']
     else:

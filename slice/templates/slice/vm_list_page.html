@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load endless %}
 {% paginate 4 vms %}
-<div id="snapshot_creation" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+<!--div id="snapshot_creation1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
         <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
@@ -29,12 +29,12 @@
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button type="button" id="snapshot_ensure" class="btn btn_info">确定</button>
+              <button type="button" class="btn btn_info">确定</button>
             </div>
         </form>
         </div>
         </div>
-    </div>
+    </div-->
 <h4 class="block_title">
     <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】<a href="/ghost/list_snapshot/">备份列表</a>
     <div class="pull-right">
@@ -46,7 +46,7 @@
          {%endif%}                              
     </div>
 </h4>
-<table class="table_defined tooltip-demo">
+<table class="table_defined tooltip-demo row_chose"  id="vm_table">
   <thead>
     <tr>
       <th width="17%">名称</th>
@@ -60,7 +60,7 @@
           操作
           <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
           <ul id="" class="dropdown-menu oper_menu" role="menu">
-              <li><a href="javascript:;" data-toggle="modal" data-target="#create_bf"><i class="icon-camera"></i>创建备份</a></li>
+              <li><a href="javascript:snapshot_creation_show();" data-toggle="modal" data-target="#create_bf"><i class="icon-camera"></i>创建备份</a></li>
               <li><a href="javascript:;" data-toggle="modal" data-target="#create_jx"><i class="glyphicon glyphicon-record"></i>创建镜像</a></li>              
               <li><a href="javascript:;" data-toggle="modal" data-target="#para_pz"><i class="icon-cogs"></i>参数配置</a></li>
            </ul>
@@ -70,7 +70,7 @@
   </thead>
   <tbody>
     {% for vm in vms %}
-    <tr>
+    <tr class="tr">
       <td><div {%if vm.type_id == 1%}class="user_define"{%endif%}
       {%if vm.type_id == 2%}class="default_create"{%endif%}
       {%if vm.type_id == 3%}class="gw"{%endif%}
@@ -89,7 +89,7 @@
         </div></td>
       <td class="slice_state"><div>
         {% if vm.state != "" %}
-            {% if vm.state == 8 or vm.state == 12 or vm.state == 13%}
+            {% if vm.state == 8 or vm.state == 12 or vm.state == 13 or vm.state == 3%}
                 <i class="icon-spinner icon-spin check_vm" id="icon_state{{vm.id}}"></i>
             {% elif vm.state == 9 or vm.state == 10 %}
                 <i class="icon-remove-sign" id="icon_state{{vm.id}}"></i>
@@ -177,19 +177,10 @@
                         </a>
                     {%endif%}
                 {%endif%}
-                {%if vm.state == 3%}
-                    <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" style="cursor:not-allowed">
-                        <img src="{{ STATIC_URL}}img/loader.gif" title="创建快照中" />
-                    </a>
-                    
-                {%elif vm.state == 12 or vm.state == 13%}
+                {%if vm.state == 12 or vm.state == 13%}
                     <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}})" style='cursor:not-allowed'>
                         <i class="icon-camera" id="icon_state{{vm.id}}"></i>
                     </a>
-                {%else%}
-                <a class="snapshot" href="javascript:void(0);" id="{{vm.id}}_snapshot" onclick="snapshot_creation_show({{vm.id}},'{{vm.host_ip}}')" >
-                        <i class="icon-camera" id="icon_state{{vm.id}}"></i>
-                 </a>
                 {%endif%}            
             {%endif%}
       </td>

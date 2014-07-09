@@ -82,3 +82,17 @@ def project_selected(island, project):
 def is_membership(user, project):
     memberships = project.memberships.filter(id=user.id)
     return memberships
+
+
+from time import mktime
+from dateutil import tz
+from datetime import datetime
+import time
+
+@register.filter
+def set_date_format(value):
+    from_zone = tz.gettz('UTC')
+    to_zone = tz.gettz('CST')
+    t = time.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
+    dt = datetime.fromtimestamp(mktime(t)).replace(tzinfo=from_zone)
+    return dt.astimezone(to_zone)

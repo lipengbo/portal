@@ -36,14 +36,11 @@
 
 <div class="well intro_well">
     <h3 class="list_title">备份（Snapshots）</h3>                        
-    <p class="list_lead">备份 (Snapshot) 用于对正在运行的主机做在线备份。</p>                     
+    <p class="list_lead">备份 (Snapshot) 用于对试验平台虚拟机的重要状态在线或离线备份。</p>                     
 </div>
 
-<<<<<<< HEAD
-<table class="table_defined td_chose">
-=======
+
 <table class="table_defined row_chose" id="jxbf">
->>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
     <thead>
         <tr>
             <th width="15%">ID</th>
@@ -56,17 +53,10 @@
                 <span class="dropdown"> 
                   操作
                   <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-<<<<<<< HEAD
-                  <ul id="" class="dropdown-menu oper_menu" role="menu">
-                      <li><a href="javascript:;" data-toggle="modal" data-target="#make_iso"><img src="{% static "img/icon_iso.png" %}" />镜像</a></li>
-                      <li><a href="javascript:;" data-toggle="modal" data-target="#images_bj"><img src="{% static "img/btn_bj.png" %}" />编辑</a></li>
-                      <li><a href="javascript:;"><img src="{% static "img/btn_sc.png" %}" />删除</a></li>
-=======
                   <ul class="dropdown-menu oper_menu" role="menu">
                       <li><a href="javascript:;" data-toggle="modal" data-target="#make_iso" class="disabled"><i class="glyphicon glyphicon-record"></i>制作镜像</a></li>
                       <li><a href="javascript:;" data-toggle="modal" data-target="#images_bj" class="disabled"><i class="glyphicon glyphicon-pencil"></i>编辑</a></li>
                       <li><a href="javascript:;" class="disabled"><i class="glyphicon glyphicon-trash"></i>删除</a></li>
->>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
                    </ul>
                 </span>
             </th>
@@ -114,23 +104,38 @@
               <h4 id="myModalLabel" class="modal-title">制作镜像</h4>      
             </div>
             <div class="modal-body base_info form-horizontal">
+                <div class="alert alert-info">
+                    <strong>提示：</strong>初始用户名与密码必须是镜像中存在的用户名与密码，建议填写管理员的用户名与密码！
+                </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2">名称</label>
+                    <label class="control-label col-md-3">名称</label>
                     <div class="col-md-8">
                             <input type="text" class="form-control" name="" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="control-label col-md-2">描述</label>
+                    <label class="control-label col-md-3">描述</label>
                     <div class="col-md-8">
                             <textarea class="form-control" rows="3"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
-                   <label class="radio-inline radio_defined">
+                    <label class="control-label col-md-3">初始用户名</label>
+                    <div class="col-md-8">
+                            <input type="text" class="form-control" name="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-3">初始密码</label>
+                    <div class="col-md-8">
+                            <input type="text" class="form-control" name="" />
+                    </div>
+                </div>
+                <div class="form-group">
+                   <label class="radio-inline col-md-offset-3 col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 私有
                     </label>
                 </div>
@@ -166,10 +171,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                   <label class="radio-inline radio_defined">
+                   <label class="radio-inline col-md-offset-2  col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 私有
                     </label>
                 </div>
@@ -202,8 +207,5 @@
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/block_tab.js"></script>
-<<<<<<< HEAD
-=======
 <script src="{{ STATIC_URL}}js/table_click.js"></script>
->>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
 {% endblock %}

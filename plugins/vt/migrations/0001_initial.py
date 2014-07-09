@@ -8,20 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'Image'
-        db.create_table('vt_image', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('uuid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
-            ('name', self.gf('django.db.models.fields.CharField')(max_length=36)),
-            ('url', self.gf('django.db.models.fields.CharField')(max_length=256)),
-            ('type', self.gf('django.db.models.fields.IntegerField')(null=True)),
-            ('version', self.gf('django.db.models.fields.CharField')(max_length=32, null=True)),
-            ('username', self.gf('django.db.models.fields.CharField')(max_length=36, null=True)),
-            ('password', self.gf('django.db.models.fields.CharField')(max_length=36, null=True)),
-            ('os', self.gf('django.db.models.fields.CharField')(max_length=256, null=True)),
-        ))
-        db.send_create_signal('vt', ['Image'])
-
         # Adding model 'Flavor'
         db.create_table('vt_flavor', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -47,13 +33,27 @@ class Migration(SchemaMigration):
             ('enable_dhcp', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('slice', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['slice.Slice'])),
             ('flavor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Flavor'], null=True)),
-            ('image', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.Image'])),
+            ('image', self.gf('django.db.models.fields.CharField')(max_length=36, null=True)),
             ('server', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.Server'])),
             ('switch_port', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['resources.SwitchPort'], null=True)),
             ('state', self.gf('django.db.models.fields.IntegerField')(null=True)),
             ('type', self.gf('django.db.models.fields.IntegerField')()),
         ))
         db.send_create_signal('vt', ['VirtualMachine'])
+
+        # Adding model 'Snapshot'
+        db.create_table('vt_snapshot', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('uuid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=36)),
+            ('vm', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['vt.VirtualMachine'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=36)),
+            ('desc', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('create_time', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
+            ('state', self.gf('django.db.models.fields.IntegerField')(null=True)),
+            ('is_current', self.gf('django.db.models.fields.BooleanField')(default=False)),
+        ))
+        db.send_create_signal('vt', ['Snapshot'])
 
         # Adding model 'SSHKey'
         db.create_table('vt_sshkey', (
@@ -83,14 +83,14 @@ class Migration(SchemaMigration):
         # Removing unique constraint on 'SSHKey', fields ['fingerprint']
         db.delete_unique('vt_sshkey', ['fingerprint'])
 
-        # Deleting model 'Image'
-        db.delete_table('vt_image')
-
         # Deleting model 'Flavor'
         db.delete_table('vt_flavor')
 
         # Deleting model 'VirtualMachine'
         db.delete_table('vt_virtualmachine')
+
+        # Deleting model 'Snapshot'
+        db.delete_table('vt_snapshot')
 
         # Deleting model 'SSHKey'
         db.delete_table('vt_sshkey')
@@ -180,7 +180,11 @@ class Migration(SchemaMigration):
             'city': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.City']"}),
             'description': ('django.db.models.fields.TextField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'})
+            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '128'}),
+            'novnc_ip': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True'}),
+            'sflow_ip': ('django.db.models.fields.IPAddressField', [], {'default': "'0.0.0.0'", 'max_length': '15', 'null': 'True'}),
+            'sflow_port': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
+            'vpn_ip': ('django.db.models.fields.IPAddressField', [], {'default': "'0.0.0.0'", 'max_length': '15', 'null': 'True'})
         },
         'project.membership': {
             'Meta': {'unique_together': "(('project', 'user'),)", 'object_name': 'Membership'},
@@ -191,19 +195,19 @@ class Migration(SchemaMigration):
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'project.project': {
-            'Meta': {'object_name': 'Project'},
+            'Meta': {'unique_together': "(('owner', 'name'),)", 'object_name': 'Project'},
             'category': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Category']"}),
             'created_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_deleted': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'islands': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['project.Island']", 'symmetrical': 'False'}),
             'memberships': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'project_belongs'", 'symmetrical': 'False', 'through': "orm['project.Membership']", 'to': "orm['auth.User']"}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'resources.server': {
             'Meta': {'object_name': 'Server'},
-            'bandwidth': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
             'cpu': ('django.db.models.fields.CharField', [], {'default': '0', 'max_length': '256', 'null': 'True'}),
             'disk': ('django.db.models.fields.IntegerField', [], {'default': '0', 'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -221,7 +225,8 @@ class Migration(SchemaMigration):
             'Meta': {'unique_together': "(('slice', 'switch_port'),)", 'object_name': 'SlicePort'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'slice': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['slice.Slice']"}),
-            'switch_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.SwitchPort']"})
+            'switch_port': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['resources.SwitchPort']"}),
+            'type': ('django.db.models.fields.IntegerField', [], {'default': '1'})
         },
         'resources.sliceswitch': {
             'Meta': {'unique_together': "(('slice', 'switch'),)", 'object_name': 'SliceSwitch'},
@@ -239,6 +244,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'slices': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['slice.Slice']", 'through': "orm['resources.SliceSwitch']", 'symmetrical': 'False'}),
+            'state': ('django.db.models.fields.IntegerField', [], {'default': '1', 'null': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'max_length': '20'})
         },
         'resources.switchport': {
@@ -251,6 +257,8 @@ class Migration(SchemaMigration):
         },
         'slice.slice': {
             'Meta': {'object_name': 'Slice'},
+            'changed': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
+            'ct_change': ('django.db.models.fields.NullBooleanField', [], {'null': 'True', 'blank': 'True'}),
             'date_created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'date_expired': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.CharField', [], {'max_length': '1024'}),
@@ -263,7 +271,9 @@ class Migration(SchemaMigration):
             'show_name': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'state': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'type': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
-            'uuid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'unique': 'True', 'null': 'True'})
+            'uuid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'unique': 'True', 'null': 'True'}),
+            'vm_num': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'vpn_state': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         },
         'slice.sliceisland': {
             'Meta': {'unique_together': "(('slice', 'island'),)", 'object_name': 'SliceIsland'},
@@ -286,17 +296,17 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'mac': ('django.db.models.fields.CharField', [], {'max_length': '32'})
         },
-        'vt.image': {
-            'Meta': {'object_name': 'Image'},
+        'vt.snapshot': {
+            'Meta': {'object_name': 'Snapshot'},
+            'create_time': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'desc': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'is_current': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '36'}),
-            'os': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True'}),
-            'type': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
-            'url': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
-            'username': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True'}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
+            'state': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'uuid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '36'}),
-            'version': ('django.db.models.fields.CharField', [], {'max_length': '32', 'null': 'True'})
+            'vm': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.VirtualMachine']"})
         },
         'vt.sshkey': {
             'Meta': {'unique_together': "(('fingerprint',),)", 'object_name': 'SSHKey'},
@@ -315,7 +325,7 @@ class Migration(SchemaMigration):
             'gateway_public_ip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'gateway_set'", 'null': 'True', 'to': "orm['ipam.IPUsage']"}),
             'hdd': ('django.db.models.fields.IntegerField', [], {'null': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'image': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['vt.Image']"}),
+            'image': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True'}),
             'ip': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'virtualmachine_set'", 'null': 'True', 'to': "orm['ipam.IPUsage']"}),
             'island': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['project.Island']"}),
             'mac': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True'}),

@@ -19,7 +19,7 @@ from plugins.common.exception import ConnectionRefused
 from django.utils.translation import ugettext as _
 import errno
 from socket import error as socket_error
-from etc.config import function_test
+from etc.config import function_test, generate_glance_url
 import logging
 LOG = logging.getLogger('plugins')
 DOMAIN_STATE_TUPLE = (
@@ -66,22 +66,22 @@ VM_TYPE = (
 SNAPSHOT_STATE = ((0, 'building'), (1, 'success'), (-1, 'failed'))
 
 
-class Image(models.Model):
-    uuid = models.CharField(max_length=36, unique=True)
-    name = models.CharField(max_length=36)
-    url = models.CharField(max_length=256)
-    type = models.IntegerField(null=True, choices=VM_TYPE)
-    version = models.CharField(max_length=32, null=True)
-    username = models.CharField(max_length=36, null=True)
-    password = models.CharField(max_length=36, null=True)
-    os = models.CharField(max_length=256, null=True)
+#class Image(models.Model):
+#    uuid = models.CharField(max_length=36, unique=True)
+#    name = models.CharField(max_length=36)
+#    url = models.CharField(max_length=256)
+#    type = models.IntegerField(null=True, choices=VM_TYPE)
+#    version = models.CharField(max_length=32, null=True)
+#    username = models.CharField(max_length=36, null=True)
+#    password = models.CharField(max_length=36, null=True)
+#    os = models.CharField(max_length=256, null=True)
 
-    def __unicode__(self):
+#    def __unicode__(self):
         #return self.os and self.os or ""
-        return self.name
+#        return self.name
 
-    class Meta:
-        verbose_name = _("Image")
+#    class Meta:
+#        verbose_name = _("Image")
 
 
 class Flavor(models.Model):
@@ -124,7 +124,8 @@ class VirtualMachine(IslandResource):
     enable_dhcp = models.BooleanField(default=False)
     slice = models.ForeignKey(Slice)
     flavor = models.ForeignKey(Flavor, null=True)
-    image = models.ForeignKey(Image)
+    #image = models.ForeignKey(Image)
+    image = models.CharField(max_length=36, null=True)
     server = models.ForeignKey(Server)
     switch_port = models.ForeignKey(SwitchPort, null=True)
     state = models.IntegerField(null=True, choices=DOMAIN_STATE_TUPLE)
@@ -188,8 +189,8 @@ class VirtualMachine(IslandResource):
                 vmInfo['hdd'] = self.flavor.hdd
 
             vmInfo['name'] = self.uuid
-            vmInfo['img'] = self.image.uuid
-            vmInfo['glanceURL'] = self.image.url
+            vmInfo['img'] = self.image
+            vmInfo['glanceURL'] = generate_glance_url() + "/images/" + self.image
             vmInfo['type'] = self.type
             vmInfo['network'] = []
             network = {}
