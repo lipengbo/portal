@@ -5825,8 +5825,7 @@ a:link {
   border-radius: 0;
 }
 .modal-open {
-  /*overflow:auto;*/
-
+  overflow: auto;
 }
 .container-fluid {
   padding-left: 30px;
@@ -5846,7 +5845,8 @@ a:link {
   margin-right: 10px;
 }
 .modal {
-  overflow-y: auto;
+  position: absolute;
+  overflow: visible;
 }
 .modal .modal-footer {
   text-align: center;
@@ -6766,7 +6766,7 @@ fieldset legend {
   padding-top: 20px;
 }
 .help_main section h4 i {
-  color: #2489c5;
+  color: #2291fe;
   font-size: 20px;
   margin-right: 10px;
   vertical-align: middle;
@@ -7057,7 +7057,7 @@ fieldset legend {
   border-radius: 3px;
   cursor: pointer;
   margin-right: 2px;
-  color: #2b8fcd;
+  color: #2291fe;
   font-size: 12px;
   font-weight: bold;
   font-family: "Microsoft YaHei";
@@ -7075,7 +7075,7 @@ fieldset legend {
   border-radius: 3px;
   cursor: pointer;
   margin-right: 6px;
-  color: #2489c5;
+  color: #2291fe;
   font-size: 12px;
   font-weight: bold;
   text-decoration: none;
@@ -7095,11 +7095,11 @@ fieldset legend {
 }
 .create_vm_form .type_chose a:hover,
 .create_vm_form .cpu_chose a:hover {
-  border-color: #2b8fcd;
+  border-color: #2291fe;
 }
 .create_vm_form a.vm_active {
-  background: #2489c5;
-  border: 1px solid #2b8fcd;
+  background: #2291fe;
+  border: 1px solid #2291fe;
   color: #fff !important;
 }
 /* flatui */
@@ -7823,7 +7823,7 @@ ul.action_box_tab li a {
   border-radius: 3px;
   cursor: pointer;
   margin-right: 10px;
-  color: #2489c5;
+  color: #2291fe;
   font-weight: bold;
   text-decoration: none;
   -webkit-transition: all 0.2s ease-in-out;
@@ -7833,12 +7833,12 @@ ul.action_box_tab li a {
 }
 ul.action_box_tab li a:hover,
 ul.action_box_tab li a:focus {
-  border-color: #2b8fcd;
+  border-color: #2291fe;
   text-decoration: none;
 }
 ul.action_box_tab li.active a {
-  background: #2489c5;
-  border: 1px solid #2b8fcd;
+  background: #2291fe;
+  border: 1px solid #2291fe;
   color: #fff;
 }
 .t_dropdown .dropdown a {
@@ -7935,7 +7935,7 @@ ul.errorlist {
   border-radius: 3px;
   cursor: pointer;
   margin-right: 2px;
-  color: #2b8fcd;
+  color: #2291fe;
   font-size: 12px;
   font-weight: bold;
   font-family: "Microsoft YaHei";
@@ -7946,11 +7946,11 @@ ul.errorlist {
   transition: all 0.2s ease-in-out;
 }
 .block_chose a:hover {
-  border-color: #2b8fcd;
+  border-color: #2291fe;
 }
 .block_chose a.active {
-  border-color: #2b8fcd;
-  background: #2b8fcd;
+  border-color: #2291fe;
+  background: #2291fe;
   color: #fff;
 }
 .btn_file {
@@ -8049,4 +8049,7 @@ ul.errorlist {
 .main2 .row_chose tbody tr.active {
   background: #e1e1e9 !important;
   border-bottom: 1px solid #ccc;
+}
+.pagination > .active > a {
+  background-color: #2291fe;
 }

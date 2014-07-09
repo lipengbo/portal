@@ -109,11 +109,11 @@
             value: parseFloat(cur_band_value),
             max: band_value,
             slide: function( event, ui ) {
-                $( "#band-range-min .amount" ).html( ui.value + "MB" );
+                $( "#band-range-min .amount" ).html( ui.value + "MB/s" );
                 $("#new_band").val(ui.value);
             }
         });
-        $( "#band-range-min .amount" ).html( $( "#band-range-min" ).slider( "value" ) + "MB" );
+        $( "#band-range-min .amount" ).html( $( "#band-range-min" ).slider( "value" ) + "MB/s" );
     });
 </script>
 {% endblock %}

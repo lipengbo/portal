@@ -217,17 +217,6 @@ def virttool_get_switches(virttool):
     """virttool上获取交换机信息
     """
     LOG.debug('virttool_get_switches')
-    switches = [{'dpid':'00:00:00:00:00:00:00:06', 'ports':[{'portNumber':2,'name':'ovs128-2'},{'portNumber':1,'name':'ovs128-1'}], 'target_switch':()},
-                {'dpid':'00:00:00:00:00:00:00:05', 'ports':[{'portNumber':2,'name':'ovs127-2'},{'portNumber':1,'name':'ovs127-1'}], 'target_switch':()},
-                {'dpid':'00:00:00:00:00:00:00:04', 'ports':[{'portNumber':2,'name':'ovs126-2'},{'portNumber':1,'name':'ovs126-1'}], 'target_switch':()},
-                {'dpid':'00:00:00:00:00:00:00:03', 'ports':[{'portNumber':2,'name':'ovs125-2'},{'portNumber':1,'name':'ovs125-1'}], 'target_switch':()},
-                {'dpid':'00:ee:00:00:00:00:00:01', 'ports':[{'portNumber':90,'name':'p90'}], 'target_switch':()},
-                {'dpid':'00:ff:00:00:00:00:00:02', 'ports':[{'portNumber':99,'name':'p99'}], 'target_switch':()},
-                {'dpid':'00:ff:00:00:00:00:00:01', 'ports':[{'portNumber':655,'name':'p655'},{'portNumber':1,'name':'eth1'}], 'target_switch':()},
-                {'dpid':'00:00:00:00:00:00:00:02', 'ports':[{'portNumber':14,'name':'et14'},{'portNumber':13,'name':'et13'},
-                                                            {'portNumber':12,'name':'et12'},{'portNumber':11,'name':'et11'},
-                                                            {'portNumber':10,'name':'et10'},{'portNumber':2,'name':'eth2'},
-                                                            {'portNumber':1,'name':'eth1'}], 'target_switch':()}]
 #     switches = [{'dpid':'00:00:a0:36:9f:02:e4:18', 'ports':[], 'target_switch':()},
 #                 {'dpid':'00:00:00:00:00:00:00:06', 'ports':[{'portNumber':2,'name':'ovs128-2'},{'portNumber':1,'name':'ovs128-1'}], 'target_switch':()},
 #                 {'dpid':'00:00:00:00:00:00:00:05', 'ports':[{'portNumber':2,'name':'ovs127-2'},{'portNumber':1,'name':'ovs127-1'}], 'target_switch':()},
@@ -240,7 +229,7 @@ def virttool_get_switches(virttool):
 #                                                             {'portNumber':12,'name':'et12'},{'portNumber':11,'name':'et11'},
 #                                                             {'portNumber':10,'name':'et10'},{'portNumber':2,'name':'eth2'},
 #                                                             {'portNumber':1,'name':'eth1'}], 'target_switch':()}]
-    #return switches
+#     return switches
     if virttool:
         if virttool.type == 1:
             print "cnvp"
@@ -259,15 +248,11 @@ def virttool_get_links(virttool):
     """virttool上获取交换机链接信息
     """
     LOG.debug('virttool_get_links')
-    links = [{'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:06', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:05'},
-             {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:05', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:04'},
-             {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:04', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:03'},
-             {'dst-port':1, 'dst-switch':'00:ff:00:00:00:00:00:01', 'src-port':1, 'src-switch':'00:00:00:00:00:00:00:02'}]
 #     links = [{'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:06', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:05'},
 #              {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:05', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:04'},
 #              {'dst-port':1, 'dst-switch':'00:00:00:00:00:00:00:04', 'src-port':2, 'src-switch':'00:00:00:00:00:00:00:03'},
 #              {'dst-port':1, 'dst-switch':'00:ff:00:00:00:00:00:01', 'src-port':1, 'src-switch':'00:00:00:00:00:00:00:02'}]
-    #return links
+#     return links
     if virttool:
         if virttool.type == 1:
             print "cnvp"
