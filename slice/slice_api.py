@@ -929,6 +929,10 @@ def add_inside_port_flowspace(slice_obj, switch_port, vm_macs, virttool,
             "", "", "0x806", slice_nw, slice_nw, "", "", "", "",
             virttool.type)
         arg_matches.append(arg_match)
+        arg_match = matches_to_arg_match(switch_port.port, "", "",
+            "", "", "0x806", slice_nw, "0.0.0.0", "", "", "", "",
+            virttool.type)
+        arg_matches.append(arg_match)
         if slice_gw:
             arg_match = matches_to_arg_match(switch_port.port, "",
                 "", slice_gw.mac, "", "0x800", slice_nw, "", "", "", "",
