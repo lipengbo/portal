@@ -11,8 +11,8 @@ class VmForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(VmForm, self).__init__(*args, **kwargs)
-        self.fields['image'].queryset = Image.objects.exclude(name__in=['gateway', 'floodlight'])
-        image_choices = [("", "---------")]
+        #self.fields['image'].queryset = Image.objects.exclude(name__in=['gateway', 'floodlight'])
+        #image_choices = [("", "---------")]
         #image_choices.extend(Image.objects.exclude(name__in=['gateway',
                                         #'Floodlight', 'POX', 'OpenDaylight']).values_list("id", "os"))
         #self.fields['image'].choices = image_choices
