@@ -5824,6 +5824,10 @@ a:link {
 .alert {
   border-radius: 0;
 }
+.modal-open {
+  /*overflow:auto;*/
+
+}
 .container-fluid {
   padding-left: 30px;
   padding-right: 30px;
@@ -7479,9 +7483,6 @@ body .modal-dialog .modal-content .modal-footer {
     padding: 5px 15px;
   }
 }
-.modal-open {
-  overflow: auto;
-}
 #div_id_name .controls {
   height: 40px;
 }
@@ -7970,8 +7971,6 @@ ul.errorlist {
 .oper_menu li i {
   color: #2291fe;
   margin-right: 10px;
-<<<<<<< HEAD
-=======
   font-weight: bold;
 }
 .oper_menu li i.glyphicon-trash {
@@ -7984,7 +7983,6 @@ ul.errorlist {
 }
 .oper_menu li a.disabled i {
   color: #ccc;
->>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463
 }
 .pop_chose_block .create_vm_form .cpu_chose a {
   padding: 10px 15px;
@@ -8045,8 +8043,6 @@ ul.errorlist {
   margin-bottom: 15px;
   margin-top: 128px;
 }
-<<<<<<< HEAD
-=======
 .main2 .row_chose tbody tr.row_hover {
   background: #e1e1e9;
 }
@@ -8054,4 +8050,3 @@ ul.errorlist {
   background: #e1e1e9 !important;
   border-bottom: 1px solid #ccc;
 }
->>>>>>> ee4aaa0d95474d0576eae9eaae1ed72bda54c463

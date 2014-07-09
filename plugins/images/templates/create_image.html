@@ -27,6 +27,9 @@
             <h4 class="block_title">
                 <img src="{{ STATIC_URL}}img/ic_baseinfo.png">基本信息     
             </h4>
+            <div class="alert alert-info">
+                <strong>提示：</strong>初始用户名与密码必须是镜像中存在的用户名与密码，建议填写管理员的用户名与密码！
+            </div>
             <div class="form-group name">
                 <label class="control-label col-md-2">名称</label>
                 <div class="col-md-6">
@@ -39,6 +42,19 @@
                 <div class="col-md-6">
                         {{ forms.description}}
                         <!--textarea class="form-control" rows="3"></textarea-->
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="control-label col-md-2">初始用户名</label>
+                <div class="col-md-6">
+                        <input type="text" class="form-control" name="" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-md-2">初始密码</label>
+                <div class="col-md-6">
+                        <input type="text" class="form-control" name="" />
                 </div>
             </div>
             <h4 class="block_title">
