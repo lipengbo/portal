@@ -1,0 +1,15 @@
+{% load endless %}
+<div class="block_chose">
+    {% paginate 4 app_images using 'app' %}
+    {%for image in app_images%}
+    <a href="javascript:;" class="clearfix">
+        <span class="pull-left">{{image.name}}</span>
+        <span class="pull-right">{{image.id}}</span>
+    </a>
+    {%endfor%}
+</div>
+<div class="text-center">
+    <ul class="pagination">
+        {% show_pages %}
+    </ul>
+</div>
