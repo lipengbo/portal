@@ -453,11 +453,9 @@ class Slice(models.Model):
                 add_unicom_slice_api(self, other_slice)
                 return True
             else:
-                print "f1"
                 return False
         except:
             transaction.rollback()
-            print "f2"
 #             import traceback
 #             traceback.print_exc()
             return False

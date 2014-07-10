@@ -95,7 +95,6 @@ def index(request):
     context['target'] = "project"
     context['type'] = "day"
     if request.is_ajax():
-        print '89'
         return render(request, 'project/list_page.html', context)
     return render(request, 'project/index.html', context)
 
@@ -312,7 +311,6 @@ def create_or_edit(request, id=None):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
         try:
-            print "-----------------------"
             setted_quota = instance.projectquota
             if setted_quota.member > project_quotas["member"]:
                 max_quota["member"] = setted_quota.member
@@ -336,7 +334,6 @@ def create_or_edit(request, id=None):
             return redirect('quota_admin_apply')
     context['max_quota'] = max_quota
     context['cur_quota'] = cur_quota
-    print max_quota, cur_quota
 
     if request.method == 'GET':
         form = ProjectForm(instance=instance)
@@ -352,7 +349,6 @@ def create_or_edit(request, id=None):
             project.save()
             form.save_m2m()
             try:
-                print "222222222222222222222222"
                 member_num = request.POST.get("new_member")
                 slice_num = request.POST.get("new_slice")
                 vm_num = request.POST.get("new_vm")

@@ -288,7 +288,6 @@ def update_physic_topology(instance):
             if switch_dbs:
                 switch_dbs[0].update_state(1)
         dpids = port_name_dict.keys()
-        print dpids
         switch_dbs = Switch.objects.filter(island=island_obj, state=1)
         for switch_db in switch_dbs:
             if switch_db.dpid not in dpids:
