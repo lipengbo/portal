@@ -17,15 +17,15 @@
                            </ul>
                         </span>
                     </th>
-                    <th width="10%">创建时间</th>
-                    <th width="15%">操作</th>
+                    <th width="15%">创建时间</th>
+                    <th width="10%">操作</th>
                 </tr>
             </thead>
             <tbody>
                 {% paginate 5 pri_images using 'pri' %}
                 {%for image in pri_images%}
                 <tr>
-                    <td>{{image.id}}</td>
+                    <td><a id="uuid" class="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{image.id}}">{{image.id}}</td>
                     <td>{{image.name}}</td>
                     <td>{{image.properties.description}}</td>
                     <td>{{image.owner}}</td>

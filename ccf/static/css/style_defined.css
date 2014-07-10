@@ -7862,9 +7862,9 @@ ul.errorlist {
   list-style: none;
   padding-left: 0;
 }
-.radio_defined {
-  margin-left: 56px;
-  margin-right: 20px;
+.radio_defined input[type="radio"] {
+  margin-left: -5px;
+  margin-right: 5px;
 }
 .pot_state span {
   width: 10px;

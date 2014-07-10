@@ -22,7 +22,7 @@ $(document).ready(function(){
     $('.submit-edit').click(function(){
         var name = $('#snapshot_name').val();
         var desc = $('#snapshot_desc').val();
-        var uuid = $('.tr.active').children("td:first").text();
+        var uuid = $('.tr.active').find("a").attr('data-original-title');
         if(!(check('name', name) && check('desc', desc))){
             return;
         } 
@@ -52,6 +52,9 @@ $(document).ready(function(){
     $('.submit-create-fromvm').click(function(){
         create_image(1);
     });
+
+    show_uuid($("[id='uuid']"));
+    $('.uuid').tooltip();
 });
 
 var STATIC_URL = $("#STATIC_URL").text();
@@ -126,7 +129,7 @@ function delete_snapshot(snapshot_uuid){
 }
 
 function delete_from_dropdown(){
-    var snapshot_uuid = $('.tr.active').children("td:first").text();
+    var snapshot_uuid = $('.tr.active').find("a").attr('data-original-title');//$('#uuid').attr('data-original-title');
     delete_snapshot(snapshot_uuid);
 }
 
@@ -169,11 +172,11 @@ function create_image(create_flag){
         var uuid;
         var is_public;
         if(create_flag==0){
-            uuid = $('.tr.active').children("td:first").text();
+            uuid = $('.tr.active').find("a").attr('data-original-title');
         }else{
-            uuid = $('#uuid').attr('data-original-title');
+            uuid = $('.tr.active').find("a").attr('data-original-title');//$('#uuid').attr('data-original-title');
         }
-
+        
         if($('#image_public').attr('checked') == 'checked'){
             is_public = true;
         }else{
@@ -206,7 +209,7 @@ function create_image(create_flag){
                     $('#alert_modal').modal();
                 }
             }
-        });    
+        }); 
 }
 
 function check(class_var, obj_var){
@@ -219,5 +222,12 @@ function check(class_var, obj_var){
             obj.removeClass('has-error');
         }
         return true;
+    }
+}
+
+//缩写uuid
+function show_uuid(objs){
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = objs[i].innerHTML.split("-")[0].split(".")[0] + "...";
     }
 }

@@ -19,6 +19,7 @@
 {% block extra_breadcrumb %}
 <form class="navbar-form navbar-right search_defined">
     <div class="form-group">
+      <!--input id="q_type" style="display:none"></input-->
       <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
      <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
     </div>
@@ -43,9 +44,9 @@
 
 <div class="action_box clearfix">
     <ul class="action_box_tab clearfix list-unstyled">
-        <li class="tab_sys active" type="sys"><a>系统</a></li>
-        <li class="tab_app" type="app"><a>应用</a></li>
-        <li class="tab_pri" type="pri"><a>自有</a></li>
+        <li class="image_index tab_sys {%if div_name == "list_sys" %}active{%endif%}" type="sys"><a>系统</a></li>
+        <li class="image_index tab_app {%if div_name == "list_app" %}active{%endif%}" type="app"><a>应用</a></li>
+        <li class="image_index tab_pri {%if div_name == "list_pri" %}active{%endif%}" type="pri"><a>自有</a></li>
     </ul>
     {%if extent_html == "admin_base.html"%}
     <div class="pull-right">
@@ -55,14 +56,20 @@
 </div>
 
     <div class="action_box_tab_blocks">
-    <div class="action_box_tab_block sys" style="display: block;">
+    <div class="action_box_tab_block sys" {%if div_name == "list_sys" %}style="display:block;"{%endif%}>
+        <div id="list_sys">
         {% include "sys_list.html" %}
+        </div>
     </div>
-    <div class="action_box_tab_block app" >
+    <div class="action_box_tab_block app" {%if div_name == "list_app" %}style="display:block;"{%endif%}>
+        <div id="list_app">
         {% include "app_list.html" %}
+        </div>
     </div>
-    <div class="action_box_tab_block pri">
+    <div class="action_box_tab_block pri" {%if div_name == "list_pri" %}style="display:block;"{%endif%}>
+        <div id="list_pri">
         {% include "pri_list.html" %}
+        </div>
     </div>
 </div>
 
@@ -88,10 +95,10 @@
                 </div>
                 {%if extent_html == "site_base.html"%}
                 <div class="form-group is_public">
-                   <label class="radio-inline radio_defined">
+                   <label class="radio-inline radio_defined col-md-2 col-md-offset-3">
                       <input type="radio" name="inlineRadioOptions" id="image_public" value="option1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="image_private" value="option2"> 私有
                     </label>
                 </div>
@@ -110,4 +117,5 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/block_tab.js"></script>
 <script src="{{ STATIC_URL}}js/image.js"></script>
+<script src="{{ STATIC_URL}}js/list_pagination_image.js"></script>
 {% endblock %}

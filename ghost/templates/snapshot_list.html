@@ -29,7 +29,7 @@
 
 {% block body %}
 <div class="user_manage_tab"> 
-    <a class="slice_index col-md-6 jx" href="{% url list_images 0%}">
+    <a class="slice_index col-md-6 jx" href="{% url list_images_div 0 %}">
         <span>镜像</span>
     </a>
     <a class="slice_index col-md-6 bf on" href="{% url list_snapshot%}">
@@ -79,7 +79,7 @@
         {% paginate 10 snapshots %}
         {%for snapshot in snapshots%}
         <tr class="tr">
-            <td>{{snapshot.uuid}}</td>
+            <td><a id="uuid" class="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{snapshot.uuid}}">{{snapshot.uuid}}</td>
             <td>{{snapshot.name}}</td>
             <td>{{snapshot.desc}}</td>
             <td>{{snapshot.vm.name}}</td>
@@ -140,10 +140,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                   <label class="radio-inline radio_defined">
+                   <label class="radio-inline radio_defined col-md-2 col-md-offset-3 ">
                       <input type="radio" name="inlineRadioOptions" id="image_public" value="1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="image_private" value="0"> 私有
                     </label>
                 </div>

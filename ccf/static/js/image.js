@@ -28,7 +28,7 @@ $(document).ready(function(){
 		    success:function(data){
                 $('#images_bj').modal('hide');
                 if(data.result == 0){
-                    window.location.href = '/plugins/images/list/';
+                    window.location.href = '/plugins/images/list/2/';
                 }
             }
         });
@@ -63,20 +63,8 @@ $(document).ready(function(){
         $('#alert_info').text('上传中，这个过程可能需要几分钟...');
         $('#alert_modal').modal();
     });
-    var image_type = $('#image_type').attr('type');
-    if(image_type != 0){
-        var type;
-        if(image_type == 1){
-            type = 'app';
-        }else if(image_type == 2){
-            type = 'pri';
-        }
-        $('.action_box_tab').children('li').removeClass('active');
-        $('.tab_'+type).addClass('active');
-        $('.action_box_tab_block').removeAttr('style');
-        $('.action_box_tab_block.'+type).attr('style', 'display: block;');
-    }
-
+    show_uuid($("[id='uuid']"));
+    $('.uuid').tooltip();
 });
 
 function delete_image(uuid, type){
@@ -92,7 +80,15 @@ function delete_image(uuid, type){
                 },
                 dataType: 'json',
                 success: function(data){
-                    location.href='/plugins/images/list/' + type +"/";
+                    
+                    if($('.endless_page_current')[0]){
+                        c_p = $('.endless_page_current')[0].innerHTML;
+                        url = document.location + "?page=" + c_p + "#topsection";
+                        update_list(url);
+                    }else{
+                        url = document.location + "?";
+                        update_list(url);
+                    }
                     
                 }
         });

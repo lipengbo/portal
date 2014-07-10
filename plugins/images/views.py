@@ -34,7 +34,8 @@ def create(request):
 
 
 
-def list(request, image_type):
+def list(request, image_type=None):
+    print "list++++++++++++++++++++"
     sys_images, app_images, pri_images = glance_client_api\
             .image_list_detailed_on_type(request.user.username, config.generate_glance_url())
     user = request.user
@@ -47,8 +48,19 @@ def list(request, image_type):
     context['app_images'] = app_images
     context['pri_images'] = pri_images
     context['owner'] = user.username
-    context['type'] = image_type
-
+    context['div_name'] = 'list_sys'
+    context['type'] = 0
+    if image_type != None:
+        if int(image_type) == 0:
+            context['div_name'] = 'list_sys'
+        if int(image_type) == 1:
+            context['div_name'] = 'list_app'
+        if int(image_type) == 2:
+            context['div_name'] = 'list_pri'
+        context['type'] = image_type
+    print "________________________"
+    print context['div_name'], context['type']
+    
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -66,6 +78,16 @@ def list(request, image_type):
                 context['pri_images'] = pri_images
 
             context['query'] = query
+
+    if request.is_ajax():
+        if 'div_name' in request.GET:
+            div_name_a = request.GET.get('div_name')
+            if div_name_a == 'list_sys':
+                return render(request, 'sys_list.html', context)
+            if div_name_a == 'list_app':
+                return render(request, 'app_list.html', context)
+            if div_name_a == 'list_pri':
+                return render(request, 'pri_list.html', context)
     return render(request, 'image_list.html', context)
 
 def update(request):
