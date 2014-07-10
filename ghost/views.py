@@ -3,11 +3,13 @@ import traceback
 
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
+from django.db.models import Q
 from plugins.vt.models import VirtualMachine, Snapshot
 from plugins.common.agent_client import AgentClient
 from plugins.common.utils import gen_uuid
 from tasks import do_create_snapshot, do_restore_snapshot
 from etc import config
+
 
 
 def list_snapshot(request):
@@ -18,6 +20,12 @@ def list_snapshot(request):
     else:
         snapshots = Snapshot.objects.filter(owner=request.user, state=1).order_by('create_time')
         context['extent_html'] = 'site_base.html'
+    
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            snapshots = snapshots.filter(Q(name__icontains=query) | Q(desc__icontains=query))
+            context['query'] = query
     context['snapshots'] = snapshots
     return render(request, 'snapshot_list.html', context)
 

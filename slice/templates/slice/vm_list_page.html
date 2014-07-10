@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load endless %}
-{% paginate 2 vms %}
+{% paginate 4 vms %}
 <h4 class="block_title">
     <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】
     <div class="pull-right">

@@ -11,6 +11,7 @@ from django.shortcuts import render
 from plugins.common import glance_client_api
 from plugins.images.forms import CreateImageForm
 from django.http import HttpResponse
+from django.db.models import Q
 from etc import config
 
 import json
@@ -47,6 +48,24 @@ def list(request, image_type):
     context['pri_images'] = pri_images
     context['owner'] = user.username
     context['type'] = image_type
+
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            if image_type == '0':
+                sys_images, has_more = glance_client_api\
+                        .image_list_detailed(config.generate_glance_url(), filters={'name': query})
+                context['sys_images'] = sys_images
+            elif image_type == '1':
+                app_images, has_more = glance_client_api\
+                        .image_list_detailed(config.generate_glance_url(), filters={'name': query})
+                context['app_images'] = app_images
+            else:
+                pri_images, has_more = glance_client_api\
+                        .image_list_detailed(config.generate_glance_url(), filters={'name': query})
+                context['pri_images'] = pri_images
+
+            context['query'] = query
     return render(request, 'image_list.html', context)
 
 def update(request):
