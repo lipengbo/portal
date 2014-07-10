@@ -1111,7 +1111,6 @@ def get_slice_topology_edit(slice_obj):
 #     链接
         links = []
         switch_ports = island.get_switch_ports()
-        print switch_ports
         virttool = slice_obj.get_virttool()
         if virttool:
             link_objs = virttool.link_set.filter(
@@ -1202,7 +1201,6 @@ def get_island_topology(island_obj):
         return []
     else:
         print "get topology success"
-        print topology
         return topology
 
 

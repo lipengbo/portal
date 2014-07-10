@@ -129,7 +129,6 @@ class Project(models.Model):
         cur_quotas = self.get_quota()
         slice_quota = cur_quotas["slice"]
         created_slice_count = self.slice_set.filter(type=0).count()
-        print created_slice_count, slice_quota
         if created_slice_count < slice_quota:
             return True
         else:
@@ -139,7 +138,6 @@ class Project(models.Model):
         cur_quotas = self.get_quota()
         member_quota = cur_quotas["member"]
         created_member_count = self.memberships.all().count()
-        print created_member_count, member_quota
         if created_member_count < member_quota:
             return True
         else:
@@ -153,7 +151,6 @@ class Project(models.Model):
         for cur_slice in cur_slices:
             vm_count = cur_slice.virtualmachine_set.filter(type=1).count()
             cur_vm_count = cur_vm_count + vm_count
-        print cur_vm_count, vm_quota
         if cur_vm_count < vm_quota:
             return True
         else:

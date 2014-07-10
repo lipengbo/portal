@@ -825,7 +825,6 @@ def edit_unicom(request, slice_id):
                 new_unicom_slices = Slice.objects.filter(id__in=new_unicom_slice_ids)
             else:
                 new_unicom_slices = []
-            print new_unicom_slices
             for new_unicom_slice in new_unicom_slices:
                 if new_unicom_slice not in unicom_slices:
                     if not slice_obj.add_unicom_slice(new_unicom_slice):
@@ -835,14 +834,11 @@ def edit_unicom(request, slice_id):
                     if not slice_obj.del_unicom_slice(unicom_slice):
                         del_errors.append(unicom_slice)
         except Exception, ex:
-            print 2
 #             import traceback
 #             traceback.print_exc()
             return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
         else:
-            print 3
             if add_errors != [] or del_errors != []:
-                print 4
                 error_str = ""
                 add_error_names = []
                 if add_errors:

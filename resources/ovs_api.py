@@ -250,13 +250,10 @@ def get_select_topology(tp_mod, switch_ids, switch_port_ids):
                     'normals': [], 'specials': [],
                     'bandwidth': [], 'maclist': []}
     except Exception, ex:
-        print 1
         #import traceback
-#         traceback.print_stack()
 #         traceback.print_exc()
         return []
     else:
-        print 2
 #         print topology
         return topology
 
