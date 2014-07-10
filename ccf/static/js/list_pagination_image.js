@@ -29,6 +29,28 @@ function update_list(url){
                     }
                 }
                 url = urls[0] + "?" + urls[1];
+            }else{
+                if(f_urls.length >= 9 && f_urls[3]=="plugins" && f_urls[4]=="vt" && f_urls[5]=="create" && f_urls[6]=="vm"){
+                    is_slice_detail = true;
+                    objs = $(".image_index");
+                    for(var i=0;i<objs.length;i++){
+                        if($(objs[i]).hasClass("active")){
+                            if($(objs[i]).hasClass("tab_sys")){
+                                list_show = "list_sys";
+                                urls[1] = "div_name=list_sys&" + urls[1];
+                            }
+                            if($(objs[i]).hasClass("tab_app")){
+                                list_show = "list_app";
+                                urls[1] = "div_name=list_app&" + urls[1];
+                            }
+                            if($(objs[i]).hasClass("tab_pri")){
+                                list_show = "list_pri";
+                                urls[1] = "div_name=list_pri&" + urls[1];
+                            }
+                        }
+                    }
+                    url = urls[0] + "?" + urls[1];
+                }
             }
         }
     }

@@ -162,6 +162,17 @@ def create_vm(request, sliceid):
         context['sys_images'] = sys_images
         context['app_images'] = app_images
         context['pri_images'] = pri_images
+        context['div_name'] = 'list_sys'
+        context['type'] = 0
+        if request.is_ajax():
+            if 'div_name' in request.GET:
+                div_name_a = request.GET.get('div_name')
+                if div_name_a == 'list_sys':
+                    return render(request, 'vt/sys_list.html', context)
+                if div_name_a == 'list_app':
+                    return render(request, 'vt/app_list.html', context)
+                if div_name_a == 'list_pri':
+                    return render(request, 'vt/pri_list.html', context)
         return render(request, 'vt/create_vm.html', context)
 
 
