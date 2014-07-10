@@ -63,7 +63,7 @@
                 <i class="icon-warning-sign" id="icon_state{{vm.id}}" title="资源不足"></i>
             {% elif vm.state == 1 %}
                 <i class="icon-ok-sign icon_state check_start_vm" id="icon_state{{vm.id}}"></i>
-            {%elif vm.state == 5%}
+            {%elif vm.state == 5 or vm.state == 0%}
                 <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
             {%elif vm.state == 3%}
                 <i class="icon-pause check_vm" id="icon_state{{vm.id}}"></i>
@@ -83,7 +83,7 @@
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor: pointer;">
                         {%if vm.state == 1 %}
                             <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
-                        {%elif vm.state == 5 %}
+                        {%elif vm.state == 5 or vm.state == 0 %}
                             <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
                         {%elif vm.state == 3%}
                             <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止" />

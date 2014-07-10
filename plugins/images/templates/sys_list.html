@@ -16,7 +16,7 @@
                 {% paginate 5 sys_images %}
                 {%for image in sys_images%}
                 <tr>
-                    <td>{{image.id}}</td>
+                    <td><a id="uuid" class="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{image.id}}">{{image.id}}</td>
                     <td>{{image.name}}</td>
                     <td>{{image.properties.description}}</td>
                     <td>{% widthratio image.size 1048576 1 %}</td>

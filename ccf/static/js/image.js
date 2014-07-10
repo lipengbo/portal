@@ -60,7 +60,7 @@ $(document).ready(function(){
             }
         }    
         $('form').submit();
-        $('#alert_info').text('uploading...');
+        $('#alert_info').text('上传中，这个过程可能需要几分钟...');
         $('#alert_modal').modal();
     });
     var image_type = $('#image_type').attr('type');
