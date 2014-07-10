@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    $('#edit_image').click(function(){
+    /*$('#edit_image').click(function(){
         $('#images_bj').modal();
-    });
+    });*/
 
     $('.submit-edit').click(function(){
         var name = $('#image_name').val();
@@ -66,6 +66,10 @@ $(document).ready(function(){
     show_uuid($("[id='uuid']"));
     $('.uuid').tooltip();
 });
+
+function edit_image(){
+    $('#images_bj').modal();
+}
 
 function delete_image(uuid, type){
     

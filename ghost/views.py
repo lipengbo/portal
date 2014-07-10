@@ -1,17 +1,20 @@
+# -*- coding: utf-8 -*-
 import json
 import traceback
 
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.db.models import Q
 from plugins.vt.models import VirtualMachine, Snapshot
 from plugins.common.agent_client import AgentClient
 from plugins.common.utils import gen_uuid
 from tasks import do_create_snapshot, do_restore_snapshot
+from adminlog.models import log, SUCCESS, FAIL
 from etc import config
 
 
-
+@login_required
 def list_snapshot(request):
     context = {}
     if request.user.is_superuser:
@@ -20,7 +23,7 @@ def list_snapshot(request):
     else:
         snapshots = Snapshot.objects.filter(owner=request.user, state=1).order_by('create_time')
         context['extent_html'] = 'site_base.html'
-    
+
     if 'query' in request.GET:
         query = request.GET.get('query')
         if query:
@@ -106,12 +109,15 @@ def create_image(request):
 
             result = AgentClient(vm.server.ip)\
                     .create_image_from_snapshot(vm.uuid, snapshot.uuid, url, image_meta)
+            log(request.user, None, u"基于备份创建自有镜像", SUCCESS)
             print '----create_image_from_snapshot', result
         else:
             vm = VirtualMachine.objects.get(uuid=_uuid)
             result = AgentClient(vm.server.ip).create_image_from_vm(_uuid, url, image_meta)
+            log(request.user, None, u"基于虚拟机创建自有镜像", SUCCESS)
             print '----create_image_from_vm', result
         return HttpResponse(json.dumps({'result': 0}))
     except:
         traceback.print_exc()
+        log(request.user, None, u"创建自有镜像失败", FAIL)
         return HttpResponse(json.dumps({'result': -1}))

@@ -8,16 +8,18 @@
 Views for managing images.
 """
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from plugins.common import glance_client_api
 from plugins.images.forms import CreateImageForm
 from django.http import HttpResponse
 from django.db.models import Q
 from etc import config
+from adminlog.models import log, SUCCESS, FAIL
 
 import json
 import traceback
 
-
+@login_required
 def create(request):
     context = {}
     context['forms'] = CreateImageForm()
@@ -27,13 +29,15 @@ def create(request):
         if createImageForm.is_valid():
             data = createImageForm.clean()
             createImageForm.handle(request, config.generate_glance_url(), data)
+            log(request.user, None, u"上传镜像", SUCCESS)
             context['success'] = 0
         else:
+            log(request.user, None, u"上传镜像", FAIL)
             context['success'] = -1
     return render(request, 'create_image.html', context)
 
 
-
+@login_required
 def list(request, image_type=None):
     print "list++++++++++++++++++++"
     sys_images, app_images, pri_images = glance_client_api\

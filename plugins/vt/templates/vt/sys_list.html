@@ -1,6 +1,6 @@
 {% load endless %}
 <div class="block_chose">
-    {% paginate 4 sys_images %}
+    {% paginate 3 sys_images %}
     {%for image in sys_images%}
     <a href="javascript:;" class="clearfix">
         <span class="pull-left">{{image.name}}</span>

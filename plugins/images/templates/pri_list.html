@@ -35,14 +35,14 @@
                     <td class="btn_operation">
                         {%if extent_html == "site_base.html"%}
                             {%if owner == image.owner%}
-                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="" data-target="" style="cursor:pointer">
+                        <a href="javascript:void(0)" onclick="edit_image()" uuid="{{image.id}}" class="bianji" data-toggle="" data-target="" style="cursor:pointer">
                              <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
                         </a>
                         <a href="javascript:delete_image('{{image.id}}', 2);" title="删除">
                             <img src="{{ STATIC_URL}}img/btn_sc.png">
                         </a>
                             {%else%}
-                         <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="" style="cursor:now-allow">
+                         <a href="javascript:void(0)" onclick="edit_image()" class="bianji" data-toggle="modal" data-target="" style="cursor:now-allow">
                              <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑">
                         </a>   
                         <a href="javascript:void(0);" title="删除">
