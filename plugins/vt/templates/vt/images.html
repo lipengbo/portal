@@ -46,29 +46,18 @@
             </div>
             <div class="action_box_tab_block">
                 <div class="block_chose">
+                    {% paginate 4 pri_images %}
+                    {%for image in pri_images%}
                     <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
+                        <span class="pull-left">{{image.name}}</span>
+                        <span class="pull-right">{{image.id}}</span>
                     </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
-                    <a href="javascript:;" class="clearfix">
-                        <span class="pull-left">aaaaaaaaaaaaaaaaa</span>
-                        <span class="pull-right">ID：aaaaaaaaaaaaaaaa</span>
-                    </a>
+                    {%endfor%}
                 </div>
-                <div class="text-right">
-                    <ul class="pagination">       
-                        <li class="active"><a class="endless_page_current">1</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">2</a></li>
-                        <li><a class="endless_page_link" href="" rel="page">&gt;</a></li>
-                   </ul>
+                <div class="text-center">
+                    <ul class="pagination">
+                        {% show_pages %}
+                    </ul>
                 </div>
             </div>
         </div>

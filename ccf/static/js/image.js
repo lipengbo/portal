@@ -45,7 +45,9 @@ $(document).ready(function(){
     $('#create_submit_btn').click(function(){
         var name = $('#id_name').val();
         var desc = $('#id_description').val();
-        if(!(check('name', name) && check('desc', desc))){
+        var username = $('#id_image_username').val();
+        var passwd = $('#id_image_passwd').val();
+        if(!(check('name', name) && check('desc', desc) && check('username', username) && check('passwd', passwd))){
             return;
         } 
         if($('#local_file').attr('checked') == "checked"){

@@ -18,7 +18,7 @@ from slice.models import Slice
 from plugins.vt.models import VirtualMachine, DOMAIN_STATE_DIC, Snapshot
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from etc.config import function_test, glance_url
+from etc.config import function_test, generate_glance_url
 from plugins.common.vt_manager_client import VTClient
 from plugins.common.agent_client import AgentClient
 from plugins.common import glance_client_api
@@ -153,7 +153,7 @@ def create_vm(request, sliceid):
         servers = [(switch.virtualswitch.server.id, switch.virtualswitch.server.name) for switch in slice.get_virtual_switches_server()]
         servers.insert(0, ('', '---------'))
         vm_form.fields['server'].choices = servers
-        sys_images, app_images, pri_images = glance_client_api.image_list_detailed_on_type(user.username, glance_url())
+        sys_images, app_images, pri_images = glance_client_api.image_list_detailed_on_type(user.username, generate_glance_url())
         context = {}
         context['vm_form'] = vm_form
         context['flavors'] = Flavor.objects.all()
@@ -248,7 +248,10 @@ def vnc(request, vmid, island_id):
     vnc_port = AgentClient(host_ip).get_vnc_port(vm.uuid)
     print "-----------vnc_port-----------", vnc_port
     private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
-    vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, 'root', '123')
+    image = glance_client_api.image_get(generate_glance_url(), vm.image)
+    username = image['properties']['image_username']
+    password = image['properties']['image_passwd']
+    vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, username, password)
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
     novnc_url = 'http://%s:6080/vnc_auto.html?token=%s' \

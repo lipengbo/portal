@@ -61,9 +61,9 @@ $(document).ready(function(){
 
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
-        image = check_vm_select('image');
+        //image = check_vm_select('image');
         server = check_vm_select('server');
-        return image && server
+        return server
 }
 
 /*function check_vm_name(obj){
@@ -253,7 +253,6 @@ function post_vminfo(sliceid){
     var s_ram = rams[$("#ram_slider").slider( "option", "value" ) - 1];
 
     var image_uuid = $(".clearfix.active").children(".pull-right").text();
-
     /*var enable_dhcp_checked;
 	if($('.switch_btn.dhcp.vm').hasClass("checked")){
 		enable_dhcp_checked = 1;
@@ -271,7 +270,7 @@ function post_vminfo(sliceid){
 				cpu: s_cpu,
 				ram: s_ram,
 				hdd: 10,
-                image: $("#id_image").val(),//image_uuid, //
+                image: image_uuid,
                 server: $("#id_server").val(),
                 enable_dhcp: 1
         },

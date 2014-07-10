@@ -24,7 +24,7 @@ from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from resources.ovs_api import slice_delete_port_device
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from plugins.vt.models import VirtualMachine
+from plugins.vt.models import VirtualMachine, Flavor
 from plugins.common import glance
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
@@ -372,6 +372,7 @@ def detail(request, slice_id, div_name=None):
     else:
         context['ct_sys_names'] = ct_sys_names
     context['vms'] = show_vms
+    context['flavors'] = Flavor.objects.all()
     context['flowvisor'] = slice_obj.get_virttool()
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = 0
