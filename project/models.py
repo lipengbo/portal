@@ -80,13 +80,13 @@ class Island(models.Model):
         else:
             return None
 
-    @staticmethod
-    def admin_options():
-        options = {
-            'exclude_fields': ('name', 'vpn_ip'),
-            'form_exclude_fields': ('vpn_ip',),
-        }
-        return options
+    #@staticmethod
+    #def admin_options():
+    #    options = {
+    #        'exclude_fields': ('name', 'vpn_ip'),
+    #       'form_exclude_fields': ('vpn_ip',),
+    #   }
+    #    return options
 
     def __unicode__(self):
         return self.name
