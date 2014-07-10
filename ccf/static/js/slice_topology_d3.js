@@ -540,7 +540,7 @@ var force = d3.layout.force()
             }
             return distance;
         })
-    .charge(-100)
+    .charge(-500)
     .on('tick', tick)
 
 // line displayed when dragging new nodes
