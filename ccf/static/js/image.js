@@ -63,7 +63,7 @@ $(document).ready(function(){
         $('#alert_info').text('uploading...');
         $('#alert_modal').modal();
     });
-    var image_type = $('#image_type').attr('type');
+    /*var image_type = $('#image_type').attr('type');
     if(image_type != 0){
         var type;
         if(image_type == 1){
@@ -75,7 +75,7 @@ $(document).ready(function(){
         $('.tab_'+type).addClass('active');
         $('.action_box_tab_block').removeAttr('style');
         $('.action_box_tab_block.'+type).attr('style', 'display: block;');
-    }
+    }*/
 
 });
 
@@ -92,7 +92,15 @@ function delete_image(uuid, type){
                 },
                 dataType: 'json',
                 success: function(data){
-                    location.href='/plugins/images/list/' + type +"/";
+                    
+                    if($('.endless_page_current')[0]){
+                        c_p = $('.endless_page_current')[0].innerHTML;
+                        url = document.location + "?page=" + c_p + "#topsection";
+                        update_list(url);
+                    }else{
+                        url = document.location + "?";
+                        update_list(url);
+                    }
                     
                 }
         });

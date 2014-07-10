@@ -43,9 +43,9 @@
 
 <div class="action_box clearfix">
     <ul class="action_box_tab clearfix list-unstyled">
-        <li class="tab_sys active" type="sys"><a>系统</a></li>
-        <li class="tab_app" type="app"><a>应用</a></li>
-        <li class="tab_pri" type="pri"><a>自有</a></li>
+        <li class="image_index tab_sys {%if div_name == "list_sys" %}active{%endif%}" type="sys"><a>系统</a></li>
+        <li class="image_index tab_app {%if div_name == "list_app" %}active{%endif%}" type="app"><a>应用</a></li>
+        <li class="image_index tab_pri {%if div_name == "list_pri" %}active{%endif%}" type="pri"><a>自有</a></li>
     </ul>
     {%if extent_html == "admin_base.html"%}
     <div class="pull-right">
@@ -55,14 +55,20 @@
 </div>
 
     <div class="action_box_tab_blocks">
-    <div class="action_box_tab_block sys" style="display: block;">
+    <div class="action_box_tab_block sys" {%if div_name == "list_sys" %}style="display:block;"{%endif%}>
+        <div id="list_sys">
         {% include "sys_list.html" %}
+        </div>
     </div>
-    <div class="action_box_tab_block app" >
+    <div class="action_box_tab_block app" {%if div_name == "list_app" %}style="display:block;"{%endif%}>
+        <div id="list_app">
         {% include "app_list.html" %}
+        </div>
     </div>
-    <div class="action_box_tab_block pri">
+    <div class="action_box_tab_block pri" {%if div_name == "list_pri" %}style="display:block;"{%endif%}>
+        <div id="list_pri">
         {% include "pri_list.html" %}
+        </div>
     </div>
 </div>
 
@@ -110,4 +116,5 @@
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/block_tab.js"></script>
 <script src="{{ STATIC_URL}}js/image.js"></script>
+<script src="{{ STATIC_URL}}js/list_pagination_image.js"></script>
 {% endblock %}
