@@ -249,8 +249,9 @@ def vnc(request, vmid, island_id):
     print "-----------vnc_port-----------", vnc_port
     private_msg = '%s_%s_%s' % (host_ip, vnc_port, time.time())
     image = glance_client_api.image_get(generate_glance_url(), vm.image)
-    username = image['properties']['image_username']
-    password = image['properties']['image_passwd']
+    username = image.properties['image_username']
+    password = image.properties['image_passwd']
+    print '-----------vnc:', username, ":", password
     vm_msg = '%s_%s_%s_%s' % (vm.name, vm.ip, username, password)
     mycrypt_tool = mycrypt()
     token = vm_msg + "_" + mycrypt_tool.encrypt(private_msg)
@@ -397,3 +398,18 @@ def can_create_vm(request, sliceid):
     else:
         return HttpResponse(json.dumps({'result': '1'}))
 
+
+def edit_vm(request):
+    try:
+        vm_id = request.POST.get('vm_id')
+        cpu = request.POST.get('cpu')
+        mem = request.POST.get('mem')
+        vm = get_object_or_404(VirtualMachine, id=vm_id)
+        result = api.reset_domain(vm, mem_size=int(mem), vcpu=int(cpu))
+        if result:
+            return HttpResponse(json.dumps({'result': '0'}))
+        else:
+            raise Exception()
+    except:
+        traceback.print_exc()
+        return HttpResponse(json.dumps({'result': '-1'}))

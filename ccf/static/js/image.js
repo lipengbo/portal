@@ -39,7 +39,7 @@ $(document).ready(function(){
     });
     
     $('#create_cancel_btn').click(function(){
-        window.location.href = '/plugins/images/list/';
+        window.location.href = '/plugins/images/list/0/';
     });
 
     $('#create_submit_btn').click(function(){
@@ -63,10 +63,24 @@ $(document).ready(function(){
         $('#alert_info').text('uploading...');
         $('#alert_modal').modal();
     });
+    var image_type = $('#image_type').attr('type');
+    if(image_type != 0){
+        var type;
+        if(image_type == 1){
+            type = 'app';
+        }else if(image_type == 2){
+            type = 'pri';
+        }
+        $('.action_box_tab').children('li').removeClass('active');
+        $('.tab_'+type).addClass('active');
+        $('.action_box_tab_block').removeAttr('style');
+        $('.action_box_tab_block.'+type).attr('style', 'display: block;');
+    }
+
 });
 
-
-function delete_image(uuid){
+function delete_image(uuid, type){
+    
      $('#alertModal').modal();
      $('.delete-confirm').unbind('click');
      $('.delete-confirm').click(function(){
@@ -78,7 +92,8 @@ function delete_image(uuid){
                 },
                 dataType: 'json',
                 success: function(data){
-                    window.location.href='/plugins/images/list/';
+                    location.href='/plugins/images/list/' + type +"/";
+                    
                 }
         });
     });
@@ -96,3 +111,4 @@ function check(class_var, obj_var){
         return true;
     }
 }
+

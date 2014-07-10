@@ -33,7 +33,7 @@ def create(request):
 
 
 
-def list(request):
+def list(request, image_type):
     sys_images, app_images, pri_images = glance_client_api\
             .image_list_detailed_on_type(request.user.username, config.generate_glance_url())
     user = request.user
@@ -46,6 +46,7 @@ def list(request):
     context['app_images'] = app_images
     context['pri_images'] = pri_images
     context['owner'] = user.username
+    context['type'] = image_type
     return render(request, 'image_list.html', context)
 
 def update(request):

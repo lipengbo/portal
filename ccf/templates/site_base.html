@@ -68,10 +68,10 @@
                                                         基础设施
                                                     </a>
                                              </li>
-                                             <li><a href="{% url "list_images" %}">镜像备份</a></li>
+                                             <li><a href="{% url "list_images" 0%}">镜像备份</a></li>
                                              <li class="{% if  request.current_app == 'adminlog' or request.current_app == 'notifications' %}active{% endif %}{% if '/nexus/auth/user/' in request.path  %}{% if request.current_app == 'nexus' %}active{% endif %} user_menu{% endif %}"><a href="{% url "nexus_list" "auth" "user" %}">用户管理</a></li>
                                             {% else %}
-                                                <li><a href="{% url "list_images" %}">镜像备份</a></li>
+                                                <li><a href="{% url "list_images" 0 %}">镜像备份</a></li>
                                                 <li class="news_menu {% if request.current_app == 'notifications' %}active{% endif %}"><a href="{% url "notifications:all" %}">消息{% if unread_count > 0%} <span class="label label-success">{{ unread_count }}</span>{% endif %}</a></li>
                                                 <li class="news_menu {% if request.current_app == 'adminlog' %}active{% endif %}"><a href="{% url "adminlog_index" %}">日志</a></li>
                                             {% endif %}

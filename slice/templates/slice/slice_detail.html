@@ -87,7 +87,7 @@
                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                         </a>
                         {%else%}
-                        <a href="javascript:;" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                         {%endif%}
@@ -97,7 +97,7 @@
                             <img src="{{ STATIC_URL}}img/btn_link.png" title="虚网通信配置" />
                         </a>
                         {%else%}
-                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                         {%endif%}
@@ -112,7 +112,7 @@
                         <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
-                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                     {%endif%}
@@ -148,10 +148,10 @@
         </div>
         
         <div class="user_manage_tab page_tab"> 
-            <a class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}" href="javascript:;">
+            <a class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}" href="javascript:void(0);">
                 <span>服务配置</span>
             </a>
-            <a class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}" href="javascript:;">
+            <a class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}" href="javascript:void(0);">
                  <span>虚拟机资源</span>
             </a>
             <div class="clear"></div>
@@ -612,17 +612,17 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">内存</label>
                     <div class="col-md-10">
-                       <div class="slider_td clearfix">
-                             <div id="slider" class="ui-slider"></div>
-                             <span class="value_s">128 MB</span>
-                             <span class="value_e">8 GB</span>
-                       </div>
+                        <div class="slider_td clearfix">
+                    	    <div id="ram_slider" class="ui-slider"></div>
+                    	    <span class="value_s"></span>
+                    	    <span class="value_e"></span>
+                 	    </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">确定</button>
+              <button class="btn btn_info edit-vm-submit">确定</button>
             </div>
         </div>
     </div>

@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load endless %}
-{% paginate 4 vms %}
+{% paginate 2 vms %}
 <h4 class="block_title">
     <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】
     <div class="pull-right">
@@ -28,7 +28,7 @@
           <ul id="" class="dropdown-menu oper_menu" role="menu">
               <li><a href="javascript:snapshot_creation_show();" data-toggle="" data-target=""><i class="icon-camera"></i>创建备份</a></li>
               <li><a href="javascript:void(0);" id="create_image_from_vm" data-toggle="" data-target=""><i class="glyphicon glyphicon-record"></i>创建镜像</a></li>              
-              <li><a href="javascript:;" data-toggle="modal" data-target="#para_pz"><i class="icon-cogs"></i>参数配置</a></li>
+              <li><a href="javascript:void(0);" id="edit_vm" data-toggle="" data-target=""><i class="icon-cogs"></i>参数配置</a></li>
            </ul>
         </span>
       </th>

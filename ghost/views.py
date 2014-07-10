@@ -90,7 +90,7 @@ def create_image(request):
                       'owner': request.user.username, \
                       'properties':{'description': desc, 'image_type': 1, 'image_attr': 3,\
                                     'image_username': username, 'image_passwd': passwd}}
-        url = config.glance_url()
+        url = config.generate_glance_url()
 
         if int(flag) == 0:
             snapshot = Snapshot.objects.get(uuid=_uuid)

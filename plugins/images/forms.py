@@ -61,7 +61,7 @@ class CreateImageForm(forms.Form):
     image_type = forms.ChoiceField(widget=forms.RadioSelect, choices=IMAGE_TYPE_CHOIES, \
                                    required=False)
     image_attr = forms.ChoiceField(widget=forms.Select, \
-                                   choices=((0, 'sys'),(1, 'app'), (2, 'custom')),\
+                                   choices=((1, 'sys'),(2, 'app'), (3, 'custom')),\
                                    required=False)
 
     def __init__(self, *args, **kwargs):
