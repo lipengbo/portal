@@ -12,16 +12,19 @@ $(function(){
         var tableId = $(this).parent("tr").parent("tbody").parent(".row_chose").attr("id");      
         var $tableId = $("#" + tableId);   
         var activeLength = $tableId.children("tbody").children("tr.active").length;
- 
-     
+        
+        if($(event.target).is("img")) {
+            $(this).parent("tr").siblings().removeClass("active");
+            $(this).parent("tr").addClass("active");
+        } else {
             if($(this).parent("tr").hasClass("active")) {
                 $(this).parent("tr").removeClass("active");
             } else {
                 $(this).parent("tr").siblings().removeClass("active");
                 $(this).parent("tr").addClass("active");
             }
-          
-         
+        }
+             
         play(tableId);     
     });
     
