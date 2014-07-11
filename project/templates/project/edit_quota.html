@@ -132,7 +132,15 @@ function check_project_quota(name,flag){
             min=$("#band_value").text();
             max=$("#max_band_value").text();
         }
-        if(!reg.test(quota) || quota > max || quota < min){
+        
+        if(!reg.test(quota)){
+            showInfo(info," * ("+min+"~"+max+")","red");
+            return false;
+        }
+        quota = parseInt(quota);
+        min = parseInt(min);
+        max = parseInt(max);
+        if(quota > max || quota < min){
             showInfo(info," * ("+min+"~"+max+")","red");
             return false;
         }
