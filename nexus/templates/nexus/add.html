@@ -25,7 +25,7 @@
     <form class="col-md-6" method="post" action="">
         {% csrf_token %}
         {{ formset|crispy }}
-        <div>
+        <div style="display: none">
         优先级：
         <select name="priority">
           {%for i in prioritys %}

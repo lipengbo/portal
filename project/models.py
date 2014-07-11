@@ -20,6 +20,7 @@ from guardian.shortcuts import assign_perm, remove_perm, get_perms
 
 from invite.models import Invitation, Application
 from notifications import notify
+from etc.config import project_quotas
 
 
 class Priority(models.Model):
@@ -125,6 +126,22 @@ class Project(models.Model):
     objects = ProjectManager()
     admin_objects = models.Manager()
 
+    def get_project_slice_num(self):
+        created_slice_count = self.slice_set.filter(type=0).count()
+        return created_slice_count
+
+    def get_project_member_num(self):
+        created_member_count = self.memberships.all().count()
+        return created_member_count
+
+    def get_project_vm_num(self):
+        cur_slices = self.slice_set.filter(type=0)
+        cur_vm_count = 0
+        for cur_slice in cur_slices:
+            vm_count = cur_slice.virtualmachine_set.filter(type=1).count()
+            cur_vm_count = cur_vm_count + vm_count
+        return cur_vm_count
+
     def check_project_slice_quota(self):
         cur_quotas = self.get_quota()
         slice_quota = cur_quotas["slice"]
@@ -171,8 +188,34 @@ class Project(models.Model):
         except ProjectQuota.DoesNotExist:
             return setted_quota
 
+    def get_max_quota(self):
+        setted_quota = {"member": project_quotas["member"], "slice": project_quotas["slice"],
+                        "vm": project_quotas["vm"], "band": project_quotas["band"]}
+        try:
+            cur_quota = self.projectquota
+            setted_quota["member"] = cur_quota.max_member
+            setted_quota["slice"] = cur_quota.max_slice
+            setted_quota["vm"] = cur_quota.max_vm
+            setted_quota["band"] = cur_quota.max_band
+            return setted_quota
+        except ProjectQuota.DoesNotExist:
+            return setted_quota
+
     def set_quota(self, member, slice, vm, band):
         try:
+            if int(member) < self.get_project_member_num():
+                raise Exception("成员配额设置值比已有成员数少！")
+            if int(slice) < self.get_project_slice_num():
+                raise Exception("虚网配额设置值比已有虚网数少！")
+            if int(vm) < self.get_project_vm_num():
+                raise Exception("虚拟机配额设置值比已有虚拟机数少！")
+            max_quota = self.get_max_quota()
+            if int(member) > max_quota["member"]:
+                raise Exception("成员配额设置值大于最大配额！")
+            if int(slice) > max_quota["slice"]:
+                raise Exception("虚网配额设置值大于最大配额！")
+            if int(vm) > max_quota["vm"]:
+                raise Exception("虚拟机配额设置值大于最大配额！")
             old_quota = self.projectquota
             old_quota.member = int(member)
             old_quota.slice = int(slice)
@@ -187,6 +230,27 @@ class Project(models.Model):
                          vm=int(vm),
                          band=int(vm)).save()
             return new_quota
+        except Exception:
+            raise
+
+    def set_max_quota(self, member, slice, vm, band):
+        try:
+            old_quota = self.projectquota
+            old_quota.max_member = int(member)
+            old_quota.max_slice = int(slice)
+            old_quota.max_vm = int(vm)
+            old_quota.max_band = int(band)
+            old_quota.save()
+            return old_quota
+        except ProjectQuota.DoesNotExist:
+            new_quota = ProjectQuota(project=self,
+                         max_member=int(member),
+                         max_slice=int(slice),
+                         max_vm=int(vm),
+                         max_band=int(vm)).save()
+            return new_quota
+        except Exception:
+            raise
 
     def created_date(self):
         return self.created_time
@@ -368,6 +432,10 @@ class ProjectQuota(models.Model):
     slice = models.IntegerField(null=True, verbose_name=u"虚网个数", default=0)
     vm = models.IntegerField(null=True, verbose_name=u"虚拟机个数", default=0)
     band = models.IntegerField(null=True, verbose_name=u"带宽大小", default=0)
+    max_member = models.IntegerField(null=True, verbose_name=u"成员个数", default=project_quotas["member"])
+    max_slice = models.IntegerField(null=True, verbose_name=u"虚网个数", default=project_quotas["slice"])
+    max_vm = models.IntegerField(null=True, verbose_name=u"虚拟机个数", default=project_quotas["vm"])
+    max_band = models.IntegerField(null=True, verbose_name=u"带宽大小", default=project_quotas["band"])
 
     def __unicode__(self):
         return self.project.name
