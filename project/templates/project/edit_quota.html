@@ -26,7 +26,7 @@
   <div class="row">
       <div class="col-md-12">
         <h4 class="title_word_bg block_title">
-            <img src="{% static "img/ic_pz.png" %}" />项目配置
+            <img src="{% static "img/ic_pz.png" %}" />项目最大配额设置
         </h4>
         <table class="table_base tooltip-demo">
          <tbody>
@@ -73,7 +73,14 @@
        </tbody>
        </table>
         <div class="clear" style="display: none" >
-
+            <p id="member_num">{{max_quotas.member}}</p>
+            <p id="slice_num">{{max_quotas.slice}}</p>
+            <p id="vm_num">{{max_quotas.vm}}</p>
+            <p id="band_value">{{max_quotas.band}}</p>
+            <p id="max_member_num">{{max_quotas_admin.member}}</p>
+            <p id="max_slice_num">{{max_quotas_admin.slice}}</p>
+            <p id="max_vm_num">{{max_quotas_admin.vm}}</p>
+            <p id="max_band_value">{{max_quotas_admin.band}}</p>
         </div>
         <div class="form-actions">
                 <div class="row buttons_margin">
@@ -113,17 +120,17 @@ function check_project_quota(name,flag){
     var reg = /^[0-9]*$/;
     if(quota.length > 0){
         if(name == "new_slice"){
-            min=0
-            max=200
+            min=$("#slice_num").text();
+            max=$("#max_slice_num").text();
         }else if(name == "new_member"){
-            min=0
-            max=2000
+            min=$("#member_num").text();
+            max=$("#max_member_num").text();
         }else if(name == "new_vm"){
-            min=0
-            max=5120
+            min=$("#vm_num").text();
+            max=$("#max_vm_num").text();
         }else{
-            min=0
-            max=20000
+            min=$("#band_value").text();
+            max=$("#max_band_value").text();
         }
         if(!reg.test(quota) || quota > max || quota < min){
             showInfo(info," * ("+min+"~"+max+")","red");

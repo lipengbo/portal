@@ -292,6 +292,7 @@ def apply(request):
     return render(request, 'project/apply.html', context)
 
 @login_required
+@transaction.commit_on_success
 #@permission_required('project.add_project', login_url='/forbidden/')
 def create_or_edit(request, id=None):
     user = request.user
@@ -303,7 +304,7 @@ def create_or_edit(request, id=None):
     max_quota["slice"] = project_quotas["slice"]
     max_quota["vm"] = project_quotas["vm"]
     max_quota["band"] = project_quotas["band"]
-    cur_quota = {"member": 0, "slice": 0, "vm": 0, "band": 0}
+    cur_quota = {"member": 1, "slice": 0, "vm": 0, "band": 0}
     if id:
         instance = get_object_or_404(Project, id=id)
         island_ids = instance.slice_set.all().values_list('sliceisland__island__id', flat=True)
@@ -311,19 +312,8 @@ def create_or_edit(request, id=None):
             return redirect('forbidden')
         context['slice_islands'] = set(list(island_ids))
         try:
-            setted_quota = instance.projectquota
-            if setted_quota.member > project_quotas["member"]:
-                max_quota["member"] = setted_quota.member
-            cur_quota["member"] = setted_quota.member
-            if setted_quota.slice > project_quotas["slice"]:
-                max_quota["slice"] = setted_quota.slice
-            cur_quota["slice"] = setted_quota.slice
-            if setted_quota.vm > project_quotas["vm"]:
-                max_quota["vm"] = setted_quota.vm
-            cur_quota["vm"] = setted_quota.vm
-            if setted_quota.band > project_quotas["band"]:
-                max_quota["band"] = setted_quota.band
-            cur_quota["band"] = setted_quota.band
+            max_quota = instance.get_max_quota
+            cur_quota = instance.get_quota
         except:
             pass
     else:
@@ -340,22 +330,25 @@ def create_or_edit(request, id=None):
     else:
         form = ProjectForm(request.POST, instance=instance)
         if form.is_valid():
-            project = form.save(commit=False)
-            if not id:
-                project.owner = user
-                if user.quotas.project < project_count:
-                    messages.add_message(request, messages.INFO, "项目个数已经超过配额")
-                    return redirect('quota_admin_apply')
-            project.save()
-            form.save_m2m()
             try:
+                project = form.save(commit=False)
                 member_num = request.POST.get("new_member")
                 slice_num = request.POST.get("new_slice")
                 vm_num = request.POST.get("new_vm")
                 band_value = request.POST.get("new_band")
+                if not id:
+                    project.owner = user
+                    if user.quotas.project < project_count:
+                        messages.add_message(request, messages.INFO, "项目个数已经超过配额")
+                        return redirect('quota_admin_apply')
+                    if int(member_num) < 1:
+                        raise Exception("成员配额设置值比已有成员数少！")
+                project.save()
+                form.save_m2m()
                 project.set_quota(member_num, slice_num, vm_num, band_value)
-            except:
-                messages.add_message(request, messages.INFO, "项目配额设置失败")
+            except Exception, ex:
+                messages.add_message(request, messages.INFO, ex)
+                transaction.rollback()
             else:
                 return redirect('project_detail', id=project.id)
     context['form'] = form
@@ -368,17 +361,24 @@ def create_or_edit(request, id=None):
 def edit_admin(request, id):
     instance = get_object_or_404(Project, id=id)
     setted_quota = instance.get_quota()
+    setted_max_quota = instance.get_max_quota()
     context = {}
     context['project_obj'] = instance
-    context['cur_quota'] = setted_quota
-    context['max_quota'] = project_quotas_admin
+    max_quota = {}
+    max_quota["member"] = setted_max_quota["member"]
+    max_quota["slice"] = setted_max_quota["slice"]
+    max_quota["vm"] = setted_max_quota["vm"]
+    max_quota["band"] = setted_max_quota["band"]
+    context['cur_quota'] = max_quota
+    context['max_quotas_admin'] = project_quotas_admin
+    context['max_quotas'] = project_quotas
     if request.method == 'POST':
         try:
             member_num = request.POST.get("new_member")
             slice_num = request.POST.get("new_slice")
             vm_num = request.POST.get("new_vm")
             band_value = request.POST.get("new_band")
-            instance.set_quota(member_num, slice_num, vm_num, band_value)
+            instance.set_max_quota(member_num, slice_num, vm_num, band_value)
         except:
             messages.add_message(request, messages.INFO, "项目配额设置失败")
         else:
