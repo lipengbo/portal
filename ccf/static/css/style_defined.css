@@ -7104,7 +7104,7 @@ fieldset legend {
 }
 /* flatui */
 .ui-slider {
-  width: 440px;
+  width: 420px;
   background: #dfdfdf;
   border-radius: 32px;
   height: 12px;
@@ -7129,7 +7129,7 @@ fieldset legend {
 .slider_td .value_e {
   position: absolute;
   top: 3px;
-  left: 418px;
+  left: 396px;
   display: block;
   width: 60px;
   text-align: center;
@@ -7862,9 +7862,9 @@ ul.errorlist {
   list-style: none;
   padding-left: 0;
 }
-.radio_defined {
-  margin-left: 56px;
-  margin-right: 20px;
+.radio_defined input[type="radio"] {
+  margin-left: -5px;
+  margin-right: 5px;
 }
 .pot_state span {
   width: 10px;
@@ -8052,4 +8052,14 @@ ul.errorlist {
 }
 .pagination > .active > a {
   background-color: #2291fe;
+}
+#list_sys,
+#list_app,
+#list_pri {
+  height: 213px;
+}
+#list_sys .block_chose,
+#list_app .block_chose,
+#list_pri .block_chose {
+  height: 135px;
 }
