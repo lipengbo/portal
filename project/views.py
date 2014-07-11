@@ -378,9 +378,9 @@ def edit_admin(request, id):
             slice_num = request.POST.get("new_slice")
             vm_num = request.POST.get("new_vm")
             band_value = request.POST.get("new_band")
-            instance.set_max_quota(member_num, slice_num, vm_num, band_value)
-        except:
-            messages.add_message(request, messages.INFO, "项目配额设置失败")
+            instance.set_max_quota(int(member_num), int(slice_num), int(vm_num), int(band_value))
+        except Exception, ex:
+            messages.add_message(request, messages.INFO, ex)
         else:
             return redirect('project_detail', id=instance.id)
     return render(request, 'project/edit_quota.html', context)
