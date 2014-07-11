@@ -61,12 +61,19 @@ var STATIC_URL = $("#STATIC_URL").text();
 
 function snapshot_creation_show(){
     var vm_id = $('.tr.active').find('.vm').attr('vm_id');
-    var host_ip = $('#vm_host_ip').attr('host_ip'); 
+    var host_ip = $('#vm_host_ip').attr('host_ip');
     if($('#'+vm_id+'_snapshot').attr('style') == 'cursor:not-allowed'){
         return;
     }
-    $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
-    $('#snapshot_creation').modal('show');
+
+    if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
+            
+    }else{
+        $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
+        $('#snapshot_creation').modal('show');
+    }
+    
+   
 }
 
 function create_snapshot(vm_id, host_ip){

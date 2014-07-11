@@ -8053,6 +8053,13 @@ ul.errorlist {
 .pagination > .active > a {
   background-color: #2291fe;
 }
-#list_sys .block_chose {
+#list_sys,
+#list_app,
+#list_pri {
+  height: 213px;
+}
+#list_sys .block_chose,
+#list_app .block_chose,
+#list_pri .block_chose {
   height: 135px;
 }

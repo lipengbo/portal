@@ -12,6 +12,9 @@
          {%endif%}                              
     </div>
 </h4>
+<div class="alert alert-info">
+    <strong>提示：</strong>使用更多操作时，请用鼠标点击选中下面某个具体的虚拟机
+</div>
 <table class="table_defined tooltip-demo row_chose"  id="vm_table">
   <thead>
     <tr>
@@ -23,12 +26,12 @@
       <th width="8%">状态</th>
       <th width="15%" class="t_dropdown">
         <span class="dropdown"> 
-          操作
+          更多操作
           <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
           <ul id="" class="dropdown-menu oper_menu" role="menu">
-              <li><a href="javascript:snapshot_creation_show();" data-toggle="" data-target=""><i class="icon-camera"></i>创建备份</a></li>
-              <li><a href="javascript:void(0);" id="create_image_from_vm" data-toggle="" data-target=""><i class="glyphicon glyphicon-record"></i>创建镜像</a></li>              
-              <li><a href="javascript:void(0);" id="edit_vm" data-toggle="" data-target=""><i class="icon-cogs"></i>参数配置</a></li>
+              <li><a href="javascript:snapshot_creation_show();" data-toggle="" data-target="" class="disabled"><i class="icon-camera"></i>创建备份</a></li>
+              <li><a href="javascript:void(0);" id="create_image_from_vm" data-toggle="" data-target="" class="disabled"><i class="glyphicon glyphicon-record"></i>创建镜像</a></li>              
+              <li><a href="javascript:void(0);" id="edit_vm" data-toggle="" data-target="" class="disabled"><i class="icon-cogs"></i>参数配置</a></li>
            </ul>
         </span>
       </th>
