@@ -85,7 +85,7 @@ $(document).ready(function() {
             $('.switch-table').attr('style', '');
         }
         //$('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
-        $('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
+        //$('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
         
         selected_ports = {};
         selected_dpids = {};
@@ -161,6 +161,10 @@ $(document).ready(function() {
        		$(".nav-pills .jump_step").removeClass("visit");
        }
        $(".nav-pills .jump_step").eq(nowIndex).addClass("visit");
+       if(nowIndex == 1){
+            var island_id = $('select[name="island_id"]').val();
+           $('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
+       }
     });
     $(".prev_btn").click(function(){
        $("html, body").scrollTop(0);
