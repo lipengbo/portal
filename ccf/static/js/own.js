@@ -161,6 +161,10 @@ $(document).ready(function() {
        		$(".nav-pills .jump_step").removeClass("visit");
        }
        $(".nav-pills .jump_step").eq(nowIndex).addClass("visit");
+       if(nowIndex == 1){
+            var island_id = $('select[name="island_id"]').val();
+           $('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
+       }
     });
     $(".prev_btn").click(function(){
        $("html, body").scrollTop(0);
