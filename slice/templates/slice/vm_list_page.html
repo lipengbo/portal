@@ -1,6 +1,6 @@
 {% load staticfiles %}
 {% load endless %}
-{% paginate 2 vms %}
+{% paginate 4 vms %}
 <h4 class="block_title">
     <img src="{{ STATIC_URL}}img/ic_lb.png" />虚拟机列表<span>【可用IP：{%if slice_obj.vm_num == 0 %}无{%elif slice_obj.vm_num == 1 %}{{vm_start_ip}}{%else%}{{ vm_start_ip }}-{{ vm_end_ip }}{%endif%}】
     <div class="pull-right">
@@ -12,6 +12,9 @@
          {%endif%}                              
     </div>
 </h4>
+<div class="alert alert-info">
+    <strong>提示：</strong>使用更多操作时，请用鼠标点击选中下面某个具体的虚拟机
+</div>
 <table class="table_defined tooltip-demo row_chose"  id="vm_table">
   <thead>
     <tr>
@@ -23,12 +26,12 @@
       <th width="8%">状态</th>
       <th width="15%" class="t_dropdown">
         <span class="dropdown"> 
-          操作
+          更多操作
           <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
           <ul id="" class="dropdown-menu oper_menu" role="menu">
-              <li><a href="javascript:snapshot_creation_show();" data-toggle="" data-target=""><i class="icon-camera"></i>创建备份</a></li>
-              <li><a href="javascript:void(0);" id="create_image_from_vm" data-toggle="" data-target=""><i class="glyphicon glyphicon-record"></i>创建镜像</a></li>              
-              <li><a href="javascript:void(0);" id="edit_vm" data-toggle="" data-target=""><i class="icon-cogs"></i>参数配置</a></li>
+              <li><a href="javascript:snapshot_creation_show();" data-toggle="" data-target="" class="disabled"><i class="icon-camera"></i>创建备份</a></li>
+              <li><a href="javascript:void(0);" id="create_image_from_vm" data-toggle="" data-target="" class="disabled"><i class="glyphicon glyphicon-record"></i>创建镜像</a></li>              
+              <li><a href="javascript:void(0);" id="edit_vm" data-toggle="" data-target="" class="disabled"><i class="icon-cogs"></i>参数配置</a></li>
            </ul>
         </span>
       </th>
@@ -63,7 +66,7 @@
                 <i class="icon-warning-sign" id="icon_state{{vm.id}}" title="资源不足"></i>
             {% elif vm.state == 1 %}
                 <i class="icon-ok-sign icon_state check_start_vm" id="icon_state{{vm.id}}"></i>
-            {%elif vm.state == 5%}
+            {%elif vm.state == 5 or vm.state == 0%}
                 <i class="icon-minus-sign icon_state" id="icon_state{{vm.id}}"></i>
             {%elif vm.state == 3%}
                 <i class="icon-pause check_vm" id="icon_state{{vm.id}}"></i>
@@ -83,7 +86,7 @@
                         <a href="javascript:void(0);" id="{{vm.id}}_qt" onclick="start_stop_vm({{vm.id}}, {{vm.type_id}});" style="cursor: pointer;">
                         {%if vm.state == 1 %}
                             <img src="{{ STATIC_URL}}img/ic-tz.png" title="停止" />
-                        {%elif vm.state == 5 %}
+                        {%elif vm.state == 5 or vm.state == 0 %}
                             <img src="{{ STATIC_URL}}img/ic-ks.png" title="启动" />
                         {%elif vm.state == 3%}
                             <img src="{{ STATIC_URL}}img/ic-tz-un.png" title="停止" />
@@ -192,10 +195,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                   <label class="radio-inline radio_defined">
+                   <label class="radio-inline radio_defined col-md-2 col-md-offset-3">
                       <input type="radio" name="radioOptions" id="image_public" value="1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="radioOptions" id="image_private" value="0"> 私有
                     </label>
                 </div>

@@ -19,6 +19,7 @@
 {% block extra_breadcrumb %}
 <form class="navbar-form navbar-right search_defined">
     <div class="form-group">
+      <!--input id="q_type" style="display:none"></input-->
       <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
      <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
     </div>
@@ -94,10 +95,10 @@
                 </div>
                 {%if extent_html == "site_base.html"%}
                 <div class="form-group is_public">
-                   <label class="radio-inline radio_defined">
+                   <label class="radio-inline radio_defined col-md-2 col-md-offset-3">
                       <input type="radio" name="inlineRadioOptions" id="image_public" value="option1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="image_private" value="option2"> 私有
                     </label>
                 </div>

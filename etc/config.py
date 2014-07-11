@@ -7,7 +7,6 @@
 #[plugin-vt]
 glance_host = '192.168.5.111'
 glance_port = 9292
-#sFlow_service = 'http://192.168.5.111:8008/'
 
 #[agent-service]
 compute_service_port = 8886
@@ -33,9 +32,9 @@ gw_controller = False
 #slice的过期时间，以天为单位（正整数），若输入格式错误，默认为30天
 slice_expiration_days = 3650
 #单元测试的时候使用，当系统发布的时候该值必须为False
-function_test = True
+function_test = False
 #配置系统是否使用网络虚拟化工具进行虚网划分，测试使用，系统发布时该值必须为False
-virttool_disable = True
+virttool_disable = False
 #直接调度底层资源判断，发布时设置为True
 use_vt_manager_to_schedul = True
 #单台机器最多允许创建的虚拟机的数量

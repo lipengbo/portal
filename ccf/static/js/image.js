@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    $('#edit_image').click(function(){
+    /*$('#edit_image').click(function(){
         $('#images_bj').modal();
-    });
+    });*/
 
     $('.submit-edit').click(function(){
         var name = $('#image_name').val();
@@ -28,7 +28,7 @@ $(document).ready(function(){
 		    success:function(data){
                 $('#images_bj').modal('hide');
                 if(data.result == 0){
-                    window.location.href = '/plugins/images/list/';
+                    window.location.href = '/plugins/images/list/2/';
                 }
             }
         });
@@ -60,24 +60,16 @@ $(document).ready(function(){
             }
         }    
         $('form').submit();
-        $('#alert_info').text('uploading...');
+        $('#alert_info').text('上传中，这个过程可能需要几分钟...');
         $('#alert_modal').modal();
     });
-    /*var image_type = $('#image_type').attr('type');
-    if(image_type != 0){
-        var type;
-        if(image_type == 1){
-            type = 'app';
-        }else if(image_type == 2){
-            type = 'pri';
-        }
-        $('.action_box_tab').children('li').removeClass('active');
-        $('.tab_'+type).addClass('active');
-        $('.action_box_tab_block').removeAttr('style');
-        $('.action_box_tab_block.'+type).attr('style', 'display: block;');
-    }*/
-
+    show_uuid($("[id='uuid']"));
+    $('.uuid').tooltip();
 });
+
+function edit_image(){
+    $('#images_bj').modal();
+}
 
 function delete_image(uuid, type){
     

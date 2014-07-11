@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    $('#edit_snapshot').click(function(){
+    /*$('#edit_snapshot').click(function(){
         $('#snapshot_bj').modal();
-    });
+    });*/
     
     $('#create_image_from_vm').click(function(){
         var vm_id = $('.tr.active').find('.vm').attr('vm_id');
@@ -22,7 +22,7 @@ $(document).ready(function(){
     $('.submit-edit').click(function(){
         var name = $('#snapshot_name').val();
         var desc = $('#snapshot_desc').val();
-        var uuid = $('.tr.active').children("td:first").text();
+        var uuid = $('.tr.active').find("a").attr('data-original-title');
         if(!(check('name', name) && check('desc', desc))){
             return;
         } 
@@ -52,18 +52,28 @@ $(document).ready(function(){
     $('.submit-create-fromvm').click(function(){
         create_image(1);
     });
+
+    show_uuid($("[id='uuid']"));
+    $('.uuid').tooltip();
 });
 
 var STATIC_URL = $("#STATIC_URL").text();
 
 function snapshot_creation_show(){
     var vm_id = $('.tr.active').find('.vm').attr('vm_id');
-    var host_ip = $('#vm_host_ip').attr('host_ip'); 
+    var host_ip = $('#vm_host_ip').attr('host_ip');
     if($('#'+vm_id+'_snapshot').attr('style') == 'cursor:not-allowed'){
         return;
     }
-    $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
-    $('#snapshot_creation').modal('show');
+
+    if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
+            
+    }else{
+        $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
+        $('#snapshot_creation').modal('show');
+    }
+    
+   
 }
 
 function create_snapshot(vm_id, host_ip){
@@ -126,7 +136,7 @@ function delete_snapshot(snapshot_uuid){
 }
 
 function delete_from_dropdown(){
-    var snapshot_uuid = $('.tr.active').children("td:first").text();
+    var snapshot_uuid = $('.tr.active').find("a").attr('data-original-title');//$('#uuid').attr('data-original-title');
     delete_snapshot(snapshot_uuid);
 }
 
@@ -169,11 +179,11 @@ function create_image(create_flag){
         var uuid;
         var is_public;
         if(create_flag==0){
-            uuid = $('.tr.active').children("td:first").text();
+            uuid = $('.tr.active').find("a").attr('data-original-title');
         }else{
-            uuid = $('#uuid').attr('data-original-title');
+            uuid = $('.tr.active').find("a").attr('data-original-title');//$('#uuid').attr('data-original-title');
         }
-
+        
         if($('#image_public').attr('checked') == 'checked'){
             is_public = true;
         }else{
@@ -206,8 +216,9 @@ function create_image(create_flag){
                     $('#alert_modal').modal();
                 }
             }
-        });    
+        }); 
 }
+
 
 function check(class_var, obj_var){
     var obj = $('.form-group.'+class_var+"");
@@ -219,5 +230,12 @@ function check(class_var, obj_var){
             obj.removeClass('has-error');
         }
         return true;
+    }
+}
+
+//缩写uuid
+function show_uuid(objs){
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = objs[i].innerHTML.split("-")[0].split(".")[0] + "...";
     }
 }

@@ -70,6 +70,8 @@ function update_list(url){
                 //alert("ok");
                 $("div#"+list_show).empty();
                 $("div#"+list_show).append(data);
+                show_uuid($("[id='uuid']"));
+                $('.uuid').tooltip();
                 /*if(is_slice_detail && list_show!="list_port") {
                      show_uuid($("[id='uuid']"));
                      update_vm_status();
@@ -122,3 +124,10 @@ $('a.endless_page_link').live("click", function(){
     update_list("http://" + window.location.host + href);
     return false;
 });
+
+//缩写uuid
+function show_uuid(objs){
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = objs[i].innerHTML.split("-")[0].split(".")[0] + "...";
+    }
+}

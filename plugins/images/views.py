@@ -8,15 +8,18 @@
 Views for managing images.
 """
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from plugins.common import glance_client_api
 from plugins.images.forms import CreateImageForm
 from django.http import HttpResponse
+from django.db.models import Q
 from etc import config
+from adminlog.models import log, SUCCESS, FAIL
 
 import json
 import traceback
 
-
+@login_required
 def create(request):
     context = {}
     context['forms'] = CreateImageForm()
@@ -26,13 +29,15 @@ def create(request):
         if createImageForm.is_valid():
             data = createImageForm.clean()
             createImageForm.handle(request, config.generate_glance_url(), data)
+            log(request.user, None, u"上传镜像", SUCCESS)
             context['success'] = 0
         else:
+            log(request.user, None, u"上传镜像", FAIL)
             context['success'] = -1
     return render(request, 'create_image.html', context)
 
 
-
+@login_required
 def list(request, image_type=None):
     print "list++++++++++++++++++++"
     sys_images, app_images, pri_images = glance_client_api\
@@ -59,6 +64,25 @@ def list(request, image_type=None):
         context['type'] = image_type
     print "________________________"
     print context['div_name'], context['type']
+    
+    if 'query' in request.GET:
+        query = request.GET.get('query')
+        if query:
+            if image_type == '0':
+                sys_images, has_more = glance_client_api\
+                        .image_list_detailed(config.generate_glance_url(), filters={'name': query})
+                context['sys_images'] = sys_images
+            elif image_type == '1':
+                app_images, has_more = glance_client_api\
+                        .image_list_detailed(config.generate_glance_url(), filters={'name': query})
+                context['app_images'] = app_images
+            else:
+                pri_images, has_more = glance_client_api\
+                        .image_list_detailed(config.generate_glance_url(), filters={'name': query})
+                context['pri_images'] = pri_images
+
+            context['query'] = query
+
     if request.is_ajax():
         if 'div_name' in request.GET:
             div_name_a = request.GET.get('div_name')
