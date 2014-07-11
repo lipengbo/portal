@@ -145,9 +145,15 @@ function restore_snapshot(vm_id, snapshot_uuid){
     $('#alertModal').find('p').text('还原将会丢失当前数据，确定要还原吗？');
     $('#alertModal').modal();
     $('.delete-confirm').click(function(){
-        var restore_img = $('#do_restore_'+snapshot_uuid).children('img');
-        restore_img.attr('src', $("#STATIC_URL").text()+'img/loader.gif');
-        $.ajax({
+        do_restore_snapshot(vm_id, snapshot_uuid);
+    });
+    
+}
+
+function do_restore_snapshot(vm_id, snapshot_uuid){
+    var STATIC_URL = $("#STATIC_URL").text();
+    $('.'+snapshot_uuid+'.pot_state').html('<img src="'+STATIC_URL+'img/loader.gif" title="还原中" />');
+    $.ajax({
                 type: 'POST',
                 url: '/ghost/restore_snapshot/',
                 data: {
@@ -157,17 +163,14 @@ function restore_snapshot(vm_id, snapshot_uuid){
                 dataType: 'json',
                 success: function(data){
                     if(data.result == 0){
-                        restore_img.attr('src', $("#STATIC_URL").text()+'img/btn_hy.png');
                         $('.'+vm_id+'.pot_state').html('');
-                        $('.'+snapshot_uuid+'.pot_state').html('<span title="使用中"></span>');
+                        $('.'+snapshot_uuid+'.pot_state').html('<i class="icon-ok-sign icon_state"></i>');
                     }else{
                         $('#alert_info').text('还原失败！');
                         $('#alert_modal').modal();
                     }
                 }
-        });
-    });
-    
+   });
 }
 
 //create_flag: 0-create from snapshot, 1-create from vm

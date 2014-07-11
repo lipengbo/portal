@@ -84,7 +84,7 @@
             <td>{{snapshot.desc}}</td>
             <td>{{snapshot.vm.name}}</td>
             <td>{{snapshot.create_time|date:"Y-m-d H:i"}}</td>
-            <td class="{{snapshot.uuid}} {{snapshot.vm.id}} pot_state">{%if snapshot.is_current%} <span title="使用中"></span>{%endif%}</td>
+            <td class="{{snapshot.uuid}} {{snapshot.vm.id}} pot_state slice_state">{%if snapshot.is_current%} <i class="icon-ok-sign icon_state"></i>{%endif%}</td>
             <td class="btn_operation">
                 {%if extent_html == "site_base.html"%}
                 <a id="do_restore_{{snapshot.uuid}}" href="javascript:restore_snapshot('{{snapshot.vm.id}}', '{{snapshot.uuid}}');"><img src="{% static "img/btn_hy.png" %}" title="还原" /></a>

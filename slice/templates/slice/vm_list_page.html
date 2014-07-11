@@ -57,7 +57,7 @@
       <td><div id="vm_host_ip" host_ip="{{vm.host_ip}}">
         {{vm.host_ip}}
         </div></td>
-        <td><div>{%if vm.current_snapshot != None%}{{vm.current_snapshot}}{%endif%}</div></td>
+        <td><div>{%if vm.current_snapshot != None%}{{vm.current_snapshot}}{%else%}无{%endif%}</div></td>
       <td class="slice_state"><div>
         {% if vm.state != "" %}
             {% if vm.state == 8 or vm.state == 12 or vm.state == 13 or vm.state == 3%}
