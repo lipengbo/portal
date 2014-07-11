@@ -87,17 +87,18 @@
                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑" />
                         </a>
                         {%else%}
-                        <a href="javascript:;" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
                         {%endif%}
                         
                         {%if slice_obj.state == 0 %}
-                        <a href="javascript:void(0);" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:pointer">
+                        <a href="javascript:void(0);" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:pointer; display: none">
                             <img src="{{ STATIC_URL}}img/btn_link.png" title="虚网通信配置" />
                         </a>
                         {%else%}
-                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+
+                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed; display: none">
                             <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                         {%endif%}
@@ -112,7 +113,7 @@
                         <a href="javascript:void(0);" class="bianji" id="slice_bj" onclick="return bj_slice({{slice_obj.id}});" style="cursor:not-allowed">
                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑" />
                         </a>
-                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed">
+                        <a href="javascript:;" class="unicom" id="unicom_bj" onclick="return bj_unicom({{slice_obj.id}});" style="cursor:not-allowed; display: none">
                             <img src="{{ STATIC_URL}}img/btn_link_gray.png" title="虚网通信配置" />
                         </a>
                     {%endif%}
@@ -148,10 +149,10 @@
         </div>
         
         <div class="user_manage_tab page_tab"> 
-            <a class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}" href="javascript:;">
+            <a class="slice_index col-md-6 fw {%if div_name == "list_fw" %}on{%endif%}" href="javascript:void(0);">
                 <span>服务配置</span>
             </a>
-            <a class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}" href="javascript:;">
+            <a class="slice_index col-md-6 xnj {%if div_name == "list_vm" %}on{%endif%}" href="javascript:void(0);">
                  <span>虚拟机资源</span>
             </a>
             <div class="clear"></div>
@@ -594,24 +595,17 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">类型</label>
                     <div class="col-md-10 create_vm_form">
-                         <div class="cpu_chose">                         
-                             <a href="javascript:void(0);" name="project" class="vm_active" value="">微型</a>                             
-                             <a href="javascript:void(0);" name="project" class="" value="">迷你型</a>                            
-                             <a href="javascript:void(0);" name="project" class="" value="">小型</a>                             
-                             <a href="javascript:void(0);" name="project" class="" value="">中型</a>
-                             <a href="javascript:void(0);" name="project" class="" value="">大型</a>   
-                             <a href="javascript:void(0);" name="project" class="" value="">超大型</a>                               
-                         </div>
+                         <div class="type_chose">
+						{%for flavor in flavors%}
+							<a href="javascript:void(0);" class="{{flavor.name}}" value={{flavor.id}}>{% trans flavor.name %}</a>
+						{%endfor%}
+			     	</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label col-md-2">CPU</label>
                     <div class="col-md-10 create_vm_form">
                          <div class="cpu_chose">                         
-                             <a href="javascript:void(0);" name="project" class="vm_active" value="">1核</a>                             
-                             <a href="javascript:void(0);" name="project" class="" value="">2核</a>                            
-                             <a href="javascript:void(0);" name="project" class="" value="">4核</a>                             
-                             <a href="javascript:void(0);" name="project" class="" value="">6核</a>                             
                          </div>
                     </div>
 
@@ -619,17 +613,17 @@
                 <div class="form-group">
                     <label class="control-label col-md-2">内存</label>
                     <div class="col-md-10">
-                       <div class="slider_td clearfix">
-                             <div id="slider" class="ui-slider"></div>
-                             <span class="value_s">128 MB</span>
-                             <span class="value_e">8 GB</span>
-                       </div>
+                        <div class="slider_td clearfix">
+                    	    <div id="ram_slider" class="ui-slider"></div>
+                    	    <span class="value_s"></span>
+                    	    <span class="value_e"></span>
+                 	    </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
               <button class="btn btn-default" data-dismiss="modal">取消</button>
-              <button class="btn btn_info submit-invite">确定</button>
+              <button class="btn btn_info edit-vm-submit">确定</button>
             </div>
         </div>
     </div>
@@ -643,6 +637,7 @@
 <script src="{{ STATIC_URL}}js/slice_verify.js"></script>
 <script src="{{ STATIC_URL}}js/jquery.ipInput.js"></script>
 <script src="{{ STATIC_URL}}js/type_chose.js"></script>
+<script src="{{ STATIC_URL}}js/vm.js"></script>
 <!--<script src="{{ STATIC_URL}}js/jquery-ui.js"></script>-->
 <script type="text/javascript">
     $(document).ready(function(){

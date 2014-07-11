@@ -43,6 +43,7 @@ def create_vm_for_controller(island_obj, slice_obj, image_name):
             vm.server = Server.objects.get(id=serverid)
         vm.type = 0
         vm.save()
+        vm.slice.flowspace_changed(None)
     except socket_error as serr:
         if ip_obj:
             IPUsage.objects.release_ip(ip_obj)
@@ -91,6 +92,7 @@ def create_vm_for_gateway(island_obj, slice_obj, server_id, image_name='gateway'
             vm.server = Server.objects.get(id=serverid)
         vm.type = 2
         vm.save()
+        vm.slice.flowspace_changed(None)
     except socket_error as serr:
         if ip_obj:
             IPUsage.objects.release_ip(ip_obj)
@@ -183,3 +185,12 @@ def slice_delete_route(slice_obj):
         raise
 
 
+def reset_domain(dom, mem_size=None, vcpu=None):
+    result = False
+    if mem_size or vcpu:
+        dom.ram = mem_size or dom.ram
+        dom.cpu = vcpu or dom.cpu
+        dom.save()
+        agent_client = AgentClient(dom.server.ip)
+        result = agent_client.reset_dom_mem_vcpu(dom.uuid, mem_size, vcpu)
+    return result

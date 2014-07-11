@@ -56,14 +56,53 @@ $(document).ready(function(){
 		}
 	});
     $("[style='display: block;']").children("div:first").children("a:first").addClass('active'); 
+
+    $('#edit_vm').click(function(){
+        var vm_id = $('.tr.active').find('.vm').attr('vm_id');
+        if($('#'+vm_id+'_qt').children('img').attr('title') == '停止' && $('#'+vm_id+'_qt').attr('style') == 'cursor: pointer;'){
+            $('#alert_info').text('虚拟机运行时无法修改性能参数，请先关闭虚拟机！');
+            $('#alert_modal').modal();
+        }else if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
+            
+        }else{
+            $('#para_pz').modal();
+        }
+
+    });
+
+    $('.edit-vm-submit').click(function(){
+        var s_cpu = $(".cpu_chose").children("a.vm_active").attr("value");
+        var s_ram = rams[$("#ram_slider").slider( "option", "value" ) - 1];
+        var vm_id = $('.tr.active').find('.vm').attr('vm_id');
+        $.ajax({
+            type: 'POST',
+            url: "/plugins/vt/edit_vm/",
+            dataType: "json",
+            data:{
+                vm_id: vm_id,
+                cpu: s_cpu,
+                mem: s_ram
+            },
+            cache: false,
+            success: function(data){
+                $('#para_pz').modal('hide');
+                if(data.result == 0){
+                    $('#alert_info').text('虚拟机性能参数设置成功！');
+                }else{
+                    $('#alert_info').text('虚拟机性能参数设置失败！');
+                }
+                $('#alert_modal').modal();
+            }
+        });
+    });
 });
 
 
 //验证vm名称是否是字母数字下划线
 function check_vminfo(){
-        image = check_vm_select('image');
+        //image = check_vm_select('image');
         server = check_vm_select('server');
-        return image && server
+        return server
 }
 
 /*function check_vm_name(obj){
@@ -253,7 +292,6 @@ function post_vminfo(sliceid){
     var s_ram = rams[$("#ram_slider").slider( "option", "value" ) - 1];
 
     var image_uuid = $(".clearfix.active").children(".pull-right").text();
-
     /*var enable_dhcp_checked;
 	if($('.switch_btn.dhcp.vm').hasClass("checked")){
 		enable_dhcp_checked = 1;
@@ -271,7 +309,7 @@ function post_vminfo(sliceid){
 				cpu: s_cpu,
 				ram: s_ram,
 				hdd: 10,
-                image: $("#id_image").val(),//image_uuid, //
+                image: image_uuid,
                 server: $("#id_server").val(),
                 enable_dhcp: 1
         },

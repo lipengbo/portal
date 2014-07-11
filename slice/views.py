@@ -24,7 +24,7 @@ from resources.models import Switch, SwitchPort, SlicePort, OwnerDevice
 from resources.ovs_api import slice_delete_port_device
 from plugins.ipam.models import IPUsage, Subnet
 from plugins.common import utils
-from plugins.vt.models import VirtualMachine
+from plugins.vt.models import VirtualMachine, Flavor
 from plugins.common import glance
 from etc.config import function_test
 from adminlog.models import log, SUCCESS, FAIL
@@ -372,6 +372,7 @@ def detail(request, slice_id, div_name=None):
     else:
         context['ct_sys_names'] = ct_sys_names
     context['vms'] = show_vms
+    context['flavors'] = Flavor.objects.all()
     context['flowvisor'] = slice_obj.get_virttool()
     context['dhcp'] = slice_obj.get_dhcp()
     context['checkband'] = 0
@@ -824,7 +825,6 @@ def edit_unicom(request, slice_id):
                 new_unicom_slices = Slice.objects.filter(id__in=new_unicom_slice_ids)
             else:
                 new_unicom_slices = []
-            print new_unicom_slices
             for new_unicom_slice in new_unicom_slices:
                 if new_unicom_slice not in unicom_slices:
                     if not slice_obj.add_unicom_slice(new_unicom_slice):
@@ -834,14 +834,11 @@ def edit_unicom(request, slice_id):
                     if not slice_obj.del_unicom_slice(unicom_slice):
                         del_errors.append(unicom_slice)
         except Exception, ex:
-            print 2
 #             import traceback
 #             traceback.print_exc()
             return HttpResponse(json.dumps({'result': 0, 'error_info': str(ex)}))
         else:
-            print 3
             if add_errors != [] or del_errors != []:
-                print 4
                 error_str = ""
                 add_error_names = []
                 if add_errors:

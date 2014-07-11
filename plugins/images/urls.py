@@ -4,6 +4,7 @@ from django.conf.urls.defaults import patterns, url
 urlpatterns = patterns('plugins.images.views',
     url(r'^create/$', "create", name='create_image'),
     url(r'^list/$', "list", name='list_images'),
+    url(r'^list/(?P<image_type>\d+)/$', "list", name='list_images_div'),
     url(r'^update/$', "update", name='update_image'),
     url(r'^delete/$', "delete", name='delete_image'),
     url(r'^upload/$', "upload", name='upload_image'),

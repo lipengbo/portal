@@ -231,8 +231,8 @@ function start_stop_slice(slice_id){
             $(".bianji").attr("style","cursor:not-allowed");
             $(".bianji").children("img").attr("src",STATIC_URL+"img/btn_bj_gray.png");
             //虚网通信编辑按钮变化
-            $(".unicom").attr("style","cursor:not-allowed");
-            $(".unicom").children("img").attr("src",STATIC_URL+"img/btn_link_gray.png");
+           // $(".unicom").attr("style","cursor:not-allowed");
+           // $(".unicom").children("img").attr("src",STATIC_URL+"img/btn_link_gray.png");
             //vm删除、port删除
             $(".shanchu").attr("style","cursor:not-allowed");
             $(".shanchu").children("img").attr("src",STATIC_URL+"img/btn_sc_gray.png");

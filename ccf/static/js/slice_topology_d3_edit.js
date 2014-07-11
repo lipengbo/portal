@@ -60,10 +60,10 @@ var icon_data = [
         limit: 1
     },
     {
-        x: -20, y: -20, icon: 'img/switch1.png', 
+        x: -17.5, y: -25, icon: 'img/switch1.png', 
         type: 'switch', name: '交换机', count: 0, 
         type_id: 3,
-        width: 40, height:40,
+        width: 35, height:50,
         allows: {'host':true, 'switch': true, 'fv': true}
     },
     {

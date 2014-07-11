@@ -7,7 +7,6 @@
 #[plugin-vt]
 glance_host = '192.168.5.111'
 glance_port = 9292
-#sFlow_service = 'http://192.168.5.111:8008/'
 
 #[agent-service]
 compute_service_port = 8886
@@ -19,9 +18,6 @@ vpn_service_port = 8890
 def generate_glance_url():
     """Generate the URL to glance."""
     return "http://%s:%d/v1" % (glance_host, glance_port)
-
-def glance_url():
-    return "http://%s:%d" % (glance_host, glance_port)
 
 #[plugin-advance]
 #高级配置项，用于配置文件锁的位置

@@ -1,8 +1,20 @@
 $(document).ready(function(){
-    $('#edit_snapshot').click(function(){
+    /*$('#edit_snapshot').click(function(){
         $('#snapshot_bj').modal();
-    });
+    });*/
     
+    $('#create_image_from_vm').click(function(){
+        var vm_id = $('.tr.active').find('.vm').attr('vm_id');
+        if($('#'+vm_id+'_qt').children('img').attr('title') == '停止' && $('#'+vm_id+'_qt').attr('style') == 'cursor: pointer;'){
+            $('#alert_info').text('虚拟机运行时无法创建镜像，请先关闭虚拟机！');
+            $('#alert_modal').modal();
+        }else if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
+            
+        }else{
+            $('#make_image').modal();
+        }
+    });
+
     $('#create_image').click(function(){
         $('#make_image').modal();
     });
@@ -10,7 +22,7 @@ $(document).ready(function(){
     $('.submit-edit').click(function(){
         var name = $('#snapshot_name').val();
         var desc = $('#snapshot_desc').val();
-        var uuid = $('.tr.active').children("td:first").text();
+        var uuid = $('.tr.active').find("a").attr('data-original-title');
         if(!(check('name', name) && check('desc', desc))){
             return;
         } 
@@ -32,52 +44,36 @@ $(document).ready(function(){
         });
     });
 
+
     $('.submit-create').click(function(){
-        var name = $('#image_name').val();
-        var desc = $('#image_desc').val();
-        var uuid = $('.tr.active').children("td:first").text();
-        var is_public;
-
-        if($('#image_public').attr('checked') == 'checked'){
-            is_public = true;
-        }else{
-            is_public = false;
-        }
-
-        if(!(check('name', name) && check('desc', desc))){
-            return;
-        }
-
-        $.ajax({
-            url : '/ghost/create_image/',
-		    type : 'POST',
-		    dataType: 'json',
-            data: {
-                name: name,
-                desc: desc,
-                is_public: is_public,
-                uuid: uuid
-            },
-		    success:function(data){
-                $('#make_image').modal('hide');
-                if(data.result == 0){
-                    window.location.href = '#';
-                }
-            }
-        });                
+        create_image(0)         
     });
+
+    $('.submit-create-fromvm').click(function(){
+        create_image(1);
+    });
+
+    show_uuid($("[id='uuid']"));
+    $('.uuid').tooltip();
 });
 
 var STATIC_URL = $("#STATIC_URL").text();
 
 function snapshot_creation_show(){
-    var vm_id = $('#uuid').attr('title');
-    alert('')
+    var vm_id = $('.tr.active').find('.vm').attr('vm_id');
+    var host_ip = $('#vm_host_ip').attr('host_ip');
     if($('#'+vm_id+'_snapshot').attr('style') == 'cursor:not-allowed'){
         return;
     }
-    $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
-    //$('#snapshot_creation').modal('show');
+
+    if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
+            
+    }else{
+        $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");
+        $('#snapshot_creation').modal('show');
+    }
+    
+   
 }
 
 function create_snapshot(vm_id, host_ip){
@@ -131,7 +127,8 @@ function delete_snapshot(snapshot_uuid){
                     if(data.result == 0){
                         window.location.href='/ghost/list_snapshot/';
                     }else{
-                        alert('删除失败')
+                        $('#alert_info').text('删除失败！');
+                        $('#alert_modal').modal();
                     }
                 }
         });
@@ -139,7 +136,7 @@ function delete_snapshot(snapshot_uuid){
 }
 
 function delete_from_dropdown(){
-    var snapshot_uuid = $('.tr.active').children("td:first").text();
+    var snapshot_uuid = $('.tr.active').find("a").attr('data-original-title');//$('#uuid').attr('data-original-title');
     delete_snapshot(snapshot_uuid);
 }
 
@@ -173,6 +170,56 @@ function restore_snapshot(vm_id, snapshot_uuid){
     
 }
 
+//create_flag: 0-create from snapshot, 1-create from vm
+function create_image(create_flag){
+        var name = $('#image_name').val();
+        var desc = $('#image_desc').val();
+        var username = $('#image_username').val();
+        var passwd = $('#image_passwd').val();
+        var uuid;
+        var is_public;
+        if(create_flag==0){
+            uuid = $('.tr.active').find("a").attr('data-original-title');
+        }else{
+            uuid = $('.tr.active').find("a").attr('data-original-title');//$('#uuid').attr('data-original-title');
+        }
+        
+        if($('#image_public').attr('checked') == 'checked'){
+            is_public = true;
+        }else{
+            is_public = false;
+        }
+
+        if(!(check('name', name) && check('desc', desc) && check('username', username) && check('passwd', passwd))){
+            return;
+        }
+
+        $.ajax({
+            url : '/ghost/create_image/',
+		    type : 'POST',
+		    dataType: 'json',
+            data: {
+                name: name,
+                desc: desc,
+                username: username,
+                passwd: passwd,
+                is_public: is_public,
+                uuid: uuid,
+                flag: create_flag
+            },
+		    success:function(data){
+                $('#make_image').modal('hide');
+                if(data.result == 0){
+                    window.location.href = '#';
+                }else{
+                    $('#alert_info').text('创建镜像失败！');
+                    $('#alert_modal').modal();
+                }
+            }
+        }); 
+}
+
+
 function check(class_var, obj_var){
     var obj = $('.form-group.'+class_var+"");
     if(obj_var == ""){
@@ -183,5 +230,12 @@ function check(class_var, obj_var){
             obj.removeClass('has-error');
         }
         return true;
+    }
+}
+
+//缩写uuid
+function show_uuid(objs){
+    for (var i=0; i<objs.length; i++){
+        objs[i].innerHTML = objs[i].innerHTML.split("-")[0].split(".")[0] + "...";
     }
 }

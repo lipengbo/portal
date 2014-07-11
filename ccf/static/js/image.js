@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    $('#edit_image').click(function(){
+    /*$('#edit_image').click(function(){
         $('#images_bj').modal();
-    });
+    });*/
 
     $('.submit-edit').click(function(){
         var name = $('#image_name').val();
@@ -28,7 +28,7 @@ $(document).ready(function(){
 		    success:function(data){
                 $('#images_bj').modal('hide');
                 if(data.result == 0){
-                    window.location.href = '/plugins/images/list/';
+                    window.location.href = '/plugins/images/list/2/';
                 }
             }
         });
@@ -39,13 +39,15 @@ $(document).ready(function(){
     });
     
     $('#create_cancel_btn').click(function(){
-        window.location.href = '/plugins/images/list/';
+        window.location.href = '/plugins/images/list/0/';
     });
 
     $('#create_submit_btn').click(function(){
         var name = $('#id_name').val();
         var desc = $('#id_description').val();
-        if(!(check('name', name) && check('desc', desc))){
+        var username = $('#id_image_username').val();
+        var passwd = $('#id_image_passwd').val();
+        if(!(check('name', name) && check('desc', desc) && check('username', username) && check('passwd', passwd))){
             return;
         } 
         if($('#local_file').attr('checked') == "checked"){
@@ -58,13 +60,19 @@ $(document).ready(function(){
             }
         }    
         $('form').submit();
-        $('#alert_info').text('uploading...');
+        $('#alert_info').text('上传中，这个过程可能需要几分钟...');
         $('#alert_modal').modal();
     });
+    show_uuid($("[id='uuid']"));
+    $('.uuid').tooltip();
 });
 
+function edit_image(){
+    $('#images_bj').modal();
+}
 
-function delete_image(uuid){
+function delete_image(uuid, type){
+    
      $('#alertModal').modal();
      $('.delete-confirm').unbind('click');
      $('.delete-confirm').click(function(){
@@ -76,7 +84,16 @@ function delete_image(uuid){
                 },
                 dataType: 'json',
                 success: function(data){
-                    window.location.href='/plugins/images/list/';
+                    
+                    if($('.endless_page_current')[0]){
+                        c_p = $('.endless_page_current')[0].innerHTML;
+                        url = document.location + "?page=" + c_p + "#topsection";
+                        update_list(url);
+                    }else{
+                        url = document.location + "?";
+                        update_list(url);
+                    }
+                    
                 }
         });
     });
@@ -94,3 +111,4 @@ function check(class_var, obj_var){
         return true;
     }
 }
+

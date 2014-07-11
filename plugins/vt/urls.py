@@ -14,4 +14,5 @@ urlpatterns = patterns('plugins.vt.views',
     url(r'^get_flavor_msg/$', "get_flavor_msg", name ='get_flavor_msg'),
     url(r'^download_keypair/$', "download_keypair", name = "download_keypair"),
     url(r'^can_create_vm/(?P<sliceid>\d+)/$', "can_create_vm", name="can_create_vm"),
+    url(r'^edit_vm/$', "edit_vm", name="edit_vm"),
 )

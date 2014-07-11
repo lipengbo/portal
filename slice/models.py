@@ -302,9 +302,12 @@ class Slice(models.Model):
                     self.save()
                     transaction.commit()
             print "2:delete route"
-#             if self.get_nw():
-#                 if self.vpn_state == 1:
-#                     slice_delete_route(self)
+            if self.get_nw():
+                if self.vpn_state == 1:
+                    slice_delete_route(self)
+                    self.vpn_state = 0
+                    self.save()
+                    transaction.commit()
             print "3:delete controller"
             delete_controller(self.get_controller(), False)
             print "4:delete slice record"
@@ -453,11 +456,9 @@ class Slice(models.Model):
                 add_unicom_slice_api(self, other_slice)
                 return True
             else:
-                print "f1"
                 return False
         except:
             transaction.rollback()
-            print "f2"
 #             import traceback
 #             traceback.print_exc()
             return False
@@ -560,3 +561,4 @@ def add_unicom_slice_api(slice_obj, unicom_slice):
 
 def del_unicom_slice_api(slice_obj, unicom_slice):
     pass
+

@@ -1,0 +1,42 @@
+{% load endless %}
+<table class="table_defined">
+            <thead>
+                <tr>
+                    <th width="15%">ID</th>
+                    <th width="20%">名称</th>
+                    <th width="20%">描述</th>
+                    <th width="15%">容量（MB）</th>
+                    <th width="20%">创建时间</th>
+                    {%if extent_html == "admin_base.html"%}
+                    <th width="15%">操作</th>
+                    {%endif%}
+                </tr>
+            </thead>
+            <tbody>
+                {% paginate 5 app_images using 'app' %}
+                {%for image in app_images%}
+                <tr>
+                    <td><a id="uuid" class="uuid" href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="{{image.id}}">{{image.id}}</td>
+                    <td>{{image.name}}</td>
+                    <td>{{image.properties.description}}</td>
+                    <td>{% widthratio image.size 1048576 1 %}</td>
+                    <td>{{image.updated_at|set_date_format|date:"Y-m-d H:i:s"}}</td>
+                    {%if extent_html == "admin_base.html"%}
+                    <td class="btn_operation">
+                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
+                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
+                        </a>
+                        <a href="javascript:delete_image('{{image.id}}', 1);" title="删除">
+                            <img src="{{ STATIC_URL}}img/btn_sc.png">
+                        </a>
+                    </td>    
+                    {%endif%}                 
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <div class="text-center">
+            <ul class="pagination">
+                {% show_pages %}
+            </ul>
+        </div>

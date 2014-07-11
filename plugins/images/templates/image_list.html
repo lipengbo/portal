@@ -19,6 +19,7 @@
 {% block extra_breadcrumb %}
 <form class="navbar-form navbar-right search_defined">
     <div class="form-group">
+      <!--input id="q_type" style="display:none"></input-->
       <input placeholder="搜索" type="text" value="{{ query }}" name="query" value="" class="form-control search-query">
      <a href="javascript:;"><i class="glyphicon glyphicon-search"></i></a>
     </div>
@@ -43,9 +44,9 @@
 
 <div class="action_box clearfix">
     <ul class="action_box_tab clearfix list-unstyled">
-        <li class="active"><a>系统</a></li>
-        <li><a>应用</a></li>
-        <li><a>自有</a></li>
+        <li class="image_index tab_sys {%if div_name == "list_sys" %}active{%endif%}" type="sys"><a>系统</a></li>
+        <li class="image_index tab_app {%if div_name == "list_app" %}active{%endif%}" type="app"><a>应用</a></li>
+        <li class="image_index tab_pri {%if div_name == "list_pri" %}active{%endif%}" type="pri"><a>自有</a></li>
     </ul>
     {%if extent_html == "admin_base.html"%}
     <div class="pull-right">
@@ -54,160 +55,20 @@
     {%endif%}
 </div>
 
-<div class="action_box_tab_blocks">
-    <div class="action_box_tab_block" style="display: block;">
-        <table class="table_defined">
-            <thead>
-                <tr>
-                    <th width="25%">ID</th>
-                    <th width="10%">名称</th>
-                    <th width="20%">描述</th>
-                    <th width="15%">容量（MB）</th>
-                    <th width="20%">创建时间</th>
-                    {%if extent_html == "admin_base.html"%}
-                    <th width="15%">操作</th>
-                    {%endif%}
-                </tr>
-            </thead>
-            <tbody>
-                {% paginate 5 sys_images %}
-                {%for image in sys_images%}
-                <tr>
-                    <td>{{image.id}}</td>
-                    <td>{{image.name}}</td>
-                    <td>{{image.properties.description}}</td>
-                    <td>{% widthratio image.size 1048576 1 %}</td>
-                    <td>{{image.updated_at|set_date_format|date:"Y-m-d H:i:s"}}</td>
-                    {%if extent_html == "admin_base.html"%}
-                    <td class="btn_operation">
-                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
-                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
-                        </a>
-                        <a href="javascript:delete_image('{{image.id}}');" title="删除">
-                            <img src="{{ STATIC_URL}}img/btn_sc.png">
-                        </a>
-                    </td>    
-                    {%endif%}              
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-        <div class="text-center">
-            <ul class="pagination">
-                {% show_pages %}
-            </ul>
+    <div class="action_box_tab_blocks">
+    <div class="action_box_tab_block sys" {%if div_name == "list_sys" %}style="display:block;"{%endif%}>
+        <div id="list_sys">
+        {% include "sys_list.html" %}
         </div>
     </div>
-    
-    <div class="action_box_tab_block">
-        <table class="table_defined">
-            <thead>
-                <tr>
-                    <th width="25%">ID</th>
-                    <th width="10%">名称</th>
-                    <th width="20%">描述</th>
-                    <th width="15%">容量（MB）</th>
-                    <th width="20%">创建时间</th>
-                    {%if extent_html == "admin_base.html"%}
-                    <th width="15%">操作</th>
-                    {%endif%}
-                </tr>
-            </thead>
-            <tbody>
-                {% paginate 5 app_images using 'app' %}
-                {%for image in app_images%}
-                <tr>
-                    <td>{{image.id}}</td>
-                    <td>{{image.name}}</td>
-                    <td>{{image.properties.description}}</td>
-                    <td>{% widthratio image.size 1048576 1 %}</td>
-                    <td>{{image.updated_at}}</td>
-                    {%if extent_html == "admin_base.html"%}
-                    <td class="btn_operation">
-                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="modal" data-target="#images_bj" style="cursor:pointer">
-                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
-                        </a>
-                        <a href="javascript:delete_image('{{image.id}}');" title="删除">
-                            <img src="{{ STATIC_URL}}img/btn_sc.png">
-                        </a>
-                    </td>    
-                    {%endif%}                 
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-        <div class="text-center">
-            <ul class="pagination">
-                {% show_pages %}
-            </ul>
+    <div class="action_box_tab_block app" {%if div_name == "list_app" %}style="display:block;"{%endif%}>
+        <div id="list_app">
+        {% include "app_list.html" %}
         </div>
     </div>
-    <div class="action_box_tab_block">
-        <table class="table_defined">
-            <thead>
-                <tr>
-                    <th width="15%">ID</th>
-                    <th width="15%">名称</th>
-                    <th width="15%">描述</th>
-                    <th width="10%">所有者</th>
-                    <th width="10%">容量（MB）</th>
-                    <th width="10%" class="t_dropdown">
-                        <span class="dropdown"> 
-                          可见范围
-                          <a id="" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
-                          <ul id="" class="dropdown-menu" role="menu">
-                              <li><a href="javascript:;">共享</a></li>
-                              <li><a href="javascript:;">私有</a></li>
-                           </ul>
-                        </span>
-                    </th>
-                    <th width="10%">创建时间</th>
-                    <th width="15%">操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% paginate 5 pri_images using 'pri' %}
-                {%for image in pri_images%}
-                <tr>
-                    <td>{{image.id}}</td>
-                    <td>{{image.name}}</td>
-                    <td>{{image.properties.description}}</td>
-                    <td>{{image.owner}}</td>
-                    <td>{% widthratio image.size 1048576 1 %}</td>
-                    <td>{%if image.is_public == 1 %}共享{%else%}私有{%endif%}</td>
-                    <td>{{image.updated_at|set_date_format|date:"Y-m-d H:i:s"}}</td>
-                    <td class="btn_operation">
-                        {%if extent_html == "site_base.html"%}
-                            {%if owner == image.owner%}
-                        <a href="javascript:void(0);" id="edit_image" uuid="{{image.id}}" class="bianji" data-toggle="" data-target="" style="cursor:pointer">
-                             <img src="{{ STATIC_URL}}img/btn_bj.png" title="编辑">
-                        </a>
-                        <a href="javascript:delete_image('{{image.id}}');" title="删除">
-                            <img src="{{ STATIC_URL}}img/btn_sc.png">
-                        </a>
-                            {%else%}
-                         <a href="javascript:void(0);" class="bianji" data-toggle="modal" data-target="" style="cursor:now-allow">
-                             <img src="{{ STATIC_URL}}img/btn_bj_gray.png" title="编辑">
-                        </a>   
-                        <a href="javascript:void(0);" title="删除">
-                            <img src="{{ STATIC_URL}}img/btn_sc_gray.png">
-                        </a>
-                            {%endif%}
-                            
-                        {%else%}
-                        <a href="javascript:delete_image('{{image.id}}');" title="删除">
-                            <img src="{{ STATIC_URL}}img/btn_sc.png">
-                        </a>
-                        {%endif%}
-                    </td>    
-                </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-        <div class="text-center">
-            <ul class="pagination">
-                {% show_pages %}
-            </ul>
+    <div class="action_box_tab_block pri" {%if div_name == "list_pri" %}style="display:block;"{%endif%}>
+        <div id="list_pri">
+        {% include "pri_list.html" %}
         </div>
     </div>
 </div>
@@ -234,10 +95,10 @@
                 </div>
                 {%if extent_html == "site_base.html"%}
                 <div class="form-group is_public">
-                   <label class="radio-inline radio_defined">
+                   <label class="radio-inline radio_defined col-md-2 col-md-offset-3">
                       <input type="radio" name="inlineRadioOptions" id="image_public" value="option1" checked> 共享
                     </label>
-                    <label class="radio-inline">
+                    <label class="radio-inline col-md-2">
                       <input type="radio" name="inlineRadioOptions" id="image_private" value="option2"> 私有
                     </label>
                 </div>
@@ -250,9 +111,11 @@
         </div>
     </div>
 </div>
+<div id="image_type", type="{{type}}"></div>
 {% endblock %}
 
 {% block extra_script %}
 <script src="{{ STATIC_URL}}js/block_tab.js"></script>
 <script src="{{ STATIC_URL}}js/image.js"></script>
+<script src="{{ STATIC_URL}}js/list_pagination_image.js"></script>
 {% endblock %}
