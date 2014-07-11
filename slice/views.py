@@ -355,12 +355,12 @@ def detail(request, slice_id, div_name=None):
             show_vms.append({'id': vm.id, 'name': vm.name, 'uuid': vm.uuid,
                              'type_id': 4, 'type': "虚拟机(DHCP)", 'ip': vm.ip,
                              'host_ip': vm.server.ip, 'state': vm.state,
-                             'dhcp': "有"})
+                             'dhcp': "有", 'current_snapshot': vm.current_snapshot})
         else:
             show_vms.append({'id': vm.id, 'name': vm.name, 'uuid': vm.uuid,
                              'type_id': 4, 'type': "虚拟机", 'ip': vm.ip,
                              'host_ip': vm.server.ip, 'state': vm.state,
-                             'dhcp': "无"})
+                             'dhcp': "无", 'current_snapshot': vm.current_snapshot})
     ct_sys_names = []
     ct_syss, has_more = glance.image_list_detailed()
     for ct_sys in ct_syss:
