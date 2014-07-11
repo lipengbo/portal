@@ -236,18 +236,26 @@ class Project(models.Model):
     def set_max_quota(self, member, slice, vm, band):
         try:
             old_quota = self.projectquota
-            old_quota.max_member = int(member)
-            old_quota.max_slice = int(slice)
-            old_quota.max_vm = int(vm)
-            old_quota.max_band = int(band)
+            if member < old_quota.member:
+                raise Exception("成员最大配额设置值小于用户成员配额！")
+            if slice < old_quota.slice:
+                raise Exception("虚网最大配额设置值小于用户虚网配额！")
+            if vm < old_quota.vm:
+                raise Exception("虚拟机最大配额设置值小于用户虚拟机配额！")
+            if band < old_quota.band:
+                raise Exception("带宽最大配额设置值小于用户带宽配额！")
+            old_quota.max_member = member
+            old_quota.max_slice = slice
+            old_quota.max_vm = vm
+            old_quota.max_band = band
             old_quota.save()
             return old_quota
         except ProjectQuota.DoesNotExist:
             new_quota = ProjectQuota(project=self,
-                         max_member=int(member),
-                         max_slice=int(slice),
-                         max_vm=int(vm),
-                         max_band=int(vm)).save()
+                         max_member=member,
+                         max_slice=slice,
+                         max_vm=vm,
+                         max_band=band).save()
             return new_quota
         except Exception:
             raise
