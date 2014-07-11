@@ -1,7 +1,7 @@
 $(document).ready(function(){
-    /*$('#edit_snapshot').click(function(){
+    $('#edit_snapshot').click(function(){
         $('#snapshot_bj').modal();
-    });*/
+    });
     
     $('#create_image_from_vm').click(function(){
         var vm_id = $('.tr.active').find('.vm').attr('vm_id');

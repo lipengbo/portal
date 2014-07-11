@@ -35,6 +35,7 @@ def do_restore_snapshot(vm, snapshot):
             snapshot.is_current = True
             snapshot.save()
             vm.current_snapshot = snapshot.name
+            vm.save()
             log(snapshot.owner, snapshot, u'还原备份', SUCCESS)
         else:
             raise
