@@ -85,7 +85,7 @@ $(document).ready(function() {
             $('.switch-table').attr('style', '');
         }
         //$('#topology-iframe').attr('src', '/topology/?size=big&tp_mod='+tp_mod+'&no_parent=true&show_virtual_switch=true&hide_filter=true&island_id=' + island_id);
-        $('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
+        //$('#topology-iframe').attr('src', '/slice/topology_d3_edit/?slice_id=0&height=500&island_id=' + island_id);
         
         selected_ports = {};
         selected_dpids = {};
