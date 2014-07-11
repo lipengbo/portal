@@ -130,6 +130,7 @@ class VirtualMachine(IslandResource):
     switch_port = models.ForeignKey(SwitchPort, null=True)
     state = models.IntegerField(null=True, choices=DOMAIN_STATE_TUPLE)
     type = models.IntegerField(null=False, choices=VM_TYPE)
+    current_snapshot = models.CharField(max_length=255, null=True, default=None)
 
     objects = VirtualMachineManager()
 

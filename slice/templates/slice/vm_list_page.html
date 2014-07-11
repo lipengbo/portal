@@ -23,6 +23,7 @@
       <!--th width="15%">DHCP</th-->
       <th width="15%">IP地址</th>
       <th width="15%">宿主机</th>
+      <th width="10%">备份点</th>
       <th width="8%">状态</th>
       <th width="15%" class="t_dropdown">
         <span class="dropdown"> 
@@ -56,6 +57,7 @@
       <td><div id="vm_host_ip" host_ip="{{vm.host_ip}}">
         {{vm.host_ip}}
         </div></td>
+        <td>{{vm.current_snapshot}}</td>
       <td class="slice_state"><div>
         {% if vm.state != "" %}
             {% if vm.state == 8 or vm.state == 12 or vm.state == 13 or vm.state == 3%}
@@ -73,6 +75,7 @@
             {%endif%}
           {%endif%}
         </div></td>
+        
         <td class="btn_operation"> 
             {%if extent_html == "site_base.html"%}
                 {%if vm.type_id != 1%}
