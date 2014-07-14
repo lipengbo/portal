@@ -66,7 +66,10 @@ function snapshot_creation_show(){
         return;
     }
 
-    if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
+    if($('#'+vm_id+'_qt').children('img').attr('title') == '停止' && $('#'+vm_id+'_qt').attr('style') == 'cursor: pointer;'){
+            $('#alert_info').text('虚拟机运行时无法创建备份，请先关闭虚拟机！');
+            $('#alert_modal').modal();
+    }else if($('#'+vm_id+'_qt').attr('style') == 'cursor: not-allowed;'){
             
     }else{
         $('#snapshot_ensure').attr("onclick", "create_snapshot(" + vm_id + ", '"+ host_ip + "')");

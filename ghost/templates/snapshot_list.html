@@ -48,7 +48,11 @@
         <!--button class="btn btn-inverse"><i class="glyphicon glyphicon-refresh"></i> 刷新</button-->
     </div>
 </div>
-
+{%if extent_html == "site_base.html"%}
+<div class="alert alert-info">
+    <strong>提示：</strong>使用更多操作时，请单击选中需要操作的备份！
+</div>
+{%endif%}
 <table class="table_defined row_chose"  id="snapshot_table">
     <thead>
         <tr>
