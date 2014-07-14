@@ -65,6 +65,8 @@ $(document).ready(function(){
     });
     show_uuid($("[id='uuid']"));
     $('.uuid').tooltip();
+
+  
 });
 
 function edit_image(){
